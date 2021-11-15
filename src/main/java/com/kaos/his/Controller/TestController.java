@@ -1,4 +1,4 @@
-package com.kaos.his.Controller;
+package com.kaos.his.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
