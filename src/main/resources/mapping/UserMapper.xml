@@ -2,7 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.his.mapper.UserMapper">
 
-    <select id="Sel" resultType="com.kaos.his.entity.User">
-        select EMPL_ID AS code, EMPL_NAME AS name from DAWN_ORG_EMPL where EMPL_ID = '${id}'
+    <select id="Sel" resultMap="myMap">
+        select EMPL_ID, EMPL_NAME, SEX_CODE from DAWN_ORG_EMPL where EMPL_ID = '${id}'
     </select>
+
+    <resultMap id="myMap" type="com.kaos.his.entity.User">
+        <result column="EMPL_ID" jdbcType="VARCHAR" property="code" />
+        <result column="EMPL_NAME" jdbcType="VARCHAR" property="name" />
+        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex" typeHandler="com.kaos.his.constant.MyEnumTypeHandler" />
+    </resultMap>
 </mapper>
