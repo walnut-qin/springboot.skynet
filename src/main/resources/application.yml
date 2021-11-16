@@ -55,5 +55,5 @@ spring:
         enabled: true
         url-pattern: /*
         exclusions: .gif,.html
-mybatis:
+mybatis-plus:
   mapper-locations: classpath:mapping/*Mapper.xml
