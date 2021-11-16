@@ -9,6 +9,6 @@
     <resultMap id="myMap" type="com.kaos.his.entity.User">
         <result column="EMPL_ID" jdbcType="VARCHAR" property="code" />
         <result column="EMPL_NAME" jdbcType="VARCHAR" property="name" />
-        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex" typeHandler="com.kaos.his.constant.MyEnumTypeHandler" />
+        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex" typeHandler="com.kaos.his.enums.handler.MyEnumTypeHandler" />
     </resultMap>
 </mapper>
