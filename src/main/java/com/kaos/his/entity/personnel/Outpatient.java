@@ -1,6 +1,6 @@
 package com.kaos.his.entity.personnel;
 
-import com.kaos.his.enums.OutpatientState;
+import com.kaos.his.enums.OutpatientStateEnum;
 
 /**
  * 门诊患者
@@ -14,5 +14,5 @@ public class Outpatient extends DeptPatient {
     /**
      * 门诊患者状态
      */
-    public OutpatientState state;
+    public OutpatientStateEnum state;
 }

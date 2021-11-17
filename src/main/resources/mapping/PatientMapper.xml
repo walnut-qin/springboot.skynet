@@ -10,7 +10,7 @@
             T1.SEX_CODE,
             T1.BIRTHDAY,
             T1.IDENNO,
-            NVL(T1.WORK_TEL, NVL(HOME_TEL, LINKMAN_TEL)) AS TEL,
+            NVL(T1.WORK_TEL, NVL(T1.HOME_TEL, T1.LINKMAN_TEL)) AS TEL,
             T1.EMAIL
         FROM
             COM_PATIENTINFO T1

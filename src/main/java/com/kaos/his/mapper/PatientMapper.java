@@ -2,6 +2,9 @@ package com.kaos.his.mapper;
 
 import com.kaos.his.entity.personnel.Patient;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public interface PatientMapper {
     /**
      * 根据就诊卡号获取患者实体

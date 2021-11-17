@@ -1,5 +1,7 @@
 package com.kaos.his.entity.personnel;
 
+import java.util.Date;
+
 import com.kaos.his.entity.organization.Department;
 
 /**
@@ -7,9 +9,14 @@ import com.kaos.his.entity.organization.Department;
  */
 public class DeptPatient extends Patient {
     /**
-     * 指定科室的操作员（门诊患者：挂号员；住院患者：住院登记员）
+     * 操作员（门诊患者：挂号员；住院患者：住院登记员）
      */
-    public String operCode;
+    public Employee operEmployee;
+
+    /**
+     * 操作时间
+     */
+    public Date operDate;
 
     /**
      * 科室信息
