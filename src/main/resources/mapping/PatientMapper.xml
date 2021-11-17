@@ -18,7 +18,7 @@
             T1.CARD_NO = #{cardNo}
     </select>
 
-    <resultMap id="patientMap" type="com.kaos.his.entity.personnel.Employee">
+    <resultMap id="patientMap" type="com.kaos.his.entity.personnel.Patient">
         <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
         <result column="GCPOUTPATIENT" jdbcType="VARCHAR" property="gcpOutPatient"/>
         <result column="NAME" jdbcType="VARCHAR" property="name"/>
