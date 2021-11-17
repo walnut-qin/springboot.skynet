@@ -1,5 +1,7 @@
 package com.kaos.his.service;
 
+import java.util.List;
+
 import com.kaos.his.entity.personnel.Outpatient;
 import com.kaos.his.mapper.OutpatientMapper;
 
@@ -13,5 +15,9 @@ public class OutpatientService {
 
     public Outpatient GetOutpatientByClinicCode(String clinicCode) {
         return this.outpatientMapper.GetOutpatientByClinicCode(clinicCode);
+    }
+
+    public List<Outpatient> GetOutpatientsByCardNo(String clinicCode) {
+        return this.outpatientMapper.GetOutpatientsByCardNo(clinicCode);
     }
 }

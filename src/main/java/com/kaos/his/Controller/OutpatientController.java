@@ -30,7 +30,7 @@ public class OutpatientController {
      * @return 职工信息json
      */
     @RequestMapping(value = "getOutpatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String GetEmployee(@RequestParam("clinicCode") String clinicCode) {
+    public String GetOutpatientByClinicCode(@RequestParam("clinicCode") String clinicCode) {
         // 调取service获取职员实体
         var outpatient = this.outpatientService.GetOutpatientByClinicCode(clinicCode);
 
@@ -42,5 +42,26 @@ public class OutpatientController {
                 .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
         return gson.toJson(outpatient);
+    }
+
+    /**
+     * 获取职工信息
+     * 
+     * @param emplCode 职工编码
+     * @return 职工信息json
+     */
+    @RequestMapping(value = "getOutpatients", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String GetOutPatientsByCardNo(@RequestParam("cardNo") String cardNo) {
+        // 调取service获取职员实体
+        var outpatients = this.outpatientService.GetOutpatientsByCardNo(cardNo);
+
+        // 创建特定类型的gson对象
+        Gson gson = new GsonBuilder().serializeNulls()
+                .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class))
+                .registerTypeAdapter(DeptOwnEnum.class, new GsonEnumTypeAdapter<>(DeptOwnEnum.class))
+                .registerTypeAdapter(OutpatientStateEnum.class, new GsonEnumTypeAdapter<>(OutpatientStateEnum.class))
+                .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+        return gson.toJson(outpatients);
     }
 }
