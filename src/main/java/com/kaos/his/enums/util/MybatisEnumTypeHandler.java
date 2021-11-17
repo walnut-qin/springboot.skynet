@@ -1,16 +1,14 @@
-package com.kaos.his.enums.handler;
+package com.kaos.his.enums.util;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.kaos.his.enums.IEnum;
-
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
-public class MyEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> {
+public class MybatisEnumTypeHandler<E extends IEnum<E>> extends BaseTypeHandler<E> {
     // private Class<E> enumType;
 
     /**
@@ -18,10 +16,10 @@ public class MyEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> {
      */
     private E[] enums;
 
-    public MyEnumTypeHandler() {
+    public MybatisEnumTypeHandler() {
     }
 
-    public MyEnumTypeHandler(Class<E> typeOfE) {
+    public MybatisEnumTypeHandler(Class<E> typeOfE) {
         if (typeOfE == null) {
             throw new IllegalArgumentException("Type argument cannot be null");
         }
@@ -39,7 +37,7 @@ public class MyEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> {
                 return e;
             }
         }
-        return enums[0];
+        return null;
         // throw new IllegalArgumentException(enumType.getName() + " unknown enumerated
         // type index:" + index);
     }
