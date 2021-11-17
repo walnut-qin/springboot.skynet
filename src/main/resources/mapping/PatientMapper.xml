@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.PatientMapper">
+
+    <select id="GetPatientByCardNo" resultMap="patientMap">
+        SELECT
+            T1.CARD_NO,
+            T1.GCPOUTPATIENT,
+            T1.NAME,
+            T1.SEX_CODE,
+            T1.BIRTHDAY,
+            T1.IDENNO,
+            NVL(T1.WORK_TEL, NVL(HOME_TEL, LINKMAN_TEL)) AS TEL,
+            T1.EMAIL
+        FROM
+            COM_PATIENTINFO T1
+        WHERE
+            T1.CARD_NO = #{cardNo}
+    </select>
+
+    <resultMap id="patientMap" type="com.kaos.his.entity.personnel.Employee">
+        <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="GCPOUTPATIENT" jdbcType="VARCHAR" property="gcpOutPatient"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex"/>
+        <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
+        <result column="IDENNO" jdbcType="VARCHAR" property="identityNo"/>
+        <result column="TEL" jdbcType="VARCHAR" property="phoneNo"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+    </resultMap>
+</mapper>
