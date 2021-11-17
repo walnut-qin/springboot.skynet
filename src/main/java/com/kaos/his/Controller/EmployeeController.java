@@ -9,6 +9,7 @@ import com.kaos.his.service.EmployeeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @RequestMapping("getEmployee")
+    @RequestMapping(value = "getEmployee", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String GetEmployee(@RequestParam("emplCode") String emplCode) {
         var employee = this.employeeService.GetEmployeeByEmplCode(emplCode);
         Gson gson = new GsonBuilder().serializeNulls()
