@@ -1,6 +1,6 @@
 package com.kaos.his.mapper;
 
-import com.kaos.his.entity.Employee;
+import com.kaos.his.entity.personnel.Employee;
 
 import org.springframework.stereotype.Repository;
 

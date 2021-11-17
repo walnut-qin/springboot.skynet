@@ -1,7 +1,6 @@
-package com.kaos.his.entity;
+package com.kaos.his.entity.personnel;
 
 import java.util.Date;
-import java.util.List;
 
 import com.kaos.his.enums.SexEnum;
 
@@ -32,10 +31,10 @@ public class Citizen {
     /**
      * 联系电话列表
      */
-    public List<String> phoneNos;
+    public String phoneNo;
 
     /**
      * 邮箱列表
      */
-    public List<String> emails;
+    public String email;
 }

@@ -2,8 +2,8 @@ package com.kaos.his.enums;
 
 import com.kaos.his.enums.util.IEnum;
 
-public enum SexEnum implements IEnum<SexEnum> {
-    Male("M", "男"), Female("F", "女");
+public enum DeptOwnEnum implements IEnum<DeptOwnEnum> {
+    All("0", "全院区"), Sourth("1", "南院区"), North("2", "北院区"), East("3", "东津院区");
 
     /**
      * 数据库存值
@@ -21,7 +21,7 @@ public enum SexEnum implements IEnum<SexEnum> {
      * @param index
      * @param description
      */
-    SexEnum(String index, String description) {
+    DeptOwnEnum(String index, String description) {
         this.value = index;
         this.description = description;
     }

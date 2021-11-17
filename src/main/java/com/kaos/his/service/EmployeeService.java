@@ -1,6 +1,6 @@
 package com.kaos.his.service;
 
-import com.kaos.his.entity.Employee;
+import com.kaos.his.entity.personnel.Employee;
 import com.kaos.his.mapper.EmployeeMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;

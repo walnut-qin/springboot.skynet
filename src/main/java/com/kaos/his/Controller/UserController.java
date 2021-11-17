@@ -2,6 +2,7 @@ package com.kaos.his.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.enums.SexEnum;
 import com.kaos.his.enums.util.GsonEnumTypeAdapter;
 import com.kaos.his.service.EmployeeService;
@@ -21,7 +22,9 @@ public class UserController {
     public String GetUser(@PathVariable String emplCode) {
         var employee = this.employeeService.GetEmployeeByEmplCode(emplCode);
         Gson gson = new GsonBuilder().serializeNulls()
-                .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class)).create();
+                .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class))
+                .registerTypeAdapter(DeptOwnEnum.class, new GsonEnumTypeAdapter<>(DeptOwnEnum.class))
+                .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         return gson.toJson(employee);
     }
 }

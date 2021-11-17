@@ -21,9 +21,18 @@
             T1.EMPL_ID = #{emplCode}
     </select>
 
-    <resultMap id="employeeMap" type="com.kaos.his.entity.Employee">
-        <result column="EMPL_ID" jdbcType="VARCHAR" property="code" />
-        <result column="EMPL_NAME" jdbcType="VARCHAR" property="name" />
-        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex" typeHandler="com.kaos.his.enums.util.MybatisEnumTypeHandler" />
+    <resultMap id="employeeMap" type="com.kaos.his.entity.personnel.Employee">
+        <result column="EMPL_ID" jdbcType="VARCHAR" property="code"/>
+        <result column="EMPL_NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex"/>
+        <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
+        <result column="IDENNO" jdbcType="VARCHAR" property="identityNo"/>
+        <result column="TEL" jdbcType="VARCHAR" property="phoneNo"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <association javaType="com.kaos.his.entity.organization.Department" property="dept">
+            <result column="DEPT_ID" jdbcType="VARCHAR" property="code"/>
+            <result column="DEPT_NAME" jdbcType="VARCHAR" property="name"/>
+            <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
+        </association>
     </resultMap>
 </mapper>
