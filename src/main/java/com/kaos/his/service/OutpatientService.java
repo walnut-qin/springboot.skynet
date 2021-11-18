@@ -17,7 +17,7 @@ public class OutpatientService {
         return this.outpatientMapper.GetOutpatientByClinicCode(clinicCode);
     }
 
-    public List<Outpatient> GetOutpatientsByCardNo(String clinicCode) {
-        return this.outpatientMapper.GetOutpatientsByCardNo(clinicCode);
+    public List<Outpatient> GetOutpatientsByCardNo(String cardNo) {
+        return this.outpatientMapper.GetOutpatientsByCardNo(cardNo);
     }
 }
