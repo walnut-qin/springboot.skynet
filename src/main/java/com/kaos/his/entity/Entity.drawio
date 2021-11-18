@@ -1,6 +1,6 @@
-<mxfile host="65bd71144e" modified="2021-11-18T03:27:50.200Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.62.2 Chrome/91.0.4472.164 Electron/13.5.2 Safari/537.36" etag="fSAZ8I-okatrL1QqE7T8" version="13.10.0" type="embed">
+<mxfile host="65bd71144e">
     <diagram id="VqwePKhzc85bmfiMxgn3" name="Page-1">
-        <mxGraphModel dx="1487" dy="-1866" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+        <mxGraphModel dx="1119" dy="-1861" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -104,7 +104,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="42" value="Outpatient" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;shadow=0;strokeColor=#d79b00;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;glass=0;expand=0;resizable=1;rotatable=0;cloneable=0;pointerEvents=0;" parent="1" vertex="1">
-                    <mxGeometry x="-171.5" y="2496" width="284" height="78" as="geometry"/>
+                    <mxGeometry x="-353" y="2464" width="284" height="78" as="geometry"/>
                 </mxCell>
                 <mxCell id="43" value="+ clinicCode : String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="42" vertex="1">
                     <mxGeometry y="26" width="284" height="26" as="geometry"/>
@@ -112,10 +112,25 @@
                 <mxCell id="44" value="+ state : com.kaos.his.enums.OutpatientStateEnum" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="42" vertex="1">
                     <mxGeometry y="52" width="284" height="26" as="geometry"/>
                 </mxCell>
-                <mxCell id="45" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="42" target="35">
+                <mxCell id="45" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="42" target="35" edge="1">
                     <mxGeometry width="160" relative="1" as="geometry">
                         <mxPoint x="-221" y="2549" as="sourcePoint"/>
                         <mxPoint x="-221" y="2666" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="46" value="Inpatient" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;shadow=0;strokeColor=#d79b00;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;glass=0;expand=0;resizable=1;rotatable=0;cloneable=0;pointerEvents=0;" vertex="1" parent="1">
+                    <mxGeometry x="3" y="2464" width="284" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="+ patientNo : String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="46">
+                    <mxGeometry y="26" width="284" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" value="+ state : com.kaos.his.enums.InpatientStateEnum" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="46">
+                    <mxGeometry y="52" width="284" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="46" target="35">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="-19.5" y="2584" as="sourcePoint"/>
+                        <mxPoint x="-19.5" y="2676" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
             </root>
