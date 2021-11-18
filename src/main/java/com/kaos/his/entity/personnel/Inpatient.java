@@ -1,5 +1,7 @@
 package com.kaos.his.entity.personnel;
 
+import java.sql.Date;
+
 import com.kaos.his.enums.InpatientStateEnum;
 
 public class Inpatient extends Deptpatient {
@@ -12,4 +14,24 @@ public class Inpatient extends Deptpatient {
      * 在院状态
      */
     public InpatientStateEnum state;
+
+    /**
+     * 病区编码
+     */
+    public String nurseCellCode;
+
+    /**
+     * 床号
+     */
+    public String bedNo;
+
+    /**
+     * 入院日期
+     */
+    public Date inDate;
+
+    /**
+     * 出院日期
+     */
+    public Date outDate;
 }

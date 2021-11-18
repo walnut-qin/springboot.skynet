@@ -5,6 +5,10 @@
         SELECT
             T1.PATIENT_NO,
             T1.IN_STATE,
+            T1.NURSE_CELL_CODE,
+            T1.BED_NO,
+            T1.IN_DATE,
+            T1.OUT_DATE,
             T1.OPER_CODE AS OPER_CODE,
             T2.EMPL_NAME AS OPER_NAME,
             T2.SEX_CODE AS OPER_SEX,
@@ -41,6 +45,10 @@
         SELECT
             T1.PATIENT_NO,
             T1.IN_STATE,
+            T1.NURSE_CELL_CODE,
+            T1.BED_NO,
+            T1.IN_DATE,
+            T1.OUT_DATE,
             T1.OPER_CODE AS OPER_CODE,
             T2.EMPL_NAME AS OPER_NAME,
             T2.SEX_CODE AS OPER_SEX,
@@ -78,6 +86,10 @@
     <resultMap id="inpatientMap" type="com.kaos.his.entity.personnel.Inpatient">
         <result column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
         <result column="IN_STATE" jdbcType="VARCHAR" property="state"/>
+        <result column="NURSE_CELL_CODE" jdbcType="VARCHAR" property="nurseCellCode"/>
+        <result column="BED_NO" jdbcType="VARCHAR" property="bedNo"/>
+        <result column="IN_DATE" jdbcType="VARCHAR" property="inDate"/>
+        <result column="OUT_DATE" jdbcType="VARCHAR" property="outDate"/>
         <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
         <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
         <result column="GCPOUTPATIENT" jdbcType="VARCHAR" property="gcpOutPatient"/>
