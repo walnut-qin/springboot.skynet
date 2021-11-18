@@ -71,6 +71,8 @@
             LEFT JOIN COM_PATIENTINFO T5 ON T5.CARD_NO = T1.CARD_NO
         WHERE
             T1.CARD_NO = #{cardNo}
+        ORDER BY
+            T1.OPER_DATE ASC
     </select>
 
     <resultMap id="outpatientMap" type="com.kaos.his.entity.personnel.Outpatient">

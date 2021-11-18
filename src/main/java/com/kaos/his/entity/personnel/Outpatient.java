@@ -5,7 +5,7 @@ import com.kaos.his.enums.OutpatientStateEnum;
 /**
  * 门诊患者
  */
-public class Outpatient extends DeptPatient {
+public class Outpatient extends Deptpatient {
     /**
      * 门诊号
      */
