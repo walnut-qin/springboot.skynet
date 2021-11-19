@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.his.mapper.personnel.EmployeeMapper">
+    <resultMap id="resultMap" extends="com.kaos.his.mapper.personnel.CitizenMapper.resultMap" type="com.kaos.his.entity.personnel.Employee">
+        <id column="CODE" jdbcType="VARCHAR" property="code"/>
+        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.resultMap" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
+    </resultMap>
 
     <select id="GetEmployeeByEmplCode" resultMap="resultMap">
         SELECT
@@ -20,9 +24,4 @@
         WHERE
             T1.EMPL_ID = #{emplCode}
     </select>
-
-    <resultMap id="resultMap" extends="com.kaos.his.mapper.personnel.CitizenMapper.resultMap" type="com.kaos.his.entity.personnel.Employee">
-        <id column="CODE" jdbcType="VARCHAR" property="code"/>
-        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.resultMap" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
-    </resultMap>
 </mapper>
