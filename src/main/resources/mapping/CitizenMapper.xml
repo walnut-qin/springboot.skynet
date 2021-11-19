@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.CitizenMapper">
+    <resultMap id="citizenMap" type="com.kaos.his.entity.personnel.Citizen">
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="SEX" jdbcType="VARCHAR" property="sex"/>
+        <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
+        <result column="IDENTITY_NO" jdbcType="VARCHAR" property="identityNo"/>
+        <result column="PHONE_NO" jdbcType="VARCHAR" property="phoneNo"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+    </resultMap>
+</mapper>

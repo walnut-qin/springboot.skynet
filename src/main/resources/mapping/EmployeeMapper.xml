@@ -4,16 +4,16 @@
 
     <select id="GetEmployeeByEmplCode" resultMap="employeeMap">
         SELECT
-            T1.EMPL_ID,
-            T1.EMPL_NAME,
-            T1.SEX_CODE,
-            T1.BIRTHDAY,
-            T1.IDENNO,
-            T1.TEL,
-            T1.EMAIL,
-            T2.DEPT_ID,
-            T2.DEPT_NAME,
-            T2.DEPTOWN
+            T1.EMPL_ID AS CODE,
+            T1.EMPL_NAME AS NAME,
+            T1.SEX_CODE AS SEX,
+            T1.BIRTHDAY AS BIRTHDAY,
+            T1.IDENNO AS IDENTITY_NO,
+            T1.TEL AS PHONE_NO,
+            T1.EMAIL AS EMAIL,
+            T2.DEPT_ID AS DEPT_CODE,
+            T2.DEPT_NAME AS DEPT_NAME,
+            T2.DEPTOWN AS DEPT_DEPTOWN
         FROM
             DAWN_ORG_EMPL T1
             LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_ID
@@ -21,18 +21,8 @@
             T1.EMPL_ID = #{emplCode}
     </select>
 
-    <resultMap id="employeeMap" type="com.kaos.his.entity.personnel.Employee">
-        <id column="EMPL_ID" jdbcType="VARCHAR" property="code"/>
-        <result column="EMPL_NAME" jdbcType="VARCHAR" property="name"/>
-        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex"/>
-        <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
-        <result column="IDENNO" jdbcType="VARCHAR" property="identityNo"/>
-        <result column="TEL" jdbcType="VARCHAR" property="phoneNo"/>
-        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
-        <association javaType="com.kaos.his.entity.organization.Department" property="dept">
-            <result column="DEPT_ID" jdbcType="VARCHAR" property="code"/>
-            <result column="DEPT_NAME" jdbcType="VARCHAR" property="name"/>
-            <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
-        </association>
+    <resultMap id="employeeMap" extends="com.kaos.his.mapper.CitizenMapper.citizenMap" type="com.kaos.his.entity.personnel.Employee">
+        <id column="CODE" jdbcType="VARCHAR" property="code"/>
+        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.DepartmentMapper.departmentMap" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
     </resultMap>
 </mapper>
