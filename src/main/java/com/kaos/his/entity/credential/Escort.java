@@ -59,9 +59,9 @@ public class Escort {
     public HospitalizationCertificate hospitalizationCertificate;
 
     /**
-     * 关联的患者
+     * 关联的陪护人
      */
-    public Patient patient;
+    public Patient helper;
 
     /**
      * VIP标识
