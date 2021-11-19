@@ -31,7 +31,7 @@ public class Escort {
     /**
      * 陪护证行为
      */
-    public class EscortAction {
+    public static class EscortAction {
         /**
          * 状态记录号
          */
