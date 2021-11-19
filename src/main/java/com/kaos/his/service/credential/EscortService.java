@@ -1,5 +1,7 @@
 package com.kaos.his.service.credential;
 
+import java.util.List;
+
 import com.kaos.his.entity.credential.Escort;
 import com.kaos.his.mapper.credential.EscortMapper;
 
@@ -13,5 +15,9 @@ public class EscortService {
 
     public Escort GetEscortByEscortNo(String escortNo) {
         return this.escortMapper.GetEscort(escortNo);
+    }
+
+    public List<Escort> GetEscortsByHelperCardNo(String cardNo) {
+        return this.escortMapper.GetEscortsByHelperCardNo(cardNo);
     }
 }
