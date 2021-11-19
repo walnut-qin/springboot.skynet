@@ -20,7 +20,7 @@
             T2.DEPTOWN AS DEPT_DEPTOWN
         FROM
             DAWN_ORG_EMPL T1
-            LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_ID
+            LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_ID AND T2.VALID_STATE = '1'
         WHERE
             T1.EMPL_ID = #{emplCode}
     </select>
