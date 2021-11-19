@@ -1,6 +1,6 @@
 package com.kaos.his.entity.credential;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import com.kaos.his.entity.personnel.Patient;
@@ -11,7 +11,7 @@ public class Escort {
     /**
      * 陪护证状态
      */
-    public class EscortState {
+    public static class EscortState {
         /**
          * 状态记录号
          */

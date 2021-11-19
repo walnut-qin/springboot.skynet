@@ -1,6 +1,6 @@
 package com.kaos.his.entity.credential;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.kaos.his.entity.organization.Department;
 import com.kaos.his.entity.personnel.Employee;

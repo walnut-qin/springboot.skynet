@@ -1,6 +1,6 @@
 package com.kaos.his.entity.personnel;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.kaos.his.entity.credential.HospitalizationCertificate;
 import com.kaos.his.enums.InpatientStateEnum;
