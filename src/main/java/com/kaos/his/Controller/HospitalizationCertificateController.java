@@ -30,15 +30,41 @@ public class HospitalizationCertificateController {
      * @return 职工信息json
      */
     @RequestMapping(value = "getHospitalizationCertificate", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String GetInpatientByClinicCode(@RequestParam("cardNo") String cardNo, @RequestParam("happenNo") Integer happenNo) {
+    public String GetHospitalizationCertificate(@RequestParam("cardNo") String cardNo,
+            @RequestParam("happenNo") Integer happenNo) {
         // 调取service获取职员实体
-        var hospitalizationCertificate = this.hospitalizationCertificateService.GetHospitalizationCertificateByCardNoAndHappenNo(cardNo, happenNo);
+        var hospitalizationCertificate = this.hospitalizationCertificateService
+                .GetHospitalizationCertificateByCardNoAndHappenNo(cardNo, happenNo);
 
         // 创建特定类型的gson对象
         Gson gson = new GsonBuilder().serializeNulls()
                 .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class))
                 .registerTypeAdapter(DeptOwnEnum.class, new GsonEnumTypeAdapter<>(DeptOwnEnum.class))
-                .registerTypeAdapter(HospitalizationCertificateStateEnum.class, new GsonEnumTypeAdapter<>(HospitalizationCertificateStateEnum.class))
+                .registerTypeAdapter(HospitalizationCertificateStateEnum.class,
+                        new GsonEnumTypeAdapter<>(HospitalizationCertificateStateEnum.class))
+                .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+        return gson.toJson(hospitalizationCertificate);
+    }
+
+    /**
+     * 获取最近的住院证
+     * 
+     * @param emplCode 职工编码
+     * @return 职工信息json
+     */
+    @RequestMapping(value = "getLatestHospitalizationCertificate", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String GetLatestHospitalizationCertificate(@RequestParam("cardNo") String cardNo) {
+        // 调取service获取职员实体
+        var hospitalizationCertificate = this.hospitalizationCertificateService
+                .GetLatestHospitalizationCertificateByCardNo(cardNo);
+
+        // 创建特定类型的gson对象
+        Gson gson = new GsonBuilder().serializeNulls()
+                .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class))
+                .registerTypeAdapter(DeptOwnEnum.class, new GsonEnumTypeAdapter<>(DeptOwnEnum.class))
+                .registerTypeAdapter(HospitalizationCertificateStateEnum.class,
+                        new GsonEnumTypeAdapter<>(HospitalizationCertificateStateEnum.class))
                 .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
         return gson.toJson(hospitalizationCertificate);

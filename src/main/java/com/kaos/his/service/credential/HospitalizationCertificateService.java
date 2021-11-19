@@ -25,4 +25,14 @@ public class HospitalizationCertificateService {
             Integer happenNo) {
         return this.hospitalizationCertificateMapper.GetHospitalizationCertificate(cardNo, happenNo);
     }
+
+    /**
+     * 获取最近的一张住院证
+     * 
+     * @param cardNo
+     * @return
+     */
+    public HospitalizationCertificate GetLatestHospitalizationCertificateByCardNo(String cardNo) {
+        return this.hospitalizationCertificateMapper.GetLatestHospitalizationCertificate(cardNo);
+    }
 }

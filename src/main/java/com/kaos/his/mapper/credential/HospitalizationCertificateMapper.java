@@ -14,4 +14,12 @@ public interface HospitalizationCertificateMapper {
      * @return
      */
     HospitalizationCertificate GetHospitalizationCertificate(String cardNo, Integer happenNo);
+
+    /**
+     * 获取指定患者的最近的一张住院证
+     * 
+     * @param cardNo
+     * @return
+     */
+    HospitalizationCertificate GetLatestHospitalizationCertificate(String cardNo);
 }
