@@ -1,4 +1,4 @@
-package com.kaos.his.mapper;
+package com.kaos.his.mapper.credential;
 
 import com.kaos.his.entity.credential.HospitalizationCertificate;
 

@@ -1,4 +1,4 @@
-package com.kaos.his.mapper;
+package com.kaos.his.mapper.personnel;
 
 import com.kaos.his.entity.personnel.Employee;
 

@@ -1,4 +1,4 @@
-package com.kaos.his.mapper;
+package com.kaos.his.mapper.personnel;
 
 import java.util.List;
 

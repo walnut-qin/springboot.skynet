@@ -1,7 +1,7 @@
 package com.kaos.his.service;
 
 import com.kaos.his.entity.credential.HospitalizationCertificate;
-import com.kaos.his.mapper.HospitalizationCertificateMapper;
+import com.kaos.his.mapper.credential.HospitalizationCertificateMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

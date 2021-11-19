@@ -3,7 +3,7 @@ package com.kaos.his.service;
 import java.util.List;
 
 import com.kaos.his.entity.personnel.Inpatient;
-import com.kaos.his.mapper.InpatientMapper;
+import com.kaos.his.mapper.personnel.InpatientMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
