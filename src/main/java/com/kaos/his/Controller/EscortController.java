@@ -63,7 +63,7 @@ public class EscortController {
      * @param emplCode 职工编码
      * @return 职工信息json
      */
-    @RequestMapping(value = "getEscortedPatients", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "getActiveEscortsByHelperCardNo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String getActiveEscortsByHelperCardNo(@RequestParam("helperCardNo") String cardNo) {
         // 获取此人拥有的所有陪护证
         var escorts = this.escortService.GetEscortsByHelperCardNo(cardNo);
