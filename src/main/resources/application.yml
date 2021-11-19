@@ -9,11 +9,11 @@ spring:
     # druid配置
     druid:
       # 初始化时建立链接数量
-      initial-size: 5 
+      initial-size: 10 
       # 最小连接池数量
-      min-idle: 5
+      min-idle: 10
       # 最大连接池数量
-      max-active: 20
+      max-active: 40
       # 获取链接时最大等待时间，单位：毫秒
       max-wait: 2000
       # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
@@ -34,7 +34,7 @@ spring:
       # 是否缓存preparedStatement
       pool-prepared-statements: true
       # 当值大于0时poolPreparedStatements会自动修改为true
-      max-pool-prepared-statement-per-connection-size: 20
+      max-pool-prepared-statement-per-connection-size: 40
       
       # 配置扩展插件
       filters: stat,wall,log4j
