@@ -6,7 +6,7 @@ import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.enums.HospitalizationCertificateStateEnum;
 import com.kaos.his.enums.SexEnum;
 import com.kaos.his.enums.util.GsonEnumTypeAdapter;
-import com.kaos.his.service.HospitalizationCertificateService;
+import com.kaos.his.service.credential.HospitalizationCertificateService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

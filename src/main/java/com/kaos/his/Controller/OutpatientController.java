@@ -6,7 +6,7 @@ import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.enums.OutpatientStateEnum;
 import com.kaos.his.enums.SexEnum;
 import com.kaos.his.enums.util.GsonEnumTypeAdapter;
-import com.kaos.his.service.OutpatientService;
+import com.kaos.his.service.personnel.OutpatientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

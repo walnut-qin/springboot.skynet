@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.enums.SexEnum;
 import com.kaos.his.enums.util.GsonEnumTypeAdapter;
-import com.kaos.his.service.EmployeeService;
+import com.kaos.his.service.personnel.EmployeeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

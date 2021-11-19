@@ -1,4 +1,4 @@
-package com.kaos.his.service;
+package com.kaos.his.service.personnel;
 
 import java.util.List;
 
