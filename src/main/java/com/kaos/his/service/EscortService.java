@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kaos.his.entity.credential.Escort;
-import com.kaos.his.entity.credential.HospitalizationCertificate;
 import com.kaos.his.entity.personnel.Inpatient;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.mapper.credential.EscortMapper;
 import com.kaos.his.mapper.credential.HospitalizationCertificateMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
+import com.kaos.his.mapper.personnel.PatientMapper;
 
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +39,19 @@ public class EscortService {
     InpatientMapper inpatientMapper;
 
     /**
+     * 患者实体接口
+     */
+    @Autowired
+    PatientMapper patientMapper;
+
+    /**
      * 查询有效的被陪护患者信息
      * 
      * @param cardNo 陪护人就诊卡号
      */
-    public List<Pair<HospitalizationCertificate, Inpatient>> QueryActiveEscortedPatient(String cardNo) {
+    public List<Pair<String, Inpatient>> QueryActiveEscortedPatient(String cardNo) {
         // 声明结果集
-        var resultSet = new ArrayList<Pair<HospitalizationCertificate, Inpatient>>();
+        var resultSet = new ArrayList<Pair<String, Inpatient>>();
 
         // 查询所有关联的陪护证
         var escorts = this.escortMapper.GetEscortsByHelperCardNo(cardNo);
@@ -68,9 +74,22 @@ public class EscortService {
             // 尝试根据陪护证获取住院实体
             var inpatient = this.inpatientMapper.GetInpatientByCardNoAndHappenNo(relatehosCtf.cardNo,
                     relatehosCtf.happenNo);
+            // 若为空，则创造虚拟住院实体
+            if (inpatient == null) {
+                var patient = this.patientMapper.GetPatientByCardNo(relatehosCtf.cardNo);
+                inpatient = new Inpatient() {
+                    {
+                        cardNo = patient.cardNo;
+                        name = patient.name;
+                        sex = patient.sex;
+                        dept = relatehosCtf.preDept;
+                        bedNo = relatehosCtf.preBedNo;
+                    }
+                };
+            }
 
             // 加入结果集
-            resultSet.add(new Pair<HospitalizationCertificate, Inpatient>(relatehosCtf, inpatient));
+            resultSet.add(new Pair<String, Inpatient>(escort.escortNo, inpatient));
         }
 
         return resultSet;
