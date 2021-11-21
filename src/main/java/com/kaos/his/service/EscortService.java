@@ -1,9 +1,12 @@
 package com.kaos.his.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.kaos.his.entity.credential.Escort;
+import com.kaos.his.entity.credential.HospitalizationCertificate;
 import com.kaos.his.entity.personnel.Inpatient;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.mapper.credential.EscortMapper;
@@ -56,6 +59,9 @@ public class EscortService {
         // 查询所有关联的陪护证
         var escorts = this.escortMapper.GetEscortsByHelperCardNo(cardNo);
 
+        // 辅助字典 - 记录患者的最近一次住院证，加速大批量数据时的查询
+        Map<String, HospitalizationCertificate> hosCtfDict = new HashMap<String, HospitalizationCertificate>();
+
         // 筛选出有效的陪护证
         for (Escort escort : escorts) {
             // 如果状态为注销，则陪护证是无效的
@@ -65,8 +71,14 @@ public class EscortService {
 
             // 提取住院证，如果住院证不是患者最近的一张陪护证，说明被关联的患者已经出院，陪护证应当自动失效
             var relatehosCtf = escort.hospitalizationCertificate;
-            var latestHosCtf = this.hospitalizationCertificateMapper
-                    .GetLatestHospitalizationCertificate(relatehosCtf.cardNo);
+            HospitalizationCertificate latestHosCtf = null;
+            if (hosCtfDict.containsKey(relatehosCtf.cardNo)) {
+                latestHosCtf = hosCtfDict.get(relatehosCtf.cardNo);
+            } else {
+                latestHosCtf = this.hospitalizationCertificateMapper
+                        .GetLatestHospitalizationCertificate(relatehosCtf.cardNo);
+                hosCtfDict.put(relatehosCtf.cardNo, latestHosCtf);
+            }
             if (relatehosCtf.happenNo != latestHosCtf.happenNo) {
                 continue;
             }
