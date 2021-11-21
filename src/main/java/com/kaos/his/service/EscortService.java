@@ -82,6 +82,7 @@ public class EscortService {
                         cardNo = patient.cardNo;
                         name = patient.name;
                         sex = patient.sex;
+                        birthday = patient.birthday;
                         dept = relatehosCtf.preDept;
                         bedNo = relatehosCtf.preBedNo;
                     }

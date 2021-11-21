@@ -85,23 +85,21 @@ public class GetEscortedPatientController {
         // 循环赋值
         for (Pair<String, Inpatient> pair : activePatients) {
             var inpatient = pair.getValue1();
-            resultSet.add(new PatientInfo() {
-                {
-                    escortNo = pair.getValue0();
-                    cardNo = inpatient.cardNo;
-                    name = inpatient.name;
-                    sex = inpatient.sex;
-                    age = DateHelper.GetAgeDetail(inpatient.birthday);
-                    deptName = inpatient.dept.name;
-                    bedNo = inpatient.bedNo;
-                    patientNo = inpatient.patientNo;
-                }
-            });
+            var patientInfo = new PatientInfo();
+            patientInfo.escortNo = pair.getValue0();
+            patientInfo.cardNo = inpatient.cardNo;
+            patientInfo.name = inpatient.name;
+            patientInfo.sex = inpatient.sex;
+            patientInfo.age = DateHelper.GetAgeDetail(inpatient.birthday);
+            patientInfo.deptName = inpatient.dept.name;
+            patientInfo.bedNo = inpatient.bedNo;
+            patientInfo.patientNo = inpatient.patientNo;
+            resultSet.add(patientInfo);
         }
 
         // 响应json字符串
-        Gson gson = new GsonBuilder().registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class))
-                .create();
+        Gson gson = new GsonBuilder().serializeNulls()
+                .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class)).create();
         return gson.toJson(resultSet);
     }
 }
