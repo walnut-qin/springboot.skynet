@@ -18,6 +18,12 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		<!-- 引入java元组库 -->
+		<dependency>
+			<groupId>org.javatuples</groupId>
+			<artifactId>javatuples</artifactId>
+			<version>1.2</version>
+		</dependency>
 
 		<!-- 添加gson模块 -->
 		<dependency>

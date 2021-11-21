@@ -17,10 +17,18 @@ public interface EscortMapper {
     Escort GetEscort(String escortNo);
 
     /**
-     * 获取陪护证列表
+     * 根据陪护人卡号查询关联的陪护证
      * 
      * @param escortNo 陪护人卡号
      * @return
      */
     List<Escort> GetEscortsByHelperCardNo(String cardNo);
+
+    /**
+     * 根据陪护人卡号查询关联的陪护证
+     * 
+     * @param cardNo
+     * @return
+     */
+    List<Escort> GetEscortsByPatientCardNo(String cardNo);
 }
