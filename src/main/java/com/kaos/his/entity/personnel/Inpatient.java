@@ -2,7 +2,6 @@ package com.kaos.his.entity.personnel;
 
 import java.util.Date;
 
-import com.kaos.his.entity.credential.HospitalizationCertificate;
 import com.kaos.his.enums.InpatientStateEnum;
 
 public class Inpatient extends Deptpatient {
@@ -35,9 +34,4 @@ public class Inpatient extends Deptpatient {
      * 出院日期
      */
     public Date outDate;
-
-    /**
-     * 住院证实体
-     */
-    public HospitalizationCertificate hospitalizationCertificate;
 }

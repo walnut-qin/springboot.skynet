@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.kaos.his.entity.organization.Department;
 import com.kaos.his.entity.personnel.Employee;
+import com.kaos.his.entity.personnel.Patient;
 import com.kaos.his.enums.HospitalizationCertificateStateEnum;
 
 public class HospitalizationCertificate {
@@ -16,6 +17,11 @@ public class HospitalizationCertificate {
      * 发生序号
      */
     public Integer happenNo;
+
+    /**
+     * 登记住院的患者实体
+     */
+    public Patient patient;
 
     /**
      * 操作职员（开立住院证的人）
