@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.his.mapper.personnel.InpatientMapper">
-    <resultMap id="resultMap" extends="com.kaos.his.mapper.personnel.DeptpatientMapper.map" type="com.kaos.his.entity.personnel.Inpatient">
+    <resultMap id="map" extends="com.kaos.his.mapper.personnel.DeptpatientMapper.map" type="com.kaos.his.entity.personnel.Inpatient">
         <id column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
         <result column="STATE" jdbcType="VARCHAR" property="state"/>
         <result column="NURSE_CELL_CODE" jdbcType="VARCHAR" property="nurseCellCode"/>
@@ -10,144 +10,63 @@
         <result column="OUT_DATE" jdbcType="VARCHAR" property="outDate"/>
     </resultMap>
 
-    <select id="GetInpatientByPatientNo" resultMap="resultMap">
+    <!-- 接口1 -->
+    <select id="QueryInpatient" resultMap="map">
         SELECT
-            T1.PATIENT_NO AS PATIENT_NO,
-            T1.IN_STATE AS STATE,
-            T1.NURSE_CELL_CODE AS NURSE_CELL_CODE,
-            T1.BED_NO AS BED_NO,
-            T1.IN_DATE AS IN_DATE,
-            T1.OUT_DATE AS OUT_DATE,
-            T1.OPER_DATE AS OPER_DATE,
-            T1.OPER_CODE AS OPER_CODE,
-            T2.EMPL_NAME AS OPER_NAME,
-            T2.SEX_CODE AS OPER_SEX,
-            T2.BIRTHDAY AS OPER_BIRTHDAY,
-            T2.IDENNO AS OPER_IDENTITY_NO,
-            T2.TEL AS OPER_PHONE_NO,
-            T2.EMAIL AS OPER_EMAIL,
-            T2.DEPT_ID AS OPER_DEPT_CODE,
-            T3.DEPT_NAME AS OPER_DEPT_NAME,
-            T3.DEPTOWN AS OPER_DEPT_DEPTOWN,
-            T1.DEPT_CODE AS DEPT_CODE,
-            T4.DEPT_NAME AS DEPT_NAME,
-            T4.DEPTOWN AS DEPTOWN,
-            T1.CARD_NO AS CARD_NO,
-            T5.GCPOUTPATIENT AS GCPOUTPATIENT,
-            T5.NAME AS NAME,
-            T5.SEX_CODE AS SEX,
-            T5.BIRTHDAY AS BIRTHDAY,
-            T5.IDENNO AS IDENTITY_NO,
-            NVL(T5.WORK_TEL, NVL(T5.HOME_TEL, T5.LINKMAN_TEL)) AS PHONE_NO,
-            T5.EMAIL AS EMAIL
+        <include refid="allItem"/>
         FROM
             FIN_IPR_INMAININFO T1
-            LEFT JOIN DAWN_ORG_EMPL T2 ON T2.EMPL_ID = T1.OPER_CODE
-            LEFT JOIN DAWN_ORG_DEPT T3 ON T3.DEPT_ID = T2.DEPT_ID
-            LEFT JOIN DAWN_ORG_DEPT T4 ON T4.DEPT_ID = T1.DEPT_CODE
-            LEFT JOIN COM_PATIENTINFO T5 ON T5.CARD_NO = T1.CARD_NO
-            LEFT JOIN FIN_IPR_PREPAYIN T6 ON T6.CARD_NO = T1.CARD_NO AND T6.HAPPEN_NO = T1.HAPPEN_NO
-            LEFT JOIN DAWN_ORG_EMPL T7 ON T7.EMPL_ID = T6.OPER_CODE AND T7.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T8 ON T8.DEPT_ID = T7.DEPT_ID AND T8.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T9 ON T9.DEPT_ID = T6.DEPT_CODE AND T9.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_EMPL T10 ON T10.EMPL_ID = T6.PREDOCT_CODE AND T10.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T11 ON T11.DEPT_ID = T10.DEPT_ID AND T11.VALID_STATE = '1'
-        WHERE
-            T1.PATIENT_NO = #{patientNo}
+            LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO AND T2.IS_VALID = '1'
+        <where>
+            <if test="patientNo!=null">
+                AND T1.PATIENT_NO = #{patientNo}
+            </if>
+        </where>
     </select>
 
-    <select id="GetInpatientByCardNoAndHappenNo" resultMap="resultMap">
-        SELECT
-            T1.PATIENT_NO AS PATIENT_NO,
-            T1.IN_STATE AS STATE,
-            T1.NURSE_CELL_CODE AS NURSE_CELL_CODE,
-            T1.BED_NO AS BED_NO,
-            T1.IN_DATE AS IN_DATE,
-            T1.OUT_DATE AS OUT_DATE,
-            T1.OPER_DATE AS OPER_DATE,
-            T1.OPER_CODE AS OPER_CODE,
-            T2.EMPL_NAME AS OPER_NAME,
-            T2.SEX_CODE AS OPER_SEX,
-            T2.BIRTHDAY AS OPER_BIRTHDAY,
-            T2.IDENNO AS OPER_IDENTITY_NO,
-            T2.TEL AS OPER_PHONE_NO,
-            T2.EMAIL AS OPER_EMAIL,
-            T2.DEPT_ID AS OPER_DEPT_CODE,
-            T3.DEPT_NAME AS OPER_DEPT_NAME,
-            T3.DEPTOWN AS OPER_DEPT_DEPTOWN,
-            T1.DEPT_CODE AS DEPT_CODE,
-            T4.DEPT_NAME AS DEPT_NAME,
-            T4.DEPTOWN AS DEPTOWN,
-            T1.CARD_NO AS CARD_NO,
-            T5.GCPOUTPATIENT AS GCPOUTPATIENT,
-            T5.NAME AS NAME,
-            T5.SEX_CODE AS SEX,
-            T5.BIRTHDAY AS BIRTHDAY,
-            T5.IDENNO AS IDENTITY_NO,
-            NVL(T5.WORK_TEL, NVL(T5.HOME_TEL, T5.LINKMAN_TEL)) AS PHONE_NO,
-            T5.EMAIL AS EMAIL
-        FROM
-            FIN_IPR_INMAININFO T1
-            LEFT JOIN DAWN_ORG_EMPL T2 ON T2.EMPL_ID = T1.OPER_CODE
-            LEFT JOIN DAWN_ORG_DEPT T3 ON T3.DEPT_ID = T2.DEPT_ID
-            LEFT JOIN DAWN_ORG_DEPT T4 ON T4.DEPT_ID = T1.DEPT_CODE
-            LEFT JOIN COM_PATIENTINFO T5 ON T5.CARD_NO = T1.CARD_NO
-            LEFT JOIN FIN_IPR_PREPAYIN T6 ON T6.CARD_NO = T1.CARD_NO AND T6.HAPPEN_NO = T1.HAPPEN_NO
-            LEFT JOIN DAWN_ORG_EMPL T7 ON T7.EMPL_ID = T6.OPER_CODE AND T7.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T8 ON T8.DEPT_ID = T7.DEPT_ID AND T8.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T9 ON T9.DEPT_ID = T6.DEPT_CODE AND T9.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_EMPL T10 ON T10.EMPL_ID = T6.PREDOCT_CODE AND T10.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T11 ON T11.DEPT_ID = T10.DEPT_ID AND T11.VALID_STATE = '1'
-        WHERE
-            T1.CARD_NO = #{cardNo}
-            AND T1.HAPPEN_NO = #{happenNo}
-    </select>
+    <!-- 所有字段 -->
+    <sql id="allItem">
+        T1.PATIENT_NO AS PATIENT_NO,
+        T1.IN_STATE AS STATE,
+        T1.NURSE_CELL_CODE AS NURSE_CELL_CODE,
+        T1.BED_NO AS BED_NO,
+        T1.IN_DATE AS IN_DATE,
+        T1.OUT_DATE AS OUT_DATE,
+        <include refid="deptpatientItem"/>
+    </sql>
 
-    <select id="GetInpatientsByCardNo" resultMap="resultMap">
-        SELECT
-            T1.PATIENT_NO AS PATIENT_NO,
-            T1.IN_STATE AS STATE,
-            T1.NURSE_CELL_CODE AS NURSE_CELL_CODE,
-            T1.BED_NO AS BED_NO,
-            T1.IN_DATE AS IN_DATE,
-            T1.OUT_DATE AS OUT_DATE,
-            T1.OPER_DATE AS OPER_DATE,
-            T1.OPER_CODE AS OPER_CODE,
-            T2.EMPL_NAME AS OPER_NAME,
-            T2.SEX_CODE AS OPER_SEX,
-            T2.BIRTHDAY AS OPER_BIRTHDAY,
-            T2.IDENNO AS OPER_IDENTITY_NO,
-            T2.TEL AS OPER_PHONE_NO,
-            T2.EMAIL AS OPER_EMAIL,
-            T2.DEPT_ID AS OPER_DEPT_CODE,
-            T3.DEPT_NAME AS OPER_DEPT_NAME,
-            T3.DEPTOWN AS OPER_DEPT_DEPTOWN,
-            T1.DEPT_CODE AS DEPT_CODE,
-            T4.DEPT_NAME AS DEPT_NAME,
-            T4.DEPTOWN AS DEPTOWN,
-            T1.CARD_NO AS CARD_NO,
-            T5.GCPOUTPATIENT AS GCPOUTPATIENT,
-            T5.NAME AS NAME,
-            T5.SEX_CODE AS SEX,
-            T5.BIRTHDAY AS BIRTHDAY,
-            T5.IDENNO AS IDENTITY_NO,
-            NVL(T5.WORK_TEL, NVL(T5.HOME_TEL, T5.LINKMAN_TEL)) AS PHONE_NO,
-            T5.EMAIL AS EMAIL
-        FROM
-            FIN_IPR_INMAININFO T1
-            LEFT JOIN DAWN_ORG_EMPL T2 ON T2.EMPL_ID = T1.OPER_CODE
-            LEFT JOIN DAWN_ORG_DEPT T3 ON T3.DEPT_ID = T2.DEPT_ID
-            LEFT JOIN DAWN_ORG_DEPT T4 ON T4.DEPT_ID = T1.DEPT_CODE
-            LEFT JOIN COM_PATIENTINFO T5 ON T5.CARD_NO = T1.CARD_NO
-            LEFT JOIN FIN_IPR_PREPAYIN T6 ON T6.CARD_NO = T1.CARD_NO AND T6.HAPPEN_NO = T1.HAPPEN_NO
-            LEFT JOIN DAWN_ORG_EMPL T7 ON T7.EMPL_ID = T6.OPER_CODE AND T7.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T8 ON T8.DEPT_ID = T7.DEPT_ID AND T8.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T9 ON T9.DEPT_ID = T6.DEPT_CODE AND T9.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_EMPL T10 ON T10.EMPL_ID = T6.PREDOCT_CODE AND T10.VALID_STATE = '1'
-            LEFT JOIN DAWN_ORG_DEPT T11 ON T11.DEPT_ID = T10.DEPT_ID AND T11.VALID_STATE = '1'
-        WHERE
-            T1.CARD_NO = #{cardNo}
-        ORDER BY
-            T1.OPER_DATE ASC
-    </select>
+    <!-- baseItem -->
+    <sql id="deptpatientItem">
+        <include refid="OPER_employeeItem"/>
+        T1.OPER_DATE AS OPER_DATE,
+        <include refid="DEPT_departmentItem"/>
+        <include refid="patientItem"/>
+    </sql>
+
+    <!-- operEmployee -->
+    <sql id="OPER_employeeItem">
+        T1.OPER_CODE AS OPER_CODE,
+    </sql>
+
+    <!-- dept -->
+    <sql id="DEPT_departmentItem">
+        T1.DEPT_CODE AS DEPT_CODE,
+    </sql>
+
+    <!-- baseItem -->
+    <sql id="patientItem">
+        T1.CARD_NO  AS CARD_NO,
+        T2.GCPOUTPATIENT AS GCPOUTPATIENT,
+        <include refid="citizenItem"/>
+    </sql>
+
+    <!-- baseItem -->
+    <sql id="citizenItem">
+        T2.NAME AS NAME,
+        T2.SEX_CODE AS SEX,
+        T2.BIRTHDAY AS BIRTHDAY,
+        T2.IDENNO AS IDENTITY_NO,
+        NVL(T2.WORK_TEL, NVL(T2.HOME_TEL, T2.LINKMAN_TEL)) AS PHONE_NO,
+        T2.EMAIL AS EMAIL
+    </sql>
 </mapper>

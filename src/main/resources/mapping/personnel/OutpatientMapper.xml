@@ -64,7 +64,7 @@
 
     <!-- baseItem -->
     <sql id="patientItem">
-        T2.CARD_NO  AS CARD_NO,
+        T1.CARD_NO  AS CARD_NO,
         T2.GCPOUTPATIENT AS GCPOUTPATIENT,
         <include refid="citizenItem"/>
     </sql>
@@ -75,7 +75,7 @@
         T2.SEX_CODE AS SEX,
         T2.BIRTHDAY AS BIRTHDAY,
         T2.IDENNO AS IDENTITY_NO,
-        NVL(WORK_TEL, NVL(HOME_TEL, LINKMAN_TEL)) AS PHONE_NO,
+        NVL(T2.WORK_TEL, NVL(T2.HOME_TEL, T2.LINKMAN_TEL)) AS PHONE_NO,
         T2.EMAIL AS EMAIL
     </sql>
 </mapper>

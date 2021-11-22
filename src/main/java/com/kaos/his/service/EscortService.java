@@ -83,8 +83,7 @@ public class EscortService {
             }
 
             // 如果已入院，则将住院患者实体更新为住院实体
-            var inpatient = this.inpatientMapper.GetInpatientByCardNoAndHappenNo(relatehosCtf.cardNo,
-                    relatehosCtf.happenNo);
+            var inpatient = this.inpatientMapper.QueryInpatientR1(relatehosCtf.cardNo, relatehosCtf.happenNo);
             if (inpatient != null) {
                 escort.hospitalizationCertificate.patient = inpatient;
             }
