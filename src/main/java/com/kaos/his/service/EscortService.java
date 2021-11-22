@@ -48,9 +48,10 @@ public class EscortService {
     PatientMapper patientMapper;
 
     /**
-     * 查询有效的被陪护患者信息
+     * 根据陪护人卡号，查询有效的被陪护患者信息
      * 
-     * @param cardNo 陪护人就诊卡号
+     * @param cardNo 陪护人卡号
+     * @return 键值对列表<陪护证编号，住院实体>
      */
     public List<Pair<String, Inpatient>> QueryActiveEscortedPatient(String cardNo) {
         // 声明结果集

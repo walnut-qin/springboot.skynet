@@ -30,5 +30,5 @@ public interface EscortMapper {
      * @param cardNo
      * @return
      */
-    List<Escort> GetEscortsByPatientCardNo(String cardNo);
+    List<Escort> GetEscortsByPatientCardNoAndHappenNo(String cardNo, Integer happenNo);
 }
