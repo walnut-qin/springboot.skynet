@@ -1,7 +1,7 @@
 package com.kaos.his.service;
 
-import com.kaos.his.entity.organization.Department;
-import com.kaos.his.mapper.organization.DepartmentMapper;
+import com.kaos.his.entity.personnel.Employee;
+import com.kaos.his.mapper.personnel.EmployeeMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestService {
     @Autowired
-    DepartmentMapper departmentMapper;
+    EmployeeMapper departmentMapper;
 
-    public Department GetDepartment(String deptCode) {
-        return this.departmentMapper.QueryDepartment(deptCode);
+    public Employee Run(String param) {
+        return this.departmentMapper.QueryEmployee(param);
     }
 }

@@ -12,5 +12,5 @@ public interface EmployeeMapper {
      * @param id 职工编号
      * @return 职工实体
      */
-    Employee GetEmployeeByEmplCode(String emplCode);
+    Employee QueryEmployee(String emplCode);
 }

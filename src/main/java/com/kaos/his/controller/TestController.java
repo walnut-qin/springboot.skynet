@@ -19,13 +19,13 @@ public class TestController {
     TestService testService;
 
     @RequestMapping(value = "test", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String Run(@RequestParam("cardNo") String deptCode) {
-        var dept = this.testService.GetDepartment(deptCode);
+    public String Run(@RequestParam("param") String param) {
+        var result = this.testService.Run(param);
 
         // 响应json字符串
         Gson gson = new GsonBuilder().serializeNulls()
                 .registerTypeAdapter(DeptOwnEnum.class, new GsonEnumTypeAdapter<>(DeptOwnEnum.class)).create();
 
-        return gson.toJson(dept);
+        return gson.toJson(result);
     }
 }

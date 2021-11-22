@@ -1,27 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.his.mapper.personnel.EmployeeMapper">
-    <resultMap id="resultMap" extends="com.kaos.his.mapper.personnel.CitizenMapper.resultMap" type="com.kaos.his.entity.personnel.Employee">
+    <!-- 实体映射表 -->
+    <resultMap id="map" extends="com.kaos.his.mapper.personnel.CitizenMapper.map" type="com.kaos.his.entity.personnel.Employee">
         <id column="CODE" jdbcType="VARCHAR" property="code"/>
-        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.resultMap" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
+        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.map" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
     </resultMap>
 
-    <select id="GetEmployeeByEmplCode" resultMap="resultMap">
+    <!-- 组合dept字段 -->
+    <sql id="deptItem">
+        T1.DEPT_ID AS DEPT_CODE,
+        T2.DEPT_NAME AS DEPT_NAME,
+        T2.DEPTOWN AS DEPT_DEPTOWN,
+    </sql>
+
+    <!-- 父类Citizen字段 -->
+    <sql id="citizenItem">
+        T1.EMPL_ID AS CODE,
+        T1.EMPL_NAME AS NAME,
+        T1.SEX_CODE AS SEX,
+        T1.BIRTHDAY AS BIRTHDAY,
+        T1.IDENNO AS IDENTITY_NO,
+        T1.TEL AS PHONE_NO,
+        T1.EMAIL AS EMAIL
+    </sql>
+
+    <!-- 待查字段：Employee字段 -->
+    <sql id="allItem">
+        T1.EMPL_ID AS CODE,
+        <include refid="deptItem"/>
+        <include refid="citizenItem"/>
+    </sql>
+
+
+    <!-- 接口 -->
+    <select id="QueryEmployee" resultMap="map">
         SELECT
-            T1.EMPL_ID AS CODE,
-            T1.EMPL_NAME AS NAME,
-            T1.SEX_CODE AS SEX,
-            T1.BIRTHDAY AS BIRTHDAY,
-            T1.IDENNO AS IDENTITY_NO,
-            T1.TEL AS PHONE_NO,
-            T1.EMAIL AS EMAIL,
-            T2.DEPT_ID AS DEPT_CODE,
-            T2.DEPT_NAME AS DEPT_NAME,
-            T2.DEPTOWN AS DEPT_DEPTOWN
+        <include refid="allItem"/>
         FROM
             DAWN_ORG_EMPL T1
             LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_ID AND T2.VALID_STATE = '1'
-        WHERE
-            T1.EMPL_ID = #{emplCode}
+        <where>
+            <if test="emplCode!=null">
+                AND T1.EMPL_ID = #{emplCode}
+            </if>
+        </where>
     </select>
 </mapper>
