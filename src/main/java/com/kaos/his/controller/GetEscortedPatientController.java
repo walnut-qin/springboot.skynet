@@ -11,7 +11,6 @@ import com.kaos.his.enums.util.GsonEnumTypeAdapter;
 import com.kaos.his.service.EscortService;
 import com.kaos.util.DateHelper;
 
-import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,19 +80,25 @@ public class GetEscortedPatientController {
         var resultSet = new ArrayList<PatientInfo>();
 
         // 调取服务
-        var activePatients = this.escortService.QueryActiveEscortedPatient(cardNo);
+        var escorts = this.escortService.QueryActiveEscortedPatient(cardNo);
 
         // 循环赋值
-        for (Pair<Escort, Inpatient> pair : activePatients) {
+        for (Escort escort : escorts) {
             var patientInfo = new PatientInfo();
-            patientInfo.escortNo = pair.getValue0().escortNo;
-            patientInfo.cardNo = pair.getValue1().cardNo;
-            patientInfo.name = pair.getValue1().name;
-            patientInfo.sex = pair.getValue1().sex;
-            patientInfo.age = DateHelper.GetAgeDetail(pair.getValue1().birthday);
-            patientInfo.deptName = pair.getValue1().dept.name;
-            patientInfo.bedNo = pair.getValue1().bedNo;
-            patientInfo.patientNo = pair.getValue1().patientNo;
+            patientInfo.escortNo = escort.escortNo;
+            patientInfo.cardNo = escort.hospitalizationCertificate.patient.cardNo;
+            patientInfo.name = escort.hospitalizationCertificate.patient.name;
+            patientInfo.sex = escort.hospitalizationCertificate.patient.sex;
+            patientInfo.age = DateHelper.GetAgeDetail(escort.hospitalizationCertificate.patient.birthday);
+            if (escort.hospitalizationCertificate.patient instanceof Inpatient) {
+                patientInfo.deptName = ((Inpatient) escort.hospitalizationCertificate.patient).dept.name;
+                patientInfo.bedNo = ((Inpatient) escort.hospitalizationCertificate.patient).bedNo;
+                patientInfo.patientNo = ((Inpatient) escort.hospitalizationCertificate.patient).patientNo;
+            } else {
+                patientInfo.deptName = escort.hospitalizationCertificate.preDept.name;
+                patientInfo.bedNo = escort.hospitalizationCertificate.preBedNo;
+                patientInfo.patientNo = null;
+            }
             resultSet.add(patientInfo);
         }
 
