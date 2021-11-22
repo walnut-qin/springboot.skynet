@@ -12,5 +12,5 @@ public interface PatientMapper {
      * @param cardNo 就诊卡号
      * @return 患者实体
      */
-    Patient GetPatientByCardNo(String cardNo);
+    Patient QueryPatient(String cardNo);
 }

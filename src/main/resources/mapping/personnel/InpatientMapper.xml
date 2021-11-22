@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.his.mapper.personnel.InpatientMapper">
-    <resultMap id="resultMap" extends="com.kaos.his.mapper.personnel.DeptpatientMapper.resultMap" type="com.kaos.his.entity.personnel.Inpatient">
+    <resultMap id="resultMap" extends="com.kaos.his.mapper.personnel.DeptpatientMapper.map" type="com.kaos.his.entity.personnel.Inpatient">
         <id column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
         <result column="STATE" jdbcType="VARCHAR" property="state"/>
         <result column="NURSE_CELL_CODE" jdbcType="VARCHAR" property="nurseCellCode"/>

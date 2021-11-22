@@ -7,43 +7,40 @@
         <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.map" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
     </resultMap>
 
-    <!-- 组合dept字段 -->
-    <sql id="deptItem">
-        T1.DEPT_ID AS DEPT_CODE,
-        T2.DEPT_NAME AS DEPT_NAME,
-        T2.DEPTOWN AS DEPT_DEPTOWN,
-    </sql>
-
-    <!-- 父类Citizen字段 -->
-    <sql id="citizenItem">
-        T1.EMPL_ID AS CODE,
-        T1.EMPL_NAME AS NAME,
-        T1.SEX_CODE AS SEX,
-        T1.BIRTHDAY AS BIRTHDAY,
-        T1.IDENNO AS IDENTITY_NO,
-        T1.TEL AS PHONE_NO,
-        T1.EMAIL AS EMAIL
-    </sql>
-
-    <!-- 所有字段 -->
-    <sql id="allItem">
-        T1.EMPL_ID AS CODE,
-        <include refid="deptItem"/>
-        <include refid="citizenItem"/>
-    </sql>
-
-
     <!-- 接口 -->
     <select id="QueryEmployee" resultMap="map">
         SELECT
         <include refid="allItem"/>
         FROM
-            DAWN_ORG_EMPL T1
-            LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_ID AND T2.VALID_STATE = '1'
+            DAWN_ORG_EMPL
         <where>
             <if test="emplCode!=null">
-                AND T1.EMPL_ID = #{emplCode}
+                AND EMPL_ID = #{emplCode}
+                AND VALID_STATE = '1'
             </if>
         </where>
     </select>
+
+    <!-- 所有字段 -->
+    <sql id="allItem">
+        EMPL_ID AS CODE,
+        <include refid="DEPT_departmentItem"/>
+        <include refid="citizenItem"/>
+    </sql>
+
+    <!-- 组合dept字段 -->
+    <sql id="DEPT_departmentItem">
+        DEPT_ID AS DEPT_CODE,
+    </sql>
+
+    <!-- 父类Citizen字段 -->
+    <sql id="citizenItem">
+        EMPL_ID AS CODE,
+        EMPL_NAME AS NAME,
+        SEX_CODE AS SEX,
+        BIRTHDAY AS BIRTHDAY,
+        IDENNO AS IDENTITY_NO,
+        TEL AS PHONE_NO,
+        EMAIL AS EMAIL
+    </sql>
 </mapper>

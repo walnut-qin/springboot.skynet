@@ -15,6 +15,7 @@
         <where>
             <if test="deptCode!=null">
                 AND DEPT_ID = #{deptCode}
+                AND VALID_STATE = '1'
             </if>
         </where>
     </select>

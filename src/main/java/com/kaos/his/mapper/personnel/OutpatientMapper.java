@@ -14,7 +14,7 @@ public interface OutpatientMapper {
      * @param clinicNo 门诊号
      * @return 门诊患者实体
      */
-    Outpatient GetOutpatientByClinicCode(String clinicCode);
+    Outpatient QueryOutpatient(String clinicCode);
 
     /**
      * 根据就诊卡号获取门诊患者实体列表
@@ -22,5 +22,5 @@ public interface OutpatientMapper {
      * @param clinicNo 就诊卡号
      * @return 门诊患者实体
      */
-    List<Outpatient> GetOutpatientsByCardNo(String cardNo);
+    List<Outpatient> QueryOutpatients(String cardNo);
 }

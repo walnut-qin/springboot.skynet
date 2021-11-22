@@ -7,33 +7,34 @@
         <result column="GCPOUTPATIENT" jdbcType="VARCHAR" property="gcpOutPatient"/>
     </resultMap>
 
-    <!-- 父类Citizen字段 -->
-    <sql id="citizenItem">
-        T1.NAME AS NAME,
-        T1.SEX_CODE AS SEX,
-        T1.BIRTHDAY AS BIRTHDAY,
-        T1.IDENNO AS IDENTITY_NO,
-        NVL(T1.WORK_TEL, NVL(T1.HOME_TEL, T1.LINKMAN_TEL)) AS PHONE_NO,
-        T1.EMAIL AS EMAIL
-    </sql>
-
-    <!-- 所有字段 -->
-    <sql id="allItem">
-        T1.CARD_NO  AS CARD_NO,
-        T1.GCPOUTPATIENT AS GCPOUTPATIENT,
-        <include refid="citizenItem"/>
-    </sql>
-
     <!-- 接口 -->
-    <select id="GetPatientByCardNo" resultMap="resultMap">
+    <select id="QueryPatient" resultMap="map">
         SELECT
         <include refid="allItem"/>
         FROM
-            COM_PATIENTINFO T1
+            COM_PATIENTINFO
         <where>
             <if test="cardNo!=null">
-                AND T1.CARD_NO = #{cardNo}
+                AND CARD_NO = #{cardNo}
+                AND IS_VALID = '1'
             </if>
         </where>
     </select>
+
+    <!-- 所有字段 -->
+    <sql id="allItem">
+        CARD_NO  AS CARD_NO,
+        GCPOUTPATIENT AS GCPOUTPATIENT,
+        <include refid="citizenItem"/>
+    </sql>
+
+    <!-- 父类Citizen字段 -->
+    <sql id="citizenItem">
+        NAME AS NAME,
+        SEX_CODE AS SEX,
+        BIRTHDAY AS BIRTHDAY,
+        IDENNO AS IDENTITY_NO,
+        NVL(WORK_TEL, NVL(HOME_TEL, LINKMAN_TEL)) AS PHONE_NO,
+        EMAIL AS EMAIL
+    </sql>
 </mapper>
