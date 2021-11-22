@@ -51,11 +51,11 @@ public class EscortService {
      * 根据陪护人卡号，查询有效的被陪护患者信息
      * 
      * @param cardNo 陪护人卡号
-     * @return 键值对列表<陪护证编号，住院实体>
+     * @return 键值对列表<陪护证实体，住院实体>
      */
-    public List<Pair<String, Inpatient>> QueryActiveEscortedPatient(String cardNo) {
+    public List<Pair<Escort, Inpatient>> QueryActiveEscortedPatient(String cardNo) {
         // 声明结果集
-        var resultSet = new ArrayList<Pair<String, Inpatient>>();
+        var resultSet = new ArrayList<Pair<Escort, Inpatient>>();
 
         // 查询所有关联的陪护证
         var escorts = this.escortMapper.GetEscortsByHelperCardNo(cardNo);
@@ -103,7 +103,7 @@ public class EscortService {
             }
 
             // 加入结果集
-            resultSet.add(new Pair<String, Inpatient>(escort.escortNo, inpatient));
+            resultSet.add(new Pair<Escort, Inpatient>(escort, inpatient));
         }
 
         return resultSet;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kaos.his.entity.credential.Escort;
 import com.kaos.his.entity.personnel.Inpatient;
 import com.kaos.his.enums.SexEnum;
 import com.kaos.his.enums.util.GsonEnumTypeAdapter;
@@ -83,17 +84,16 @@ public class GetEscortedPatientController {
         var activePatients = this.escortService.QueryActiveEscortedPatient(cardNo);
 
         // 循环赋值
-        for (Pair<String, Inpatient> pair : activePatients) {
-            var inpatient = pair.getValue1();
+        for (Pair<Escort, Inpatient> pair : activePatients) {
             var patientInfo = new PatientInfo();
-            patientInfo.escortNo = pair.getValue0();
-            patientInfo.cardNo = inpatient.cardNo;
-            patientInfo.name = inpatient.name;
-            patientInfo.sex = inpatient.sex;
-            patientInfo.age = DateHelper.GetAgeDetail(inpatient.birthday);
-            patientInfo.deptName = inpatient.dept.name;
-            patientInfo.bedNo = inpatient.bedNo;
-            patientInfo.patientNo = inpatient.patientNo;
+            patientInfo.escortNo = pair.getValue0().escortNo;
+            patientInfo.cardNo = pair.getValue1().cardNo;
+            patientInfo.name = pair.getValue1().name;
+            patientInfo.sex = pair.getValue1().sex;
+            patientInfo.age = DateHelper.GetAgeDetail(pair.getValue1().birthday);
+            patientInfo.deptName = pair.getValue1().dept.name;
+            patientInfo.bedNo = pair.getValue1().bedNo;
+            patientInfo.patientNo = pair.getValue1().patientNo;
             resultSet.add(patientInfo);
         }
 
