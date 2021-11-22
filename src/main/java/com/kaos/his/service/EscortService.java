@@ -51,7 +51,7 @@ public class EscortService {
      * @param cardNo 陪护人卡号
      * @return 键值对列表<陪护证实体，住院实体>
      */
-    public List<Escort> QueryActiveEscortedPatient(String cardNo) {
+    public List<Escort> QueryActiveEscortsByHelper(String cardNo) {
         // 声明结果集
         var resultSet = new ArrayList<Escort>();
 
@@ -87,6 +87,39 @@ public class EscortService {
                     relatehosCtf.happenNo);
             if (inpatient != null) {
                 escort.hospitalizationCertificate.patient = inpatient;
+            }
+
+            // 加入结果集
+            resultSet.add(escort);
+        }
+
+        return resultSet;
+    }
+
+    /**
+     * 查询患者关联的有效的陪护证
+     * 
+     * @param cardNo 患者就诊卡号
+     * @return 陪护证实体
+     */
+    public List<Escort> QueryActiveEscortsByPatient(String cardNo) {
+        // 声明结果集
+        var resultSet = new ArrayList<Escort>();
+
+        // 获取最近的一张住院证
+        var latestHosCtf = this.hospitalizationCertificateMapper.GetLatestHospitalizationCertificate(cardNo);
+        if (latestHosCtf == null) {
+            throw new RuntimeException("患者无住院证");
+        }
+
+        // 查询所有关联的陪护证
+        var escorts = this.escortMapper.GetEscortsByPatientCardNoAndHappenNo(cardNo, latestHosCtf.happenNo);
+
+        // 筛选出有效的陪护证
+        for (Escort escort : escorts) {
+            // 如果状态为注销，则陪护证是无效的
+            if (escort.states.isEmpty() || escort.states.get(escort.states.size() - 1).state == EscortStateEnum.注销) {
+                continue;
             }
 
             // 加入结果集

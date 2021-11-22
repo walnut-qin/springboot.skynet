@@ -80,7 +80,7 @@ public class GetEscortedPatientController {
         var resultSet = new ArrayList<PatientInfo>();
 
         // 调取服务
-        var escorts = this.escortService.QueryActiveEscortedPatient(cardNo);
+        var escorts = this.escortService.QueryActiveEscortsByHelper(cardNo);
 
         // 循环赋值
         for (Escort escort : escorts) {
