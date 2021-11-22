@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.his.mapper.personnel.DeptpatientMapper">
-    <resultMap id="resultMap" extends="com.kaos.his.mapper.personnel.PatientMapper.resultMap" type="com.kaos.his.entity.personnel.Deptpatient">
+    <!-- 实体映射表 -->
+    <resultMap id="resultMap" extends="com.kaos.his.mapper.personnel.PatientMapper.map" type="com.kaos.his.entity.personnel.Deptpatient">
         <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
-        <association columnPrefix="OPER_" resultMap="com.kaos.his.mapper.personnel.EmployeeMapper.resultMap" javaType="com.kaos.his.entity.personnel.Employee" property="operEmployee"/>
-        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.resultMap" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
+        <association columnPrefix="OPER_" resultMap="com.kaos.his.mapper.personnel.EmployeeMapper.map" javaType="com.kaos.his.entity.personnel.Employee" property="operEmployee"/>
+        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.map" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
     </resultMap>
 </mapper>
