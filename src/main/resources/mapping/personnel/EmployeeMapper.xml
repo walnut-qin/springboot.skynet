@@ -25,7 +25,7 @@
         T1.EMAIL AS EMAIL
     </sql>
 
-    <!-- 待查字段：Employee字段 -->
+    <!-- 所有字段 -->
     <sql id="allItem">
         T1.EMPL_ID AS CODE,
         <include refid="deptItem"/>
