@@ -22,9 +22,11 @@
         FROM
             V_LIS_VCONRESULT1
         <where>
-            <if test="cardNo!=null">
-                AND PATIENTNO = #{cardNo}
-                AND ITEMCODE = 'SARS-CoV-2-RNA'
+            <if test="index!=null">
+                AND PATIENTNO = #{index}
+            </if>
+            <if test="itemCode!=null">
+                AND ITEMCODE = #{itemCode}
             </if>
             <if test="days!=null">
                 AND RESULTDATE >= SYSDATE - #{days}

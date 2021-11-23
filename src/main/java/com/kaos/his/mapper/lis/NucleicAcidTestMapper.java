@@ -11,9 +11,10 @@ public interface NucleicAcidTestMapper {
     /**
      * 查询核酸检测结果
      * 
-     * @param cardNo 卡号
-     * @param days   多少日以内
-     * @return
+     * @param index    索引值
+     * @param itemCode 项目编码
+     * @param days     检索期限
+     * @return 检测结果实体
      */
-    List<NucleicAcidTest> QueryNucleicAcidTest(String cardNo, Integer days);
+    List<NucleicAcidTest> QueryNucleicAcidTest(String index, String itemCode, Integer days);
 }

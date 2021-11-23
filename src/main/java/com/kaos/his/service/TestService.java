@@ -17,7 +17,7 @@ public class TestService {
 
     public Inpatient Run(String param) {
         var v = this.inpatientMapper.QueryInpatient(param);
-        v.nucleicAcidTests = this.nucleicAcidTestMapper.QueryNucleicAcidTest(v.patientNo, 14);
+        v.nucleicAcidTests = this.nucleicAcidTestMapper.QueryNucleicAcidTest(v.patientNo, "SARS-CoV-2-RNA", 14);
         return v;
     }
 }
