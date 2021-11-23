@@ -2,6 +2,7 @@ package com.kaos.his.entity.personnel;
 
 import java.util.List;
 
+import com.kaos.his.entity.product.Order;
 import com.kaos.his.entity.lis.NucleicAcidTest;
 
 public class Patient extends Citizen {
@@ -19,4 +20,9 @@ public class Patient extends Citizen {
      * 核酸检测结果
      */
     public List<NucleicAcidTest> nucleicAcidTests = null;
+
+    /**
+     * 医嘱列表
+     */
+    public List<Order> orders = null;
 }
