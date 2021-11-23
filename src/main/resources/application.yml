@@ -63,3 +63,4 @@ mybatis-plus:
   - classpath:mapping/organization/*.xml
   - classpath:mapping/credential/*.xml
   - classpath:mapping/lis/*.xml
+  - classpath:mapping/product/*.xml
