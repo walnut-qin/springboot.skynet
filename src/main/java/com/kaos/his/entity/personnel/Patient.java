@@ -18,5 +18,5 @@ public class Patient extends Citizen {
     /**
      * 核酸检测结果
      */
-    public List<NucleicAcidTest> nucleicAcidTest = null;
+    public List<NucleicAcidTest> nucleicAcidTests = null;
 }

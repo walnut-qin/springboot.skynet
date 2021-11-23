@@ -23,7 +23,7 @@
 
     <!-- 所有字段 -->
     <sql id="allItem">
-        CARD_NO  AS CARD_NO,
+        CARD_NO AS CARD_NO,
         GCPOUTPATIENT AS GCPOUTPATIENT,
         <include refid="citizenItem"/>
     </sql>
