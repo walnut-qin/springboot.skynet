@@ -1,7 +1,9 @@
 package com.kaos.his.service;
 
-import com.kaos.his.entity.credential.PreinCard;
-import com.kaos.his.mapper.credential.PreinCardMapper;
+import java.util.List;
+
+import com.kaos.his.entity.lis.NucleicAcidTest;
+import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestService {
     @Autowired
-    PreinCardMapper departmentMapper;
+    NucleicAcidTestMapper nucleicAcidTestMapper;
 
-    public PreinCard Run(String param) {
-        return this.departmentMapper.QueryLatestPreinCard(param);
+    public List<NucleicAcidTest> Run(String param) {
+        return this.nucleicAcidTestMapper.QueryNucleicAcidTest(param, 7);
     }
 }

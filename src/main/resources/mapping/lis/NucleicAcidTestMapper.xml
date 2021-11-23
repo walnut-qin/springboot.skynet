@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.lis.NucleicAcidTestMapper">
+    <!-- 实体映射表 -->
+    <resultMap id="map" type="com.kaos.his.entity.lis.NucleicAcidTest">
+        <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="RESULT_DATE" jdbcType="VARCHAR" property="resultDate"/>
+        <result column="NEGATIVE" jdbcType="VARCHAR" property="negative"/>
+    </resultMap>
+
+    <!-- 全部字段 -->
+    <sql id="allItem">
+        PATIENTNO AS CARD_NO,
+        RESULTDATE AS RESULT_DATE,
+        DECODE(RESULT, '阴性(-)', '1', '0') AS NEGATIVE
+    </sql>
+
+    <!-- 接口1 -->
+    <select id="QueryNucleicAcidTest" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            V_LIS_VCONRESULT1
+        <where>
+            <if test="cardNo!=null">
+                AND PATIENTNO = #{cardNo}
+                AND ITEMCODE = 'SARS-CoV-2-RNA'
+            </if>
+            <if test="days!=null">
+                AND RESULTDATE >= SYSDATE - #{days}
+            </if>
+        </where>
+    </select>
+</mapper>
