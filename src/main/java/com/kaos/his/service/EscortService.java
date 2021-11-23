@@ -11,8 +11,10 @@ import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
+import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
+import com.kaos.his.mapper.product.OrderMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,18 @@ public class EscortService {
      */
     @Autowired
     PatientMapper patientMapper;
+
+    /**
+     * 核酸检测结果读取接口
+     */
+    @Autowired
+    NucleicAcidTestMapper nucleicAcidTestMapper;
+
+    /**
+     * 医嘱读取接口
+     */
+    @Autowired
+    OrderMapper orderMapper;
 
     /**
      * 根据陪护人卡号，查询有效的陪护证
@@ -138,5 +152,32 @@ public class EscortService {
         }
 
         return resultSet;
+    }
+
+    /**
+     * 根据陪护证编号查询陪护证实体
+     * 
+     * @param escortNo
+     * @return
+     */
+    public EscortCard QueryEscort(String escortNo) {
+        // 查询出陪护证实体
+        var escort = this.escortMapper.QueryEscort(escortNo);
+
+        // 非空则赋值
+        if (escort != null) {
+            // 抽取helper实体
+            escort.helper = Optional.ofNullable(this.patientMapper.QueryPatient(escort.helper.cardNo))
+                    .orElse(escort.helper);
+
+            // 提取7日内有效核酸检测结果
+            escort.helper.nucleicAcidTests = this.nucleicAcidTestMapper.QueryNucleicAcidTest(escort.helper.cardNo,
+                    "SARS-CoV-2-RNA", 7);
+
+            // 提取7日内有效核酸医嘱
+            escort.helper.orders = this.orderMapper.QueryOrders(escort.helper.cardNo, "438771", 7);
+        }
+
+        return escort;
     }
 }
