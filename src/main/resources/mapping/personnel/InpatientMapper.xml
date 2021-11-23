@@ -24,6 +24,37 @@
         </where>
     </select>
 
+    <!-- 接口2 -->
+    <select id="QueryInpatientR1" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            FIN_IPR_INMAININFO T1
+            LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO AND T2.IS_VALID = '1'
+        <where>
+            <if test="cardNo!=null">
+                AND T1.CARD_NO = #{cardNo}
+            </if>
+            <if test="happenNo!=null">
+                AND T1.HAPPEN_NO = #{happenNo}
+            </if>
+        </where>
+    </select>
+
+    <!-- 接口3 -->
+    <select id="QueryInpatients" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            FIN_IPR_INMAININFO T1
+            LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO AND T2.IS_VALID = '1'
+        <where>
+            <if test="cardNo!=null">
+                AND T1.CARD_NO = #{cardNo}
+            </if>
+        </where>
+    </select>
+
     <!-- 所有字段 -->
     <sql id="allItem">
         T1.PATIENT_NO AS PATIENT_NO,

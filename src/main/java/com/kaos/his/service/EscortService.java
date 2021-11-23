@@ -56,7 +56,7 @@ public class EscortService {
         var resultSet = new ArrayList<EscortCard>();
 
         // 查询所有关联的陪护证
-        var escorts = this.escortMapper.GetEscortsByHelperCardNo(cardNo);
+        var escorts = this.escortMapper.QueryHelperEscorts(cardNo);
 
         // 辅助字典 - 记录患者的最近一次住院证，加速大批量数据时的查询
         Map<String, PreinCard> hosCtfDict = new HashMap<String, PreinCard>();
@@ -111,7 +111,7 @@ public class EscortService {
         }
 
         // 查询所有关联的陪护证
-        var escorts = this.escortMapper.GetEscortsByPatientCardNoAndHappenNo(cardNo, latestHosCtf.happenNo);
+        var escorts = this.escortMapper.QueryPatientEscorts(cardNo, latestHosCtf.happenNo);
 
         // 筛选出有效的陪护证
         for (EscortCard escort : escorts) {
