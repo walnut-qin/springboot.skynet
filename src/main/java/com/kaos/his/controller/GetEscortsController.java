@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.kaos.his.entity.credential.Escort;
+import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.enums.SexEnum;
 import com.kaos.his.enums.util.GsonEnumTypeAdapter;
 import com.kaos.his.service.EscortService;
@@ -75,7 +75,7 @@ public class GetEscortsController {
         var escorts = this.escortService.QueryActiveEscortsByPatient(cardNo);
 
         // 循环赋值
-        for (Escort escort : escorts) {
+        for (EscortCard escort : escorts) {
             var helperInfo = new HelperInfo();
             helperInfo.escortNo = escort.escortNo;
             helperInfo.cardNo = escort.helper.cardNo;

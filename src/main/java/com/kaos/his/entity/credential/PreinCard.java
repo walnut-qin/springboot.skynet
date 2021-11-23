@@ -7,7 +7,7 @@ import com.kaos.his.entity.personnel.Employee;
 import com.kaos.his.entity.personnel.Patient;
 import com.kaos.his.enums.HospitalizationCertificateStateEnum;
 
-public class HospitalizationCertificate {
+public class PreinCard {
     /**
      * 就诊卡号
      */

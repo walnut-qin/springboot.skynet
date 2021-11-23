@@ -7,7 +7,7 @@ import com.kaos.his.entity.personnel.Patient;
 import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 
-public class Escort {
+public class EscortCard {
     /**
      * 陪护证状态
      */
@@ -56,7 +56,7 @@ public class Escort {
     /**
      * 关联的住院证
      */
-    public HospitalizationCertificate hospitalizationCertificate;
+    public PreinCard hospitalizationCertificate;
 
     /**
      * 关联的陪护人

@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kaos.his.entity.credential.Escort;
-import com.kaos.his.entity.credential.HospitalizationCertificate;
+import com.kaos.his.entity.credential.EscortCard;
+import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.enums.EscortStateEnum;
-import com.kaos.his.mapper.credential.EscortMapper;
-import com.kaos.his.mapper.credential.HospitalizationCertificateMapper;
+import com.kaos.his.mapper.credential.EscortCardMapper;
+import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
 
@@ -25,13 +25,13 @@ public class EscortService {
      * 陪护人实体接口
      */
     @Autowired
-    EscortMapper escortMapper;
+    EscortCardMapper escortMapper;
 
     /**
      * 住院证实体接口
      */
     @Autowired
-    HospitalizationCertificateMapper hospitalizationCertificateMapper;
+    PreinCardMapper hospitalizationCertificateMapper;
 
     /**
      * 住院患者实体接口
@@ -51,18 +51,18 @@ public class EscortService {
      * @param cardNo 陪护人卡号
      * @return 键值对列表<陪护证实体，住院实体>
      */
-    public List<Escort> QueryActiveEscortsByHelper(String cardNo) {
+    public List<EscortCard> QueryActiveEscortsByHelper(String cardNo) {
         // 声明结果集
-        var resultSet = new ArrayList<Escort>();
+        var resultSet = new ArrayList<EscortCard>();
 
         // 查询所有关联的陪护证
         var escorts = this.escortMapper.GetEscortsByHelperCardNo(cardNo);
 
         // 辅助字典 - 记录患者的最近一次住院证，加速大批量数据时的查询
-        Map<String, HospitalizationCertificate> hosCtfDict = new HashMap<String, HospitalizationCertificate>();
+        Map<String, PreinCard> hosCtfDict = new HashMap<String, PreinCard>();
 
         // 筛选出有效的陪护证
-        for (Escort escort : escorts) {
+        for (EscortCard escort : escorts) {
             // 如果状态为注销，则陪护证是无效的
             if (escort.states.isEmpty() || escort.states.get(escort.states.size() - 1).state == EscortStateEnum.注销) {
                 continue;
@@ -70,12 +70,11 @@ public class EscortService {
 
             // 提取住院证，如果住院证不是患者最近的一张陪护证，说明被关联的患者已经出院，陪护证应当自动失效
             var relatehosCtf = escort.hospitalizationCertificate;
-            HospitalizationCertificate latestHosCtf = null;
+            PreinCard latestHosCtf = null;
             if (hosCtfDict.containsKey(relatehosCtf.cardNo)) {
                 latestHosCtf = hosCtfDict.get(relatehosCtf.cardNo);
             } else {
-                latestHosCtf = this.hospitalizationCertificateMapper
-                        .GetLatestHospitalizationCertificate(relatehosCtf.cardNo);
+                latestHosCtf = this.hospitalizationCertificateMapper.QueryLatestPreinCard(relatehosCtf.cardNo);
                 hosCtfDict.put(relatehosCtf.cardNo, latestHosCtf);
             }
             if (relatehosCtf.happenNo != latestHosCtf.happenNo) {
@@ -101,12 +100,12 @@ public class EscortService {
      * @param cardNo 患者就诊卡号
      * @return 陪护证实体
      */
-    public List<Escort> QueryActiveEscortsByPatient(String cardNo) {
+    public List<EscortCard> QueryActiveEscortsByPatient(String cardNo) {
         // 声明结果集
-        var resultSet = new ArrayList<Escort>();
+        var resultSet = new ArrayList<EscortCard>();
 
         // 获取最近的一张住院证
-        var latestHosCtf = this.hospitalizationCertificateMapper.GetLatestHospitalizationCertificate(cardNo);
+        var latestHosCtf = this.hospitalizationCertificateMapper.QueryLatestPreinCard(cardNo);
         if (latestHosCtf == null) {
             throw new RuntimeException("患者无住院证");
         }
@@ -115,7 +114,7 @@ public class EscortService {
         var escorts = this.escortMapper.GetEscortsByPatientCardNoAndHappenNo(cardNo, latestHosCtf.happenNo);
 
         // 筛选出有效的陪护证
-        for (Escort escort : escorts) {
+        for (EscortCard escort : escorts) {
             // 如果状态为注销，则陪护证是无效的
             if (escort.states.isEmpty() || escort.states.get(escort.states.size() - 1).state == EscortStateEnum.注销) {
                 continue;
