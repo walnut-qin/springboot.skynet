@@ -69,31 +69,7 @@ public class QueryEscortStateController {
         state.escortCardNo = escort.helper.cardNo;
         state.patientCardNo = escort.preinCard.cardNo;
         state.regDate = escort.states.get(0).operDate;
-
-        // 状态赋值
-        var recState = escort.states.get(escort.states.size() - 1).state;
-        if (recState == EscortStateEnum.注销 || recState == EscortStateEnum.等待院外核酸检测结果审核) {
-            state.state = recState;
-        } else if (escort.helper.nucleicAcidTests.size() == 0) { // 无核酸检测结果
-            // 查询核检医嘱
-            if (escort.helper.orders.size() > 0) {
-                state.state = EscortStateEnum.等待院内核酸检测结果;
-            } else {
-                state.state = EscortStateEnum.无核酸检测结果;
-            }
-        } else { // 有核酸检测结果
-            // 结果是否阴性
-            if (escort.helper.nucleicAcidTests.get(escort.helper.nucleicAcidTests.size() - 1).negative) {
-                state.state = EscortStateEnum.生效中;
-            } else {
-                state.state = EscortStateEnum.无核酸检测结果;
-            }
-        }
-
-        // 如果实际状态与记录状态不一致，更新记录状态
-        if (recState != state.state) {
-            // 预留
-        }
+        state.state = escort.states.get(escort.states.size() - 1).state;
 
         // 响应json字符串
         Gson gson = new GsonBuilder().serializeNulls()

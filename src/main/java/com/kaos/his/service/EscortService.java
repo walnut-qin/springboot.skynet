@@ -1,6 +1,7 @@
 package com.kaos.his.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.kaos.his.mapper.product.OrderMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 陪护证系统的接口
@@ -160,6 +162,7 @@ public class EscortService {
      * @param escortNo
      * @return
      */
+    @Transactional
     public EscortCard QueryEscort(String escortNo) {
         // 查询出陪护证实体
         var escort = this.escortMapper.QueryEscort(escortNo);
@@ -176,6 +179,41 @@ public class EscortService {
 
             // 提取7日内有效核酸医嘱
             escort.helper.orders = this.orderMapper.QueryOrders(escort.helper.cardNo, "438771", 7);
+
+            // 查询最新状态
+            EscortStateEnum newState = null;
+            EscortStateEnum recState = escort.states.get(escort.states.size() - 1).state;
+            if (recState == EscortStateEnum.注销 || recState == EscortStateEnum.等待院外核酸检测结果审核) {
+                newState = recState;
+            } else if (escort.helper.nucleicAcidTests.size() == 0) { // 无核酸检测结果
+                // 查询核检医嘱
+                if (escort.helper.orders.size() > 0) {
+                    newState = EscortStateEnum.等待院内核酸检测结果;
+                } else {
+                    newState = EscortStateEnum.无核酸检测结果;
+                }
+            } else { // 有核酸检测结果
+                // 结果是否阴性
+                if (escort.helper.nucleicAcidTests.get(escort.helper.nucleicAcidTests.size() - 1).negative) {
+                    newState = EscortStateEnum.生效中;
+                } else {
+                    newState = EscortStateEnum.无核酸检测结果;
+                }
+            }
+
+            // 如果新状态与记录的状态不等，则更新
+            if (newState != recState) {
+                var lstEscortState = escort.states.get(escort.states.size() - 1);
+                // 创建新状态
+                var newEscortState = new EscortCard.EscortState();
+                newEscortState.escortNo = lstEscortState.escortNo;
+                newEscortState.recNo = lstEscortState.recNo + 1;
+                newEscortState.state = newState;
+                newEscortState.operDate = new Date();
+                this.escortMapper.UpdateEscortState(newEscortState);
+                // 将新状态插入列表
+                escort.states.add(newEscortState);
+            }
         }
 
         return escort;
