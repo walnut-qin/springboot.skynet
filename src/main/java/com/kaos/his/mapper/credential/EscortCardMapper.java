@@ -31,4 +31,12 @@ public interface EscortCardMapper {
      * @return
      */
     List<EscortCard> QueryPatientEscorts(String cardNo, Integer happenNo);
+
+    /**
+     * 更新陪护证的状态
+     * 
+     * @param escortNo 陪护证编号
+     * @param newState 新状态
+     */
+    void UpdateEscortState(EscortCard.EscortState newState);
 }

@@ -13,19 +13,24 @@ public class EscortCard {
      */
     public static class EscortState {
         /**
+         * 陪护证编号
+         */
+        public String escortNo = null;
+
+        /**
          * 状态记录号
          */
-        public Integer recNo;
+        public Integer recNo = null;
 
         /**
          * 状态值
          */
-        public EscortStateEnum state;
+        public EscortStateEnum state = null;
 
         /**
          * 状态记录生成时间
          */
-        public Date operDate;
+        public Date operDate = null;
     }
 
     /**
@@ -33,19 +38,24 @@ public class EscortCard {
      */
     public static class EscortAction {
         /**
+         * 陪护证编号
+         */
+        public String escortNo = null;
+
+        /**
          * 状态记录号
          */
-        public Integer recNo;
+        public Integer recNo = null;
 
         /**
          * 状态值
          */
-        public EscortActionEnum action;
+        public EscortActionEnum action = null;
 
         /**
          * 状态记录生成时间
          */
-        public Date operDate;
+        public Date operDate = null;
     }
 
     /**
