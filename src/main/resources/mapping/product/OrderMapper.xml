@@ -19,7 +19,7 @@
         TERM_NAME AS TERM_NAME
     </sql>
 
-    <!-- 接口 -->
+    <!-- 接口1 -->
     <select id="QueryOrder" resultMap="map">
         SELECT
         <include refid="allItem"/>
@@ -30,5 +30,26 @@
                 AND MO_ORDER = #{moOrder}
             </if>
         </where>
+    </select>
+
+    <!-- 接口2 -->
+    <select id="QueryOrders" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            HIS_FSHV1.MET_ORDO_ORDER
+        <where>
+            <if test="indexNo!=null">
+                AND PATIENT_ID = #{indexNo}
+            </if>
+            <if test="itemCode!=null">
+                AND TERM_ID = #{itemCode}
+            </if>
+            <if test="dayOffset!=null">
+                AND MO_DATE >= SYSDATE - #{dayOffset}
+            </if>
+        </where>
+        ORDER BY
+            MO_DATE ASC
     </select>
 </mapper>
