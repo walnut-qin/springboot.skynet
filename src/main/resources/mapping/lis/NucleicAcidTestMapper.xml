@@ -3,14 +3,14 @@
 <mapper namespace="com.kaos.his.mapper.lis.NucleicAcidTestMapper">
     <!-- 实体映射表 -->
     <resultMap id="map" type="com.kaos.his.entity.lis.NucleicAcidTest">
-        <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="INDEX_NO" jdbcType="VARCHAR" property="indexNo"/>
         <result column="RESULT_DATE" jdbcType="VARCHAR" property="resultDate"/>
         <result column="NEGATIVE" jdbcType="VARCHAR" property="negative"/>
     </resultMap>
 
     <!-- 全部字段 -->
     <sql id="allItem">
-        PATIENTNO AS CARD_NO,
+        PATIENTNO AS INDEX_NO,
         RESULTDATE AS RESULT_DATE,
         DECODE(RESULT, '阴性(-)', '1', '0') AS NEGATIVE
     </sql>

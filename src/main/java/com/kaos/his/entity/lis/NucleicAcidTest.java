@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class NucleicAcidTest {
     /**
-     * 住院号
+     * 住院为住院号，门诊为就诊卡号
      */
-    public String cardNo = null;
+    public String indexNo = null;
 
     /**
      * 出结果的时间

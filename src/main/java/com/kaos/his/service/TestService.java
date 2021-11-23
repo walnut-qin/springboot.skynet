@@ -1,6 +1,8 @@
 package com.kaos.his.service;
 
-import com.kaos.his.entity.personnel.Inpatient;
+import java.util.List;
+
+import com.kaos.his.entity.lis.NucleicAcidTest;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 
@@ -15,9 +17,7 @@ public class TestService {
     @Autowired
     NucleicAcidTestMapper nucleicAcidTestMapper;
 
-    public Inpatient Run(String param) {
-        var v = this.inpatientMapper.QueryInpatient(param);
-        v.nucleicAcidTests = this.nucleicAcidTestMapper.QueryNucleicAcidTest(v.patientNo, "SARS-CoV-2-RNA", 14);
-        return v;
+    public List<NucleicAcidTest> Run(String param) {
+        return this.nucleicAcidTestMapper.QueryNucleicAcidTest(param, "nCOV-RNA", 14);
     }
 }
