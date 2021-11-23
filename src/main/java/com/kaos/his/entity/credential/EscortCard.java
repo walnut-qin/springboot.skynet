@@ -56,7 +56,7 @@ public class EscortCard {
     /**
      * 关联的住院证
      */
-    public PreinCard hospitalizationCertificate;
+    public PreinCard preinCard;
 
     /**
      * 关联的陪护人

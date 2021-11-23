@@ -5,7 +5,7 @@ import java.util.Date;
 import com.kaos.his.entity.organization.Department;
 import com.kaos.his.entity.personnel.Employee;
 import com.kaos.his.entity.personnel.Patient;
-import com.kaos.his.enums.HospitalizationCertificateStateEnum;
+import com.kaos.his.enums.PreinCardStateEnum;
 
 public class PreinCard {
     /**
@@ -66,5 +66,5 @@ public class PreinCard {
     /**
      * 住院证状态
      */
-    public HospitalizationCertificateStateEnum state;
+    public PreinCardStateEnum state;
 }

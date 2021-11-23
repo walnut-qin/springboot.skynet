@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
@@ -31,7 +32,7 @@ public class EscortService {
      * 住院证实体接口
      */
     @Autowired
-    PreinCardMapper hospitalizationCertificateMapper;
+    PreinCardMapper preinCardMapper;
 
     /**
      * 住院患者实体接口
@@ -46,20 +47,20 @@ public class EscortService {
     PatientMapper patientMapper;
 
     /**
-     * 根据陪护人卡号，查询有效的被陪护患者信息
+     * 根据陪护人卡号，查询有效的陪护证
      * 
-     * @param cardNo 陪护人卡号
+     * @param helperCardNo 陪护卡号
      * @return 键值对列表<陪护证实体，住院实体>
      */
-    public List<EscortCard> QueryActiveEscortsByHelper(String cardNo) {
+    public List<EscortCard> QueryActiveHelperEscorts(String helperCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<EscortCard>();
 
         // 查询所有关联的陪护证
-        var escorts = this.escortMapper.QueryHelperEscorts(cardNo);
+        var escorts = this.escortMapper.QueryHelperEscorts(helperCardNo);
 
         // 辅助字典 - 记录患者的最近一次住院证，加速大批量数据时的查询
-        Map<String, PreinCard> hosCtfDict = new HashMap<String, PreinCard>();
+        Map<String, PreinCard> preinCardDict = new HashMap<String, PreinCard>();
 
         // 筛选出有效的陪护证
         for (EscortCard escort : escorts) {
@@ -68,23 +69,31 @@ public class EscortService {
                 continue;
             }
 
-            // 提取住院证，如果住院证不是患者最近的一张陪护证，说明被关联的患者已经出院，陪护证应当自动失效
-            var relatehosCtf = escort.hospitalizationCertificate;
-            PreinCard latestHosCtf = null;
-            if (hosCtfDict.containsKey(relatehosCtf.cardNo)) {
-                latestHosCtf = hosCtfDict.get(relatehosCtf.cardNo);
+            // 获取陪护证关联的住院证
+            escort.preinCard = Optional
+                    .ofNullable(this.preinCardMapper.QueryPreinCard(escort.preinCard.cardNo, escort.preinCard.happenNo))
+                    .orElse(escort.preinCard);
+
+            // 获取患者最近的住院证
+            PreinCard latestPreinCard = null;
+            if (preinCardDict.containsKey(escort.preinCard.cardNo)) {
+                latestPreinCard = preinCardDict.get(escort.preinCard.cardNo);
             } else {
-                latestHosCtf = this.hospitalizationCertificateMapper.QueryLatestPreinCard(relatehosCtf.cardNo);
-                hosCtfDict.put(relatehosCtf.cardNo, latestHosCtf);
+                latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(escort.preinCard.cardNo);
+                preinCardDict.put(escort.preinCard.cardNo, latestPreinCard);
             }
-            if (relatehosCtf.happenNo != latestHosCtf.happenNo) {
+
+            // 如果住院证不是患者最近的一张陪护证，说明被关联的患者已经出院，陪护证应当自动失效
+            if (escort.preinCard.happenNo != latestPreinCard.happenNo) {
                 continue;
             }
 
-            // 如果已入院，则将住院患者实体更新为住院实体
-            var inpatient = this.inpatientMapper.QueryInpatientR1(relatehosCtf.cardNo, relatehosCtf.happenNo);
+            // 如果已入院，则将住院患者实体更新为住院实体，否则记录患者信息
+            var inpatient = this.inpatientMapper.QueryInpatientR1(escort.preinCard.cardNo, escort.preinCard.happenNo);
             if (inpatient != null) {
-                escort.hospitalizationCertificate.patient = inpatient;
+                escort.preinCard.patient = inpatient;
+            } else {
+                escort.preinCard.patient = this.patientMapper.QueryPatient(escort.preinCard.cardNo);
             }
 
             // 加入结果集
@@ -95,23 +104,23 @@ public class EscortService {
     }
 
     /**
-     * 查询患者关联的有效的陪护证
+     * 根据患者卡号查询关联陪护证
      * 
-     * @param cardNo 患者就诊卡号
+     * @param patientCardNo 患者就诊卡号
      * @return 陪护证实体
      */
-    public List<EscortCard> QueryActiveEscortsByPatient(String cardNo) {
+    public List<EscortCard> QueryActivePatientEscorts(String patientCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<EscortCard>();
 
         // 获取最近的一张住院证
-        var latestHosCtf = this.hospitalizationCertificateMapper.QueryLatestPreinCard(cardNo);
-        if (latestHosCtf == null) {
+        var latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
+        if (latestPreinCard == null) {
             throw new RuntimeException("患者无住院证");
         }
 
         // 查询所有关联的陪护证
-        var escorts = this.escortMapper.QueryPatientEscorts(cardNo, latestHosCtf.happenNo);
+        var escorts = this.escortMapper.QueryPatientEscorts(patientCardNo, latestPreinCard.happenNo);
 
         // 筛选出有效的陪护证
         for (EscortCard escort : escorts) {
@@ -119,6 +128,10 @@ public class EscortService {
             if (escort.states.isEmpty() || escort.states.get(escort.states.size() - 1).state == EscortStateEnum.注销) {
                 continue;
             }
+
+            // 记录helper信息
+            escort.helper = Optional.ofNullable(this.patientMapper.QueryPatient(escort.helper.cardNo))
+                    .orElse(escort.helper);
 
             // 加入结果集
             resultSet.add(escort);

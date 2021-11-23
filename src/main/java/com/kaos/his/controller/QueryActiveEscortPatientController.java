@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/webApi")
-public class GetEscortedPatientController {
+public class QueryActiveEscortPatientController {
     /**
      * 陪护系统服务
      */
@@ -74,29 +74,29 @@ public class GetEscortedPatientController {
         public String patientNo = null;
     }
 
-    @RequestMapping(value = "getActiveEscortedPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String Run(@RequestParam("cardNo") String cardNo) {
+    @RequestMapping(value = "QueryActiveEscortPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String Run(@RequestParam("helperCardNo") String helperCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<PatientInfo>();
 
         // 调取服务
-        var escorts = this.escortService.QueryActiveEscortsByHelper(cardNo);
+        var escorts = this.escortService.QueryActiveHelperEscorts(helperCardNo);
 
         // 循环赋值
         for (EscortCard escort : escorts) {
             var patientInfo = new PatientInfo();
             patientInfo.escortNo = escort.escortNo;
-            patientInfo.cardNo = escort.hospitalizationCertificate.patient.cardNo;
-            patientInfo.name = escort.hospitalizationCertificate.patient.name;
-            patientInfo.sex = escort.hospitalizationCertificate.patient.sex;
-            patientInfo.age = DateHelper.GetAgeDetail(escort.hospitalizationCertificate.patient.birthday);
-            if (escort.hospitalizationCertificate.patient instanceof Inpatient) {
-                patientInfo.deptName = ((Inpatient) escort.hospitalizationCertificate.patient).dept.name;
-                patientInfo.bedNo = ((Inpatient) escort.hospitalizationCertificate.patient).bedNo;
-                patientInfo.patientNo = ((Inpatient) escort.hospitalizationCertificate.patient).patientNo;
+            patientInfo.cardNo = escort.preinCard.patient.cardNo;
+            patientInfo.name = escort.preinCard.patient.name;
+            patientInfo.sex = escort.preinCard.patient.sex;
+            patientInfo.age = DateHelper.GetAgeDetail(escort.preinCard.patient.birthday);
+            if (escort.preinCard.patient instanceof Inpatient) {
+                patientInfo.deptName = ((Inpatient) escort.preinCard.patient).dept.name;
+                patientInfo.bedNo = ((Inpatient) escort.preinCard.patient).bedNo;
+                patientInfo.patientNo = ((Inpatient) escort.preinCard.patient).patientNo;
             } else {
-                patientInfo.deptName = escort.hospitalizationCertificate.preDept.name;
-                patientInfo.bedNo = escort.hospitalizationCertificate.preBedNo;
+                patientInfo.deptName = escort.preinCard.preDept.name;
+                patientInfo.bedNo = escort.preinCard.preBedNo;
                 patientInfo.patientNo = null;
             }
             resultSet.add(patientInfo);

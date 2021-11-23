@@ -2,7 +2,7 @@ package com.kaos.his.enums;
 
 import com.kaos.his.enums.util.IEnum;
 
-public enum HospitalizationCertificateStateEnum implements IEnum<HospitalizationCertificateStateEnum> {
+public enum PreinCardStateEnum implements IEnum<PreinCardStateEnum> {
     预约("0", "预约"), 作废("1", "作废"), 转住院("2", "转住院"), 签床("3", "签床"), 预住院预约("4", "预住院预约");
 
     /**
@@ -21,7 +21,7 @@ public enum HospitalizationCertificateStateEnum implements IEnum<Hospitalization
      * @param index
      * @param description
      */
-    HospitalizationCertificateStateEnum(String value, String description) {
+    PreinCardStateEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

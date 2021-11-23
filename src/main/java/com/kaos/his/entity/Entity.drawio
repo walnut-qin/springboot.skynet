@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="VqwePKhzc85bmfiMxgn3" name="Page-1">
-        <mxGraphModel dx="3380" dy="140" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+        <mxGraphModel dx="1269" dy="-1092" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -137,7 +137,7 @@
                         <mxPoint x="-19.5" y="2364" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="54" value="HospitalizationCertificate" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;shadow=0;strokeColor=#d79b00;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;glass=0;expand=0;resizable=1;rotatable=0;cloneable=0;pointerEvents=0;" parent="1" vertex="1">
+                <mxCell id="54" value="PreinCard" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;shadow=0;strokeColor=#d79b00;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;glass=0;expand=0;resizable=1;rotatable=0;cloneable=0;pointerEvents=0;" parent="1" vertex="1">
                     <mxGeometry x="1127" y="2464" width="384" height="338" as="geometry">
                         <mxRectangle x="1127" y="2464" width="171" height="26" as="alternateBounds"/>
                     </mxGeometry>
@@ -175,7 +175,7 @@
                 <mxCell id="65" value="+ preCost : Double" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="54" vertex="1">
                     <mxGeometry y="286" width="384" height="26" as="geometry"/>
                 </mxCell>
-                <mxCell id="64" value="+ state : com.kaos.his.enums.HospitalizationCertificateStateEnum" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="54" vertex="1">
+                <mxCell id="64" value="+ state : com.kaos.his.enums.PreinCardStateEnum" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="54" vertex="1">
                     <mxGeometry y="312" width="384" height="26" as="geometry"/>
                 </mxCell>
                 <mxCell id="71" value="" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=0;edgeStyle=orthogonalEdgeStyle;entryX=0.75;entryY=0;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="54" target="24" edge="1">
@@ -202,7 +202,7 @@
                 <mxCell id="101" value="+ escortNo : String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="88" vertex="1">
                     <mxGeometry y="26" width="384" height="26" as="geometry"/>
                 </mxCell>
-                <mxCell id="89" value="+ hospitalizationCertificate : HospitalizationCertificate" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="88" vertex="1">
+                <mxCell id="89" value="+ preinCard : PreinCard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="88" vertex="1">
                     <mxGeometry y="52" width="384" height="26" as="geometry"/>
                 </mxCell>
                 <mxCell id="100" value="+ patient : personnel.Patient" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" parent="88" vertex="1">

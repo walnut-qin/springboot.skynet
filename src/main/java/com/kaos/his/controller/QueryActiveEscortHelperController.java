@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/webApi")
-public class GetEscortsController {
+public class QueryActiveEscortHelperController {
     /**
      * 陪护系统服务
      */
@@ -66,13 +66,13 @@ public class GetEscortsController {
      * @param cardNo 患者就诊卡号
      * @return
      */
-    @RequestMapping(value = "getActiveEscorts", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String Run(@RequestParam("cardNo") String cardNo) {
+    @RequestMapping(value = "QueryActiveEscortHelper", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String Run(@RequestParam("patientCardNo") String patientCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<HelperInfo>();
 
         // 调取服务
-        var escorts = this.escortService.QueryActiveEscortsByPatient(cardNo);
+        var escorts = this.escortService.QueryActivePatientEscorts(patientCardNo);
 
         // 循环赋值
         for (EscortCard escort : escorts) {
