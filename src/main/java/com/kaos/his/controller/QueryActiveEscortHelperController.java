@@ -66,7 +66,7 @@ public class QueryActiveEscortHelperController {
      * @param cardNo 患者就诊卡号
      * @return
      */
-    @RequestMapping(value = "QueryActiveEscortHelper", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "queryActiveEscortHelper", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String Run(@RequestParam("patientCardNo") String patientCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<HelperInfo>();

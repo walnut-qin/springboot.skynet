@@ -74,7 +74,7 @@ public class QueryActiveEscortPatientController {
         public String patientNo = null;
     }
 
-    @RequestMapping(value = "QueryActiveEscortPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "queryActiveEscortPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String Run(@RequestParam("helperCardNo") String helperCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<PatientInfo>();
