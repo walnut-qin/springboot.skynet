@@ -227,4 +227,21 @@
             </if>
         </where>
     </select>
+
+    <update id="UpdateDrugBaseInfo" parameterType="com.kaos.his.entity.drug.DrugBaseInfo">
+        UPDATE PHA_COM_BASEINFO
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tradeName!=null">
+                TRADE_NAME = #{tradeName},
+            </if>
+            <if test="spellCode!=null">
+                SPELL_CODE = #{spellCode},
+            </if>
+        </trim>
+        <where>
+            <if test="drugCode!=null">
+                AND DRUG_CODE = #{drugCode}
+            </if>
+        </where>
+    </update>
 </mapper>

@@ -14,8 +14,15 @@ public class TestService {
 
     @Transactional
     public DrugBaseInfo Run(String param) {
-        var escort = this.drugBaseInfoMapper.QueryDrugBaseInfo(param);
+        DrugBaseInfo v = new DrugBaseInfo() {
+            {
+                drugCode = "KaOS";
+                tradeName = "test";
+                cnegotiateFlag = false;
+            }
+        };
+        this.drugBaseInfoMapper.UpdateDrugBaseInfo(v);
 
-        return escort;
+        return v;
     }
 }

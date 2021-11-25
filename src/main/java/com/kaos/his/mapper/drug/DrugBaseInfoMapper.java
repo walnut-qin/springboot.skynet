@@ -13,4 +13,11 @@ public interface DrugBaseInfoMapper {
      * @return
      */
     DrugBaseInfo QueryDrugBaseInfo(String drugCode);
+
+    /**
+     * 更新数据
+     * 
+     * @param drugBaseInfo
+     */
+    void UpdateDrugBaseInfo(DrugBaseInfo drugBaseInfo);
 }
