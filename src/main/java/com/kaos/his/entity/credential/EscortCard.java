@@ -64,6 +64,21 @@ public class EscortCard {
     public String escortNo;
 
     /**
+     * 患者就诊卡号
+     */
+    public String patientCardNo = null;
+
+    /**
+     * 住院证序号
+     */
+    public Integer happenNo = null;
+
+    /**
+     * 陪护人卡号
+     */
+    public String helperCardNo = null;
+
+    /**
      * 关联的住院证
      */
     public PreinCard preinCard;
@@ -72,11 +87,6 @@ public class EscortCard {
      * 关联的陪护人
      */
     public Patient helper;
-
-    /**
-     * VIP标识
-     */
-    public boolean vip;
 
     /**
      * 状态清单

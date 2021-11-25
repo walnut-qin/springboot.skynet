@@ -13,6 +13,7 @@ import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
+import com.kaos.his.mapper.organization.DepartmentMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
 import com.kaos.his.mapper.product.OrderMapper;
@@ -63,6 +64,12 @@ public class EscortService {
     OrderMapper orderMapper;
 
     /**
+     * 科室信息接口
+     */
+    @Autowired
+    DepartmentMapper departmentMapper;
+
+    /**
      * 根据陪护人卡号，查询有效的陪护证
      * 
      * @param helperCardNo 陪护卡号
@@ -86,16 +93,17 @@ public class EscortService {
             }
 
             // 获取陪护证关联的住院证
-            escort.preinCard = Optional
-                    .ofNullable(this.preinCardMapper.QueryPreinCard(escort.preinCard.cardNo, escort.preinCard.happenNo))
-                    .orElse(escort.preinCard);
+            escort.preinCard = this.preinCardMapper.QueryPreinCard(escort.patientCardNo, escort.happenNo);
+
+            // 记录预约的科室
+            escort.preinCard.preDept = this.departmentMapper.QueryDepartment(escort.preinCard.preDeptCode);
 
             // 获取患者最近的住院证
             PreinCard latestPreinCard = null;
             if (preinCardDict.containsKey(escort.preinCard.cardNo)) {
-                latestPreinCard = preinCardDict.get(escort.preinCard.cardNo);
+                latestPreinCard = preinCardDict.get(escort.patientCardNo);
             } else {
-                latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(escort.preinCard.cardNo);
+                latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(escort.patientCardNo);
                 preinCardDict.put(escort.preinCard.cardNo, latestPreinCard);
             }
 
@@ -105,11 +113,11 @@ public class EscortService {
             }
 
             // 如果已入院，则将住院患者实体更新为住院实体，否则记录患者信息
-            var inpatient = this.inpatientMapper.QueryInpatientR1(escort.preinCard.cardNo, escort.preinCard.happenNo);
+            var inpatient = this.inpatientMapper.QueryInpatientR1(escort.patientCardNo, escort.happenNo);
             if (inpatient != null) {
                 escort.preinCard.patient = inpatient;
             } else {
-                escort.preinCard.patient = this.patientMapper.QueryPatient(escort.preinCard.cardNo);
+                escort.preinCard.patient = this.patientMapper.QueryPatient(escort.patientCardNo);
             }
 
             // 加入结果集
@@ -145,9 +153,11 @@ public class EscortService {
                 continue;
             }
 
+            // 记录住院证
+            escort.preinCard = latestPreinCard;
+
             // 记录helper信息
-            escort.helper = Optional.ofNullable(this.patientMapper.QueryPatient(escort.helper.cardNo))
-                    .orElse(escort.helper);
+            escort.helper = this.patientMapper.QueryPatient(escort.helperCardNo);
 
             // 加入结果集
             resultSet.add(escort);
@@ -170,15 +180,15 @@ public class EscortService {
         // 非空则赋值
         if (escort != null) {
             // 抽取helper实体
-            escort.helper = Optional.ofNullable(this.patientMapper.QueryPatient(escort.helper.cardNo))
+            escort.helper = Optional.ofNullable(this.patientMapper.QueryPatient(escort.helperCardNo))
                     .orElse(escort.helper);
 
             // 提取7日内有效核酸检测结果
-            escort.helper.nucleicAcidTests = this.nucleicAcidTestMapper.QueryNucleicAcidTest(escort.helper.cardNo,
+            escort.helper.nucleicAcidTests = this.nucleicAcidTestMapper.QueryNucleicAcidTest(escort.helperCardNo,
                     "SARS-CoV-2-RNA", 7);
 
             // 提取7日内有效核酸医嘱
-            escort.helper.orders = this.orderMapper.QueryOrders(escort.helper.cardNo, "438771", 7);
+            escort.helper.orders = this.orderMapper.QueryOrders(escort.helperCardNo, "438771", 7);
 
             // 查询最新状态
             EscortStateEnum newState = null;

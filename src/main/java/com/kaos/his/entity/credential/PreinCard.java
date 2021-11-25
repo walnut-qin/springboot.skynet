@@ -11,60 +11,80 @@ public class PreinCard {
     /**
      * 就诊卡号
      */
-    public String cardNo;
+    public String cardNo = null;
 
     /**
      * 发生序号
      */
-    public Integer happenNo;
+    public Integer happenNo = null;
 
     /**
-     * 登记住院的患者实体
+     * 操作员编码
      */
-    public Patient patient;
-
-    /**
-     * 操作职员（开立住院证的人）
-     */
-    public Employee operEmployee;
+    public String operCode = null;
 
     /**
      * 操作时间
      */
-    public Date operDate;
+    public Date operDate = null;
 
     /**
-     * 预约的科室
+     * 预约的科室编码
      */
-    public Department preDept;
+    public String preDeptCode = null;
 
     /**
      * 预约的病区
      */
-    public String preNurseCellCode;
+    public String preNurseCellCode = null;
 
     /**
      * 预约的床号（签床）
      */
-    public String preBedNo;
+    public String preBedNo = null;
 
     /**
-     * 预约的医生
+     * 预约的医生编码
      */
-    public Employee preDoctor;
+    public String preDoctorCode = null;
 
     /**
      * 预约入院日期
      */
-    public Date preDate;
+    public Date preDate = null;
 
     /**
      * 拟定预交金
      */
-    public Double preCost;
+    public Double preCost = null;
 
     /**
      * 住院证状态
      */
-    public PreinCardStateEnum state;
+    public PreinCardStateEnum state = null;
+
+    /**
+     * 陪护证的VIP卡号
+     */
+    public String escortVip = null;
+
+    /**
+     * 登记住院的患者实体
+     */
+    public Patient patient = null;
+
+    /**
+     * 操作职员（开立住院证的人）
+     */
+    public Employee operEmployee = null;
+
+    /**
+     * 预约的科室
+     */
+    public Department preDept = null;
+
+    /**
+     * 预约的医生
+     */
+    public Employee preDoctor = null;
 }

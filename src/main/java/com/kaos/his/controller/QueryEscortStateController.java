@@ -66,8 +66,8 @@ public class QueryEscortStateController {
         }
 
         // 赋值
-        state.escortCardNo = escort.helper.cardNo;
-        state.patientCardNo = escort.preinCard.cardNo;
+        state.escortCardNo = escort.helperCardNo;
+        state.patientCardNo = escort.patientCardNo;
         state.regDate = escort.states.get(0).operDate;
         state.state = escort.states.get(escort.states.size() - 1).state;
 

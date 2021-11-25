@@ -3,8 +3,8 @@
 <mapper namespace="com.kaos.his.mapper.personnel.DeptpatientMapper">
     <!-- 实体映射表 -->
     <resultMap id="map" extends="com.kaos.his.mapper.personnel.PatientMapper.map" type="com.kaos.his.entity.personnel.Deptpatient">
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
         <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
-        <association columnPrefix="OPER_" resultMap="com.kaos.his.mapper.personnel.EmployeeMapper.map" javaType="com.kaos.his.entity.personnel.Employee" property="operEmployee"/>
-        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.map" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
+        <result column="DEPT_CODE" jdbcType="VARCHAR" property="deptCode"/>
     </resultMap>
 </mapper>

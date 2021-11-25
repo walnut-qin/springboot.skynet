@@ -82,7 +82,7 @@ public class QueryActiveEscortHelperController {
             helperInfo.name = escort.helper.name;
             helperInfo.sex = escort.helper.sex;
             helperInfo.age = DateHelper.GetAgeDetail(escort.helper.birthday);
-            helperInfo.freeFlag = escort.vip ? "1" : "0";
+            helperInfo.freeFlag = escort.helperCardNo.equals(escort.preinCard.escortVip) ? "1" : "0";
             resultSet.add(helperInfo);
         }
 

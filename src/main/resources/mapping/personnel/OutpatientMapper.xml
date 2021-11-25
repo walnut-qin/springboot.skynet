@@ -46,20 +46,10 @@
 
     <!-- baseItem -->
     <sql id="deptpatientItem">
-        <include refid="OPER_employeeItem"/>
-        T1.OPER_DATE AS OPER_DATE,
-        <include refid="DEPT_departmentItem"/>
-        <include refid="patientItem"/>
-    </sql>
-
-    <!-- operEmployee -->
-    <sql id="OPER_employeeItem">
         T1.OPER_CODE AS OPER_CODE,
-    </sql>
-
-    <!-- dept -->
-    <sql id="DEPT_departmentItem">
+        T1.OPER_DATE AS OPER_DATE,
         T1.DEPT_CODE AS DEPT_CODE,
+        <include refid="patientItem"/>
     </sql>
 
     <!-- baseItem -->

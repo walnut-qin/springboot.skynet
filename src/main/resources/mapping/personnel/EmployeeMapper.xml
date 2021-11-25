@@ -4,7 +4,7 @@
     <!-- 实体映射表 -->
     <resultMap id="map" extends="com.kaos.his.mapper.personnel.CitizenMapper.map" type="com.kaos.his.entity.personnel.Employee">
         <id column="CODE" jdbcType="VARCHAR" property="code"/>
-        <association columnPrefix="DEPT_" resultMap="com.kaos.his.mapper.organization.DepartmentMapper.map" javaType="com.kaos.his.entity.organization.Department" property="dept"/>
+        <result column="DEPT_CODE" jdbcType="VARCHAR" property="deptCode"/>
     </resultMap>
 
     <!-- 接口 -->
@@ -24,13 +24,8 @@
     <!-- 所有字段 -->
     <sql id="allItem">
         EMPL_ID AS CODE,
-        <include refid="DEPT_departmentItem"/>
-        <include refid="citizenItem"/>
-    </sql>
-
-    <!-- 组合dept字段 -->
-    <sql id="DEPT_departmentItem">
         DEPT_ID AS DEPT_CODE,
+        <include refid="citizenItem"/>
     </sql>
 
     <!-- 父类Citizen字段 -->
