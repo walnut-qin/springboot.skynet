@@ -19,7 +19,7 @@ public class DrugBaseInfo {
     /**
      * 商品名称
      */
-    public String tradName = null;
+    public String tradeName = null;
 
     /**
      * 商品名拼音码

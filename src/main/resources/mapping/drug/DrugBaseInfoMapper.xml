@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.drug.DrugBaseInfo">
+    <!-- 实体映射表 -->
+    <resultMap id="map" type="com.kaos.his.entity.drug.DrugBaseInfo">
+        <id column="DRUG_CODE" jdbcType="VARCHAR" property="drugCode"/>
+        <result column="TRADE_NAME" jdbcType="VARCHAR" property="tradeName"/>
+        <result column="SPELL_CODE" jdbcType="VARCHAR" property="spellCode"/>
+        <result column="WB_CODE" jdbcType="VARCHAR" property="wbCode"/>
+        <result column="CUS_CODE" jdbcType="VARCHAR" property="cusCode"/>
+        <result column="REG_NAME" jdbcType="VARCHAR" property="regName"/>
+        <result column="REG_SPELL_CODE" jdbcType="VARCHAR" property="regSpellCode"/>
+        <result column="REG_WB_CODE" jdbcType="VARCHAR" property="regWbCode"/>
+        <result column="REG_CUS_CODE" jdbcType="VARCHAR" property="regCusCode"/>
+        <result column="FML_NAME" jdbcType="VARCHAR" property="fmlName"/>
+        <result column="FML_SPELL_CODE" jdbcType="VARCHAR" property="fmlSpellCode"/>
+        <result column="FML_WB_CODE" jdbcType="VARCHAR" property="fmlWbCode"/>
+        <result column="FML_CUS_CODE" jdbcType="VARCHAR" property="fmlCusCode"/>
+        <result column="OTHER_NAME" jdbcType="VARCHAR" property="otherName"/>
+        <result column="OTHER_SPELL_CODE" jdbcType="VARCHAR" property="otherSpellCode"/>
+        <result column="OTHER_WB_CODE" jdbcType="VARCHAR" property="otherWbCode"/>
+        <result column="OTHER_CUS_CODE" jdbcType="VARCHAR" property="otherCusCode"/>
+        <result column="ENGLISH_REGULAR" jdbcType="VARCHAR" property="englishRegular"/>
+        <result column="ENGLISH_OTHER" jdbcType="VARCHAR" property="englishOther"/>
+        <result column="ENGLISH_NAME" jdbcType="VARCHAR" property="englishName"/>
+        <result column="INTL_CODE" jdbcType="VARCHAR" property="intlCode"/>
+        <result column="NL_CODE" jdbcType="VARCHAR" property="nlCode"/>
+        <result column="CLASS_CODE" jdbcType="VARCHAR" property="classCode"/>
+        <result column="FEE_CODE" jdbcType="VARCHAR" property="feeCode"/>
+        <result column="DRUG_TYPE" jdbcType="VARCHAR" property="drugType"/>
+        <result column="DRUG_QUALITY" jdbcType="VARCHAR" property="drugQuality"/>
+        <result column="ITEM_GRADE" jdbcType="VARCHAR" property="itemGrade"/>
+        <result column="SPECS" jdbcType="VARCHAR" property="specs"/>
+        <result column="RETAIL_PRICE" jdbcType="VARCHAR" property="retailPrice"/>
+        <result column="WHOLESALE_PRICE" jdbcType="VARCHAR" property="wholesalePrice"/>
+        <result column="PURCHASE_PRICE" jdbcType="VARCHAR" property="purchasePrice"/>
+        <result column="TOP_RETAIL_PRICE" jdbcType="VARCHAR" property="topRetailPrice"/>
+        <result column="PACK_UNIT" jdbcType="VARCHAR" property="packUnit"/>
+        <result column="PACK_QTY" jdbcType="VARCHAR" property="packQty"/>
+        <result column="MIN_UNIT" jdbcType="VARCHAR" property="minUnit"/>
+        <result column="DOSE_MODEL_CODE" jdbcType="VARCHAR" property="doseModelCode"/>
+        <result column="BASE_DOSE" jdbcType="VARCHAR" property="baseDose"/>
+        <result column="DOSE_UNIT" jdbcType="VARCHAR" property="doseUnit"/>
+        <result column="USAGE_CODE" jdbcType="VARCHAR" property="usageCode"/>
+        <result column="FREQUENCY_CODE" jdbcType="VARCHAR" property="frequencyCode"/>
+        <result column="ONCE_DOSE" jdbcType="VARCHAR" property="onceDose"/>
+        <result column="CAUTION" jdbcType="VARCHAR" property="caution"/>
+        <result column="PHY_FUNCTION1" jdbcType="VARCHAR" property="phyFunction1"/>
+        <result column="PHA_FUNCTION2" jdbcType="VARCHAR" property="phyFunction2"/>
+        <result column="PHA_FUNCTION3" jdbcType="VARCHAR" property="phyFunction3"/>
+        <result column="VALID_STATE" jdbcType="VARCHAR" property="validState"/>
+        <result column="SELF_FLAG" jdbcType="VARCHAR" property="selfFlag"/>
+        <result column="OCT_FLAG" jdbcType="VARCHAR" property="octFlag"/>
+        <result column="GMP_FLAG" jdbcType="VARCHAR" property="gmpFlag"/>
+        <result column="TEST_FLAG" jdbcType="VARCHAR" property="testFlag"/>
+        <result column="NEW_FLAG" jdbcType="VARCHAR" property="newFlag"/>
+        <result column="APPEND_FLAG" jdbcType="VARCHAR" property="appendFlag"/>
+        <result column="LACK_FLAG" jdbcType="VARCHAR" property="lackFlag"/>
+        <result column="SHOW_FLAG" jdbcType="VARCHAR" property="showFlag"/>
+        <result column="TENDER_FLAG" jdbcType="VARCHAR" property="tenderFlag"/>
+        <result column="TENDER_PRICE" jdbcType="VARCHAR" property="tenderPrice"/>
+        <result column="TENDER_COMPANY" jdbcType="VARCHAR" property="tenderCompany"/>
+        <result column="TENDER_BEGIN_DATE" jdbcType="VARCHAR" property="tenderBeginDate"/>
+        <result column="TENDER_END_DATE" jdbcType="VARCHAR" property="tenderEndDate"/>
+        <result column="COMPAYNY_CODE" jdbcType="VARCHAR" property="companyCode"/>
+        <result column="PRICE_FORM" jdbcType="VARCHAR" property="priceForm"/>
+        <result column="CONTACT_CODE" jdbcType="VARCHAR" property="contactCode"/>
+        <result column="PRODUCTING_AREA" jdbcType="VARCHAR" property="productingArea"/>
+        <result column="PRODUCER_CODE" jdbcType="VARCHAR" property="producerCode"/>
+        <result column="APPROVE_INFO" jdbcType="VARCHAR" property="approveInfo"/>
+        <result column="LABEL" jdbcType="VARCHAR" property="label"/>
+        <result column="INGREDIENT" jdbcType="VARCHAR" property="ingredient"/>
+        <result column="EXEC_STD" jdbcType="VARCHAR" property="execStd"/>
+        <result column="SOTRE_COND" jdbcType="VARCHAR" property="storeCond"/>
+        <result column="BRIEF_INFO" jdbcType="VARCHAR" property="briefInfo"/>
+        <result column="MANUAL" jdbcType="VARCHAR" property="manual"/>
+        <result column="BAR_CODE" jdbcType="VARCHAR" property="barCode"/>
+        <result column="OLD_DRUG_CODE" jdbcType="VARCHAR" property="oldDrugCode"/>
+        <result column="MARK" jdbcType="VARCHAR" property="mark"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+        <result column="PR_FLAG" jdbcType="VARCHAR" property="prFlag"/>
+        <result column="CITY_FLAG" jdbcType="VARCHAR" property="cityFlag"/>
+        <result column="SELF_PAY_FLAG" jdbcType="VARCHAR" property="selfPayFlag"/>
+        <result column="SPECIAL_FLAG" jdbcType="VARCHAR" property="specialFlag"/>
+        <result column="INPAT_PACK_FLAG" jdbcType="VARCHAR" property="inpatPackFlag"/>
+        <result column="SHIFT_TYPE" jdbcType="VARCHAR" property="shiftType"/>
+        <result column="SHIFT_DATE" jdbcType="VARCHAR" property="shiftDate"/>
+        <result column="SHIFT_MARK" jdbcType="VARCHAR" property="shiftMark"/>
+        <result column="TRADE_PIC" jdbcType="VARCHAR" property="tradePic"/>
+        <result column="INSEPARABLE_FLAG" jdbcType="VARCHAR" property="inseparableFlag"/>
+        <result column="NO_STRUM_FLAG" jdbcType="VARCHAR" property="noStrumFlag"/>
+        <result column="EXTEND1" jdbcType="VARCHAR" property="extend1"/>
+        <result column="EXTEND2" jdbcType="VARCHAR" property="extend2"/>
+        <result column="CREATE_TIME" jdbcType="VARCHAR" property="createTime"/>
+        <result column="DRUG_TYPE_TWO" jdbcType="VARCHAR" property="drugTypeTwo"/>
+        <result column="ACT_NO" jdbcType="VARCHAR" property="actNo"/>
+        <result column="ADJUVANT_FLAG" jdbcType="VARCHAR" property="adjuvantFlag"/>
+        <result column="ANTI_TUMER_FLAG" jdbcType="VARCHAR" property="antiTumerFlag"/>
+        <result column="WITH_QTY_FLAG" jdbcType="VARCHAR" property="withQtyFlag"/>
+        <result column="TEMPORARY_FLAG" jdbcType="VARCHAR" property="temporaryFlag"/>
+        <result column="BASE_FLAG" jdbcType="VARCHAR" property="baseFlag"/>
+        <result column="MONITOR_FLAG" jdbcType="VARCHAR" property="monitorFlag"/>
+        <result column="UNI_PURCHASE_FLAG" jdbcType="VARCHAR" property="uniPurchaseFlag"/>
+        <result column="PPSN" jdbcType="VARCHAR" property="ppsn"/>
+        <result column="C_NEGOTIATE_FLAG" jdbcType="VARCHAR" property="cnegotiateFlag"/>
+        <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
+        <result column="PACK_MATERIAL" jdbcType="VARCHAR" property="packMaterial"/>
+    </resultMap>
+
+    <!-- 全部字段 -->
+    <sql id="allItem">
+        DRUG_CODE AS DRUG_CODE,
+        TRADE_NAME AS TRADE_NAME,
+        SPELL_CODE AS SPELL_CODE,
+        WB_CODE AS WB_CODE,
+        CUSTOM_CODE AS CUS_CODE,
+        REGULAR_NAME AS REG_NAME,
+        REGULAR_SPELL AS REG_SPELL_CODE,
+        REGULAR_WB AS REG_WB_CODE,
+        REGULAR_CUSTOM AS REG_CUS_CODE,
+        FORMAL_NAME AS FML_NAME,
+        FORMAL_SPELL AS FML_SPELL_CODE,
+        FORMAL_WB AS FML_WB_CODE,
+        FORMAL_CUSTOM AS FML_CUS_CODE,
+        OTHER_NAME AS OTHER_NAME,
+        OTHER_SPELL AS OTHER_SPELL_CODE,
+        OTHER_WB AS OTHER_WB_CODE,
+        OTHER_CUSTOM AS OTHER_CUS_CODE,
+        ENGLISH_REGULAR AS ENGLISH_REGULAR,
+        ENGLISH_OTHER AS ENGLISH_OTHER,
+        ENGLISH_NAME AS ENGLISH_NAME,
+        INTERNATIONAL_CODE AS INTL_CODE,
+        GB_CODE AS NL_CODE,
+        CLASS_CODE AS CLASS_CODE,
+        FEE_CODE AS FEE_CODE,
+        DRUG_TYPE AS DRUG_TYPE,
+        DRUG_QUALITY AS DRUG_QUALITY,
+        ITEM_GRADE AS ITEM_GRADE,
+        SPECS AS SPECS,
+        RETAIL_PRICE AS RETAIL_PRICE,
+        WHOLESALE_PRICE AS WHOLESALE_PRICE,
+        PURCHASE_PRICE AS PURCHASE_PRICE,
+        TOP_RETAILPRICE AS TOP_RETAIL_PRICE,
+        PACK_UNIT AS PACK_UNIT,
+        PACK_QTY AS PACK_QTY,
+        MIN_UNIT AS MIN_UNIT,
+        DOSE_MODEL_CODE AS DOSE_MODEL_CODE,
+        BASE_DOSE AS BASE_DOSE,
+        DOSE_UNIT AS DOSE_UNIT,
+        USAGE_CODE AS USAGE_CODE,
+        FREQUENCY_CODE AS FREQUENCY_CODE,
+        ONCE_DOSE AS ONCE_DOSE,
+        CAUTION AS CAUTION,
+        PHY_FUNCTION1 AS PHY_FUNCTION1,
+        PHY_FUNCTION2 AS PHA_FUNCTION2,
+        PHY_FUNCTION3 AS PHA_FUNCTION3,
+        VALID_STATE AS VALID_STATE,
+        SELF_FLAG AS SELF_FLAG,
+        OCT_FLAG AS OCT_FLAG,
+        GMP_FLAG AS GMP_FLAG,
+        TEST_FLAG AS TEST_FLAG,
+        NEW_FLAG AS NEW_FLAG,
+        APPEND_FLAG AS APPEND_FLAG,
+        LACK_FLAG AS LACK_FLAG,
+        SHOW_FLAG AS SHOW_FLAG,
+        TENDER_FLAG AS TENDER_FLAG,
+        TENDER_PRICE AS TENDER_PRICE,
+        TENDER_COMPANY AS TENDER_COMPANY,
+        TENDER_BEGINDATE AS TENDER_BEGIN_DATE,
+        TENDER_ENDDATE AS TENDER_END_DATE,
+        COMPANY_CODE AS COMPAYNY_CODE,
+        PRICE_FORM AS PRICE_FORM,
+        CONTRACT_CODE AS CONTACT_CODE,
+        PRODUCING_AREA AS PRODUCTING_AREA,
+        PRODUCER_CODE AS PRODUCER_CODE,
+        APPROVE_INFO AS APPROVE_INFO,
+        LABEL AS LABEL,
+        INGREDIENT AS INGREDIENT,
+        EXECUTE_STANDARD AS EXEC_STD,
+        STORE_CONDITION AS SOTRE_COND,
+        BRIEF_INTRODUCTION AS BRIEF_INFO,
+        MANUAL AS MANUAL,
+        BAR_CODE AS BAR_CODE,
+        OLD_DRUG_CODE AS OLD_DRUG_CODE,
+        MARK AS MARK,
+        OPER_CODE AS OPER_CODE,
+        OPER_DATE AS OPER_DATE,
+        SPECIAL_FLAG AS PR_FLAG,
+        SPECIAL_FLAG1 AS CITY_FLAG,
+        SPECIAL_FLAG2 AS SELF_PAY_FLAG,
+        SPECIAL_FLAG3 AS SPECIAL_FLAG,
+        SPECIAL_FLAG4 AS INPAT_PACK_FLAG,
+        SHIFT_TYPE AS SHIFT_TYPE,
+        SHIFT_DATE AS SHIFT_DATE,
+        SHIFT_MARK AS SHIFT_MARK,
+        TRADE_PICTURE AS TRADE_PIC,
+        SPLIT_TYPE AS INSEPARABLE_FLAG,
+        NOSTRUM_FLAG AS NO_STRUM_FLAG,
+        EXTEND1 AS EXTEND1,
+        EXTEND2 AS EXTEND2,
+        CREATE_TIME AS CREATE_TIME,
+        DRUG_TYPETWO AS DRUG_TYPE_TWO,
+        ATC_NO AS ACT_NO,
+        SPECIAL_FLAG5 AS ADJUVANT_FLAG,
+        SPECIAL_FLAG6 AS ANTI_TUMER_FLAG,
+        BUYWITHQTY_FLAG AS WITH_QTY_FLAG,
+        SPECIAL_FLAG7 AS TEMPORARY_FLAG,
+        SPECIAL_FLAG8 AS BASE_FLAG,
+        ISMONITORS AS MONITOR_FLAG,
+        ISCPURCHASE AS UNI_PURCHASE_FLAG,
+        PPSN AS PPSN,
+        ISCNEGOTIATE AS C_NEGOTIATE_FLAG,
+        BRANCHCODE AS DEPTOWN,
+        PACKAGE_MATERIAL AS PACK_MATERIAL
+    </sql>
+
+    <!-- 接口1 -->
+    <select id="QueryDrugBaseInfo" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            PHA_COM_BASEINFO
+        <where>
+            <if test="drugCode!=null">
+                AND DRUG_CODE = #{drugCode}
+            </if>
+        </where>
+    </select>
+</mapper>
