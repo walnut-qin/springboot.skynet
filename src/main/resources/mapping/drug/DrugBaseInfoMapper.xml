@@ -228,20 +228,114 @@
         </where>
     </select>
 
+    <!-- 接口2 -->
     <update id="UpdateDrugBaseInfo" parameterType="com.kaos.his.entity.drug.DrugBaseInfo">
         UPDATE PHA_COM_BASEINFO
         <trim prefix="SET" suffixOverrides=",">
-            <if test="tradeName!=null">
-                TRADE_NAME = #{tradeName},
-            </if>
-            <if test="spellCode!=null">
-                SPELL_CODE = #{spellCode},
-            </if>
+            <if test="tradeName!=null">TRADE_NAME = #{tradeName},</if>
+            <if test="spellCode!=null">SPELL_CODE = #{spellCode},</if>
+            <if test="wbCode!=null">WB_CODE = #{wbCode},</if>
+            <if test="cusCode!=null">CUSTOM_CODE = #{cusCode},</if>
+            <if test="regName!=null">REGULAR_NAME = #{regName},</if>
+            <if test="regSpellCode!=null">REGULAR_SPELL = #{regSpellCode},</if>
+            <if test="regWbCode!=null">REGULAR_WB = #{regWbCode},</if>
+            <if test="regCusCode!=null">REGULAR_CUSTOM = #{regCusCode},</if>
+            <if test="fmlName!=null">FORMAL_NAME = #{fmlName},</if>
+            <if test="fmlSpellCode!=null">FORMAL_SPELL = #{fmlSpellCode},</if>
+            <if test="fmlWbCode!=null">FORMAL_WB = #{fmlWbCode},</if>
+            <if test="fmlCusCode!=null">FORMAL_CUSTOM = #{fmlCusCode},</if>
+            <if test="otherName!=null">OTHER_NAME = #{otherName},</if>
+            <if test="otherSpellCode!=null">OTHER_SPELL = #{otherSpellCode},</if>
+            <if test="otherWbCode!=null">OTHER_WB = #{otherWbCode},</if>
+            <if test="otherCusCode!=null">OTHER_CUSTOM = #{otherCusCode},</if>
+            <if test="englishRegular!=null">ENGLISH_REGULAR = #{englishRegular},</if>
+            <if test="englishOther!=null">ENGLISH_OTHER = #{englishOther},</if>
+            <if test="englishName!=null">ENGLISH_NAME = #{englishName},</if>
+            <if test="intlCode!=null">INTERNATIONAL_CODE = #{intlCode},</if>
+            <if test="nlCode!=null">GB_CODE = #{nlCode},</if>
+            <if test="classCode!=null">CLASS_CODE = #{classCode},</if>
+            <if test="feeCode!=null">FEE_CODE = #{feeCode},</if>
+            <if test="drugType!=null">DRUG_TYPE = #{drugType},</if>
+            <if test="drugQuality!=null">DRUG_QUALITY = #{drugQuality},</if>
+            <if test="itemGrade!=null">ITEM_GRADE = #{itemGrade},</if>
+            <if test="specs!=null">SPECS = #{specs},</if>
+            <if test="retailPrice!=null">RETAIL_PRICE = #{retailPrice},</if>
+            <if test="wholesalePrice!=null">WHOLESALE_PRICE = #{wholesalePrice},</if>
+            <if test="purchasePrice!=null">PURCHASE_PRICE = #{purchasePrice},</if>
+            <if test="topRetailPrice!=null">TOP_RETAILPRICE = #{topRetailPrice},</if>
+            <if test="packUnit!=null">PACK_UNIT = #{packUnit},</if>
+            <if test="packQty!=null">PACK_QTY = #{packQty},</if>
+            <if test="minUnit!=null">MIN_UNIT = #{minUnit},</if>
+            <if test="doseModelCode!=null">DOSE_MODEL_CODE = #{doseModelCode},</if>
+            <if test="baseDose!=null">BASE_DOSE = #{baseDose},</if>
+            <if test="doseUnit!=null">DOSE_UNIT = #{doseUnit},</if>
+            <if test="usageCode!=null">USAGE_CODE = #{usageCode},</if>
+            <if test="frequencyCode!=null">FREQUENCY_CODE = #{frequencyCode},</if>
+            <if test="onceDose!=null">ONCE_DOSE = #{onceDose},</if>
+            <if test="caution!=null">CAUTION = #{caution},</if>
+            <if test="phyFunction1!=null">PHY_FUNCTION1 = #{phyFunction1},</if>
+            <if test="phyFunction2!=null">PHY_FUNCTION2 = #{phyFunction2},</if>
+            <if test="phyFunction3!=null">PHY_FUNCTION3 = #{phyFunction3},</if>
+            <if test="validState!=null">VALID_STATE = #{validState},</if>
+            <if test="selfFlag!=null">SELF_FLAG = #{selfFlag},</if>
+            <if test="octFlag!=null">OCT_FLAG = #{octFlag},</if>
+            <if test="gmpFlag!=null">GMP_FLAG = #{gmpFlag},</if>
+            <if test="testFlag!=null">TEST_FLAG = #{testFlag},</if>
+            <if test="newFlag!=null">NEW_FLAG = #{newFlag},</if>
+            <if test="appendFlag!=null">APPEND_FLAG = #{appendFlag},</if>
+            <if test="lackFlag!=null">LACK_FLAG = #{lackFlag},</if>
+            <if test="showFlag!=null">SHOW_FLAG = #{showFlag},</if>
+            <if test="tenderFlag!=null">TENDER_FLAG = #{tenderFlag},</if>
+            <if test="tenderPrice!=null">TENDER_PRICE = #{tenderPrice},</if>
+            <if test="tenderCompany!=null">TENDER_COMPANY = #{tenderCompany},</if>
+            <if test="tenderBeginDate!=null">TENDER_BEGINDATE = #{tenderBeginDate},</if>
+            <if test="tenderEndDate!=null">TENDER_ENDDATE = #{tenderEndDate},</if>
+            <if test="companyCode!=null">COMPANY_CODE = #{companyCode},</if>
+            <if test="priceForm!=null">PRICE_FORM = #{priceForm},</if>
+            <if test="contactCode!=null">CONTRACT_CODE = #{contactCode},</if>
+            <if test="productingArea!=null">PRODUCING_AREA = #{productingArea},</if>
+            <if test="producerCode!=null">PRODUCER_CODE = #{producerCode},</if>
+            <if test="approveInfo!=null">APPROVE_INFO = #{approveInfo},</if>
+            <if test="label!=null">LABEL = #{label},</if>
+            <if test="ingredient!=null">INGREDIENT = #{ingredient},</if>
+            <if test="execStd!=null">EXECUTE_STANDARD = #{execStd},</if>
+            <if test="storeCond!=null">STORE_CONDITION = #{storeCond},</if>
+            <if test="briefInfo!=null">BRIEF_INTRODUCTION = #{briefInfo},</if>
+            <if test="manual!=null">MANUAL = #{manual},</if>
+            <if test="barCode!=null">BAR_CODE = #{barCode},</if>
+            <if test="oldDrugCode!=null">OLD_DRUG_CODE = #{oldDrugCode},</if>
+            <if test="mark!=null">MARK = #{mark},</if>
+            <if test="operCode!=null">OPER_CODE = #{operCode},</if>
+            <if test="operDate!=null">OPER_DATE = #{operDate},</if>
+            <if test="prFlag!=null">SPECIAL_FLAG = #{prFlag},</if>
+            <if test="cityFlag!=null">SPECIAL_FLAG1 = #{cityFlag},</if>
+            <if test="selfPayFlag!=null">SPECIAL_FLAG2 = #{selfPayFlag},</if>
+            <if test="specialFlag!=null">SPECIAL_FLAG3 = #{specialFlag},</if>
+            <if test="inpatPackFlag!=null">SPECIAL_FLAG4 = #{inpatPackFlag},</if>
+            <if test="shiftType!=null">SHIFT_TYPE = #{shiftType},</if>
+            <if test="shiftDate!=null">SHIFT_DATE = #{shiftDate},</if>
+            <if test="shiftMark!=null">SHIFT_MARK = #{shiftMark},</if>
+            <if test="tradePic!=null">TRADE_PICTURE = #{tradePic},</if>
+            <if test="inseparableFlag!=null">SPLIT_TYPE = #{inseparableFlag},</if>
+            <if test="noStrumFlag!=null">NOSTRUM_FLAG = #{noStrumFlag},</if>
+            <if test="extend1!=null">EXTEND1 = #{extend1},</if>
+            <if test="extend2!=null">EXTEND2 = #{extend2},</if>
+            <if test="createTime!=null">CREATE_TIME = #{createTime},</if>
+            <if test="drugTypeTwo!=null">DRUG_TYPETWO = #{drugTypeTwo},</if>
+            <if test="actNo!=null">ATC_NO = #{actNo},</if>
+            <if test="adjuvantFlag!=null">SPECIAL_FLAG5 = #{adjuvantFlag},</if>
+            <if test="antiTumerFlag!=null">SPECIAL_FLAG6 = #{antiTumerFlag},</if>
+            <if test="withQtyFlag!=null">BUYWITHQTY_FLAG = #{withQtyFlag},</if>
+            <if test="temporaryFlag!=null">SPECIAL_FLAG7 = #{temporaryFlag},</if>
+            <if test="baseFlag!=null">SPECIAL_FLAG8 = #{baseFlag},</if>
+            <if test="monitorFlag!=null">ISMONITORS = #{monitorFlag},</if>
+            <if test="uniPurchaseFlag!=null">ISCPURCHASE = #{uniPurchaseFlag},</if>
+            <if test="ppsn!=null">PPSN = #{ppsn},</if>
+            <if test="cnegotiateFlag!=null">ISCNEGOTIATE = #{cnegotiateFlag},</if>
+            <if test="deptOwn!=null">BRANCHCODE = #{deptOwn},</if>
+            <if test="packMaterial!=null">PACKAGE_MATERIAL = #{packMaterial},</if>
         </trim>
-        <where>
-            <if test="drugCode!=null">
-                AND DRUG_CODE = #{drugCode}
-            </if>
-        </where>
+        WHERE
+            DRUG_CODE = #{drugCode}
     </update>
 </mapper>

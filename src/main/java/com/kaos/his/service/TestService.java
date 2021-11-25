@@ -14,15 +14,15 @@ public class TestService {
 
     @Transactional
     public DrugBaseInfo Run(String param) {
-        DrugBaseInfo v = new DrugBaseInfo() {
-            {
-                drugCode = "KaOS";
-                tradeName = "test";
-                cnegotiateFlag = false;
-            }
-        };
-        this.drugBaseInfoMapper.UpdateDrugBaseInfo(v);
+        // 查询出指定的药品实体
+        var drug = this.drugBaseInfoMapper.QueryDrugBaseInfo("Y00000017445");
 
-        return v;
+        // 替换主键
+        drug.drugCode = "KaOS";
+
+        // 回写
+        this.drugBaseInfoMapper.UpdateDrugBaseInfo(drug);
+
+        return drug;
     }
 }
