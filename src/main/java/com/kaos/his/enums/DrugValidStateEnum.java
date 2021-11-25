@@ -3,7 +3,7 @@ package com.kaos.his.enums;
 import com.kaos.his.enums.util.IEnum;
 
 public enum DrugValidStateEnum implements IEnum<DrugValidStateEnum> {
-    在用("0", "在用"), 停用("1", "停用"), 废弃("2", "废弃");
+    停用("0", "停用"), 在用("1", "在用"), 废弃("2", "废弃");
 
     /**
      * 数据库存值
