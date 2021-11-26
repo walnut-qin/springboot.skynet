@@ -1,6 +1,9 @@
 package com.kaos.his.controller;
 
-import com.kaos.his.enums.SexEnum;
+import java.util.Date;
+
+import com.kaos.his.entity.credential.EscortCard.EscortState;
+import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.EscortService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,9 @@ public class UpdateEscortStateController {
      * @param escortNo
      * @return
      */
-    @RequestMapping(value = "updateEscortState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void Run(@RequestParam("escortNo") String escortNo, @RequestParam("newState") SexEnum newState) {
-        var escort = this.escortService.QueryEscort(escortNo);
-        escort.states.clear();
+    @RequestMapping(value = "updateEscortState", method = RequestMethod.GET)
+    public void Run(@RequestParam("escortNo") String escortNo, @RequestParam("newState") EscortStateEnum newState) {
+        // 执行更新服务
+        this.escortService.UpdateEscortState(escortNo, newState);
     }
 }

@@ -1,5 +1,6 @@
 package com.kaos.his.service;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -227,5 +228,41 @@ public class EscortService {
         }
 
         return escort;
+    }
+
+    /**
+     * 更新陪护证状态
+     * 
+     * @param escortNo
+     * @param newState
+     */
+    @Transactional
+    public void UpdateEscortState(String escortNo, EscortStateEnum newState) {
+        // 查询出陪护证实体
+        var escort = this.escortMapper.QueryEscort(escortNo);
+        if (escort == null) {
+            throw new InvalidParameterException("不存在的陪护证");
+        }
+
+        // 异常状态
+        if (escort.states == null || escort.states.size() == 0) {
+            throw new InvalidParameterException("陪护证的初始状态异常");
+        }
+
+        // 取当前状态
+        var curState = escort.states.get(escort.states.size() - 1);
+
+        // 仅当新状态与当前状态不同时更新
+        if (curState.state.equals(newState)) {
+            return;
+        }
+
+        // 插入一条新状态
+        var newEscortState = new EscortCard.EscortState();
+        newEscortState.escortNo = curState.escortNo;
+        newEscortState.recNo = curState.recNo + 1;
+        newEscortState.state = newState;
+        newEscortState.operDate = new Date();
+        this.escortMapper.UpdateEscortState(newEscortState);
     }
 }
