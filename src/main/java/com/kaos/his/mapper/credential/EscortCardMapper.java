@@ -22,7 +22,7 @@ public interface EscortCardMapper {
      * @param escortNo 陪护人卡号
      * @return
      */
-    List<EscortCard> QueryHelperEscorts(String cardNo);
+    List<EscortCard> QueryHelperEscorts(String helperCardNo);
 
     /**
      * 根据陪护人卡号查询关联的陪护证
@@ -30,7 +30,7 @@ public interface EscortCardMapper {
      * @param cardNo
      * @return
      */
-    List<EscortCard> QueryPatientEscorts(String cardNo, Integer happenNo);
+    List<EscortCard> QueryPatientEscorts(String patientCardNo, Integer happenNo);
 
     /**
      * 更新陪护证的状态
