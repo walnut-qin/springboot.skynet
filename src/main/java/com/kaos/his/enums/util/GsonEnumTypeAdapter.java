@@ -10,7 +10,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class GsonEnumTypeAdapter<E extends IEnum<E>> implements JsonSerializer<E>, JsonDeserializer<E> {
+public class GsonEnumTypeAdapter<E extends IEnum> implements JsonSerializer<E>, JsonDeserializer<E> {
 
     private E[] enums;
 
@@ -21,7 +21,7 @@ public class GsonEnumTypeAdapter<E extends IEnum<E>> implements JsonSerializer<E
     @Override
     public JsonElement serialize(E src, Type typeOfSrc, JsonSerializationContext context) {
         if (src != null) {
-            return new JsonPrimitive(((IEnum<E>) src).getDescription());
+            return new JsonPrimitive(((IEnum) src).getDescription());
         }
         return null;
     }

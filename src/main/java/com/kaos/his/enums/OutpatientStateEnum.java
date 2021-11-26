@@ -2,10 +2,12 @@ package com.kaos.his.enums;
 
 import com.kaos.his.enums.util.IEnum;
 
+import org.springframework.core.convert.converter.Converter;
+
 /**
  * 门诊患者状态枚举
  */
-public enum OutpatientStateEnum implements IEnum<OutpatientStateEnum> {
+public enum OutpatientStateEnum implements IEnum {
     正常挂号("N", "正常挂号"), 留观登记("R", "留观登记"), 正在留观("I", "正在留观"), 出观登记("P", "出观登记"), 留观出院完成("B", "留观出院完成"),
     留观转住院登记("E", "留观转住院登记"), 留观转住院完成("C", "留观转住院完成");
 
@@ -38,5 +40,20 @@ public enum OutpatientStateEnum implements IEnum<OutpatientStateEnum> {
     @Override
     public String getDescription() {
         return this.description;
+    }
+
+    /**
+     * 枚举转换器
+     */
+    public static class EnumConverter implements Converter<String, OutpatientStateEnum> {
+        @Override
+        public OutpatientStateEnum convert(String source) {
+            for (OutpatientStateEnum e : OutpatientStateEnum.class.getEnumConstants()) {
+                if (e.getDescription().equals(source)) {
+                    return e;
+                }
+            }
+            throw new IllegalArgumentException();
+        }
     }
 }

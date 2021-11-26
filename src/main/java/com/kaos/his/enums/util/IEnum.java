@@ -1,6 +1,9 @@
 package com.kaos.his.enums.util;
 
-public interface IEnum<E> {
+/**
+ * 定制枚举接口
+ */
+public interface IEnum {
     /**
      * 值用于mybatis映射数据库
      * 

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
-public class MybatisEnumTypeHandler<E extends IEnum<E>> extends BaseTypeHandler<E> {
+public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> {
     // private Class<E> enumType;
 
     /**
