@@ -39,8 +39,8 @@
         FROM
             HIS_FSHV1.MET_ORDO_ORDER
         <where>
-            <if test="indexNo!=null">
-                AND PATIENT_ID = #{indexNo}
+            <if test="cardNo!=null">
+                AND PATIENT_ID = #{cardNo}
             </if>
             <if test="itemCode!=null">
                 AND TERM_ID = #{itemCode}

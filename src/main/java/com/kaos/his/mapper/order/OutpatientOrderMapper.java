@@ -24,5 +24,5 @@ public interface OutpatientOrderMapper {
      * @param dayOffset 时间偏移量
      * @return
      */
-    List<OutpatientOrder> QueryOutpatientOrders(String indexNo, String itemCode, Integer dayOffset);
+    List<OutpatientOrder> QueryOutpatientOrders(String cardNo, String itemCode, Integer dayOffset);
 }

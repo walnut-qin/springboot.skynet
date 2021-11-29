@@ -14,9 +14,9 @@ public class OutpatientOrder {
     public Date moDate = null;
 
     /**
-     * 索引号，门诊为卡号，住院为住院号
+     * 就诊卡号
      */
-    public String indexNo = null;
+    public String cardNo = null;
 
     /**
      * 项目编码
