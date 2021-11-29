@@ -23,6 +23,6 @@ public class GetPatientController {
         // 调取业务获取实体
         var patient = this.entityService.QueryPatient(cardNo);
 
-        return GsonHelper.GetUniversalGson().toJson(patient);
+        return GsonHelper.ToJson(patient);
     }
 }

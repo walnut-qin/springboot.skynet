@@ -23,6 +23,6 @@ public class GetActiveEscortsController {
         // 调取业务获取实体
         var escortCards = this.entityService.QueryActiveEscorts(patientCardNo);
 
-        return GsonHelper.GetUniversalGson().toJson(escortCards);
+        return GsonHelper.ToJson(escortCards);
     }
 }
