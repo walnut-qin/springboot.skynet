@@ -20,7 +20,7 @@ public class GsonHelper {
      * 
      * @return
      */
-    public static Gson GetUniversalGson() {
+    private static Gson GetUniversalGson() {
         return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .registerTypeAdapter(DeptOwnEnum.class, new GsonEnumTypeAdapter<>(DeptOwnEnum.class))
                 .registerTypeAdapter(DrugItemGradeEnum.class, new GsonEnumTypeAdapter<>(DrugItemGradeEnum.class))
@@ -32,5 +32,15 @@ public class GsonHelper {
                 .registerTypeAdapter(OutpatientStateEnum.class, new GsonEnumTypeAdapter<>(OutpatientStateEnum.class))
                 .registerTypeAdapter(PreinCardStateEnum.class, new GsonEnumTypeAdapter<>(PreinCardStateEnum.class))
                 .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class)).create();
+    }
+
+    public static String ToJson(Object src) {
+        Gson gson = GsonHelper.GetUniversalGson();
+        return gson.toJson(src);
+    }
+
+    public static <T> T FromJson(String json, Class<T> typeOfT) {
+        Gson gson = GsonHelper.GetUniversalGson();
+        return gson.fromJson(json, typeOfT);
     }
 }
