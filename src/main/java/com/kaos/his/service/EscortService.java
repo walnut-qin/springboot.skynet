@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.enums.EscortStateEnum;
@@ -19,6 +22,7 @@ import com.kaos.his.mapper.organization.DepartmentMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -268,12 +272,74 @@ public class EscortService {
     }
 
     /**
+     * 添加陪护前的权限检查
+     * 
+     * @param escortCard
+     */
+    private void InsertEscortValidCheck(EscortCard escortCard) {
+        // 患者不可以为自己陪护
+        if (escortCard.helperCardNo.equals(escortCard.patientCardNo)) {
+            throw new InvalidParameterException("患者不可以为自己陪护");
+        }
+
+        // 获取患者当前有效的陪护列表
+        var curEscortCards = Lists.newArrayList(
+                Iterables.filter(this.escortMapper.QueryPatientEscorts(escortCard.patientCardNo, escortCard.happenNo),
+                        new Predicate<EscortCard>() {
+                            @Override
+                            public boolean apply(@Nullable EscortCard escortCard) {
+                                if (!escortCard.states.isEmpty() && escortCard.states
+                                        .get(escortCard.states.size() - 1).state != EscortStateEnum.注销) {
+                                    return true;
+                                }
+                                return false;
+                            }
+                        }));
+
+        // 若有效陪护数量已有2位，则无法再添加
+        switch (curEscortCards.size()) {
+        case 0:
+            break;
+
+        case 1:
+            break;
+
+        default:
+            throw new RuntimeException("已存在2位以上的陪护");
+        }
+    }
+
+    /**
      * 添加一个新的陪护证
      * 
      * @param escortCard
      */
     @Transactional
-    public void InsertEscort(EscortCard escortCard) {
+    public EscortCard InsertEscort(EscortCard escortCard) {
+        // 入参判断
+        if (escortCard.patientCardNo == null) {
+            throw new InvalidParameterException("患者卡号为空");
+        }
 
+        // 权限检查
+        this.InsertEscortValidCheck(escortCard);
+
+        // 生成陪护证号
+        escortCard.escortNo = this.escortMapper.GenerateNewEscortNo();
+
+        // 插入主表记录
+        this.escortMapper.InsertEscort(escortCard);
+
+        // 插入状态列表
+        if (!escortCard.states.isEmpty()) {
+            this.escortMapper.InsertEscortStates(escortCard.states);
+        }
+
+        // 插入行为列表
+        if (!escortCard.actions.isEmpty()) {
+            this.escortMapper.InsertEscortActions(escortCard.actions);
+        }
+
+        return escortCard;
     }
 }

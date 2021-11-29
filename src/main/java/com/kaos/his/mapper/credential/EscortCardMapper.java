@@ -25,7 +25,7 @@ public interface EscortCardMapper {
     List<EscortCard> QueryHelperEscorts(String helperCardNo);
 
     /**
-     * 根据陪护人卡号查询关联的陪护证
+     * 根据患者卡号查询关联的陪护证
      * 
      * @param cardNo
      * @return
@@ -70,4 +70,11 @@ public interface EscortCardMapper {
      * @param escortCard
      */
     void InsertEscort(EscortCard escortCard);
+
+    /**
+     * 生成一个新的陪护证号
+     * 
+     * @return
+     */
+    String GenerateNewEscortNo();
 }
