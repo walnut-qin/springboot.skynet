@@ -39,4 +39,11 @@ public interface EscortCardMapper {
      * @param newState 新状态
      */
     void UpdateEscortState(EscortCard.EscortState newState);
+
+    /**
+     * 添加一个新的陪护证
+     * 
+     * @param escortCard
+     */
+    void InsertEscort(EscortCard escortCard);
 }
