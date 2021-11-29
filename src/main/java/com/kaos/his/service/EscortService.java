@@ -14,10 +14,10 @@ import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
+import com.kaos.his.mapper.order.OutpatientOrderMapper;
 import com.kaos.his.mapper.organization.DepartmentMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
-import com.kaos.his.mapper.product.OrderMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +62,7 @@ public class EscortService {
      * 医嘱读取接口
      */
     @Autowired
-    OrderMapper orderMapper;
+    OutpatientOrderMapper outpatientOrderMapper;
 
     /**
      * 科室信息接口
@@ -189,7 +189,8 @@ public class EscortService {
                     "SARS-CoV-2-RNA", 7);
 
             // 提取7日内有效核酸医嘱
-            escort.helper.orders = this.orderMapper.QueryOrders(escort.helperCardNo, "438771", 7);
+            escort.helper.outpatientOrders = this.outpatientOrderMapper.QueryOutpatientOrders(escort.helperCardNo,
+                    "438771", 7);
 
             // 查询最新状态
             EscortStateEnum newState = null;
@@ -198,7 +199,7 @@ public class EscortService {
                 newState = recState;
             } else if (escort.helper.nucleicAcidTests.size() == 0) { // 无核酸检测结果
                 // 查询核检医嘱
-                if (escort.helper.orders.size() > 0) {
+                if (escort.helper.outpatientOrders.size() > 0) {
                     newState = EscortStateEnum.等待院内核酸检测结果;
                 } else {
                     newState = EscortStateEnum.无核酸检测结果;

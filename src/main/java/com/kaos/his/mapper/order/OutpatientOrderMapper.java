@@ -1,20 +1,20 @@
-package com.kaos.his.mapper.product;
+package com.kaos.his.mapper.order;
 
 import java.util.List;
 
-import com.kaos.his.entity.product.Order;
+import com.kaos.his.entity.order.OutpatientOrder;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderMapper {
+public interface OutpatientOrderMapper {
     /**
      * 根据医嘱号查询医嘱
      * 
      * @param moOrder 医嘱号，主键
      * @return
      */
-    Order QueryOrder(String moOrder);
+    OutpatientOrder QueryOutpatientOrder(String moOrder);
 
     /**
      * 查询符合条件的医嘱
@@ -24,5 +24,5 @@ public interface OrderMapper {
      * @param dayOffset 时间偏移量
      * @return
      */
-    List<Order> QueryOrders(String indexNo, String itemCode, Integer dayOffset);
+    List<OutpatientOrder> QueryOutpatientOrders(String indexNo, String itemCode, Integer dayOffset);
 }

@@ -1,8 +1,8 @@
-package com.kaos.his.entity.product;
+package com.kaos.his.entity.order;
 
 import java.util.Date;
 
-public class Order {
+public class OutpatientOrder {
     /**
      * 医嘱流水号
      */
