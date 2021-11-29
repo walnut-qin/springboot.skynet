@@ -341,6 +341,12 @@ public class EscortService {
             throw new InvalidParameterException("患者卡号为空");
         }
 
+        // 查询住院证
+        var preinCard = this.preinCardMapper.QueryPreinCard(escortCard.patientCardNo, escortCard.happenNo);
+        if (preinCard == null) {
+            throw new RuntimeException("无住院证，无法注册陪护");
+        }
+
         // 权限检查
         this.InsertEscortValidCheck(escortCard);
 
@@ -358,6 +364,9 @@ public class EscortService {
         }
 
         // 检查VIP记录
+        if (preinCard.escortVip == null) {
+            
+        }
 
         // 插入主表记录
         this.escortMapper.InsertEscort(escortCard);
