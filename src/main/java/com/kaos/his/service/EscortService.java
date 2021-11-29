@@ -222,7 +222,7 @@ public class EscortService {
                 newEscortState.recNo = lstEscortState.recNo + 1;
                 newEscortState.state = newState;
                 newEscortState.operDate = new Date();
-                this.escortMapper.UpdateEscortState(newEscortState);
+                this.escortMapper.InsertEscortState(newEscortState);
                 // 将新状态插入列表
                 escort.states.add(newEscortState);
             }
@@ -264,6 +264,16 @@ public class EscortService {
         newEscortState.recNo = curState.recNo + 1;
         newEscortState.state = newState;
         newEscortState.operDate = new Date();
-        this.escortMapper.UpdateEscortState(newEscortState);
+        this.escortMapper.InsertEscortState(newEscortState);
+    }
+
+    /**
+     * 添加一个新的陪护证
+     * 
+     * @param escortCard
+     */
+    @Transactional
+    public void InsertEscort(EscortCard escortCard) {
+
     }
 }

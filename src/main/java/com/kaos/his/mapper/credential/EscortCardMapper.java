@@ -38,7 +38,31 @@ public interface EscortCardMapper {
      * @param escortNo 陪护证编号
      * @param newState 新状态
      */
-    void UpdateEscortState(EscortCard.EscortState newState);
+    void InsertEscortState(EscortCard.EscortState newState);
+
+    /**
+     * 更新陪护证的状态
+     * 
+     * @param escortNo 陪护证编号
+     * @param newState 新状态
+     */
+    void InsertEscortStates(List<EscortCard.EscortState> newStates);
+
+    /**
+     * 更新陪护证的状态
+     * 
+     * @param escortNo 陪护证编号
+     * @param newState 新状态
+     */
+    void InsertEscortAction(EscortCard.EscortAction newAction);
+
+    /**
+     * 更新陪护证的状态
+     * 
+     * @param escortNo 陪护证编号
+     * @param newState 新状态
+     */
+    void InsertEscortActions(List<EscortCard.EscortAction> newActions);
 
     /**
      * 添加一个新的陪护证
