@@ -346,12 +346,18 @@ public class EscortService {
 
         // 生成陪护证号
         escortCard.escortNo = this.escortMapper.GenerateNewEscortNo();
-        for (EscortState state : escortCard.states) {
-            state.escortNo = escortCard.escortNo;
+        if (escortCard.states != null) {
+            for (EscortState state : escortCard.states) {
+                state.escortNo = escortCard.escortNo;
+            }
         }
-        for (EscortAction action : escortCard.actions) {
-            action.escortNo = escortCard.escortNo;
+        if (escortCard.actions != null) {
+            for (EscortAction action : escortCard.actions) {
+                action.escortNo = escortCard.escortNo;
+            }
         }
+
+        // 检查VIP记录
 
         // 插入主表记录
         this.escortMapper.InsertEscort(escortCard);
