@@ -17,6 +17,7 @@ import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
+import com.kaos.his.mapper.order.InpatientOrderMapper;
 import com.kaos.his.mapper.order.OutpatientOrderMapper;
 import com.kaos.his.mapper.organization.DepartmentMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
@@ -63,10 +64,16 @@ public class EscortService {
     NucleicAcidTestMapper nucleicAcidTestMapper;
 
     /**
-     * 医嘱读取接口
+     * 门诊医嘱读取接口
      */
     @Autowired
     OutpatientOrderMapper outpatientOrderMapper;
+
+    /**
+     * 住院医嘱读取接口
+     */
+    @Autowired
+    InpatientOrderMapper inpatientOrderMapper;
 
     /**
      * 科室信息接口
@@ -302,6 +309,17 @@ public class EscortService {
             break;
 
         case 1:
+            // 查看患者最近的住院记录
+            var inpatient = this.inpatientMapper.QueryInpatientR1(escortCard.patientCardNo, escortCard.happenNo);
+            if (inpatient == null) {
+                throw new RuntimeException("患者尚未入院，无法添加第二陪护");
+            } else {
+                // 获取住院医嘱
+                var ordi = this.inpatientOrderMapper.QueryInpatientOrders(inpatient.patientNo, "5070672", 7);
+                if (ordi.isEmpty()) {
+                    throw new RuntimeException("患者尚未开立第二陪护医嘱");
+                }
+            }
             break;
 
         default:
