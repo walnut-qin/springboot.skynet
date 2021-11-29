@@ -13,6 +13,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
+import com.kaos.his.entity.credential.EscortCard.EscortAction;
+import com.kaos.his.entity.credential.EscortCard.EscortState;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
@@ -344,6 +346,12 @@ public class EscortService {
 
         // 生成陪护证号
         escortCard.escortNo = this.escortMapper.GenerateNewEscortNo();
+        for (EscortState state : escortCard.states) {
+            state.escortNo = escortCard.escortNo;
+        }
+        for (EscortAction action : escortCard.actions) {
+            action.escortNo = escortCard.escortNo;
+        }
 
         // 插入主表记录
         this.escortMapper.InsertEscort(escortCard);

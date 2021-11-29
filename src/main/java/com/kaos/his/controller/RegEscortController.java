@@ -25,7 +25,7 @@ public class RegEscortController {
      * @param escortNo
      * @return
      */
-    @RequestMapping(value = "RegEscort", method = RequestMethod.POST)
+    @RequestMapping(value = "regEscort", method = RequestMethod.POST)
     public void Run(@RequestBody String body) {
         // 解析body
         var escortCard = GsonHelper.FromJson(body, EscortCard.class);
