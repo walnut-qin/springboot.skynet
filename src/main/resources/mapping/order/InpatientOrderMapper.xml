@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.his.mapper.order.OutpatientOrderMapper">
+<mapper namespace="com.kaos.his.mapper.order.InpatientOrderMapper">
     <!-- 实体映射表 -->
-    <resultMap id="map" type="com.kaos.his.entity.order.OutpatientOrder">
+    <resultMap id="map" type="com.kaos.his.entity.order.InpatientOrder">
         <id column="MO_ORDER" jdbcType="VARCHAR" property="moOrder"/>
         <result column="MO_DATE" jdbcType="VARCHAR" property="moDate"/>
-        <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
         <result column="TERM_ID" jdbcType="VARCHAR" property="termId"/>
         <result column="TERM_NAME" jdbcType="VARCHAR" property="termName"/>
     </resultMap>
@@ -14,17 +14,17 @@
     <sql id="allItem">
         MO_ORDER AS MO_ORDER,
         MO_DATE AS MO_DATE,
-        PATIENT_ID AS CARD_NO,
+        SUBSTR(INPATIENT_NO, 5) AS PATIENT_NO,
         TERM_ID AS TERM_ID,
         TERM_NAME AS TERM_NAME
     </sql>
 
     <!-- 接口1 -->
-    <select id="QueryOutpatientOrder" resultMap="map">
+    <select id="QueryInpatientOrder" resultMap="map">
         SELECT
         <include refid="allItem"/>
         FROM
-            HIS_FSHV1.MET_ORDO_ORDER
+            HIS_FSHV1.MET_ORDI_ORDER
         <where>
             <if test="moOrder!=null">
                 AND MO_ORDER = #{moOrder}
@@ -33,14 +33,14 @@
     </select>
 
     <!-- 接口2 -->
-    <select id="QueryOutpatientOrders" resultMap="map">
+    <select id="QueryInpatientOrders" resultMap="map">
         SELECT
         <include refid="allItem"/>
         FROM
-            HIS_FSHV1.MET_ORDO_ORDER
+            HIS_FSHV1.MET_ORDI_ORDER
         <where>
-            <if test="cardNo!=null">
-                AND PATIENT_ID = #{cardNo}
+            <if test="patientNo!=null">
+                AND INPATIENT_NO = 'ZY01' || #{patientNo}
             </if>
             <if test="itemCode!=null">
                 AND TERM_ID = #{itemCode}

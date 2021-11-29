@@ -19,7 +19,7 @@ public interface OutpatientOrderMapper {
     /**
      * 查询符合条件的医嘱
      * 
-     * @param indexNo   索引号，门诊为就诊卡号
+     * @param cardNo    就诊卡号
      * @param itemCode  项目编码
      * @param dayOffset 时间偏移量
      * @return
