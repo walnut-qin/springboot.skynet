@@ -1,13 +1,14 @@
 package com.kaos.his.controller;
 
-import com.kaos.his.entity.credential.EscortCard;
+import java.security.InvalidParameterException;
+
 import com.kaos.his.service.EscortService;
 import com.kaos.util.GsonHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,13 +26,17 @@ public class RegEscortController {
      * @param escortNo
      * @return
      */
-    @RequestMapping(value = "regEscort", method = RequestMethod.POST)
-    public String Run(@RequestBody String body) {
-        // 解析body
-        var escortCard = GsonHelper.FromJson(body, EscortCard.class);
+    @RequestMapping(value = "regEscort", method = RequestMethod.GET)
+    public String Run(@RequestParam("patientCardNo") String patient, @RequestParam("helperCardNo") String helper) {
+        // 入参判断
+        if (patient == null || patient.isEmpty()) {
+            throw new InvalidParameterException("患者号不能为空");
+        } else if (helper == null || helper.isEmpty()) {
+            throw new InvalidParameterException("陪护号不能为空");
+        }
 
         // 添加陪护
-        var recEscortCard = this.escortService.InsertEscort(escortCard);
+        var recEscortCard = this.escortService.InsertEscort(patient, helper);
 
         return GsonHelper.ToJson(recEscortCard);
     }

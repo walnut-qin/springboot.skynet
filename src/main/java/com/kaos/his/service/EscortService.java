@@ -13,7 +13,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
-import com.kaos.his.entity.credential.EscortCard.EscortAction;
 import com.kaos.his.entity.credential.EscortCard.EscortState;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.mapper.credential.EscortCardMapper;
@@ -285,21 +284,21 @@ public class EscortService {
      * 
      * @param escortCard
      */
-    private void InsertEscortValidCheck(EscortCard escortCard) {
+    private void InsertEscortValidCheck(PreinCard preinCard, String helperCardNo) {
         // 患者不可以为自己陪护
-        if (escortCard.helperCardNo.equals(escortCard.patientCardNo)) {
+        if (helperCardNo.equals(preinCard.cardNo)) {
             throw new InvalidParameterException("患者不可以为自己陪护");
         }
 
         // 获取患者当前有效的陪护列表
         var curEscortCards = Lists.newArrayList(
-                Iterables.filter(this.escortMapper.QueryPatientEscorts(escortCard.patientCardNo, escortCard.happenNo),
+                Iterables.filter(this.escortMapper.QueryPatientEscorts(preinCard.cardNo, preinCard.happenNo),
                         new Predicate<EscortCard>() {
                             @Override
                             public boolean apply(@Nullable EscortCard item) {
                                 if (!item.states.isEmpty()
                                         && item.states.get(item.states.size() - 1).state != EscortStateEnum.注销) {
-                                    if (item.helperCardNo.equals(escortCard.helperCardNo)) {
+                                    if (item.helperCardNo.equals(helperCardNo)) {
                                         throw new InvalidParameterException("无法重复添加同一个陪护");
                                     }
                                     return true;
@@ -315,7 +314,7 @@ public class EscortService {
 
         case 1:
             // 查看患者最近的住院记录
-            var inpatient = this.inpatientMapper.QueryInpatientR1(escortCard.patientCardNo, escortCard.happenNo);
+            var inpatient = this.inpatientMapper.QueryInpatientR1(preinCard.cardNo, preinCard.happenNo);
             if (inpatient == null) {
                 throw new RuntimeException("患者尚未入院，无法添加第二陪护");
             } else {
@@ -338,53 +337,52 @@ public class EscortService {
      * @param escortCard
      */
     @Transactional
-    public EscortCard InsertEscort(EscortCard escortCard) {
+    public EscortCard InsertEscort(String patientCardNo, String helperCardNo) {
         // 入参判断
-        if (escortCard.patientCardNo == null) {
+        if (patientCardNo == null) {
             throw new InvalidParameterException("患者卡号为空");
         }
 
         // 查询住院证
-        var preinCard = this.preinCardMapper.QueryPreinCard(escortCard.patientCardNo, escortCard.happenNo);
+        var preinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
         if (preinCard == null) {
             throw new RuntimeException("无住院证，无法注册陪护");
         }
 
         // 权限检查
-        this.InsertEscortValidCheck(escortCard);
-
-        // 生成陪护证号
-        escortCard.escortNo = this.escortMapper.GenerateNewEscortNo();
-        if (escortCard.states != null) {
-            for (EscortState state : escortCard.states) {
-                state.escortNo = escortCard.escortNo;
-            }
-        }
-        if (escortCard.actions != null) {
-            for (EscortAction action : escortCard.actions) {
-                action.escortNo = escortCard.escortNo;
-            }
-        }
+        this.InsertEscortValidCheck(preinCard, helperCardNo);
 
         // 检查VIP记录
         if (preinCard.escortVip == null) {
-            preinCard.escortVip = escortCard.helperCardNo;
+            preinCard.escortVip = helperCardNo;
             this.preinCardMapper.InsertEscortVip(preinCard);
         }
 
+        // 创建新的陪护证实体
+        var newEscortCard = new EscortCard();
+        {
+            newEscortCard.escortNo = this.escortMapper.GenerateNewEscortNo();
+            newEscortCard.patientCardNo = preinCard.cardNo;
+            newEscortCard.happenNo = preinCard.happenNo;
+            newEscortCard.helperCardNo = helperCardNo;
+            newEscortCard.states = new ArrayList<>();
+            // 添加初始状态
+            var newEscortState = new EscortState();
+            {
+                newEscortState.escortNo = newEscortCard.escortNo;
+                newEscortState.recNo = 1;
+                newEscortState.state = EscortStateEnum.无核酸检测结果;
+                newEscortState.operDate = new Date();
+            }
+            newEscortCard.states.add(newEscortState);
+        }
+
         // 插入主表记录
-        this.escortMapper.InsertEscort(escortCard);
+        this.escortMapper.InsertEscort(newEscortCard);
 
         // 插入状态列表
-        if (escortCard.states != null && !escortCard.states.isEmpty()) {
-            this.escortMapper.InsertEscortStates(escortCard.states);
-        }
+        this.escortMapper.InsertEscortState(newEscortCard.states.get(0));
 
-        // 插入行为列表
-        if (escortCard.actions != null && !escortCard.actions.isEmpty()) {
-            this.escortMapper.InsertEscortActions(escortCard.actions);
-        }
-
-        return escortCard;
+        return newEscortCard;
     }
 }
