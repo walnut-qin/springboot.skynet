@@ -26,7 +26,7 @@ public class RegEscortController {
      * @param escortNo
      * @return
      */
-    @RequestMapping(value = "regEscort", method = RequestMethod.GET)
+    @RequestMapping(value = "regEscort", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String Run(@RequestParam("patientCardNo") String patient, @RequestParam("helperCardNo") String helper) {
         // 入参判断
         if (patient == null || patient.isEmpty()) {

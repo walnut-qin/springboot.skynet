@@ -24,7 +24,7 @@ public class UpdateEscortStateController {
      * @param escortNo
      * @return
      */
-    @RequestMapping(value = "updateEscortState", method = RequestMethod.GET)
+    @RequestMapping(value = "updateEscortState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void Run(@RequestParam("escortNo") String escortNo, @RequestParam("newState") EscortStateEnum newState) {
         // 执行更新服务
         this.escortService.UpdateEscortState(escortNo, newState);
