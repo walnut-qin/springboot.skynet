@@ -26,11 +26,13 @@ public class RegEscortController {
      * @return
      */
     @RequestMapping(value = "regEscort", method = RequestMethod.POST)
-    public void Run(@RequestBody String body) {
+    public String Run(@RequestBody String body) {
         // 解析body
         var escortCard = GsonHelper.FromJson(body, EscortCard.class);
 
         // 添加陪护
-        this.escortService.InsertEscort(escortCard);
+        var recEscortCard = this.escortService.InsertEscort(escortCard);
+
+        return GsonHelper.ToJson(recEscortCard);
     }
 }

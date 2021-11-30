@@ -296,9 +296,12 @@ public class EscortService {
                 Iterables.filter(this.escortMapper.QueryPatientEscorts(escortCard.patientCardNo, escortCard.happenNo),
                         new Predicate<EscortCard>() {
                             @Override
-                            public boolean apply(@Nullable EscortCard escortCard) {
-                                if (!escortCard.states.isEmpty() && escortCard.states
-                                        .get(escortCard.states.size() - 1).state != EscortStateEnum.注销) {
+                            public boolean apply(@Nullable EscortCard item) {
+                                if (!item.states.isEmpty()
+                                        && item.states.get(item.states.size() - 1).state != EscortStateEnum.注销) {
+                                    if (item.helperCardNo.equals(escortCard.helperCardNo)) {
+                                        throw new InvalidParameterException("无法重复添加同一个陪护");
+                                    }
                                     return true;
                                 }
                                 return false;
@@ -365,19 +368,20 @@ public class EscortService {
 
         // 检查VIP记录
         if (preinCard.escortVip == null) {
-            
+            preinCard.escortVip = escortCard.helperCardNo;
+            this.preinCardMapper.InsertEscortVip(preinCard);
         }
 
         // 插入主表记录
         this.escortMapper.InsertEscort(escortCard);
 
         // 插入状态列表
-        if (!escortCard.states.isEmpty()) {
+        if (escortCard.states != null && !escortCard.states.isEmpty()) {
             this.escortMapper.InsertEscortStates(escortCard.states);
         }
 
         // 插入行为列表
-        if (!escortCard.actions.isEmpty()) {
+        if (escortCard.actions != null && !escortCard.actions.isEmpty()) {
             this.escortMapper.InsertEscortActions(escortCard.actions);
         }
 
