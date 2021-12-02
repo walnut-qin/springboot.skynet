@@ -19,10 +19,10 @@ public class TestListItem {
     ConfigService configService;
 
     @ResponseBody
-    @RequestMapping(value = "testSwitch", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-    public String Run(@RequestParam("listName") String listName, @RequestParam("paramName") String paramName) {
+    @RequestMapping(value = "testListItem", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    public String Run(@RequestParam("listName") String listName, @RequestParam("itemName") String itemName) {
         // 调取业务获取实体
-        var state = this.configService.TestListItem(listName, paramName);
+        var state = this.configService.TestListItem(listName, itemName);
 
         return state.toString();
     }
