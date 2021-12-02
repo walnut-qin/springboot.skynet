@@ -4,22 +4,25 @@
     <!-- 实体映射表 -->
     <resultMap id="map" type="com.kaos.his.entity.config.ParamList">
         <id column="NAME" jdbcType="VARCHAR" property="name"/>
-        <collection column="{listName=NAME, validCheck=#{validCheck}}" select="GetListParams" ofType="com.kaos.his.entity.config.ParamList$Param" property="params"/>
+        <collection ofType="com.kaos.his.entity.config.ParamList$Param" property="params">
+            <id column="VALUE" jdbcType="VARCHAR" property="value"/>
+            <result column="VALID" jdbcType="VARCHAR" property="valid"/>
+            <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        </collection>
     </resultMap>
 
-    <!-- 容器映射表1 -->
-    <resultMap id="paramListMap" type="com.kaos.his.entity.config.ParamList$Param">
-        <id column="VALUE" jdbcType="VARCHAR" property="value"/>
-        <result column="VALID" jdbcType="VARCHAR" property="valid"/>
-        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
-    </resultMap>
+    <!-- 全部字段 -->
+    <sql id="allItem">
+        NAME AS NAME,
+        VALUE AS VALUE,
+        VALID AS VALID,
+        REMARK AS REMARK
+    </sql>
 
-    <!-- 容器1 -->
-    <select id="GetListParams" resultMap="paramListMap">
+    <!-- 接口1 -->
+    <select id="QueryParamList" resultMap="map">
         SELECT
-            VALUE AS VALUE,
-            VALID AS VALID,
-            REMARK AS REMARK
+        <include refid="allItem"/>
         FROM
             KAOS.CONFIG_LIST
         <where>
@@ -30,18 +33,5 @@
                 AND VALID = #{validCheck}
             </if>
         </where>
-    </select>
-
-    <!-- 全部字段 -->
-    <sql id="allItem">
-        NAME AS NAME
-    </sql>
-
-    <!-- 接口1 -->
-    <select id="QueryParamList" resultMap="map">
-        SELECT
-            #{listName} AS NAME
-        FROM
-            DUAL;
     </select>
 </mapper>

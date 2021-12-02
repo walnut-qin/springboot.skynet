@@ -18,7 +18,7 @@
     </sql>
 
     <!-- 接口1 -->
-    <select id="QuerySwitch" resultMap="map">
+    <select id="QueryParam" resultMap="map">
         SELECT
         <include refid="allItem"/>
         FROM

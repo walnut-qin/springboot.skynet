@@ -1,6 +1,7 @@
 package com.kaos.his.controller;
 
 import com.kaos.his.service.TestService;
+import com.kaos.util.GsonHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ public class TestController {
 
     @RequestMapping(value = "test", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String Run(@RequestParam("param") String param) {
-        throw new RuntimeException("test err");
+        var entity = this.testService.Run(param);
+        return GsonHelper.ToJson(entity);
     }
 }
