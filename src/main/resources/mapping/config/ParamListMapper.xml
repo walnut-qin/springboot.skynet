@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.config.ParamListMapper">
+    <!-- 实体映射表 -->
+    <resultMap id="map" type="com.kaos.his.entity.config.ParamList">
+        <id column="NAME" jdbcType="VARCHAR" property="name"/>
+        <collection column="{listName=NAME, validCheck=#{validCheck}}" select="GetListParams" ofType="com.kaos.his.entity.config.ParamList$Param" property="params"/>
+    </resultMap>
+
+    <!-- 容器映射表1 -->
+    <resultMap id="paramListMap" type="com.kaos.his.entity.config.ParamList$Param">
+        <id column="VALUE" jdbcType="VARCHAR" property="value"/>
+        <result column="VALID" jdbcType="VARCHAR" property="valid"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <!-- 容器1 -->
+    <select id="GetListParams" resultMap="paramListMap">
+        SELECT
+            VALUE AS VALUE,
+            VALID AS VALID,
+            REMARK AS REMARK
+        FROM
+            KAOS.CONFIG_LIST
+        <where>
+            <if test="listName!=null">
+                AND NAME = #{listName}
+            </if>
+            <if test="validCheck!=null">
+                AND VALID = #{validCheck}
+            </if>
+        </where>
+    </select>
+
+    <!-- 全部字段 -->
+    <sql id="allItem">
+        NAME AS NAME
+    </sql>
+
+    <!-- 接口1 -->
+    <select id="QueryParamList" resultMap="map">
+        SELECT
+            #{listName} AS NAME
+        FROM
+            DUAL;
+    </select>
+</mapper>

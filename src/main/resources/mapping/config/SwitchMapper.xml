@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.config.SwitchMapper">
+    <!-- 实体映射表 -->
+    <resultMap id="map" type="com.kaos.his.entity.config.Switch">
+        <id column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="VALUE" jdbcType="VARCHAR" property="state"/>
+        <result column="VALID" jdbcType="VARCHAR" property="valid"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <!-- 全部字段 -->
+    <sql id="allItem">
+        NAME AS NAME,
+        VALUE AS VALUE,
+        VALID AS VALID,
+        REMARK AS REMARK
+    </sql>
+
+    <!-- 接口1 -->
+    <select id="QuerySwitch" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            KAOS.CONFIG_SWITCHS
+        <where>
+            <if test="switchName!=null">
+                AND NAME = #{switchName}
+            </if>
+            <if test="validCheck!=null">
+                AND VALID = #{validCheck}
+            </if>
+        </where>
+    </select>
+</mapper>
