@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.entity.credential.EscortCard.EscortState;
@@ -24,7 +20,6 @@ import com.kaos.his.mapper.organization.DepartmentMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -285,30 +280,44 @@ public class EscortService {
      * @param escortCard
      */
     private void InsertEscortValidCheck(PreinCard preinCard, String helperCardNo) {
+        // 声明陪护上一次注销的时间，辅助变量
+        Date deregDate = null;
+
         // 患者不可以为自己陪护
         if (helperCardNo.equals(preinCard.cardNo)) {
             throw new InvalidParameterException("患者不可以为自己陪护");
         }
 
         // 获取患者当前有效的陪护列表
-        var curEscortCards = Lists.newArrayList(
-                Iterables.filter(this.escortMapper.QueryPatientEscorts(preinCard.cardNo, preinCard.happenNo),
-                        new Predicate<EscortCard>() {
-                            @Override
-                            public boolean apply(@Nullable EscortCard item) {
-                                if (!item.states.isEmpty()
-                                        && item.states.get(item.states.size() - 1).state != EscortStateEnum.注销) {
-                                    if (item.helperCardNo.equals(helperCardNo)) {
-                                        throw new InvalidParameterException("无法重复添加同一个陪护");
-                                    }
-                                    return true;
-                                }
-                                return false;
-                            }
-                        }));
+        var validList = new ArrayList<>();
+        for (var item : this.escortMapper.QueryPatientEscorts(preinCard.cardNo, preinCard.happenNo)) {
+            if (item.states == null || item.states.isEmpty()) {
+                // 无状态的陪护证，丢弃
+                continue;
+            } else {
+                // 获取陪护证的准确状态
+                var curState = item.states.get(item.states.size() - 1);
+                if (curState.state == EscortStateEnum.注销) {
+                    if (curState.operDate.after(deregDate)) {
+                        deregDate = curState.operDate;
+                    }
+                } else {
+                    validList.add(item);
+                }
+            }
+        }
+
+        // 已注销的陪护人12小时内无法再次注册
+        if (deregDate != null) {
+            // 获取时间差值，单位：毫秒
+            var offset = new Date().getTime() - deregDate.getTime();
+            if (offset < 12 * 60 * 60 * 1000) {
+                throw new RuntimeException("该陪护人12小时以内刚注销，无法立刻重新注册");
+            }
+        }
 
         // 若有效陪护数量已有2位，则无法再添加
-        switch (curEscortCards.size()) {
+        switch (validList.size()) {
         case 0:
             break;
 
