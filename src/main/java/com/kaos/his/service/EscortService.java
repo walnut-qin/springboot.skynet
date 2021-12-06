@@ -11,6 +11,7 @@ import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.entity.credential.EscortCard.EscortState;
 import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
@@ -280,8 +281,29 @@ public class EscortService {
      * @param escortCard
      */
     private void InsertEscortValidCheck(PreinCard preinCard, String helperCardNo) {
-        // 声明陪护上一次注销的时间，辅助变量
-        Date deregDate = null;
+        // 检查住院证状态
+        if (preinCard == null || preinCard.state == PreinCardStateEnum.作废) {
+            throw new RuntimeException("无有效住院证，无法注册陪护");
+        }
+
+        // 检查在院状态
+        var inpatient = this.inpatientMapper.QueryInpatientR1(preinCard.cardNo, preinCard.happenNo);
+        if (inpatient != null) {
+            switch (inpatient.state) {
+            case 出院登记:
+                throw new RuntimeException("患者已办理出院登记，无法再添加陪护");
+
+            case 出院结算:
+                throw new RuntimeException("患者已办理出院结算，无法再添加陪护");
+
+            case 无费退院:
+                throw new RuntimeException("患者已办理无费退院，无法再添加陪护");
+
+            default:
+                // 其他状态认为是有效的
+                break;
+            }
+        }
 
         // 患者不可以为自己陪护
         if (helperCardNo.equals(preinCard.cardNo)) {
@@ -289,6 +311,7 @@ public class EscortService {
         }
 
         // 获取患者当前有效的陪护列表
+        Date deregDate = null;
         var validList = new ArrayList<>();
         for (var item : this.escortMapper.QueryPatientEscorts(preinCard.cardNo, preinCard.happenNo)) {
             if (item.states == null || item.states.isEmpty()) {
@@ -298,7 +321,7 @@ public class EscortService {
                 // 获取陪护证的准确状态
                 var curState = item.states.get(item.states.size() - 1);
                 if (curState.state == EscortStateEnum.注销) {
-                    if (curState.operDate.after(deregDate)) {
+                    if (deregDate == null || curState.operDate.after(deregDate)) {
                         deregDate = curState.operDate;
                     }
                 } else {
@@ -323,7 +346,6 @@ public class EscortService {
 
         case 1:
             // 查看患者最近的住院记录
-            var inpatient = this.inpatientMapper.QueryInpatientR1(preinCard.cardNo, preinCard.happenNo);
             if (inpatient == null) {
                 throw new RuntimeException("患者尚未入院，无法添加第二陪护");
             } else {
@@ -354,11 +376,8 @@ public class EscortService {
 
         // 查询住院证
         var preinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
-        if (preinCard == null) {
-            throw new RuntimeException("无住院证，无法注册陪护");
-        }
 
-        // 权限检查
+        // 参数、权限检查
         this.InsertEscortValidCheck(preinCard, helperCardNo);
 
         // 检查VIP记录
