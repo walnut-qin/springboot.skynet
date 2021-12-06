@@ -11,9 +11,9 @@
 	</parent>
 	<groupId>com.kaos</groupId>
 	<artifactId>his</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>his</name>
-	<description>Demo project for Spring Boot</description>
+	<version>5.0</version>
+	<name>hisServer</name>
+	<description>HIS Server Based On Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -120,7 +120,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>com.kaos.his.server</finalName>
+		<!-- <finalName>com.kaos.his.server</finalName> -->
 	</build>
 
 </project>
