@@ -10,7 +10,7 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.kaos</groupId>
-	<artifactId>his</artifactId>
+	<artifactId>hisServer</artifactId>
 	<version>5.0</version>
 	<name>hisServer</name>
 	<description>HIS Server Based On Spring Boot</description>
