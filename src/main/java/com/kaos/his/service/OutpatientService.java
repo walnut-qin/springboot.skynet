@@ -2,8 +2,8 @@ package com.kaos.his.service;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
-import com.kaos.his.entity.config.ParamList.Param;
-import com.kaos.his.mapper.config.ParamListMapper;
+import com.kaos.his.entity.config.VariableList.Variable;
+import com.kaos.his.mapper.config.VariableListMapper;
 import com.kaos.his.mapper.personnel.OutpatientMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class OutpatientService {
      * 参数列表接口
      */
     @Autowired
-    ParamListMapper paramListMapper;
+    VariableListMapper variableListMapper;
 
     /**
      * 检查GCP权限
@@ -30,10 +30,10 @@ public class OutpatientService {
      */
     public Boolean CheckGcpValid(String deptCode, String clinicCode) {
         // 定义查询条件
-        final Predicate<Param> neq = new Predicate<Param>() {
+        final Predicate<Variable> neq = new Predicate<Variable>() {
             @Override
-            public boolean apply(Param input) {
-                if (!input.value.equals(deptCode)) {
+            public boolean apply(Variable input) {
+                if (!input.valid || !input.value.equals(deptCode)) {
                     return true;
                 }
                 return false;
@@ -41,7 +41,7 @@ public class OutpatientService {
         };
 
         // 检查科室是否适配
-        var lst = this.paramListMapper.QueryParamList("GcpDept", true).params;
+        var lst = this.variableListMapper.QueryVariableList("GcpDept").variables;
         if (Iterators.all(lst.iterator(), neq)) {
             return false;
         }

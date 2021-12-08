@@ -1,6 +1,6 @@
 package com.kaos.his.entity.config;
 
-public class Param {
+public class Variable {
     /**
      * 参数名称
      */

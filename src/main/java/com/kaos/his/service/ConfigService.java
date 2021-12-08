@@ -1,9 +1,8 @@
 package com.kaos.his.service;
 
 import com.google.common.base.Optional;
-import com.kaos.his.entity.config.ParamList.Param;
-import com.kaos.his.mapper.config.ParamListMapper;
-import com.kaos.his.mapper.config.ParamMapper;
+import com.kaos.his.mapper.config.VariableListMapper;
+import com.kaos.his.mapper.config.VariableMapper;
 import com.kaos.his.mapper.config.SwitchMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,13 @@ public class ConfigService {
      * 参数接口
      */
     @Autowired
-    ParamMapper paramMapper;
+    VariableMapper paramMapper;
 
     /**
      * 列表接口
      */
     @Autowired
-    ParamListMapper listMapper;
+    VariableListMapper listMapper;
 
     /**
      * 测试开关状态
@@ -37,8 +36,8 @@ public class ConfigService {
      */
     public Boolean TestSwitch(String switchName) {
         // 根据开关名获取开关值
-        var swt = this.switchMapper.QuerySwitch(switchName, true);
-        if (swt == null) {
+        var swt = this.switchMapper.QuerySwitch(switchName);
+        if (swt == null || !swt.valid) {
             return false;
         }
 
@@ -55,14 +54,14 @@ public class ConfigService {
      */
     public Boolean TestListItem(String listName, String item) {
         // 查询列表
-        var lst = this.listMapper.QueryParamList(listName, true);
+        var lst = this.listMapper.QueryVariableList(listName);
         if (lst == null) {
             return false;
         }
 
         // 轮训
-        for (Param param : lst.params) {
-            if (param.value.equals(item)) {
+        for (var variable : lst.variables) {
+            if (variable.valid && variable.value.equals(item)) {
                 return true;
             }
         }

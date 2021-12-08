@@ -27,9 +27,26 @@
             <if test="switchName!=null">
                 AND NAME = #{switchName}
             </if>
-            <if test="validCheck!=null">
-                AND VALID = #{validCheck}
-            </if>
         </where>
     </select>
+
+    <!-- 接口2 -->
+    <update id="TurnOn" parameterType="String">
+        UPDATE 
+            KAOS.CONFIG_SWITCHS
+        SET
+            VALUE = '1'
+        WHERE
+            NAME = #{switchName}
+    </update>
+
+    <!-- 接口3 -->
+    <update id="TurnOff" parameterType="String">
+        UPDATE 
+            KAOS.CONFIG_SWITCHS
+        SET
+            VALUE = '0'
+        WHERE
+            NAME = #{switchName}
+    </update>
 </mapper>

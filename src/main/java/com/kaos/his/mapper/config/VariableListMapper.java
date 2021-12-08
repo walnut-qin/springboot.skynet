@@ -1,11 +1,12 @@
 package com.kaos.his.mapper.config;
 
-import com.kaos.his.entity.config.ParamList;
+import com.kaos.his.entity.config.VariableList;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ParamListMapper {
+public interface VariableListMapper {
     /**
      * 查询列表
      * 
@@ -13,5 +14,5 @@ public interface ParamListMapper {
      * @param validCheck 是否检查有效性
      * @return
      */
-    ParamList QueryParamList(String listName, Boolean validCheck);
+    VariableList QueryVariableList(@Param("listName") String listName);
 }

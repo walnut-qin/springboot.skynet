@@ -5,11 +5,11 @@ import java.util.List;
 /**
  * 集合参数
  */
-public class ParamList {
+public class VariableList {
     /**
      * 参数列表
      */
-    public static class Param {
+    public static class Variable {
         /**
          * 参数状态
          */
@@ -34,5 +34,5 @@ public class ParamList {
     /**
      * 参数列表
      */
-    public List<Param> params = null;
+    public List<Variable> variables = null;
 }
