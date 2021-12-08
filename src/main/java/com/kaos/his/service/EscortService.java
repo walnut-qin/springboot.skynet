@@ -124,6 +124,9 @@ public class EscortService {
             // 如果已入院，则将住院患者实体更新为住院实体，否则记录患者信息
             var inpatient = this.inpatientMapper.QueryInpatientR1(escort.patientCardNo, escort.happenNo);
             if (inpatient != null) {
+                // 记录科室信息
+                inpatient.dept = this.departmentMapper.QueryDepartment(inpatient.deptCode);
+                // 更新记录
                 escort.preinCard.patient = inpatient;
             } else {
                 escort.preinCard.patient = this.patientMapper.QueryPatient(escort.patientCardNo);
