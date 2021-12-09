@@ -328,7 +328,8 @@ public class EscortService {
                 // 获取陪护证的准确状态
                 var curState = item.states.get(item.states.size() - 1);
                 if (curState.state == EscortStateEnum.注销) {
-                    if (deregDate == null || curState.operDate.after(deregDate)) {
+                    if (item.helperCardNo.equals(helperCardNo)
+                            && (deregDate == null || curState.operDate.after(deregDate))) {
                         deregDate = curState.operDate;
                     }
                 } else {
