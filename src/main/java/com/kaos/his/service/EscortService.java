@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.entity.credential.EscortCard.EscortState;
@@ -188,55 +187,60 @@ public class EscortService {
     public EscortCard QueryEscort(String escortNo) {
         // 查询出陪护证实体
         var escort = this.escortMapper.QueryEscort(escortNo);
+        if (escort == null || escort.states == null || escort.states.isEmpty()) {
+            return escort;
+        }
 
-        // 非空则赋值
-        if (escort != null) {
-            // 抽取helper实体
-            escort.helper = Optional.ofNullable(this.patientMapper.QueryPatient(escort.helperCardNo))
-                    .orElse(escort.helper);
+        // 获取记录的当前状态，特殊状态不判断
+        var curState = escort.states.get(escort.states.size() - 1);
+        switch (curState.state) {
+        case 等待院外核酸检测结果审核:
+        case 注销:
+            return escort;
 
-            // 提取7日内有效核酸检测结果
-            escort.helper.nucleicAcidTests = this.nucleicAcidTestMapper.QueryNucleicAcidTest(escort.helperCardNo,
-                    "SARS-CoV-2-RNA", 7);
+        default:
+            break;
+        }
 
-            // 提取7日内有效核酸医嘱
-            escort.helper.outpatientOrders = this.outpatientOrderMapper.QueryOutpatientOrders(escort.helperCardNo,
-                    "438771", 7);
+        // 声明实际状态
+        EscortStateEnum realState = null;
 
-            // 查询最新状态
-            EscortStateEnum newState = null;
-            EscortStateEnum recState = escort.states.get(escort.states.size() - 1).state;
-            if (recState == EscortStateEnum.注销 || recState == EscortStateEnum.等待院外核酸检测结果审核) {
-                newState = recState;
-            } else if (escort.helper.nucleicAcidTests.size() == 0) { // 无核酸检测结果
-                // 查询核检医嘱
-                if (escort.helper.outpatientOrders.size() > 0) {
-                    newState = EscortStateEnum.等待院内核酸检测结果;
-                } else {
-                    newState = EscortStateEnum.无核酸检测结果;
-                }
-            } else { // 有核酸检测结果
-                // 结果是否阴性
-                if (escort.helper.nucleicAcidTests.get(escort.helper.nucleicAcidTests.size() - 1).negative) {
-                    newState = EscortStateEnum.生效中;
-                } else {
-                    newState = EscortStateEnum.无核酸检测结果;
-                }
+        // 查询是否存在核酸检测结果
+        var acidRs = this.nucleicAcidTestMapper.QueryNucleicAcidTest(escort.helperCardNo, "SARS-CoV-2-RNA", 7);
+        if (acidRs == null || acidRs.isEmpty()) {
+            // 若不存在核酸结果，查询是否存在核酸医嘱
+            var ordRs = this.outpatientOrderMapper.QueryOutpatientOrders(escort.helperCardNo, "438771", 7);
+            if (ordRs == null || ordRs.isEmpty()) {
+                // 若无医嘱，则为尚未开立核酸医嘱状态
+                realState = EscortStateEnum.无核酸检测结果;
+            } else {
+                // 若有医嘱，则为等待结果状态
+                realState = EscortStateEnum.等待院内核酸检测结果;
             }
-
-            // 如果新状态与记录的状态不等，则更新
-            if (newState != recState) {
-                var lstEscortState = escort.states.get(escort.states.size() - 1);
-                // 创建新状态
-                var newEscortState = new EscortCard.EscortState();
-                newEscortState.escortNo = lstEscortState.escortNo;
-                newEscortState.recNo = lstEscortState.recNo + 1;
-                newEscortState.state = newState;
-                newEscortState.operDate = new Date();
-                this.escortMapper.InsertEscortState(newEscortState);
-                // 将新状态插入列表
-                escort.states.add(newEscortState);
+        } else {
+            // 取最近的一次结果
+            var curRt = acidRs.get(acidRs.size() - 1);
+            if (curRt.negative) {
+                // 核酸为阴性
+                realState = EscortStateEnum.生效中;
+            } else {
+                // 核酸为阳性
+                realState = EscortStateEnum.无核酸检测结果;
             }
+        }
+
+        // 如果新状态与记录的状态不等，则更新
+        if (realState != curState.state) {
+            // 创建新状态
+            var newItem = new EscortCard.EscortState();
+            newItem.escortNo = curState.escortNo;
+            newItem.recNo = curState.recNo + 1;
+            newItem.state = realState;
+            newItem.operDate = new Date();
+
+            // 将新状态插入列表
+            this.escortMapper.InsertEscortState(newItem);
+            escort.states.add(newItem);
         }
 
         return escort;
