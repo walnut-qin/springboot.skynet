@@ -20,7 +20,7 @@
         SELECT
         <include refid="allItem"/>
         FROM
-            V_LIS_VCONRESULT1
+            V_LIS_VCONRESULT_1
         <where>
             <if test="index!=null">
                 AND PATIENTNO = #{index}
