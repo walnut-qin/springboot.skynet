@@ -1,4 +1,4 @@
-package com.kaos.his.controller;
+package com.kaos.his.controller.escort;
 
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.EscortService;
