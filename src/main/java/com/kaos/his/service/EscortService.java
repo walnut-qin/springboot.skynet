@@ -317,56 +317,57 @@ public class EscortService {
             throw new InvalidParameterException("患者不可以为自己陪护");
         }
 
-        // 获取患者当前有效的陪护列表
-        Date deregDate = null;
-        var validList = new ArrayList<>();
-        for (var item : this.escortMapper.QueryPatientEscorts(preinCard.cardNo, preinCard.happenNo)) {
-            if (item.states == null || item.states.isEmpty()) {
-                // 无状态的陪护证，丢弃
-                continue;
+        // 尝试获取陪护人和患者的关联历史
+        var historyEscorts = this.escortMapper.QueryHistoryEscorts(preinCard.cardNo, preinCard.happenNo, helperCardNo);
+        if (historyEscorts != null && !historyEscorts.isEmpty()) {
+            // 获取最近的一次关联
+            var targetEscort = historyEscorts.get(historyEscorts.size() - 1);
+            var curState = targetEscort.states.get(targetEscort.states.size() - 1);
+            if (curState.state == EscortStateEnum.注销) {
+                // 若最近的一张已注销，判断间隔时间
+                var offset = new Date().getTime() - curState.operDate.getTime();
+                if (offset <= 12 * 60 * 60 * 1000) {
+                    throw new RuntimeException("该陪护人刚注销，12小时以内无法再次登记");
+                }
             } else {
-                // 获取陪护证的准确状态
-                var curState = item.states.get(item.states.size() - 1);
-                if (curState.state == EscortStateEnum.注销) {
-                    if (item.helperCardNo.equals(helperCardNo)
-                            && (deregDate == null || curState.operDate.after(deregDate))) {
-                        deregDate = curState.operDate;
-                    }
+                // 若此时陪护证正生效，则不应该重复添加
+                throw new RuntimeException("无法重复添加同一个陪护");
+            }
+        }
+
+        // 调用查询接口获取患者关联的陪护证
+        var patientEscorts = this.QueryActivePatientEscorts(preinCard.cardNo);
+        if (patientEscorts != null && !patientEscorts.isEmpty()) {
+            // 已有陪护人判断
+            switch (patientEscorts.size()) {
+            case 0:
+                break;
+
+            case 1:
+                // 查看患者最近的住院记录
+                if (inpatient == null) {
+                    throw new RuntimeException("患者尚未入院，无法添加第二陪护");
                 } else {
-                    validList.add(item);
+                    // 获取住院医嘱
+                    var ordi = this.inpatientOrderMapper.QueryInpatientOrders(inpatient.patientNo, "5070672", 7);
+                    if (ordi.isEmpty()) {
+                        throw new RuntimeException("患者尚未开立第二陪护医嘱");
+                    }
                 }
+                break;
+
+            default:
+                throw new RuntimeException("该患者已关联了两个陪护人，无法添加更多陪护");
             }
         }
 
-        // 已注销的陪护人12小时内无法再次注册
-        if (deregDate != null) {
-            // 获取时间差值，单位：毫秒
-            var offset = new Date().getTime() - deregDate.getTime();
-            if (offset < 12 * 60 * 60 * 1000) {
-                throw new RuntimeException("该陪护人12小时以内刚注销，无法立刻重新注册");
+        // 调用查询接口获取陪护人关联的陪护证
+        var helperEscorts = this.QueryActiveHelperEscorts(helperCardNo);
+        if (helperEscorts != null && !helperEscorts.isEmpty()) {
+            // 上一个接口以判断唯一键，这里只判断上限
+            if (helperEscorts.size() >= 2) {
+                throw new RuntimeException("该陪护人已关联了两个患者，无法再为更多人陪护");
             }
-        }
-
-        // 若有效陪护数量已有2位，则无法再添加
-        switch (validList.size()) {
-        case 0:
-            break;
-
-        case 1:
-            // 查看患者最近的住院记录
-            if (inpatient == null) {
-                throw new RuntimeException("患者尚未入院，无法添加第二陪护");
-            } else {
-                // 获取住院医嘱
-                var ordi = this.inpatientOrderMapper.QueryInpatientOrders(inpatient.patientNo, "5070672", 7);
-                if (ordi.isEmpty()) {
-                    throw new RuntimeException("患者尚未开立第二陪护医嘱");
-                }
-            }
-            break;
-
-        default:
-            throw new RuntimeException("已存在2位以上的陪护");
         }
     }
 

@@ -33,6 +33,16 @@ public interface EscortCardMapper {
     List<EscortCard> QueryPatientEscorts(String patientCardNo, Integer happenNo);
 
     /**
+     * 指定陪护人和患者，查询历史陪护证
+     * 
+     * @param patientCardNo
+     * @param happenNo
+     * @param helperCardNo
+     * @return
+     */
+    List<EscortCard> QueryHistoryEscorts(String patientCardNo, Integer happenNo, String helperCardNo);
+
+    /**
      * 更新陪护证的状态
      * 
      * @param escortNo 陪护证编号
