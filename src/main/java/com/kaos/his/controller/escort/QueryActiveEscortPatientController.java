@@ -72,6 +72,11 @@ public class QueryActiveEscortPatientController {
          * 患者住院号
          */
         public String patientNo = null;
+
+        /**
+         * 免费标识： 0 - 不免费 1 - 免费
+         */
+        public String freeFlag = null;
     }
 
     @RequestMapping(value = "queryActiveEscortPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
@@ -99,6 +104,7 @@ public class QueryActiveEscortPatientController {
                 patientInfo.bedNo = escort.preinCard.preBedNo;
                 patientInfo.patientNo = null;
             }
+            patientInfo.freeFlag = escort.helperCardNo.equals(escort.preinCard.escortVip) ? "1" : "0";
             resultSet.add(patientInfo);
         }
 
