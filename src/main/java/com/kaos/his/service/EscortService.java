@@ -343,7 +343,7 @@ public class EscortService {
                 // 若最近的一张已注销，判断间隔时间
                 var offset = new Date().getTime() - curState.operDate.getTime();
                 if (offset <= millionsecond) {
-                    throw new RuntimeException(String.format("距离下次登记剩余时间: %d 分钟", millionsecond / 1000 / 60));
+                    throw new RuntimeException(String.format("距离下次登记剩余时间: %d 分钟", (millionsecond - offset) / 1000 / 60));
                 }
             } else {
                 // 若此时陪护证正生效，则不应该重复添加
