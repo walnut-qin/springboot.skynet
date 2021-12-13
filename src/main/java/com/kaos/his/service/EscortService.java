@@ -11,6 +11,7 @@ import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.entity.credential.EscortCard.EscortState;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.PreinCardStateEnum;
+import com.kaos.his.mapper.config.VariableMapper;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
@@ -76,6 +77,12 @@ public class EscortService {
      */
     @Autowired
     DepartmentMapper departmentMapper;
+
+    /**
+     * 配置变量接口
+     */
+    @Autowired
+    VariableMapper variableMapper;
 
     /**
      * 根据陪护人卡号，查询有效的陪护证
@@ -324,10 +331,19 @@ public class EscortService {
             var targetEscort = historyEscorts.get(historyEscorts.size() - 1);
             var curState = targetEscort.states.get(targetEscort.states.size() - 1);
             if (curState.state == EscortStateEnum.注销) {
+                // 默认的时间间隔
+                var millionsecond = 12l * 60l * 60l * 1000l;
+
+                // 读取时间间隔配置
+                var offsetCfg = this.variableMapper.QueryVariable("EscortRegOffset");
+                if (offsetCfg != null && offsetCfg.valid) {
+                    millionsecond = Long.parseLong(offsetCfg.value) * 1000;
+                }
+
                 // 若最近的一张已注销，判断间隔时间
                 var offset = new Date().getTime() - curState.operDate.getTime();
-                if (offset <= 12 * 60 * 60 * 1000) {
-                    throw new RuntimeException("该陪护人刚注销，12小时以内无法再次登记");
+                if (offset <= millionsecond) {
+                    throw new RuntimeException(String.format("距离下次登记剩余时间: %d 分钟", millionsecond / 1000 / 60));
                 }
             } else {
                 // 若此时陪护证正生效，则不应该重复添加
