@@ -6,12 +6,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.kaos.his.entity.credential.EscortAnnex;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.entity.credential.EscortCard.EscortState;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.mapper.config.VariableMapper;
+import com.kaos.his.mapper.credential.EscortAnnexMapper;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
@@ -35,6 +38,12 @@ public class EscortService {
      */
     @Autowired
     EscortCardMapper escortMapper;
+
+    /**
+     * 陪护附件接口
+     */
+    @Autowired
+    EscortAnnexMapper escortAnnexMapper;
 
     /**
      * 住院证实体接口
@@ -343,7 +352,8 @@ public class EscortService {
                 // 若最近的一张已注销，判断间隔时间
                 var offset = new Date().getTime() - curState.operDate.getTime();
                 if (offset <= millionsecond) {
-                    throw new RuntimeException(String.format("距离下次登记剩余时间: %d 分钟", (millionsecond - offset) / 1000 / 60));
+                    throw new RuntimeException(
+                            String.format("距离下次登记剩余时间: %d 分钟", (millionsecond - offset) / 1000 / 60));
                 }
             } else {
                 // 若此时陪护证正生效，则不应该重复添加
@@ -437,5 +447,31 @@ public class EscortService {
         this.escortMapper.InsertEscortState(newEscortCard.states.get(0));
 
         return newEscortCard;
+    }
+
+    /**
+     * 为陪护人添加附件
+     * 
+     * @param helperCardNo
+     * @param url
+     */
+    @Transactional
+    public void AttachAnnex(String helperCardNo, String picUrl) {
+        // 先尝试获取已有附件
+        var annex = this.escortAnnexMapper.QueryEscortAnnex(helperCardNo);
+
+        if (annex == null) {
+            // 如果原来不存在，插入新记录
+            this.escortAnnexMapper.InsertEscortAnnex(new EscortAnnex() {
+                {
+                    escortCardNo = helperCardNo;
+                    operDate = new Date();
+                    url = picUrl;
+                }
+            });
+        } else {
+            // 如果存在，则修改
+            this.escortAnnexMapper.UpdateEscortAnnex(helperCardNo, new Date(), picUrl);
+        }
     }
 }
