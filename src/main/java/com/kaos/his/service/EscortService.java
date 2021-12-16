@@ -193,6 +193,46 @@ public class EscortService {
     }
 
     /**
+     * 判断陪护证的实际状态
+     * 
+     * @param helperCardNo
+     * @return
+     */
+    private EscortStateEnum JudgeRealState(String helperCardNo) {
+        // 优先级1：判断院内核酸结果
+        var acidRs = this.nucleicAcidTestMapper.QueryNucleicAcidTest(helperCardNo, "SARS-CoV-2-RNA", 7);
+        if (acidRs != null && !acidRs.isEmpty()) {
+            // 判断最近的有效状态
+            var curRt = acidRs.get(acidRs.size() - 1);
+            if (curRt.negative) {
+                // 结果阴性
+                return EscortStateEnum.生效中;
+            } else {
+                // 结果阳性
+                return EscortStateEnum.无核酸检测结果;
+            }
+        }
+
+        // 优先级2：判断院内核酸医嘱
+        var ordRs = this.outpatientOrderMapper.QueryOutpatientOrders(helperCardNo, "438771", 7);
+        if (ordRs != null && !ordRs.isEmpty()) {
+            // 有院内医嘱
+            return EscortStateEnum.等待院内核酸检测结果;
+        }
+
+        // 优先级3：判断院外报告审核结果
+
+        // 优先级4：判断尚未审核的院外报告
+        var rpt = this.escortAnnexMapper.QueryEscortAnnex(helperCardNo);
+        if (rpt != null && rpt.cfmDate != null) {
+            // 存在未审核的院外报告
+            return EscortStateEnum.等待院外核酸检测结果审核;
+        }
+
+        return EscortStateEnum.无核酸检测结果;
+    }
+
+    /**
      * 根据陪护证编号查询陪护证实体
      * 
      * @param escortNo
@@ -206,10 +246,9 @@ public class EscortService {
             return escort;
         }
 
-        // 获取记录的当前状态，特殊状态不判断
+        // 若陪护证已注销，则不再判断
         var curState = escort.states.get(escort.states.size() - 1);
         switch (curState.state) {
-        case 等待院外核酸检测结果审核:
         case 注销:
             return escort;
 
@@ -218,31 +257,7 @@ public class EscortService {
         }
 
         // 声明实际状态
-        EscortStateEnum realState = null;
-
-        // 查询是否存在核酸检测结果
-        var acidRs = this.nucleicAcidTestMapper.QueryNucleicAcidTest(escort.helperCardNo, "SARS-CoV-2-RNA", 7);
-        if (acidRs == null || acidRs.isEmpty()) {
-            // 若不存在核酸结果，查询是否存在核酸医嘱
-            var ordRs = this.outpatientOrderMapper.QueryOutpatientOrders(escort.helperCardNo, "438771", 7);
-            if (ordRs == null || ordRs.isEmpty()) {
-                // 若无医嘱，则为尚未开立核酸医嘱状态
-                realState = EscortStateEnum.无核酸检测结果;
-            } else {
-                // 若有医嘱，则为等待结果状态
-                realState = EscortStateEnum.等待院内核酸检测结果;
-            }
-        } else {
-            // 取最近的一次结果
-            var curRt = acidRs.get(acidRs.size() - 1);
-            if (curRt.negative) {
-                // 核酸为阴性
-                realState = EscortStateEnum.生效中;
-            } else {
-                // 核酸为阳性
-                realState = EscortStateEnum.无核酸检测结果;
-            }
-        }
+        EscortStateEnum realState = this.JudgeRealState(escort.helperCardNo);
 
         // 如果新状态与记录的状态不等，则更新
         if (realState != curState.state) {
