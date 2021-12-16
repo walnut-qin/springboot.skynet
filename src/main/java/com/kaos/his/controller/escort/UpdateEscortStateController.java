@@ -1,5 +1,7 @@
 package com.kaos.his.controller.escort;
 
+import java.security.InvalidParameterException;
+
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.EscortService;
 
@@ -26,6 +28,11 @@ public class UpdateEscortStateController {
      */
     @RequestMapping(value = "updateEscortState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void Run(@RequestParam("escortNo") String escortNo, @RequestParam("newState") EscortStateEnum newState) {
+        // 入参检查
+        if (escortNo == null || escortNo.isEmpty()) {
+            throw new InvalidParameterException("陪护证号不能为空");
+        }
+
         // 执行更新服务
         this.escortService.UpdateEscortState(escortNo, newState);
     }

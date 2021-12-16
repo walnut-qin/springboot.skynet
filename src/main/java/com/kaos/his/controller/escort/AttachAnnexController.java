@@ -1,5 +1,7 @@
 package com.kaos.his.controller.escort;
 
+import java.security.InvalidParameterException;
+
 import com.kaos.his.service.EscortService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,11 @@ public class AttachAnnexController {
      */
     @RequestMapping(value = "attachAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void Run(@RequestParam("helperCardNo") String helperCardNo, @RequestParam("picUrl") String picUrl) {
+        // 入参检查
+        if (helperCardNo == null || helperCardNo.isEmpty()) {
+            throw new InvalidParameterException("陪护人卡号不能为空");
+        }
+
         // 执行业务
         this.escortService.AttachAnnex(helperCardNo, picUrl);
     }
