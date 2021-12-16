@@ -20,4 +20,9 @@ public class EscortAnnex {
      * 图片外链
      */
     public String url = null;
+
+    /**
+     * 审核标志
+     */
+    public Date cfmDate = null;
 }

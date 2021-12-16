@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kaos.his.entity.credential.EscortAnnex;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.entity.credential.EscortCard.EscortState;
@@ -462,16 +461,10 @@ public class EscortService {
 
         if (annex == null) {
             // 如果原来不存在，插入新记录
-            this.escortAnnexMapper.InsertEscortAnnex(new EscortAnnex() {
-                {
-                    escortCardNo = helperCardNo;
-                    operDate = new Date();
-                    url = picUrl;
-                }
-            });
+            this.escortAnnexMapper.InsertEscortAnnex(helperCardNo, picUrl);
         } else {
             // 如果存在，则修改
-            this.escortAnnexMapper.UpdateEscortAnnex(helperCardNo, new Date(), picUrl);
+            this.escortAnnexMapper.UpdateEscortAnnex(helperCardNo, picUrl);
         }
     }
 }

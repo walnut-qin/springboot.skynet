@@ -1,7 +1,5 @@
 package com.kaos.his.mapper.credential;
 
-import java.util.Date;
-
 import com.kaos.his.entity.credential.EscortAnnex;
 
 import org.apache.ibatis.annotations.Param;
@@ -22,7 +20,7 @@ public interface EscortAnnexMapper {
      * 
      * @param escortAnnex
      */
-    void InsertEscortAnnex(EscortAnnex escortAnnex);
+    void InsertEscortAnnex(@Param("cardNo") String cardNo, @Param("url") String url);
 
     /**
      * 更新记录
@@ -31,5 +29,13 @@ public interface EscortAnnexMapper {
      * @param operDate
      * @param url
      */
-    void UpdateEscortAnnex(@Param("cardNo") String cardNo, @Param("operDate") Date operDate, @Param("url") String url);
+    void UpdateEscortAnnex(@Param("cardNo") String cardNo, @Param("url") String url);
+
+    /**
+     * 审核
+     * 
+     * @param cardNo
+     * @param operDate
+     */
+    void ConfirmEscortAnnex(@Param("cardNo") String cardNo);
 }
