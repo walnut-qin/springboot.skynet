@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.kaos.his.entity.credential.EscortAnnex;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.entity.credential.EscortCard.EscortState;
@@ -23,6 +26,7 @@ import com.kaos.his.mapper.organization.DepartmentMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -199,7 +203,7 @@ public class EscortService {
      * @return
      */
     private EscortStateEnum JudgeRealState(String helperCardNo) {
-        // 优先级1：判断院内核酸结果
+        // 优先级1：以院内核酸结果为准
         var acidRs = this.nucleicAcidTestMapper.QueryNucleicAcidTest(helperCardNo, "SARS-CoV-2-RNA", 7);
         if (acidRs != null && !acidRs.isEmpty()) {
             // 判断最近的有效状态
@@ -207,26 +211,74 @@ public class EscortService {
             if (curRt.negative) {
                 // 结果阴性
                 return EscortStateEnum.生效中;
-            } else {
-                // 结果阳性
-                return EscortStateEnum.无核酸检测结果;
             }
         }
 
-        // 优先级2：判断院内核酸医嘱
+        // 优先级2：无院内核酸结果时，可以接受院外核酸
+        var rpt = this.escortAnnexMapper.QueryAnnex(helperCardNo, 7);
+        if (rpt != null && !rpt.isEmpty()) {
+            // 过滤出审核过的7日内有效结果
+            var filteredRs = Collections2.filter(rpt, new Predicate<EscortAnnex>() {
+                @Override
+                public boolean apply(@Nullable EscortAnnex input) {
+                    // 若未审核，过滤掉
+                    if (input.cfmResult == null) {
+                        return false;
+                    }
+
+                    // 核酸检测时间超过7天，过滤掉
+                    if (new Date().getTime() - input.cfmNatDate.getTime() > 7 * 24 * 60 * 60 * 1000) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            });
+
+            // 过滤后，是否还有结果
+            if (filteredRs != null && !filteredRs.isEmpty()) {
+                // 取出过滤结果中最近的一次核酸结果
+                EscortAnnex anchor = null;
+                for (EscortAnnex escortAnnex : filteredRs) {
+                    if (anchor == null || anchor.cfmNatDate.before(escortAnnex.cfmNatDate)) {
+                        anchor = escortAnnex;
+                    }
+                }
+
+                // 核酸结果判断
+                if (anchor.cfmResult) {
+                    // 结果阴性，视为有效
+                    return EscortStateEnum.生效中;
+                }
+            }
+        }
+
+        // 优先级3：判断院内核酸医嘱
         var ordRs = this.outpatientOrderMapper.QueryOutpatientOrders(helperCardNo, "438771", 7);
         if (ordRs != null && !ordRs.isEmpty()) {
             // 有院内医嘱
             return EscortStateEnum.等待院内核酸检测结果;
         }
 
-        // 优先级3：判断院外报告审核结果
+        // 优先级4：判断有无院外待审核结果
+        if (rpt != null && !rpt.isEmpty()) {
+            // 过滤出审核过的7日内有效结果
+            var filteredRs = Collections2.filter(rpt, new Predicate<EscortAnnex>() {
+                @Override
+                public boolean apply(@Nullable EscortAnnex input) {
+                    // 若已审核，过滤掉
+                    if (input.cfmResult != null) {
+                        return false;
+                    }
 
-        // 优先级4：判断尚未审核的院外报告
-        var rpt = this.escortAnnexMapper.QueryEscortAnnex(helperCardNo);
-        if (rpt != null && rpt.cfmDate != null) {
-            // 存在未审核的院外报告
-            return EscortStateEnum.等待院外核酸检测结果审核;
+                    return true;
+                }
+            });
+
+            // 过滤后，是否还有结果
+            if (filteredRs != null && !filteredRs.isEmpty()) {
+                return EscortStateEnum.等待院外核酸检测结果审核;
+            }
         }
 
         return EscortStateEnum.无核酸检测结果;
@@ -472,14 +524,6 @@ public class EscortService {
     @Transactional
     public void AttachAnnex(String helperCardNo, String picUrl) {
         // 先尝试获取已有附件
-        var annex = this.escortAnnexMapper.QueryEscortAnnex(helperCardNo);
-
-        if (annex == null) {
-            // 如果原来不存在，插入新记录
-            this.escortAnnexMapper.InsertEscortAnnex(helperCardNo, picUrl);
-        } else {
-            // 如果存在，则修改
-            this.escortAnnexMapper.UpdateEscortAnnex(helperCardNo, picUrl);
-        }
+        this.escortAnnexMapper.InsertAnnex(helperCardNo, picUrl);
     }
 }

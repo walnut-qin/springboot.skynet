@@ -7,22 +7,37 @@ import java.util.Date;
  */
 public class EscortAnnex {
     /**
-     * 陪护人卡号
+     * 附件编号，主键
      */
-    public String escortCardNo = null;
+    public String annexNo = null;
 
     /**
-     * 上传时间
+     * 就诊卡号
      */
-    public Date operDate = null;
+    public String cardNo = null;
 
     /**
-     * 图片外链
+     * 附件上传日期
      */
-    public String url = null;
+    public Date uploadDate = null;
 
     /**
-     * 审核标志
+     * 附件外链
+     */
+    public String picUrl = null;
+
+    /**
+     * 审核结果： null - 未审核； 0 - 核酸阳性； 1 - 核酸阴性
+     */
+    public Boolean cfmResult = null;
+
+    /**
+     * 审核日期
      */
     public Date cfmDate = null;
+
+    /**
+     * 审核结果 - 核酸结果生效时间
+     */
+    public Date cfmNatDate = null;
 }
