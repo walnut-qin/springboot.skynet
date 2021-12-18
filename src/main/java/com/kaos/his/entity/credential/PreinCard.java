@@ -64,11 +64,6 @@ public class PreinCard {
     public PreinCardStateEnum state = null;
 
     /**
-     * 陪护证的VIP卡号
-     */
-    public String escortVip = null;
-
-    /**
      * 登记住院的患者实体
      */
     public Patient patient = null;

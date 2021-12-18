@@ -22,11 +22,4 @@ public interface PreinCardMapper {
      * @return
      */
     PreinCard QueryLatestPreinCard(String cardNo);
-
-    /**
-     * 插入一条陪护证VIP卡号
-     * 
-     * @param helperCardNo
-     */
-    void InsertEscortVip(PreinCard preinCard);
 }
