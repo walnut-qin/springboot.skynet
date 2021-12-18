@@ -2,6 +2,7 @@ package com.kaos.his.service;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,12 +12,14 @@ import java.util.Map;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
+import com.kaos.his.entity.credential.AnnexCheckInfo;
 import com.kaos.his.entity.credential.AnnexInfo;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.mapper.config.VariableMapper;
+import com.kaos.his.mapper.credential.AnnexCheckInfoMapper;
 import com.kaos.his.mapper.credential.AnnexInfoMapper;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
@@ -26,6 +29,7 @@ import com.kaos.his.mapper.order.OutpatientOrderMapper;
 import com.kaos.his.mapper.organization.DepartmentMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
+import com.kaos.util.ListHelper;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +51,13 @@ public class EscortService {
      * 陪护附件接口
      */
     @Autowired
-    AnnexInfoMapper escortAnnexMapper;
+    AnnexInfoMapper annexInfoMapper;
+
+    /**
+     * 附件审核接口
+     */
+    @Autowired
+    AnnexCheckInfoMapper annexCheckInfoMapper;
 
     /**
      * 住院证实体接口
@@ -98,17 +108,69 @@ public class EscortService {
     VariableMapper variableMapper;
 
     /**
+     * 判断陪护证的实际状态
+     * 
+     * @param helperCardNo
+     * @return
+     */
+    private EscortStateEnum JudgeRealState(EscortCard escortCard) {
+        // 辅助变量，时间锚点
+        var cal = Calendar.getInstance();
+        var beginDate = cal.getTime();
+        cal.add(Calendar.DAY_OF_MONTH, -7);
+        var endDate = cal.getTime();
+
+        // 预判断：如果该陪护证已注销，则其真实状态就是注销
+        if (ListHelper.GetLast(escortCard.states).state == EscortStateEnum.注销) {
+            return EscortStateEnum.注销;
+        }
+
+        // 优先级0：如果陪护证关联的住院证不是患者的最后一张住院证，表示患者已经出院了，陪护证应当注销
+        var latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(escortCard.patientCardNo);
+        if (latestPreinCard == null || !latestPreinCard.happenNo.equals(escortCard.happenNo)) {
+            return EscortStateEnum.注销;
+        }
+
+        // 优先级1：若陪护人7日内院内核酸结果为阴性，则生效陪护证
+        var nats = this.nucleicAcidTestMapper.QueryNucleicAcidTest(escortCard.helperCardNo, "SARS-CoV-2-RNA", 7);
+        if (nats != null && !nats.isEmpty() && ListHelper.GetLast(nats).negative) {
+            return EscortStateEnum.生效中;
+        }
+
+        // 优先级2：若陪护人已审核的院外报告中，最近的一个结果为阴性，则生效陪护证
+        var rpts = this.annexCheckInfoMapper.QueryWithExecDateLimit(escortCard.helperCardNo, beginDate, endDate);
+        if (rpts != null && !rpts.isEmpty() && ListHelper.GetLast(rpts).negative) {
+            return EscortStateEnum.生效中;
+        }
+
+        // 优先级3：判断院内核酸医嘱
+        var ordRs = this.outpatientOrderMapper.QueryOutpatientOrders(escortCard.helperCardNo, "438771", 7);
+        if (ordRs != null && !ordRs.isEmpty()) {
+            // 有院内医嘱
+            return EscortStateEnum.等待院内核酸检测结果;
+        }
+
+        // 优先级4：判断有无院外待审核结果
+        var unchecked = this.annexInfoMapper.QueryUncheckedAnnexInfos(escortCard.helperCardNo, beginDate, endDate);
+        if (unchecked != null && !unchecked.isEmpty()) {
+            return EscortStateEnum.等待院外核酸检测结果审核;
+        }
+
+        return EscortStateEnum.无核酸检测结果;
+    }
+
+    /**
      * 根据陪护人卡号，查询有效的陪护证
      * 
      * @param helperCardNo 陪护卡号
      * @return 键值对列表<陪护证实体，住院实体>
      */
-    public List<EscortCard> QueryActiveHelperEscorts(String helperCardNo) {
+    public List<EscortCard> QueryHelperRegisteredEscorts(String helperCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<EscortCard>();
 
-        // 查询所有关联的陪护证
-        var escorts = this.escortMapper.QueryHelperEscorts(helperCardNo);
+        // 查询陪护人关联的所有尚未注销的陪护证
+        var escorts = this.escortMapper.QueryHelperRegisteredEscorts(helperCardNo);
 
         // 辅助字典 - 记录患者的最近一次住院证，加速大批量数据时的查询
         Map<String, PreinCard> preinCardDict = new HashMap<String, PreinCard>();
@@ -195,94 +257,6 @@ public class EscortService {
         }
 
         return resultSet;
-    }
-
-    /**
-     * 判断陪护证的实际状态
-     * 
-     * @param helperCardNo
-     * @return
-     */
-    private EscortStateEnum JudgeRealState(String helperCardNo) {
-        // 优先级1：以院内核酸结果为准
-        var acidRs = this.nucleicAcidTestMapper.QueryNucleicAcidTest(helperCardNo, "SARS-CoV-2-RNA", 7);
-        if (acidRs != null && !acidRs.isEmpty()) {
-            // 判断最近的有效状态
-            var curRt = acidRs.get(acidRs.size() - 1);
-            if (curRt.negative) {
-                // 结果阴性
-                return EscortStateEnum.生效中;
-            }
-        }
-
-        // 优先级2：无院内核酸结果时，可以接受院外核酸
-        var rpt = this.escortAnnexMapper.QueryAnnex(helperCardNo, 7);
-        if (rpt != null && !rpt.isEmpty()) {
-            // 过滤出审核过的7日内有效结果
-            var filteredRs = Collections2.filter(rpt, new Predicate<AnnexInfo>() {
-                @Override
-                public boolean apply(@Nullable AnnexInfo input) {
-                    // 若未审核，过滤掉
-                    if (input.cfmResult == null) {
-                        return false;
-                    }
-
-                    // 核酸检测时间超过7天，过滤掉
-                    if (new Date().getTime() - input.cfmNatDate.getTime() > 7 * 24 * 60 * 60 * 1000) {
-                        return false;
-                    }
-
-                    return true;
-                }
-            });
-
-            // 过滤后，是否还有结果
-            if (filteredRs != null && !filteredRs.isEmpty()) {
-                // 取出过滤结果中最近的一次核酸结果
-                AnnexInfo anchor = null;
-                for (AnnexInfo escortAnnex : filteredRs) {
-                    if (anchor == null || anchor.cfmNatDate.before(escortAnnex.cfmNatDate)) {
-                        anchor = escortAnnex;
-                    }
-                }
-
-                // 核酸结果判断
-                if (anchor.cfmResult) {
-                    // 结果阴性，视为有效
-                    return EscortStateEnum.生效中;
-                }
-            }
-        }
-
-        // 优先级3：判断院内核酸医嘱
-        var ordRs = this.outpatientOrderMapper.QueryOutpatientOrders(helperCardNo, "438771", 7);
-        if (ordRs != null && !ordRs.isEmpty()) {
-            // 有院内医嘱
-            return EscortStateEnum.等待院内核酸检测结果;
-        }
-
-        // 优先级4：判断有无院外待审核结果
-        if (rpt != null && !rpt.isEmpty()) {
-            // 过滤出审核过的7日内有效结果
-            var filteredRs = Collections2.filter(rpt, new Predicate<AnnexInfo>() {
-                @Override
-                public boolean apply(@Nullable AnnexInfo input) {
-                    // 若已审核，过滤掉
-                    if (input.cfmResult != null) {
-                        return false;
-                    }
-
-                    return true;
-                }
-            });
-
-            // 过滤后，是否还有结果
-            if (filteredRs != null && !filteredRs.isEmpty()) {
-                return EscortStateEnum.等待院外核酸检测结果审核;
-            }
-        }
-
-        return EscortStateEnum.无核酸检测结果;
     }
 
     /**

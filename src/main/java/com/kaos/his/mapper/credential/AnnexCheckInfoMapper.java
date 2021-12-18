@@ -1,5 +1,8 @@
 package com.kaos.his.mapper.credential;
 
+import java.util.Date;
+import java.util.List;
+
 import com.kaos.his.entity.credential.AnnexCheckInfo;
 
 import org.springframework.stereotype.Repository;
@@ -15,12 +18,14 @@ public interface AnnexCheckInfoMapper {
     public AnnexCheckInfo QueryAnnexCheckInfo(String annexNo);
 
     /**
-     * 获取距今最近（检测时间而非审核时间）的一次核酸检测审核结果
+     * 查询特定人员某个时段内的核酸检测结果
      * 
      * @param cardNo
+     * @param beginDate
+     * @param endDate
      * @return
      */
-    public AnnexCheckInfo QueryLatestExecInfo(String cardNo);
+    public List<AnnexCheckInfo> QueryWithExecDateLimit(String cardNo, Date beginDate, Date endDate);
 
     /**
      * 插入一条审核结果
