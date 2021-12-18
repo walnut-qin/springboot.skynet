@@ -12,16 +12,21 @@ import java.util.Map;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
+import com.kaos.his.controller.escort.QueryEscortStateController.EscortState;
 import com.kaos.his.entity.credential.AnnexCheckInfo;
 import com.kaos.his.entity.credential.AnnexInfo;
 import com.kaos.his.entity.credential.EscortCard;
+import com.kaos.his.entity.credential.EscortCardAction;
+import com.kaos.his.entity.credential.EscortCardState;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.mapper.config.VariableMapper;
 import com.kaos.his.mapper.credential.AnnexCheckInfoMapper;
 import com.kaos.his.mapper.credential.AnnexInfoMapper;
+import com.kaos.his.mapper.credential.EscortCardActionMapper;
 import com.kaos.his.mapper.credential.EscortCardMapper;
+import com.kaos.his.mapper.credential.EscortCardStateMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
 import com.kaos.his.mapper.order.InpatientOrderMapper;
@@ -34,6 +39,7 @@ import com.kaos.util.ListHelper;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -46,6 +52,18 @@ public class EscortService {
      */
     @Autowired
     EscortCardMapper escortMapper;
+
+    /**
+     * 陪护状态接口
+     */
+    @Autowired
+    EscortCardStateMapper escortCardStateMapper;
+
+    /**
+     * 陪护动作接口
+     */
+    @Autowired
+    EscortCardActionMapper escortCardActionMapper;
 
     /**
      * 陪护附件接口
@@ -108,12 +126,22 @@ public class EscortService {
     VariableMapper variableMapper;
 
     /**
-     * 判断陪护证的实际状态
+     * 核心函数：判断陪护证的实际状态
      * 
-     * @param helperCardNo
+     * @param escortCard
      * @return
      */
     private EscortStateEnum JudgeRealState(EscortCard escortCard) {
+        // 入参判断
+        if (escortCard == null) {
+            return null;
+        }
+
+        // 如果尚未获取状态列表，则获取数据库当前记录的状态列表
+        if (escortCard.states == null) {
+            escortCard.states = this.escortCardStateMapper.QueryEscortCardStates(escortCard.escortNo);
+        }
+
         // 辅助变量，时间锚点
         var cal = Calendar.getInstance();
         var beginDate = cal.getTime();
@@ -121,7 +149,7 @@ public class EscortService {
         var endDate = cal.getTime();
 
         // 预判断：如果该陪护证已注销，则其真实状态就是注销
-        if (ListHelper.GetLast(escortCard.states).state == EscortStateEnum.注销) {
+        if (escortCard == null || ListHelper.GetLast(escortCard.states).state == EscortStateEnum.注销) {
             return EscortStateEnum.注销;
         }
 
@@ -160,61 +188,103 @@ public class EscortService {
     }
 
     /**
+     * 根据陪护证编号查询陪护证实体，同时刷新陪护证状态；独立事务
+     * 
+     * @param escortNo
+     * @return
+     */
+    @Transactional(propagation = Propagation.PROPAGATION_REQUIRES_NEW)
+    public EscortCard QueryEscort(String escortNo) {
+        // 查询出陪护证实体
+        var escortCard = this.escortMapper.QueryEscort(escortNo);
+        if (escortCard == null) {
+            return null;
+        }
+
+        // 查询状态列表
+        escortCard.states = this.escortCardStateMapper.QueryEscortCardStates(escortNo);
+        if (escortCard.states == null) {
+            return null;
+        } else {
+            // 若状态发生了改变，则应当更新数据库
+            var realState = this.JudgeRealState(escortCard);
+            if (realState != ListHelper.GetLast(escortCard.states).state) {
+                var newState = new EscortCardState() {
+                    {
+                        escortNo = null;
+                        state = realState;
+                        operDate = new Date();
+                        remark = "查询到的陪护证状态与实际状态不符，自动更新。";
+                    }
+                };
+                this.escortCardStateMapper.InsertEscortCardState(newState);
+                escortCard.states.add(newState);
+            }
+        }
+
+        // 更新动作列表
+        escortCard.actions = this.escortCardActionMapper.QueryEscortCardActions(escortNo);
+
+        return escortCard;
+    }
+
+    /**
      * 根据陪护人卡号，查询有效的陪护证
      * 
      * @param helperCardNo 陪护卡号
      * @return 键值对列表<陪护证实体，住院实体>
      */
+    @Transactional
     public List<EscortCard> QueryHelperRegisteredEscorts(String helperCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<EscortCard>();
 
-        // 查询陪护人关联的所有尚未注销的陪护证
+        // 初步获取数据库中记录的，与陪护人关联的，尚未注销的陪护证
         var escorts = this.escortMapper.QueryHelperRegisteredEscorts(helperCardNo);
 
-        // 辅助字典 - 记录患者的最近一次住院证，加速大批量数据时的查询
-        Map<String, PreinCard> preinCardDict = new HashMap<String, PreinCard>();
-
-        // 筛选出有效的陪护证
-        for (EscortCard escort : escorts) {
-            // 如果状态为注销，则陪护证是无效的
-            if (escort.states.isEmpty() || escort.states.get(escort.states.size() - 1).state == EscortStateEnum.注销) {
+        // 轮训补充部分内部实体
+        for (EscortCard escortCard : escorts) {
+            // 获取数据库记录的状态列表
+            escortCard.states = this.escortCardStateMapper.QueryEscortCardStates(escortCard.escortNo);
+            if (escortCard.states == null) {
                 continue;
-            }
-
-            // 获取陪护证关联的住院证
-            escort.preinCard = this.preinCardMapper.QueryPreinCard(escort.patientCardNo, escort.happenNo);
-
-            // 记录预约的科室
-            escort.preinCard.preDept = this.departmentMapper.QueryDepartment(escort.preinCard.preDeptCode);
-
-            // 获取患者最近的住院证
-            PreinCard latestPreinCard = null;
-            if (preinCardDict.containsKey(escort.preinCard.cardNo)) {
-                latestPreinCard = preinCardDict.get(escort.patientCardNo);
             } else {
-                latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(escort.patientCardNo);
-                preinCardDict.put(escort.preinCard.cardNo, latestPreinCard);
+                // 若状态发生了改变，则应当更新数据库
+                var realState = this.JudgeRealState(escortCard);
+                if (realState != ListHelper.GetLast(escortCard.states).state) {
+                    var newState = new EscortCardState() {
+                        {
+                            escortNo = null;
+                            state = realState;
+                            operDate = new Date();
+                            remark = "查询到的陪护证状态与实际状态不符，自动更新。";
+                        }
+                    };
+                    this.escortCardStateMapper.InsertEscortCardState(newState);
+                    escortCard.states.add(newState);
+                }
+
+                // 如果实际状态已注销，则丢弃这个陪护证
+                if (realState == EscortStateEnum.注销) {
+                    continue;
+                }
             }
 
-            // 如果住院证不是患者最近的一张陪护证，说明被关联的患者已经出院，陪护证应当自动失效
-            if (escort.preinCard.happenNo != latestPreinCard.happenNo) {
-                continue;
+            // 获取住院证实体
+            if (escortCard.preinCard == null) {
+                escortCard.preinCard = this.preinCardMapper.QueryPreinCard(escortCard.patientCardNo,
+                        escortCard.happenNo);
+                // 获取患者信息实体，若已入院，则存住院实体
+                escortCard.preinCard.patient = this.inpatientMapper.QueryInpatientR1(escortCard.patientCardNo,
+                        escortCard.happenNo);
+                // 若患者未入院，则存患者实体
+                if (escortCard.preinCard.patient == null) {
+                    escortCard.preinCard.patient = this.patientMapper.QueryPatient(escortCard.patientCardNo);
+                }
             }
 
-            // 如果已入院，则将住院患者实体更新为住院实体，否则记录患者信息
-            var inpatient = this.inpatientMapper.QueryInpatientR1(escort.patientCardNo, escort.happenNo);
-            if (inpatient != null) {
-                // 记录科室信息
-                inpatient.dept = this.departmentMapper.QueryDepartment(inpatient.deptCode);
-                // 更新记录
-                escort.preinCard.patient = inpatient;
-            } else {
-                escort.preinCard.patient = this.patientMapper.QueryPatient(escort.patientCardNo);
-            }
-
-            // 加入结果集
-            resultSet.add(escort);
+            // 加入响应结果集
+            resultSet.add(escortCard);
         }
 
         return resultSet;
@@ -226,18 +296,18 @@ public class EscortService {
      * @param patientCardNo 患者就诊卡号
      * @return 陪护证实体
      */
-    public List<EscortCard> QueryActivePatientEscorts(String patientCardNo) {
+    public List<EscortCard> QueryPatientRegisteredEscorts(String patientCardNo) {
         // 声明结果集
         var resultSet = new ArrayList<EscortCard>();
 
         // 获取最近的一张住院证
         var latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
         if (latestPreinCard == null) {
-            throw new RuntimeException("患者无住院证");
+            return null;
         }
 
-        // 查询所有关联的陪护证
-        var escorts = this.escortMapper.QueryPatientEscorts(patientCardNo, latestPreinCard.happenNo);
+        // 查询所有关联的未注销陪护证
+        var escorts = this.escortMapper.QueryPatientRegisteredEscorts(patientCardNo, latestPreinCard.happenNo);
 
         // 筛选出有效的陪护证
         for (EscortCard escort : escorts) {
@@ -257,50 +327,6 @@ public class EscortService {
         }
 
         return resultSet;
-    }
-
-    /**
-     * 根据陪护证编号查询陪护证实体
-     * 
-     * @param escortNo
-     * @return
-     */
-    @Transactional
-    public EscortCard QueryEscort(String escortNo) {
-        // 查询出陪护证实体
-        var escort = this.escortMapper.QueryEscort(escortNo);
-        if (escort == null || escort.states == null || escort.states.isEmpty()) {
-            return escort;
-        }
-
-        // 若陪护证已注销，则不再判断
-        var curState = escort.states.get(escort.states.size() - 1);
-        switch (curState.state) {
-        case 注销:
-            return escort;
-
-        default:
-            break;
-        }
-
-        // 声明实际状态
-        EscortStateEnum realState = this.JudgeRealState(escort.helperCardNo);
-
-        // 如果新状态与记录的状态不等，则更新
-        if (realState != curState.state) {
-            // 创建新状态
-            var newItem = new EscortCard.EscortState();
-            newItem.escortNo = curState.escortNo;
-            newItem.recNo = curState.recNo + 1;
-            newItem.state = realState;
-            newItem.operDate = new Date();
-
-            // 将新状态插入列表
-            this.escortMapper.InsertEscortState(newItem);
-            escort.states.add(newItem);
-        }
-
-        return escort;
     }
 
     /**
