@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 核酸检测（附件）审核信息
  */
-public class AnnexNatCfmInfo {
+public class AnnexCheckInfo {
     /**
      * 附件编码
      */

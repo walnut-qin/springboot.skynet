@@ -18,7 +18,7 @@ public interface AnnexInfoMapper {
     List<AnnexInfo> QueryAnnexInfo(String annexNo);
 
     /**
-     * 获取某个时间段内上传的指定患者的附件
+     * 获取指定患者的某个时间段内上传的附件
      * 
      * @param cardNo
      * @param beginDate
@@ -26,6 +26,16 @@ public interface AnnexInfoMapper {
      * @return
      */
     List<AnnexInfo> QueryAnnexInfos(String cardNo, Date beginDate, Date endDate);
+
+    /**
+     * 获取指定患者的某个时间段内上传的还未审核的附件
+     * 
+     * @param cardNo
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
+    List<AnnexInfo> QueryUncheckedAnnexInfos(String cardNo, Date beginDate, Date endDate);
 
     /**
      * 插入新纪录
