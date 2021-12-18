@@ -2,6 +2,7 @@ package com.kaos.his.service;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,14 +10,14 @@ import java.util.Map;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.kaos.his.entity.credential.EscortAnnex;
+import com.google.common.collect.Iterators;
+import com.kaos.his.entity.credential.AnnexInfo;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.PreinCard;
-import com.kaos.his.entity.credential.EscortCard.EscortState;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.mapper.config.VariableMapper;
-import com.kaos.his.mapper.credential.EscortAnnexMapper;
+import com.kaos.his.mapper.credential.AnnexInfoMapper;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
@@ -46,7 +47,7 @@ public class EscortService {
      * 陪护附件接口
      */
     @Autowired
-    EscortAnnexMapper escortAnnexMapper;
+    AnnexInfoMapper escortAnnexMapper;
 
     /**
      * 住院证实体接口
@@ -218,9 +219,9 @@ public class EscortService {
         var rpt = this.escortAnnexMapper.QueryAnnex(helperCardNo, 7);
         if (rpt != null && !rpt.isEmpty()) {
             // 过滤出审核过的7日内有效结果
-            var filteredRs = Collections2.filter(rpt, new Predicate<EscortAnnex>() {
+            var filteredRs = Collections2.filter(rpt, new Predicate<AnnexInfo>() {
                 @Override
-                public boolean apply(@Nullable EscortAnnex input) {
+                public boolean apply(@Nullable AnnexInfo input) {
                     // 若未审核，过滤掉
                     if (input.cfmResult == null) {
                         return false;
@@ -238,8 +239,8 @@ public class EscortService {
             // 过滤后，是否还有结果
             if (filteredRs != null && !filteredRs.isEmpty()) {
                 // 取出过滤结果中最近的一次核酸结果
-                EscortAnnex anchor = null;
-                for (EscortAnnex escortAnnex : filteredRs) {
+                AnnexInfo anchor = null;
+                for (AnnexInfo escortAnnex : filteredRs) {
                     if (anchor == null || anchor.cfmNatDate.before(escortAnnex.cfmNatDate)) {
                         anchor = escortAnnex;
                     }
@@ -263,9 +264,9 @@ public class EscortService {
         // 优先级4：判断有无院外待审核结果
         if (rpt != null && !rpt.isEmpty()) {
             // 过滤出审核过的7日内有效结果
-            var filteredRs = Collections2.filter(rpt, new Predicate<EscortAnnex>() {
+            var filteredRs = Collections2.filter(rpt, new Predicate<AnnexInfo>() {
                 @Override
-                public boolean apply(@Nullable EscortAnnex input) {
+                public boolean apply(@Nullable AnnexInfo input) {
                     // 若已审核，过滤掉
                     if (input.cfmResult != null) {
                         return false;
