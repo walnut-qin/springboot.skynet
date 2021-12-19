@@ -14,6 +14,11 @@ public class EscortCardAction {
     public String escortNo = null;
 
     /**
+     * 记录编号
+     */
+    public Integer recNo = null;
+
+    /**
      * 出入动作枚举
      */
     public EscortActionEnum action = null;

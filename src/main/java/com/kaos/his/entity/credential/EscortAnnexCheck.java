@@ -5,11 +5,16 @@ import java.util.Date;
 /**
  * 核酸检测（附件）审核信息
  */
-public class AnnexCheckInfo {
+public class EscortAnnexCheck {
     /**
      * 附件编码
      */
     public String annexNo = null;
+
+    /**
+     * 审核员编码
+     */
+    public String operCode = null;
 
     /**
      * 审核时间

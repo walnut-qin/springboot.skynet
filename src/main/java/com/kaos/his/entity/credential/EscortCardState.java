@@ -14,6 +14,11 @@ public class EscortCardState {
     public String escortNo = null;
 
     /**
+     * 记录编号
+     */
+    public Integer recNo = null;
+
+    /**
      * 状态枚举
      */
     public EscortStateEnum state = null;

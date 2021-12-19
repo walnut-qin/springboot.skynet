@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 陪护人附件
  */
-public class AnnexInfo {
+public class EscortAnnexInfo {
     /**
      * 附件编号，主键
      */
