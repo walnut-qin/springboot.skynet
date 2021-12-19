@@ -9,7 +9,7 @@ public class EscortCard {
     /**
      * 陪护证编号
      */
-    public String escortNo;
+    public String escortNo = null;
 
     /**
      * 患者就诊卡号
@@ -39,20 +39,25 @@ public class EscortCard {
     /**
      * 关联的住院证
      */
-    public PreinCard preinCard;
+    public PreinCard preinCard = null;
 
     /**
      * 关联的陪护人
      */
-    public Patient helper;
+    public Patient helper = null;
 
     /**
      * 状态清单
      */
-    public List<EscortCardState> states;
+    public List<EscortCardState> states = null;
 
     /**
      * 行为清单
      */
-    public List<EscortCardAction> actions;
+    public List<EscortCardAction> actions = null;
+
+    /**
+     * VIP信息
+     */
+    public EscortVip escortVip = null;
 }
