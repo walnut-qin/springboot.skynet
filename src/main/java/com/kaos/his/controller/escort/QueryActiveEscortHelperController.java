@@ -68,21 +68,30 @@ public class QueryActiveEscortHelperController {
      */
     @RequestMapping(value = "queryActiveEscortHelper", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String Run(@RequestParam("patientCardNo") String patientCardNo) {
-        // 声明结果集
-        var resultSet = new ArrayList<HelperInfo>();
+        // 入参判断
+        if (patientCardNo == null) {
+            throw new RuntimeException("患者卡号不能为空");
+        }
 
         // 调取服务
-        var escorts = this.escortService.QueryActivePatientEscorts(patientCardNo);
+        var escorts = this.escortService.QueryPatientRegisteredEscorts(patientCardNo);
 
         // 循环赋值
-        for (EscortCard escort : escorts) {
+        var resultSet = new ArrayList<HelperInfo>();
+        for (EscortCard escortCard : escorts) {
+            // 填充实体
+            this.escortService.FillEscortCard(escortCard);
+
+            // 创建响应实体元素
             var helperInfo = new HelperInfo();
-            helperInfo.escortNo = escort.escortNo;
-            helperInfo.cardNo = escort.helper.cardNo;
-            helperInfo.name = escort.helper.name;
-            helperInfo.sex = escort.helper.sex;
-            helperInfo.age = DateHelper.GetAgeDetail(escort.helper.birthday);
-            helperInfo.freeFlag = escort.helperCardNo.equals(escort.preinCard.escortVip) ? "1" : "0";
+            helperInfo.escortNo = escortCard.escortNo;
+            helperInfo.cardNo = escortCard.helper.cardNo;
+            helperInfo.name = escortCard.helper.name;
+            helperInfo.sex = escortCard.helper.sex;
+            helperInfo.age = DateHelper.GetAgeDetail(escortCard.helper.birthday);
+            helperInfo.freeFlag = escortCard.helperCardNo.equals(escortCard.escortVip.helperCardNo) ? "1" : "0";
+
+            // 添加响应实体元素
             resultSet.add(helperInfo);
         }
 

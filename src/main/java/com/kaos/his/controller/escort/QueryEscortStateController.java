@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.util.GsonEnumTypeAdapter;
 import com.kaos.his.service.EscortService;
+import com.kaos.util.ListHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,14 +63,17 @@ public class QueryEscortStateController {
         // 提取指定陪护证
         var escort = this.escortService.QueryEscort(escortNo);
         if (escort == null) {
-            return null;
+            throw new RuntimeException("未查询到陪护证");
         }
+
+        // 为实体赋值
+        this.escortService.FillEscortCard(escort);
 
         // 赋值
         state.escortCardNo = escort.helperCardNo;
         state.patientCardNo = escort.patientCardNo;
         state.regDate = escort.states.get(0).operDate;
-        state.state = escort.states.get(escort.states.size() - 1).state;
+        state.state = ListHelper.GetLast(escort.states).state;
 
         // 响应json字符串
         Gson gson = new GsonBuilder().serializeNulls()

@@ -1,6 +1,5 @@
 package com.kaos.his.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -256,23 +255,14 @@ public class EscortService {
      * @param escortNo
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED)
     public EscortCard QueryEscort(String escortNo) {
-        // 查询出陪护证实体
-        var escortCard = this.escortMapper.QueryEscort(escortNo);
-        if (escortCard == null) {
+        // 入参判断
+        if (escortNo == null) {
             return null;
         }
 
-        // 调用子业务填充陪护证实体
-        try {
-            this.escortService.FillEscortCard(escortCard);
-        } catch (Exception e) {
-            // 填充实体失败
-            throw new RuntimeException(e.getMessage());
-        }
-
-        return escortCard;
+        // 查询出陪护证实体
+        return this.escortMapper.QueryEscort(escortNo);
     }
 
     /**
@@ -281,34 +271,13 @@ public class EscortService {
      * @param helperCardNo 陪护卡号
      * @return 键值对列表<陪护证实体，住院实体>
      */
-    @Transactional(propagation = Propagation.REQUIRED)
     public List<EscortCard> QueryHelperRegisteredEscorts(String helperCardNo) {
-        // 声明结果集
-        var resultSet = new ArrayList<EscortCard>();
-
-        // 初步获取数据库中记录的，与陪护人关联的，尚未注销的陪护证
-        var escorts = this.escortMapper.QueryHelperRegisteredEscorts(helperCardNo);
-
-        // 轮训补充部分内部实体
-        for (EscortCard escortCard : escorts) {
-            // 调用子业务填充陪护证实体
-            try {
-                this.escortService.FillEscortCard(escortCard);
-            } catch (Exception e) {
-                // 填充实体失败
-                throw new RuntimeException(e.getMessage());
-            }
-
-            // 如果实际状态已注销，则丢弃
-            if (ListHelper.GetLast(escortCard.states).state == EscortStateEnum.注销) {
-                continue;
-            }
-
-            // 加入响应结果集
-            resultSet.add(escortCard);
+        if (helperCardNo == null) {
+            return null;
         }
 
-        return resultSet;
+        // 初步获取数据库中记录的，与陪护人关联的，尚未注销的陪护证
+        return this.escortMapper.QueryHelperRegisteredEscorts(helperCardNo);
     }
 
     /**
@@ -317,10 +286,11 @@ public class EscortService {
      * @param patientCardNo 患者就诊卡号
      * @return 陪护证实体
      */
-    @Transactional(propagation = Propagation.REQUIRED)
     public List<EscortCard> QueryPatientRegisteredEscorts(String patientCardNo) {
-        // 声明结果集
-        var resultSet = new ArrayList<EscortCard>();
+        // 入参判断
+        if (patientCardNo == null) {
+            return null;
+        }
 
         // 获取最近的一张住院证
         var latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
@@ -328,29 +298,8 @@ public class EscortService {
             return null;
         }
 
-        // 查询所有关联的未注销陪护证
-        var escortCards = this.escortMapper.QueryPatientRegisteredEscorts(patientCardNo, latestPreinCard.happenNo);
-
-        // 筛选出有效的陪护证
-        for (EscortCard escortCard : escortCards) {
-            // 调用子业务填充陪护证实体
-            try {
-                this.escortService.FillEscortCard(escortCard);
-            } catch (Exception e) {
-                // 填充实体失败
-                throw new RuntimeException(e.getMessage());
-            }
-
-            // 如果实际状态已注销，则丢弃
-            if (ListHelper.GetLast(escortCard.states).state == EscortStateEnum.注销) {
-                continue;
-            }
-
-            // 加入响应结果集
-            resultSet.add(escortCard);
-        }
-
-        return resultSet;
+        // 查询陪护证列表
+        return this.escortMapper.QueryPatientRegisteredEscorts(patientCardNo, latestPreinCard.happenNo);
     }
 
     /**
@@ -361,6 +310,11 @@ public class EscortService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void UpdateEscortState(String escortNo, EscortStateEnum newState) {
+        if (escortNo == null || newState == null) {
+            throw new RuntimeException("陪护证号和状态不能为空");
+        }
+
+        // 构造新的状态实体
         var newEscortState = new EscortCardState() {
             {
                 escortNo = null;
@@ -369,6 +323,8 @@ public class EscortService {
                 remark = "收到更新状态请求";
             }
         };
+
+        // 执行插入操作
         this.escortCardStateMapper.InsertEscortCardState(newEscortState);
     }
 

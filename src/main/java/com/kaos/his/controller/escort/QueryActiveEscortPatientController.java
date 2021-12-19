@@ -81,14 +81,21 @@ public class QueryActiveEscortPatientController {
 
     @RequestMapping(value = "queryActiveEscortPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String Run(@RequestParam("helperCardNo") String helperCardNo) {
-        // 声明结果集
-        var resultSet = new ArrayList<PatientInfo>();
+        // 入参判断
+        if (helperCardNo == null) {
+            throw new RuntimeException("陪护人卡号不能为空");
+        }
 
         // 调取服务
-        var escorts = this.escortService.QueryActiveHelperEscorts(helperCardNo);
+        var escorts = this.escortService.QueryHelperRegisteredEscorts(helperCardNo);
 
         // 循环赋值
+        var resultSet = new ArrayList<PatientInfo>();
         for (EscortCard escort : escorts) {
+            // 填充实体
+            this.escortService.FillEscortCard(escort);
+
+            // 创建新实体元素
             var patientInfo = new PatientInfo();
             patientInfo.escortNo = escort.escortNo;
             patientInfo.cardNo = escort.preinCard.patient.cardNo;
@@ -104,7 +111,9 @@ public class QueryActiveEscortPatientController {
                 patientInfo.bedNo = escort.preinCard.preBedNo;
                 patientInfo.patientNo = null;
             }
-            patientInfo.freeFlag = escort.helperCardNo.equals(escort.preinCard.escortVip) ? "1" : "0";
+            patientInfo.freeFlag = escort.helperCardNo.equals(escort.escortVip.helperCardNo) ? "1" : "0";
+
+            // 添加实体元素
             resultSet.add(patientInfo);
         }
 
