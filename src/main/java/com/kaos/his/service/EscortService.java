@@ -229,15 +229,15 @@ public class EscortService {
      * @param newState
      */
     @Transactional
-    public void UpdateEscortState(String escortNo, EscortStateEnum newState) {
-        if (escortNo == null || newState == null) {
+    public void UpdateEscortState(String targetEscortNo, EscortStateEnum newState) {
+        if (targetEscortNo == null || newState == null) {
             throw new RuntimeException("陪护证号和状态不能为空");
         }
 
         // 构造新的状态实体
         var newEscortState = new EscortCardState() {
             {
-                escortNo = null;
+                escortNo = targetEscortNo;
                 state = newState;
                 operDate = new Date();
                 remark = "收到更新状态请求";
@@ -287,11 +287,11 @@ public class EscortService {
             escortCard.preinCard = this.preinCardMapper.QueryPreinCard(escortCard.patientCardNo, escortCard.happenNo);
 
             // 填充住院实体
-            escortCard.preinCard.patient = this.inpatientMapper.QueryInpatientR1(escortCard.patientCardNo,
-                    escortCard.happenNo);
-
-            // 若未入院，则保存患者基本信息
-            if (escortCard.preinCard.patient == null) {
+            var inpatient = this.inpatientMapper.QueryInpatientR1(escortCard.patientCardNo, escortCard.happenNo);
+            if (inpatient != null) {
+                inpatient.dept = this.departmentMapper.QueryDepartment(inpatient.deptCode);
+                escortCard.preinCard.patient = inpatient;
+            } else {
                 escortCard.preinCard.patient = this.patientMapper.QueryPatient(escortCard.patientCardNo);
             }
 
@@ -301,6 +301,7 @@ public class EscortService {
 
         // 初步获取数据库中记录的，与陪护人关联的，尚未注销的陪护证
         return escortCards;
+
     }
 
     /**
@@ -386,8 +387,8 @@ public class EscortService {
                 // 若最近的一张已注销，判断间隔时间
                 var offset = new Date().getTime() - ListHelper.GetLast(states).operDate.getTime();
                 if (offset <= millionsecond) {
-                    throw new RuntimeException(
-                            String.format("距离下次登记剩余时间: %d 分钟", Math.ceil((millionsecond - offset) / 1000 / 60d)));
+                    throw new RuntimeException(String.format("距离下次登记剩余时间: %d 分钟",
+                            (int) Math.ceil((millionsecond - offset) / 1000 / 60.0)));
                 }
             } else {
                 // 若此时陪护证正生效，则不应该重复添加
