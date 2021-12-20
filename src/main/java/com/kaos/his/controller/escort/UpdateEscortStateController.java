@@ -76,7 +76,8 @@ public class UpdateEscortStateController {
         for (EscortCard escortCard : escortCards) {
             try {
                 // 加陪护号锁
-                var lock = this.locks.get((int)(Long.valueOf(escortCard.escortNo) % 10));
+                var lock = this.locks
+                        .get(Integer.valueOf(escortCard.escortNo.substring(escortCard.escortNo.length() - 3)) % 10);
                 synchronized (lock) {
                     // 执行更新服务
                     this.escortService.RefreshEscortState(escortCard.escortNo);
