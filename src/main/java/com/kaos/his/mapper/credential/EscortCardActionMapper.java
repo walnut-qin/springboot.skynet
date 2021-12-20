@@ -14,7 +14,7 @@ public interface EscortCardActionMapper {
      * @param escortNo 陪护证编号
      * @return 查询到的出入记录列表
      */
-    public List<EscortCardAction> QueryEscortCardActions(String escortNo);
+    List<EscortCardAction> QueryEscortCardActions(String escortNo);
 
     /**
      * 插入一条新的状态记录
@@ -22,5 +22,5 @@ public interface EscortCardActionMapper {
      * @param newAction
      * @return
      */
-    public int InsertEscortCardAction(EscortCardAction newAction);
+    int InsertEscortCardAction(EscortCardAction newAction);
 }

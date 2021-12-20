@@ -14,7 +14,7 @@ public interface EscortCardMapper {
      * @param escortNo 陪护证编号
      * @return
      */
-    EscortCard QueryEscort(String escortNo);
+    EscortCard QueryEscortCard(String escortNo);
 
     /**
      * 查询陪护人关联的未注销的陪护证列表
@@ -22,7 +22,7 @@ public interface EscortCardMapper {
      * @param helperCardNo 陪护人卡号
      * @return 陪护证列表
      */
-    List<EscortCard> QueryHelperRegisteredEscorts(String helperCardNo);
+    List<EscortCard> QueryHelperRegisteredEscortCards(String helperCardNo);
 
     /**
      * 查询患者住院证关联的未注销陪护证列表
@@ -31,22 +31,22 @@ public interface EscortCardMapper {
      * @param happenNo      住院证编号
      * @return
      */
-    List<EscortCard> QueryPatientRegisteredEscorts(String patientCardNo, Integer happenNo);
+    List<EscortCard> QueryPatientRegisteredEscortCards(String patientCardNo, Integer happenNo);
 
     /**
-     * 查询陪护历史
+     * 查询指定陪护关系中最后一张陪护证
      * 
      * @param patientCardNo 患者卡号
      * @param happenNo      住院证编号
      * @param helperCardNo  陪护人卡号
      * @return 陪护证列表
      */
-    List<EscortCard> QueryEscortHistorys(String patientCardNo, Integer happenNo, String helperCardNo);
+    EscortCard QueryLastEscortCards(String patientCardNo, Integer happenNo, String helperCardNo);
 
     /**
      * 添加一个新的陪护证
      * 
      * @param escortCard
      */
-    void InsertEscort(EscortCard escortCard);
+    void InsertEscortCard(EscortCard escortCard);
 }

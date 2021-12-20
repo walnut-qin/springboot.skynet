@@ -14,7 +14,7 @@ public interface EscortCardStateMapper {
      * @param escortNo 陪护证编号
      * @return 查询到的状态记录列表
      */
-    public List<EscortCardState> QueryEscortCardStates(String escortNo);
+    List<EscortCardState> QueryEscortCardStates(String escortNo);
 
     /**
      * 插入一条新的状态记录
@@ -24,5 +24,5 @@ public interface EscortCardStateMapper {
      * @param remark   备注
      * @return
      */
-    public int InsertEscortCardState(EscortCardState newState);
+    int InsertEscortCardState(EscortCardState newState);
 }
