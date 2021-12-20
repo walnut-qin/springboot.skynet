@@ -72,10 +72,10 @@ public class RegEscortController {
         EscortCard recEscortCard = null;
 
         // 加患者锁
-        var patientLock = this.patientLocks.get(Integer.valueOf(patient) % 10);
+        var patientLock = this.patientLocks.get((int)(Long.valueOf(patient) % 10));
         synchronized (patientLock) {
             // 加陪护锁
-            var helperLock = this.helperLocks.get(Integer.valueOf(helper) % 10);
+            var helperLock = this.helperLocks.get((int)(Long.valueOf(helper) % 10));
             synchronized (helperLock) {
                 // 添加陪护
                 recEscortCard = this.escortService.InsertEscort(patient, helper);
