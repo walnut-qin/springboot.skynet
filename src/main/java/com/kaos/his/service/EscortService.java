@@ -19,6 +19,7 @@ import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.EscortCardStateMapper;
 import com.kaos.his.mapper.credential.EscortVipMapper;
 import com.kaos.his.mapper.credential.PreinCardMapper;
+import com.kaos.his.mapper.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.lis.NucleicAcidTestMapper;
 import com.kaos.his.mapper.order.InpatientOrderMapper;
 import com.kaos.his.mapper.order.OutpatientOrderMapper;
@@ -127,6 +128,12 @@ public class EscortService {
     EscortVipMapper escortVipMapper;
 
     /**
+     * 门诊划价接口
+     */
+    @Autowired
+    FinOpbFeeDetailMapper finOpbFeeDetailMapper;
+
+    /**
      * 定时任务核心函数：判断陪护证的实际状态
      * 
      * @param escortNo 陪护证编号
@@ -174,6 +181,13 @@ public class EscortService {
         var rpt = this.escortAnnexCheckMapper.QueryLastExecEscortAnnexCheck(escortCard.helperCardNo);
         if (rpt != null && rpt.negative && (new Date().getTime() - rpt.execDate.getTime() <= 7 * 24 * 60 * 60 * 1000)) {
             return EscortStateEnum.生效中;
+        }
+
+        // 优先级5-1：判断免费核酸划价记录
+        var feeDetail = this.finOpbFeeDetailMapper.QueryLastFinOpbFeeDetail(escortCard.helperCardNo, "F00000068231");
+        if (feeDetail != null && (new Date().getTime() - feeDetail.operDate.getTime() <= 7 * 24 * 60 * 60 * 1000)) {
+            // 有7日内的免费核酸划价
+            return EscortStateEnum.等待院内核酸检测结果;
         }
 
         // 优先级5：判断院内核酸医嘱
@@ -501,6 +515,7 @@ public class EscortService {
 
     /**
      * 查询当前数据库所有活跃的陪护证
+     * 
      * @return
      */
     public List<EscortCard> QueryAllRegisteredEscortNo() {
