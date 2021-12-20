@@ -44,6 +44,13 @@ public interface EscortCardMapper {
     EscortCard QueryLastEscortCards(String patientCardNo, Integer happenNo, String helperCardNo);
 
     /**
+     * 查询所有当前活跃的陪护证
+     * 
+     * @return
+     */
+    List<EscortCard> QueryAllActivedEscortCards();
+
+    /**
      * 添加一个新的陪护证
      * 
      * @param escortCard

@@ -198,21 +198,21 @@ public class EscortService {
      * @param escortNo
      */
     @Transactional
-    public void RefreshEscortState(String escortNo) {
+    public void RefreshEscortState(String targetEscortNo) {
         // 获取数据库状态列表
-        var states = this.escortCardStateMapper.QueryEscortCardStates(escortNo);
+        var states = this.escortCardStateMapper.QueryEscortCardStates(targetEscortNo);
         if (states == null || states.isEmpty()) {
             throw new RuntimeException("检测到异常状态的陪护证");
         }
 
         // 获取实时状态
-        var realState = this.JudgeRealState(escortNo);
+        var realState = this.JudgeRealState(targetEscortNo);
 
         // 若状态发生了变化，则更新
         if (realState != ListHelper.GetLast(states).state) {
             var newState = new EscortCardState() {
                 {
-                    escortNo = null;
+                    escortNo = targetEscortNo;
                     state = realState;
                     operDate = new Date();
                     remark = "探测到陪护证状态变更，自动更新。";
@@ -497,5 +497,13 @@ public class EscortService {
                 operDate = new Date();
             }
         });
+    }
+
+    /**
+     * 查询当前数据库所有活跃的陪护证
+     * @return
+     */
+    public List<EscortCard> QueryAllRegisteredEscortNo() {
+        return this.escortCardMapper.QueryAllActivedEscortCards();
     }
 }
