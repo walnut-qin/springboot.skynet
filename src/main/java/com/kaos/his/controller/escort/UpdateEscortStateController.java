@@ -1,6 +1,8 @@
 package com.kaos.his.controller.escort;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.enums.EscortStateEnum;
@@ -24,6 +26,24 @@ public class UpdateEscortStateController {
     EscortService escortService;
 
     /**
+     * 锁资源
+     */
+    private List<Object> locks = new ArrayList<>() {
+        {
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+        }
+    };
+
+    /**
      * 获取陪护证状态
      * 
      * @param escortNo
@@ -37,7 +57,10 @@ public class UpdateEscortStateController {
         }
 
         // 执行更新服务
-        this.escortService.UpdateEscortState(escortNo, newState);
+        var lock = this.locks.get(Integer.valueOf(escortNo) % 10);
+        synchronized (lock) {
+            this.escortService.UpdateEscortState(escortNo, newState);
+        }
     }
 
     /**
@@ -51,7 +74,10 @@ public class UpdateEscortStateController {
         // 轮训刷新状态
         for (EscortCard escortCard : escortCards) {
             try {
-                this.escortService.RefreshEscortState(escortCard.escortNo);
+                var lock = this.locks.get(Integer.valueOf(escortCard.escortNo) % 10);
+                synchronized (lock) {
+                    this.escortService.RefreshEscortState(escortCard.escortNo);
+                }
             } catch (Exception e) {
                 Logger.getLogger(UpdateEscortStateController.class.getName()).error(e.getMessage());
             }
