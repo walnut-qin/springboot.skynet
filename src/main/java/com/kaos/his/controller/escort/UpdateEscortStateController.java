@@ -67,7 +67,7 @@ public class UpdateEscortStateController {
     /**
      * 定期更新活跃的陪护证状态
      */
-    @Scheduled(initialDelay = 2000, fixedDelay = 2000)
+    @Scheduled(initialDelay = 5 * 60 * 1000, fixedDelay = 5 * 60 * 1000)
     public void AutoRefreshEscortState() {
         // 从数据库中查询所有活跃着的陪护证编号
         var escortCards = this.escortService.QueryAllRegisteredEscortNo();
