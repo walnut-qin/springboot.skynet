@@ -12,11 +12,6 @@ public class EscortAnnexCheck {
     public String annexNo = null;
 
     /**
-     * 陪护人卡号
-     */
-    public String helperCardNo = null;
-
-    /**
      * 审核员编码
      */
     public String operCode = null;
