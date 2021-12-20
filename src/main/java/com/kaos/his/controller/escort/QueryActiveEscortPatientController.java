@@ -92,9 +92,6 @@ public class QueryActiveEscortPatientController {
         // 循环赋值
         var resultSet = new ArrayList<PatientInfo>();
         for (EscortCard escort : escorts) {
-            // 填充实体
-            this.escortService.FillEscortCard(escort);
-
             // 创建新实体元素
             var patientInfo = new PatientInfo();
             patientInfo.escortNo = escort.escortNo;

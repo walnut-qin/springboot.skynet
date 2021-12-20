@@ -1,17 +1,19 @@
 package com.kaos.his.service;
 
-import java.util.Calendar;
+import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.his.entity.credential.AnnexInfo;
+import com.kaos.his.entity.credential.EscortAnnexInfo;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.EscortCardState;
 import com.kaos.his.entity.credential.EscortVip;
+import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.mapper.config.VariableMapper;
-import com.kaos.his.mapper.credential.AnnexCheckInfoMapper;
-import com.kaos.his.mapper.credential.AnnexInfoMapper;
+import com.kaos.his.mapper.credential.EscortAnnexCheckMapper;
+import com.kaos.his.mapper.credential.EscortAnnexInfoMapper;
 import com.kaos.his.mapper.credential.EscortCardActionMapper;
 import com.kaos.his.mapper.credential.EscortCardMapper;
 import com.kaos.his.mapper.credential.EscortCardStateMapper;
@@ -27,7 +29,6 @@ import com.kaos.util.ListHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -45,7 +46,7 @@ public class EscortService {
      * 陪护人实体接口
      */
     @Autowired
-    EscortCardMapper escortMapper;
+    EscortCardMapper escortCardMapper;
 
     /**
      * 陪护状态接口
@@ -63,13 +64,13 @@ public class EscortService {
      * 陪护附件接口
      */
     @Autowired
-    AnnexInfoMapper annexInfoMapper;
+    EscortAnnexInfoMapper escortAnnexInfoMapper;
 
     /**
      * 附件审核接口
      */
     @Autowired
-    AnnexCheckInfoMapper annexCheckInfoMapper;
+    EscortAnnexCheckMapper escortAnnexCheckMapper;
 
     /**
      * 住院证实体接口
@@ -126,16 +127,16 @@ public class EscortService {
     EscortVipMapper escortVipMapper;
 
     /**
-     * 核心函数：判断陪护证的实际状态
+     * 定时任务核心函数：判断陪护证的实际状态
      * 
-     * @param escortCard 初始获取到的陪护证实体，无需填充
+     * @param escortNo 陪护证编号
      * @return
      */
     private EscortStateEnum JudgeRealState(String escortNo) {
         // 获取陪护证实体
-        var escortCard = this.escortMapper.QueryEscort(escortNo);
+        var escortCard = this.escortCardMapper.QueryEscortCard(escortNo);
         if (escortCard == null) {
-            return null;
+            throw new RuntimeException("试图获取不存在的陪护证实体");
         }
 
         // 优先级0：若记录的状态已经注销，则该陪护证已废弃
@@ -163,12 +164,6 @@ public class EscortService {
             }
         }
 
-        // 辅助变量，时间锚点
-        var cal = Calendar.getInstance();
-        var beginDate = cal.getTime();
-        cal.add(Calendar.DAY_OF_MONTH, -7);
-        var endDate = cal.getTime();
-
         // 优先级3：若陪护人7日内院内核酸结果为阴性，则生效陪护证
         var nats = this.nucleicAcidTestMapper.QueryNucleicAcidTest(escortCard.helperCardNo, "SARS-CoV-2-RNA", 7);
         if (nats != null && !nats.isEmpty() && ListHelper.GetLast(nats).negative) {
@@ -176,8 +171,8 @@ public class EscortService {
         }
 
         // 优先级4：若陪护人已审核的院外报告中，最近的一个结果为阴性，则生效陪护证
-        var rpts = this.annexCheckInfoMapper.QueryWithExecDateLimit(escortCard.helperCardNo, beginDate, endDate);
-        if (rpts != null && !rpts.isEmpty() && ListHelper.GetLast(rpts).negative) {
+        var rpt = this.escortAnnexCheckMapper.QueryLastExecEscortAnnexCheck(escortCard.helperCardNo);
+        if (rpt != null && rpt.negative && (new Date().getTime() - rpt.execDate.getTime() <= 7 * 24 * 60 * 60 * 1000)) {
             return EscortStateEnum.生效中;
         }
 
@@ -189,7 +184,7 @@ public class EscortService {
         }
 
         // 优先级6：判断有无院外待审核结果
-        var unchecked = this.annexInfoMapper.QueryUncheckedAnnexInfos(escortCard.helperCardNo, beginDate, endDate);
+        var unchecked = this.escortAnnexInfoMapper.QueryUncheckedEscortAnnexInfos(escortCard.helperCardNo);
         if (unchecked != null && !unchecked.isEmpty()) {
             return EscortStateEnum.等待院外核酸检测结果审核;
         }
@@ -198,108 +193,33 @@ public class EscortService {
     }
 
     /**
-     * 填充陪护证实体
-     * 
-     * @param escortCard
-     */
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void FillEscortCard(EscortCard escortCard) {
-        // 入参判断
-        if (escortCard == null) {
-            return;
-        }
-
-        // 填充关联陪护证
-        escortCard.preinCard = this.preinCardMapper.QueryPreinCard(escortCard.patientCardNo, escortCard.happenNo);
-        if (escortCard.preinCard != null) {
-            // 若患者已入院，陪护证关联住院实体
-            var cardNo = escortCard.patientCardNo;
-            var happenNo = escortCard.happenNo;
-            escortCard.preinCard.patient = this.inpatientMapper.QueryInpatientR1(cardNo, happenNo);
-            if (escortCard.preinCard.patient == null) {
-                escortCard.preinCard.patient = this.patientMapper.QueryPatient(cardNo);
-            }
-        }
-
-        // 填充陪护人实体
-        escortCard.helper = this.patientMapper.QueryPatient(escortCard.helperCardNo);
-
-        // 填充状态实体
-        escortCard.states = this.escortCardStateMapper.QueryEscortCardStates(escortCard.escortNo);
-        if (escortCard.states != null && !escortCard.states.isEmpty()) {
-            var realState = this.JudgeRealState(escortCard.escortNo);
-            if (realState != ListHelper.GetLast(escortCard.states).state) {
-                var newState = new EscortCardState() {
-                    {
-                        escortNo = null;
-                        state = realState;
-                        operDate = new Date();
-                        remark = "探测到陪护证状态变更，自动更新。";
-                    }
-                };
-                this.escortCardStateMapper.InsertEscortCardState(newState);
-                escortCard.states.add(newState);
-            }
-        }
-
-        // 填充动作实体
-        escortCard.actions = this.escortCardActionMapper.QueryEscortCardActions(escortCard.escortNo);
-
-        // 填充VIP实体
-        escortCard.escortVip = this.escortVipMapper.QueryEscortVip(escortCard.patientCardNo, escortCard.happenNo);
-    }
-
-    /**
-     * 根据陪护证编号查询陪护证实体
+     * 刷新陪护证状态（定时任务）
      * 
      * @param escortNo
-     * @return
      */
-    public EscortCard QueryEscort(String escortNo) {
-        // 入参判断
-        if (escortNo == null) {
-            return null;
+    @Transactional
+    public void RefreshEscortState(String escortNo) {
+        // 获取数据库状态列表
+        var states = this.escortCardStateMapper.QueryEscortCardStates(escortNo);
+        if (states == null || states.isEmpty()) {
+            throw new RuntimeException("检测到异常状态的陪护证");
         }
 
-        // 查询出陪护证实体
-        return this.escortMapper.QueryEscort(escortNo);
-    }
+        // 获取实时状态
+        var realState = this.JudgeRealState(escortNo);
 
-    /**
-     * 根据陪护人卡号，查询有效的陪护证
-     * 
-     * @param helperCardNo 陪护卡号
-     * @return 键值对列表<陪护证实体，住院实体>
-     */
-    public List<EscortCard> QueryHelperRegisteredEscorts(String helperCardNo) {
-        if (helperCardNo == null) {
-            return null;
+        // 若状态发生了变化，则更新
+        if (realState != ListHelper.GetLast(states).state) {
+            var newState = new EscortCardState() {
+                {
+                    escortNo = null;
+                    state = realState;
+                    operDate = new Date();
+                    remark = "探测到陪护证状态变更，自动更新。";
+                }
+            };
+            this.escortCardStateMapper.InsertEscortCardState(newState);
         }
-
-        // 初步获取数据库中记录的，与陪护人关联的，尚未注销的陪护证
-        return this.escortMapper.QueryHelperRegisteredEscorts(helperCardNo);
-    }
-
-    /**
-     * 根据患者卡号查询关联陪护证
-     * 
-     * @param patientCardNo 患者就诊卡号
-     * @return 陪护证实体
-     */
-    public List<EscortCard> QueryPatientRegisteredEscorts(String patientCardNo) {
-        // 入参判断
-        if (patientCardNo == null) {
-            return null;
-        }
-
-        // 获取最近的一张住院证
-        var latestPreinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
-        if (latestPreinCard == null) {
-            return null;
-        }
-
-        // 查询陪护证列表
-        return this.escortMapper.QueryPatientRegisteredEscorts(patientCardNo, latestPreinCard.happenNo);
     }
 
     /**
@@ -308,7 +228,7 @@ public class EscortService {
      * @param escortNo
      * @param newState
      */
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public void UpdateEscortState(String escortNo, EscortStateEnum newState) {
         if (escortNo == null || newState == null) {
             throw new RuntimeException("陪护证号和状态不能为空");
@@ -328,119 +248,201 @@ public class EscortService {
         this.escortCardStateMapper.InsertEscortCardState(newEscortState);
     }
 
-    // /**
-    // * 添加陪护前的权限检查
-    // *
-    // * @param escortCard
-    // */
-    // private void InsertEscortValidCheck(PreinCard preinCard, String helperCardNo)
-    // {
-    // // 检查住院证状态
-    // if (preinCard == null || preinCard.state == PreinCardStateEnum.作废) {
-    // throw new RuntimeException("无有效住院证，无法注册陪护");
-    // }
+    /**
+     * 根据陪护证编号查询陪护证实体
+     * 
+     * @param escortNo
+     * @return
+     */
+    public EscortCard QueryEscort(String escortNo) {
+        var escortCard = this.escortCardMapper.QueryEscortCard(escortNo);
+        if (escortCard == null) {
+            return null;
+        }
 
-    // // 检查在院状态
-    // var inpatient = this.inpatientMapper.QueryInpatientR1(preinCard.cardNo,
-    // preinCard.happenNo);
-    // if (inpatient != null) {
-    // switch (inpatient.state) {
-    // case 出院登记:
-    // throw new RuntimeException("患者已办理出院登记，无法再添加陪护");
+        // 获取状态
+        escortCard.states = this.escortCardStateMapper.QueryEscortCardStates(escortNo);
 
-    // case 出院结算:
-    // throw new RuntimeException("患者已办理出院结算，无法再添加陪护");
+        // 获取动作
+        escortCard.actions = this.escortCardActionMapper.QueryEscortCardActions(escortNo);
 
-    // case 无费退院:
-    // throw new RuntimeException("患者已办理无费退院，无法再添加陪护");
+        // 查询出陪护证实体
+        return escortCard;
+    }
 
-    // default:
-    // // 其他状态认为是有效的
-    // break;
-    // }
-    // }
+    /**
+     * 根据陪护人卡号，查询有效的陪护证
+     * 
+     * @param helperCardNo 陪护卡号
+     * @return 键值对列表<陪护证实体，住院实体>
+     */
+    public List<EscortCard> QueryHelperRegisteredEscorts(String helperCardNo) {
+        var escortCards = this.escortCardMapper.QueryHelperRegisteredEscortCards(helperCardNo);
+        if (escortCards == null) {
+            return null;
+        }
 
-    // // 患者不可以为自己陪护
-    // if (helperCardNo.equals(preinCard.cardNo)) {
-    // throw new InvalidParameterException("患者不可以为自己陪护");
-    // }
+        for (EscortCard escortCard : escortCards) {
+            // 填充住院证
+            escortCard.preinCard = this.preinCardMapper.QueryPreinCard(escortCard.patientCardNo, escortCard.happenNo);
 
-    // // 尝试获取陪护人和患者的关联历史
-    // var historyEscorts = this.escortMapper.QueryHistoryEscorts(preinCard.cardNo,
-    // preinCard.happenNo, helperCardNo);
-    // if (historyEscorts != null && !historyEscorts.isEmpty()) {
-    // // 获取最近的一次关联
-    // var targetEscort = historyEscorts.get(historyEscorts.size() - 1);
-    // var curState = targetEscort.states.get(targetEscort.states.size() - 1);
-    // if (curState.state == EscortStateEnum.注销) {
-    // // 默认的时间间隔
-    // var millionsecond = 12l * 60l * 60l * 1000l;
+            // 填充住院实体
+            escortCard.preinCard.patient = this.inpatientMapper.QueryInpatientR1(escortCard.patientCardNo,
+                    escortCard.happenNo);
 
-    // // 读取时间间隔配置
-    // var offsetCfg = this.variableMapper.QueryVariable("EscortRegOffset");
-    // if (offsetCfg != null && offsetCfg.valid) {
-    // millionsecond = Long.parseLong(offsetCfg.value) * 1000;
-    // }
+            // 若未入院，则保存患者基本信息
+            if (escortCard.preinCard.patient == null) {
+                escortCard.preinCard.patient = this.patientMapper.QueryPatient(escortCard.patientCardNo);
+            }
 
-    // // 若最近的一张已注销，判断间隔时间
-    // var offset = new Date().getTime() - curState.operDate.getTime();
-    // if (offset <= millionsecond) {
-    // throw new RuntimeException(
-    // String.format("距离下次登记剩余时间: %d 分钟", (millionsecond - offset) / 1000 / 60));
-    // }
-    // } else {
-    // // 若此时陪护证正生效，则不应该重复添加
-    // throw new RuntimeException("无法重复添加同一个陪护");
-    // }
-    // }
+            // 填充VIP实体
+            escortCard.escortVip = this.escortVipMapper.QueryEscortVip(escortCard.patientCardNo, escortCard.happenNo);
+        }
 
-    // // 调用查询接口获取患者关联的陪护证
-    // var patientEscorts = this.QueryActivePatientEscorts(preinCard.cardNo);
-    // if (patientEscorts != null && !patientEscorts.isEmpty()) {
-    // // 已有陪护人判断
-    // switch (patientEscorts.size()) {
-    // case 0:
-    // break;
+        // 初步获取数据库中记录的，与陪护人关联的，尚未注销的陪护证
+        return escortCards;
+    }
 
-    // case 1:
-    // // 查看患者最近的住院记录
-    // if (inpatient == null) {
-    // throw new RuntimeException("患者尚未入院，无法添加第二陪护");
-    // } else {
-    // // 获取住院医嘱
-    // var ordi =
-    // this.inpatientOrderMapper.QueryInpatientOrders(inpatient.patientNo,
-    // "5070672", 7);
-    // if (ordi.isEmpty()) {
-    // throw new RuntimeException("患者尚未开立第二陪护医嘱");
-    // }
-    // }
-    // break;
+    /**
+     * 根据患者卡号查询关联陪护证
+     * 
+     * @param patientCardNo 患者就诊卡号
+     * @return 陪护证实体
+     */
+    public List<EscortCard> QueryPatientRegisteredEscorts(String patientCardNo) {
+        // 获取最近一次住院证
+        var preinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
+        if (preinCard == null) {
+            throw new RuntimeException("检测到不存在的住院证");
+        }
 
-    // default:
-    // throw new RuntimeException("该患者已关联了两个陪护人，无法添加更多陪护");
-    // }
-    // }
+        // 获取关联陪护证
+        var escortCards = this.escortCardMapper.QueryPatientRegisteredEscortCards(patientCardNo, preinCard.happenNo);
+        if (escortCards == null) {
+            return null;
+        }
 
-    // // 调用查询接口获取陪护人关联的陪护证
-    // var helperEscorts = this.QueryActiveHelperEscorts(helperCardNo);
-    // if (helperEscorts != null && !helperEscorts.isEmpty()) {
-    // // 上一个接口以判断唯一键，这里只判断上限
-    // if (helperEscorts.size() >= 2) {
-    // throw new RuntimeException("该陪护人已关联了两个患者，无法再为更多人陪护");
-    // }
-    // }
-    // }
+        for (EscortCard escortCard : escortCards) {
+            // 填充陪护人实体
+            escortCard.helper = this.patientMapper.QueryPatient(escortCard.helperCardNo);
+
+            // 填充VIP实体
+            escortCard.escortVip = this.escortVipMapper.QueryEscortVip(escortCard.patientCardNo, escortCard.happenNo);
+        }
+
+        // 初步获取数据库中记录的，与陪护人关联的，尚未注销的陪护证
+        return escortCards;
+    }
+
+    /**
+     * 添加陪护前的权限检查
+     *
+     * @param escortCard
+     */
+    private void InsertEscortValidCheck(PreinCard preinCard, String helperCardNo) {
+        // 检查住院证状态
+        if (preinCard == null || preinCard.state == PreinCardStateEnum.作废) {
+            throw new RuntimeException("无有效住院证，无法注册陪护");
+        }
+
+        // 患者不可以为自己陪护
+        if (helperCardNo.equals(preinCard.cardNo)) {
+            throw new InvalidParameterException("患者不可以为自己陪护");
+        }
+
+        // 检查在院状态
+        var inpatient = this.inpatientMapper.QueryInpatientR1(preinCard.cardNo, preinCard.happenNo);
+        if (inpatient != null) {
+            switch (inpatient.state) {
+            case 出院登记:
+                throw new RuntimeException("患者已办理出院登记，无法再添加陪护");
+
+            case 出院结算:
+                throw new RuntimeException("患者已办理出院结算，无法再添加陪护");
+
+            case 无费退院:
+                throw new RuntimeException("患者已办理无费退院，无法再添加陪护");
+
+            default:
+                // 其他状态认为是有效的
+                break;
+            }
+        }
+
+        // 12小时内已注销
+        var preRec = this.escortCardMapper.QueryLastEscortCards(preinCard.cardNo, preinCard.happenNo, helperCardNo);
+        if (preRec != null) {
+            var states = this.escortCardStateMapper.QueryEscortCardStates(preRec.escortNo);
+            if (ListHelper.GetLast(states).state == EscortStateEnum.注销) {
+                // 默认的时间间隔
+                var millionsecond = 12l * 60l * 60l * 1000l;
+
+                // 读取时间间隔配置
+                var offsetCfg = this.variableMapper.QueryVariable("EscortRegOffset");
+                if (offsetCfg != null && offsetCfg.valid) {
+                    millionsecond = Long.parseLong(offsetCfg.value) * 1000;
+                }
+
+                // 若最近的一张已注销，判断间隔时间
+                var offset = new Date().getTime() - ListHelper.GetLast(states).operDate.getTime();
+                if (offset <= millionsecond) {
+                    throw new RuntimeException(
+                            String.format("距离下次登记剩余时间: %d 分钟", Math.ceil((millionsecond - offset) / 1000 / 60d)));
+                }
+            } else {
+                // 若此时陪护证正生效，则不应该重复添加
+                throw new RuntimeException("无法重复添加同一个陪护");
+            }
+        }
+
+        // 调用查询接口获取患者关联的陪护证
+        var patientEscorts = this.QueryPatientRegisteredEscorts(preinCard.cardNo);
+        if (patientEscorts != null && !patientEscorts.isEmpty()) {
+            // 已有陪护人判断
+            switch (patientEscorts.size()) {
+            case 0:
+                break;
+
+            case 1:
+                // 查看患者最近的住院记录
+                if (inpatient == null) {
+                    throw new RuntimeException("患者尚未入院，无法添加第二陪护");
+                } else {
+                    // 获取住院医嘱
+                    var ordi = this.inpatientOrderMapper.QueryInpatientOrders(inpatient.patientNo, "5070672", 7);
+                    if (ordi.isEmpty()) {
+                        throw new RuntimeException("患者尚未开立第二陪护医嘱");
+                    }
+                }
+                break;
+
+            default:
+                throw new RuntimeException("该患者已关联了两个陪护人，无法添加更多陪护");
+            }
+        }
+
+        // 调用查询接口获取陪护人关联的陪护证
+        var helperEscorts = this.QueryHelperRegisteredEscorts(helperCardNo);
+        if (helperEscorts != null && !helperEscorts.isEmpty()) {
+            // 上一个接口以判断唯一键，这里只判断上限
+            if (helperEscorts.size() >= 2) {
+                throw new RuntimeException("该陪护人已关联了两个患者，无法再为更多人陪护");
+            }
+        }
+    }
 
     /**
      * 添加一个新的陪护证
      * 
      * @param escortCard
      */
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public EscortCard InsertEscort(String patientCardNo, String helperCardNo) {
         // 查询住院证
         var preinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
+
+        // 可行性检查
+        this.InsertEscortValidCheck(preinCard, helperCardNo);
 
         // 检查VIP记录
         var vipRec = this.escortVipMapper.QueryEscortVip(preinCard.cardNo, preinCard.happenNo);
@@ -462,7 +464,7 @@ public class EscortService {
         newEscortCard.helperCardNo = helperCardNo;
         newEscortCard.operDate = new Date();
         newEscortCard.remark = "";
-        this.escortMapper.InsertEscort(newEscortCard);
+        this.escortCardMapper.InsertEscortCard(newEscortCard);
 
         // 插入状态表记录
         var newEscortState = new EscortCardState();
@@ -474,8 +476,7 @@ public class EscortService {
         }
         this.escortCardStateMapper.InsertEscortCardState(newEscortState);
 
-        // 获取实时的陪护证实体
-        return this.escortService.QueryEscort(newEscortState.escortNo);
+        return newEscortCard;
     }
 
     /**
@@ -487,7 +488,7 @@ public class EscortService {
     @Transactional
     public void AttachAnnex(String helperCardNo, String picUrl) {
         // 先尝试获取已有附件
-        this.annexInfoMapper.InsertAnnexInfo(new AnnexInfo() {
+        this.escortAnnexInfoMapper.InsertEscortAnnexInfo(new EscortAnnexInfo() {
             {
                 annexNo = null;
                 cardNo = helperCardNo;

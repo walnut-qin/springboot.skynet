@@ -35,8 +35,6 @@ public class RegEscortController {
             throw new InvalidParameterException("陪护号不能为空");
         }
 
-        
-
         // 添加陪护
         var recEscortCard = this.escortService.InsertEscort(patient, helper);
 

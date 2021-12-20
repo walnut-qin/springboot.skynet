@@ -79,9 +79,6 @@ public class QueryActiveEscortHelperController {
         // 循环赋值
         var resultSet = new ArrayList<HelperInfo>();
         for (EscortCard escortCard : escorts) {
-            // 填充实体
-            this.escortService.FillEscortCard(escortCard);
-
             // 创建响应实体元素
             var helperInfo = new HelperInfo();
             helperInfo.escortNo = escortCard.escortNo;

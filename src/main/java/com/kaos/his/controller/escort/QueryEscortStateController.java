@@ -66,9 +66,6 @@ public class QueryEscortStateController {
             throw new RuntimeException("未查询到陪护证");
         }
 
-        // 为实体赋值
-        this.escortService.FillEscortCard(escort);
-
         // 赋值
         state.escortCardNo = escort.helperCardNo;
         state.patientCardNo = escort.patientCardNo;
