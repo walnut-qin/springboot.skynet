@@ -69,3 +69,4 @@ mybatis-plus:
   - classpath:mapping/drug/*.xml
   - classpath:mapping/order/*.xml
   - classpath:mapping/config/*.xml
+  - classpath:mapping/fee/*.xml

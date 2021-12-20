@@ -24,6 +24,7 @@ public class SpringEnumConfiguration extends WebMvcConfigurationSupport {
         f.addConverter(new OutpatientStateEnum.EnumConverter());
         f.addConverter(new PreinCardStateEnum.EnumConverter());
         f.addConverter(new SexEnum.EnumConverter());
+        f.addConverter(new TransTypeEnum.EnumConverter());
         return f;
     }
 }
