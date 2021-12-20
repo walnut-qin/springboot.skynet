@@ -56,9 +56,10 @@ public class UpdateEscortStateController {
             throw new InvalidParameterException("陪护证号不能为空");
         }
 
-        // 执行更新服务
+        // 加陪护号锁
         var lock = this.locks.get(Integer.valueOf(escortNo) % 10);
         synchronized (lock) {
+            // 执行更新服务
             this.escortService.UpdateEscortState(escortNo, newState);
         }
     }
@@ -74,8 +75,10 @@ public class UpdateEscortStateController {
         // 轮训刷新状态
         for (EscortCard escortCard : escortCards) {
             try {
+                // 加陪护号锁
                 var lock = this.locks.get(Integer.valueOf(escortCard.escortNo) % 10);
                 synchronized (lock) {
+                    // 执行更新服务
                     this.escortService.RefreshEscortState(escortCard.escortNo);
                 }
             } catch (Exception e) {

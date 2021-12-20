@@ -1,7 +1,10 @@
 package com.kaos.his.controller.escort;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.service.EscortService;
 import com.kaos.util.GsonHelper;
 
@@ -20,6 +23,36 @@ public class RegEscortController {
     @Autowired
     EscortService escortService;
 
+    private List<Object> patientLocks = new ArrayList<>() {
+        {
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+        }
+    };
+
+    private List<Object> helperLocks = new ArrayList<>() {
+        {
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+        }
+    };
+
     /**
      * 获取陪护证状态
      * 
@@ -35,8 +68,19 @@ public class RegEscortController {
             throw new InvalidParameterException("陪护号不能为空");
         }
 
-        // 添加陪护
-        var recEscortCard = this.escortService.InsertEscort(patient, helper);
+        // 声明陪护实体
+        EscortCard recEscortCard = null;
+
+        // 加患者锁
+        var patientLock = this.patientLocks.get(Integer.valueOf(patient) % 10);
+        synchronized (patientLock) {
+            // 加陪护锁
+            var helperLock = this.helperLocks.get(Integer.valueOf(helper) % 10);
+            synchronized (helperLock) {
+                // 添加陪护
+                recEscortCard = this.escortService.InsertEscort(patient, helper);
+            }
+        }
 
         return GsonHelper.ToJson(recEscortCard);
     }
