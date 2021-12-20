@@ -12,6 +12,7 @@ import com.kaos.his.enums.InpatientStateEnum;
 import com.kaos.his.enums.OutpatientStateEnum;
 import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.enums.SexEnum;
+import com.kaos.his.enums.TransTypeEnum;
 import com.kaos.his.enums.util.GsonEnumTypeAdapter;
 
 public class GsonHelper {
@@ -31,7 +32,8 @@ public class GsonHelper {
                 .registerTypeAdapter(InpatientStateEnum.class, new GsonEnumTypeAdapter<>(InpatientStateEnum.class))
                 .registerTypeAdapter(OutpatientStateEnum.class, new GsonEnumTypeAdapter<>(OutpatientStateEnum.class))
                 .registerTypeAdapter(PreinCardStateEnum.class, new GsonEnumTypeAdapter<>(PreinCardStateEnum.class))
-                .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class)).create();
+                .registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class))
+                .registerTypeAdapter(TransTypeEnum.class, new GsonEnumTypeAdapter<>(TransTypeEnum.class)).create();
     }
 
     public static String ToJson(Object src) {

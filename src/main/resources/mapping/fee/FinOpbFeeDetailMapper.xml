@@ -38,7 +38,7 @@
     </select>
 
     <!-- 接口2 -->
-    <select id="QueryFinOpbFeeDetail" resultMap="map">
+    <select id="QueryLastFinOpbFeeDetail" resultMap="map">
         SELECT
         <include refid="allItem"/>
         FROM
