@@ -6,6 +6,7 @@ import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.EscortService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,5 +36,10 @@ public class UpdateEscortStateController {
 
         // 执行更新服务
         this.escortService.UpdateEscortState(escortNo, newState);
+    }
+
+    @Scheduled(initialDelay = 2000, fixedDelay = 2000)
+    public void Maintaince() {
+        System.out.println("test");
     }
 }
