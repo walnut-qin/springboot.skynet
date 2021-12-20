@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class EscortAnnexInfo {
     /**
-     * 附件编号，主键
+     * 附件编号
      */
     public String annexNo = null;
 
