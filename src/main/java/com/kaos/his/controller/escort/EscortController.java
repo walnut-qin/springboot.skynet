@@ -6,9 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import com.kaos.his.entity.credential.EscortCard;
+import com.kaos.his.entity.personnel.Inpatient;
 import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.SexEnum;
 import com.kaos.his.service.EscortService;
+import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
+import com.kaos.util.ListHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,116 @@ public class EscortController {
      */
     @Autowired
     EscortService escortService;
+
+    /**
+     * QueryEscortState的响应体
+     */
+    class QueryEscortState_RspBody {
+        /**
+         * 陪护人卡号
+         */
+        public String escortCardNo = null;
+
+        /**
+         * 患者卡号
+         */
+        public String patientCardNo = null;
+
+        /**
+         * 姓名
+         */
+        public Date regDate = null;
+
+        /**
+         * 状态
+         */
+        public EscortStateEnum state = null;
+    }
+
+    /**
+     * QueryHelper的响应体
+     */
+    class QueryActiveHelper_RspBody {
+        /**
+         * 陪护证号
+         */
+        public String escortNo = null;
+
+        /**
+         * 就诊卡号
+         */
+        public String cardNo = null;
+
+        /**
+         * 姓名
+         */
+        public String name = null;
+
+        /**
+         * 性别
+         */
+        public SexEnum sex = null;
+
+        /**
+         * 年龄
+         */
+        public String age = null;
+
+        /**
+         * 免费标识： 0 - 不免费 1 - 免费
+         */
+        public String freeFlag = null;
+    }
+
+    /**
+     * QueryActivePatient响应体
+     */
+    class QueryActivePatient_RspBody {
+        /**
+         * 陪护证编号
+         */
+        public String escortNo = null;
+
+        /**
+         * 就诊卡号
+         */
+        public String cardNo = null;
+
+        /**
+         * 姓名
+         */
+        public String name = null;
+
+        /**
+         * 性别
+         */
+        public SexEnum sex = null;
+
+        /**
+         * 年龄
+         */
+        public String age = null;
+
+        /**
+         * 科室名称
+         */
+        public String deptName = null;
+
+        /**
+         * 床号
+         */
+        public String bedNo = null;
+
+        /**
+         * 患者住院号
+         */
+        public String patientNo = null;
+
+        /**
+         * 免费标识： 0 - 不免费 1 - 免费
+         */
+        public String freeFlag = null;
+    }
 
     /**
      * 陪护证号锁
@@ -82,7 +196,7 @@ public class EscortController {
     };
 
     /**
-     * 获取陪护证状态
+     * 添加新的陪护证
      * 
      * @param escortNo
      * @return
@@ -173,6 +287,103 @@ public class EscortController {
         // 记录日志
         var endDate = new Date();
         logger.info(String.format("<< 实际更新 %d，耗时 %d ms", escortCards.size(), endDate.getTime() - beginDate.getTime()));
+    }
+
+    /**
+     * 获取陪护证状态
+     * 
+     * @param escortNo
+     * @return
+     */
+    @RequestMapping(value = "queryEscortState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String QueryEscortState(@RequestParam("escortNo") String escortNo) {
+        // 提取指定陪护证
+        var escort = this.escortService.QueryEscort(escortNo);
+        if (escort == null) {
+            throw new RuntimeException("未查询到陪护证");
+        }
+
+        // 创建响应实体
+        var rspBody = new QueryEscortState_RspBody();
+        rspBody.escortCardNo = escort.helperCardNo;
+        rspBody.patientCardNo = escort.patientCardNo;
+        rspBody.regDate = escort.states.get(0).operDate;
+        rspBody.state = ListHelper.GetLast(escort.states).state;
+
+        return GsonHelper.ToJson(rspBody);
+    }
+
+    /**
+     * 获取患者的陪护人信息
+     * 
+     * @param cardNo 患者就诊卡号
+     * @return
+     */
+    @RequestMapping(value = "queryActiveEscortHelper", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String QueryActiveHelper(@RequestParam("patientCardNo") String patientCardNo) {
+        // 入参判断
+        if (patientCardNo == null) {
+            throw new RuntimeException("患者卡号不能为空");
+        }
+
+        // 调取服务
+        var escorts = this.escortService.QueryPatientRegisteredEscorts(patientCardNo);
+
+        // 循环赋值
+        var rspBody = new ArrayList<QueryActiveHelper_RspBody>();
+        for (EscortCard escortCard : escorts) {
+            // 创建响应实体元素
+            var helperInfo = new QueryActiveHelper_RspBody();
+            helperInfo.escortNo = escortCard.escortNo;
+            helperInfo.cardNo = escortCard.helper.cardNo;
+            helperInfo.name = escortCard.helper.name;
+            helperInfo.sex = escortCard.helper.sex;
+            helperInfo.age = DateHelper.GetAgeDetail(escortCard.helper.birthday);
+            helperInfo.freeFlag = escortCard.helperCardNo.equals(escortCard.escortVip.helperCardNo) ? "1" : "0";
+
+            // 添加响应实体元素
+            rspBody.add(helperInfo);
+        }
+
+        return GsonHelper.ToJson(rspBody);
+    }
+
+    @RequestMapping(value = "queryActiveEscortPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String QueryActivePatient(@RequestParam("helperCardNo") String helperCardNo) {
+        // 入参判断
+        if (helperCardNo == null) {
+            throw new RuntimeException("陪护人卡号不能为空");
+        }
+
+        // 调取服务
+        var escorts = this.escortService.QueryHelperRegisteredEscorts(helperCardNo);
+
+        // 循环赋值
+        var rspBody = new ArrayList<QueryActivePatient_RspBody>();
+        for (EscortCard escort : escorts) {
+            // 创建新实体元素
+            var patientInfo = new QueryActivePatient_RspBody();
+            patientInfo.escortNo = escort.escortNo;
+            patientInfo.cardNo = escort.preinCard.patient.cardNo;
+            patientInfo.name = escort.preinCard.patient.name;
+            patientInfo.sex = escort.preinCard.patient.sex;
+            patientInfo.age = DateHelper.GetAgeDetail(escort.preinCard.patient.birthday);
+            if (escort.preinCard.patient instanceof Inpatient) {
+                patientInfo.deptName = ((Inpatient) escort.preinCard.patient).dept.name;
+                patientInfo.bedNo = ((Inpatient) escort.preinCard.patient).bedNo;
+                patientInfo.patientNo = ((Inpatient) escort.preinCard.patient).patientNo;
+            } else {
+                patientInfo.deptName = escort.preinCard.preDept.name;
+                patientInfo.bedNo = escort.preinCard.preBedNo;
+                patientInfo.patientNo = null;
+            }
+            patientInfo.freeFlag = escort.helperCardNo.equals(escort.escortVip.helperCardNo) ? "1" : "0";
+
+            // 添加实体元素
+            rspBody.add(patientInfo);
+        }
+
+        return GsonHelper.ToJson(rspBody);
     }
 
     /**
