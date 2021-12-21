@@ -307,6 +307,7 @@ public class EscortService {
                 escortCard.preinCard.patient = inpatient;
             } else {
                 escortCard.preinCard.patient = this.patientMapper.QueryPatient(escortCard.patientCardNo);
+                escortCard.preinCard.preDept = this.departmentMapper.QueryDepartment(escortCard.preinCard.preDeptCode);
             }
 
             // 填充VIP实体
