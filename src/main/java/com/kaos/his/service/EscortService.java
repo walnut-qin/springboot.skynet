@@ -402,8 +402,14 @@ public class EscortService {
                 // 若最近的一张已注销，判断间隔时间
                 var offset = new Date().getTime() - ListHelper.GetLast(states).operDate.getTime();
                 if (offset <= millionsecond) {
-                    throw new RuntimeException(String.format("距离下次登记剩余时间: %d 分钟",
-                            (int) Math.ceil((millionsecond - offset) / 1000 / 60.0)));
+                    Integer leftM = (int) Math.ceil((millionsecond - offset) / 1000.00 / 60.00);
+                    Integer leftH = leftM / 60;
+                    leftM %= 60;
+                    if (leftH > 0) {
+                        throw new RuntimeException(String.format("距离下次登记剩余时间: %d 小时 %d 分钟", leftH, leftM));
+                    } else {
+                        throw new RuntimeException(String.format("距离下次登记剩余时间: %d 分钟", leftM));
+                    }
                 }
             } else {
                 // 若此时陪护证正生效，则不应该重复添加
