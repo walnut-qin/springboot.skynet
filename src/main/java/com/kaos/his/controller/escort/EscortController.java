@@ -4,6 +4,10 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.personnel.Inpatient;
@@ -196,6 +200,17 @@ public class EscortController {
     };
 
     /**
+     * 定时任务处理线程池
+     */
+    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 12, TimeUnit.MINUTES,
+            new LinkedBlockingQueue<Runnable>());
+
+    /**
+     * 发令枪
+     */
+    private CountDownLatch countDownLatch = null;
+
+    /**
      * 添加新的陪护证
      * 
      * @param escortNo
@@ -253,6 +268,39 @@ public class EscortController {
         }
     }
 
+    class MyTask implements Runnable {
+        /**
+         * 任务即将处理的陪护证编号
+         */
+        private String escortNo = null;
+
+        /**
+         * 构造函数
+         */
+        MyTask(String escortNo) {
+            this.escortNo = escortNo;
+        }
+
+        /**
+         * 核心处理方法
+         */
+        @Override
+        public void run() {
+            // 加陪护号锁
+            var idx = Integer.valueOf(escortNo.substring(escortNo.length() - 2)) % escortNoLocks.size();
+            var lock = escortNoLocks.get(idx);
+            synchronized (lock) {
+                // 执行更新服务
+                escortService.RefreshEscortState(escortNo);
+            }
+
+            // 发令枪计时自减
+            if (countDownLatch != null) {
+                countDownLatch.countDown();
+            }
+        }
+    }
+
     /**
      * 定期自动更新陪护证状态
      */
@@ -269,19 +317,18 @@ public class EscortController {
         var beginDate = new Date();
 
         // 轮训刷新状态
+        this.countDownLatch = new CountDownLatch(escortCards.size());
         for (EscortCard escortCard : escortCards) {
             try {
-                // 加陪护号锁
-                var escortNo = escortCard.escortNo;
-                var idx = Integer.valueOf(escortNo.substring(escortNo.length() - 2)) % escortNoLocks.size();
-                var lock = this.escortNoLocks.get(idx);
-                synchronized (lock) {
-                    // 执行更新服务
-                    this.escortService.RefreshEscortState(escortCard.escortNo);
-                }
+                this.threadPoolExecutor.execute(new MyTask(escortCard.escortNo));
             } catch (Exception e) {
                 logger.error(String.format("xx 更新陪护证 %s 的状态时发生错误: %s", escortCard.escortNo, e.getMessage()));
             }
+        }
+        try {
+            this.countDownLatch.await();
+        } catch (Exception e) {
+            logger.error(String.format("主线程等待发令枪出现错误: %s", e.getMessage()));
         }
 
         // 记录日志
