@@ -2,8 +2,6 @@ package com.kaos.his.enums;
 
 import com.kaos.his.enums.util.IEnum;
 
-import org.springframework.core.convert.converter.Converter;
-
 public enum TransTypeEnum implements IEnum {
     Positive("1", "正交易"), Negative("2", "负交易");
 
@@ -36,20 +34,5 @@ public enum TransTypeEnum implements IEnum {
     @Override
     public String getDescription() {
         return this.description;
-    }
-
-    /**
-     * 枚举转换器
-     */
-    public static class EnumConverter implements Converter<String, SexEnum> {
-        @Override
-        public SexEnum convert(String source) {
-            for (SexEnum e : SexEnum.class.getEnumConstants()) {
-                if (e.getDescription().equals(source)) {
-                    return e;
-                }
-            }
-            throw new IllegalArgumentException();
-        }
     }
 }

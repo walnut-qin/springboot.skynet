@@ -2,8 +2,6 @@ package com.kaos.his.enums;
 
 import com.kaos.his.enums.util.IEnum;
 
-import org.springframework.core.convert.converter.Converter;
-
 public enum EscortActionEnum implements IEnum {
     进入("I", "进入"), 外出("O", "外出");
 
@@ -36,20 +34,5 @@ public enum EscortActionEnum implements IEnum {
     @Override
     public String getDescription() {
         return this.description;
-    }
-
-    /**
-     * 枚举转换器
-     */
-    public static class EnumConverter implements Converter<String, EscortActionEnum> {
-        @Override
-        public EscortActionEnum convert(String source) {
-            for (EscortActionEnum e : EscortActionEnum.class.getEnumConstants()) {
-                if (e.getDescription().equals(source)) {
-                    return e;
-                }
-            }
-            throw new IllegalArgumentException();
-        }
     }
 }

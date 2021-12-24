@@ -2,8 +2,6 @@ package com.kaos.his.enums;
 
 import com.kaos.his.enums.util.IEnum;
 
-import org.springframework.core.convert.converter.Converter;
-
 /**
  * 门诊患者状态枚举
  */
@@ -40,20 +38,5 @@ public enum OutpatientStateEnum implements IEnum {
     @Override
     public String getDescription() {
         return this.description;
-    }
-
-    /**
-     * 枚举转换器
-     */
-    public static class EnumConverter implements Converter<String, OutpatientStateEnum> {
-        @Override
-        public OutpatientStateEnum convert(String source) {
-            for (OutpatientStateEnum e : OutpatientStateEnum.class.getEnumConstants()) {
-                if (e.getDescription().equals(source)) {
-                    return e;
-                }
-            }
-            throw new IllegalArgumentException();
-        }
     }
 }

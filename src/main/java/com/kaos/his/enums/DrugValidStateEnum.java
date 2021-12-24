@@ -2,8 +2,6 @@ package com.kaos.his.enums;
 
 import com.kaos.his.enums.util.IEnum;
 
-import org.springframework.core.convert.converter.Converter;
-
 public enum DrugValidStateEnum implements IEnum {
     停用("0", "停用"), 在用("1", "在用"), 废弃("2", "废弃");
 
@@ -36,20 +34,5 @@ public enum DrugValidStateEnum implements IEnum {
     @Override
     public String getDescription() {
         return this.description;
-    }
-
-    /**
-     * 枚举转换器
-     */
-    public static class EnumConverter implements Converter<String, DrugValidStateEnum> {
-        @Override
-        public DrugValidStateEnum convert(String source) {
-            for (DrugValidStateEnum e : DrugValidStateEnum.class.getEnumConstants()) {
-                if (e.getDescription().equals(source)) {
-                    return e;
-                }
-            }
-            throw new IllegalArgumentException();
-        }
     }
 }
