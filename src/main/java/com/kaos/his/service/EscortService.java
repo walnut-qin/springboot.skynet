@@ -1,7 +1,9 @@
 package com.kaos.his.service;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.kaos.his.entity.credential.EscortAnnexInfo;
@@ -9,6 +11,7 @@ import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.EscortCardState;
 import com.kaos.his.entity.credential.EscortVip;
 import com.kaos.his.entity.credential.PreinCard;
+import com.kaos.his.entity.personnel.Patient;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.mapper.config.VariableMapper;
@@ -28,6 +31,7 @@ import com.kaos.his.mapper.personnel.InpatientMapper;
 import com.kaos.his.mapper.personnel.PatientMapper;
 import com.kaos.util.ListHelper;
 
+import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -518,6 +522,63 @@ public class EscortService {
                 operDate = new Date();
             }
         });
+    }
+
+    /**
+     * 查询某个科室下的所有未审核的记录
+     * 
+     * @param deptCode 科室编码
+     * @return Map<陪护人卡号， Triplet<陪护人实体， 陪护附件实体， 被陪护人列表>>
+     */
+    public HashMap<String, Triplet<Patient, EscortAnnexInfo, List<Patient>>> QueryUncheckedAnnexInfo(String deptCode) {
+        // 创建结果集
+        var rs = new HashMap<String, Triplet<Patient, EscortAnnexInfo, List<Patient>>>();
+
+        // 查询出所有未审核的附件
+        var annexs = this.escortAnnexInfoMapper.QueryAllUncheckedEscortAnnexInfos();
+
+        // 基本信息寄存器
+        var patientInfos = new HashMap<String, Patient>();
+
+        // 轮训所有未审核附件，找出符合条件的
+        for (EscortAnnexInfo escortAnnexInfo : annexs) {
+            // 查询出陪护人基本信息
+            var helperInfo = patientInfos.get(escortAnnexInfo.cardNo);
+            if (helperInfo == null) {
+                helperInfo = this.patientMapper.QueryPatient(escortAnnexInfo.cardNo);
+                patientInfos.put(escortAnnexInfo.cardNo, helperInfo);
+            }
+
+            // 查询该陪护人关联的陪护证
+            var escortCards = this.escortCardMapper.QueryHelperRegisteredEscortCards(escortAnnexInfo.cardNo);
+
+            // 查询出所有关联的患者
+            for (EscortCard escortCard : escortCards) {
+                // 查询出关联的住院证
+                var preinCard = this.preinCardMapper.QueryPreinCard(escortCard.patientCardNo, escortCard.happenNo);
+
+                // 若住院证科室符合条件 - 加入结果集
+                if (preinCard.preDeptCode.equals(deptCode)) {
+                    // 查询出患者基本信息
+                    var patientInfo = patientInfos.get(escortCard.patientCardNo);
+                    if (patientInfo == null) {
+                        patientInfo = this.patientMapper.QueryPatient(escortCard.patientCardNo);
+                        patientInfos.put(escortCard.patientCardNo, patientInfo);
+                    }
+
+                    if (rs.keySet().contains(helperInfo.cardNo)) {
+                        rs.get(helperInfo.cardNo).getValue2().add(patientInfo);
+                    } else {
+                        var item = new Triplet<Patient, EscortAnnexInfo, List<Patient>>(helperInfo, escortAnnexInfo,
+                                new ArrayList<Patient>());
+                        item.getValue2().add(patientInfo);
+                        rs.put(helperInfo.cardNo, item);
+                    }
+                }
+            }
+        }
+
+        return rs;
     }
 
     /**

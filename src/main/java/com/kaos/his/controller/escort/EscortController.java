@@ -146,6 +146,31 @@ public class EscortController {
     }
 
     /**
+     * QueryUncheckEscortAnnex响应体
+     */
+    class QueryUncheckEscortAnnex_RspBody {
+        /**
+         * 陪护人姓名
+         */
+        public String helperName = null;
+
+        /**
+         * 附件ID
+         */
+        public String annexNo = null;
+
+        /**
+         * 图片外链
+         */
+        public String picUrl = null;
+
+        /**
+         * 患者姓名列表
+         */
+        public List<String> patientNames = null;
+    }
+
+    /**
      * 陪护证号锁
      */
     private List<Object> escortNoLocks = new ArrayList<>() {
@@ -304,7 +329,7 @@ public class EscortController {
     /**
      * 定期自动更新陪护证状态
      */
-    @Scheduled(initialDelay = 10 * 60 * 1000, fixedDelay = 5 * 60 * 1000)
+    @Scheduled(initialDelay = 50 * 60 * 1000, fixedDelay = 10 * 60 * 1000)
     public void AutoUpdateEscortState() {
         // 获取日志工具
         var logger = Logger.getLogger(EscortController.class.getName());
@@ -448,5 +473,40 @@ public class EscortController {
 
         // 执行业务
         this.escortService.AttachAnnex(helperCardNo, picUrl);
+    }
+
+    /**
+     * 查询指定科室关联的未审核的陪护人附件
+     * 
+     * @param deptCode
+     * @return
+     */
+    @RequestMapping(value = "queryUncheckEscortAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String QueryUncheckEscortAnnex(@RequestParam("deptCode") String deptCode) {
+        // 入参检查
+        if (deptCode == null) {
+            throw new InvalidParameterException("科室编码不能为空");
+        }
+
+        // 查询所有关联结果
+        var rs = this.escortService.QueryUncheckedAnnexInfo(deptCode);
+
+        // 创建结果集
+        var rspBody = new ArrayList<QueryUncheckEscortAnnex_RspBody>();
+
+        // 提取结果集
+        for (var rsItem : rs.values()) {
+            var item = new QueryUncheckEscortAnnex_RspBody();
+            item.helperName = rsItem.getValue0().name;
+            item.annexNo = rsItem.getValue1().annexNo;
+            item.picUrl = rsItem.getValue1().annexUrl;
+            item.patientNames = new ArrayList<String>();
+            for (var patientName : rsItem.getValue2()) {
+                item.patientNames.add(patientName.name);
+            }
+            rspBody.add(item);
+        }
+
+        return GsonHelper.ToJson(rspBody);
     }
 }
