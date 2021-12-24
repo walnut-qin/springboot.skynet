@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kaos.his.entity.credential.EscortAnnexCheck;
 import com.kaos.his.entity.credential.EscortAnnexInfo;
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.EscortCardState;
@@ -579,6 +580,33 @@ public class EscortService {
         }
 
         return rs;
+    }
+
+    /**
+     * 审核陪护附件
+     * 
+     * @param annexNo
+     * @param operCode
+     * @param negative
+     * @param execDate
+     */
+    public void CheckAnnexInfo(String vAnnexNo, String vOperCode, Boolean vNegative, Date vExecDate) {
+        // 尝试获取审核结果
+        var rt = this.escortAnnexCheckMapper.QueryEscortAnnexCheck(vAnnexNo);
+        if (rt != null) {
+            throw new RuntimeException("该附件已审核，无法重复审核");
+        }
+
+        // 审核
+        this.escortAnnexCheckMapper.InsertEscortAnnexCheck(new EscortAnnexCheck() {
+            {
+                annexNo = vAnnexNo;
+                operCode = vOperCode;
+                operDate = new Date();
+                negative = vNegative;
+                execDate = vExecDate;
+            }
+        });
     }
 
     /**

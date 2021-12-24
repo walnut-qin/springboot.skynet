@@ -9,11 +9,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.personnel.Inpatient;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.SexEnum;
-import com.kaos.his.enums.TransTypeEnum;
 import com.kaos.his.service.EscortService;
 import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
@@ -211,6 +213,24 @@ public class EscortController {
      * 陪护人卡号锁
      */
     private List<Object> helperLocks = new ArrayList<>() {
+        {
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+        }
+    };
+
+    /**
+     * 附件ID锁
+     */
+    private List<Object> annexNoLocks = new ArrayList<>() {
         {
             add(new Object());
             add(new Object());
@@ -511,7 +531,25 @@ public class EscortController {
         return GsonHelper.ToJson(rspBody);
     }
 
+    /**
+     * 审核附件
+     * 
+     * @param annexNo
+     * @param operCode
+     * @param negative
+     * @param execDate
+     */
     @RequestMapping(value = "CheckEscortAnnex", method = RequestMethod.GET)
-    public void CheckEscortAnnex(@RequestParam("annexNo") TransTypeEnum annexNo) {
+    public void CheckEscortAnnex(@NotEmpty(message = "附件编号不能为空") @RequestParam("annexNo") String annexNo,
+            @NotEmpty(message = "操作员不能为空") @RequestParam("operCode") String operCode,
+            @NotNull(message = "审核结果不能为空") @RequestParam("negative") Boolean negative,
+            @NotNull(message = "核酸检测日期不能为空") @RequestParam("execDate") Date execDate) {
+        // 加附件号锁
+        var idx = Integer.valueOf(annexNo.substring(annexNo.length() - 2)) % annexNoLocks.size();
+        var lock = this.annexNoLocks.get(idx);
+        synchronized (lock) {
+            // 执行更新服务
+            this.escortService.CheckAnnexInfo(annexNo, operCode, negative, execDate);
+        }
     }
 }
