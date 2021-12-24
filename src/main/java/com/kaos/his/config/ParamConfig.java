@@ -1,19 +1,23 @@
-package com.kaos.his.enums.util;
+package com.kaos.his.config;
 
+import com.kaos.his.config.converter.DateConverter;
 import com.kaos.his.enums.*;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-/**
- * 枚举配置，注册相关枚举的转换器，以便入参解析器解析
- */
 @Configuration
-public class SpringEnumConfiguration extends WebMvcConfigurationSupport {
+public class ParamConfig extends WebMvcConfigurationSupport {
+
     @Override
     public FormattingConversionService mvcConversionService() {
         FormattingConversionService f = super.mvcConversionService();
+
+        // Date格式化
+        f.addConverter(new DateConverter());
+
+        // 自定义枚举格式化
         f.addConverter(new DeptOwnEnum.EnumConverter());
         f.addConverter(new DrugItemGradeEnum.EnumConverter());
         f.addConverter(new DrugShiftTypeEnum.EnumConverter());
@@ -25,6 +29,8 @@ public class SpringEnumConfiguration extends WebMvcConfigurationSupport {
         f.addConverter(new PreinCardStateEnum.EnumConverter());
         f.addConverter(new SexEnum.EnumConverter());
         f.addConverter(new TransTypeEnum.EnumConverter());
+
         return f;
     }
+
 }
