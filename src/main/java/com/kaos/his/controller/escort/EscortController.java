@@ -9,13 +9,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.personnel.Inpatient;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.SexEnum;
+import com.kaos.his.enums.TransTypeEnum;
 import com.kaos.his.service.EscortService;
 import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
@@ -514,9 +512,6 @@ public class EscortController {
     }
 
     @RequestMapping(value = "CheckEscortAnnex", method = RequestMethod.GET)
-    public void CheckEscortAnnex(@NotEmpty(message = "annexNo不能为空") @RequestParam("annexNo") String annexNo,
-            @NotEmpty(message = "审核人员编码不能为空") @RequestParam("operCode") String operCode,
-            @NotNull(message = "检测结果不能为空") @RequestParam("negative") Boolean negative,
-            @NotNull(message = "检测日期不能为空") @RequestParam("execDate") Date execDate) {
+    public void CheckEscortAnnex(@RequestParam("annexNo") TransTypeEnum annexNo) {
     }
 }

@@ -59,7 +59,7 @@ spring:
         exclusions: .gif,.html
 mybatis-plus:
   configuration:
-    default-enum-type-handler: com.kaos.his.enums.util.MybatisEnumTypeHandler
+    default-enum-type-handler: com.kaos.his.config.MybatisEnumTypeHandler
   mapper-locations:
   - classpath:mapping/personnel/*.xml
   - classpath:mapping/organization/*.xml

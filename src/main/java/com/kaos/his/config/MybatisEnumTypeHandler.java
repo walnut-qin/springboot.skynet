@@ -1,16 +1,16 @@
-package com.kaos.his.enums.util;
+package com.kaos.his.config;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.kaos.his.enums.util.IEnum;
+
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
 public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> {
-    // private Class<E> enumType;
-
     /**
      * 枚举值数组
      */
@@ -38,8 +38,6 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
             }
         }
         return null;
-        // throw new IllegalArgumentException(enumType.getName() + " unknown enumerated
-        // type index:" + index);
     }
 
     @Override
