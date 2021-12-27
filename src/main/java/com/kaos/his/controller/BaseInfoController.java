@@ -25,7 +25,7 @@ public class BaseInfoController {
      * 
      * @return
      */
-    @RequestMapping(value = "QueryPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "queryPatient", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String QueryPatient(@NotEmpty(message = "患者卡号不能为空") @RequestParam("cardNo") String cardNo) {
         // 查询实体
         var patient = this.baseInfoService.QueryPatient(cardNo);
