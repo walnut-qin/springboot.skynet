@@ -315,6 +315,12 @@ public class EscortService {
                 escortCard.preinCard.preDept = this.departmentMapper.QueryDepartment(escortCard.preinCard.preDeptCode);
             }
 
+            // 填充状态列表
+            escortCard.states = this.escortCardStateMapper.QueryEscortCardStates(escortCard.escortNo);
+
+            // 填充行为列表
+            escortCard.actions = this.escortCardActionMapper.QueryEscortCardActions(escortCard.escortNo);
+
             // 填充VIP实体
             escortCard.escortVip = this.escortVipMapper.QueryEscortVip(escortCard.patientCardNo, escortCard.happenNo);
         }
@@ -346,6 +352,12 @@ public class EscortService {
         for (EscortCard escortCard : escortCards) {
             // 填充陪护人实体
             escortCard.helper = this.patientMapper.QueryPatient(escortCard.helperCardNo);
+
+            // 填充状态列表
+            escortCard.states = this.escortCardStateMapper.QueryEscortCardStates(escortCard.escortNo);
+
+            // 填充行为列表
+            escortCard.actions = this.escortCardActionMapper.QueryEscortCardActions(escortCard.escortNo);
 
             // 填充VIP实体
             escortCard.escortVip = this.escortVipMapper.QueryEscortVip(escortCard.patientCardNo, escortCard.happenNo);
@@ -423,7 +435,8 @@ public class EscortService {
         }
 
         // 调用查询接口获取患者关联的陪护证
-        var patientEscorts = this.QueryPatientRegisteredEscorts(preinCard.cardNo);
+        var patientEscorts = this.escortCardMapper.QueryPatientRegisteredEscortCards(preinCard.cardNo,
+                preinCard.happenNo);
         if (patientEscorts != null && !patientEscorts.isEmpty()) {
             // 已有陪护人判断
             switch (patientEscorts.size()) {
@@ -449,7 +462,7 @@ public class EscortService {
         }
 
         // 调用查询接口获取陪护人关联的陪护证
-        var helperEscorts = this.QueryHelperRegisteredEscorts(helperCardNo);
+        var helperEscorts = this.escortCardMapper.QueryHelperRegisteredEscortCards(helperCardNo);
         if (helperEscorts != null && !helperEscorts.isEmpty()) {
             // 上一个接口以判断唯一键，这里只判断上限
             if (helperEscorts.size() >= 2) {

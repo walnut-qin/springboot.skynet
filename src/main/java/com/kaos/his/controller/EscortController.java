@@ -13,6 +13,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.his.entity.credential.EscortCard;
+import com.kaos.his.entity.credential.EscortCardAction;
+import com.kaos.his.entity.credential.EscortCardState;
 import com.kaos.his.entity.personnel.Inpatient;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.SexEnum;
@@ -96,6 +98,16 @@ public class EscortController {
          * 免费标识： 0 - 不免费 1 - 免费
          */
         public String freeFlag = null;
+
+        /**
+         * 状态列表
+         */
+        public List<EscortCardState> states = null;
+
+        /**
+         * 行为列表
+         */
+        public List<EscortCardAction> actions = null;
     }
 
     /**
@@ -146,6 +158,16 @@ public class EscortController {
          * 免费标识： 0 - 不免费 1 - 免费
          */
         public String freeFlag = null;
+
+        /**
+         * 状态列表
+         */
+        public List<EscortCardState> states = null;
+
+        /**
+         * 行为列表
+         */
+        public List<EscortCardAction> actions = null;
     }
 
     /**
@@ -434,6 +456,10 @@ public class EscortController {
             helperInfo.age = DateHelper.GetAgeDetail(escortCard.helper.birthday);
             helperInfo.freeFlag = escortCard.helperCardNo.equals(escortCard.escortVip.helperCardNo) ? "1" : "0";
 
+            // 双列表
+            helperInfo.states = escortCard.states;
+            helperInfo.actions = escortCard.actions;
+
             // 添加响应实体元素
             rspBody.add(helperInfo);
         }
@@ -471,6 +497,10 @@ public class EscortController {
                 patientInfo.patientNo = null;
             }
             patientInfo.freeFlag = escort.helperCardNo.equals(escort.escortVip.helperCardNo) ? "1" : "0";
+
+            // 双列表
+            patientInfo.states = escort.states;
+            patientInfo.actions = escort.actions;
 
             // 添加实体元素
             rspBody.add(patientInfo);
