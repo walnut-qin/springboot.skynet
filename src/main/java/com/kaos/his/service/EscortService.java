@@ -153,7 +153,7 @@ public class EscortService {
 
         // 优先级0：若记录的状态已经注销，则该陪护证已废弃
         var states = this.escortCardStateMapper.QueryEscortCardStates(escortNo);
-        if (ListHelper.GetLast(states).state == EscortStateEnum.注销) {
+        if (states != null && !states.isEmpty() && ListHelper.GetLast(states).state == EscortStateEnum.注销) {
             return EscortStateEnum.注销;
         }
 
@@ -510,7 +510,8 @@ public class EscortService {
         var newEscortState = new EscortCardState();
         {
             newEscortState.escortNo = newEscortCard.escortNo;
-            newEscortState.state = EscortStateEnum.无核酸检测结果;
+            // 获取实时最新状态
+            newEscortState.state = this.JudgeRealState(newEscortCard.escortNo);
             newEscortState.operDate = new Date();
             newEscortState.remark = "添加陪护证，初始状态";
         }
