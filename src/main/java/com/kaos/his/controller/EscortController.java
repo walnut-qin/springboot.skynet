@@ -41,6 +41,11 @@ public class EscortController {
     EscortService escortService;
 
     /**
+     * 日志对象
+     */
+    private Logger logger = Logger.getLogger(EscortController.class.getName());
+
+    /**
      * QueryEscortState的响应体
      */
     class QueryEscortState_RspBody {
@@ -327,12 +332,28 @@ public class EscortController {
             throw new InvalidParameterException("陪护证号不能为空");
         }
 
+        // 记录日志
+        this.logger.info(String.format("开始更新陪护证 %s 的状态", escortNo));
+
         // 加陪护号锁
         var idx = Integer.valueOf(escortNo.substring(escortNo.length() - 2)) % escortNoLocks.size();
         var lock = this.escortNoLocks.get(idx);
+        this.logger.info(String.format("计算陪护证号锁编号为 %d", idx));
+
         synchronized (lock) {
+            // 加锁日志
+            this.logger.info(String.format("加锁 %d", idx));
+
             // 执行更新服务
-            this.escortService.UpdateEscortState(escortNo, newState);
+            try {
+                this.escortService.UpdateEscortState(escortNo, newState);
+            } catch (Exception e) {
+                // 异常日志
+                this.logger.info(String.format("更新异常，%s", e.getMessage()));
+            }
+
+            // 解锁日志
+            this.logger.info(String.format("解锁 %d", idx));
         }
     }
 
@@ -341,6 +362,11 @@ public class EscortController {
          * 任务即将处理的陪护证编号
          */
         private String escortNo = null;
+
+        /**
+         * 日志对象
+         */
+        private Logger logger = Logger.getLogger(MyTask.class.getName());
 
         /**
          * 构造函数
@@ -354,12 +380,28 @@ public class EscortController {
          */
         @Override
         public void run() {
+            // 记录日志
+            this.logger.info(String.format("开始更新陪护证 %s 的状态", this.escortNo));
+
             // 加陪护号锁
             var idx = Integer.valueOf(escortNo.substring(escortNo.length() - 2)) % escortNoLocks.size();
             var lock = escortNoLocks.get(idx);
+            this.logger.info(String.format("计算陪护证号锁编号为 %d", idx));
+
             synchronized (lock) {
+                // 加锁日志
+                this.logger.info(String.format("加锁 %d", idx));
+
                 // 执行更新服务
-                escortService.RefreshEscortState(escortNo);
+                try {
+                    escortService.RefreshEscortState(escortNo);
+                } catch (Exception e) {
+                    // 异常日志
+                    this.logger.info(String.format("更新异常，%s", e.getMessage()));
+                }
+
+                // 解锁日志
+                this.logger.info(String.format("解锁 %d", idx));
             }
 
             // 发令枪计时自减
