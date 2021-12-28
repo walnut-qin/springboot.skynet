@@ -203,7 +203,7 @@ public class EscortController {
     /**
      * 陪护证号锁
      */
-    private List<Object> escortNoLocks = new ArrayList<>() {
+    private final List<Object> escortNoLocks = new ArrayList<>() {
         {
             add(new Object());
             add(new Object());
@@ -221,7 +221,7 @@ public class EscortController {
     /**
      * 患者卡号锁
      */
-    private List<Object> patientLocks = new ArrayList<>() {
+    private final List<Object> patientLocks = new ArrayList<>() {
         {
             add(new Object());
             add(new Object());
@@ -239,7 +239,7 @@ public class EscortController {
     /**
      * 陪护人卡号锁
      */
-    private List<Object> helperLocks = new ArrayList<>() {
+    private final List<Object> helperLocks = new ArrayList<>() {
         {
             add(new Object());
             add(new Object());
@@ -257,7 +257,7 @@ public class EscortController {
     /**
      * 附件ID锁
      */
-    private List<Object> annexNoLocks = new ArrayList<>() {
+    private final List<Object> annexNoLocks = new ArrayList<>() {
         {
             add(new Object());
             add(new Object());
@@ -275,7 +275,7 @@ public class EscortController {
     /**
      * 定时任务处理线程池
      */
-    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 12, TimeUnit.MINUTES,
+    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 12, TimeUnit.MINUTES,
             new LinkedBlockingQueue<Runnable>());
 
     /**
