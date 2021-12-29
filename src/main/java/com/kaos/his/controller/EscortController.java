@@ -284,6 +284,26 @@ public class EscortController {
     private CountDownLatch countDownLatch = null;
 
     /**
+     * 将字符串转为锁索引
+     * 
+     * @param orgString
+     * @param lockSize
+     * @return
+     */
+    private Integer TransferToIndex(String orgString, Integer lockSize) {
+        // 剔除字符串中的非数字字符
+        String intStr = orgString.replaceAll("[^0-9]", "");
+        this.logger.info(String.format("剔除非数字字符，%s -> %s", orgString, intStr));
+
+        // 转换出索引
+        Integer idx = Integer.valueOf(intStr) % lockSize;
+        this.logger.info(String.format("计算索引，%s -> %d", intStr, idx));
+
+        // 响应索引号
+        return idx;
+    }
+
+    /**
      * 添加新的陪护证
      * 
      * @param escortNo
@@ -316,6 +336,46 @@ public class EscortController {
         }
 
         return GsonHelper.ToJson(recEscortCard);
+    }
+
+    /**
+     * 注册陪护证
+     * 
+     * @param patientCardNo 患者卡号
+     * @param helperCardNo  陪护人卡号
+     * @param operCode      操作员
+     * @return 陪护证实体json字符串
+     */
+    @RequestMapping(value = "escort/Register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String RegEscort(@RequestParam("patientCardNo") @NotEmpty(message = "患者卡号不能为空") String patientCardNo,
+            @RequestParam("helperCardNo") @NotEmpty(message = "陪护卡号不能为空") String helperCardNo,
+            @RequestParam("operCode") @NotEmpty(message = "操作员不能为空") String operCode) {
+        // 记录log
+        this.logger.info(String.format("登记陪护证 - patientCardNo(%s), helperCardNo(%s), operCode(%s)", patientCardNo,
+                helperCardNo, operCode));
+
+        // 声明陪护实体
+        EscortCard escortCard = null;
+
+        // 加锁 - 患者卡号
+        var patientLockIdx = this.TransferToIndex(patientCardNo, this.patientLocks.size());
+        this.logger.info(String.format("加锁 - patientLock(%d)", patientLockIdx));
+        synchronized (this.patientLocks.get(patientLockIdx)) {
+            // 加锁 - 陪护卡号
+            var helperLockIdx = this.TransferToIndex(helperCardNo, this.helperLocks.size());
+            this.logger.info(String.format("加锁 - helperLock(%d)", helperLockIdx));
+            synchronized (this.helperLocks.get(helperLockIdx)) {
+                // 注册陪护
+                escortCard = this.escortService.InsertEscort(patientCardNo, helperCardNo, operCode);
+            }
+            this.logger.info(String.format("解锁 - helperLock(%d)", helperLockIdx));
+        }
+        this.logger.info(String.format("解锁 - patientLock(%d)", patientLockIdx));
+
+        // 记录log
+        this.logger.info(String.format("登记陪护证成功(%s)", escortCard.escortNo));
+
+        return GsonHelper.ToJson(escortCard);
     }
 
     /**
