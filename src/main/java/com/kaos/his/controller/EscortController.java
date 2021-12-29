@@ -417,6 +417,29 @@ public class EscortController {
         }
     }
 
+    /**
+     * 更新陪护证状态
+     * 
+     * @param escortNo
+     * @return
+     */
+    @RequestMapping(value = "escort/updateState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void UpdateEscortState(@RequestParam("escortNo") @NotEmpty(message = "陪护证编号不能为空") String escortNo,
+            @RequestParam("newState") @NotEmpty(message = "状态枚举不能为空") EscortStateEnum newState,
+            @RequestParam("operCode") @NotEmpty(message = "操作员编码不能为空") String operCode) {
+        // 记录日志
+        this.logger.info(String.format("更新陪护证(%s)的状态为(%s)", escortNo, newState.getDescription()));
+
+        // 加陪护号锁
+        var lockIdx = this.TransferToIndex(escortNo, this.escortNoLocks.size());
+        this.logger.info(String.format("加锁 - 陪护证锁(%d)", lockIdx));
+        synchronized (this.escortNoLocks.get(lockIdx)) {
+            // 执行更新服务
+            this.escortService.UpdateEscortState(escortNo, newState, operCode);
+        }
+        this.logger.info(String.format("解锁 - 陪护证锁(%d)", lockIdx));
+    }
+
     class MyTask implements Runnable {
         /**
          * 任务即将处理的陪护证编号
@@ -443,15 +466,10 @@ public class EscortController {
             // 记录日志
             this.logger.info(String.format("开始更新陪护证 %s 的状态", this.escortNo));
 
-            // 加陪护号锁
-            var idx = Integer.valueOf(escortNo.substring(escortNo.length() - 2)) % escortNoLocks.size();
-            var lock = escortNoLocks.get(idx);
-            this.logger.info(String.format("计算陪护证号锁编号为 %d", idx));
-
-            synchronized (lock) {
-                // 加锁日志
-                this.logger.info(String.format("加锁 %d", idx));
-
+            // 加锁日志
+            var lockIdx = TransferToIndex(escortNo, escortNoLocks.size());
+            this.logger.info(String.format("加锁 - 陪护证号锁(%d)", lockIdx));
+            synchronized (escortNoLocks.get(lockIdx)) {
                 // 执行更新服务
                 try {
                     escortService.RefreshEscortState(escortNo);
@@ -459,10 +477,8 @@ public class EscortController {
                     // 异常日志
                     this.logger.info(String.format("更新异常，%s", e.getMessage()));
                 }
-
-                // 解锁日志
-                this.logger.info(String.format("解锁 %d", idx));
             }
+            this.logger.info(String.format("解锁 - 陪护证号锁(%d)", lockIdx));
 
             // 发令枪计时自减
             if (countDownLatch != null) {
