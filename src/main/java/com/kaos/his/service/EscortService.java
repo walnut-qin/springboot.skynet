@@ -234,6 +234,7 @@ public class EscortService {
                     escortNo = targetEscortNo;
                     state = realState;
                     operDate = new Date();
+                    operCode = "server";
                     remark = "探测到陪护证状态变更，自动更新。";
                 }
             };
@@ -246,9 +247,10 @@ public class EscortService {
      * 
      * @param escortNo
      * @param newState
+     * @param operCode
      */
     @Transactional
-    public void UpdateEscortState(String targetEscortNo, EscortStateEnum newState) {
+    public void UpdateEscortState(String targetEscortNo, EscortStateEnum newState, String targetOperCode) {
         if (targetEscortNo == null || newState == null) {
             throw new RuntimeException("陪护证号和状态不能为空");
         }
@@ -259,6 +261,7 @@ public class EscortService {
                 escortNo = targetEscortNo;
                 state = newState;
                 operDate = new Date();
+                operCode = targetOperCode;
                 remark = "收到更新状态请求";
             }
         };
@@ -477,7 +480,7 @@ public class EscortService {
      * @param escortCard
      */
     @Transactional
-    public EscortCard InsertEscort(String patientCardNo, String helperCardNo) {
+    public EscortCard InsertEscort(String patientCardNo, String helperCardNo, String operCode) {
         // 查询住院证
         var preinCard = this.preinCardMapper.QueryLatestPreinCard(patientCardNo);
 
@@ -513,6 +516,7 @@ public class EscortService {
             // 获取实时最新状态
             newEscortState.state = this.JudgeRealState(newEscortCard.escortNo);
             newEscortState.operDate = new Date();
+            newEscortState.operCode = operCode;
             newEscortState.remark = "添加陪护证，初始状态";
         }
         this.escortCardStateMapper.InsertEscortCardState(newEscortState);
