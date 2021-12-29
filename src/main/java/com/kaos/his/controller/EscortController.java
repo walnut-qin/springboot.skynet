@@ -356,7 +356,7 @@ public class EscortController {
      * @param operCode      操作员
      * @return 陪护证实体json字符串
      */
-    @RequestMapping(value = "escort/Register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "escort/register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String RegEscort(@RequestParam("patientCardNo") @NotEmpty(message = "患者卡号不能为空") String patientCardNo,
             @RequestParam("helperCardNo") @NotEmpty(message = "陪护卡号不能为空") String helperCardNo,
             @RequestParam("operCode") @NotEmpty(message = "操作员不能为空") String operCode) {
