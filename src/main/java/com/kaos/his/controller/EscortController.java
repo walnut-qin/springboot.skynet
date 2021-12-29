@@ -341,7 +341,7 @@ public class EscortController {
             var helperLock = this.patientLocks.get(helperIdx);
             synchronized (helperLock) {
                 // 添加陪护
-                recEscortCard = this.escortService.InsertEscort(patientCardNo, helperCardNo, null);
+                recEscortCard = this.escortService.InsertEscort(patientCardNo, helperCardNo, "Default");
             }
         }
 
@@ -416,7 +416,7 @@ public class EscortController {
 
             // 执行更新服务
             try {
-                this.escortService.UpdateEscortState(escortNo, newState, null);
+                this.escortService.UpdateEscortState(escortNo, newState, "Default");
             } catch (Exception e) {
                 // 异常日志
                 this.logger.info(String.format("更新异常，%s", e.getMessage()));
