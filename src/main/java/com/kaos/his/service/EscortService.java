@@ -424,7 +424,7 @@ public class EscortService {
 
                 // 若最近的一张已注销，判断间隔时间
                 var offset = new Date().getTime() - ListHelper.GetLast(states).operDate.getTime();
-                if (offset <= millionsecond) {
+                if (offset > 0 && offset <= millionsecond) {
                     Integer leftM = (int) Math.ceil((millionsecond - offset) / 1000.00 / 60.00);
                     Integer leftH = leftM / 60;
                     leftM %= 60;
