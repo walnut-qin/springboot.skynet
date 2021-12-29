@@ -48,7 +48,7 @@
             AND ITEM_CODE = #{itemCode}
             AND TRANS_TYPE = '1'
             AND PAY_FLAG = '1'
-            AND CANCEL_FALG = '1'
+            AND CANCEL_FLAG = '1'
         ORDER BY
             OPER_DATE
     </select>
