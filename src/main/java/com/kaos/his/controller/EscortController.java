@@ -414,7 +414,7 @@ public class EscortController {
     /**
      * 定期自动更新陪护证状态
      */
-    @Scheduled(initialDelay = 10 * 60 * 1000, fixedDelay = 10 * 60 * 1000)
+    @Scheduled(initialDelay = 1 * 1000, fixedDelay = 10 * 60 * 1000)
     public void AutoUpdateEscortState() {
         // 获取日志工具
         var logger = Logger.getLogger(EscortController.class.getName());

@@ -45,6 +45,7 @@
             XYHIS.FIN_OPB_FEEDETAIL
         WHERE
             CARD_NO = #{cardNo}
+            AND ITEM_CODE = #{itemCode}
             AND OPER_DATE = (
                 SELECT
                     MAX(OPER_DATE)

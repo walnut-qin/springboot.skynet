@@ -1,5 +1,6 @@
 package com.kaos.his.controller;
 
+import com.kaos.his.service.EscortService;
 import com.kaos.his.service.TestService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,13 @@ public class TestController {
     @Autowired
     TestService testService;
 
+    @Autowired
+    EscortService escortService;
+
     @ResponseBody
     @RequestMapping(value = "test", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String Run(@RequestParam("param") String param) {
+        this.escortService.RefreshEscortState("0000000103");
         return "测试结束";
     }
 }
