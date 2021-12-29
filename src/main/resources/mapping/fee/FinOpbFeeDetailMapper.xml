@@ -38,7 +38,7 @@
     </select>
 
     <!-- 接口2 -->
-    <select id="QueryLastFinOpbFeeDetail" resultMap="map">
+    <select id="QueryPatientFinOpbFeeDetail" resultMap="map">
         SELECT
         <include refid="allItem"/>
         FROM
@@ -46,13 +46,10 @@
         WHERE
             CARD_NO = #{cardNo}
             AND ITEM_CODE = #{itemCode}
-            AND OPER_DATE = (
-                SELECT
-                    MAX(OPER_DATE)
-                FROM
-                    XYHIS.FIN_OPB_FEEDETAIL
-                WHERE
-                    CARD_NO = #{cardNo}
-            )
+            AND TRANS_TYPE = '1'
+            AND PAY_FLAG = '1'
+            AND CANCEL_FALG = '1'
+        ORDER BY
+            OPER_DATE
     </select>
 </mapper>

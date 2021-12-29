@@ -189,10 +189,13 @@ public class EscortService {
         }
 
         // 优先级5-1：判断免费核酸划价记录
-        var feeDetail = this.finOpbFeeDetailMapper.QueryLastFinOpbFeeDetail(escortCard.helperCardNo, "F00000068231");
-        if (feeDetail != null && (new Date().getTime() - feeDetail.operDate.getTime() <= 7 * 24 * 60 * 60 * 1000)) {
-            // 有7日内的免费核酸划价
-            return EscortStateEnum.等待院内核酸检测结果;
+        var feeDetails = this.finOpbFeeDetailMapper.QueryPatientFinOpbFeeDetail(escortCard.helperCardNo,
+                "F00000068231");
+        if (feeDetails != null && !feeDetails.isEmpty()) {
+            if (new Date().getTime() - ListHelper.GetLast(feeDetails).operDate.getTime() <= 7 * 24 * 60 * 60 * 1000) {
+                // 有7日内的免费核酸划价
+                return EscortStateEnum.等待院内核酸检测结果;
+            }
         }
 
         // 优先级5：判断院内核酸医嘱

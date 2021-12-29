@@ -1,5 +1,7 @@
 package com.kaos.his.mapper.fee;
 
+import java.util.List;
+
 import com.kaos.his.entity.fee.FinOpbFeeDetail;
 import com.kaos.his.enums.TransTypeEnum;
 
@@ -22,5 +24,5 @@ public interface FinOpbFeeDetailMapper {
      * @param cardNo
      * @return
      */
-    FinOpbFeeDetail QueryLastFinOpbFeeDetail(String cardNo, String itemCode);
+    List<FinOpbFeeDetail> QueryPatientFinOpbFeeDetail(String cardNo, String itemCode);
 }
