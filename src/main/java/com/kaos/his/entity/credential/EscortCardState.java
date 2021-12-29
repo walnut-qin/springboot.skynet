@@ -29,6 +29,11 @@ public class EscortCardState {
     public Date operDate = null;
 
     /**
+     * 操作员
+     */
+    public String operCode = null;
+
+    /**
      * 备注
      */
     public String remark = null;
