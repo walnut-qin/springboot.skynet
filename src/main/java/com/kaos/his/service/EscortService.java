@@ -171,6 +171,14 @@ public class EscortService {
             case 出院结算:
                 return EscortStateEnum.注销;
 
+            case 出院登记:
+                // 办理出院登记12小时后自动失效
+                var offset = new Date().getTime() - relateInpatient.outDate.getTime();
+                if (offset > 12 * 60 * 60 * 1000) {
+                    return EscortStateEnum.注销;
+                }
+                break;
+
             default:
                 break;
             }
