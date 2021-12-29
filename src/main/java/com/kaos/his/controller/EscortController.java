@@ -215,6 +215,16 @@ public class EscortController {
             add(new Object());
             add(new Object());
             add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
         }
     };
 
@@ -275,7 +285,7 @@ public class EscortController {
     /**
      * 定时任务处理线程池
      */
-    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 12, TimeUnit.MINUTES,
+    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(20, 20, 12, TimeUnit.MINUTES,
             new LinkedBlockingQueue<Runnable>());
 
     /**
@@ -296,11 +306,11 @@ public class EscortController {
         this.logger.info(String.format("剔除非数字字符，%s -> %s", orgString, intStr));
 
         // 转换出索引
-        Integer idx = Integer.valueOf(intStr) % lockSize;
+        var idx = Long.valueOf(intStr) % lockSize;
         this.logger.info(String.format("计算索引，%s -> %d", intStr, idx));
 
         // 响应索引号
-        return idx;
+        return (int) idx;
     }
 
     /**
