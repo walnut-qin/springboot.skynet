@@ -695,7 +695,7 @@ public class EscortController {
      * @param deptCode
      * @return
      */
-    @RequestMapping(value = "queryUncheckEscortAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "escort/queryUncheckedAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String QueryUncheckEscortAnnex(@RequestParam("deptCode") String deptCode) {
         // 入参检查
         if (deptCode == null) {
@@ -730,7 +730,7 @@ public class EscortController {
      * @param deptCode
      * @return
      */
-    @RequestMapping(value = "queryCheckEscortAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "escort/queryCheckedAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String QueryCheckEscortAnnex(@RequestParam("deptCode") String deptCode) {
         // 入参检查
         if (deptCode == null) {
@@ -769,7 +769,7 @@ public class EscortController {
      * @param negative
      * @param execDate
      */
-    @RequestMapping(value = "CheckEscortAnnex", method = RequestMethod.GET)
+    @RequestMapping(value = "escort/checkAnnex", method = RequestMethod.GET)
     public void CheckEscortAnnex(@NotEmpty(message = "附件编号不能为空") @RequestParam("annexNo") String annexNo,
             @NotEmpty(message = "操作员不能为空") @RequestParam("operCode") String operCode,
             @NotNull(message = "审核结果不能为空") @RequestParam("negative") Boolean negative,
