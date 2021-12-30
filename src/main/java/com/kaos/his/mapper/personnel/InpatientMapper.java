@@ -32,4 +32,12 @@ public interface InpatientMapper {
      * @return 住院患者实体
      */
     List<Inpatient> QueryInpatients(String cardNo);
+
+    /**
+     * 查询指定科室的住院患者
+     * 
+     * @param deptCode
+     * @return
+     */
+    List<Inpatient> QueryDeptInpatients(String deptCode);
 }

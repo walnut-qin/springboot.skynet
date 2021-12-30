@@ -55,6 +55,18 @@
         </where>
     </select>
 
+    <!-- 接口4 -->
+    <select id="QueryDeptInpatients" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            FIN_IPR_INMAININFO T1
+            LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO AND T2.IS_VALID = '1'
+        WHERE
+            T1.DEPT_CODE = #{deptCode}
+            AND T1.IN_STATE IN ('R', 'I')
+    </select>
+
     <!-- 所有字段 -->
     <sql id="allItem">
         T1.PATIENT_NO AS PATIENT_NO,
