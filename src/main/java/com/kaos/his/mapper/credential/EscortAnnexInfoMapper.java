@@ -25,12 +25,12 @@ public interface EscortAnnexInfoMapper {
     List<EscortAnnexInfo> QueryUncheckedEscortAnnexInfos(String cardNo);
 
     /**
-     * 查询某个科室下所有未审核的结果
+     * 查询某位患者已审核的附件
      * 
-     * @param deptCode
+     * @param cardNo
      * @return
      */
-    List<EscortAnnexInfo> QueryAllUncheckedEscortAnnexInfos();
+    List<EscortAnnexInfo> QueryCheckedEscortAnnexInfos(String cardNo);
 
     /**
      * 插入新纪录

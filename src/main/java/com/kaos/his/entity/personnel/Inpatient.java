@@ -34,4 +34,9 @@ public class Inpatient extends Deptpatient {
      * 出院日期
      */
     public Date outDate;
+
+    /**
+     * 住院证编号
+     */
+    public Integer happenNo = null;
 }

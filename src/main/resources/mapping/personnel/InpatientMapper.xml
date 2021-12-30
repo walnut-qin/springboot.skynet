@@ -8,6 +8,7 @@
         <result column="BED_NO" jdbcType="VARCHAR" property="bedNo"/>
         <result column="IN_DATE" jdbcType="VARCHAR" property="inDate"/>
         <result column="OUT_DATE" jdbcType="VARCHAR" property="outDate"/>
+        <result column="HAPPEN_NO" jdbcType="VARCHAR" property="happenNo"/>
     </resultMap>
 
     <!-- 接口1 -->
@@ -75,6 +76,7 @@
         T1.BED_NO AS BED_NO,
         T1.IN_DATE AS IN_DATE,
         T1.OUT_DATE AS OUT_DATE,
+        T1.HAPPEN_NO AS HAPPEN_NO,
         <include refid="deptpatientItem"/>
     </sql>
 
