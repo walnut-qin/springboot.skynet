@@ -572,6 +572,11 @@ public class EscortService {
 
         // 轮训所有在院患者
         for (Inpatient inpatient : inpatients) {
+            // 无住院证的患者不处理
+            if (inpatient.happenNo == null) {
+                continue;
+            }
+
             // 查询患者关联的所有陪护证
             var escorts = this.escortCardMapper.QueryPatientRegisteredEscortCards(inpatient.cardNo, inpatient.happenNo);
 
