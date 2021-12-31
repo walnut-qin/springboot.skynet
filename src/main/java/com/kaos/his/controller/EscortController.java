@@ -459,11 +459,20 @@ public class EscortController {
             patientInfo.sex = escort.preinCard.patient.sex;
             patientInfo.age = DateHelper.GetAgeDetail(escort.preinCard.patient.birthday);
             if (escort.preinCard.patient instanceof Inpatient) {
-                patientInfo.deptName = ((Inpatient) escort.preinCard.patient).dept.name;
-                patientInfo.bedNo = ((Inpatient) escort.preinCard.patient).bedNo;
-                patientInfo.patientNo = ((Inpatient) escort.preinCard.patient).patientNo;
+                var inpatient = (Inpatient) escort.preinCard.patient;
+                if (inpatient.dept == null) {
+                    patientInfo.deptName = inpatient.dept.name;
+                } else {
+                    patientInfo.deptName = inpatient.deptCode;
+                }
+                patientInfo.bedNo = inpatient.bedNo;
+                patientInfo.patientNo = inpatient.patientNo;
             } else {
-                patientInfo.deptName = escort.preinCard.preDept.name;
+                if (escort.preinCard.preDept == null) {
+                    patientInfo.deptName = escort.preinCard.preDeptCode;
+                } else {
+                    patientInfo.deptName = escort.preinCard.preDept.name;
+                }
                 patientInfo.bedNo = escort.preinCard.preBedNo;
                 patientInfo.patientNo = null;
             }
