@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseEntity<String> exceptionHandler(HttpServletRequest req, Exception e) {
         // 记录异常日志
-        logger.info(e.getMessage());
+        logger.error(e.getMessage());
 
         // 构造响应
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();

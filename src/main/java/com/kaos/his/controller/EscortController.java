@@ -376,35 +376,42 @@ public class EscortController {
      * @return 陪护证实体json字符串
      */
     @RequestMapping(value = "escort/register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String RegEscort(@RequestParam("patientCardNo") @NotEmpty(message = "患者卡号不能为空") String patientCardNo,
-            @RequestParam("helperCardNo") @NotEmpty(message = "陪护卡号不能为空") String helperCardNo,
-            @RequestParam("operCode") @NotEmpty(message = "操作员不能为空") String operCode) {
-        // 记录log
-        this.logger.info(String.format("登记陪护证 - patientCardNo(%s), helperCardNo(%s), operCode(%s)", patientCardNo,
-                helperCardNo, operCode));
-
-        // 声明陪护实体
-        EscortCard escortCard = null;
-
-        // 加锁 - 患者卡号
-        var patientLockIdx = this.TransferToIndex(patientCardNo, this.patientLocks.size());
-        this.logger.info(String.format("加锁 - patientLock(%d)", patientLockIdx));
-        synchronized (this.patientLocks.get(patientLockIdx)) {
-            // 加锁 - 陪护卡号
-            var helperLockIdx = this.TransferToIndex(helperCardNo, this.helperLocks.size());
-            this.logger.info(String.format("加锁 - helperLock(%d)", helperLockIdx));
-            synchronized (this.helperLocks.get(helperLockIdx)) {
-                // 注册陪护
-                escortCard = this.escortService.InsertEscort(patientCardNo, helperCardNo, operCode);
-            }
-            this.logger.info(String.format("解锁 - helperLock(%d)", helperLockIdx));
+    public String Register(@RequestParam("patientCardNo") String patientCardNo,
+            @RequestParam("helperCardNo") String helperCardNo, @RequestParam("operCode") String operCode) {
+        // 入参检查
+        if (patientCardNo == null || patientCardNo.length() != 10) {
+            throw new RuntimeException("患者卡号长度异常");
+        } else if (helperCardNo == null || helperCardNo.length() != 10) {
+            throw new RuntimeException("患者卡号长度异常");
+        } else if (operCode == null || operCode.isEmpty()) {
+            throw new RuntimeException("操作员编码不能为空");
         }
-        this.logger.info(String.format("解锁 - patientLock(%d)", patientLockIdx));
 
-        // 记录log
-        this.logger.info(String.format("登记陪护证成功(%s)", escortCard.escortNo));
+        // 业务日志
+        this.logger.info(String.format("登记陪护证(patient = %s, helper = %s, operCode = %s)", patientCardNo, helperCardNo,
+                operCode));
 
-        return GsonHelper.ToJson(escortCard);
+        // 计算患者卡号锁
+        var patientLockIdx = this.TransferToIndex(patientCardNo, this.patientLocks.size());
+        try {
+            this.logger.info(String.format("加锁 - patientLock(%d)", patientLockIdx));
+            synchronized (this.patientLocks.get(patientLockIdx)) {
+                // 计算陪护卡号锁
+                var helperLockIdx = this.TransferToIndex(helperCardNo, this.helperLocks.size());
+                try {
+                    this.logger.info(String.format("加锁 - helperLock(%d)", helperLockIdx));
+
+                    // 执行业务逻辑
+                    var escortCard = this.escortService.InsertEscort(patientCardNo, helperCardNo, operCode);
+
+                    return GsonHelper.ToJson(escortCard);
+                } finally {
+                    this.logger.info(String.format("解锁 - helperLock(%d)", helperLockIdx));
+                }
+            }
+        } finally {
+            this.logger.info(String.format("解锁 - patientLock(%d)", patientLockIdx));
+        }
     }
 
     /**
@@ -515,6 +522,7 @@ public class EscortController {
 
     /**
      * 记录陪护证行为
+     * 
      * @param escortNo
      * @param action
      */
