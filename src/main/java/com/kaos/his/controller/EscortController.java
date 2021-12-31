@@ -16,6 +16,7 @@ import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.EscortCardAction;
 import com.kaos.his.entity.credential.EscortCardState;
 import com.kaos.his.entity.personnel.Inpatient;
+import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.SexEnum;
 import com.kaos.his.service.EscortService;
@@ -236,9 +237,9 @@ public class EscortController {
     }
 
     /**
-     * 陪护证号锁
+     * 陪护证状态锁
      */
-    private final List<Object> escortNoLocks = new ArrayList<>() {
+    private final List<Object> escortStateLocks = new ArrayList<>() {
         {
             add(new Object());
             add(new Object());
@@ -250,6 +251,24 @@ public class EscortController {
             add(new Object());
             add(new Object());
             add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+            add(new Object());
+        }
+    };
+
+    /**
+     * 陪护证行为锁
+     */
+    private final List<Object> escortActionLocks = new ArrayList<>() {
+        {
             add(new Object());
             add(new Object());
             add(new Object());
@@ -349,41 +368,6 @@ public class EscortController {
     }
 
     /**
-     * 添加新的陪护证
-     * 
-     * @param escortNo
-     * @return
-     */
-    @RequestMapping(value = "regEscort", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String RegEscort(@RequestParam("patientCardNo") String patientCardNo,
-            @RequestParam("helperCardNo") String helperCardNo) {
-        // 入参判断
-        if (patientCardNo == null || patientCardNo.isEmpty()) {
-            throw new InvalidParameterException("患者号不能为空");
-        } else if (helperCardNo == null || helperCardNo.isEmpty()) {
-            throw new InvalidParameterException("陪护号不能为空");
-        }
-
-        // 声明陪护实体
-        EscortCard recEscortCard = null;
-
-        // 加患者锁
-        var patientIdx = Integer.valueOf(patientCardNo.substring(patientCardNo.length() - 2)) % patientLocks.size();
-        var patientLock = this.patientLocks.get(patientIdx);
-        synchronized (patientLock) {
-            // 加陪护锁
-            var helperIdx = Integer.valueOf(helperCardNo.substring(helperCardNo.length() - 2)) % helperLocks.size();
-            var helperLock = this.patientLocks.get(helperIdx);
-            synchronized (helperLock) {
-                // 添加陪护
-                recEscortCard = this.escortService.InsertEscort(patientCardNo, helperCardNo, "Default");
-            }
-        }
-
-        return GsonHelper.ToJson(recEscortCard);
-    }
-
-    /**
      * 注册陪护证
      * 
      * @param patientCardNo 患者卡号
@@ -429,45 +413,6 @@ public class EscortController {
      * @param escortNo
      * @return
      */
-    @RequestMapping(value = "updateEscortState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void UpdateEscortState(@RequestParam("escortNo") String escortNo,
-            @RequestParam("newState") EscortStateEnum newState) {
-        // 入参检查
-        if (escortNo == null || escortNo.isEmpty()) {
-            throw new InvalidParameterException("陪护证号不能为空");
-        }
-
-        // 记录日志
-        this.logger.info(String.format("开始更新陪护证 %s 的状态", escortNo));
-
-        // 加陪护号锁
-        var idx = Integer.valueOf(escortNo.substring(escortNo.length() - 2)) % escortNoLocks.size();
-        var lock = this.escortNoLocks.get(idx);
-        this.logger.info(String.format("计算陪护证号锁编号为 %d", idx));
-
-        synchronized (lock) {
-            // 加锁日志
-            this.logger.info(String.format("加锁 %d", idx));
-
-            // 执行更新服务
-            try {
-                this.escortService.UpdateEscortState(escortNo, newState, "Default");
-            } catch (Exception e) {
-                // 异常日志
-                this.logger.info(String.format("更新异常，%s", e.getMessage()));
-            }
-
-            // 解锁日志
-            this.logger.info(String.format("解锁 %d", idx));
-        }
-    }
-
-    /**
-     * 更新陪护证状态
-     * 
-     * @param escortNo
-     * @return
-     */
     @RequestMapping(value = "escort/updateState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void UpdateEscortState(@RequestParam("escortNo") @NotEmpty(message = "陪护证编号不能为空") String escortNo,
             @RequestParam("newState") @NotEmpty(message = "状态枚举不能为空") EscortStateEnum newState,
@@ -475,14 +420,14 @@ public class EscortController {
         // 记录日志
         this.logger.info(String.format("更新陪护证(%s)的状态为(%s)", escortNo, newState.getDescription()));
 
-        // 加陪护号锁
-        var lockIdx = this.TransferToIndex(escortNo, this.escortNoLocks.size());
-        this.logger.info(String.format("加锁 - 陪护证锁(%d)", lockIdx));
-        synchronized (this.escortNoLocks.get(lockIdx)) {
+        // 加陪护证状态锁
+        var lockIdx = this.TransferToIndex(escortNo, this.escortStateLocks.size());
+        this.logger.info(String.format("加锁 - 陪护证状态锁(%d)", lockIdx));
+        synchronized (this.escortStateLocks.get(lockIdx)) {
             // 执行更新服务
             this.escortService.UpdateEscortState(escortNo, newState, operCode);
         }
-        this.logger.info(String.format("解锁 - 陪护证锁(%d)", lockIdx));
+        this.logger.info(String.format("解锁 - 陪护证状态锁(%d)", lockIdx));
     }
 
     class MyTask implements Runnable {
@@ -512,9 +457,9 @@ public class EscortController {
             this.logger.info(String.format("开始更新陪护证 %s 的状态", this.escortNo));
 
             // 加锁日志
-            var lockIdx = TransferToIndex(escortNo, escortNoLocks.size());
-            this.logger.info(String.format("加锁 - 陪护证号锁(%d)", lockIdx));
-            synchronized (escortNoLocks.get(lockIdx)) {
+            var lockIdx = TransferToIndex(escortNo, escortStateLocks.size());
+            this.logger.info(String.format("加锁 - 陪护证状态锁(%d)", lockIdx));
+            synchronized (escortStateLocks.get(lockIdx)) {
                 // 执行更新服务
                 try {
                     escortService.RefreshEscortState(escortNo);
@@ -523,7 +468,7 @@ public class EscortController {
                     this.logger.info(String.format("更新异常，%s", e.getMessage()));
                 }
             }
-            this.logger.info(String.format("解锁 - 陪护证号锁(%d)", lockIdx));
+            this.logger.info(String.format("解锁 - 陪护证状态锁(%d)", lockIdx));
 
             // 发令枪计时自减
             if (countDownLatch != null) {
@@ -533,9 +478,7 @@ public class EscortController {
     }
 
     /**
-     * 刷新现存有效陪护证状态
-     * 工作实践业务量巨大，15分钟刷新一次
-     * 下班后业务量减少，减少刷新频次
+     * 刷新现存有效陪护证状态 工作实践业务量巨大，15分钟刷新一次 下班后业务量减少，减少刷新频次
      */
     @Scheduled(cron = "0 0 0,4,12,13,18,19,22 * * ?")
     @Scheduled(cron = "0 0/15 8-11,14-17 * * ?")
@@ -568,6 +511,33 @@ public class EscortController {
         // 记录日志
         var endDate = new Date();
         logger.info(String.format("<< 实际更新 %d，耗时 %d ms", escortCards.size(), endDate.getTime() - beginDate.getTime()));
+    }
+
+    /**
+     * 记录陪护证行为
+     * @param escortNo
+     * @param action
+     */
+    @RequestMapping(value = "escort/recordAction", method = RequestMethod.GET)
+    public void RecordAction(@RequestParam("escortNo") String escortNo,
+            @RequestParam("action") EscortActionEnum action) {
+        // 入参检查
+        if (escortNo == null || escortNo.isEmpty()) {
+            throw new RuntimeException("陪护证编号不能为空");
+        } else if (action == null) {
+            throw new RuntimeException("动作枚举不能为空");
+        }
+
+        // 计算陪护证行为所
+        var idx = this.TransferToIndex(escortNo, this.escortActionLocks.size());
+        try {
+            this.logger.info(String.format("加锁 - 陪护证行为锁(%d)", idx));
+            synchronized (this.escortActionLocks.get(idx)) {
+                this.escortService.AppendEscortAction(escortNo, action);
+            }
+        } finally {
+            this.logger.info(String.format("解锁 - 陪护证行为锁(%d)", idx));
+        }
     }
 
     /**

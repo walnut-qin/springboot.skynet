@@ -10,11 +10,13 @@ import java.util.List;
 import com.kaos.his.entity.credential.EscortAnnexCheck;
 import com.kaos.his.entity.credential.EscortAnnexInfo;
 import com.kaos.his.entity.credential.EscortCard;
+import com.kaos.his.entity.credential.EscortCardAction;
 import com.kaos.his.entity.credential.EscortCardState;
 import com.kaos.his.entity.credential.EscortVip;
 import com.kaos.his.entity.credential.PreinCard;
 import com.kaos.his.entity.personnel.Inpatient;
 import com.kaos.his.entity.personnel.Patient;
+import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.PreinCardStateEnum;
 import com.kaos.his.mapper.config.VariableMapper;
@@ -281,6 +283,29 @@ public class EscortService {
 
         // 执行插入操作
         this.escortCardStateMapper.InsertEscortCardState(newEscortState);
+    }
+
+    /**
+     * 尾部添加一条行为记录
+     * 
+     * @param iEscortNo
+     * @param iAction
+     */
+    @Transactional
+    public void AppendEscortAction(String iEscortNo, EscortActionEnum iAction) {
+        // 构造新的行为实体
+        var actionItem = new EscortCardAction() {
+            {
+                escortNo = iEscortNo;
+                recNo = null;
+                action = iAction;
+                operDate = new Date();
+                remark = "收到记录行为请求";
+            }
+        };
+
+        // 执行插入操作
+        this.escortCardActionMapper.InsertEscortCardAction(actionItem);
     }
 
     /**
