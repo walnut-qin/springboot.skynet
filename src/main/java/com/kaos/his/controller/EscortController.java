@@ -47,31 +47,6 @@ public class EscortController {
     private Logger logger = Logger.getLogger(EscortController.class.getName());
 
     /**
-     * QueryEscortState的响应体
-     */
-    class QueryEscortState_RspBody {
-        /**
-         * 陪护人卡号
-         */
-        public String escortCardNo = null;
-
-        /**
-         * 患者卡号
-         */
-        public String patientCardNo = null;
-
-        /**
-         * 姓名
-         */
-        public Date regDate = null;
-
-        /**
-         * 状态
-         */
-        public EscortStateEnum state = null;
-    }
-
-    /**
      * QueryHelper的响应体
      */
     class QueryActiveHelper_RspBody {
@@ -481,6 +456,60 @@ public class EscortController {
         }
     }
 
+    /**
+     * 获取陪护证状态
+     * 
+     * @param escortNo
+     * @return
+     */
+    @RequestMapping(value = "queryEscortState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String QueryState(@RequestParam("escortNo") String escortNo) {
+        // 入参检查
+        if (escortNo == null || escortNo.isEmpty()) {
+            throw new RuntimeException("陪护证号不能为空");
+        }
+
+        // 业务日志
+        this.logger.info(String.format("查询陪护证状态(escortNo = %s)", escortNo));
+
+        // 提取指定陪护证
+        var escort = this.escortService.QueryEscort(escortNo);
+
+        // 创建响应实体
+        var rspBody = new QueryState_RspBody();
+        rspBody.escortCardNo = escort.helperCardNo;
+        rspBody.patientCardNo = escort.patientCardNo;
+        rspBody.regDate = escort.states.get(0).operDate;
+        rspBody.state = ListHelper.GetLast(escort.states).state;
+
+        return GsonHelper.ToJson(rspBody);
+    }
+
+    /**
+     * 响应体
+     */
+    class QueryState_RspBody {
+        /**
+         * 陪护人卡号
+         */
+        public String escortCardNo = null;
+
+        /**
+         * 患者卡号
+         */
+        public String patientCardNo = null;
+
+        /**
+         * 姓名
+         */
+        public Date regDate = null;
+
+        /**
+         * 状态
+         */
+        public EscortStateEnum state = null;
+    }
+
     class MyTask implements Runnable {
         /**
          * 任务即将处理的陪护证编号
@@ -562,30 +591,6 @@ public class EscortController {
         // 记录日志
         var endDate = new Date();
         logger.info(String.format("<< 实际更新 %d，耗时 %d ms", escortCards.size(), endDate.getTime() - beginDate.getTime()));
-    }
-
-    /**
-     * 获取陪护证状态
-     * 
-     * @param escortNo
-     * @return
-     */
-    @RequestMapping(value = "queryEscortState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String QueryEscortState(@RequestParam("escortNo") String escortNo) {
-        // 提取指定陪护证
-        var escort = this.escortService.QueryEscort(escortNo);
-        if (escort == null) {
-            throw new RuntimeException("未查询到陪护证");
-        }
-
-        // 创建响应实体
-        var rspBody = new QueryEscortState_RspBody();
-        rspBody.escortCardNo = escort.helperCardNo;
-        rspBody.patientCardNo = escort.patientCardNo;
-        rspBody.regDate = escort.states.get(0).operDate;
-        rspBody.state = ListHelper.GetLast(escort.states).state;
-
-        return GsonHelper.ToJson(rspBody);
     }
 
     /**

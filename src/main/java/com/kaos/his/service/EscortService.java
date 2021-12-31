@@ -317,7 +317,7 @@ public class EscortService {
     public EscortCard QueryEscort(String escortNo) {
         var escortCard = this.escortCardMapper.QueryEscortCard(escortNo);
         if (escortCard == null) {
-            return null;
+            throw new RuntimeException(String.format("未查询到陪护证(escortNo = %s)", escortNo));
         }
 
         // 获取状态
