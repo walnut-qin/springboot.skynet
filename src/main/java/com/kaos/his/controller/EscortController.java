@@ -9,9 +9,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import com.kaos.his.entity.credential.EscortCard;
 import com.kaos.his.entity.credential.EscortCardAction;
 import com.kaos.his.entity.credential.EscortCardState;
@@ -625,6 +622,45 @@ public class EscortController {
         this.escortService.AttachAnnex(helperCardNo, picUrl);
     }
 
+    /**
+     * 审核附件
+     * 
+     * @param annexNo
+     * @param operCode
+     * @param negative
+     * @param execDate
+     */
+    @RequestMapping(value = "escort/checkAnnex", method = RequestMethod.GET)
+    public void CheckEscortAnnex(@RequestParam("annexNo") String annexNo, @RequestParam("operCode") String operCode,
+            @RequestParam("negative") Boolean negative, @RequestParam("execDate") Date execDate) {
+        // 入参检查
+        if (annexNo == null || annexNo.isEmpty()) {
+            throw new InvalidParameterException("附件号不能为空");
+        } else if (operCode == null || operCode.isEmpty()) {
+            throw new InvalidParameterException("操作员不能为空");
+        } else if (negative == null) {
+            throw new InvalidParameterException("审核结果不能为空");
+        } else if (execDate == null) {
+            throw new InvalidParameterException("核酸检测时间不能为空");
+        }
+
+        // 业务日志
+        this.logger.info(String.format("审核附件(annexNo = %s, operCode = %s, negative = %s, execDate = %s)", annexNo,
+                operCode, negative.toString(), execDate.toString()));
+
+        // 计算附件编号锁
+        var idx = this.TransferToIndex(annexNo, this.annexNoLocks.size());
+        try {
+            this.logger.info(String.format("加锁 - 附件ID锁", idx));
+            synchronized (this.annexNoLocks.get(idx)) {
+                // 执行更新服务
+                this.escortService.CheckAnnexInfo(annexNo, operCode, negative, execDate);
+            }
+        } finally {
+            this.logger.info(String.format("解锁 - 附件ID锁", idx));
+        }
+    }
+
     class MyTask implements Runnable {
         /**
          * 任务即将处理的陪护证编号
@@ -778,27 +814,5 @@ public class EscortController {
         }
 
         return GsonHelper.ToJson(rspBody);
-    }
-
-    /**
-     * 审核附件
-     * 
-     * @param annexNo
-     * @param operCode
-     * @param negative
-     * @param execDate
-     */
-    @RequestMapping(value = "escort/checkAnnex", method = RequestMethod.GET)
-    public void CheckEscortAnnex(@NotEmpty(message = "附件编号不能为空") @RequestParam("annexNo") String annexNo,
-            @NotEmpty(message = "操作员不能为空") @RequestParam("operCode") String operCode,
-            @NotNull(message = "审核结果不能为空") @RequestParam("negative") Boolean negative,
-            @NotNull(message = "核酸检测日期不能为空") @RequestParam("execDate") Date execDate) {
-        // 加附件号锁
-        var idx = Integer.valueOf(annexNo.substring(annexNo.length() - 2)) % annexNoLocks.size();
-        var lock = this.annexNoLocks.get(idx);
-        synchronized (lock) {
-            // 执行更新服务
-            this.escortService.CheckAnnexInfo(annexNo, operCode, negative, execDate);
-        }
     }
 }
