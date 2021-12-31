@@ -69,41 +69,6 @@ public class EscortController {
     }
 
     /**
-     * QueryUncheckEscortAnnex响应体
-     */
-    class QueryCheckEscortAnnex_RspBody {
-        /**
-         * 陪护人姓名
-         */
-        public String helperName = null;
-
-        /**
-         * 附件ID
-         */
-        public String annexNo = null;
-
-        /**
-         * 图片外链
-         */
-        public String picUrl = null;
-
-        /**
-         * 患者姓名列表
-         */
-        public List<String> patientNames = null;
-
-        /**
-         * 核酸结果
-         */
-        public Boolean negative = null;
-
-        /**
-         * 检测时间
-         */
-        public Date execDate = null;
-    }
-
-    /**
      * 陪护证状态锁
      */
     private final List<Object> escortStateLocks = new ArrayList<>() {
@@ -661,6 +626,81 @@ public class EscortController {
         }
     }
 
+    /**
+     * 查询指定科室关联的未审核的陪护人附件
+     * 
+     * @param deptCode
+     * @return
+     */
+    @RequestMapping(value = "escort/queryCheckedAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String QueryCheckEscortAnnex(@RequestParam("deptCode") String deptCode) {
+        // 入参检查
+        if (deptCode == null) {
+            throw new InvalidParameterException("科室编码不能为空");
+        }
+
+        // 业务日志
+        this.logger.info(String.format("查询科室已审核附件(deptCode = %s)", deptCode));
+
+        // 查询所有关联结果
+        var rs = this.escortService.QueryAnnexInfos(deptCode, true);
+
+        // 创建结果集
+        var rspBody = new ArrayList<QueryCheckEscortAnnex_RspBody>();
+
+        // 提取结果集
+        for (var rsItem : rs) {
+            var item = new QueryCheckEscortAnnex_RspBody();
+            item.helperName = rsItem.getValue0().name;
+            item.annexNo = rsItem.getValue1().annexNo;
+            item.picUrl = rsItem.getValue1().annexUrl;
+            item.patientNames = new ArrayList<String>();
+            for (var patientName : rsItem.getValue2()) {
+                item.patientNames.add(patientName.name);
+            }
+            item.negative = rsItem.getValue3().negative;
+            item.execDate = rsItem.getValue3().execDate;
+            rspBody.add(item);
+        }
+
+        return GsonHelper.ToJson(rspBody);
+    }
+
+    /**
+     * QueryUncheckEscortAnnex响应体
+     */
+    class QueryCheckEscortAnnex_RspBody {
+        /**
+         * 陪护人姓名
+         */
+        public String helperName = null;
+
+        /**
+         * 附件ID
+         */
+        public String annexNo = null;
+
+        /**
+         * 图片外链
+         */
+        public String picUrl = null;
+
+        /**
+         * 患者姓名列表
+         */
+        public List<String> patientNames = null;
+
+        /**
+         * 核酸结果
+         */
+        public Boolean negative = null;
+
+        /**
+         * 检测时间
+         */
+        public Date execDate = null;
+    }
+
     class MyTask implements Runnable {
         /**
          * 任务即将处理的陪护证编号
@@ -773,43 +813,6 @@ public class EscortController {
             for (var patientName : rsItem.getValue2()) {
                 item.patientNames.add(patientName.name);
             }
-            rspBody.add(item);
-        }
-
-        return GsonHelper.ToJson(rspBody);
-    }
-
-    /**
-     * 查询指定科室关联的未审核的陪护人附件
-     * 
-     * @param deptCode
-     * @return
-     */
-    @RequestMapping(value = "escort/queryCheckedAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String QueryCheckEscortAnnex(@RequestParam("deptCode") String deptCode) {
-        // 入参检查
-        if (deptCode == null) {
-            throw new InvalidParameterException("科室编码不能为空");
-        }
-
-        // 查询所有关联结果
-        var rs = this.escortService.QueryAnnexInfos(deptCode, true);
-
-        // 创建结果集
-        var rspBody = new ArrayList<QueryCheckEscortAnnex_RspBody>();
-
-        // 提取结果集
-        for (var rsItem : rs) {
-            var item = new QueryCheckEscortAnnex_RspBody();
-            item.helperName = rsItem.getValue0().name;
-            item.annexNo = rsItem.getValue1().annexNo;
-            item.picUrl = rsItem.getValue1().annexUrl;
-            item.patientNames = new ArrayList<String>();
-            for (var patientName : rsItem.getValue2()) {
-                item.patientNames.add(patientName.name);
-            }
-            item.negative = rsItem.getValue3().negative;
-            item.execDate = rsItem.getValue3().execDate;
             rspBody.add(item);
         }
 
