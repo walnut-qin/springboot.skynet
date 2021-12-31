@@ -603,6 +603,28 @@ public class EscortController {
         public List<EscortCardAction> actions = null;
     }
 
+    /**
+     * 为陪护人添加院外陪护证附件
+     * 
+     * @param cardNo 患者就诊卡号
+     * @return
+     */
+    @RequestMapping(value = "attachAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void AttachAnnex(@RequestParam("helperCardNo") String helperCardNo, @RequestParam("picUrl") String picUrl) {
+        // 入参检查
+        if (helperCardNo == null || helperCardNo.isEmpty()) {
+            throw new InvalidParameterException("陪护人卡号不能为空");
+        } else if (picUrl == null || picUrl.isEmpty()) {
+            throw new InvalidParameterException("附件不能为空");
+        }
+
+        // 业务日志
+        this.logger.info(String.format("添加附件(helperCardNo = %s, picUrl = %s)", helperCardNo, picUrl));
+
+        // 执行业务
+        this.escortService.AttachAnnex(helperCardNo, picUrl);
+    }
+
     class MyTask implements Runnable {
         /**
          * 任务即将处理的陪护证编号
@@ -684,23 +706,6 @@ public class EscortController {
         // 记录日志
         var endDate = new Date();
         logger.info(String.format("<< 实际更新 %d，耗时 %d ms", escortCards.size(), endDate.getTime() - beginDate.getTime()));
-    }
-
-    /**
-     * 为陪护人添加院外陪护证附件
-     * 
-     * @param cardNo 患者就诊卡号
-     * @return
-     */
-    @RequestMapping(value = "attachAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void AttachAnnex(@RequestParam("helperCardNo") String helperCardNo, @RequestParam("picUrl") String picUrl) {
-        // 入参检查
-        if (helperCardNo == null || helperCardNo.isEmpty()) {
-            throw new InvalidParameterException("陪护人卡号不能为空");
-        }
-
-        // 执行业务
-        this.escortService.AttachAnnex(helperCardNo, picUrl);
     }
 
     /**
