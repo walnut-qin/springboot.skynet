@@ -400,11 +400,11 @@ public class EscortController {
                 var helperLockIdx = this.TransferToIndex(helperCardNo, this.helperLocks.size());
                 try {
                     this.logger.info(String.format("加锁 - helperLock(%d)", helperLockIdx));
-
-                    // 执行业务逻辑
-                    var escortCard = this.escortService.InsertEscort(patientCardNo, helperCardNo, operCode);
-
-                    return GsonHelper.ToJson(escortCard);
+                    synchronized (this.helperLocks.get(helperLockIdx)) {
+                        // 执行service
+                        var escortCard = this.escortService.InsertEscort(patientCardNo, helperCardNo, operCode);
+                        return GsonHelper.ToJson(escortCard);
+                    }
                 } finally {
                     this.logger.info(String.format("解锁 - helperLock(%d)", helperLockIdx));
                 }
@@ -440,11 +440,44 @@ public class EscortController {
         var idx = this.TransferToIndex(escortNo, this.escortStateLocks.size());
         try {
             this.logger.info(String.format("加锁 - 陪护证状态锁(%d)", idx));
-
-            // 执行业务逻辑
-            this.escortService.UpdateEscortState(escortNo, newState, operCode);
+            synchronized (this.escortStateLocks.get(idx)) {
+                // 执行service
+                this.escortService.UpdateEscortState(escortNo, newState, operCode);
+            }
         } finally {
             this.logger.info(String.format("解锁 - 陪护证状态锁(%d)", idx));
+        }
+    }
+
+    /**
+     * 记录陪护证行为
+     * 
+     * @param escortNo
+     * @param action
+     */
+    @RequestMapping(value = "escort/recordAction", method = RequestMethod.GET)
+    public void RecordAction(@RequestParam("escortNo") String escortNo,
+            @RequestParam("action") EscortActionEnum action) {
+        // 入参检查
+        if (escortNo == null || escortNo.isEmpty()) {
+            throw new RuntimeException("陪护证编号不能为空");
+        } else if (action == null) {
+            throw new RuntimeException("行为枚举不能为空");
+        }
+
+        // 记录日志
+        this.logger.info(String.format("记录陪护证行为(escortNo = %s, action = %s)", escortNo, action.getDescription()));
+
+        // 计算陪护证行为锁
+        var idx = this.TransferToIndex(escortNo, this.escortActionLocks.size());
+        try {
+            this.logger.info(String.format("加锁 - 陪护证行为锁(%d)", idx));
+            synchronized (this.escortActionLocks.get(idx)) {
+                // 执行业务逻辑
+                this.escortService.AppendEscortAction(escortNo, action);
+            }
+        } finally {
+            this.logger.info(String.format("解锁 - 陪护证行为锁(%d)", idx));
         }
     }
 
@@ -529,34 +562,6 @@ public class EscortController {
         // 记录日志
         var endDate = new Date();
         logger.info(String.format("<< 实际更新 %d，耗时 %d ms", escortCards.size(), endDate.getTime() - beginDate.getTime()));
-    }
-
-    /**
-     * 记录陪护证行为
-     * 
-     * @param escortNo
-     * @param action
-     */
-    @RequestMapping(value = "escort/recordAction", method = RequestMethod.GET)
-    public void RecordAction(@RequestParam("escortNo") String escortNo,
-            @RequestParam("action") EscortActionEnum action) {
-        // 入参检查
-        if (escortNo == null || escortNo.isEmpty()) {
-            throw new RuntimeException("陪护证编号不能为空");
-        } else if (action == null) {
-            throw new RuntimeException("动作枚举不能为空");
-        }
-
-        // 计算陪护证行为所
-        var idx = this.TransferToIndex(escortNo, this.escortActionLocks.size());
-        try {
-            this.logger.info(String.format("加锁 - 陪护证行为锁(%d)", idx));
-            synchronized (this.escortActionLocks.get(idx)) {
-                this.escortService.AppendEscortAction(escortNo, action);
-            }
-        } finally {
-            this.logger.info(String.format("解锁 - 陪护证行为锁(%d)", idx));
-        }
     }
 
     /**
