@@ -533,12 +533,13 @@ public class EscortController {
     }
 
     /**
-     * 定期自动更新陪护证状态
+     * 刷新现存有效陪护证状态
+     * 工作实践业务量巨大，15分钟刷新一次
+     * 下班后业务量减少，减少刷新频次
      */
-    // @Scheduled(initialDelay = 1 * 1000, fixedDelay = 10 * 60 * 1000)
-    @Scheduled(cron = "0 0/15 8-17 * * ?")
-    @Scheduled(cron = "0 0 0-7,18-23 * * ?")
-    public void AutoUpdateEscortState() {
+    @Scheduled(cron = "0 0 0,4,12,13,18,19,22 * * ?")
+    @Scheduled(cron = "0 0/15 8-11,14-17 * * ?")
+    public void RefreshEscortState() {
         // 获取日志工具
         var logger = Logger.getLogger(EscortController.class.getName());
 
