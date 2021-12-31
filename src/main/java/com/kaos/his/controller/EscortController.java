@@ -421,20 +421,31 @@ public class EscortController {
      * @return
      */
     @RequestMapping(value = "escort/updateState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void UpdateEscortState(@RequestParam("escortNo") @NotEmpty(message = "陪护证编号不能为空") String escortNo,
-            @RequestParam("newState") @NotEmpty(message = "状态枚举不能为空") EscortStateEnum newState,
-            @RequestParam("operCode") @NotEmpty(message = "操作员编码不能为空") String operCode) {
-        // 记录日志
-        this.logger.info(String.format("更新陪护证(%s)的状态为(%s)", escortNo, newState.getDescription()));
-
-        // 加陪护证状态锁
-        var lockIdx = this.TransferToIndex(escortNo, this.escortStateLocks.size());
-        this.logger.info(String.format("加锁 - 陪护证状态锁(%d)", lockIdx));
-        synchronized (this.escortStateLocks.get(lockIdx)) {
-            // 执行更新服务
-            this.escortService.UpdateEscortState(escortNo, newState, operCode);
+    public void UpdateState(@RequestParam("escortNo") String escortNo,
+            @RequestParam("newState") EscortStateEnum newState, @RequestParam("operCode") String operCode) {
+        // 入参检查
+        if (escortNo == null || escortNo.isEmpty()) {
+            throw new RuntimeException("陪护证号不能为空");
+        } else if (newState == null) {
+            throw new RuntimeException("状态枚举不能为空");
+        } else if (operCode == null || operCode.isEmpty()) {
+            throw new RuntimeException("操作员不能为空");
         }
-        this.logger.info(String.format("解锁 - 陪护证状态锁(%d)", lockIdx));
+
+        // 记录日志
+        this.logger.info(String.format("更新陪护证状态(escortNo = %s, newState = %s, operCode = %s)", escortNo,
+                newState.getDescription(), operCode));
+
+        // 计算陪护证状态锁
+        var idx = this.TransferToIndex(escortNo, this.escortStateLocks.size());
+        try {
+            this.logger.info(String.format("加锁 - 陪护证状态锁(%d)", idx));
+
+            // 执行业务逻辑
+            this.escortService.UpdateEscortState(escortNo, newState, operCode);
+        } finally {
+            this.logger.info(String.format("解锁 - 陪护证状态锁(%d)", idx));
+        }
     }
 
     class MyTask implements Runnable {
