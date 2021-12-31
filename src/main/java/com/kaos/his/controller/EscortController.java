@@ -739,6 +739,39 @@ public class EscortController {
         public List<String> patientNames = null;
     }
 
+    /**
+     * 刷新现存有效陪护证状态 工作实践业务量巨大，15分钟刷新一次 下班后业务量减少，减少刷新频次
+     */
+    @Scheduled(cron = "0 0 0,4,12,13,18,19,22 * * ?")
+    @Scheduled(cron = "0 0/15 8-11,14-17 * * ?")
+    public void RefreshEscortState() {
+        // 业务日志
+        logger.info("启动定时任务: 更新陪护证状态");
+
+        try {
+            // 从数据库中查询所有活跃着的陪护证编号
+            var escortCards = this.escortService.QueryAllRegisteredEscortNo();
+            this.countDownLatch = new CountDownLatch(escortCards.size());
+
+            // 记录开始日志
+            logger.info(String.format(">> 开始更新，总计 %d 条活跃陪护证", escortCards.size()));
+
+            // 轮训刷新状态
+            var beginDate = new Date();
+            for (EscortCard escortCard : escortCards) {
+                this.threadPoolExecutor.execute(new MyTask(escortCard.escortNo));
+            }
+            this.countDownLatch.await();
+            var endDate = new Date();
+
+            // 记录日志
+            logger.info(
+                    String.format("<< 实际更新 %d，耗时 %d ms", escortCards.size(), endDate.getTime() - beginDate.getTime()));
+        } catch (Exception e) {
+            this.logger.error(String.format("定时任务(RefreshEscortState)执行中发生异常: %s", e.getMessage()));
+        }
+    }
+
     class MyTask implements Runnable {
         /**
          * 任务即将处理的陪护证编号
@@ -765,60 +798,24 @@ public class EscortController {
             // 记录日志
             this.logger.info(String.format("开始更新陪护证 %s 的状态", this.escortNo));
 
-            // 加锁日志
+            // 获取状态锁
             var lockIdx = TransferToIndex(escortNo, escortStateLocks.size());
-            this.logger.info(String.format("加锁 - 陪护证状态锁(%d)", lockIdx));
-            synchronized (escortStateLocks.get(lockIdx)) {
-                // 执行更新服务
-                try {
+            try {
+                this.logger.info(String.format("加锁 - 陪护证状态锁(%d)", lockIdx));
+                synchronized (escortStateLocks.get(lockIdx)) {
+                    // 执行更新服务
                     escortService.RefreshEscortState(escortNo);
-                } catch (Exception e) {
-                    // 异常日志
-                    this.logger.info(String.format("更新异常，%s", e.getMessage()));
                 }
+            } catch (Exception ex) {
+                this.logger.error(String.format("更新陪护证(%s)时发生异常: %s", this.escortNo, ex.getMessage()));
+            } finally {
+                this.logger.info(String.format("解锁 - 陪护证状态锁(%d)", lockIdx));
             }
-            this.logger.info(String.format("解锁 - 陪护证状态锁(%d)", lockIdx));
 
             // 发令枪计时自减
             if (countDownLatch != null) {
                 countDownLatch.countDown();
             }
         }
-    }
-
-    /**
-     * 刷新现存有效陪护证状态 工作实践业务量巨大，15分钟刷新一次 下班后业务量减少，减少刷新频次
-     */
-    @Scheduled(cron = "0 0 0,4,12,13,18,19,22 * * ?")
-    @Scheduled(cron = "0 0/15 8-11,14-17 * * ?")
-    public void RefreshEscortState() {
-        // 获取日志工具
-        var logger = Logger.getLogger(EscortController.class.getName());
-
-        // 从数据库中查询所有活跃着的陪护证编号
-        var escortCards = this.escortService.QueryAllRegisteredEscortNo();
-
-        // 记录开始日志
-        logger.info(String.format(">> 开始更新，总计 %d 条活跃陪护证", escortCards.size()));
-        var beginDate = new Date();
-
-        // 轮训刷新状态
-        this.countDownLatch = new CountDownLatch(escortCards.size());
-        for (EscortCard escortCard : escortCards) {
-            try {
-                this.threadPoolExecutor.execute(new MyTask(escortCard.escortNo));
-            } catch (Exception e) {
-                logger.error(String.format("xx 更新陪护证 %s 的状态时发生错误: %s", escortCard.escortNo, e.getMessage()));
-            }
-        }
-        try {
-            this.countDownLatch.await();
-        } catch (Exception e) {
-            logger.error(String.format("主线程等待发令枪出现错误: %s", e.getMessage()));
-        }
-
-        // 记录日志
-        var endDate = new Date();
-        logger.info(String.format("<< 实际更新 %d，耗时 %d ms", escortCards.size(), endDate.getTime() - beginDate.getTime()));
     }
 }
