@@ -28,6 +28,11 @@ public class FinIpbBalanceHead {
     public Integer balanceNo = null;
 
     /**
+     * 结算员编码
+     */
+    public String balanceOperCode = null;
+
+    /**
      * 总费用，实际交易的费用总额，和明细总和的差值即为四舍五入量
      */
     public Double totCost = null;
