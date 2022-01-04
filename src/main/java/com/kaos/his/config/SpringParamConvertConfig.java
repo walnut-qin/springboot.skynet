@@ -177,6 +177,32 @@ public class SpringParamConvertConfig extends WebMvcConfigurationSupport {
             }
         });
 
+        // 注册BalancePayTransKindEnum转换器
+        f.addConverter(new Converter<String, BalancePayTransKindEnum>() {
+            @Override
+            public BalancePayTransKindEnum convert(String source) {
+                for (BalancePayTransKindEnum e : BalancePayTransKindEnum.class.getEnumConstants()) {
+                    if (e.getDescription().equals(source)) {
+                        return e;
+                    }
+                }
+                throw new IllegalArgumentException();
+            }
+        });
+
+        // 注册PayWayEnum转换器
+        f.addConverter(new Converter<String, PayWayEnum>() {
+            @Override
+            public PayWayEnum convert(String source) {
+                for (PayWayEnum e : PayWayEnum.class.getEnumConstants()) {
+                    if (e.getDescription().equals(source)) {
+                        return e;
+                    }
+                }
+                throw new IllegalArgumentException();
+            }
+        });
+
         return f;
     }
 
