@@ -59,4 +59,16 @@
             INVOICE_NO = #{invoiceNo}
             AND TRANS_TYPE = #{transType}
     </select>
+
+    <!-- 接口2 -->
+    <select id="QueryBalancerFinIpbBalanceHeads" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            XYHIS.FIN_IPB_BALANCEHEAD
+        WHERE
+            BALANCE_OPERCODE = #{balanceOperCode}
+            AND BALANCE_DATE &ge; #{beginDate}
+            AND BALANCE_DATE &le; #{endDate}
+    </select>
 </mapper>
