@@ -1,5 +1,6 @@
 package com.kaos.his.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -55,7 +56,14 @@ public class DayBalanceService {
                     item.name = nameMap.get(x.inpatientNo);
                     item.value = x.totCost;
                     if (item.value != null) {
-                        dayBalance.totCost += item.value;
+                        if (dayBalance.totCost == null) {
+                            dayBalance.totCost = item.value;
+                        } else {
+                            dayBalance.totCost += item.value;
+                        }
+                    }
+                    if (dayBalance.totCosts == null) {
+                        dayBalance.totCosts = new ArrayList<>();
                     }
                     dayBalance.totCosts.add(item);
                 });

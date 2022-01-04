@@ -23,7 +23,8 @@ public interface FinIpbBalanceHeadMapper {
      * 查询某个结算员某个时段的所有记录
      * 
      * @param balanceOperCode
-     * @return
+     * @return0
+     * 
      */
     List<FinIpbBalanceHead> QueryBalancerFinIpbBalanceHeads(String balanceOperCode, Date beginDate, Date endDate);
 }

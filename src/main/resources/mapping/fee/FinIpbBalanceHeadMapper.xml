@@ -20,8 +20,8 @@
         <result column="LARGE_PAY" jdbcType="VARCHAR" property="largePay"/>
         <result column="MILTARY_PAY" jdbcType="VARCHAR" property="militaryPay"/>
         <result column="CL_COST" jdbcType="VARCHAR" property="clCost"/>
-        <result column="JZFP_COST" jdbcType="VARCHAR" property="jzfpCost"/>
-        <result column="GYB_COST" jdbcType="VARCHAR" property="gybCost"/>
+        <result column="JZFPBCYZF_COST" jdbcType="VARCHAR" property="jzfpCost"/>
+        <result column="GYBAPI_COST" jdbcType="VARCHAR" property="gybCost"/>
         <result column="HOS_COST" jdbcType="VARCHAR" property="hosCost"/>
     </resultMap>
 
@@ -44,8 +44,8 @@
         LARGE_PAY,
         MILTARY_PAY,
         CL_COST,
-        JZFP_COST,
-        GYB_COST,
+        JZFPBCYZF_COST,
+        GYBAPI_COST,
         HOS_COST
     </sql>
 
@@ -68,7 +68,7 @@
             XYHIS.FIN_IPB_BALANCEHEAD
         WHERE
             BALANCE_OPERCODE = #{balanceOperCode}
-            AND BALANCE_DATE &ge; #{beginDate}
-            AND BALANCE_DATE &le; #{endDate}
+            AND BALANCE_DATE &gt;= #{beginDate}
+            AND BALANCE_DATE &lt;= #{endDate}
     </select>
 </mapper>
