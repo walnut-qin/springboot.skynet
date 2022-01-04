@@ -1,13 +1,14 @@
 package com.kaos.his.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 import com.kaos.his.entity.fee.DayBalance;
+import com.kaos.his.entity.fee.FinIpbBalanceHead;
 import com.kaos.his.mapper.fee.FinIpbBalanceHeadMapper;
 import com.kaos.his.mapper.personnel.InpatientMapper;
 
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,53 +24,40 @@ public class DayBalanceService {
     InpatientMapper inpatientMapper;
 
     interface IGetDayBalanceDetail {
-        void Run(String balanceOperCode, Date beginDate, Date endDate);
+        void Run();
     }
 
-    public DayBalance QueryDayBalanceData(String balanceOperCode, Date beginDate, Date endDate) {
+    public Pair<DayBalance, HashMap<String, DayBalance>> QueryDayBalanceData(String balanceOperCode, Date beginDate,
+            Date endDate) {
         // 定义结果集
-        DayBalance dayBalance = new DayBalance();
+        var rs = new Pair<DayBalance, HashMap<String, DayBalance>>(new DayBalance(), new HashMap<>());
 
-        // 定义cache => 住院号 - 姓名
-        HashMap<String, String> nameMap = new HashMap<>();
+        // 从结算头表中计算所有结算的患者
+        var balanceHeads = this.balanceHeadMapper.QueryBalancerFinIpbBalanceHeads(balanceOperCode, beginDate, endDate);
+        for (FinIpbBalanceHead balanceHead : balanceHeads) {
+            // 初始化结果集
+            rs.getValue1().put(balanceHead.inpatientNo, new DayBalance());
 
-        // 第四大项
-        new IGetDayBalanceDetail() {
-            @Override
-            public void Run(String balanceOperCode, Date beginDate, Date endDate) {
-                // 获取结算头表相关记录
-                var balanceHeads = balanceHeadMapper.QueryBalancerFinIpbBalanceHeads(balanceOperCode, beginDate,
-                        endDate);
-
-                // 赋值明细
-                balanceHeads.forEach((x) -> {
-                    var item = new DayBalance.Detail();
-                    item.inpatientNo = x.inpatientNo;
-                    if (!nameMap.containsKey(x.inpatientNo)) {
-                        var inpatient = inpatientMapper.QueryInpatient(x.inpatientNo.substring(4));
-                        if (inpatient == null) {
-                            nameMap.put(x.inpatientNo, null);
-                        } else {
-                            nameMap.put(x.inpatientNo, inpatient.name);
-                        }
+            // 第四大项
+            new IGetDayBalanceDetail() {
+                @Override
+                public void Run() {
+                    // 填入总和
+                    if (rs.getValue0().totCost == null) {
+                        rs.getValue0().totCost = balanceHead.totCost;
+                    } else {
+                        rs.getValue0().totCost += balanceHead.totCost;
                     }
-                    item.name = nameMap.get(x.inpatientNo);
-                    item.value = x.totCost;
-                    if (item.value != null) {
-                        if (dayBalance.totCost == null) {
-                            dayBalance.totCost = item.value;
-                        } else {
-                            dayBalance.totCost += item.value;
-                        }
-                    }
-                    if (dayBalance.totCosts == null) {
-                        dayBalance.totCosts = new ArrayList<>();
-                    }
-                    dayBalance.totCosts.add(item);
-                });
-            }
-        }.Run(balanceOperCode, beginDate, endDate);
 
-        return dayBalance;
+                    // 填入明细
+                    var item = rs.getValue1().get(balanceHead.inpatientNo);
+                    item.totCost = balanceHead.totCost;
+                }
+            }.Run();
+
+            // 第五大项
+        }
+
+        return rs;
     }
 }
