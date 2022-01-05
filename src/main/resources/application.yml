@@ -57,6 +57,12 @@ spring:
         enabled: true
         url-pattern: /*
         exclusions: .gif,.html
+  thymeleaf:
+    # 模板支持，支持 HTML，XML TEXT JAVASCRIPT
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+    prefix: classpath:/template
 mybatis-plus:
   configuration:
     default-enum-type-handler: com.kaos.his.config.MybatisEnumTypeHandler
