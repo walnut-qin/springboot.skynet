@@ -1,4 +1,4 @@
-package com.kaos.his;
+package com.kaos.his.config;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -3,7 +3,6 @@ package com.kaos.his.controller;
 import java.util.Date;
 
 import com.kaos.his.service.DayBalanceService;
-import com.kaos.util.GsonHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +19,7 @@ public class TestController {
 
     @ResponseBody
     @RequestMapping(value = "test", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-    public String Run(@RequestParam("operCode") String operCode, @RequestParam("beginDate") Date beginDate,
-            @RequestParam("endDate") Date endDate) {
-        var v = this.dayBalanceService.QueryDayBalanceData(operCode, beginDate, endDate);
-
-        return GsonHelper.ToJson(v);
+    public String Run(@RequestParam("param") Date param) {
+        return "test";
     }
 }
