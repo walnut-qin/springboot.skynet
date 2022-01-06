@@ -7,6 +7,7 @@
         <id column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
         <result column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
         <result column="BALANCE_NO" jdbcType="VARCHAR" property="balanceNo"/>
+        <result column="PACT_CODE" jdbcType="VARCHAR" property="pactCode"/>
         <result column="BALANCE_OPERCODE" jdbcType="VARCHAR" property="balanceOperCode"/>
         <result column="TOT_COST" jdbcType="VARCHAR" property="totCost"/>
         <result column="PAY_COST" jdbcType="VARCHAR" property="payCost"/>
@@ -31,6 +32,7 @@
         TRANS_TYPE,
         INPATIENT_NO,
         BALANCE_NO,
+        PACT_CODE,
         BALANCE_OPERCODE,
         TOT_COST,
         PAY_COST,

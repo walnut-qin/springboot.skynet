@@ -28,6 +28,11 @@ public class FinIpbBalanceHead {
     public Integer balanceNo = null;
 
     /**
+     * 医保编码
+     */
+    public String pactCode = null;
+
+    /**
      * 结算员编码
      */
     public String balanceOperCode = null;
