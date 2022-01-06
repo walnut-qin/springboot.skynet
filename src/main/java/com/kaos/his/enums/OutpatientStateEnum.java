@@ -1,7 +1,5 @@
 package com.kaos.his.enums;
 
-import com.kaos.his.enums.util.IEnum;
-
 /**
  * 门诊患者状态枚举
  */

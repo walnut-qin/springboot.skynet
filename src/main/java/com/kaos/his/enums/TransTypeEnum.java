@@ -1,7 +1,5 @@
 package com.kaos.his.enums;
 
-import com.kaos.his.enums.util.IEnum;
-
 public enum TransTypeEnum implements IEnum {
     Positive("1", "正交易"), Negative("2", "负交易");
 

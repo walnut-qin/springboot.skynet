@@ -1,7 +1,5 @@
 package com.kaos.his.enums;
 
-import com.kaos.his.enums.util.IEnum;
-
 public enum BalancePayTransKindEnum implements IEnum {
     预交款("0", "预交款"), 结算款("1", "结算款");
 

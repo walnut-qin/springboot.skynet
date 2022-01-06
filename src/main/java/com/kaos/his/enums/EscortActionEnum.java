@@ -1,7 +1,5 @@
 package com.kaos.his.enums;
 
-import com.kaos.his.enums.util.IEnum;
-
 public enum EscortActionEnum implements IEnum {
     进入("I", "进入"), 外出("O", "外出");
 

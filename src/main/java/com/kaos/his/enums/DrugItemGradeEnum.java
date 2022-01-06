@@ -1,7 +1,5 @@
 package com.kaos.his.enums;
 
-import com.kaos.his.enums.util.IEnum;
-
 public enum DrugItemGradeEnum implements IEnum {
     甲("1", "甲类"), 乙("2", "乙类"), 丙("3", "丙类");
 

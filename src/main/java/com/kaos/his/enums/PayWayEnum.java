@@ -1,7 +1,5 @@
 package com.kaos.his.enums;
 
-import com.kaos.his.enums.util.IEnum;
-
 public enum PayWayEnum implements IEnum {
     CA("CA", "现金");
 
