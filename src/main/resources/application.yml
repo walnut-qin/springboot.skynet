@@ -62,7 +62,7 @@ spring:
     mode: HTML5
     encoding: UTF-8
     cache: false
-    prefix: classpath:/template
+    prefix: classpath:/templates
 mybatis-plus:
   configuration:
     default-enum-type-handler: com.kaos.his.config.MybatisEnumTypeHandler
