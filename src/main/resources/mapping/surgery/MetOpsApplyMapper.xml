@@ -57,4 +57,27 @@
         WHERE
             OPERATIONNO = #{operationNo}
     </select>
+
+    <!-- 接口 -->
+    <select id="queryDeptMetOpsApplies" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            XYHIS.MET_OPS_APPLY
+        WHERE
+            (
+                SELECT
+                    DEPT_CODE
+                FROM
+                    FIN_IPR_INMAININFO
+                WHERE
+                    INPATIENT_NO = 'ZY01' || PATIENT_NO
+            ) = #{deptCode}
+            AND APPLY_DATE &gt;= #{beginDate}
+            AND APPLY_DATE &lt;= #{endDate}
+            AND EXECSTATUS IN
+        <foreach collection="status" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

@@ -17,12 +17,12 @@ public interface MetOpsApplyMapper {
      * @param operationNo
      * @return
      */
-    MetOpsApply queryMetOpsApply(String operationNo);
+    MetOpsApply queryMetOpsApply(String operationNo, List<SurgeryStatusEnum> status);
 
     /**
      * 查询某个时段内的某个科室的某类状态的手术
      * 
-     * @param deptCode  手术医生科室
+     * @param deptCode  患者住院科室
      * @param beginDate 计划时间起点
      * @param endDate   计划时间终点
      * @param status    手术状态
@@ -34,7 +34,7 @@ public interface MetOpsApplyMapper {
     /**
      * 查询某个时段内的某个院区的某类状态的手术
      * 
-     * @param deptOwn   手术医生院区
+     * @param deptOwn   患者住院院区
      * @param beginDate 计划时间起点
      * @param endDate   计划时间终点
      * @param status    手术状态
