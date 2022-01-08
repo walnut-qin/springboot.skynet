@@ -1,4 +1,4 @@
-package com.kaos.his.entity.operation;
+package com.kaos.his.entity.surgery;
 
 import java.util.Date;
 
@@ -47,11 +47,6 @@ public class MetOpsApply {
      * 申请医生编码
      */
     public String applyDocCode = null;
-
-    /**
-     * 申请科室编码
-     */
-    public String applyDeptCode = null;
 
     /**
      * 申请时间
