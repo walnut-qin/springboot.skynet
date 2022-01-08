@@ -65,6 +65,10 @@ public class GsonConverterConfig {
         builder.registerTypeAdapter(TransTypeEnum.class, new GsonEnumTypeAdapter<>(TransTypeEnum.class));
         builder.registerTypeAdapter(BalancePayTransKindEnum.class, new GsonEnumTypeAdapter<>(BalancePayTransKindEnum.class));
         builder.registerTypeAdapter(PayWayEnum.class, new GsonEnumTypeAdapter<>(PayWayEnum.class));
+        builder.registerTypeAdapter(SurgeryKindEnum.class, new GsonEnumTypeAdapter<>(SurgeryKindEnum.class));
+        builder.registerTypeAdapter(AnesTypeEnum.class, new GsonEnumTypeAdapter<>(AnesTypeEnum.class));
+        builder.registerTypeAdapter(SurgeryDegreeEnum.class, new GsonEnumTypeAdapter<>(SurgeryDegreeEnum.class));
+        builder.registerTypeAdapter(SurgeryStatusEnum.class, new GsonEnumTypeAdapter<>(SurgeryStatusEnum.class));
 
         return builder.create();
     }

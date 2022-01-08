@@ -212,6 +212,58 @@ public class SpringParamConvertConfig {
                     throw new IllegalArgumentException();
                 }
             });
+
+            // 注册OpsKindEnum转换器
+            genericConversionService.addConverter(new Converter<String, SurgeryKindEnum>() {
+                @Override
+                public SurgeryKindEnum convert(String source) {
+                    for (SurgeryKindEnum e : SurgeryKindEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册AnesTypeEnum转换器
+            genericConversionService.addConverter(new Converter<String, AnesTypeEnum>() {
+                @Override
+                public AnesTypeEnum convert(String source) {
+                    for (AnesTypeEnum e : AnesTypeEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册OperationDegreeEnum转换器
+            genericConversionService.addConverter(new Converter<String, SurgeryDegreeEnum>() {
+                @Override
+                public SurgeryDegreeEnum convert(String source) {
+                    for (SurgeryDegreeEnum e : SurgeryDegreeEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册OperationDegreeEnum转换器
+            genericConversionService.addConverter(new Converter<String, SurgeryStatusEnum>() {
+                @Override
+                public SurgeryStatusEnum convert(String source) {
+                    for (SurgeryStatusEnum e : SurgeryStatusEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
         }
     }
 
