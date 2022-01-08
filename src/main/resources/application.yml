@@ -76,3 +76,4 @@ mybatis-plus:
   - classpath:mapping/order/*.xml
   - classpath:mapping/config/*.xml
   - classpath:mapping/fee/*.xml
+  - classpath:mapping/surgery/*.xml

@@ -14,6 +14,11 @@ public class MetOpsApply {
     public String operationNo = null;
 
     /**
+     * 手术名称（非表字段，联合查询得出）
+     */
+    public String operationName = null;
+
+    /**
      * 住院号
      */
     public String patientNo = null;
@@ -72,7 +77,7 @@ public class MetOpsApply {
      * 手术分级
      */
     public SurgeryDegreeEnum surgeryDegree = null;
-    
+
     /**
      * 手术状态
      */

@@ -1,6 +1,6 @@
 package com.kaos.his.enums;
 
-public enum OperationDegreeEnum implements IEnum {
+public enum SurgeryDegreeEnum implements IEnum {
     一级("1级", "一级"), 二级("2级", "二级"), 三级("3级", "三级"), 四级("4级", "四级");
 
     /**
@@ -19,7 +19,7 @@ public enum OperationDegreeEnum implements IEnum {
      * @param index
      * @param description
      */
-    OperationDegreeEnum(String value, String description) {
+    SurgeryDegreeEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }
