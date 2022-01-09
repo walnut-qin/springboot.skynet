@@ -71,7 +71,7 @@
                 FROM
                     FIN_IPR_INMAININFO
                 WHERE
-                    INPATIENT_NO = 'ZY01' || PATIENT_NO
+                    INPATIENT_NO = 'ZY01' || XYHIS.MET_OPS_APPLY.PATIENT_NO
             ) = #{deptCode}
             AND APPLY_DATE &gt;= #{beginDate}
             AND APPLY_DATE &lt;= #{endDate}
@@ -95,7 +95,7 @@
                     FIN_IPR_INMAININFO T1
                     LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_CODE
                 WHERE
-                    T1.INPATIENT_NO = 'ZY01' || PATIENT_NO
+                    T1.INPATIENT_NO = 'ZY01' || XYHIS.MET_OPS_APPLY.PATIENT_NO
             ) = #{deptOwn}
             AND APPLY_DATE &gt;= #{beginDate}
             AND APPLY_DATE &lt;= #{endDate}

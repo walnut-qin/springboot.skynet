@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/webApi")
 public class SurgeryController {
-    @Autowired
-    Logger logger;
+    /**
+     * 日志接口
+     */
+    Logger logger = Logger.getLogger(SurgeryController.class.getName());
 
     /**
      * 手术服务
@@ -26,7 +28,7 @@ public class SurgeryController {
     SurgeryService surgeryService;
 
     @ResponseBody
-    @RequestMapping(value = "test", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "surgery/queryDeptSurgeries", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String queryDeptSurgeries(@RequestParam("deptCode") String deptCode,
             @RequestParam("beginDate") Date beginDate,
             @RequestParam("endDate") Date endDate) {

@@ -32,6 +32,11 @@ public class SpringParamConvertConfig {
             genericConversionService.addConverter(new Converter<String, Date>() {
                 @Override
                 public Date convert(String source) {
+                    // 判空
+                    if (source == null || source.isEmpty()) {
+                        return null;
+                    }
+
                     // 创建格式化工具
                     var fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
