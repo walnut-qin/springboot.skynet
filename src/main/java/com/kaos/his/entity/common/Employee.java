@@ -5,6 +5,7 @@ import java.sql.Date;
 import com.kaos.his.enums.PositionEnum;
 import com.kaos.his.enums.RankEnum;
 import com.kaos.his.enums.SexEnum;
+import com.kaos.his.enums.ValidStateEnum;
 
 /**
  * 实体：职员（DAWN_ORG_EMPL）
@@ -83,7 +84,7 @@ public class Employee {
     /**
      * 有效标识
      */
-    public Boolean valid = null;
+    public ValidStateEnum valid = null;
 
     /**
      * 关联实体
@@ -92,7 +93,7 @@ public class Employee {
         /**
          * 归属科室
          */
-        public Department department = null;
+        public Department dept = null;
 
         /**
          * 归属护士站
@@ -103,5 +104,5 @@ public class Employee {
     /**
      * 关联实体
      */
-    public AssociateEntity associateEntity = new AssociateEntity();
+    transient public AssociateEntity associateEntity = new AssociateEntity();
 }

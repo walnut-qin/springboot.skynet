@@ -3,6 +3,7 @@ package com.kaos.his.entity.common;
 import java.util.Date;
 
 import com.kaos.his.enums.SexEnum;
+import com.kaos.his.enums.ValidStateEnum;
 
 /**
  * 实体：患者信息（XYHIS.COM_PATIENTINFO）
@@ -51,7 +52,7 @@ public class Patient {
     /**
      * 有效性
      */
-    public Boolean valid = null;
+    public ValidStateEnum valid = null;
 
     /**
      * 关联实体
@@ -60,11 +61,11 @@ public class Patient {
         /**
          * 基本信息操作员
          */
-        public Employee operEmpl = null;
+        public Employee operator = null;
     }
 
     /**
      * 关联实体
      */
-    public AssociateEntity associateEntity = new AssociateEntity();
+    transient public AssociateEntity associateEntity = new AssociateEntity();
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.inpatient.BedMapper">
+    <resultMap id="map" type="com.kaos.his.entity.inpatient.Bed">
+        <id column="BED_NO" jdbcType="VARCHAR" property="bedNo"/>
+        <result column="NURSE_CELL_CODE" jdbcType="VARCHAR" property="nurseCellCode"/>
+        <result column="BED_STATE" jdbcType="VARCHAR" property="state"/>
+        <result column="VALID_STATE" jdbcType="VARCHAR" property="valid"/>
+    </resultMap>
+
+    <sql id="item">
+        BED_NO,
+        NURSE_CELL_CODE,
+        BED_STATE,
+        VALID_STATE
+    </sql>
+
+    <select id="queryBed" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            COM_BEDINFO
+        <where>
+            <if test="bedNo!=null">
+                AND BED_NO = #{bedNo}
+            </if>
+            <if test="valid!=null">
+                AND VALID_STATE = #{valid}
+            </if>
+        </where>
+    </select>
+</mapper>

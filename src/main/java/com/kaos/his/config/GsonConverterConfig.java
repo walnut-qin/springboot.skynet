@@ -63,7 +63,8 @@ public class GsonConverterConfig {
         builder.registerTypeAdapter(PreinCardStateEnum.class, new GsonEnumTypeAdapter<>(PreinCardStateEnum.class));
         builder.registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class));
         builder.registerTypeAdapter(TransTypeEnum.class, new GsonEnumTypeAdapter<>(TransTypeEnum.class));
-        builder.registerTypeAdapter(BalancePayTransKindEnum.class, new GsonEnumTypeAdapter<>(BalancePayTransKindEnum.class));
+        builder.registerTypeAdapter(BalancePayTransKindEnum.class,
+                new GsonEnumTypeAdapter<>(BalancePayTransKindEnum.class));
         builder.registerTypeAdapter(PayWayEnum.class, new GsonEnumTypeAdapter<>(PayWayEnum.class));
         builder.registerTypeAdapter(SurgeryKindEnum.class, new GsonEnumTypeAdapter<>(SurgeryKindEnum.class));
         builder.registerTypeAdapter(AnesTypeEnum.class, new GsonEnumTypeAdapter<>(AnesTypeEnum.class));
@@ -73,6 +74,13 @@ public class GsonConverterConfig {
         builder.registerTypeAdapter(PositionEnum.class, new GsonEnumTypeAdapter<>(PositionEnum.class));
         builder.registerTypeAdapter(RankEnum.class, new GsonEnumTypeAdapter<>(RankEnum.class));
         builder.registerTypeAdapter(BedStateEnum.class, new GsonEnumTypeAdapter<>(BedStateEnum.class));
+        builder.registerTypeAdapter(InpatientSourceEnum.class, new GsonEnumTypeAdapter<>(InpatientSourceEnum.class));
+        builder.registerTypeAdapter(ValidStateEnum.class, new GsonEnumTypeAdapter<>(ValidStateEnum.class));
+        builder.registerTypeAdapter(InciTypeEnum.class, new GsonEnumTypeAdapter<>(InciTypeEnum.class));
+        builder.registerTypeAdapter(SurgeryInspectResultEnum.class,
+                new GsonEnumTypeAdapter<>(SurgeryInspectResultEnum.class));
+        builder.registerTypeAdapter(SurgeryArrangeRoleEnum.class,
+                new GsonEnumTypeAdapter<>(SurgeryArrangeRoleEnum.class));
 
         return builder.create();
     }

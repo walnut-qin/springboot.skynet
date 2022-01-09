@@ -321,6 +321,71 @@ public class SpringParamConvertConfig {
                     throw new IllegalArgumentException();
                 }
             });
+
+            // 注册 InpatientSourceEnum 转换器
+            genericConversionService.addConverter(new Converter<String, InpatientSourceEnum>() {
+                @Override
+                public InpatientSourceEnum convert(String source) {
+                    for (InpatientSourceEnum e : InpatientSourceEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册 ValidStateEnum 转换器
+            genericConversionService.addConverter(new Converter<String, ValidStateEnum>() {
+                @Override
+                public ValidStateEnum convert(String source) {
+                    for (ValidStateEnum e : ValidStateEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册 InciTypeEnum 转换器
+            genericConversionService.addConverter(new Converter<String, InciTypeEnum>() {
+                @Override
+                public InciTypeEnum convert(String source) {
+                    for (InciTypeEnum e : InciTypeEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册 SurgeryInspectResultEnum 转换器
+            genericConversionService.addConverter(new Converter<String, SurgeryInspectResultEnum>() {
+                @Override
+                public SurgeryInspectResultEnum convert(String source) {
+                    for (SurgeryInspectResultEnum e : SurgeryInspectResultEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册 SurgeryArrangeRoleEnum 转换器
+            genericConversionService.addConverter(new Converter<String, SurgeryArrangeRoleEnum>() {
+                @Override
+                public SurgeryArrangeRoleEnum convert(String source) {
+                    for (SurgeryArrangeRoleEnum e : SurgeryArrangeRoleEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
         }
     }
 
