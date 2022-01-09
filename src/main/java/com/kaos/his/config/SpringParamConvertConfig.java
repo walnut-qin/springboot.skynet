@@ -269,6 +269,45 @@ public class SpringParamConvertConfig {
                     throw new IllegalArgumentException();
                 }
             });
+
+            // 注册DeptStateEnum转换器
+            genericConversionService.addConverter(new Converter<String, DeptStateEnum>() {
+                @Override
+                public DeptStateEnum convert(String source) {
+                    for (DeptStateEnum e : DeptStateEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册PositionEnum转换器
+            genericConversionService.addConverter(new Converter<String, PositionEnum>() {
+                @Override
+                public PositionEnum convert(String source) {
+                    for (PositionEnum e : PositionEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
+
+            // 注册RankEnum转换器
+            genericConversionService.addConverter(new Converter<String, RankEnum>() {
+                @Override
+                public RankEnum convert(String source) {
+                    for (RankEnum e : RankEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
         }
     }
 

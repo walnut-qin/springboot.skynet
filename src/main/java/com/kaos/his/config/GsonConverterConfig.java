@@ -69,6 +69,9 @@ public class GsonConverterConfig {
         builder.registerTypeAdapter(AnesTypeEnum.class, new GsonEnumTypeAdapter<>(AnesTypeEnum.class));
         builder.registerTypeAdapter(SurgeryDegreeEnum.class, new GsonEnumTypeAdapter<>(SurgeryDegreeEnum.class));
         builder.registerTypeAdapter(SurgeryStatusEnum.class, new GsonEnumTypeAdapter<>(SurgeryStatusEnum.class));
+        builder.registerTypeAdapter(DeptStateEnum.class, new GsonEnumTypeAdapter<>(DeptStateEnum.class));
+        builder.registerTypeAdapter(PositionEnum.class, new GsonEnumTypeAdapter<>(PositionEnum.class));
+        builder.registerTypeAdapter(RankEnum.class, new GsonEnumTypeAdapter<>(RankEnum.class));
 
         return builder.create();
     }
