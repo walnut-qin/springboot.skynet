@@ -1,4 +1,4 @@
-package com.kaos.his.entity.com;
+package com.kaos.his.entity.common;
 
 import java.sql.Date;
 
@@ -7,7 +7,7 @@ import com.kaos.his.enums.RankEnum;
 import com.kaos.his.enums.SexEnum;
 
 /**
- * 职员实体（DAWN_ORG_EMPL）
+ * 实体：职员（DAWN_ORG_EMPL）
  */
 public class Employee {
     /**

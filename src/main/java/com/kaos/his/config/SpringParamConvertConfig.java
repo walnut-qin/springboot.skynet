@@ -308,6 +308,19 @@ public class SpringParamConvertConfig {
                     throw new IllegalArgumentException();
                 }
             });
+
+            // 注册BedStateEnum转换器
+            genericConversionService.addConverter(new Converter<String, BedStateEnum>() {
+                @Override
+                public BedStateEnum convert(String source) {
+                    for (BedStateEnum e : BedStateEnum.class.getEnumConstants()) {
+                        if (e.getDescription().equals(source)) {
+                            return e;
+                        }
+                    }
+                    throw new IllegalArgumentException();
+                }
+            });
         }
     }
 

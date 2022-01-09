@@ -1,11 +1,11 @@
-package com.kaos.his.entity.com;
+package com.kaos.his.entity.common;
 
 import java.util.Date;
 
 import com.kaos.his.enums.SexEnum;
 
 /**
- * 患者信息（XYHIS.COM_PATIENTINFO）
+ * 实体：患者信息（XYHIS.COM_PATIENTINFO）
  */
 public class Patient {
     /**
@@ -58,9 +58,9 @@ public class Patient {
      */
     public class AssociateEntity {
         /**
-         * 操作员
+         * 基本信息操作员
          */
-        public Employee employee = null;
+        public Employee operEmpl = null;
     }
 
     /**

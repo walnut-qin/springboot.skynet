@@ -1,9 +1,9 @@
-package com.kaos.his.entity.com;
+package com.kaos.his.entity.common;
 
 import com.kaos.his.enums.DeptOwnEnum;
 
 /**
- * 科室信息（XYHIS.DAWN_ORG_DEPT）
+ * 实体：科室信息（XYHIS.DAWN_ORG_DEPT）
  */
 public class Department {
     /**

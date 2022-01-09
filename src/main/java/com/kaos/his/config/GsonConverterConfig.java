@@ -72,6 +72,7 @@ public class GsonConverterConfig {
         builder.registerTypeAdapter(DeptStateEnum.class, new GsonEnumTypeAdapter<>(DeptStateEnum.class));
         builder.registerTypeAdapter(PositionEnum.class, new GsonEnumTypeAdapter<>(PositionEnum.class));
         builder.registerTypeAdapter(RankEnum.class, new GsonEnumTypeAdapter<>(RankEnum.class));
+        builder.registerTypeAdapter(BedStateEnum.class, new GsonEnumTypeAdapter<>(BedStateEnum.class));
 
         return builder.create();
     }
