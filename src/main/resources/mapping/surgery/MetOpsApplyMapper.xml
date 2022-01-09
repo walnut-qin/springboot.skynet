@@ -80,4 +80,28 @@
             #{item}
         </foreach>
     </select>
+
+    <!-- 接口 -->
+    <select id="queryDeptOwnMetOpsApplies" resultMap="map">
+        SELECT
+        <include refid="allItem"/>
+        FROM
+            XYHIS.MET_OPS_APPLY
+        WHERE
+            (
+                SELECT
+                    T2.DEPTOWN
+                FROM
+                    FIN_IPR_INMAININFO T1
+                    LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_CODE
+                WHERE
+                    T1.INPATIENT_NO = 'ZY01' || PATIENT_NO
+            ) = #{deptOwn}
+            AND APPLY_DATE &gt;= #{beginDate}
+            AND APPLY_DATE &lt;= #{endDate}
+            AND EXECSTATUS IN
+        <foreach collection="status" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>
