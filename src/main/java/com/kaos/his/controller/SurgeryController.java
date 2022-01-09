@@ -1,7 +1,12 @@
 package com.kaos.his.controller;
 
 import java.util.Date;
+import java.util.List;
 
+import com.kaos.his.entity.surgery.MetOpsApply;
+import com.kaos.his.enums.AnesTypeEnum;
+import com.kaos.his.enums.SexEnum;
+import com.kaos.his.enums.SurgeryDegreeEnum;
 import com.kaos.his.service.SurgeryService;
 import com.kaos.util.GsonHelper;
 
@@ -47,5 +52,100 @@ public class SurgeryController {
         var rs = this.surgeryService.queryMetOpsApplies(deptCode, beginDate, endDate);
 
         return GsonHelper.ToJson(rs);
+    }
+
+    /**
+     * queryDeptSurgeries_rspBody
+     */
+    public class queryDeptSurgeries_rspBody {
+        /**
+         * 手术间
+         */
+        public String roomNo = null;
+
+        /**
+         * 手术时间
+         */
+        public Date surgeryDate = null;
+
+        /**
+         * 住院科室
+         */
+        public String deptCode = null;
+
+        /**
+         * 床号
+         */
+        public String bedNo = null;
+
+        /**
+         * 姓名
+         */
+        public String name = null;
+
+        /**
+         * 性别
+         */
+        public SexEnum sex = null;
+
+        /**
+         * 年龄
+         */
+        public String age = null;
+
+        /**
+         * 诊断
+         */
+        public String diagnosis = null;
+
+        /**
+         * 手术名
+         */
+        public String surgeryName = null;
+
+        /**
+         * 备注
+         */
+        public String remark = null;
+
+        /**
+         * 手术等级
+         */
+        public SurgeryDegreeEnum surgeryDegree = null;
+
+        /**
+         * 术者姓名
+         */
+        public String operDocName = null;
+
+        /**
+         * 助手姓名
+         */
+        public List<String> helperNames = null;
+
+        /**
+         * 麻醉方法
+         */
+        public AnesTypeEnum anesType = null;
+
+        /**
+         * 麻醉医生姓名
+         */
+        public List<String> anesDocNames = null;
+
+        /**
+         * 洗手护士
+         */
+        public List<String> washNurses = null;
+
+        /**
+         * 巡回护士列表
+         */
+        public List<String> itinerantNurses = null;
+
+        /**
+         * 特殊需求
+         */
+        public String specialMessage = null;
     }
 }

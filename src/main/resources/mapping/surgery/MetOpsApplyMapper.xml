@@ -5,6 +5,7 @@
     <resultMap id="map" type="com.kaos.his.entity.surgery.MetOpsApply">
         <id column="OPERATIONNO" jdbcType="VARCHAR" property="operationNo"/>
         <result column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
+        <result column="ROOM_ID" jdbcType="VARCHAR" property="roomId"/>
         <result column="OPS_KIND" jdbcType="VARCHAR" property="surgeryKind"/>
         <result column="OPS_DOCD" jdbcType="VARCHAR" property="opsDocCode"/>
         <result column="PRE_DATE" jdbcType="VARCHAR" property="preDate"/>
@@ -17,13 +18,14 @@
         <result column="ANES_DOCD" jdbcType="VARCHAR" property="anesDocCode"/>
         <result column="DEGREE" jdbcType="VARCHAR" property="surgeryDegree"/>
         <result column="EXECSTATUS" jdbcType="VARCHAR" property="surgeryStatus"/>
-        <association property="operationName" column="operationNo" select="querySurgeryName" />
+        <result column="DIAGNOSE" jdbcType="VARCHAR" property="diagnosis"/>
     </resultMap>
 
     <!-- 所有字段 -->
     <sql id="allItem">
         OPERATIONNO,
         PATIENT_NO,
+        ROOM_ID,
         OPS_KIND,
         OPS_DOCD,
         PRE_DATE,
@@ -37,16 +39,6 @@
         DEGREE,
         EXECSTATUS
     </sql>
-
-    <!-- 内联接口 -->
-    <select id="querySurgeryName" resultType="String">
-        SELECT
-            ITEM_NAME
-        FROM
-            XYHIS.MET_OPS_OPERATIONITEM
-        WHERE
-            OPERATIONNO = #{operationNo}
-    </select>
 
     <!-- 接口 -->
     <select id="queryMetOpsApply" resultMap="map">
