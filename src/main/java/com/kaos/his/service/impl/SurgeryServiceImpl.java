@@ -2,10 +2,14 @@ package com.kaos.his.service.impl;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import com.kaos.his.entity.common.Department;
+import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
+import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.enums.SurgeryStatusEnum;
 import com.kaos.his.enums.ValidStateEnum;
@@ -107,25 +111,44 @@ public class SurgeryServiceImpl implements SurgeryService {
                 break;
         }
 
+        // cache模块，加速查询
+        HashMap<String, Employee> employeeCache = new HashMap<>();
+        HashMap<String, Department> departmentCache = new HashMap<>();
+        HashMap<String, MetOpsRoom> roomCache = new HashMap<>();
+
         // 填充关联实体
         for (MetOpsApply item : rs) {
             // 实体：项目
             item.associateEntity.metOpsItem = this.metOpsItemMapper.queryMetOpsItem(item.operationNo, "S991");
 
             // 主刀医师
-            item.associateEntity.opsDoctor = this.employeeMapper.queryEmployee(item.opsDocCode, ValidStateEnum.有效);
-            if (item.associateEntity.opsDoctor == null) {
-                item.associateEntity.opsDoctor = this.employeeMapper.queryInformalEmployee(item.opsDocCode,
-                        ValidStateEnum.有效);
+            if (employeeCache.keySet().contains(item.opsDocCode)) {
+                // 取cache
+                item.associateEntity.opsDoctor = employeeCache.get(item.opsDocCode);
+            } else {
+                item.associateEntity.opsDoctor = this.employeeMapper.queryEmployee(item.opsDocCode, ValidStateEnum.有效);
+                if (item.associateEntity.opsDoctor == null) {
+                    item.associateEntity.opsDoctor = this.employeeMapper.queryInformalEmployee(item.opsDocCode,
+                            ValidStateEnum.有效);
+                }
+                // 加入cache
+                employeeCache.put(item.opsDocCode, item.associateEntity.opsDoctor);
             }
 
             // 实体：手术安排
             item.associateEntity.metOpsArranges = this.metOpsArrangeMapper.queryMetOpsArranges(item.operationNo, null);
             for (var iter : item.associateEntity.metOpsArranges) {
-                iter.associateEntity.employee = this.employeeMapper.queryEmployee(iter.emplCode, ValidStateEnum.有效);
-                if (iter.associateEntity.employee == null) {
-                    iter.associateEntity.employee = this.employeeMapper.queryInformalEmployee(iter.emplCode,
-                            ValidStateEnum.有效);
+                if (employeeCache.keySet().contains(iter.emplCode)) {
+                    // 取cache
+                    iter.associateEntity.employee = employeeCache.get(iter.emplCode);
+                } else {
+                    iter.associateEntity.employee = this.employeeMapper.queryEmployee(iter.emplCode, ValidStateEnum.有效);
+                    if (iter.associateEntity.employee == null) {
+                        iter.associateEntity.employee = this.employeeMapper.queryInformalEmployee(iter.emplCode,
+                                ValidStateEnum.有效);
+                    }
+                    // 加入cache
+                    employeeCache.put(iter.emplCode, iter.associateEntity.employee);
                 }
             }
 
@@ -136,14 +159,28 @@ public class SurgeryServiceImpl implements SurgeryService {
                 Inpatient inpatient = item.associateEntity.inpatient;
 
                 // 住院科室
-                inpatient.associateEntity.stayedDept = this.departmentMapper.queryDepartment(inpatient.stayedDeptCode,
-                        ValidStateEnum.有效);
+                if (departmentCache.keySet().contains(inpatient.stayedDeptCode)) {
+                    // 取cache
+                    inpatient.associateEntity.stayedDept = departmentCache.get(inpatient.stayedDeptCode);
+                } else {
+                    inpatient.associateEntity.stayedDept = this.departmentMapper.queryDepartment(
+                            inpatient.stayedDeptCode, ValidStateEnum.有效);
+                    // 加入cache
+                    departmentCache.put(inpatient.stayedDeptCode, inpatient.associateEntity.stayedDept);
+                }
 
                 // 床位
                 inpatient.associateEntity.bed = this.bedMapper.queryBed(inpatient.bedNo, ValidStateEnum.有效);
             }
             // 实体：房间
-            item.associateEntity.room = this.metOpsRoomMapper.queryMetOpsRoom(item.roomId);
+            if (roomCache.keySet().contains(item.roomId)) {
+                // 取cache
+                item.associateEntity.room = roomCache.get(item.roomId);
+            } else {
+                item.associateEntity.room = this.metOpsRoomMapper.queryMetOpsRoom(item.roomId);
+                // 加入cache
+                roomCache.put(item.roomId, item.associateEntity.room);
+            }
         }
 
         // 按手术室排序
