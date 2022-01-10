@@ -1,6 +1,6 @@
 # spring数据库链接
 server:
-  port: 8024
+  port: 8025
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
