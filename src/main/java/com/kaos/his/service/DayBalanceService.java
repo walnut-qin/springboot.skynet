@@ -82,7 +82,7 @@ public class DayBalanceService {
         var collects = Collections2.filter(balanceHeads, new Predicate<FinIpbBalanceHead>() {
             @Override
             public boolean apply(@Nullable FinIpbBalanceHead input) {
-                if (input.pactCode == pactCode) {
+                if (input.pactCode.equals(pactCode)) {
                     return true;
                 } else {
                     return false;
