@@ -47,7 +47,7 @@ public class DayReportController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "dayreport/fixNewYbData", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "dayreport/fixNewYbDataInDeptOwn", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String fixNewYbDataInDeptOwn(Date beginDate, Date endDate, @Nullable DeptOwnEnum deptOwn) {
         // 入参判断
         if (beginDate == null || endDate == null) {
