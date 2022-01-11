@@ -49,6 +49,9 @@ public class DayReportServiceImpl implements DayReportService {
     @Autowired
     FinIpbDayReportDetailMapper finIpbDayReportDetailMapper;
 
+    /**
+     * 以独立事务更新指定的日结
+     */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void fixNewYbDayReportData(String statNo) {
@@ -124,6 +127,10 @@ public class DayReportServiceImpl implements DayReportService {
         }
     }
 
+    /**
+     * 批量更新
+     */
+    @Transactional
     @Override
     public void fixNewYbDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
         // 查询目标范围内的所有日结记录
