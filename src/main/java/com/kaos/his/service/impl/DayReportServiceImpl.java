@@ -132,7 +132,10 @@ public class DayReportServiceImpl implements DayReportService {
         // 每一个日结单独启动会话刷新
         for (var rpt : rpts) {
             try {
-                // 事务之间应当互不影响
+                // 记录日志
+                this.logger.info(String.format("修改新医保日结数据(statNo = %s)", rpt.statNo));
+
+                // 以独立的事务运行
                 this.selfService.fixNewYbDayReportData(rpt.statNo);
             } catch (Exception e) {
                 this.logger.error(String.format("更新数据异常(statNo = %s)", rpt.statNo));
