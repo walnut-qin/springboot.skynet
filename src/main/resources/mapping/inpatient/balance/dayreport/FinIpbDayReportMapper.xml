@@ -34,4 +34,32 @@
             </if>
         </where>
     </select>
+
+    <select id="queryDayReprots" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_DAYREPORT
+        <where>
+            <if test="beginDate != null">
+                AND OPER_DATE &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND OPER_DATE &lt;= #{endDate}
+            </if>
+            <if test="deptOwn != null and deptOwn != @com.kaos.his.enums.DeptOwnEnum@All">
+                AND (
+                    SELECT
+                        T2.DEPTOWN
+                    FROM
+                        DAWN_ORG_EMPL T1
+                        LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_ID
+                    WHERE
+                        T1.VALID_STATE = 1
+                        AND T2.VALID_STATE = 1
+                        AND T1.EMPL_ID = XYHIS.FIN_IPB_DAYREPORT.OPER_CODE
+                ) = #{deptOwn}
+            </if>
+        </where>
+    </select>
 </mapper>

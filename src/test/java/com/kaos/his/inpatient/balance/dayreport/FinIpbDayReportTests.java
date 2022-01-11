@@ -1,5 +1,8 @@
 package com.kaos.his.inpatient.balance.dayreport;
 
+import java.util.Date;
+
+import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportMapper;
 
 import org.junit.jupiter.api.Test;
@@ -14,5 +17,12 @@ public class FinIpbDayReportTests {
     @Test
     public void queryDayReport() {
         this.finIpbDayReportMapper.queryDayReport("163691");
+    }
+
+    @Test
+    public void queryDayReports() {
+        this.finIpbDayReportMapper.queryDayReprots(new Date(), new Date(), DeptOwnEnum.East);
+        this.finIpbDayReportMapper.queryDayReprots(new Date(), new Date(), DeptOwnEnum.All);
+        this.finIpbDayReportMapper.queryDayReprots(new Date(), new Date(), null);
     }
 }
