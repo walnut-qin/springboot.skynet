@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/microservice")
+@RequestMapping("/ms")
 public class DayReportController {
     /**
      * 接口：日志服务
