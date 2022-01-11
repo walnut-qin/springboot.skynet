@@ -30,4 +30,12 @@ public interface FinIpbDayReportDetailMapper {
      * @return
      */
     int updateDayReportDetail(String statNo, String statCode, Double totCost);
+
+    /**
+     * 插入一条记录
+     * 
+     * @param finIpbDayReportDetail
+     * @return
+     */
+    int insertDayReportDetail(FinIpbDayReportDetail finIpbDayReportDetail);
 }

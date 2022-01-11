@@ -1,5 +1,6 @@
 package com.kaos.his.inpatient.balance.dayreport;
 
+import com.kaos.his.entity.inpatient.balance.dayreport.FinIpbDayReportDetail;
 import com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportDetailMapper;
 
 import org.junit.jupiter.api.Test;
@@ -23,13 +24,12 @@ public class FinIpbDayReportDetailTests {
 
     @Test
     public void updateDayReportDetail() {
-        var detail = this.finIpbDayReportDetailMapper.queryDayReportDetail("999999", "test");
-        if (detail != null) {
-            var cnt = this.finIpbDayReportDetailMapper.updateDayReportDetail(detail.statNo, detail.statCode,
-                    detail.totCost);
-            if (cnt != 1) {
-                throw new RuntimeException("更新测试失败");
+        this.finIpbDayReportDetailMapper.insertDayReportDetail(new FinIpbDayReportDetail() {
+            {
+                statNo = "999999";
+                statCode = "test";
+                totCost = 0.01;
             }
-        }
+        });
     }
 }

@@ -59,4 +59,11 @@
             </if>
         </where>
     </update>
+
+    <insert id="insertDayReportDetail">
+        INSERT INTO
+            XYHIS.FIN_IPB_DAYREPORTDETAIL(STATIC_NO, STAT_CODE, TOT_COST)
+        VALUES
+            (#{statNo}, #{statCode}, #{totCost})
+    </insert>
 </mapper>
