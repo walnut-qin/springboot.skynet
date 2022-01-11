@@ -7,7 +7,7 @@
         <result column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
         <result column="BALANCE_NO" jdbcType="VARCHAR" property="balanceNo"/>
         <result column="PACT_CODE" jdbcType="VARCHAR" property="pactCode"/>
-        <result column="BALANCE_OPERCODE" jdbcType="VARCHAR" property="balanceOperCode"/>
+        <result column="BALANCE_OPERCODE" jdbcType="VARCHAR" property="balanceEmplCode"/>
         <result column="BALANCE_DATE" jdbcType="VARCHAR" property="balanceDate"/>
         <result column="TOT_COST" jdbcType="VARCHAR" property="totCost"/>
         <result column="PAY_COST" jdbcType="VARCHAR" property="payCost"/>

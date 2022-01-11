@@ -3,6 +3,8 @@ package com.kaos.his.entity.inpatient.balance;
 import java.util.Date;
 
 import com.google.common.base.Optional;
+import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.TransTypeEnum;
 
 /**
@@ -37,7 +39,7 @@ public class FinIpbBalanceHead {
     /**
      * 结算员编码
      */
-    public String balanceOperCode = null;
+    public String balanceEmplCode = null;
 
     /**
      * 结算时间
@@ -120,7 +122,28 @@ public class FinIpbBalanceHead {
     public Double hosCost = null;
 
     /**
+     * 关联实体
+     */
+    public class AssociateEntity {
+        /**
+         * 实体：住院患者
+         */
+        public Inpatient inpatient = null;
+
+        /**
+         * 实体：结算员
+         */
+        public Employee balanceEmployee = null;
+    }
+
+    /**
+     * 关联实体
+     */
+    transient public AssociateEntity associateEntity = null;
+
+    /**
      * 根据当前结算数据计算四舍五入
+     * 
      * @return
      */
     public Double getRound() {
