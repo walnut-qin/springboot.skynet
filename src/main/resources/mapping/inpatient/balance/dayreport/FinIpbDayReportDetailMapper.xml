@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportDetailMapper">
+    <resultMap id="map" type="com.kaos.his.entity.inpatient.balance.dayreport.FinIpbDayReportDetail">
+        <result column="STATIC_NO" jdbcType="VARCHAR" property="statNo"/>
+        <result column="STAT_CODE" jdbcType="VARCHAR" property="statCode"/>
+        <result column="TOT_COST" jdbcType="VARCHAR" property="totCost"/>
+    </resultMap>
+
+    <sql id="item">
+        STATIC_NO,
+        STAT_CODE,
+        TOT_COST
+    </sql>
+
+    <select id="queryDayReportDetail" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_DAYREPORTDETAIL
+        <where>
+            <if test="statNo != null">
+                AND STATIC_NO = #{statNo}
+            </if>
+            <if test="statCode != null">
+                AND STAT_CODE = #{statCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryDayReportDetails" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_DAYREPORTDETAIL
+        <where>
+            <if test="statNo != null">
+                AND STATIC_NO = #{statNo}
+            </if>
+        </where>
+    </select>
+</mapper>
