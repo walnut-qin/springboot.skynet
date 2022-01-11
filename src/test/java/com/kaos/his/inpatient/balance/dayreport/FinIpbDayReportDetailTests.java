@@ -23,13 +23,24 @@ public class FinIpbDayReportDetailTests {
     }
 
     @Test
-    public void updateDayReportDetail() {
-        this.finIpbDayReportDetailMapper.insertDayReportDetail(new FinIpbDayReportDetail() {
-            {
-                statNo = "999999";
-                statCode = "test";
-                totCost = 0.01;
+    public void insertOrUpdateDayReportDetail() {
+        var detail = this.finIpbDayReportDetailMapper.queryDayReportDetail("000000", "测试数据");
+        if (detail == null) {
+            var cnt = this.finIpbDayReportDetailMapper.insertDayReportDetail(new FinIpbDayReportDetail() {
+                {
+                    statNo = "000000";
+                    statCode = "测试数据";
+                    totCost = 0.01;
+                }
+            });
+            if (cnt != 1) {
+                throw new RuntimeException();
             }
-        });
+        } else {
+            var cnt = this.finIpbDayReportDetailMapper.updateDayReportDetail("000000", "测试数据", 0.01);
+            if (cnt != 1) {
+                throw new RuntimeException();
+            }
+        }
     }
 }
