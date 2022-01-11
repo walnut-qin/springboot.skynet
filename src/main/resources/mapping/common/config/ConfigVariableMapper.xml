@@ -29,4 +29,19 @@
             </if>
         </where>
     </select>
+
+    <select id="queryConfigVariableList" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.CONFIG_LIST
+        <where>
+            <if test="name != null">
+                AND NAME = #{name}
+            </if>
+            <if test="valid != null">
+                AND VALID = #{valid}
+            </if>
+        </where>
+    </select>
 </mapper>

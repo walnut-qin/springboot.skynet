@@ -3,7 +3,7 @@ package com.kaos.his.entity.common.config;
 import com.kaos.his.enums.ValidStateEnum;
 
 /**
- * 开关控制器（KAOS.CONFIG_SWITCHS）
+ * 开关控制器（KAOS.CONFIG_SWITCH）
  */
 public class ConfigSwitch {
     /**

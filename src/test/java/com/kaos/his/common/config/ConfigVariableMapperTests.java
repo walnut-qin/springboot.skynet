@@ -17,4 +17,10 @@ public class ConfigVariableMapperTests {
         this.configVariableMapper.queryConfigVariable("EscortRegOffset", null);
         this.configVariableMapper.queryConfigVariable("EscortRegOffset", ValidStateEnum.有效);
     }
+
+    @Test
+    public void queryConfigVariableList() {
+        this.configVariableMapper.queryConfigVariableList("GcpDept", null);
+        this.configVariableMapper.queryConfigVariableList("GcpDept", ValidStateEnum.有效);
+    }
 }
