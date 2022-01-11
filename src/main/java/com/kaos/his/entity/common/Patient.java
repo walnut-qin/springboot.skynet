@@ -40,19 +40,24 @@ public class Patient {
     public String tel = null;
 
     /**
-     * 操作职员
+     * 患者实体创建人
      */
-    public String operCode = null;
+    public String crtEmplCode = null;
 
     /**
-     * 操作日期
+     * 患者实体创建日期
      */
-    public Date operDate = null;
+    public Date crtDate = null;
 
     /**
      * 有效性
      */
     public ValidStateEnum valid = null;
+
+    /**
+     * GCP患者标识（临床试验）
+     */
+    public Boolean gcpFlag = null;
 
     /**
      * 关联实体

@@ -8,6 +8,10 @@
         <result column="SEX_CODE" jdbcType="VARCHAR" property="sex"/>
         <result column="IDENNO" jdbcType="VARCHAR" property="identityCardNo"/>
         <result column="LINKMAN_TEL" jdbcType="VARCHAR" property="tel"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="crtEmplCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="crtDate"/>
+        <result column="IS_VALID" jdbcType="VARCHAR" property="valid"/>
+        <result column="GCPOUTPATIENT" jdbcType="VARCHAR" property="gcpFlag"/>
     </resultMap>
 
     <sql id="item">
@@ -16,7 +20,11 @@
         BIRTHDAY,
         SEX_CODE,
         IDENNO,
-        LINKMAN_TEL
+        LINKMAN_TEL,
+        OPER_CODE,
+        OPER_DATE,
+        IS_VALID,
+        GCPOUTPATIENT
     </sql>
 
     <select id="queryPatient" resultMap="map">
