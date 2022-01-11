@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/webApi")
+@RequestMapping("/microservice")
 public class SurgeryController {
     /**
      * 接口：日志服务
