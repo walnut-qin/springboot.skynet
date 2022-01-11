@@ -20,4 +20,14 @@ public interface FinIpbDayReportDetailMapper {
      * @return
      */
     List<FinIpbDayReportDetail> queryDayReportDetails(String statNo);
+
+    /**
+     * 主键修改
+     * 
+     * @param statNo
+     * @param statCode
+     * @param totCost
+     * @return
+     */
+    int updateDayReportDetail(String statNo, String statCode, Double totCost);
 }

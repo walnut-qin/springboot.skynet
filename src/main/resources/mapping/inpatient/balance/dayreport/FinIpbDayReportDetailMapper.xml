@@ -39,4 +39,24 @@
             </if>
         </where>
     </select>
+
+    <update id="updateDayReportDetail">
+        UPDATE XYHIS.FIN_IPB_DAYREPORTDETAIL
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="totCost != null">
+                TOT_COST = #{totCost},
+            </if>
+            <if test="totCost == null">
+                TOT_COST = NULL,
+            </if>
+        </trim>
+        <where>
+            <if test="statNo != null">
+                AND STATIC_NO = #{statNo}
+            </if>
+            <if test="statCode != null">
+                AND STAT_CODE = #{statCode}
+            </if>
+        </where>
+    </update>
 </mapper>

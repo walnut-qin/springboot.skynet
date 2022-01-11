@@ -20,4 +20,16 @@ public class FinIpbDayReportDetailTests {
     public void queryDayReportDetails() {
         this.finIpbDayReportDetailMapper.queryDayReportDetails("163691");
     }
+
+    @Test
+    public void updateDayReportDetail() {
+        var detail = this.finIpbDayReportDetailMapper.queryDayReportDetail("999999", "test");
+        if (detail != null) {
+            var cnt = this.finIpbDayReportDetailMapper.updateDayReportDetail(detail.statNo, detail.statCode,
+                    detail.totCost);
+            if (cnt != 1) {
+                throw new RuntimeException("更新测试失败");
+            }
+        }
+    }
 }
