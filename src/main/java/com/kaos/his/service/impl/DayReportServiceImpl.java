@@ -1,5 +1,6 @@
 package com.kaos.his.service.impl;
 
+import java.util.Date;
 import java.util.function.ToDoubleFunction;
 
 import com.google.common.base.Optional;
@@ -113,5 +114,33 @@ public class DayReportServiceImpl implements DayReportService {
             this.logger.info(String.format("修改账户数据(statNo = %s, statCode = %s, totCost = %f)", rpt.statNo, "市直统筹市直外伤",
                     payCost));
         }
+    }
+
+    @Override
+    public Double queryNewYbPubCost(String balancer, Date beginDate, Date endDate) {
+        // 检索所有结算记录
+        var balances = this.finIpbBalanceHeadMapper.queryBalanceHeadsInBalancer(balancer, beginDate, endDate, "18");
+
+        // 算和
+        return balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+            @Override
+            public double applyAsDouble(FinIpbBalanceHead arg0) {
+                return Optional.fromNullable(arg0.pubCost).or(0.0);
+            }
+        }).sum();
+    }
+
+    @Override
+    public Double queryNewYbPayCost(String balancer, Date beginDate, Date endDate) {
+        // 检索所有结算记录
+        var balances = this.finIpbBalanceHeadMapper.queryBalanceHeadsInBalancer(balancer, beginDate, endDate, "18");
+
+        // 算和
+        return balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+            @Override
+            public double applyAsDouble(FinIpbBalanceHead arg0) {
+                return Optional.fromNullable(arg0.payCost).or(0.0);
+            }
+        }).sum();
     }
 }

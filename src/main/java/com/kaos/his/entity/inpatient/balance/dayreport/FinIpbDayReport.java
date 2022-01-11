@@ -1,6 +1,6 @@
 package com.kaos.his.entity.inpatient.balance.dayreport;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.kaos.his.entity.common.Employee;
 

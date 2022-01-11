@@ -1,5 +1,7 @@
 package com.kaos.his.controller.dayreport;
 
+import java.util.Date;
+
 import com.kaos.his.service.DayReportService;
 
 import org.apache.log4j.Logger;
@@ -39,5 +41,45 @@ public class DayReportController {
         this.dayReportService.fixNewYbDayReportData(statNo);
 
         return "修改完毕";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "dayreport/queryNewYbPubCost", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    public String queryNewYbPubCost(String balancer, Date beginDate, Date endDate) {
+        // 入参判断
+        if (balancer == null || balancer.isEmpty()) {
+            throw new RuntimeException("statNo不能为空");
+        }
+
+        // 记录日志
+        this.logger.info(String.format("获取新医保统筹数据(balancer = %s, beginDate = %s, endDate = %s)", balancer,
+                beginDate.toString(), endDate.toString()));
+
+        var sum = this.dayReportService.queryNewYbPubCost(balancer, beginDate, endDate);
+
+        this.logger.info(String.format("响应(%f)", sum));
+
+        // 调用服务
+        return sum.toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "dayreport/queryNewYbPayCost", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    public String queryNewYbPayCost(String balancer, Date beginDate, Date endDate) {
+        // 入参判断
+        if (balancer == null || balancer.isEmpty()) {
+            throw new RuntimeException("statNo不能为空");
+        }
+
+        // 记录日志
+        this.logger.info(String.format("获取新医保账户数据(balancer = %s, beginDate = %s, endDate = %s)", balancer,
+                beginDate.toString(), endDate.toString()));
+
+        var sum = this.dayReportService.queryNewYbPayCost(balancer, beginDate, endDate);
+
+        this.logger.info(String.format("响应(%f)", sum));
+
+        // 调用服务
+        return sum.toString();
     }
 }
