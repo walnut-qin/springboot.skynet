@@ -6,6 +6,7 @@ import java.util.function.ToDoubleFunction;
 import com.google.common.base.Optional;
 import com.kaos.his.entity.inpatient.balance.FinIpbBalanceHead;
 import com.kaos.his.entity.inpatient.balance.dayreport.FinIpbDayReportDetail;
+import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.mapper.inpatient.balance.FinIpbBalanceHeadMapper;
 import com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportDetailMapper;
 import com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportMapper;
@@ -14,6 +15,7 @@ import com.kaos.his.service.DayReportService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -22,6 +24,12 @@ public class DayReportServiceImpl implements DayReportService {
      * 日志接口
      */
     Logger logger = Logger.getLogger(DayReportServiceImpl.class.getName());
+
+    /**
+     * 注解自身，用于会话传递
+     */
+    @Autowired
+    DayReportService selfService;
 
     /**
      * 日结头表接口
@@ -41,7 +49,7 @@ public class DayReportServiceImpl implements DayReportService {
     @Autowired
     FinIpbDayReportDetailMapper finIpbDayReportDetailMapper;
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void fixNewYbDayReportData(String statNo) {
         // 查询到结算实体
@@ -113,6 +121,22 @@ public class DayReportServiceImpl implements DayReportService {
             this.finIpbDayReportDetailMapper.updateDayReportDetail(rpt.statNo, "市直统筹市直外伤", payCost);
             this.logger.info(String.format("修改账户数据(statNo = %s, statCode = %s, totCost = %f)", rpt.statNo, "市直统筹市直外伤",
                     payCost));
+        }
+    }
+
+    @Override
+    public void fixNewYbDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
+        // 查询目标范围内的所有日结记录
+        var rpts = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
+
+        // 每一个日结单独启动会话刷新
+        for (var rpt : rpts) {
+            try {
+                // 事务之间应当互不影响
+                this.selfService.fixNewYbDayReportData(rpt.statNo);
+            } catch (Exception e) {
+                this.logger.error(String.format("更新数据异常(statNo = %s)", rpt.statNo));
+            }
         }
     }
 

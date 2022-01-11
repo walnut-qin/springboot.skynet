@@ -2,6 +2,9 @@ package com.kaos.his.controller.dayreport;
 
 import java.util.Date;
 
+import javax.annotation.Nullable;
+
+import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.service.DayReportService;
 
 import org.apache.log4j.Logger;
@@ -39,6 +42,24 @@ public class DayReportController {
 
         // 调用服务
         this.dayReportService.fixNewYbDayReportData(statNo);
+
+        return "修改完毕";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "dayreport/fixNewYbData", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String fixNewYbDataInDeptOwn(Date beginDate, Date endDate, @Nullable DeptOwnEnum deptOwn) {
+        // 入参判断
+        if (beginDate == null || endDate == null) {
+            throw new RuntimeException("日期限制不能为空");
+        }
+
+        // 记录日志
+        this.logger.info(String.format("批量修改新医保日结数据(beginDate = %s, endDate = %s, deptOwn = %s)", beginDate.toString(),
+                endDate.toString(), deptOwn.getDescription()));
+
+        // 调用服务
+        this.dayReportService.fixNewYbDayReportData(beginDate, endDate, deptOwn);
 
         return "修改完毕";
     }

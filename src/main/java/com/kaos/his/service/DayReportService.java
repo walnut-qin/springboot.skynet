@@ -2,6 +2,8 @@ package com.kaos.his.service;
 
 import java.util.Date;
 
+import com.kaos.his.enums.DeptOwnEnum;
+
 /**
  * 日结服务
  */
@@ -12,6 +14,13 @@ public interface DayReportService {
      * @param statNo
      */
     void fixNewYbDayReportData(String statNo);
+
+    /**
+     * 修复新医保日结明细数据
+     * 
+     * @param statNo
+     */
+    void fixNewYbDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn);
 
     /**
      * 查询新医保统筹总额
