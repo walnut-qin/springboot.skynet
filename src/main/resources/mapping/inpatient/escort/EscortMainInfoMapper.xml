@@ -97,4 +97,17 @@
             </if>
         </where>
     </select>
+
+    <insert id="insertEscortMainInfo">
+        <selectKey keyProperty="escortNo" order="BEFORE" resultType="java.lang.String">
+            SELECT
+                LPAD(KAOS.SEQ_ESCORT_NO.NEXTVAL, 10, '0')
+            FROM
+                DUAL
+        </selectKey>
+        INSERT INTO
+            KAOS.ESCORT_MAIN_INFO(ESCORT_NO, PATIENT_CARD_NO, HAPPEN_NO, HELPER_CARD_NO, REMARK)
+        VALUES
+            (#{escortNo}, #{patientCardNo}, #{happenNo}, #{helperCardNo}, #{remark})
+    </insert>
 </mapper>

@@ -29,4 +29,12 @@ public interface EscortMainInfoMapper {
      * @return
      */
     List<EscortMainInfo> queryHelperEscortMainInfos(String cardNo, List<EscortStateEnum> states);
+
+    /**
+     * 插入陪护主记录
+     * 
+     * @param escortMainInfo
+     * @return
+     */
+    int insertEscortMainInfo(EscortMainInfo escortMainInfo);
 }

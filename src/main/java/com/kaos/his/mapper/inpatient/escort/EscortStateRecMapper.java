@@ -22,4 +22,12 @@ public interface EscortStateRecMapper {
      * @return
      */
     List<EscortStateRec> queryStates(String escortNo);
+
+    /**
+     * 插入新状态
+     * 
+     * @param escortStateRec
+     * @return
+     */
+    int insertState(EscortStateRec escortStateRec);
 }

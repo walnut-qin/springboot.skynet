@@ -48,4 +48,19 @@
             </if>
         </where>
     </select>
+
+    <insert id="insertAction">
+        <selectKey keyProperty="recNo" order="BEFORE" resultType="java.lang.Integer">
+            SELECT
+                NVL(MAX(REC_NO), '0') + 1
+            FROM
+                KAOS.ESCORT_ACTION_REC
+            WHERE
+                ESCORT_NO = #{escortNo}
+        </selectKey>
+        INSERT INTO
+            KAOS.ESCORT_ACTION_REC(ESCORT_NO, REC_NO, ACTION, OPER_DATE, REMARK)
+        VALUES
+            (#{escortNo}, #{recNo}, #{action}, #{recDate}, #{remark})
+    </insert>
 </mapper>

@@ -17,4 +17,12 @@ public interface EscortActionRecMapper {
      * @return
      */
     List<EscortActionRec> queryActions(String escortNo);
+
+    /**
+     * 插入一条动作
+     * 
+     * @param escortActionRec
+     * @return
+     */
+    int insertAction(EscortActionRec escortActionRec);
 }

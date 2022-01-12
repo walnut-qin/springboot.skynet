@@ -33,6 +33,11 @@ public class EscortAnnexInfo {
          * 实体：患者信息
          */
         public Patient patient = null;
+
+        /**
+         * 审核记录
+         */
+        public EscortAnnexChk escortAnnexChk = null;
     }
 
     /**
