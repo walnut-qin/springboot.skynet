@@ -36,9 +36,6 @@
             <if test="cardNo!=null">
                 AND CARD_NO = #{cardNo}
             </if>
-            <if test="valid!=null">
-                AND IS_VALID = #{valid}
-            </if>
         </where>
     </select>
 </mapper>

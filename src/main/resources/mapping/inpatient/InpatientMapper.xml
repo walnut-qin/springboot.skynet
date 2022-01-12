@@ -75,6 +75,12 @@
             <if test="happenNo!=null">
                 AND T1.HAPPEN_NO = #{happenNo}
             </if>
+            <if test="states!=null">
+                AND T1.IN_STATE IN
+                <foreach collection="states" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
 </mapper>

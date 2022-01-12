@@ -1,5 +1,8 @@
 package com.kaos.his.inpatient;
 
+import java.util.ArrayList;
+
+import com.kaos.his.enums.InpatientStateEnum;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
 
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,11 @@ public class InpatientMapperTests {
 
     @Test
     public void queryInpatients() {
-        this.inpatientMapper.queryInpatients("2551130556", null);
-        this.inpatientMapper.queryInpatients("2551130556", 1);
+        this.inpatientMapper.queryInpatients("2551130556", null, null);
+        this.inpatientMapper.queryInpatients("2551130556", 1, new ArrayList<InpatientStateEnum>() {
+            {
+                add(InpatientStateEnum.住院登记);
+            }
+        });
     }
 }

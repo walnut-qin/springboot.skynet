@@ -62,7 +62,7 @@ public class FinIprPrepayIn {
      */
     public class AssociateEntity {
         /**
-         * 实体：患者信息
+         * 实体：患者信息（入院后应当更新为住院实体）
          */
         public Patient patient = null;
 

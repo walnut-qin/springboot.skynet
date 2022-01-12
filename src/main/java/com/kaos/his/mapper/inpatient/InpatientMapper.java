@@ -3,6 +3,7 @@ package com.kaos.his.mapper.inpatient;
 import java.util.List;
 
 import com.kaos.his.entity.inpatient.Inpatient;
+import com.kaos.his.enums.InpatientStateEnum;
 
 public interface InpatientMapper {
     /**
@@ -20,5 +21,5 @@ public interface InpatientMapper {
      * @param happenNo 住院证编号
      * @return
      */
-    List<Inpatient> queryInpatients(String cardNo, Integer happenNo);
+    List<Inpatient> queryInpatients(String cardNo, Integer happenNo, List<InpatientStateEnum> states);
 }
