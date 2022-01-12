@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.inpatient.escort.EscortMainInfoMapper">
+    <resultMap id="map" type="com.kaos.his.entity.inpatient.escort.EscortMainInfo">
+        <id column="ESCORT_NO" jdbcType="VARCHAR" property="escortNo"/>
+        <result column="PATIENT_CARD_NO" jdbcType="VARCHAR" property="patientCardNo"/>
+        <result column="HAPPEN_NO" jdbcType="VARCHAR" property="happenNo"/>
+        <result column="HELPER_CARD_NO" jdbcType="VARCHAR" property="helperCardNo"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <sql id="item">
+        ESCORT_NO,
+        PATIENT_CARD_NO,
+        HAPPEN_NO,
+        HELPER_CARD_NO,
+        REMARK
+    </sql>
+
+    <select id="queryEscortMainInfo" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.ESCORT_MAIN_INFO
+        <where>
+            <if test="escortNo != null">
+                AND ESCORT_NO = #{escortNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPatientEscortMainInfos" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.ESCORT_MAIN_INFO
+        <where>
+            <if test="cardNo != null">
+                AND PATIENT_CARD_NO = #{cardNo}
+            </if>
+            <if test="happenNo != null">
+                AND HAPPEN_NO = #{happenNo}
+            </if>
+            <if test="states != null">
+                AND (
+                    SELECT
+                        T1.STATE
+                    FROM
+                        KAOS.ESCORT_STATE_REC T1
+                    WHERE
+                        T1.ESCORT_NO = KAOS.ESCORT_MAIN_INFO.ESCORT_NO
+                        AND T1.REC_NO = (
+                            SELECT
+                                MAX(T2.REC_NO)
+                            FROM
+                                KAOS.ESCORT_STATE_REC T2
+                            WHERE
+                                T2.ESCORT_NO = T1.ESCORT_NO
+                        )
+                ) IN
+                <foreach collection="states" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="queryHelperEscortMainInfos" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.ESCORT_MAIN_INFO
+        <where>
+            <if test="cardNo != null">
+                AND HELPER_CARD_NO = #{cardNo}
+            </if>
+            <if test="states != null">
+                AND (
+                    SELECT
+                        T1.STATE
+                    FROM
+                        KAOS.ESCORT_STATE_REC T1
+                    WHERE
+                        T1.ESCORT_NO = KAOS.ESCORT_MAIN_INFO.ESCORT_NO
+                        AND T1.REC_NO = (
+                            SELECT
+                                MAX(T2.REC_NO)
+                            FROM
+                                KAOS.ESCORT_STATE_REC T2
+                            WHERE
+                                T2.ESCORT_NO = T1.ESCORT_NO
+                        )
+                ) IN
+                <foreach collection="states" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>
