@@ -7,7 +7,7 @@ import com.kaos.his.entity.common.Department;
 import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.AnesTypeEnum;
-import com.kaos.his.enums.InciTypeEnum;
+import com.kaos.his.enums.MetOpsInciTypeEnum;
 import com.kaos.his.enums.SurgeryDegreeEnum;
 import com.kaos.his.enums.SurgeryInspectResultEnum;
 import com.kaos.his.enums.SurgeryKindEnum;
@@ -112,7 +112,7 @@ public class MetOpsApply {
     /**
      * 切口类型
      */
-    public InciTypeEnum inciType = null;
+    public MetOpsInciTypeEnum inciType = null;
 
     /**
      * 检验结果

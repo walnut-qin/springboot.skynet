@@ -154,10 +154,10 @@ public class SpringParamConvertConfig {
             });
 
             // 注册PreinCardStateEnum转换器
-            genericConversionService.addConverter(new Converter<String, PreinCardStateEnum>() {
+            genericConversionService.addConverter(new Converter<String, FinIprPrepayInStateEnum>() {
                 @Override
-                public PreinCardStateEnum convert(String source) {
-                    for (PreinCardStateEnum e : PreinCardStateEnum.class.getEnumConstants()) {
+                public FinIprPrepayInStateEnum convert(String source) {
+                    for (FinIprPrepayInStateEnum e : FinIprPrepayInStateEnum.class.getEnumConstants()) {
                         if (e.getDescription().equals(source)) {
                             return e;
                         }
@@ -349,10 +349,10 @@ public class SpringParamConvertConfig {
             });
 
             // 注册 InciTypeEnum 转换器
-            genericConversionService.addConverter(new Converter<String, InciTypeEnum>() {
+            genericConversionService.addConverter(new Converter<String, MetOpsInciTypeEnum>() {
                 @Override
-                public InciTypeEnum convert(String source) {
-                    for (InciTypeEnum e : InciTypeEnum.class.getEnumConstants()) {
+                public MetOpsInciTypeEnum convert(String source) {
+                    for (MetOpsInciTypeEnum e : MetOpsInciTypeEnum.class.getEnumConstants()) {
                         if (e.getDescription().equals(source)) {
                             return e;
                         }

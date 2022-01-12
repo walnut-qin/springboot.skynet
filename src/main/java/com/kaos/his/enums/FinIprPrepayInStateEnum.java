@@ -1,6 +1,6 @@
 package com.kaos.his.enums;
 
-public enum PreinCardStateEnum implements IEnum {
+public enum FinIprPrepayInStateEnum implements IEnum {
     预约("0", "预约"), 作废("1", "作废"), 转住院("2", "转住院"), 签床("3", "签床"), 预住院预约("4", "预住院预约");
 
     /**
@@ -19,7 +19,7 @@ public enum PreinCardStateEnum implements IEnum {
      * @param index
      * @param description
      */
-    PreinCardStateEnum(String value, String description) {
+    FinIprPrepayInStateEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }
