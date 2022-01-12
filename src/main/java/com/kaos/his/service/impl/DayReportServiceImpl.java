@@ -4,12 +4,12 @@ import java.util.Date;
 import java.util.function.ToDoubleFunction;
 
 import com.google.common.base.Optional;
-import com.kaos.his.entity.inpatient.balance.FinIpbBalanceHead;
-import com.kaos.his.entity.inpatient.balance.dayreport.FinIpbDayReportDetail;
+import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
+import com.kaos.his.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
 import com.kaos.his.enums.DeptOwnEnum;
-import com.kaos.his.mapper.inpatient.balance.FinIpbBalanceHeadMapper;
-import com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportDetailMapper;
-import com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportMapper;
+import com.kaos.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
+import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
+import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
 import com.kaos.his.service.DayReportService;
 
 import org.apache.log4j.Logger;

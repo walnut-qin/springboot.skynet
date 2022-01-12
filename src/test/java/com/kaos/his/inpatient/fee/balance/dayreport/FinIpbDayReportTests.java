@@ -1,9 +1,9 @@
-package com.kaos.his.inpatient.balance.dayreport;
+package com.kaos.his.inpatient.fee.balance.dayreport;
 
 import java.util.Date;
 
 import com.kaos.his.enums.DeptOwnEnum;
-import com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportMapper;
+import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

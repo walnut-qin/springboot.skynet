@@ -1,4 +1,4 @@
-package com.kaos.his.entity.inpatient.balance.dayreport;
+package com.kaos.his.entity.inpatient.fee.balance.dayreport;
 
 /**
  * 实体：日结明细（XYHIS.FIN_IPB_DAYREPORTDETAIL）

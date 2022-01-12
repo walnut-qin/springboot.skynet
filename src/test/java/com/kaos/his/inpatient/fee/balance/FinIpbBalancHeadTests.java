@@ -1,9 +1,9 @@
-package com.kaos.his.inpatient.balance;
+package com.kaos.his.inpatient.fee.balance;
 
 import java.util.Date;
 
 import com.kaos.his.enums.TransTypeEnum;
-import com.kaos.his.mapper.inpatient.balance.FinIpbBalanceHeadMapper;
+import com.kaos.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

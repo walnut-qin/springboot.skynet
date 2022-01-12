@@ -1,9 +1,9 @@
-package com.kaos.his.mapper.inpatient.balance;
+package com.kaos.his.mapper.inpatient.fee.balance;
 
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.his.entity.inpatient.balance.FinIpbBalanceHead;
+import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.his.enums.TransTypeEnum;
 
 public interface FinIpbBalanceHeadMapper {

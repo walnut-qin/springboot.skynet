@@ -1,7 +1,7 @@
-package com.kaos.his.inpatient.balance.dayreport;
+package com.kaos.his.inpatient.fee.balance.dayreport;
 
-import com.kaos.his.entity.inpatient.balance.dayreport.FinIpbDayReportDetail;
-import com.kaos.his.mapper.inpatient.balance.dayreport.FinIpbDayReportDetailMapper;
+import com.kaos.his.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
+import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
-package com.kaos.his.mapper.inpatient.balance.dayreport;
+package com.kaos.his.mapper.inpatient.fee.balance.dayreport;
 
 import java.util.List;
 
-import com.kaos.his.entity.inpatient.balance.dayreport.FinIpbDayReportDetail;
+import com.kaos.his.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
 
 public interface FinIpbDayReportDetailMapper {
     /**

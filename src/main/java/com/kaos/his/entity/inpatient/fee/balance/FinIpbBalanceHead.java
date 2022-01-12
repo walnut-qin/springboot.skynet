@@ -1,4 +1,4 @@
-package com.kaos.his.entity.inpatient.balance;
+package com.kaos.his.entity.inpatient.fee.balance;
 
 import java.util.Date;
 

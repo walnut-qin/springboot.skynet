@@ -1,9 +1,9 @@
-package com.kaos.his.mapper.inpatient.balance.dayreport;
+package com.kaos.his.mapper.inpatient.fee.balance.dayreport;
 
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.his.entity.inpatient.balance.dayreport.FinIpbDayReport;
+import com.kaos.his.entity.inpatient.fee.balance.dayreport.FinIpbDayReport;
 import com.kaos.his.enums.DeptOwnEnum;
 
 public interface FinIpbDayReportMapper {
