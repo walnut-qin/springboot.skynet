@@ -1,4 +1,4 @@
-package com.kaos.his.controller.surgery;
+package com.kaos.his.controller.inpatient.surgery;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.Date;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.kaos.his.controller.surgery.entity.QueryArrangedMetOpsAppliesInDeptRspBody;
+import com.kaos.his.controller.inpatient.surgery.entity.QueryArrangedMetOpsAppliesInDeptRspBody;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.entity.inpatient.surgery.MetOpsItem;
@@ -20,14 +20,16 @@ import com.kaos.util.GsonHelper;
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
-@RequestMapping("/ms")
+@RequestMapping("/ms/inpatient/surgery")
 public class SurgeryController {
     /**
      * 接口：日志服务
@@ -41,7 +43,7 @@ public class SurgeryController {
     SurgeryService surgeryService;
 
     @ResponseBody
-    @RequestMapping(value = "surgery/queryArrangedMetOpsAppliesInDept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "queryArrangedMetOpsAppliesInDept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String queryArrangedMetOpsAppliesInDept(@RequestParam("deptCode") String deptCode,
             @RequestParam("beginDate") Date beginDate, @RequestParam("endDate") Date endDate) {
         // 入参判断

@@ -1,4 +1,4 @@
-package com.kaos.his.controller.dayreport;
+package com.kaos.his.controller.inpatient.dayreport;
 
 import java.util.Date;
 
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/ms")
+@RequestMapping({ "/ms/inpatient/dayreport", "/ms/dayreport" })
 public class DayReportController {
     /**
      * 接口：日志服务
@@ -30,7 +30,7 @@ public class DayReportController {
     DayReportService dayReportService;
 
     @ResponseBody
-    @RequestMapping(value = "dayreport/fixNewYbData", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "fixNewYbData", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String fixNewYbData(@RequestParam("statNo") String statNo) {
         // 入参判断
         if (statNo == null || statNo.isEmpty()) {
@@ -47,7 +47,7 @@ public class DayReportController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "dayreport/fixNewYbDataInDeptOwn", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "fixNewYbDataInDeptOwn", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String fixNewYbDataInDeptOwn(Date beginDate, Date endDate, @Nullable DeptOwnEnum deptOwn) {
         // 入参判断
         if (beginDate == null || endDate == null) {
@@ -65,7 +65,7 @@ public class DayReportController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "dayreport/queryNewYbPubCost", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "queryNewYbPubCost", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String queryNewYbPubCost(String balancer, Date beginDate, Date endDate) {
         // 入参判断
         if (balancer == null || balancer.isEmpty()) {
@@ -85,7 +85,7 @@ public class DayReportController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "dayreport/queryNewYbPayCost", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "queryNewYbPayCost", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String queryNewYbPayCost(String balancer, Date beginDate, Date endDate) {
         // 入参判断
         if (balancer == null || balancer.isEmpty()) {

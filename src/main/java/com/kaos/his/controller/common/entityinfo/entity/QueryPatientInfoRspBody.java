@@ -1,4 +1,4 @@
-package com.kaos.his.controller.entityinfo.entity;
+package com.kaos.his.controller.common.entityinfo.entity;
 
 import com.kaos.his.enums.SexEnum;
 

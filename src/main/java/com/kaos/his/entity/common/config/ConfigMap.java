@@ -5,7 +5,7 @@ import com.kaos.his.enums.ValidStateEnum;
 /**
  * 控制变量（KAOS.CONFIG_VARIABLE || KAOS.CONFIG_LIST）
  */
-public class ConfigVariable {
+public class ConfigMap {
     /**
      * 开关名
      */

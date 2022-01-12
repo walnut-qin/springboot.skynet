@@ -1,4 +1,4 @@
-package com.kaos.his.controller.surgery.entity;
+package com.kaos.his.controller.inpatient.surgery.entity;
 
 import java.util.Date;
 import java.util.List;

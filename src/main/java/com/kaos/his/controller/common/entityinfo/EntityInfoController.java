@@ -1,8 +1,8 @@
-package com.kaos.his.controller.entityinfo;
+package com.kaos.his.controller.common.entityinfo;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.entityinfo.entity.QueryPatientInfoRspBody;
+import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
 import com.kaos.his.service.EntityInfoService;
 import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping("/ms")
+@RequestMapping("/ms/common/entityinfo")
 public class EntityInfoController {
     /**
      * 日志接口
@@ -31,7 +31,7 @@ public class EntityInfoController {
     EntityInfoService entityInfoService;
 
     @ResponseBody
-    @RequestMapping(value = "entityinfo/queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
         // 记录日志
         this.logger.info(String.format("查询患者信息(cardNo = %s)", cardNo));
