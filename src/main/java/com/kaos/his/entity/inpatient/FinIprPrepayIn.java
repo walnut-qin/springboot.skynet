@@ -5,6 +5,7 @@ import java.util.Date;
 import com.kaos.his.entity.common.Department;
 import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.inpatient.escort.EscortVip;
 import com.kaos.his.enums.FinIprPrepayInStateEnum;
 
 /**
@@ -66,24 +67,29 @@ public class FinIprPrepayIn {
         public Patient patient = null;
 
         /**
-         * 床位信息
+         * 实体：床位信息
          */
         public ComBedInfo bedInfo = null;
 
         /**
-         * 预约医师
+         * 实体：预约医师
          */
         public Employee preDoc = null;
 
         /**
-         * 预约科室
+         * 实体：预约科室
          */
         public Department preDept = null;
 
         /**
-         * 开立医师
+         * 实体：开立医师
          */
         public Employee openDoc = null;
+
+        /**
+         * 实体：陪护证VIP
+         */
+        public EscortVip escortVip = null;
     }
 
     /**
