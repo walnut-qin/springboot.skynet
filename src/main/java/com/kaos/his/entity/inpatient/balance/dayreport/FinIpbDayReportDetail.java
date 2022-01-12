@@ -32,5 +32,5 @@ public class FinIpbDayReportDetail {
     /**
      * 关联实体
      */
-    transient public AssociateEntity associateEntity = null;
+    transient public AssociateEntity associateEntity = new AssociateEntity();
 }

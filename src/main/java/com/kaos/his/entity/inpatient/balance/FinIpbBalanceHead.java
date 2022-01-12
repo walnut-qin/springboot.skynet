@@ -139,7 +139,7 @@ public class FinIpbBalanceHead {
     /**
      * 关联实体
      */
-    transient public AssociateEntity associateEntity = null;
+    transient public AssociateEntity associateEntity = new AssociateEntity();
 
     /**
      * 根据当前结算数据计算四舍五入
