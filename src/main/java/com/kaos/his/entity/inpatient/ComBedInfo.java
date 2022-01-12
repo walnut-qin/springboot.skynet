@@ -7,7 +7,7 @@ import com.kaos.his.enums.ValidStateEnum;
 /**
  * 床位信息（XYHIS.COM_BEDINFO）
  */
-public class Bed {
+public class ComBedInfo {
     /**
      * 床号
      */

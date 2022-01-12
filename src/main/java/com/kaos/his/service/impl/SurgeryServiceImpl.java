@@ -15,7 +15,7 @@ import com.kaos.his.enums.SurgeryStatusEnum;
 import com.kaos.his.enums.ValidStateEnum;
 import com.kaos.his.mapper.common.DepartmentMapper;
 import com.kaos.his.mapper.common.EmployeeMapper;
-import com.kaos.his.mapper.inpatient.BedMapper;
+import com.kaos.his.mapper.inpatient.ComBedInfoMapper;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsArrangeMapper;
@@ -74,7 +74,7 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 床位接口
      */
     @Autowired
-    BedMapper bedMapper;
+    ComBedInfoMapper bedMapper;
 
     @Override
     public List<MetOpsApply> queryMetOpsAppliesInDept(String deptCode, Date beginDate, Date endDate,
@@ -170,7 +170,7 @@ public class SurgeryServiceImpl implements SurgeryService {
                 }
 
                 // 床位
-                inpatient.associateEntity.bed = this.bedMapper.queryBed(inpatient.bedNo, ValidStateEnum.有效);
+                inpatient.associateEntity.bed = this.bedMapper.queryBedInfo(inpatient.bedNo, ValidStateEnum.有效);
             }
             // 实体：房间
             if (roomCache.keySet().contains(item.roomId)) {

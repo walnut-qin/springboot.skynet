@@ -104,7 +104,7 @@ public class Inpatient extends Patient {
         /**
          * 实体：床位
          */
-        public Bed bed = null;
+        public ComBedInfo bed = null;
 
         /**
          * 实体：住院病区
