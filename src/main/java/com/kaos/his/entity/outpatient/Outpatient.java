@@ -34,6 +34,9 @@ public class Outpatient extends Patient {
      * 关联实体
      */
     public class AssociateEntity extends Patient.AssociateEntity {
+        /**
+         * 实体：挂号科室
+         */
         public Department regDept = null;
     }
 

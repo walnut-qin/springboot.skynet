@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper">
+    <resultMap id="map" type="com.kaos.his.entity.outpatient.fee.FinOpbFeeDetail" extends="com.kaos.his.mapper.common.PatientMapper.map">
+        <id column="RECIPE_NO" jdbcType="VARCHAR" property="recipeNo"/>
+        <result column="SEQUENCE_NO" jdbcType="VARCHAR" property="seqNo"/>
+        <result column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
+        <result column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
+        <result column="ITEM_CODE" jdbcType="VARCHAR" property="itemCode"/>
+        <result column="ITEM_NAME" jdbcType="VARCHAR" property="itemName"/>
+        <result column="EXEC_DPCD" jdbcType="VARCHAR" property="execDeptCode"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="feeEmplCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="feeDate"/>
+    </resultMap>
+
+    <sql id="item">
+        RECIPE_NO,
+        SEQUENCE_NO,
+        TRANS_TYPE,
+        CLINIC_CODE,
+        ITEM_CODE,
+        ITEM_NAME,
+        EXEC_DPCD,
+        OPER_CODE,
+        OPER_DATE
+    </sql>
+
+    <select id="queryFeeDetailsWithClinicCode" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            FIN_OPB_FEEDETAIL
+        <where>
+            <if test="clinicCode != null">
+                AND CLINIC_CODE = #{clinicCode}
+            </if>
+            <if test="itemCode != null">
+                AND ITEM_CODE = #{itemCode}
+            </if>
+            <if test="beginDate != null">
+                AND OPER_DATE &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND OPER_DATE &lt;= #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryFeeDetailsWithCardNo" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            FIN_OPB_FEEDETAIL
+        <where>
+            <if test="cardNo != null">
+                AND (
+                    SELECT
+                        CARD_NO
+                    FROM
+                        FIN_OPR_REGISTER
+                    WHERE
+                        CLINIC_CODE = FIN_OPB_FEEDETAIL.CLINIC_CODE
+                ) = #{cardNo}
+            </if>
+            <if test="itemCode != null">
+                AND ITEM_CODE = #{itemCode}
+            </if>
+            <if test="beginDate != null">
+                AND OPER_DATE &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND OPER_DATE &lt;= #{endDate}
+            </if>
+        </where>
+    </select>
+</mapper>
