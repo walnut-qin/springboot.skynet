@@ -24,4 +24,12 @@ public interface EscortAnnexInfoMapper {
      * @return
      */
     List<EscortAnnexInfo> queryAnnexInfos(String cardNo, Date beginDate, Date endDate, Boolean checked);
+
+    /**
+     * 插入一条附件记录
+     * 
+     * @param escortAnnexInfo
+     * @return
+     */
+    int insertAnnexInfo(EscortAnnexInfo escortAnnexInfo);
 }

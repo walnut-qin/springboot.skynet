@@ -28,4 +28,11 @@
             </if>
         </where>
     </select>
+
+    <insert id="insertAnnexChk">
+        INSERT INTO
+            KAOS.ESCORT_ANNEX_CHK(ANNEX_NO, OPER_CODE, OPER_DATE, NEGATIVE, EXEC_DATE)
+        VALUES
+            (#{annexNo}, #{chkEmplCode}, #{chkDate}, #{negativeFlag}, #{inspectDate})
+    </insert>
 </mapper>

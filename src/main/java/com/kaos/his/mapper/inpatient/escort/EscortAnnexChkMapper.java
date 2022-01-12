@@ -10,4 +10,9 @@ public interface EscortAnnexChkMapper {
      * @return
      */
     EscortAnnexChk queryAnnexChk(String annexNo);
+
+    /**
+     * 插入审核记录
+     */
+    int insertAnnexChk(EscortAnnexChk escortAnnexChk);
 }

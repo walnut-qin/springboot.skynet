@@ -62,4 +62,11 @@
             </if>
         </where>
     </select>
+
+    <insert id="insertAnnexInfo">
+        INSERT INTO
+            KAOS.ESCORT_ANNEX_INFO(ANNEX_NO, CARD_NO, ANNEX_URL, OPER_DATE)
+        VALUES
+            (#{annexNo}, #{cardNo}, #{annexUrl}, #{recDate})
+    </insert>
 </mapper>
