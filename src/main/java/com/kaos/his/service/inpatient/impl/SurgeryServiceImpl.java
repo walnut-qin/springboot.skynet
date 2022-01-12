@@ -1,4 +1,4 @@
-package com.kaos.his.service.impl;
+package com.kaos.his.service.inpatient.impl;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -21,7 +21,7 @@ import com.kaos.his.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsRoomMapper;
-import com.kaos.his.service.SurgeryService;
+import com.kaos.his.service.inpatient.SurgeryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

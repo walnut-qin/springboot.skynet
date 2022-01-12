@@ -3,7 +3,7 @@ package com.kaos.his.controller.common.entityinfo;
 import javax.validation.constraints.NotBlank;
 
 import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
-import com.kaos.his.service.EntityInfoService;
+import com.kaos.his.service.common.EntityInfoService;
 import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
 

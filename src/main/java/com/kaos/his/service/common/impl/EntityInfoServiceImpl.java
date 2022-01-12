@@ -1,9 +1,9 @@
-package com.kaos.his.service.impl;
+package com.kaos.his.service.common.impl;
 
 import com.kaos.his.entity.common.Patient;
 import com.kaos.his.enums.ValidStateEnum;
 import com.kaos.his.mapper.common.PatientMapper;
-import com.kaos.his.service.EntityInfoService;
+import com.kaos.his.service.common.EntityInfoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

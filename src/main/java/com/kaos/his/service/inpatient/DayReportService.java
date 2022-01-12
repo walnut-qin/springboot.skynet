@@ -1,4 +1,4 @@
-package com.kaos.his.service;
+package com.kaos.his.service.inpatient;
 
 import java.util.Date;
 

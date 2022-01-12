@@ -1,4 +1,4 @@
-package com.kaos.his.service.impl;
+package com.kaos.his.service.inpatient.impl;
 
 import java.util.Date;
 import java.util.function.ToDoubleFunction;
@@ -10,7 +10,7 @@ import com.kaos.his.enums.DeptOwnEnum;
 import com.kaos.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
-import com.kaos.his.service.DayReportService;
+import com.kaos.his.service.inpatient.DayReportService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

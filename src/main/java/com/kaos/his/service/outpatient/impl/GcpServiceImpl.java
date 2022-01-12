@@ -1,10 +1,10 @@
-package com.kaos.his.service.impl;
+package com.kaos.his.service.outpatient.impl;
 
 import com.kaos.his.enums.TransTypeEnum;
 import com.kaos.his.enums.ValidStateEnum;
 import com.kaos.his.mapper.common.config.ConfigMapMapper;
 import com.kaos.his.mapper.outpatient.OutpatientMapper;
-import com.kaos.his.service.GcpService;
+import com.kaos.his.service.outpatient.GcpService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

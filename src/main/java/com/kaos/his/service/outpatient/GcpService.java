@@ -1,4 +1,4 @@
-package com.kaos.his.service;
+package com.kaos.his.service.outpatient;
 
 public interface GcpService {
     /**

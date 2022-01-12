@@ -1,4 +1,4 @@
-package com.kaos.his.service;
+package com.kaos.his.service.common;
 
 import com.kaos.his.entity.common.Patient;
 
