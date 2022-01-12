@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.inpatient.escort.EscortAnnexInfoMapper">
+    <resultMap id="map" type="com.kaos.his.entity.inpatient.escort.EscortAnnexInfo">
+        <id column="ANNEX_NO" jdbcType="VARCHAR" property="annexNo"/>
+        <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="ANNEX_URL" jdbcType="VARCHAR" property="annexUrl"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="recDate"/>
+    </resultMap>
+
+    <sql id="item">
+        ANNEX_NO,
+        CARD_NO,
+        ANNEX_URL,
+        OPER_DATE
+    </sql>
+
+    <select id="queryAnnexInfo" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.ESCORT_ANNEX_INFO
+        <where>
+            <if test="annexNo != null">
+                AND ANNEX_NO = #{annexNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAnnexInfos" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.ESCORT_ANNEX_INFO
+        <where>
+            <if test="cardNo != null">
+                AND CARD_NO = #{cardNo}
+            </if>
+            <if test="beginDate != null">
+                AND OPER_DATE &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND OPER_DATE &lt;= #{endDate}
+            </if>
+            <if test="checked != null">
+                <if test="checked == true">
+                    AND ANNEX_NO IN (
+                        SELECT
+                            ANNEX_NO
+                        FROM
+                            KAOS.ESCORT_ANNEX_CHK
+                    )
+                </if>
+                <if test="checked == false">
+                    AND ANNEX_NO NOT IN (
+                        SELECT
+                            ANNEX_NO
+                        FROM
+                            KAOS.ESCORT_ANNEX_CHK
+                    )
+                </if>
+            </if>
+        </where>
+    </select>
+</mapper>
