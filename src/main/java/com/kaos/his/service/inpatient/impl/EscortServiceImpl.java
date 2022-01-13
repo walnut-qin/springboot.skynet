@@ -1,6 +1,11 @@
 package com.kaos.his.service.inpatient.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
+import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.InpatientStateEnum;
 import com.kaos.his.mapper.common.PatientMapper;
 import com.kaos.his.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
@@ -56,9 +61,6 @@ public class EscortServiceImpl implements EscortService {
     @Autowired
     PatientMapper patientMapper;
 
-    /**
-     * 查询陪护证
-     */
     @Override
     public EscortMainInfo queryEscortStateInfo(String escortNo) {
         // 检索陪护证
@@ -71,5 +73,58 @@ public class EscortServiceImpl implements EscortService {
         rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(escortNo);
 
         return rt;
+    }
+
+    @Override
+    public List<EscortMainInfo> queryPatientInfos(String helperCardNo) {
+        // 检索关联的陪护证实体
+        var rs = this.escortMainInfoMapper.queryHelperEscortMainInfos(helperCardNo, new ArrayList<>() {
+            {
+                add(EscortStateEnum.无核酸检测结果);
+                add(EscortStateEnum.等待院内核酸检测结果);
+                add(EscortStateEnum.等待院外核酸检测结果审核);
+                add(EscortStateEnum.生效中);
+            }
+        });
+
+        for (var rt : rs) {
+            // 填充装填实体
+            rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);
+
+            // 填充动作实体
+            rt.associateEntity.actionRecs = this.escortActionRecMapper.queryActions(rt.escortNo);
+
+            // 填充患者信息
+            rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
+            if (rt.associateEntity.finIprPrepayIn != null) {
+                // 锚定住院证
+                var fip = rt.associateEntity.finIprPrepayIn;
+
+                // 检索住院实体
+                var inpatients = this.inpatientMapper.queryInpatients(rt.patientCardNo, rt.happenNo, new ArrayList<>() {
+                    {
+                        add(InpatientStateEnum.住院登记);
+                        add(InpatientStateEnum.病房接诊);
+                        add(InpatientStateEnum.出院登记);
+                        add(InpatientStateEnum.预约出院);
+                    }
+                });
+                switch (inpatients.size()) {
+                    case 0:
+                        fip.associateEntity.patient = this.patientMapper.queryPatient(rt.patientCardNo);
+                        break;
+
+                    case 1:
+                        fip.associateEntity.patient = inpatients.get(0);
+                        break;
+
+                    default:
+                        fip.associateEntity.patient = this.patientMapper.queryPatient(rt.patientCardNo);
+                        break;
+                }
+            }
+        }
+        // TODO Auto-generated method stub
+        return null;
     }
 }
