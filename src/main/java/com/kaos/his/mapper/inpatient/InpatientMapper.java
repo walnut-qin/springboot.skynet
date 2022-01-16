@@ -22,4 +22,13 @@ public interface InpatientMapper {
      * @return
      */
     List<Inpatient> queryInpatients(String cardNo, Integer happenNo, List<InpatientStateEnum> states);
+
+    /**
+     * 查询最后一个目标状态的住院实体
+     * 
+     * @param cardNo
+     * @param states
+     * @return
+     */
+    Inpatient queryLastInpatient(String cardNo);
 }

@@ -83,4 +83,25 @@
             </if>
         </where>
     </select>
+
+    <select id="queryLastInpatient" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            FIN_IPR_INMAININFO T1
+            LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO
+        <where>
+            <if test="cardNo!=null">
+                AND T1.CARD_NO = #{cardNo}
+                AND T1.HAPPEN_NO = (
+                    SELECT
+                        MAX(T3.HAPPEN_NO)
+                    FROM
+                        FIN_IPR_PREPAYIN T3
+                    WHERE
+                        T3.CARD_NO = T1.CARD_NO
+                )
+            </if>
+        </where>
+    </select>
 </mapper>

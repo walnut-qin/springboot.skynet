@@ -29,5 +29,5 @@ public interface FinIprPrepayInMapper {
      * @param cardNo
      * @return
      */
-    FinIprPrepayIn queryLastPrepayIn(String cardNo);
+    FinIprPrepayIn queryLastPrepayIn(String cardNo, List<FinIprPrepayInStateEnum> states);
 }

@@ -28,4 +28,9 @@ public class InpatientMapperTests {
             }
         });
     }
+
+    @Test
+    public void queryLastInpatient() {
+        this.inpatientMapper.queryLastInpatient("2000003605");
+    }
 }

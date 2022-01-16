@@ -5,9 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.FinIprPrepayInStateEnum;
 import com.kaos.his.enums.InpatientStateEnum;
 import com.kaos.his.mapper.common.PatientMapper;
 import com.kaos.his.mapper.inpatient.FinIprPrepayInMapper;
@@ -25,6 +27,7 @@ import com.kaos.util.ListHelper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EscortServiceImpl implements EscortService {
@@ -99,7 +102,7 @@ public class EscortServiceImpl implements EscortService {
      * @param context 业务上下文（陪护证实体）
      * @return
      */
-    public EscortStateEnum queryRealState(EscortMainInfo context) {
+    private EscortStateEnum queryRealState(EscortMainInfo context) {
         // 锚定关联对象
         var ntt = context.associateEntity;
 
@@ -122,8 +125,15 @@ public class EscortServiceImpl implements EscortService {
             }
         }
 
-        // 锚定住院证
+        // 住院证有效？
         var fip = ntt.finIprPrepayIn;
+        switch (fip.state) {
+            case 作废:
+                return EscortStateEnum.注销;
+
+            default:
+                break;
+        }
 
         // 获取住院实体/患者实体
         var inps = this.inpatientMapper.queryInpatients(context.patientCardNo, context.happenNo, null);
@@ -132,7 +142,14 @@ public class EscortServiceImpl implements EscortService {
                 if (fip.associateEntity.patient == null) {
                     fip.associateEntity.patient = this.patientMapper.queryPatient(fip.cardNo);
                 }
-                var lastFip = this.finIprPrepayInMapper.queryLastPrepayIn(fip.cardNo);
+                var lastFip = this.finIprPrepayInMapper.queryLastPrepayIn(fip.cardNo, new ArrayList<>() {
+                    {
+                        add(FinIprPrepayInStateEnum.预约);
+                        add(FinIprPrepayInStateEnum.转住院);
+                        add(FinIprPrepayInStateEnum.签床);
+                        add(FinIprPrepayInStateEnum.预住院预约);
+                    }
+                });
                 if (!lastFip.happenNo.equals(fip.happenNo)) {
                     return EscortStateEnum.注销;
                 }
@@ -198,6 +215,68 @@ public class EscortServiceImpl implements EscortService {
         }
 
         return EscortStateEnum.无核酸检测结果;
+    }
+
+    /**
+     * 查询待注册陪护关联的住院证
+     * 
+     * @param patientCardNo
+     * @return
+     */
+    private FinIprPrepayIn queryRegisteredPrepayIn(String patientCardNo) {
+        // 查询最近的住院实体
+        var lastInp = this.inpatientMapper.queryLastInpatient(patientCardNo);
+        if (lastInp != null) {
+            switch (lastInp.inState) {
+                case 出院结算:
+                case 无费退院:
+                    return this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, new ArrayList<>() {
+                        {
+                            add(FinIprPrepayInStateEnum.预约);
+                            add(FinIprPrepayInStateEnum.转住院);
+                            add(FinIprPrepayInStateEnum.签床);
+                            add(FinIprPrepayInStateEnum.预住院预约);
+                        }
+                    });
+
+                case 出院登记:
+                    if (new Date().getTime() - lastInp.outDate.getTime() >= 12 * 60 * 60 * 1000) {
+                        return this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, new ArrayList<>() {
+                            {
+                                add(FinIprPrepayInStateEnum.预约);
+                                add(FinIprPrepayInStateEnum.转住院);
+                                add(FinIprPrepayInStateEnum.签床);
+                                add(FinIprPrepayInStateEnum.预住院预约);
+                            }
+                        });
+                    } else {
+                        // 响应关联住院证
+                        return this.finIprPrepayInMapper.queryPrepayIn(lastInp.cardNo, lastInp.happenNo);
+                    }
+
+                default:
+                    // 响应关联住院证
+                    return this.finIprPrepayInMapper.queryPrepayIn(lastInp.cardNo, lastInp.happenNo);
+            }
+        }
+
+        // 查询最近有效的住院证
+
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public EscortMainInfo registerEscort(String patientCardNo, String helperCardNo) {
+        // 获取目标住院证
+        var fip = this.queryRegisteredPrepayIn(patientCardNo);
+        if (fip == null) {
+            throw new RuntimeException("无关联的住院证");
+        }
+
+        // 插入一条主表记录
+        
+        return null;
     }
 
     @Override

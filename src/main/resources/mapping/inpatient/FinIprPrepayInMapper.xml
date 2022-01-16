@@ -68,11 +68,17 @@
                 AND CARD_NO = #{cardNo}
                 AND HAPPEN_NO = (
                     SELECT
-                        MAX(HAPPEN_NO)
+                        MAX(T1.HAPPEN_NO)
                     FROM
                         FIN_IPR_PREPAYIN T1
                     WHERE
                         T1.CARD_NO = FIN_IPR_PREPAYIN.CARD_NO
+                <if test="states != null">
+                        AND T1.PRE_STATE IN
+                    <foreach collection="states" item="item" open="(" separator="," close=")">
+                            #{item}
+                    </foreach>
+                </if>
                 )
             </if>
         </where>

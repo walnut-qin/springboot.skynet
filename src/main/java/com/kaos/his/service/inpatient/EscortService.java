@@ -6,6 +6,15 @@ import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 
 public interface EscortService {
     /**
+     * 注册陪护人
+     * 
+     * @param patientCardNo
+     * @param helperCardNo
+     * @return
+     */
+    EscortMainInfo registerEscort(String patientCardNo, String helperCardNo);
+
+    /**
      * 查询陪护证，主键查询
      * 
      * @param escortNo

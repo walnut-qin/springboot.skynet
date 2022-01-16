@@ -30,6 +30,14 @@ public class FinIprPrepayInMapperTests {
 
     @Test
     public void queryLastPrepayIn() {
-        this.finIprPrepayInMapper.queryLastPrepayIn("2000003605");
+        this.finIprPrepayInMapper.queryLastPrepayIn("2000003605", null);
+        this.finIprPrepayInMapper.queryLastPrepayIn("2000003605", new ArrayList<>() {
+            {
+                add(FinIprPrepayInStateEnum.预约);
+                add(FinIprPrepayInStateEnum.转住院);
+                add(FinIprPrepayInStateEnum.签床);
+                add(FinIprPrepayInStateEnum.预住院预约);
+            }
+        });
     }
 }
