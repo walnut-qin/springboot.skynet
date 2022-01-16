@@ -12,7 +12,7 @@ public interface EscortService {
      * @param helperCardNo
      * @return
      */
-    EscortMainInfo registerEscort(String patientCardNo, String helperCardNo);
+    EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark);
 
     /**
      * 查询陪护证，主键查询
