@@ -137,7 +137,7 @@ public class EscortController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "queryStateInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String queryPatientInfo(@NotBlank(message = "陪护人卡号不能为空") String helperCardNo) {
         // 记录日志
         this.logger.info(String.format("查询陪护的患者信息 %s 的状态", helperCardNo));
