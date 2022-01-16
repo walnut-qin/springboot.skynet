@@ -9,7 +9,7 @@ public interface LisResultNewMapper {
     /**
      * 查询检验结果
      * 
-     * @param patientId
+     * @param patientId 住院号或就诊卡号
      * @param itemCode
      * @param beginDate
      * @param endDate

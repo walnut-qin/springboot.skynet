@@ -22,4 +22,12 @@ public interface FinIprPrepayInMapper {
      * @return
      */
     List<FinIprPrepayIn> queryPrepayIns(String cardNo, List<FinIprPrepayInStateEnum> states);
+
+    /**
+     * 获取最后一张住院证
+     * 
+     * @param cardNo
+     * @return
+     */
+    FinIprPrepayIn queryLastPrepayIn(String cardNo);
 }

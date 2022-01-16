@@ -27,4 +27,9 @@ public class FinIprPrepayInMapperTests {
             }
         });
     }
+
+    @Test
+    public void queryLastPrepayIn() {
+        this.finIprPrepayInMapper.queryLastPrepayIn("2000003605");
+    }
 }

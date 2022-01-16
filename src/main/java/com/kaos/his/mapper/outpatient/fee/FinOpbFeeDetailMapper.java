@@ -1,6 +1,7 @@
 package com.kaos.his.mapper.outpatient.fee;
 
 import java.util.Date;
+import java.util.List;
 
 import com.kaos.his.entity.outpatient.fee.FinOpbFeeDetail;
 
@@ -14,7 +15,8 @@ public interface FinOpbFeeDetailMapper {
      * @param endDate
      * @return
      */
-    FinOpbFeeDetail queryFeeDetailsWithClinicCode(String clinicCode, String itemCode, Date beginDate, Date endDate);
+    List<FinOpbFeeDetail> queryFeeDetailsWithClinicCode(String clinicCode, String itemCode, Date beginDate,
+            Date endDate);
 
     /**
      * 查询患者门诊划价
@@ -25,5 +27,5 @@ public interface FinOpbFeeDetailMapper {
      * @param endDate
      * @return
      */
-    FinOpbFeeDetail queryFeeDetailsWithCardNo(String cardNo, String itemCode, Date beginDate, Date endDate);
+    List<FinOpbFeeDetail> queryFeeDetailsWithCardNo(String cardNo, String itemCode, Date beginDate, Date endDate);
 }

@@ -57,4 +57,24 @@
             </if>
         </where>
     </select>
+
+    <select id="queryLastPrepayIn" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            FIN_IPR_PREPAYIN
+        <where>
+            <if test="cardNo != null">
+                AND CARD_NO = #{cardNo}
+                AND HAPPEN_NO = (
+                    SELECT
+                        MAX(HAPPEN_NO)
+                    FROM
+                        FIN_IPR_PREPAYIN T1
+                    WHERE
+                        T1.CARD_NO = FIN_IPR_PREPAYIN.CARD_NO
+                )
+            </if>
+        </where>
+    </select>
 </mapper>

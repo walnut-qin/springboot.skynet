@@ -1,179 +1,188 @@
 <mxfile host="65bd71144e">
     <diagram id="k0nbtBAQ9G7xwQQl9tIo" name="Page-1">
-        <mxGraphModel dx="1082" dy="782" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+        <mxGraphModel dx="1273" dy="920" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="6" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="4" target="5">
+                <mxCell id="6" value="" style="edgeStyle=none;html=1;" parent="1" source="4" target="5" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="开始" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
-                    <mxGeometry x="380" y="80" width="80" height="30" as="geometry"/>
+                    <mxGeometry x="220" y="80" width="80" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="10" value="存在" style="edgeStyle=none;html=1;" edge="1" parent="1" source="5" target="9">
+                <mxCell id="10" value="存在" style="edgeStyle=none;html=1;" parent="1" source="5" target="9" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="38" value="不存在" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="5" target="15">
+                <mxCell id="38" value="不存在" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="5" target="15" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="5" value="当前状态？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
-                    <mxGeometry x="380" y="165" width="80" height="80" as="geometry"/>
+                <mxCell id="5" value="当前状态？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="165" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" value="是" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="9" target="50">
+                <mxCell id="14" value="是" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="9" target="50" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="420" y="635" as="targetPoint"/>
+                        <mxPoint x="260" y="635" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="16" value="否" style="edgeStyle=none;html=1;" edge="1" parent="1" source="9" target="15">
+                <mxCell id="16" value="否" style="edgeStyle=none;html=1;" parent="1" source="9" target="15" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="9" value="已注销？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
-                    <mxGeometry x="380" y="325" width="80" height="80" as="geometry"/>
+                <mxCell id="9" value="已注销？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="325" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="20" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="15" target="19">
+                <mxCell id="95" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="15" target="94">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="15" value="获取关联住院证" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
-                    <mxGeometry x="520" y="335" width="120" height="60" as="geometry"/>
+                <mxCell id="15" value="获取关联住院证" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="335" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="22" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="19" target="21">
+                <mxCell id="22" value="" style="edgeStyle=none;html=1;" parent="1" source="19" target="21" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="19" value="获取住院实体" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="19" value="获取住院实体" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="720" y="335" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="24" value="&amp;gt;=2" style="edgeStyle=none;html=1;" edge="1" parent="1" source="21" target="23">
+                <mxCell id="24" value="&amp;gt;=2" style="edgeStyle=none;html=1;" parent="1" source="21" target="23" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="28" value="1" style="edgeStyle=none;html=1;" edge="1" parent="1" source="21" target="27">
+                <mxCell id="28" value="1" style="edgeStyle=none;html=1;" parent="1" source="21" target="27" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="42" value="0" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="21" target="41">
+                <mxCell id="42" value="0" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="21" target="41" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="21" value="实体数量？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="21" value="实体数量？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="740" y="465" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="23" value="异常" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#B20000;fillColor=#e51400;fontColor=#ffffff;" vertex="1" parent="1">
+                <mxCell id="23" value="异常" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#B20000;fillColor=#e51400;fontColor=#ffffff;" parent="1" vertex="1">
                     <mxGeometry x="560" y="475" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="30" value="已结算" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="27" target="50">
+                <mxCell id="30" value="已结算" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="27" target="50" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="480" y="665" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="32" value="出科" style="edgeStyle=none;html=1;" edge="1" parent="1" source="27" target="31">
+                <mxCell id="32" value="出科" style="edgeStyle=none;html=1;" parent="1" source="27" target="31" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="35" value="在院" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="27" target="34">
+                <mxCell id="35" value="在院" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="27" target="34" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="27" value="状态？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="27" value="状态？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="740" y="625" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="37" value="&amp;lt;12小时" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="31" target="34">
+                <mxCell id="37" value="&amp;lt;12小时" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="31" target="34" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="31" value="时长" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="31" value="时长" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="740" y="785" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="33" value="&amp;gt;=12小时" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryPerimeter=0;" edge="1" parent="1" source="31" target="50">
+                <mxCell id="33" value="&amp;gt;=12小时" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0.5;entryY=0.5;entryDx=0;entryDy=15;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryPerimeter=0;" parent="1" source="31" target="50" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="670" y="850" as="sourcePoint"/>
                         <mxPoint x="420" y="695" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="52" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="34" target="51">
+                <mxCell id="52" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="34" target="51" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="34" value="查最新核酸记录" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="34" value="查最新核酸记录" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="880" y="635" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="47" value="否" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="41" target="46">
+                <mxCell id="47" value="否" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="41" target="46" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="48" value="是" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="41" target="34">
+                <mxCell id="48" value="是" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="41" target="34" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="41" value="最新住院证？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="41" value="最新住院证？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="900" y="465" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="46" value="状态：注销" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="46" value="状态：注销" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="900" y="350" width="80" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="50" value="&lt;span&gt;状态：注销&lt;/span&gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
-                    <mxGeometry x="380" y="650" width="80" height="30" as="geometry"/>
+                <mxCell id="50" value="&lt;span&gt;状态：注销&lt;/span&gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="650" width="80" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="54" value="是" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="51" target="53">
+                <mxCell id="54" value="是" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="51" target="53" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="56" value="否" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="51" target="55">
+                <mxCell id="56" value="否" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="51" target="55" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="51" value="7日内阴性？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="51" value="7日内阴性？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="1100" y="625" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="53" value="状态：生效中" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="53" value="状态：生效中" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="1100" y="490" width="80" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="58" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="55" target="57">
+                <mxCell id="58" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="55" target="57" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="55" value="查最新院外报告" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="55" value="查最新院外报告" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="1080" y="795" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="60" value="是" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="57" target="59">
+                <mxCell id="60" value="是" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="57" target="59" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="62" value="否" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="57" target="61">
+                <mxCell id="62" value="否" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="57" target="61" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="57" value="7日内阴性？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="57" value="7日内阴性？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="1100" y="925" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="59" value="状态：生效中" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="59" value="状态：生效中" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="1280" y="950" width="80" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="64" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="61" target="63">
+                <mxCell id="64" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="61" target="63" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="61" value="查陪护核酸划价" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="61" value="查陪护核酸划价" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="920" y="935" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="66" value="有" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0.5;entryY=0.5;entryDx=0;entryDy=-15;entryPerimeter=0;" edge="1" parent="1" source="63" target="69">
+                <mxCell id="66" value="有" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0.5;entryY=0.5;entryDx=0;entryDy=-15;entryPerimeter=0;" parent="1" source="63" target="69" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="780" y="1085" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="71" value="无" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="63" target="70">
+                <mxCell id="71" value="无" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="63" target="70" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="63" value="7日内有效？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="63" value="7日内有效？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="740" y="925" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="69" value="状态：等待院内结果" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="69" value="状态：等待院内结果" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="720" y="1090" width="120" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="73" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="70" target="72">
+                <mxCell id="73" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="70" target="72" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="70" value="查院外待审附件" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="70" value="查院外待审附件" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="560" y="935" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="79" value="有" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="72" target="78">
+                <mxCell id="79" value="有" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="72" target="78" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="93" value="无" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="72" target="92">
+                <mxCell id="93" value="无" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="72" target="92" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="72" value="7日内有效？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="72" value="7日内有效？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="380" y="925" width="80" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="78" value="状态：等待院外审核" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="78" value="状态：等待院外审核" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="200" y="950" width="120" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="92" value="状态：无核酸检测结果" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                <mxCell id="92" value="状态：无核酸检测结果" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
                     <mxGeometry x="355" y="1090" width="130" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" value="否" style="edgeStyle=none;html=1;" edge="1" parent="1" source="94" target="23">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="97" value="是" style="edgeStyle=none;html=1;" edge="1" parent="1" source="94" target="19">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="94" value="存在？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                    <mxGeometry x="580" y="325" width="80" height="80" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

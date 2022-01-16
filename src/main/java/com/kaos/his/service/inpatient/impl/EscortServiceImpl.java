@@ -1,8 +1,11 @@
 package com.kaos.his.service.inpatient.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.InpatientStateEnum;
@@ -10,9 +13,14 @@ import com.kaos.his.mapper.common.PatientMapper;
 import com.kaos.his.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortActionRecMapper;
+import com.kaos.his.mapper.inpatient.escort.EscortAnnexChkMapper;
+import com.kaos.his.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortStateRecMapper;
+import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
+import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.his.service.inpatient.EscortService;
+import com.kaos.util.ListHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +68,137 @@ public class EscortServiceImpl implements EscortService {
      */
     @Autowired
     PatientMapper patientMapper;
+
+    /**
+     * 附件接口
+     */
+    @Autowired
+    EscortAnnexInfoMapper escortAnnexInfoMapper;
+
+    /**
+     * 审核附件接口
+     */
+    @Autowired
+    EscortAnnexChkMapper escortAnnexChkMapper;
+
+    /**
+     * 门诊划价接口
+     */
+    @Autowired
+    FinOpbFeeDetailMapper finOpbFeeDetailMapper;
+
+    /**
+     * LIS结果查询
+     */
+    @Autowired
+    LisResultNewMapper lisResultNewMapper;
+
+    /**
+     * 查询当前陪护证的实时状态
+     * 
+     * @param context 业务上下文（陪护证实体）
+     * @return
+     */
+    public EscortStateEnum queryRealState(EscortMainInfo context) {
+        // 锚定关联对象
+        var ntt = context.associateEntity;
+
+        // 当前状态是否存在
+        if (ntt.stateRecs == null) {
+            ntt.stateRecs = this.escortStateRecMapper.queryStates(context.escortNo);
+        }
+        if (ntt.stateRecs != null && !ntt.stateRecs.isEmpty()) {
+            var curState = ListHelper.GetLast(ntt.stateRecs).state;
+            if (curState == EscortStateEnum.注销) {
+                return EscortStateEnum.注销;
+            }
+        }
+
+        // 获取关联住院证
+        if (ntt.finIprPrepayIn == null) {
+            ntt.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(context.patientCardNo, context.happenNo);
+            if (ntt.finIprPrepayIn == null) {
+                throw new RuntimeException(String.format("陪护证(%s)无关联的住院证，无法判断状态", context.escortNo));
+            }
+        }
+
+        // 锚定住院证
+        var fip = ntt.finIprPrepayIn;
+
+        // 获取住院实体/患者实体
+        var inps = this.inpatientMapper.queryInpatients(context.patientCardNo, context.happenNo, null);
+        switch (inps.size()) {
+            case 0:
+                if (fip.associateEntity.patient == null) {
+                    fip.associateEntity.patient = this.patientMapper.queryPatient(fip.cardNo);
+                }
+                var lastFip = this.finIprPrepayInMapper.queryLastPrepayIn(fip.cardNo);
+                if (!lastFip.happenNo.equals(fip.happenNo)) {
+                    return EscortStateEnum.注销;
+                }
+                break;
+
+            case 1:
+                // 锚定住院证
+                fip.associateEntity.patient = inps.get(0);
+                var inp = (Inpatient) fip.associateEntity.patient;
+                switch (inp.inState) {
+                    case 出院结算:
+                    case 无费退院:
+                        return EscortStateEnum.注销;
+
+                    case 出院登记:
+                        if (new Date().getTime() - inp.outDate.getTime() >= 12 * 60 * 60 * 1000) {
+                            return EscortStateEnum.注销;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                throw new RuntimeException(String.format("住院证(%s)存在多张关联的住院实体，无法判断状态", context.escortNo));
+        }
+
+        // 锚定7天前的当前时间
+        var calender = Calendar.getInstance();
+        calender.add(Calendar.DATE, -7);
+        var beginDate = calender.getTime();
+
+        // 查询7日内本院核酸记录
+        var lisRs = this.lisResultNewMapper.queryInspectResult(ntt.helper.cardNo, "SARS-CoV-2-RNA", beginDate, null);
+        if (lisRs != null && !lisRs.isEmpty()) {
+            var lastLisRt = lisRs.get(0);
+            if (lastLisRt.result.equals("阴性(-)")) {
+                return EscortStateEnum.生效中;
+            }
+        }
+
+        // 查询院外核酸报告（已审核）
+        var annexChks = this.escortAnnexChkMapper.queryAnnexChks(fip.cardNo, beginDate, null);
+        if (annexChks != null && !annexChks.isEmpty()) {
+            var lastAnnexChk = annexChks.get(0);
+            if (lastAnnexChk.negativeFlag) {
+                return EscortStateEnum.生效中;
+            }
+        }
+
+        // 查询7日内划价记录
+        var fees = this.finOpbFeeDetailMapper.queryFeeDetailsWithCardNo(fip.cardNo, "F00000068231", beginDate, null);
+        if (fees != null && !fees.isEmpty()) {
+            return EscortStateEnum.等待院内核酸检测结果;
+        }
+
+        // 查询7日内上传的院外待审记录
+        var annexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(fip.cardNo, beginDate, null, false);
+        if (annexInfos != null && !annexInfos.isEmpty()) {
+            return EscortStateEnum.等待院外核酸检测结果审核;
+        }
+
+        return EscortStateEnum.无核酸检测结果;
+    }
 
     @Override
     public EscortMainInfo queryEscortStateInfo(String escortNo) {
