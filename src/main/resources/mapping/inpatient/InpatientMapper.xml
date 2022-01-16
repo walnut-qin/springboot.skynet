@@ -93,6 +93,7 @@
         <where>
             <if test="cardNo!=null">
                 AND T1.CARD_NO = #{cardNo}
+                AND T1.HAPPEN_NO IS NOT NULL
                 AND T1.HAPPEN_NO = (
                     SELECT
                         MAX(T3.HAPPEN_NO)

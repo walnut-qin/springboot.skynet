@@ -24,7 +24,7 @@ public interface InpatientMapper {
     List<Inpatient> queryInpatients(String cardNo, Integer happenNo, List<InpatientStateEnum> states);
 
     /**
-     * 查询最后一个目标状态的住院实体
+     * 查询最后一个目标状态的住院实体，排序依据为住院证编号
      * 
      * @param cardNo
      * @param states
