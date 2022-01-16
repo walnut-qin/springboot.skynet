@@ -30,5 +30,5 @@ public interface InpatientMapper {
      * @param states
      * @return
      */
-    Inpatient queryLastInpatient(String cardNo);
+    Inpatient queryLastInpatient(String cardNo, List<InpatientStateEnum> states);
 }

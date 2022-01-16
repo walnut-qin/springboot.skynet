@@ -97,9 +97,15 @@
                     SELECT
                         MAX(T3.HAPPEN_NO)
                     FROM
-                        FIN_IPR_PREPAYIN T3
+                        FIN_IPR_INMAININFO T3
                     WHERE
                         T3.CARD_NO = T1.CARD_NO
+                <if test="states != null">
+                        AND T3.IN_STATE IN
+                    <foreach collection="states" item="item" open="(" separator="," close=")">
+                            #{item}
+                    </foreach>
+                </if>
                 )
             </if>
         </where>

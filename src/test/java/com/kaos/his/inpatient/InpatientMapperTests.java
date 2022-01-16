@@ -31,6 +31,11 @@ public class InpatientMapperTests {
 
     @Test
     public void queryLastInpatient() {
-        this.inpatientMapper.queryLastInpatient("2000003605");
+        this.inpatientMapper.queryLastInpatient("2000003605", null);
+        this.inpatientMapper.queryLastInpatient("2000003605", new ArrayList<>() {
+            {
+                add(InpatientStateEnum.病房接诊);
+            }
+        });
     }
 }

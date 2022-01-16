@@ -225,7 +225,7 @@ public class EscortServiceImpl implements EscortService {
      */
     private FinIprPrepayIn queryRegisteredPrepayIn(String patientCardNo) {
         // 查询最近的住院实体
-        var lastInp = this.inpatientMapper.queryLastInpatient(patientCardNo);
+        var lastInp = this.inpatientMapper.queryLastInpatient(patientCardNo, null);
         if (lastInp != null) {
             switch (lastInp.inState) {
                 case 出院结算:
