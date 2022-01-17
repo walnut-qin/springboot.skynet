@@ -163,14 +163,14 @@ public class SurgeryServiceImpl implements SurgeryService {
                     // 取cache
                     inpatient.associateEntity.stayedDept = departmentCache.get(inpatient.stayedDeptCode);
                 } else {
-                    inpatient.associateEntity.stayedDept = this.departmentMapper.queryDepartment(
-                            inpatient.stayedDeptCode, ValidStateEnum.有效);
+                    inpatient.associateEntity.stayedDept = this.departmentMapper
+                            .queryDepartment(inpatient.stayedDeptCode);
                     // 加入cache
                     departmentCache.put(inpatient.stayedDeptCode, inpatient.associateEntity.stayedDept);
                 }
 
                 // 床位
-                inpatient.associateEntity.bed = this.bedMapper.queryBedInfo(inpatient.bedNo, ValidStateEnum.有效);
+                inpatient.associateEntity.bed = this.bedMapper.queryBedInfo(inpatient.bedNo);
             }
             // 实体：房间
             if (roomCache.keySet().contains(item.roomId)) {

@@ -44,4 +44,12 @@ public interface EscortService {
      * @return
      */
     List<EscortMainInfo> queryPatientInfos(String helperCardNo);
+
+    /**
+     * 查询陪护人信息
+     * 
+     * @param patientCardNo
+     * @return
+     */
+    List<EscortMainInfo> queryHelperInfos(String patientCardNo);
 }

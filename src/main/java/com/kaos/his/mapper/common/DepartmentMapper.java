@@ -1,7 +1,6 @@
 package com.kaos.his.mapper.common;
 
 import com.kaos.his.entity.common.Department;
-import com.kaos.his.enums.ValidStateEnum;
 
 public interface DepartmentMapper {
     /**
@@ -11,5 +10,5 @@ public interface DepartmentMapper {
      * @param valid    有效标识，若为null，则不纳入判断
      * @return
      */
-    Department queryDepartment(String deptCode, ValidStateEnum valid);
+    Department queryDepartment(String deptCode);
 }

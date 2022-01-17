@@ -14,9 +14,6 @@ public class BedMapperTests {
 
     @Test
     public void queryBed() {
-        this.bedMapper.queryBedInfo("901985", null);
-        this.bedMapper.queryBedInfo("901985", ValidStateEnum.作废);
-        this.bedMapper.queryBedInfo("901985", ValidStateEnum.无效);
-        this.bedMapper.queryBedInfo("901985", ValidStateEnum.有效);
+        this.bedMapper.queryBedInfo("901985");
     }
 }

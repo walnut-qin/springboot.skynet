@@ -15,7 +15,10 @@ import com.kaos.his.entity.inpatient.escort.EscortStateRec;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.FinIprPrepayInStateEnum;
 import com.kaos.his.enums.InpatientStateEnum;
+import com.kaos.his.mapper.common.DepartmentMapper;
+import com.kaos.his.mapper.common.EmployeeMapper;
 import com.kaos.his.mapper.common.PatientMapper;
+import com.kaos.his.mapper.inpatient.ComBedInfoMapper;
 import com.kaos.his.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortActionRecMapper;
@@ -113,6 +116,24 @@ public class EscortServiceImpl implements EscortService {
      */
     @Autowired
     MetOrdiOrderMapper metOrdiOrderMapper;
+
+    /**
+     * 员工接口
+     */
+    @Autowired
+    EmployeeMapper employeeMapper;
+
+    /**
+     * 科室接口
+     */
+    @Autowired
+    DepartmentMapper departmentMapper;
+
+    /**
+     * 床位接口
+     */
+    @Autowired
+    ComBedInfoMapper comBedInfoMapper;
 
     /**
      * 查询当前陪护证的实时状态
@@ -379,7 +400,8 @@ public class EscortServiceImpl implements EscortService {
 
         // 更新实时状态（传递事务）
         var curState = this.queryRealState(escort);
-        escort.associateEntity.stateRecs = this.selfService.updateEscortState(escort.escortNo, curState, emplCode, remark);
+        escort.associateEntity.stateRecs = this.selfService.updateEscortState(escort.escortNo, curState, emplCode,
+                remark);
 
         return escort;
     }
@@ -435,6 +457,34 @@ public class EscortServiceImpl implements EscortService {
 
     @Override
     public List<EscortMainInfo> queryPatientInfos(String helperCardNo) {
+        // 查询陪护人关联的上下文
+        var rs = this.escortMainInfoMapper.queryEscortMainInfos(null, null, helperCardNo, new ArrayList<>() {
+            {
+                add(EscortStateEnum.无核酸检测结果);
+                add(EscortStateEnum.等待院内核酸检测结果);
+                add(EscortStateEnum.等待院外核酸检测结果审核);
+                add(EscortStateEnum.生效中);
+            }
+        });
+
+        // 填充实体
+        rs.forEach((rt) -> {
+            // 锚定关联实体
+            var ntt = rt.associateEntity;
+
+            // 住院证
+            ntt.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
+            if (ntt.finIprPrepayIn != null) {
+            }
+
+            // 陪护人
+            ntt.helper = this.patientMapper.queryPatient(rt.helperCardNo);
+        });
+        return null;
+    }
+
+    @Override
+    public List<EscortMainInfo> queryHelperInfos(String patientCardNo) {
         return null;
     }
 }

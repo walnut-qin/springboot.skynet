@@ -14,9 +14,6 @@ public class DepartmentMapperTests {
 
     @Test
     public void queryDepartment() throws Exception {
-        this.departmentMapper.queryDepartment("1000", null);
-        this.departmentMapper.queryDepartment("1000", ValidStateEnum.作废);
-        this.departmentMapper.queryDepartment("1000", ValidStateEnum.无效);
-        this.departmentMapper.queryDepartment("1000", ValidStateEnum.有效);
+        this.departmentMapper.queryDepartment("1000");
     }
 }

@@ -24,9 +24,6 @@
             <if test="deptCode!=null">
                 AND DEPT_ID = #{deptCode}
             </if>
-            <if test="valid!=null">
-                AND VALID_STATE = #{valid}
-            </if>
         </where>
     </select>
 </mapper>

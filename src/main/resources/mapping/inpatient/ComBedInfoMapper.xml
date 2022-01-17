@@ -24,9 +24,6 @@
             <if test="bedNo!=null">
                 AND BED_NO = #{bedNo}
             </if>
-            <if test="valid!=null">
-                AND VALID_STATE = #{valid}
-            </if>
         </where>
     </select>
 </mapper>
