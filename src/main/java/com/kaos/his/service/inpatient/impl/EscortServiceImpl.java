@@ -504,12 +504,38 @@ public class EscortServiceImpl implements EscortService {
                 rt.associateEntity.finIprPrepayIn.associateEntity.escortVip = this.escortVipMapper
                         .queryEscortVip(rt.patientCardNo, rt.happenNo);
             }
+            rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);
+            rt.associateEntity.actionRecs = this.escortActionRecMapper.queryActions(rt.escortNo);
         }
         return rs;
     }
 
     @Override
     public List<EscortMainInfo> queryHelperInfos(String patientCardNo) {
-        return null;
+        // 查询陪护人关联的上下文
+        var rs = this.escortMainInfoMapper.queryEscortMainInfos(patientCardNo, null, null, new ArrayList<>() {
+            {
+                add(EscortStateEnum.无核酸检测结果);
+                add(EscortStateEnum.等待院内核酸检测结果);
+                add(EscortStateEnum.等待院外核酸检测结果审核);
+                add(EscortStateEnum.生效中);
+            }
+        });
+
+        // 填充实体
+        for (var rt : rs) {
+            // 住院证
+            rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
+            // 助手实体
+            rt.associateEntity.helper = this.patientMapper.queryPatient(rt.helperCardNo);
+            if (rt.associateEntity.finIprPrepayIn != null) {
+                // vip
+                rt.associateEntity.finIprPrepayIn.associateEntity.escortVip = this.escortVipMapper
+                        .queryEscortVip(rt.patientCardNo, rt.happenNo);
+            }
+            rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);
+            rt.associateEntity.actionRecs = this.escortActionRecMapper.queryActions(rt.escortNo);
+        }
+        return rs;
     }
 }

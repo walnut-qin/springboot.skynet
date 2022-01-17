@@ -6,6 +6,9 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.kaos.his.controller.inpatient.escort.entity.EscortActionRec;
+import com.kaos.his.controller.inpatient.escort.entity.EscortStateRec;
+import com.kaos.his.controller.inpatient.escort.entity.QueryHelperInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryPatientInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryStateInfoRspBody;
 import com.kaos.his.entity.inpatient.Inpatient;
@@ -261,6 +264,75 @@ public class EscortController {
                     .equals(rt.helperCardNo) ? "1" : "0";
             // 陪护证号
             rspItem.escortNo = rt.escortNo;
+            // 状态列表
+            rspItem.states = new ArrayList<>();
+            for (var item : rt.associateEntity.stateRecs) {
+                var stateItem = new EscortStateRec();
+                stateItem.recNo = item.recNo;
+                stateItem.state = item.state;
+                stateItem.recEmplCode = item.recEmplCode;
+                stateItem.recDate = item.recDate;
+                rspItem.states.add(stateItem);
+            }
+            // 动作列表
+            rspItem.actions = new ArrayList<>();
+            for (var item : rt.associateEntity.actionRecs) {
+                var actionItem = new EscortActionRec();
+                actionItem.recNo = item.recNo;
+                actionItem.action = item.action;
+                actionItem.recDate = item.recDate;
+                rspItem.actions.add(actionItem);
+            }
+
+            rspBody.add(rspItem);
+        }
+
+        return GsonHelper.ToJson(rspBody);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "queryHelperInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String queryHelperInfo(@NotBlank(message = "患者卡号不能为空") String patientCardNo) {
+        // 记录日志
+        this.logger.info(String.format("查询患者的陪护人信息 %s 的状态", patientCardNo));
+
+        // 调用服务
+        var rspBody = new ArrayList<QueryHelperInfoRspBody>();
+        for (var rt : this.escortService.queryHelperInfos(patientCardNo)) {
+            // 创建元素
+            var rspItem = new QueryHelperInfoRspBody();
+            // 就诊卡号
+            rspItem.cardNo = rt.patientCardNo;
+            // 姓名
+            rspItem.name = rt.associateEntity.helper.name;
+            // 性别
+            rspItem.sex = rt.associateEntity.helper.sex;
+            // 年龄
+            rspItem.age = DateHelper.GetAgeDetail(rt.associateEntity.helper.birthday);
+            // 免费标识
+            rspItem.freeFlag = rt.associateEntity.finIprPrepayIn.associateEntity.escortVip.helperCardNo
+                    .equals(rt.helperCardNo) ? "1" : "0";
+            // 陪护证号
+            rspItem.escortNo = rt.escortNo;
+            // 状态列表
+            rspItem.states = new ArrayList<>();
+            for (var item : rt.associateEntity.stateRecs) {
+                var stateItem = new EscortStateRec();
+                stateItem.recNo = item.recNo;
+                stateItem.state = item.state;
+                stateItem.recEmplCode = item.recEmplCode;
+                stateItem.recDate = item.recDate;
+                rspItem.states.add(stateItem);
+            }
+            // 动作列表
+            rspItem.actions = new ArrayList<>();
+            for (var item : rt.associateEntity.actionRecs) {
+                var actionItem = new EscortActionRec();
+                actionItem.recNo = item.recNo;
+                actionItem.action = item.action;
+                actionItem.recDate = item.recDate;
+                rspItem.actions.add(actionItem);
+            }
 
             rspBody.add(rspItem);
         }
