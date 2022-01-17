@@ -26,6 +26,7 @@ import com.kaos.his.mapper.inpatient.escort.EscortAnnexChkMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortStateRecMapper;
+import com.kaos.his.mapper.inpatient.escort.EscortVipMapper;
 import com.kaos.his.mapper.inpatient.order.MetOrdiOrderMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
@@ -68,6 +69,12 @@ public class EscortServiceImpl implements EscortService {
      */
     @Autowired
     EscortActionRecMapper escortActionRecMapper;
+
+    /**
+     * vip接口
+     */
+    @Autowired
+    EscortVipMapper escortVipMapper;
 
     /**
      * 住院证接口
@@ -469,16 +476,37 @@ public class EscortServiceImpl implements EscortService {
 
         // 填充实体
         rs.forEach((rt) -> {
-            // 锚定关联实体
-            var ntt = rt.associateEntity;
-
             // 住院证
-            ntt.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
-            if (ntt.finIprPrepayIn != null) {
+            rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
+            if (rt.associateEntity.finIprPrepayIn != null) {
+                // 若已入院，则存住院信息
+                var inpatients = this.inpatientMapper.queryInpatients(rt.patientCardNo, rt.happenNo, new ArrayList<>() {
+                    {
+                        add(InpatientStateEnum.住院登记);
+                        add(InpatientStateEnum.病房接诊);
+                        add(InpatientStateEnum.出院登记);
+                        add(InpatientStateEnum.预约出院);
+                    }
+                });
+                if (inpatients != null && inpatients.size() == 1) {
+                    var ipt = inpatients.get(0);
+                    ipt.associateEntity.stayedDept = this.departmentMapper.queryDepartment(ipt.stayedDeptCode);
+                    ipt.associateEntity.bed = this.comBedInfoMapper.queryBedInfo(ipt.bedNo);
+                    rt.associateEntity.finIprPrepayIn.associateEntity.patient = ipt;
+                } else {
+                    rt.associateEntity.finIprPrepayIn.associateEntity.patient = this.patientMapper
+                            .queryPatient(rt.patientCardNo);
+                }
+                // 科室信息
+                rt.associateEntity.finIprPrepayIn.associateEntity.preDept = this.departmentMapper
+                        .queryDepartment(rt.associateEntity.finIprPrepayIn.preDeptCode);
+                // 床位信息
+                rt.associateEntity.finIprPrepayIn.associateEntity.bedInfo = this.comBedInfoMapper
+                        .queryBedInfo(rt.associateEntity.finIprPrepayIn.bedNo);
+                // vip
+                rt.associateEntity.finIprPrepayIn.associateEntity.escortVip = this.escortVipMapper
+                        .queryEscortVip(rt.patientCardNo, rt.happenNo);
             }
-
-            // 陪护人
-            ntt.helper = this.patientMapper.queryPatient(rt.helperCardNo);
         });
         return null;
     }

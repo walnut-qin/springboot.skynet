@@ -2,8 +2,6 @@ package com.kaos.his.controller.inpatient.escort.entity;
 
 import java.util.List;
 
-import com.kaos.his.entity.inpatient.escort.EscortActionRec;
-import com.kaos.his.entity.inpatient.escort.EscortStateRec;
 import com.kaos.his.enums.SexEnum;
 
 public class QueryPatientInfoRspBody {
@@ -55,10 +53,10 @@ public class QueryPatientInfoRspBody {
     /**
      * 状态列表
      */
-    public List<EscortStateRec> states = null;
+    public List<StateRec> states = null;
 
     /**
      * 动作列表
      */
-    public List<EscortActionRec> actions = null;
+    public List<ActionRec> actions = null;
 }

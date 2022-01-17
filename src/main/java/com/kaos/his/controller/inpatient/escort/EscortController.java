@@ -193,46 +193,55 @@ public class EscortController {
 
         // 构造响应
         var rspBody = new ArrayList<QueryPatientInfoRspBody>();
-        for (var srvRt : srvRs) {
-            var item = new QueryPatientInfoRspBody();
+        srvRs.forEach((rt) -> {
+            // 创建元素
+            var rspItem = new QueryPatientInfoRspBody();
+            // 就诊卡号
+            rspItem.cardNo = rt.patientCardNo;
+            // 姓名
+            rspItem.name = rt.associateEntity.finIprPrepayIn.associateEntity.patient.name;
+            // 性别
+            rspItem.sex = rt.associateEntity.finIprPrepayIn.associateEntity.patient.sex;
+            // 年龄
+            rspItem.age = DateHelper.GetAgeDetail(rt.associateEntity.finIprPrepayIn.associateEntity.patient.birthday);
 
-            var fip = srvRt.associateEntity.finIprPrepayIn;
-            item.cardNo = srvRt.patientCardNo;
-            item.name = fip.associateEntity.patient.name;
-            item.sex = fip.associateEntity.patient.sex;
-            item.age = DateHelper.GetAgeDetail(fip.associateEntity.patient.birthday);
-            if (fip.associateEntity.patient instanceof Inpatient) {
-                Inpatient inpatient = (Inpatient) fip.associateEntity.patient;
+            if (rt.associateEntity.finIprPrepayIn.associateEntity.patient instanceof Inpatient) {
+                var inpatient = (Inpatient) rt.associateEntity.finIprPrepayIn.associateEntity.patient;
+                // 科室
                 if (inpatient.associateEntity.stayedDept == null) {
-                    item.deptName = inpatient.stayedDeptCode;
+                    rspItem.deptName = inpatient.stayedDeptCode;
                 } else {
-                    item.deptName = inpatient.associateEntity.stayedDept.deptName;
+                    rspItem.deptName = inpatient.associateEntity.stayedDept.deptName;
                 }
+                // 床号
                 if (inpatient.associateEntity.bed == null) {
-                    item.bedNo = inpatient.bedNo;
+                    rspItem.bedNo = inpatient.bedNo;
                 } else {
-                    item.bedNo = inpatient.associateEntity.bed.getBriefBedNo();
+                    rspItem.bedNo = inpatient.associateEntity.bed.getBriefBedNo();
                 }
-                item.patientNo = inpatient.patientNo;
+                // 住院号
+                rspItem.patientNo = inpatient.patientNo;
             } else {
-                if (fip.associateEntity.preDept == null) {
-                    item.deptName = fip.preDeptCode;
+                // 科室
+                if (rt.associateEntity.finIprPrepayIn.associateEntity.preDept == null) {
+                    rspItem.deptName = rt.associateEntity.finIprPrepayIn.preDeptCode;
                 } else {
-                    item.deptName = fip.associateEntity.preDept.deptName;
+                    rspItem.deptName = rt.associateEntity.finIprPrepayIn.associateEntity.preDept.deptName;
                 }
-                if (fip.associateEntity.bedInfo == null) {
-                    item.bedNo = fip.bedNo;
+                // 床号
+                if (rt.associateEntity.finIprPrepayIn.associateEntity.bedInfo == null) {
+                    rspItem.bedNo = rt.associateEntity.finIprPrepayIn.bedNo;
                 } else {
-                    item.bedNo = fip.associateEntity.bedInfo.getBriefBedNo();
+                    rspItem.bedNo = rt.associateEntity.finIprPrepayIn.associateEntity.bedInfo.getBriefBedNo();
                 }
             }
-            item.freeFlag = fip.associateEntity.escortVip.helperCardNo.equals(srvRt.helperCardNo) ? "1" : "0";
-            item.escortNo = srvRt.escortNo;
-            item.states = srvRt.associateEntity.stateRecs;
-            item.actions = srvRt.associateEntity.actionRecs;
 
-            rspBody.add(item);
-        }
+            // 免费标识
+            rspItem.freeFlag = rt.associateEntity.finIprPrepayIn.associateEntity.escortVip.helperCardNo
+                    .equals(rt.helperCardNo) ? "1" : "0";
+            // 陪护证号
+            rspItem.escortNo = rt.escortNo;
+        });
 
         return GsonHelper.ToJson(rspBody);
     }
