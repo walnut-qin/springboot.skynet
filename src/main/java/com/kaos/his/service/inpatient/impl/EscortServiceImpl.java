@@ -323,7 +323,7 @@ public class EscortServiceImpl implements EscortService {
     @Transactional
     @Override
     public EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark) {
-        // 查询有效的住院记录
+        // 判定住院证
         var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, new ArrayList<>() {
             {
                 add(InpatientStateEnum.住院登记);
@@ -371,29 +371,45 @@ public class EscortServiceImpl implements EscortService {
         // 插入陪护证主表
         this.escortMainInfoMapper.insertEscortMainInfo(escort);
 
-        // 获取陪护证实时状态
-        var stateEnum = this.queryRealState(escort);
-        if (stateEnum == EscortStateEnum.注销) {
-            throw new RuntimeException("系统逻辑注销了此陪护证");
-        } else {
-            // 创建状态实体
-            var state = new EscortStateRec();
-            state.escortNo = escort.escortNo;
-            state.recNo = null;
-            state.state = stateEnum;
-            state.recEmplCode = emplCode;
-            state.recDate = new Date();
-            state.remark = remark;
-
-            // 插入状态记录
-            this.escortStateRecMapper.insertState(state);
-
-            // 关联实体
-            escort.associateEntity.stateRecs = new ArrayList<>();
-            escort.associateEntity.stateRecs.add(state);
-        }
+        // 更新实时状态
+        var curState = this.queryRealState(escort);
+        escort.associateEntity.stateRecs = this.updateEscortState(escort.escortNo, curState, emplCode, remark);
 
         return escort;
+    }
+
+    @Override
+    public List<EscortStateRec> updateEscortState(String escortNo, EscortStateEnum state, String emplCode,
+            String remark) {
+        // 查询陪护证
+        var escort = this.escortMainInfoMapper.queryEscortMainInfo(escortNo);
+        if (escort == null) {
+            throw new RuntimeException(String.format("陪护证(%s)不存在", escortNo));
+        }
+
+        // 查询当前状态
+        var curState = this.escortStateRecMapper.queryCurState(escortNo);
+        if (curState != null) {
+            if (curState.state == state) {
+                return this.escortStateRecMapper.queryStates(escortNo);
+            } else if (curState.state == EscortStateEnum.注销) {
+                throw new RuntimeException(String.format("陪护证(%s)已注销，无法再改变状态", escortNo));
+            }
+        }
+
+        // 创建新状态
+        var stateRec = new EscortStateRec();
+        stateRec.escortNo = escortNo;
+        stateRec.recNo = null;
+        stateRec.state = state;
+        stateRec.recEmplCode = emplCode;
+        stateRec.recDate = new Date();
+        stateRec.remark = remark;
+
+        // 插入状态记录
+        this.escortStateRecMapper.insertState(stateRec);
+
+        return this.escortStateRecMapper.queryStates(escortNo);
     }
 
     @Override
