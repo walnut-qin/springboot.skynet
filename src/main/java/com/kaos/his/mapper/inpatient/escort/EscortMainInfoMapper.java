@@ -12,23 +12,28 @@ public interface EscortMainInfoMapper {
     EscortMainInfo queryEscortMainInfo(String escortNo);
 
     /**
-     * 查询患者关联的陪护证主表信息
+     * 查询陪护列表
      * 
-     * @param cardNo   患者卡号
-     * @param happenNo 住院证序号
-     * @param states   陪护证状态列表
+     * @param patientCardNo
+     * @param happenNo
+     * @param helperCardNo
+     * @param states
      * @return
      */
-    List<EscortMainInfo> queryPatientEscortMainInfos(String cardNo, Integer happenNo, List<EscortStateEnum> states);
+    List<EscortMainInfo> queryEscortMainInfos(String patientCardNo, Integer happenNo, String helperCardNo,
+            List<EscortStateEnum> states);
 
     /**
-     * 查询患者关联的陪护证主表信息
+     * 查询最后一张陪护（排序依据为注册时间）
      * 
-     * @param cardNo 陪护人卡号
-     * @param states 陪护证状态列表
+     * @param patientCardNo
+     * @param happenNo
+     * @param helperCardNo
+     * @param states
      * @return
      */
-    List<EscortMainInfo> queryHelperEscortMainInfos(String cardNo, List<EscortStateEnum> states);
+    EscortMainInfo queryLastEscortMainInfo(String patientCardNo, Integer happenNo, String helperCardNo,
+            List<EscortStateEnum> states);
 
     /**
      * 插入陪护主记录

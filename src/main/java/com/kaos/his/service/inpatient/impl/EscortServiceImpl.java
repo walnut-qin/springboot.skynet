@@ -229,13 +229,70 @@ public class EscortServiceImpl implements EscortService {
     }
 
     /**
+     * 判断能否注册陪护
+     * 
+     * @param patientCardNo
+     * @param helperCardNo
+     */
+    private void canRegister(String patientCardNo, String helperCardNo) throws RuntimeException {
+        // 判断0：自陪护
+        if (patientCardNo.equals(helperCardNo)) {
+            throw new RuntimeException("不可以给自己陪护");
+        }
+
+        // 判断1：已陪护 || 刚注销
+        var lastEscort = this.escortMainInfoMapper.queryLastEscortMainInfo(patientCardNo, null, helperCardNo, null);
+        var curState = ListHelper.GetLast(lastEscort.associateEntity.stateRecs);
+        if (curState.state != EscortStateEnum.注销) {
+            throw new RuntimeException("陪护关系已绑定，请勿重复绑定");
+        } else {
+            var offset = new Date().getTime() - curState.recDate.getTime();
+            if (offset <= 12 * 60 * 60 * 1000) {
+                var hour = offset / (1000 * 60 * 60);
+                var mins = (offset - hour * 60 * 60 * 1000) / (1000 * 60);
+                var secs = (offset - hour * 60 * 60 * 1000 - mins * 60 * 1000) / 1000;
+                throw new RuntimeException(String.format("注销12小时后才能重新绑定，剩余%s%s%s", hour > 0 ? hour + "小时" : "",
+                        mins > 0 ? mins + "分" : "", secs > 0 ? secs + "秒" : ""));
+            }
+        }
+
+        // 判断2：患者陪护上限
+        var patientEscorts = this.escortMainInfoMapper.queryEscortMainInfos(patientCardNo, null, null,
+                new ArrayList<>() {
+                    {
+                        add(EscortStateEnum.无核酸检测结果);
+                        add(EscortStateEnum.等待院内核酸检测结果);
+                        add(EscortStateEnum.等待院外核酸检测结果审核);
+                        add(EscortStateEnum.生效中);
+                    }
+                });
+        if (patientEscorts.size() >= 2) {
+            throw new RuntimeException("人数已满，无法添加更多陪护");
+        }
+
+        // 判断3：陪护人上限
+        var helperEscorts = this.escortMainInfoMapper.queryEscortMainInfos(null, null, helperCardNo,
+                new ArrayList<>() {
+                    {
+                        add(EscortStateEnum.无核酸检测结果);
+                        add(EscortStateEnum.等待院内核酸检测结果);
+                        add(EscortStateEnum.等待院外核酸检测结果审核);
+                        add(EscortStateEnum.生效中);
+                    }
+                });
+        if (helperEscorts.size() >= 2) {
+            throw new RuntimeException("人数已满，无法陪护更多患者");
+        }
+    }
+
+    /**
      * 登记陪护证
      */
     @Transactional
     @Override
     public EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark) {
-        // 声明待关联的住院证
-        FinIprPrepayIn fip = null;
+        // 权限判断
+        this.canRegister(patientCardNo, helperCardNo);
 
         // 查询有效的住院记录
         var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, new ArrayList<>() {
@@ -244,33 +301,28 @@ public class EscortServiceImpl implements EscortService {
                 add(InpatientStateEnum.病房接诊);
             }
         });
-        if (inps != null) {
-            switch (inps.size()) {
-                case 0:
-                    fip = this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, new ArrayList<>() {
-                        {
-                            add(FinIprPrepayInStateEnum.预约);
-                            add(FinIprPrepayInStateEnum.转住院);
-                            add(FinIprPrepayInStateEnum.签床);
-                            add(FinIprPrepayInStateEnum.预住院预约);
-                        }
-                    });
-                    if (fip == null) {
-                        throw new RuntimeException(String.format("患者(%s)无有效住院证，无法判断关联数据", patientCardNo));
-                    }
-                    break;
-
-                case 1:
-                    var inp = inps.get(0);
-                    fip = this.finIprPrepayInMapper.queryPrepayIn(inp.cardNo, inp.happenNo);
-                    if (fip == null) {
-                        throw new RuntimeException(String.format("患者(%s)住院记录(%s)未关联住院证，无法判断关联数据", inp.patientNo));
-                    }
-                    fip.associateEntity.patient = inp;
-
-                default:
-                    throw new RuntimeException(String.format("患者(%s)存在多条住院记录，无法判断关联数据", patientCardNo));
+        FinIprPrepayIn fip = null;
+        if (inps == null || inps.size() == 0) {
+            fip = this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, new ArrayList<>() {
+                {
+                    add(FinIprPrepayInStateEnum.预约);
+                    add(FinIprPrepayInStateEnum.转住院);
+                    add(FinIprPrepayInStateEnum.签床);
+                    add(FinIprPrepayInStateEnum.预住院预约);
+                }
+            });
+            if (fip == null) {
+                throw new RuntimeException(String.format("患者(%s)无有效住院证，无法判断关联数据", patientCardNo));
             }
+        } else if (inps.size() == 1) {
+            var inp = inps.get(0);
+            fip = this.finIprPrepayInMapper.queryPrepayIn(inp.cardNo, inp.happenNo);
+            if (fip == null) {
+                throw new RuntimeException(String.format("患者(%s)住院记录(%s)未关联住院证，无法判断关联数据", inp.patientNo));
+            }
+            fip.associateEntity.patient = inp;
+        } else {
+            throw new RuntimeException(String.format("患者(%s)存在多条住院记录，无法判断关联数据", patientCardNo));
         }
 
         // 创建新陪护实体
@@ -325,53 +377,6 @@ public class EscortServiceImpl implements EscortService {
 
     @Override
     public List<EscortMainInfo> queryPatientInfos(String helperCardNo) {
-        // 检索关联的陪护证实体
-        var rs = this.escortMainInfoMapper.queryHelperEscortMainInfos(helperCardNo, new ArrayList<>() {
-            {
-                add(EscortStateEnum.无核酸检测结果);
-                add(EscortStateEnum.等待院内核酸检测结果);
-                add(EscortStateEnum.等待院外核酸检测结果审核);
-                add(EscortStateEnum.生效中);
-            }
-        });
-
-        for (var rt : rs) {
-            // 填充装填实体
-            rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);
-
-            // 填充动作实体
-            rt.associateEntity.actionRecs = this.escortActionRecMapper.queryActions(rt.escortNo);
-
-            // 填充患者信息
-            rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
-            if (rt.associateEntity.finIprPrepayIn != null) {
-                // 锚定住院证
-                var fip = rt.associateEntity.finIprPrepayIn;
-
-                // 检索住院实体
-                var inpatients = this.inpatientMapper.queryInpatients(rt.patientCardNo, rt.happenNo, new ArrayList<>() {
-                    {
-                        add(InpatientStateEnum.住院登记);
-                        add(InpatientStateEnum.病房接诊);
-                        add(InpatientStateEnum.出院登记);
-                        add(InpatientStateEnum.预约出院);
-                    }
-                });
-                switch (inpatients.size()) {
-                    case 0:
-                        fip.associateEntity.patient = this.patientMapper.queryPatient(rt.patientCardNo);
-                        break;
-
-                    case 1:
-                        fip.associateEntity.patient = inpatients.get(0);
-                        break;
-
-                    default:
-                        fip.associateEntity.patient = this.patientMapper.queryPatient(rt.patientCardNo);
-                        break;
-                }
-            }
-        }
         return null;
     }
 }

@@ -29,17 +29,20 @@
         </where>
     </select>
 
-    <select id="queryPatientEscortMainInfos" resultMap="map">
+    <select id="queryEscortMainInfos" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
             KAOS.ESCORT_MAIN_INFO
         <where>
-            <if test="cardNo != null">
-                AND PATIENT_CARD_NO = #{cardNo}
+            <if test="patientCardNo != null">
+                AND PATIENT_CARD_NO = #{patientCardNo}
             </if>
             <if test="happenNo != null">
                 AND HAPPEN_NO = #{happenNo}
+            </if>
+            <if test="helperCardNo != null">
+                AND HELPER_CARD_NO = #{helperCardNo}
             </if>
             <if test="states != null">
                 AND (
@@ -65,14 +68,20 @@
         </where>
     </select>
 
-    <select id="queryHelperEscortMainInfos" resultMap="map">
-        SELECT
+    <select id="queryLastEscortMainInfo" resultMap="map">
+        SELECT * FROM (SELECT
         <include refid="item"/>
         FROM
             KAOS.ESCORT_MAIN_INFO
         <where>
-            <if test="cardNo != null">
-                AND HELPER_CARD_NO = #{cardNo}
+            <if test="patientCardNo != null">
+                AND PATIENT_CARD_NO = #{patientCardNo}
+            </if>
+            <if test="happenNo != null">
+                AND HAPPEN_NO = #{happenNo}
+            </if>
+            <if test="helperCardNo != null">
+                AND HELPER_CARD_NO = #{helperCardNo}
             </if>
             <if test="states != null">
                 AND (
@@ -96,6 +105,16 @@
                 </foreach>
             </if>
         </where>
+        ORDER BY
+            (
+                SELECT
+                    OPER_DATE
+                FROM
+                    KAOS.ESCORT_STATE_REC
+                WHERE
+                    ESCORT_NO = KAOS.ESCORT_MAIN_INFO.ESCORT_NO
+                    AND REC_NO = 1
+            ) ASC ) WHERE ROWNUM = 1
     </select>
 
     <insert id="insertEscortMainInfo">

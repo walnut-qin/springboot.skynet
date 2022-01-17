@@ -20,22 +20,52 @@ public class EscortMainInfoMapperTests {
     }
 
     @Test
-    public void queryPatientEscortMainInfos() {
-        this.escortMainInfoMapper.queryPatientEscortMainInfos("2000003605", 10, null);
-        this.escortMainInfoMapper.queryPatientEscortMainInfos("2000003605", 10, new ArrayList<EscortStateEnum>() {
+    public void queryEscortMainInfos() {
+        this.escortMainInfoMapper.queryEscortMainInfos("2000003605", 10, null, null);
+        this.escortMainInfoMapper.queryEscortMainInfos("2000003605", 10, null, new ArrayList<EscortStateEnum>() {
             {
                 add(EscortStateEnum.无核酸检测结果);
             }
         });
+
+        this.escortMainInfoMapper.queryEscortMainInfos(null, null, "2000003605", null);
+        this.escortMainInfoMapper.queryEscortMainInfos(null, null, "2000003605", new ArrayList<EscortStateEnum>() {
+            {
+                add(EscortStateEnum.无核酸检测结果);
+            }
+        });
+
+        this.escortMainInfoMapper.queryEscortMainInfos("2000003605", 10, "2000003605", null);
+        this.escortMainInfoMapper.queryEscortMainInfos("2000003605", 10, "2000003605",
+                new ArrayList<EscortStateEnum>() {
+                    {
+                        add(EscortStateEnum.无核酸检测结果);
+                    }
+                });
     }
 
     @Test
-    public void queryHelperEscortMainInfos() {
-        this.escortMainInfoMapper.queryHelperEscortMainInfos("2000003605", null);
-        this.escortMainInfoMapper.queryHelperEscortMainInfos("2000003605", new ArrayList<EscortStateEnum>() {
+    public void queryLastEscortMainInfo() {
+        this.escortMainInfoMapper.queryLastEscortMainInfo("2000003605", 10, null, null);
+        this.escortMainInfoMapper.queryLastEscortMainInfo("2000003605", 10, null, new ArrayList<EscortStateEnum>() {
             {
                 add(EscortStateEnum.无核酸检测结果);
             }
         });
+
+        this.escortMainInfoMapper.queryLastEscortMainInfo(null, null, "2000003605", null);
+        this.escortMainInfoMapper.queryLastEscortMainInfo(null, null, "2000003605", new ArrayList<EscortStateEnum>() {
+            {
+                add(EscortStateEnum.无核酸检测结果);
+            }
+        });
+
+        this.escortMainInfoMapper.queryLastEscortMainInfo("2000003605", 10, "2000003605", null);
+        this.escortMainInfoMapper.queryLastEscortMainInfo("2000003605", 10, "2000003605",
+                new ArrayList<EscortStateEnum>() {
+                    {
+                        add(EscortStateEnum.无核酸检测结果);
+                    }
+                });
     }
 }
