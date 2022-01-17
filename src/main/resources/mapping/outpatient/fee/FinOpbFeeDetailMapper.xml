@@ -53,14 +53,7 @@
             FIN_OPB_FEEDETAIL
         <where>
             <if test="cardNo != null">
-                AND (
-                    SELECT
-                        CARD_NO
-                    FROM
-                        FIN_OPR_REGISTER
-                    WHERE
-                        CLINIC_CODE = FIN_OPB_FEEDETAIL.CLINIC_CODE
-                ) = #{cardNo}
+                AND CARD_NO = #{cardNo}
             </if>
             <if test="itemCode != null">
                 AND ITEM_CODE = #{itemCode}

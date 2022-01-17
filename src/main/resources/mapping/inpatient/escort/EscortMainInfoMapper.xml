@@ -114,7 +114,7 @@
                 WHERE
                     ESCORT_NO = KAOS.ESCORT_MAIN_INFO.ESCORT_NO
                     AND REC_NO = 1
-            ) ASC ) WHERE ROWNUM = 1
+            ) DESC ) WHERE ROWNUM = 1
     </select>
 
     <insert id="insertEscortMainInfo">

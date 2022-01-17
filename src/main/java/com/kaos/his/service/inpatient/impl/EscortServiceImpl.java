@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.kaos.his.entity.common.Patient;
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
@@ -203,7 +204,7 @@ public class EscortServiceImpl implements EscortService {
         var beginDate = calender.getTime();
 
         // 查询7日内本院核酸记录
-        var lisRs = this.lisResultNewMapper.queryInspectResult(ntt.helper.cardNo, "SARS-CoV-2-RNA", beginDate, null);
+        var lisRs = this.lisResultNewMapper.queryInspectResult(context.helperCardNo, "SARS-CoV-2-RNA", beginDate, null);
         if (lisRs != null && !lisRs.isEmpty()) {
             var lastLisRt = lisRs.get(0);
             if (lastLisRt.result.equals("阴性(-)")) {
@@ -241,25 +242,34 @@ public class EscortServiceImpl implements EscortService {
      * @param patientCardNo
      * @param helperCardNo
      */
-    private void canRegister(FinIprPrepayIn fip, String helperCardNo) throws RuntimeException {
+    private void canRegister(FinIprPrepayIn fip, Patient helper) throws RuntimeException {
+        // 入参判断
+        if (fip == null) {
+            throw new RuntimeException("住院证不存在");
+        } else if (helper == null) {
+            throw new RuntimeException("陪护人不存在");
+        }
+
         // 判断0：自陪护
-        if (fip.cardNo.equals(helperCardNo)) {
+        if (fip.cardNo.equals(helper.cardNo)) {
             throw new RuntimeException("不可以给自己陪护");
         }
 
         // 判断1：已陪护 || 刚注销
-        var lastEscort = this.escortMainInfoMapper.queryLastEscortMainInfo(fip.cardNo, null, helperCardNo, null);
-        var curState = ListHelper.GetLast(lastEscort.associateEntity.stateRecs);
-        if (curState.state != EscortStateEnum.注销) {
-            throw new RuntimeException("陪护关系已绑定，请勿重复绑定");
-        } else {
-            var offset = new Date().getTime() - curState.recDate.getTime();
-            if (offset <= 12 * 60 * 60 * 1000) {
-                var hour = offset / (1000 * 60 * 60);
-                var mins = (offset - hour * 60 * 60 * 1000) / (1000 * 60);
-                var secs = (offset - hour * 60 * 60 * 1000 - mins * 60 * 1000) / 1000;
-                throw new RuntimeException(String.format("注销12小时后才能重新绑定，剩余%s%s%s", hour > 0 ? hour + "小时" : "",
-                        mins > 0 ? mins + "分" : "", secs > 0 ? secs + "秒" : ""));
+        var lastEscort = this.escortMainInfoMapper.queryLastEscortMainInfo(fip.cardNo, null, helper.cardNo, null);
+        if (lastEscort != null) {
+            var curState = this.escortStateRecMapper.queryCurState(lastEscort.escortNo);
+            if (curState.state != EscortStateEnum.注销) {
+                throw new RuntimeException("陪护关系已绑定，请勿重复绑定");
+            } else {
+                var offset = new Date().getTime() - curState.recDate.getTime();
+                if (offset <= 12 * 60 * 60 * 1000) {
+                    var hour = offset / (1000 * 60 * 60);
+                    var mins = (offset - hour * 60 * 60 * 1000) / (1000 * 60);
+                    var secs = (offset - hour * 60 * 60 * 1000 - mins * 60 * 1000) / 1000;
+                    throw new RuntimeException(String.format("注销12小时后才能重新绑定，剩余%s%s%s", hour > 0 ? hour + "小时" : "",
+                            mins > 0 ? mins + "分" : "", secs > 0 ? secs + "秒" : ""));
+                }
             }
         }
 
@@ -292,7 +302,7 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 判断3：陪护人上限
-        var helperEscorts = this.escortMainInfoMapper.queryEscortMainInfos(null, null, helperCardNo,
+        var helperEscorts = this.escortMainInfoMapper.queryEscortMainInfos(null, null, helper.cardNo,
                 new ArrayList<>() {
                     {
                         add(EscortStateEnum.无核酸检测结果);
@@ -343,8 +353,11 @@ public class EscortServiceImpl implements EscortService {
             throw new RuntimeException(String.format("患者(%s)存在多条住院记录，无法判断关联数据", patientCardNo));
         }
 
+        // 陪护人对象
+        var helper = this.patientMapper.queryPatient(helperCardNo);
+
         // 权限判断
-        this.canRegister(fip, helperCardNo);
+        this.canRegister(fip, helper);
 
         // 创建新陪护实体
         var escort = new EscortMainInfo();
@@ -360,7 +373,7 @@ public class EscortServiceImpl implements EscortService {
         // 获取陪护证实时状态
         var stateEnum = this.queryRealState(escort);
         if (stateEnum == EscortStateEnum.注销) {
-            throw new RuntimeException("陪护证注册成功，但判断其状态已注销");
+            throw new RuntimeException("系统逻辑注销了此陪护证");
         } else {
             // 创建状态实体
             var state = new EscortStateRec();

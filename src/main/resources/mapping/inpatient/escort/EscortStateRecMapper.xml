@@ -76,6 +76,6 @@
         INSERT INTO
             KAOS.ESCORT_STATE_REC(ESCORT_NO, REC_NO, STATE, OPER_CODE, OPER_DATE, REMARK)
         VALUES
-            (#{escortNo}, #{recNo}, #{state}, #{operCode}, #{operDate}, #{remark})
+            (#{escortNo}, #{recNo}, #{state}, #{recEmplCode}, #{recDate}, #{remark})
     </insert>
 </mapper>

@@ -3,8 +3,8 @@ package com.kaos.his.controller.inpatient.escort;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.kaos.his.controller.inpatient.escort.entity.QueryPatientInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryStateInfoRspBody;
@@ -73,6 +73,7 @@ public class EscortController {
             add(new Object());
             add(new Object());
             add(new Object());
+            add(new Object());
         }
     };
 
@@ -90,6 +91,7 @@ public class EscortController {
             add(new Object());
             add(new Object());
             add(new Object());
+            add(new Object());
         }
     };
 
@@ -98,6 +100,7 @@ public class EscortController {
      */
     public static final List<Object> helperLocks = new ArrayList<>() {
         {
+            add(new Object());
             add(new Object());
             add(new Object());
             add(new Object());
@@ -136,16 +139,16 @@ public class EscortController {
     public void register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
             @NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
             @NotBlank(message = "操作员编码不能为空") String emplCode,
-            @Nullable String remark) {
+            @NotNull(message = "备注不能为空") String remark) {
         // 记录日志
         this.logger.info(String.format("登记陪护证(patientCardNo = %s, helperCardNo = %s)", patientCardNo, helperCardNo));
 
         try {
-            this.logger.info("加锁");
             synchronized (this.mapToLock(patientCardNo, patientLocks)) {
+                this.logger.info("加锁");
                 try {
-                    this.logger.info("加锁");
                     synchronized (this.mapToLock(helperCardNo, helperLocks)) {
+                        this.logger.info("加锁");
                         // 执行服务
                         this.escortService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
                     }
