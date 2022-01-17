@@ -22,6 +22,7 @@ import com.kaos.his.mapper.inpatient.escort.EscortAnnexChkMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortStateRecMapper;
+import com.kaos.his.mapper.inpatient.order.MetOrdiOrderMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.his.service.inpatient.EscortService;
@@ -99,6 +100,12 @@ public class EscortServiceImpl implements EscortService {
      */
     @Autowired
     LisResultNewMapper lisResultNewMapper;
+
+    /**
+     * 住院医嘱接口
+     */
+    @Autowired
+    MetOrdiOrderMapper metOrdiOrderMapper;
 
     /**
      * 查询当前陪护证的实时状态
@@ -234,14 +241,14 @@ public class EscortServiceImpl implements EscortService {
      * @param patientCardNo
      * @param helperCardNo
      */
-    private void canRegister(String patientCardNo, String helperCardNo) throws RuntimeException {
+    private void canRegister(FinIprPrepayIn fip, String helperCardNo) throws RuntimeException {
         // 判断0：自陪护
-        if (patientCardNo.equals(helperCardNo)) {
+        if (fip.cardNo.equals(helperCardNo)) {
             throw new RuntimeException("不可以给自己陪护");
         }
 
         // 判断1：已陪护 || 刚注销
-        var lastEscort = this.escortMainInfoMapper.queryLastEscortMainInfo(patientCardNo, null, helperCardNo, null);
+        var lastEscort = this.escortMainInfoMapper.queryLastEscortMainInfo(fip.cardNo, null, helperCardNo, null);
         var curState = ListHelper.GetLast(lastEscort.associateEntity.stateRecs);
         if (curState.state != EscortStateEnum.注销) {
             throw new RuntimeException("陪护关系已绑定，请勿重复绑定");
@@ -257,7 +264,7 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 判断2：患者陪护上限
-        var patientEscorts = this.escortMainInfoMapper.queryEscortMainInfos(patientCardNo, null, null,
+        var patientEscorts = this.escortMainInfoMapper.queryEscortMainInfos(fip.cardNo, null, null,
                 new ArrayList<>() {
                     {
                         add(EscortStateEnum.无核酸检测结果);
@@ -266,8 +273,22 @@ public class EscortServiceImpl implements EscortService {
                         add(EscortStateEnum.生效中);
                     }
                 });
-        if (patientEscorts.size() >= 2) {
-            throw new RuntimeException("人数已满，无法添加更多陪护");
+        switch (patientEscorts.size()) {
+            case 0:
+                break;
+
+            case 1:
+                if (fip.associateEntity.patient != null && fip.associateEntity.patient instanceof Inpatient) {
+                    Inpatient inp = (Inpatient) fip.associateEntity.patient;
+                    var ords = this.metOrdiOrderMapper.queryInpatientOrders(inp.inpatientNo, "5070672", null, null);
+                    if (ords != null && !ords.isEmpty()) {
+                        break;
+                    }
+                }
+                throw new RuntimeException("未开立第二陪护医嘱，无法添加更多陪护");
+
+            default:
+                throw new RuntimeException("人数已满，无法添加更多陪护");
         }
 
         // 判断3：陪护人上限
@@ -291,9 +312,6 @@ public class EscortServiceImpl implements EscortService {
     @Transactional
     @Override
     public EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark) {
-        // 权限判断
-        this.canRegister(patientCardNo, helperCardNo);
-
         // 查询有效的住院记录
         var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, new ArrayList<>() {
             {
@@ -324,6 +342,9 @@ public class EscortServiceImpl implements EscortService {
         } else {
             throw new RuntimeException(String.format("患者(%s)存在多条住院记录，无法判断关联数据", patientCardNo));
         }
+
+        // 权限判断
+        this.canRegister(fip, helperCardNo);
 
         // 创建新陪护实体
         var escort = new EscortMainInfo();
