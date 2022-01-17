@@ -189,11 +189,8 @@ public class EscortController {
         this.logger.info(String.format("查询陪护的患者信息 %s 的状态", helperCardNo));
 
         // 调用服务
-        var srvRs = this.escortService.queryPatientInfos(helperCardNo);
-
-        // 构造响应
         var rspBody = new ArrayList<QueryPatientInfoRspBody>();
-        srvRs.forEach((rt) -> {
+        for (var rt : this.escortService.queryPatientInfos(helperCardNo)) {
             // 创建元素
             var rspItem = new QueryPatientInfoRspBody();
             // 就诊卡号
@@ -241,7 +238,9 @@ public class EscortController {
                     .equals(rt.helperCardNo) ? "1" : "0";
             // 陪护证号
             rspItem.escortNo = rt.escortNo;
-        });
+
+            rspBody.add(rspItem);
+        }
 
         return GsonHelper.ToJson(rspBody);
     }

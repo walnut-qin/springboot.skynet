@@ -475,19 +475,12 @@ public class EscortServiceImpl implements EscortService {
         });
 
         // 填充实体
-        rs.forEach((rt) -> {
+        for (var rt : rs) {
             // 住院证
             rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
             if (rt.associateEntity.finIprPrepayIn != null) {
                 // 若已入院，则存住院信息
-                var inpatients = this.inpatientMapper.queryInpatients(rt.patientCardNo, rt.happenNo, new ArrayList<>() {
-                    {
-                        add(InpatientStateEnum.住院登记);
-                        add(InpatientStateEnum.病房接诊);
-                        add(InpatientStateEnum.出院登记);
-                        add(InpatientStateEnum.预约出院);
-                    }
-                });
+                var inpatients = this.inpatientMapper.queryInpatients(rt.patientCardNo, rt.happenNo, null);
                 if (inpatients != null && inpatients.size() == 1) {
                     var ipt = inpatients.get(0);
                     ipt.associateEntity.stayedDept = this.departmentMapper.queryDepartment(ipt.stayedDeptCode);
@@ -498,17 +491,21 @@ public class EscortServiceImpl implements EscortService {
                             .queryPatient(rt.patientCardNo);
                 }
                 // 科室信息
-                rt.associateEntity.finIprPrepayIn.associateEntity.preDept = this.departmentMapper
-                        .queryDepartment(rt.associateEntity.finIprPrepayIn.preDeptCode);
+                if (rt.associateEntity.finIprPrepayIn.preDeptCode != null) {
+                    rt.associateEntity.finIprPrepayIn.associateEntity.preDept = this.departmentMapper
+                            .queryDepartment(rt.associateEntity.finIprPrepayIn.preDeptCode);
+                }
                 // 床位信息
-                rt.associateEntity.finIprPrepayIn.associateEntity.bedInfo = this.comBedInfoMapper
-                        .queryBedInfo(rt.associateEntity.finIprPrepayIn.bedNo);
+                if (rt.associateEntity.finIprPrepayIn.bedNo != null) {
+                    rt.associateEntity.finIprPrepayIn.associateEntity.bedInfo = this.comBedInfoMapper
+                            .queryBedInfo(rt.associateEntity.finIprPrepayIn.bedNo);
+                }
                 // vip
                 rt.associateEntity.finIprPrepayIn.associateEntity.escortVip = this.escortVipMapper
                         .queryEscortVip(rt.patientCardNo, rt.happenNo);
             }
-        });
-        return null;
+        }
+        return rs;
     }
 
     @Override
