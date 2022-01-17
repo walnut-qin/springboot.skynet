@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.kaos.his.enums.EscortStateEnum;
 
-public class StateRec {
+public class EscortStateRec {
     /**
      * 状态序号
      */

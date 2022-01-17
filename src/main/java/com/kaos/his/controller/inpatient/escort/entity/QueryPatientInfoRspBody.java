@@ -53,10 +53,10 @@ public class QueryPatientInfoRspBody {
     /**
      * 状态列表
      */
-    public List<StateRec> states = null;
+    public List<EscortStateRec> states = null;
 
     /**
      * 动作列表
      */
-    public List<ActionRec> actions = null;
+    public List<EscortActionRec> actions = null;
 }
