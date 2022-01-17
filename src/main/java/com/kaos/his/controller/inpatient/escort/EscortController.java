@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import com.kaos.his.controller.inpatient.escort.entity.QueryPatientInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryStateInfoRspBody;
 import com.kaos.his.entity.inpatient.Inpatient;
+import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.inpatient.EscortService;
 import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
@@ -151,10 +152,32 @@ public class EscortController {
                         this.logger.info("加锁");
                         // 执行服务
                         this.escortService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
+                        this.logger.info("业务执行成功");
                     }
                 } finally {
                     this.logger.info("解锁");
                 }
+            }
+        } finally {
+            this.logger.info("解锁");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "updateState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void updateState(@NotBlank(message = "陪护证号不能为空") String escortNo,
+            @NotNull(message = "新状态不能为空") EscortStateEnum state,
+            @NotBlank(message = "操作员编码不能为空") String emplCode) {
+        // 记录日志
+        this.logger.info(String.format("修改陪护证状态(escortNo = %s, state = %s, emplCode = %s)", escortNo,
+                state, emplCode));
+
+        try {
+            synchronized (this.mapToLock(escortNo, stateLocks)) {
+                this.logger.info("加锁");
+                // 执行业务
+                this.escortService.updateEscortState(escortNo, state, emplCode, "收到客户端请求");
+                this.logger.info("业务执行成功");
             }
         } finally {
             this.logger.info("解锁");
