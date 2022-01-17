@@ -264,9 +264,10 @@ public class EscortServiceImpl implements EscortService {
             } else {
                 var offset = new Date().getTime() - curState.recDate.getTime();
                 if (offset <= 12 * 60 * 60 * 1000) {
-                    var hour = offset / (1000 * 60 * 60);
-                    var mins = (offset - hour * 60 * 60 * 1000) / (1000 * 60);
-                    var secs = (offset - hour * 60 * 60 * 1000 - mins * 60 * 1000) / 1000;
+                    var rest = 12 * 60 * 60 * 1000 - offset;
+                    var hour = rest / (1000 * 60 * 60);
+                    var mins = (rest - hour * 60 * 60 * 1000) / (1000 * 60);
+                    var secs = (rest - hour * 60 * 60 * 1000 - mins * 60 * 1000) / 1000;
                     throw new RuntimeException(String.format("注销12小时后才能重新绑定，剩余%s%s%s", hour > 0 ? hour + "小时" : "",
                             mins > 0 ? mins + "分" : "", secs > 0 ? secs + "秒" : ""));
                 }
