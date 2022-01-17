@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
@@ -26,6 +28,7 @@ import com.kaos.his.service.inpatient.EscortService;
 import com.kaos.util.ListHelper;
 
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,7 +125,7 @@ public class EscortServiceImpl implements EscortService {
         if (ntt.finIprPrepayIn == null) {
             ntt.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(context.patientCardNo, context.happenNo);
             if (ntt.finIprPrepayIn == null) {
-                throw new RuntimeException(String.format("陪护证(%s)无关联的住院证，无法判断状态", context.escortNo));
+                throw new RuntimeException(String.format("陪护证(%s)关联的住院证不存在，无法判断状态", context.escortNo));
             }
         }
 
@@ -138,19 +141,26 @@ public class EscortServiceImpl implements EscortService {
 
         // 获取住院实体/患者实体
         var inps = this.inpatientMapper.queryInpatients(context.patientCardNo, context.happenNo, null);
-        switch (inps.size()) {
-            case 0:
-                if (fip.associateEntity.patient == null) {
-                    fip.associateEntity.patient = this.patientMapper.queryPatient(fip.cardNo);
-                }
-                var lastFip = this.finIprPrepayInMapper.queryLastPrepayIn(fip.cardNo, new ArrayList<>() {
-                    {
-                        add(FinIprPrepayInStateEnum.预约);
-                        add(FinIprPrepayInStateEnum.转住院);
-                        add(FinIprPrepayInStateEnum.签床);
-                        add(FinIprPrepayInStateEnum.预住院预约);
+        if (inps.size() >= 2) {
+            // 过滤出院记录
+            inps = Collections2.filter(inps, new Predicate<Inpatient>() {
+                @Override
+                public boolean apply(@Nullable Inpatient input) {
+                    switch (input.inState) {
+                        case 出院结算:
+                        case 无费退院:
+                            return false;
+
+                        default:
+                            return true;
                     }
-                });
+                }
+            }).stream().toList();
+        }
+        switch (inps.size()) {
+            // 弱陪护
+            case 0:
+                var lastFip = this.finIprPrepayInMapper.queryLastPrepayIn(fip.cardNo, null);
                 if (!lastFip.happenNo.equals(fip.happenNo)) {
                     return EscortStateEnum.注销;
                 }
@@ -177,7 +187,7 @@ public class EscortServiceImpl implements EscortService {
                 break;
 
             default:
-                throw new RuntimeException(String.format("住院证(%s)存在多张关联的住院实体，无法判断状态", context.escortNo));
+                throw new RuntimeException(String.format("住院证(%s)存在多张关联的有效住院实体，无法判断状态", context.escortNo));
         }
 
         // 锚定7天前的当前时间
