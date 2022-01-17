@@ -43,6 +43,12 @@ public class EscortServiceImpl implements EscortService {
     Logger logger = Logger.getLogger(DayReportServiceImpl.class.getName());
 
     /**
+     * 注解自身
+     */
+    @Autowired
+    EscortService selfService;
+
+    /**
      * 陪护证主表接口
      */
     @Autowired
@@ -371,13 +377,14 @@ public class EscortServiceImpl implements EscortService {
         // 插入陪护证主表
         this.escortMainInfoMapper.insertEscortMainInfo(escort);
 
-        // 更新实时状态
+        // 更新实时状态（传递事务）
         var curState = this.queryRealState(escort);
-        escort.associateEntity.stateRecs = this.updateEscortState(escort.escortNo, curState, emplCode, remark);
+        escort.associateEntity.stateRecs = this.selfService.updateEscortState(escort.escortNo, curState, emplCode, remark);
 
         return escort;
     }
 
+    @Transactional
     @Override
     public List<EscortStateRec> updateEscortState(String escortNo, EscortStateEnum state, String emplCode,
             String remark) {
