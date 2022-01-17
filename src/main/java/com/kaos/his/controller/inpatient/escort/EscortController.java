@@ -3,6 +3,7 @@ package com.kaos.his.controller.inpatient.escort;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
 
 import com.kaos.his.controller.inpatient.escort.entity.QueryPatientInfoRspBody;
@@ -114,6 +115,48 @@ public class EscortController {
      */
     @Autowired
     EscortService escortService;
+
+    /**
+     * 将字符串映射到锁索引
+     * 
+     * @param input
+     * @return
+     */
+    private Object mapToLock(String input, List<Object> locks) {
+        // 计算索引
+        input = input.replaceAll("[^0-9]", "");
+        var idx = Long.valueOf(input) % locks.size();
+        this.logger.info(String.format("映射到锁对象: %s -> %d", input, idx));
+
+        return locks.get((int) idx);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
+            @NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
+            @NotBlank(message = "操作员编码不能为空") String emplCode,
+            @Nullable String remark) {
+        // 记录日志
+        this.logger.info(String.format("登记陪护证(patientCardNo = %s, helperCardNo = %s)", patientCardNo, helperCardNo));
+
+        try {
+            this.logger.info("加锁");
+            synchronized (this.mapToLock(patientCardNo, patientLocks)) {
+                try {
+                    this.logger.info("加锁");
+                    synchronized (this.mapToLock(helperCardNo, helperLocks)) {
+                        // 执行服务
+                        this.escortService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
+                    }
+                } finally {
+                    this.logger.info("解锁");
+                }
+            }
+        } finally {
+            this.logger.info("解锁");
+        }
+    }
 
     @ResponseBody
     @RequestMapping(value = "queryStateInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
