@@ -1,6 +1,5 @@
 package com.kaos.his.common;
 
-import com.kaos.his.enums.ValidStateEnum;
 import com.kaos.his.mapper.common.DepartmentMapper;
 
 import org.junit.jupiter.api.Test;
