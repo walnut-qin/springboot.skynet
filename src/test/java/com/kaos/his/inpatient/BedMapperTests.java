@@ -1,6 +1,5 @@
 package com.kaos.his.inpatient;
 
-import com.kaos.his.enums.ValidStateEnum;
 import com.kaos.his.mapper.inpatient.ComBedInfoMapper;
 
 import org.junit.jupiter.api.Test;
