@@ -507,6 +507,7 @@ public class EscortServiceImpl implements EscortService {
             rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);
             rt.associateEntity.actionRecs = this.escortActionRecMapper.queryActions(rt.escortNo);
         }
+
         return rs;
     }
 
@@ -536,6 +537,7 @@ public class EscortServiceImpl implements EscortService {
             rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);
             rt.associateEntity.actionRecs = this.escortActionRecMapper.queryActions(rt.escortNo);
         }
+
         return rs;
     }
 }
