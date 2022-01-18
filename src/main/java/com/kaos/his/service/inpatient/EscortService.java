@@ -52,4 +52,11 @@ public interface EscortService {
      * @return
      */
     List<EscortMainInfo> queryHelperInfos(String patientCardNo);
+
+    /**
+     * 查询所有当前未注销的陪护证号
+     * 
+     * @return
+     */
+    List<String> queryUncanceledEscortNos();
 }

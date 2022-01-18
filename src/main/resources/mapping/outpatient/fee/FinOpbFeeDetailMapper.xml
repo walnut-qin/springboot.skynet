@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper">
-    <resultMap id="map" type="com.kaos.his.entity.outpatient.fee.FinOpbFeeDetail" extends="com.kaos.his.mapper.common.PatientMapper.map">
+    <resultMap id="map" type="com.kaos.his.entity.outpatient.fee.FinOpbFeeDetail">
         <id column="RECIPE_NO" jdbcType="VARCHAR" property="recipeNo"/>
         <result column="SEQUENCE_NO" jdbcType="VARCHAR" property="seqNo"/>
         <result column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>

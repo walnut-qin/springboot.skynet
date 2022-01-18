@@ -423,6 +423,11 @@ public class EscortServiceImpl implements EscortService {
             throw new RuntimeException(String.format("陪护证(%s)不存在", escortNo));
         }
 
+        // 如果新状态被置为null，则表示要求自动更新
+        if (state == null) {
+            state = this.queryRealState(escort);
+        }
+
         // 查询当前状态
         var curState = this.escortStateRecMapper.queryCurState(escortNo);
         if (curState != null) {
@@ -539,5 +544,20 @@ public class EscortServiceImpl implements EscortService {
         }
 
         return rs;
+    }
+
+    @Override
+    public List<String> queryUncanceledEscortNos() {
+        // 查询所有未注销的陪护证
+        var escorts = this.escortMainInfoMapper.queryEscortMainInfos(null, null, null, new ArrayList<>() {
+            {
+                add(EscortStateEnum.无核酸检测结果);
+                add(EscortStateEnum.等待院内核酸检测结果);
+                add(EscortStateEnum.等待院外核酸检测结果审核);
+                add(EscortStateEnum.生效中);
+            }
+        });
+
+        return escorts.stream().map((x) -> x.escortNo).toList();
     }
 }

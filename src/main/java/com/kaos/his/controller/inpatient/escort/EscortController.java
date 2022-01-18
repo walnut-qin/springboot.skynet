@@ -3,6 +3,7 @@ package com.kaos.his.controller.inpatient.escort;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -129,11 +130,10 @@ public class EscortController {
      * @param input
      * @return
      */
-    private Object mapToLock(String input, List<Object> locks) {
+    public static Object mapToLock(String input, List<Object> locks) {
         // 计算索引
         input = input.replaceAll("[^0-9]", "");
         var idx = Long.valueOf(input) % locks.size();
-        this.logger.info(String.format("映射到锁对象: %s -> %d", input, idx));
 
         return locks.get((int) idx);
     }
@@ -148,42 +148,42 @@ public class EscortController {
         this.logger.info(String.format("登记陪护证(patientCardNo = %s, helperCardNo = %s)", patientCardNo, helperCardNo));
 
         try {
-            synchronized (this.mapToLock(patientCardNo, patientLocks)) {
-                this.logger.info("加锁");
+            synchronized (mapToLock(patientCardNo, patientLocks)) {
+                this.logger.info("加锁(patientLock)");
                 try {
-                    synchronized (this.mapToLock(helperCardNo, helperLocks)) {
-                        this.logger.info("加锁");
+                    synchronized (mapToLock(helperCardNo, helperLocks)) {
+                        this.logger.info("加锁(helperLock)");
                         // 执行服务
                         this.escortService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
                         this.logger.info("业务执行成功");
                     }
                 } finally {
-                    this.logger.info("解锁");
+                    this.logger.info("解锁(helperLock)");
                 }
             }
         } finally {
-            this.logger.info("解锁");
+            this.logger.info("解锁(patientLock)");
         }
     }
 
     @ResponseBody
     @RequestMapping(value = "updateState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void updateState(@NotBlank(message = "陪护证号不能为空") String escortNo,
-            @NotNull(message = "新状态不能为空") EscortStateEnum state,
+            @Nullable EscortStateEnum state,
             @NotBlank(message = "操作员编码不能为空") String emplCode) {
         // 记录日志
         this.logger.info(String.format("修改陪护证状态(escortNo = %s, state = %s, emplCode = %s)", escortNo,
                 state, emplCode));
 
         try {
-            synchronized (this.mapToLock(escortNo, stateLocks)) {
-                this.logger.info("加锁");
+            synchronized (mapToLock(escortNo, stateLocks)) {
+                this.logger.info("加锁(stateLock)");
                 // 执行业务
                 this.escortService.updateEscortState(escortNo, state, emplCode, "收到客户端请求");
                 this.logger.info("业务执行成功");
             }
         } finally {
-            this.logger.info("解锁");
+            this.logger.info("解锁(stateLock)");
         }
     }
 
