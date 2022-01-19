@@ -75,6 +75,9 @@
             <if test="happenNo!=null">
                 AND T1.HAPPEN_NO = #{happenNo}
             </if>
+            <if test="deptCode!=null">
+                AND T1.DEPT_CODE = #{deptCode}
+            </if>
             <if test="states!=null">
                 AND T1.IN_STATE IN
                 <foreach collection="states" item="item" open="(" separator="," close=")">

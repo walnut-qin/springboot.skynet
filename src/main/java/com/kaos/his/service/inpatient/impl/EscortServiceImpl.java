@@ -3,6 +3,7 @@ package com.kaos.his.service.inpatient.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -11,6 +12,8 @@ import com.kaos.his.entity.common.Patient;
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.escort.EscortActionRec;
+import com.kaos.his.entity.inpatient.escort.EscortAnnexChk;
+import com.kaos.his.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.his.entity.inpatient.escort.EscortStateRec;
 import com.kaos.his.enums.EscortActionEnum;
@@ -184,7 +187,7 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 获取住院实体/患者实体
-        var inps = this.inpatientMapper.queryInpatients(context.patientCardNo, context.happenNo, null);
+        var inps = this.inpatientMapper.queryInpatients(context.patientCardNo, context.happenNo, null, null);
         if (inps.size() >= 2) {
             // 过滤出院记录
             inps = Collections2.filter(inps, new Predicate<Inpatient>() {
@@ -360,7 +363,7 @@ public class EscortServiceImpl implements EscortService {
     @Override
     public EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark) {
         // 判定住院证
-        var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, new ArrayList<>() {
+        var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, null, new ArrayList<>() {
             {
                 add(InpatientStateEnum.住院登记);
                 add(InpatientStateEnum.病房接诊);
@@ -516,7 +519,7 @@ public class EscortServiceImpl implements EscortService {
             rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
             if (rt.associateEntity.finIprPrepayIn != null) {
                 // 若已入院，则存住院信息
-                var inpatients = this.inpatientMapper.queryInpatients(rt.patientCardNo, rt.happenNo, null);
+                var inpatients = this.inpatientMapper.queryInpatients(rt.patientCardNo, rt.happenNo, null, null);
                 if (inpatients != null && inpatients.size() == 1) {
                     var ipt = inpatients.get(0);
                     ipt.associateEntity.stayedDept = this.departmentMapper.queryDepartment(ipt.stayedDeptCode);
@@ -590,5 +593,84 @@ public class EscortServiceImpl implements EscortService {
         });
 
         return escorts.stream().map((x) -> x.escortNo).toList();
+    }
+
+    @Override
+    public EscortAnnexInfo uploadAnnex(String helperCardNo, String url) {
+        // 创建实体
+        var annexInfo = new EscortAnnexInfo() {
+            {
+                annexNo = null;
+                cardNo = helperCardNo;
+                annexUrl = url;
+                recDate = new Date();
+            }
+        };
+
+        // 插入记录
+        this.escortAnnexInfoMapper.insertAnnexInfo(annexInfo);
+
+        return annexInfo;
+    }
+
+    @Override
+    public EscortAnnexChk checkAnnex(String annexNo, Boolean negativeFlag, Date inspectDate) {
+        // 创建实体
+        var annexChk = new EscortAnnexChk();
+        annexChk.annexNo = annexNo;
+        annexChk.chkDate = new Date();
+        annexChk.negativeFlag = negativeFlag;
+        annexChk.inspectDate = inspectDate;
+
+        // 插入记录
+        this.escortAnnexChkMapper.insertAnnexChk(annexChk);
+
+        return annexChk;
+    }
+
+    @Override
+    public List<EscortAnnexInfo> queryAnnexInfoInDept(String deptCode, Boolean checked) {
+        // 辅助结果集<附件Id，信息>
+        HashMap<String, EscortAnnexInfo> rs = new HashMap<>();
+
+        // 查询该科室的所有患者
+        var inpatients = this.inpatientMapper.queryInpatients(null, null, deptCode, new ArrayList<>() {
+            {
+                add(InpatientStateEnum.住院登记);
+                add(InpatientStateEnum.病房接诊);
+            }
+        });
+        for (var inpatient : inpatients) {
+            // 患者关联的陪护证
+            var escorts = this.escortMainInfoMapper.queryEscortMainInfos(inpatient.cardNo, inpatient.happenNo, null,
+                    new ArrayList<>() {
+                        {
+                            add(EscortStateEnum.无核酸检测结果);
+                            add(EscortStateEnum.等待院内核酸检测结果);
+                            add(EscortStateEnum.等待院外核酸检测结果审核);
+                            add(EscortStateEnum.生效中);
+                        }
+                    });
+            for (var escort : escorts) {
+                // 附件内容
+                var annexs = this.escortAnnexInfoMapper.queryAnnexInfos(escort.helperCardNo, null, null, checked);
+                for (var annex : annexs) {
+                    if (rs.keySet().contains(annex.annexNo)) {
+                        if (annex.associateEntity.patient != null) {
+                            annex.associateEntity.patient.associateEntity.escortedPatients.add(inpatient);
+                        }
+                    } else {
+                        annex.associateEntity.patient = this.patientMapper.queryPatient(escort.helperCardNo);
+                        if (annex.associateEntity.patient != null) {
+                            annex.associateEntity.patient.associateEntity.escortedPatients = new ArrayList<>();
+                            annex.associateEntity.patient.associateEntity.escortedPatients.add(inpatient);
+                        }
+                        rs.put(annex.annexNo, annex);
+                    }
+                }
+            }
+        }
+
+        return rs.values().stream().toList();
     }
 }

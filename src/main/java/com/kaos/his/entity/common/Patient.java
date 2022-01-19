@@ -1,6 +1,7 @@
 package com.kaos.his.entity.common;
 
 import java.util.Date;
+import java.util.List;
 
 import com.kaos.his.enums.SexEnum;
 import com.kaos.his.enums.ValidStateEnum;
@@ -67,6 +68,11 @@ public class Patient {
          * 基本信息操作员
          */
         public Employee operator = null;
+
+        /**
+         * 陪护的患者
+         */
+        public List<Patient> escortedPatients = null;
     }
 
     /**

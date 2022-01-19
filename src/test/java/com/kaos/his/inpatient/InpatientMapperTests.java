@@ -21,8 +21,8 @@ public class InpatientMapperTests {
 
     @Test
     public void queryInpatients() {
-        this.inpatientMapper.queryInpatients("2551130556", null, null);
-        this.inpatientMapper.queryInpatients("2551130556", 1, new ArrayList<InpatientStateEnum>() {
+        this.inpatientMapper.queryInpatients("2551130556", null, null, null);
+        this.inpatientMapper.queryInpatients("2551130556", 1, null, new ArrayList<InpatientStateEnum>() {
             {
                 add(InpatientStateEnum.住院登记);
             }
