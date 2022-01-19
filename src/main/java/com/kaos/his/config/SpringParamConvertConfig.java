@@ -54,7 +54,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public DeptOwnEnum convert(String source) {
                     for (DeptOwnEnum e : DeptOwnEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -67,7 +67,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public DrugItemGradeEnum convert(String source) {
                     for (DrugItemGradeEnum e : DrugItemGradeEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -80,7 +80,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public DrugShiftTypeEnum convert(String source) {
                     for (DrugShiftTypeEnum e : DrugShiftTypeEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -93,7 +93,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public DrugValidStateEnum convert(String source) {
                     for (DrugValidStateEnum e : DrugValidStateEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -106,7 +106,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public EscortActionEnum convert(String source) {
                     for (EscortActionEnum e : EscortActionEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -119,7 +119,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public EscortStateEnum convert(String source) {
                     for (EscortStateEnum e : EscortStateEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -132,7 +132,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public InpatientStateEnum convert(String source) {
                     for (InpatientStateEnum e : InpatientStateEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -145,7 +145,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public OutpatientStateEnum convert(String source) {
                     for (OutpatientStateEnum e : OutpatientStateEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -158,7 +158,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public FinIprPrepayInStateEnum convert(String source) {
                     for (FinIprPrepayInStateEnum e : FinIprPrepayInStateEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -171,7 +171,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public SexEnum convert(String source) {
                     for (SexEnum e : SexEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -184,7 +184,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public TransTypeEnum convert(String source) {
                     for (TransTypeEnum e : TransTypeEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -197,7 +197,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public BalancePayTransKindEnum convert(String source) {
                     for (BalancePayTransKindEnum e : BalancePayTransKindEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -210,7 +210,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public PayWayEnum convert(String source) {
                     for (PayWayEnum e : PayWayEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -223,7 +223,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public SurgeryKindEnum convert(String source) {
                     for (SurgeryKindEnum e : SurgeryKindEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -236,7 +236,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public AnesTypeEnum convert(String source) {
                     for (AnesTypeEnum e : AnesTypeEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -249,7 +249,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public SurgeryDegreeEnum convert(String source) {
                     for (SurgeryDegreeEnum e : SurgeryDegreeEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -262,7 +262,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public SurgeryStatusEnum convert(String source) {
                     for (SurgeryStatusEnum e : SurgeryStatusEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -275,7 +275,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public DeptStateEnum convert(String source) {
                     for (DeptStateEnum e : DeptStateEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -288,7 +288,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public PositionEnum convert(String source) {
                     for (PositionEnum e : PositionEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -301,7 +301,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public RankEnum convert(String source) {
                     for (RankEnum e : RankEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -314,7 +314,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public BedStateEnum convert(String source) {
                     for (BedStateEnum e : BedStateEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -327,7 +327,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public InpatientSourceEnum convert(String source) {
                     for (InpatientSourceEnum e : InpatientSourceEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -340,7 +340,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public ValidStateEnum convert(String source) {
                     for (ValidStateEnum e : ValidStateEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -353,7 +353,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public MetOpsInciTypeEnum convert(String source) {
                     for (MetOpsInciTypeEnum e : MetOpsInciTypeEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -366,7 +366,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public SurgeryInspectResultEnum convert(String source) {
                     for (SurgeryInspectResultEnum e : SurgeryInspectResultEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }
@@ -379,7 +379,7 @@ public class SpringParamConvertConfig {
                 @Override
                 public SurgeryArrangeRoleEnum convert(String source) {
                     for (SurgeryArrangeRoleEnum e : SurgeryArrangeRoleEnum.class.getEnumConstants()) {
-                        if (e.getDescription().equals(source)) {
+                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
                     }

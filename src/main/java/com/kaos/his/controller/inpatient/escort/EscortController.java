@@ -18,6 +18,7 @@ import com.kaos.his.service.inpatient.EscortService;
 import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
 import com.kaos.util.ListHelper;
+import com.kaos.util.LockHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,20 +125,6 @@ public class EscortController {
     @Autowired
     EscortService escortService;
 
-    /**
-     * 将字符串映射到锁索引
-     * 
-     * @param input
-     * @return
-     */
-    public static Object mapToLock(String input, List<Object> locks) {
-        // 计算索引
-        input = input.replaceAll("[^0-9]", "");
-        var idx = Long.valueOf(input) % locks.size();
-
-        return locks.get((int) idx);
-    }
-
     @ResponseBody
     @RequestMapping(value = "register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
@@ -148,10 +135,10 @@ public class EscortController {
         this.logger.info(String.format("登记陪护证(patientCardNo = %s, helperCardNo = %s)", patientCardNo, helperCardNo));
 
         try {
-            synchronized (mapToLock(patientCardNo, patientLocks)) {
+            synchronized (LockHelper.mapToLock(patientCardNo, patientLocks)) {
                 this.logger.info("加锁(patientLock)");
                 try {
-                    synchronized (mapToLock(helperCardNo, helperLocks)) {
+                    synchronized (LockHelper.mapToLock(helperCardNo, helperLocks)) {
                         this.logger.info("加锁(helperLock)");
                         // 执行服务
                         this.escortService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
@@ -176,7 +163,7 @@ public class EscortController {
                 state, emplCode));
 
         try {
-            synchronized (mapToLock(escortNo, stateLocks)) {
+            synchronized (LockHelper.mapToLock(escortNo, stateLocks)) {
                 this.logger.info("加锁(stateLock)");
                 // 执行业务
                 this.escortService.updateEscortState(escortNo, state, emplCode, "收到客户端请求");
