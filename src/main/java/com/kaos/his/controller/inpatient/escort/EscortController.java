@@ -309,7 +309,7 @@ public class EscortController {
             // 创建元素
             var rspItem = new QueryHelperInfoRspBody();
             // 就诊卡号
-            rspItem.cardNo = rt.patientCardNo;
+            rspItem.cardNo = rt.helperCardNo;
             // 姓名
             rspItem.name = rt.associateEntity.helper.name;
             // 性别
