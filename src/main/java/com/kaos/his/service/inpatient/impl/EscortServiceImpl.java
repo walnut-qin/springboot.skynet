@@ -10,8 +10,10 @@ import com.google.common.collect.Collections2;
 import com.kaos.his.entity.common.Patient;
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.his.entity.inpatient.Inpatient;
+import com.kaos.his.entity.inpatient.escort.EscortActionRec;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.his.entity.inpatient.escort.EscortStateRec;
+import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.FinIprPrepayInStateEnum;
 import com.kaos.his.enums.InpatientStateEnum;
@@ -407,15 +409,21 @@ public class EscortServiceImpl implements EscortService {
 
         // 更新实时状态（传递事务）
         var curState = this.queryRealState(escort);
-        escort.associateEntity.stateRecs = this.selfService.updateEscortState(escort.escortNo, curState, emplCode,
-                remark);
+        var stateRec = this.selfService.updateEscortState(escort.escortNo, curState, emplCode, remark);
+
+        // 更改状态实体
+        escort.associateEntity.stateRecs = new ArrayList<>() {
+            {
+                add(stateRec);
+            }
+        };
 
         return escort;
     }
 
     @Transactional
     @Override
-    public List<EscortStateRec> updateEscortState(String escortNo, EscortStateEnum state, String emplCode,
+    public EscortStateRec updateEscortState(String escortNo, EscortStateEnum state, String emplCode,
             String remark) {
         // 查询陪护证
         var escort = this.escortMainInfoMapper.queryEscortMainInfo(escortNo);
@@ -432,7 +440,7 @@ public class EscortServiceImpl implements EscortService {
         var curState = this.escortStateRecMapper.queryCurState(escortNo);
         if (curState != null) {
             if (curState.state == state) {
-                return this.escortStateRecMapper.queryStates(escortNo);
+                return curState;
             } else if (curState.state == EscortStateEnum.注销) {
                 throw new RuntimeException(String.format("陪护证(%s)已注销，无法再改变状态", escortNo));
             }
@@ -450,7 +458,30 @@ public class EscortServiceImpl implements EscortService {
         // 插入状态记录
         this.escortStateRecMapper.insertState(stateRec);
 
-        return this.escortStateRecMapper.queryStates(escortNo);
+        return stateRec;
+    }
+
+    @Transactional
+    @Override
+    public EscortActionRec recordEscortAction(String escortNo, EscortActionEnum action, String remark) {
+        // 查询陪护证
+        var escort = this.escortMainInfoMapper.queryEscortMainInfo(escortNo);
+        if (escort == null) {
+            throw new RuntimeException(String.format("陪护证(%s)不存在", escortNo));
+        }
+
+        // 创建新状态
+        var actionRec = new EscortActionRec();
+        actionRec.escortNo = escortNo;
+        actionRec.recNo = null;
+        actionRec.action = action;
+        actionRec.recDate = new Date();
+        actionRec.remark = remark;
+
+        // 插入状态记录
+        this.escortActionRecMapper.insertAction(actionRec);
+
+        return actionRec;
     }
 
     @Override

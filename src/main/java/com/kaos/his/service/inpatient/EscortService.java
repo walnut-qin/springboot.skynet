@@ -2,8 +2,10 @@ package com.kaos.his.service.inpatient;
 
 import java.util.List;
 
+import com.kaos.his.entity.inpatient.escort.EscortActionRec;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.his.entity.inpatient.escort.EscortStateRec;
+import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 
 public interface EscortService {
@@ -27,7 +29,17 @@ public interface EscortService {
      * @param remark
      * @return
      */
-    List<EscortStateRec> updateEscortState(String escortNo, EscortStateEnum state, String emplCode, String remark);
+    EscortStateRec updateEscortState(String escortNo, EscortStateEnum state, String emplCode, String remark);
+
+    /**
+     * 记录陪护动作
+     * 
+     * @param escortNo
+     * @param action
+     * @param remark
+     * @return
+     */
+    EscortActionRec recordEscortAction(String escortNo, EscortActionEnum action, String remark);
 
     /**
      * 查询陪护证，主键查询

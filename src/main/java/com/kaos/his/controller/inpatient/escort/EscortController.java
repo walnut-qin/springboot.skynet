@@ -13,6 +13,7 @@ import com.kaos.his.controller.inpatient.escort.entity.QueryHelperInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryPatientInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryStateInfoRspBody;
 import com.kaos.his.entity.inpatient.Inpatient;
+import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.inpatient.EscortService;
 import com.kaos.util.DateHelper;
@@ -171,6 +172,25 @@ public class EscortController {
             }
         } finally {
             this.logger.info("解锁(stateLock)");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "recordAction", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void recordAction(@NotBlank(message = "陪护证号不能为空") String escortNo,
+            @Nullable EscortActionEnum action) {
+        // 记录日志
+        this.logger.info(String.format("记录陪护证行为(escortNo = %s, action = %s)", escortNo, action));
+
+        try {
+            synchronized (LockHelper.mapToLock(escortNo, actionLocks)) {
+                this.logger.info("加锁(actionLock)");
+                // 执行业务
+                this.escortService.recordEscortAction(escortNo, action, "收到客户端请求");
+                this.logger.info("业务执行成功");
+            }
+        } finally {
+            this.logger.info("解锁(actionLock)");
         }
     }
 
