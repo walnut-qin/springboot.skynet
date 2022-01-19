@@ -15,7 +15,7 @@ public class EscortAnnexChkMapperTests {
 
     @Test
     public void queryAnnexChk() {
-        this.escortAnnexChkMapper.queryAnnexChk("annexNo");
+        this.escortAnnexChkMapper.queryAnnexChk("0000000008");
     }
 
     @Test

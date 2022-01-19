@@ -13,6 +13,6 @@ public class PatientMapperTests {
 
     @Test
     public void queryPatient() {
-        this.patientMapper.queryPatient("000306");
+        this.patientMapper.queryPatient("2009999999");
     }
 }

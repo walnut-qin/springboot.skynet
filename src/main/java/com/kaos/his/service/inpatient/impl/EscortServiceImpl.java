@@ -16,6 +16,7 @@ import com.kaos.his.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.his.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.his.entity.inpatient.escort.EscortStateRec;
+import com.kaos.his.entity.inpatient.escort.EscortVip;
 import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.enums.FinIprPrepayInStateEnum;
@@ -398,6 +399,18 @@ public class EscortServiceImpl implements EscortService {
 
         // 权限判断
         this.canRegister(fip, helper);
+
+        // 插入VIP记录
+        var vip = this.escortVipMapper.queryEscortVip(fip.cardNo, fip.happenNo);
+        if (vip == null) {
+            vip = new EscortVip();
+            vip.patientCardNo = fip.cardNo;
+            vip.happenNo = fip.happenNo;
+            vip.helperCardNo = helperCardNo;
+            vip.recDate = new Date();
+            vip.remark = "首次登记陪护人";
+            this.escortVipMapper.insertEscortVip(vip);
+        }
 
         // 创建新陪护实体
         var escort = new EscortMainInfo();

@@ -64,6 +64,12 @@
     </select>
 
     <insert id="insertAnnexInfo">
+        <selectKey keyProperty="annexNo" order="BEFORE" resultType="java.lang.String">
+            SELECT
+                LPAD(KAOS.SEQ_ANNEX_NO.NEXTVAL, 10, '0')
+            FROM
+                DUAL
+        </selectKey>
         INSERT INTO
             KAOS.ESCORT_ANNEX_INFO(ANNEX_NO, CARD_NO, ANNEX_URL, OPER_DATE)
         VALUES

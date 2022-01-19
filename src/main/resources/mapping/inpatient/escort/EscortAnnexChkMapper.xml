@@ -5,7 +5,7 @@
         <id column="ANNEX_NO" jdbcType="VARCHAR" property="annexNo"/>
         <result column="OPER_CODE" jdbcType="VARCHAR" property="chkEmplCode"/>
         <result column="OPER_DATE" jdbcType="VARCHAR" property="chkDate"/>
-        <result column="NEGATIVE" jdbcType="VARCHAR" property="nagetiveFlag"/>
+        <result column="NEGATIVE" jdbcType="VARCHAR" property="nagativeFlag"/>
         <result column="EXEC_DATE" jdbcType="VARCHAR" property="inspectDate"/>
     </resultMap>
 

@@ -354,13 +354,15 @@ public class EscortController {
 
     @ResponseBody
     @RequestMapping(value = "uploadAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void uploadAnnex(@NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
+    public String uploadAnnex(@NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
             @NotBlank(message = "附件链接不能为空") String url) {
         // 记录日志
         this.logger.info(String.format("上传附件(helperCardNo = %s, url = %s)", helperCardNo, url));
 
         // 执行服务
-        this.escortService.uploadAnnex(helperCardNo, url);
+        var rt = this.escortService.uploadAnnex(helperCardNo, url);
+
+        return rt.annexNo;
     }
 
     @ResponseBody
