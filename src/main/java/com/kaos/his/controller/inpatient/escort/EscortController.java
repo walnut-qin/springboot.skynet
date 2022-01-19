@@ -1,6 +1,7 @@
 package com.kaos.his.controller.inpatient.escort;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import com.kaos.his.controller.inpatient.escort.entity.EscortActionRec;
 import com.kaos.his.controller.inpatient.escort.entity.EscortStateRec;
+import com.kaos.his.controller.inpatient.escort.entity.QueryAnnexInDeptRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryHelperInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryPatientInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryStateInfoRspBody;
@@ -341,6 +343,56 @@ public class EscortController {
                 rspItem.actions.add(actionItem);
             }
 
+            rspBody.add(rspItem);
+        }
+
+        return GsonHelper.ToJson(rspBody);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "uploadAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void uploadAnnex(@NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
+            @NotBlank(message = "附件链接不能为空") String url) {
+        // 记录日志
+        this.logger.info(String.format("上传附件(helperCardNo = %s, url = %s)", helperCardNo, url));
+
+        // 执行服务
+        this.escortService.uploadAnnex(helperCardNo, url);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "checkAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public void checkAnnex(@NotBlank(message = "附件号不能为空") String annexNo,
+            @NotBlank(message = "审核人不能为空") String checker,
+            @NotNull(message = "审核结果不能为空") Boolean negativeFlag,
+            @NotNull(message = "检验时间不能为空") Date inspectDate) {
+        // 记录日志
+        this.logger.info(String.format("审核附件(annexNo = %s, checker = %s)", annexNo, checker));
+
+        // 执行服务
+        this.escortService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "queryAnnexInDept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public String queryAnnexInDept(@NotBlank(message = "科室编码不能为空") String deptCode,
+            @NotNull(message = "审核标识不能为空") Boolean checked) {
+        // 记录日志
+        this.logger.info(String.format("查询附件(deptCode = %s, checked = %s)", deptCode, checked.toString()));
+
+        // 结果集
+        var rspBody = new ArrayList<QueryAnnexInDeptRspBody>();
+        for (var annexInfo : this.escortService.queryAnnexInfoInDept(deptCode, checked)) {
+            var rspItem = new QueryAnnexInDeptRspBody();
+            rspItem.annexNo = annexInfo.annexNo;
+            rspItem.helperName = annexInfo.associateEntity.patient.name;
+            rspItem.picUrl = annexInfo.annexUrl;
+            rspItem.patientNames = annexInfo.associateEntity.patient.associateEntity.escortedPatients.stream()
+                    .map((x) -> x.name).toList();
+            if (annexInfo.associateEntity.escortAnnexChk != null) {
+                rspItem.negative = annexInfo.associateEntity.escortAnnexChk.negativeFlag;
+                rspItem.inspectDate = annexInfo.associateEntity.escortAnnexChk.inspectDate;
+            }
             rspBody.add(rspItem);
         }
 

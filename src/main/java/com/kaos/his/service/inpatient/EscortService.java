@@ -92,7 +92,7 @@ public interface EscortService {
      * @param inspectDate
      * @return
      */
-    EscortAnnexChk checkAnnex(String annexNo, Boolean negativeFlag, Date inspectDate);
+    EscortAnnexChk checkAnnex(String annexNo, String checker, Boolean negativeFlag, Date inspectDate);
 
     /**
      * 查询指定科室的附件

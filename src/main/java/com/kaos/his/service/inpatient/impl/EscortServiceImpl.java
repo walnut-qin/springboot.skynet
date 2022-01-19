@@ -614,10 +614,11 @@ public class EscortServiceImpl implements EscortService {
     }
 
     @Override
-    public EscortAnnexChk checkAnnex(String annexNo, Boolean negativeFlag, Date inspectDate) {
+    public EscortAnnexChk checkAnnex(String annexNo, String checker, Boolean negativeFlag, Date inspectDate) {
         // 创建实体
         var annexChk = new EscortAnnexChk();
         annexChk.annexNo = annexNo;
+        annexChk.chkEmplCode = checker;
         annexChk.chkDate = new Date();
         annexChk.negativeFlag = negativeFlag;
         annexChk.inspectDate = inspectDate;
@@ -665,6 +666,7 @@ public class EscortServiceImpl implements EscortService {
                             annex.associateEntity.patient.associateEntity.escortedPatients = new ArrayList<>();
                             annex.associateEntity.patient.associateEntity.escortedPatients.add(inpatient);
                         }
+                        annex.associateEntity.escortAnnexChk = this.escortAnnexChkMapper.queryAnnexChk(annex.annexNo);
                         rs.put(annex.annexNo, annex);
                     }
                 }
