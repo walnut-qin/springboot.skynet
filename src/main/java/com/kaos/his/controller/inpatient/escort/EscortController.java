@@ -130,7 +130,7 @@ public class EscortController {
 
     @ResponseBody
     @RequestMapping(value = "register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public void register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
+    public String register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
             @NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
             @NotBlank(message = "操作员编码不能为空") String emplCode,
             @NotNull(message = "备注不能为空") String remark) {
@@ -143,9 +143,12 @@ public class EscortController {
                 try {
                     synchronized (LockHelper.mapToLock(helperCardNo, helperLocks)) {
                         this.logger.info("加锁(helperLock)");
+
                         // 执行服务
-                        this.escortService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
+                        var rt = this.escortService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
                         this.logger.info("业务执行成功");
+
+                        return rt.escortNo;
                     }
                 } finally {
                     this.logger.info("解锁(helperLock)");
