@@ -49,5 +49,5 @@ public interface DayReportService {
      * @param endDate
      * @param deptOwn
      */
-    void queryDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn);
+    void exportNewYbData(Date beginDate, Date endDate, DeptOwnEnum deptOwn);
 }

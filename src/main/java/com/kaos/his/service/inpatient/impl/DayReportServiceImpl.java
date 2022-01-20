@@ -1,6 +1,9 @@
 package com.kaos.his.service.inpatient.impl;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.function.ToDoubleFunction;
 
 import com.google.common.base.Optional;
@@ -179,22 +182,42 @@ public class DayReportServiceImpl implements DayReportService {
     }
 
     @Override
-    public void queryDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
-        // 查询目标时段的所有日结记录
-        var stats = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
+    public void exportNewYbData(Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
+        // 结果集
+        List<FinIpbBalanceHead> balances = new ArrayList<>();
 
-        Double pubCost = 0.0;
-        Double payCost = 0.0;
-        for (var rpt : stats) {
-            var balances = this.finIpbBalanceHeadMapper.queryBalanceHeadsInBalancer(rpt.rptEmplCode, rpt.beginDate,
-                    rpt.endDate, "18");
-            for (var balance : balances) {
-                this.logger.info(String.format("inpatientNo = %s, pubCost = %f, payCost = %f", balance.inpatientNo,
-                        balance.pubCost, balance.payCost));
-                pubCost += Optional.fromNullable(balance.pubCost).or(0.0);
-                payCost += Optional.fromNullable(balance.payCost).or(0.0);
-            }
+        // 查询目标时段的所有日结记录
+        for (var rpt : this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn)) {
+            balances.addAll(this.finIpbBalanceHeadMapper.queryBalanceHeadsInBalancer(rpt.rptEmplCode, rpt.beginDate,
+                    rpt.endDate, "18"));
         }
-        this.logger.info(String.format("汇总: pubCost = %f, payCost = %f", pubCost, payCost));
+
+        // 排序
+        balances.sort(new Comparator<FinIpbBalanceHead>() {
+            @Override
+            public int compare(FinIpbBalanceHead arg0, FinIpbBalanceHead arg1) {
+                return arg0.inpatientNo.compareTo(arg1.inpatientNo);
+            }
+        });
+
+        // 逐条打印
+        for (var balance : balances) {
+            this.logger.info(String.format("inpatientNo = %s, pubCost = %f, payCost = %f", balance.inpatientNo,
+                    balance.pubCost, balance.payCost));
+        }
+
+        // 汇总
+        this.logger.info(String.format("汇总: pubCost = %f, payCost = %f",
+                balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+                    @Override
+                    public double applyAsDouble(FinIpbBalanceHead arg0) {
+                        return arg0.pubCost;
+                    }
+                }), balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+                    @Override
+                    public double applyAsDouble(FinIpbBalanceHead arg0) {
+                        return arg0.payCost;
+                    }
+                })));
     }
 }
