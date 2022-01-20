@@ -23,5 +23,5 @@ public class QueryStateInfoRspBody {
     /**
      * 当前状态
      */
-    public EscortStateEnum curState = null;
+    public EscortStateEnum state = null;
 }
