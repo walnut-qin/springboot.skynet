@@ -221,7 +221,10 @@ public class EscortServiceImpl implements EscortService {
                 switch (inp.inState) {
                     case 出院结算:
                     case 无费退院:
-                        return EscortStateEnum.注销;
+                        if (new Date().getTime() - inp.outDate.getTime() >= 6 * 60 * 60 * 1000) {
+                            return EscortStateEnum.注销;
+                        }
+                        break;
 
                     case 出院登记:
                         if (new Date().getTime() - inp.outDate.getTime() >= 12 * 60 * 60 * 1000) {
