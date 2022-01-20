@@ -211,7 +211,7 @@ public class EscortController {
         // 构造响应
         var rspBody = new QueryStateInfoRspBody();
         rspBody.patientCardNo = srvRt.patientCardNo;
-        rspBody.helperCardNo = srvRt.helperCardNo;
+        rspBody.escortCardNo = srvRt.helperCardNo;
         if (srvRt.associateEntity.stateRecs != null) {
             rspBody.regDate = srvRt.associateEntity.stateRecs.get(0).recDate;
             rspBody.curState = ListHelper.GetLast(srvRt.associateEntity.stateRecs).state;

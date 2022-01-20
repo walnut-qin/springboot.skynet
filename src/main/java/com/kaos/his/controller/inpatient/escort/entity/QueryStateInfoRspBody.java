@@ -13,7 +13,7 @@ public class QueryStateInfoRspBody {
     /**
      * 陪护卡号
      */
-    public String helperCardNo = null;
+    public String escortCardNo = null;
 
     /**
      * 注册时间
