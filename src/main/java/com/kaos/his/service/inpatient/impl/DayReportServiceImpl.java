@@ -177,4 +177,24 @@ public class DayReportServiceImpl implements DayReportService {
             }
         }).sum();
     }
+
+    @Override
+    public void queryDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
+        // 查询目标时段的所有日结记录
+        var stats = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
+
+        Double pubCost = 0.0;
+        Double payCost = 0.0;
+        for (var rpt : stats) {
+            var balances = this.finIpbBalanceHeadMapper.queryBalanceHeadsInBalancer(rpt.rptEmplCode, rpt.beginDate,
+                    rpt.endDate, "18");
+            for (var balance : balances) {
+                this.logger.info(String.format("inpatientNo = %s, pubCost = %f, payCost = %f", balance.inpatientNo,
+                        balance.pubCost, balance.payCost));
+                pubCost += Optional.fromNullable(balance.pubCost).or(0.0);
+                payCost += Optional.fromNullable(balance.payCost).or(0.0);
+            }
+        }
+        this.logger.info(String.format("汇总: pubCost = %f, payCost = %f", pubCost, payCost));
+    }
 }

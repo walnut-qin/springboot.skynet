@@ -103,4 +103,10 @@ public class DayReportController {
         // 调用服务
         return sum.toString();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "queryDayBalanceDetail", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    public void queryDayBalanceDetail(Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
+        this.dayReportService.queryDayReportData(beginDate, endDate, deptOwn);
+    }
 }

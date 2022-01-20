@@ -41,4 +41,13 @@ public interface DayReportService {
      * @return
      */
     Double queryNewYbPayCost(String balancer, Date beginDate, Date endDate);
+
+    /**
+     * 查询汇总改数据
+     * 
+     * @param beginDate
+     * @param endDate
+     * @param deptOwn
+     */
+    void queryDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn);
 }
