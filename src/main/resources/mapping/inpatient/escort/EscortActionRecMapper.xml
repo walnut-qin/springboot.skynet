@@ -47,6 +47,8 @@
                 AND ESCORT_NO = #{escortNo}
             </if>
         </where>
+        ORDER BY
+            REC_NO
     </select>
 
     <insert id="insertAction">
