@@ -23,7 +23,7 @@
         FROM
             LISNEW.LIS_RESULT_NEW
         <where>
-            <if test="patientId != null">
+            <if test="true">
                 AND PATIENTID = #{patientId}
             </if>
             <if test="itemCode != null">

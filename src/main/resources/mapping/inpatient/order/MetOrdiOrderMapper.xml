@@ -29,7 +29,7 @@
         FROM
             HIS_FSHV1.MET_ORDI_ORDER
         <where>
-            <if test="moOrder != null">
+            <if test="true">
                 AND MO_ORDER = #{moOrder}
             </if>
         </where>

@@ -12,12 +12,8 @@ public class EscortActionRecMapperTests {
     EscortActionRecMapper escortActionRecMapper;
 
     @Test
-    public void queryLastAction() {
-        this.escortActionRecMapper.queryLastAction("0000000018");
-    }
-
-    @Test
     public void queryActions() {
+        this.escortActionRecMapper.queryActions(null);
         this.escortActionRecMapper.queryActions("0000000018");
     }
 }

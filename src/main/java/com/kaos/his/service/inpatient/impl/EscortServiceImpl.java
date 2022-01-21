@@ -188,7 +188,7 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 获取住院实体/患者实体
-        var inps = this.inpatientMapper.queryInpatients(context.patientCardNo, context.happenNo, null, null);
+        var inps = this.inpatientMapper.queryInpatientsWithPrepayIn(context.patientCardNo, context.happenNo);
         if (inps.size() >= 2) {
             // 过滤出院记录
             inps = Collections2.filter(inps, new Predicate<Inpatient>() {
@@ -256,10 +256,18 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 查询院外核酸报告（已审核）
-        var annexChks = this.escortAnnexChkMapper.queryAnnexChks(fip.cardNo, beginDate, null);
-        if (annexChks != null && !annexChks.isEmpty()) {
-            var lastAnnexChk = annexChks.get(0);
-            if (lastAnnexChk.negativeFlag) {
+        var checkedAnnexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(fip.cardNo, beginDate, null, true);
+        if (checkedAnnexInfos != null) {
+            // 提取最近一次测试结果
+            EscortAnnexChk lastRecord = null;
+            for (var annexInfo : checkedAnnexInfos) {
+                var curRec = this.escortAnnexChkMapper.queryAnnexChk(annexInfo.annexNo);
+                if (lastRecord == null || lastRecord.inspectDate.before(curRec.inspectDate)) {
+                    lastRecord = curRec;
+                }
+            }
+            // 如果最近一次结果为阴性，则生效
+            if (lastRecord.negativeFlag) {
                 return EscortStateEnum.生效中;
             }
         }
@@ -271,8 +279,8 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 查询7日内上传的院外待审记录
-        var annexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(fip.cardNo, beginDate, null, false);
-        if (annexInfos != null && !annexInfos.isEmpty()) {
+        var unCheckedAnnexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(fip.cardNo, beginDate, null, false);
+        if (unCheckedAnnexInfos != null && !unCheckedAnnexInfos.isEmpty()) {
             return EscortStateEnum.等待院外核酸检测结果审核;
         }
 
@@ -367,7 +375,7 @@ public class EscortServiceImpl implements EscortService {
     @Override
     public EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark) {
         // 判定住院证
-        var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, null, new ArrayList<>() {
+        var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, new ArrayList<>() {
             {
                 add(InpatientStateEnum.住院登记);
                 add(InpatientStateEnum.病房接诊);
@@ -535,7 +543,7 @@ public class EscortServiceImpl implements EscortService {
             rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
             if (rt.associateEntity.finIprPrepayIn != null) {
                 // 若已入院，则存住院信息
-                var inpatients = this.inpatientMapper.queryInpatients(rt.patientCardNo, rt.happenNo, null, null);
+                var inpatients = this.inpatientMapper.queryInpatientsWithPrepayIn(rt.patientCardNo, rt.happenNo);
                 if (inpatients != null && inpatients.size() == 1) {
                     var ipt = inpatients.get(0);
                     ipt.associateEntity.stayedDept = this.departmentMapper.queryDepartment(ipt.stayedDeptCode);
@@ -653,7 +661,7 @@ public class EscortServiceImpl implements EscortService {
         HashMap<String, EscortAnnexInfo> rs = new HashMap<>();
 
         // 查询该科室的所有患者
-        var inpatients = this.inpatientMapper.queryInpatients(null, null, deptCode, new ArrayList<>() {
+        var inpatients = this.inpatientMapper.queryInpatients(null, deptCode, new ArrayList<>() {
             {
                 add(InpatientStateEnum.住院登记);
                 add(InpatientStateEnum.病房接诊);

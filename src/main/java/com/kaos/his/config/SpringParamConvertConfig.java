@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 
 import com.kaos.his.enums.*;
+import com.kaos.his.enums.pharmacy.DrugTypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,26 @@ public class SpringParamConvertConfig {
 
     @Autowired
     RequestMappingHandlerAdapter requestMappingHandlerAdapter;
+
+    /**
+     * 添加药品类枚举转换器
+     * 
+     * @param genericConversionService
+     */
+    private void addPharmacyConverter(GenericConversionService genericConversionService) {
+        // 注册 DrugTypeEnum 转换器
+        genericConversionService.addConverter(new Converter<String, DrugTypeEnum>() {
+            @Override
+            public DrugTypeEnum convert(String source) {
+                for (DrugTypeEnum e : DrugTypeEnum.class.getEnumConstants()) {
+                    if (e.getValue().equals(source) || e.getDescription().equals(source)) {
+                        return e;
+                    }
+                }
+                throw new IllegalArgumentException();
+            }
+        });
+    }
 
     @PostConstruct
     public void addConversionConfig() {
@@ -80,19 +101,6 @@ public class SpringParamConvertConfig {
                 @Override
                 public DrugShiftTypeEnum convert(String source) {
                     for (DrugShiftTypeEnum e : DrugShiftTypeEnum.class.getEnumConstants()) {
-                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
-                            return e;
-                        }
-                    }
-                    throw new IllegalArgumentException();
-                }
-            });
-
-            // 注册DrugValidStateEnum转换器
-            genericConversionService.addConverter(new Converter<String, DrugValidStateEnum>() {
-                @Override
-                public DrugValidStateEnum convert(String source) {
-                    for (DrugValidStateEnum e : DrugValidStateEnum.class.getEnumConstants()) {
                         if (e.getValue().equals(source) || e.getDescription().equals(source)) {
                             return e;
                         }
@@ -270,19 +278,6 @@ public class SpringParamConvertConfig {
                 }
             });
 
-            // 注册DeptStateEnum转换器
-            genericConversionService.addConverter(new Converter<String, DeptStateEnum>() {
-                @Override
-                public DeptStateEnum convert(String source) {
-                    for (DeptStateEnum e : DeptStateEnum.class.getEnumConstants()) {
-                        if (e.getValue().equals(source) || e.getDescription().equals(source)) {
-                            return e;
-                        }
-                    }
-                    throw new IllegalArgumentException();
-                }
-            });
-
             // 注册PositionEnum转换器
             genericConversionService.addConverter(new Converter<String, PositionEnum>() {
                 @Override
@@ -386,6 +381,9 @@ public class SpringParamConvertConfig {
                     throw new IllegalArgumentException();
                 }
             });
+
+            // 添加药品类枚举转换器
+            this.addPharmacyConverter(genericConversionService);
         }
     }
 

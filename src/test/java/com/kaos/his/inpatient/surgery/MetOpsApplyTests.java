@@ -19,12 +19,8 @@ public class MetOpsApplyTests {
 
     @Test
     public void queryMetOpsApply() {
-        this.metOpsApplyMapper.queryMetOpsApply("554750", null, null);
-        this.metOpsApplyMapper.queryMetOpsApply("554750", new ArrayList<>() {
-            {
-                add(SurgeryStatusEnum.手术安排);
-            }
-        }, null);
+        this.metOpsApplyMapper.queryMetOpsApply(null);
+        this.metOpsApplyMapper.queryMetOpsApply("554750");
     }
 
     @Test

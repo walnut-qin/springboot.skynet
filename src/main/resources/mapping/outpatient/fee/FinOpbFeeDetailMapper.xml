@@ -31,7 +31,7 @@
         FROM
             FIN_OPB_FEEDETAIL
         <where>
-            <if test="clinicCode != null">
+            <if test="true">
                 AND CLINIC_CODE = #{clinicCode}
             </if>
             <if test="itemCode != null">
@@ -52,7 +52,7 @@
         FROM
             FIN_OPB_FEEDETAIL
         <where>
-            <if test="cardNo != null">
+            <if test="true">
                 AND CARD_NO = #{cardNo}
             </if>
             <if test="itemCode != null">

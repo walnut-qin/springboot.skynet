@@ -13,6 +13,7 @@ public class DepartmentMapperTests {
 
     @Test
     public void queryDepartment() throws Exception {
+        this.departmentMapper.queryDepartment(null);
         this.departmentMapper.queryDepartment("1000");
     }
 }

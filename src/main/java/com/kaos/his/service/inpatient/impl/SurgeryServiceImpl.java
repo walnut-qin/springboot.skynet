@@ -126,10 +126,9 @@ public class SurgeryServiceImpl implements SurgeryService {
                 // 取cache
                 item.associateEntity.opsDoctor = employeeCache.get(item.opsDocCode);
             } else {
-                item.associateEntity.opsDoctor = this.employeeMapper.queryEmployee(item.opsDocCode, ValidStateEnum.有效);
+                item.associateEntity.opsDoctor = this.employeeMapper.queryEmployee(item.opsDocCode);
                 if (item.associateEntity.opsDoctor == null) {
-                    item.associateEntity.opsDoctor = this.employeeMapper.queryInformalEmployee(item.opsDocCode,
-                            ValidStateEnum.有效);
+                    item.associateEntity.opsDoctor = this.employeeMapper.queryOuterEmployee(item.opsDocCode);
                 }
                 // 加入cache
                 employeeCache.put(item.opsDocCode, item.associateEntity.opsDoctor);
@@ -142,10 +141,9 @@ public class SurgeryServiceImpl implements SurgeryService {
                     // 取cache
                     iter.associateEntity.employee = employeeCache.get(iter.emplCode);
                 } else {
-                    iter.associateEntity.employee = this.employeeMapper.queryEmployee(iter.emplCode, ValidStateEnum.有效);
+                    iter.associateEntity.employee = this.employeeMapper.queryEmployee(iter.emplCode);
                     if (iter.associateEntity.employee == null) {
-                        iter.associateEntity.employee = this.employeeMapper.queryInformalEmployee(iter.emplCode,
-                                ValidStateEnum.有效);
+                        iter.associateEntity.employee = this.employeeMapper.queryOuterEmployee(iter.emplCode);
                     }
                     // 加入cache
                     employeeCache.put(iter.emplCode, iter.associateEntity.employee);

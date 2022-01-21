@@ -20,19 +20,15 @@ public class InpatientMapperTests {
     }
 
     @Test
-    public void queryInpatients() {
-        this.inpatientMapper.queryInpatients("2551130556", null, null, null);
-        this.inpatientMapper.queryInpatients("2551130556", 1, null, new ArrayList<InpatientStateEnum>() {
-            {
-                add(InpatientStateEnum.住院登记);
-            }
-        });
+    public void queryInpatientsWithPrepayIn() {
+        this.inpatientMapper.queryInpatientsWithPrepayIn("2000003605", 10);
+        this.inpatientMapper.queryInpatientsWithPrepayIn("2000003605", null);
     }
 
     @Test
     public void queryLastInpatient() {
-        this.inpatientMapper.queryLastInpatient("2000003605", null);
-        this.inpatientMapper.queryLastInpatient("2000003605", new ArrayList<>() {
+        this.inpatientMapper.queryInpatients("2000003605", null, null);
+        this.inpatientMapper.queryInpatients("2000003605", null, new ArrayList<>() {
             {
                 add(InpatientStateEnum.病房接诊);
             }

@@ -56,8 +56,24 @@
             FIN_IPR_INMAININFO T1
             LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO
         <where>
-            <if test="inpatientNo!=null">
+            <if test="true">
                 AND T1.INPATIENT_NO = #{inpatientNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryInpatientsWithPrepayIn" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            FIN_IPR_INMAININFO T1
+            LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO
+        <where>
+            <if test="true">
+                AND T1.CARD_NO = #{cardNo}
+            </if>
+            <if test="true">
+                AND T1.HAPPEN_NO = #{happenNo}
             </if>
         </where>
     </select>
@@ -72,45 +88,14 @@
             <if test="cardNo!=null">
                 AND T1.CARD_NO = #{cardNo}
             </if>
-            <if test="happenNo!=null">
-                AND T1.HAPPEN_NO = #{happenNo}
-            </if>
-            <if test="deptCode!=null">
+            <if test="deptCode != null">
                 AND T1.DEPT_CODE = #{deptCode}
             </if>
-            <if test="states!=null">
+            <if test="states != null">
                 AND T1.IN_STATE IN
                 <foreach collection="states" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
-            </if>
-        </where>
-    </select>
-
-    <select id="queryLastInpatient" resultMap="map">
-        SELECT
-        <include refid="item"/>
-        FROM
-            FIN_IPR_INMAININFO T1
-            LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO
-        <where>
-            <if test="cardNo!=null">
-                AND T1.CARD_NO = #{cardNo}
-                AND T1.HAPPEN_NO IS NOT NULL
-                AND T1.HAPPEN_NO = (
-                    SELECT
-                        MAX(T3.HAPPEN_NO)
-                    FROM
-                        FIN_IPR_INMAININFO T3
-                    WHERE
-                        T3.CARD_NO = T1.CARD_NO
-                <if test="states != null">
-                        AND T3.IN_STATE IN
-                    <foreach collection="states" item="item" open="(" separator="," close=")">
-                            #{item}
-                    </foreach>
-                </if>
-                )
             </if>
         </where>
     </select>

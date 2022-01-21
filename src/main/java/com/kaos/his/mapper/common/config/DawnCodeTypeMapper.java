@@ -1,15 +1,13 @@
 package com.kaos.his.mapper.common.config;
 
 import com.kaos.his.entity.common.config.DawnCodeType;
-import com.kaos.his.enums.ValidStateEnum;
 
 public interface DawnCodeTypeMapper {
     /**
      * 主键查询
      * 
-     * @param constTypeId
-     * @param valid
+     * @param constTypeId 常量名；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
-    DawnCodeType queryDawnCodeType(String constTypeId, ValidStateEnum valid);
+    DawnCodeType queryDawnCodeType(String constTypeId);
 }

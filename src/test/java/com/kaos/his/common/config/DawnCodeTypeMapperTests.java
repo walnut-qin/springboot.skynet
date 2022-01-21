@@ -1,6 +1,5 @@
 package com.kaos.his.common.config;
 
-import com.kaos.his.enums.ValidStateEnum;
 import com.kaos.his.mapper.common.config.DawnCodeTypeMapper;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,7 @@ public class DawnCodeTypeMapperTests {
 
     @Test
     public void queryDawnCodeType() {
-        this.dawnCodeTypeMapper.queryDawnCodeType("DrugHedging", ValidStateEnum.有效);
+        this.dawnCodeTypeMapper.queryDawnCodeType(null);
+        this.dawnCodeTypeMapper.queryDawnCodeType("DrugHedging");
     }
 }

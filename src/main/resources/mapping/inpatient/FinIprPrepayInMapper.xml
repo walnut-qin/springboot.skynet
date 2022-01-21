@@ -31,10 +31,10 @@
         FROM
             FIN_IPR_PREPAYIN
         <where>
-            <if test="cardNo != null">
+            <if test="true">
                 AND CARD_NO = #{cardNo}
             </if>
-            <if test="happenNo != null">
+            <if test="true">
                 AND HAPPEN_NO = #{happenNo}
             </if>
         </where>
@@ -46,7 +46,7 @@
         FROM
             FIN_IPR_PREPAYIN
         <where>
-            <if test="cardNo != null">
+            <if test="true">
                 AND CARD_NO = #{cardNo}
             </if>
             <if test="states != null">
@@ -56,30 +56,40 @@
                 </foreach>
             </if>
         </where>
+        ORDER BY
+            HAPPEN_NO
     </select>
+
+    <sql id = "rank1">
+        SELECT
+            *
+        FROM
+            FIN_IPR_PREPAYIN
+        <where>
+            <if test="true">
+                AND CARD_NO = #{cardNo}
+            </if>
+            <if test="states != null">
+                AND PRE_STATE IN
+                <foreach collection="states" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY
+            HAPPEN_NO DESC
+    </sql>
 
     <select id="queryLastPrepayIn" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
-            FIN_IPR_PREPAYIN
+        (
+        <include refid = "rank1"/>
+        )
         <where>
-            <if test="cardNo != null">
-                AND CARD_NO = #{cardNo}
-                AND HAPPEN_NO = (
-                    SELECT
-                        MAX(T1.HAPPEN_NO)
-                    FROM
-                        FIN_IPR_PREPAYIN T1
-                    WHERE
-                        T1.CARD_NO = FIN_IPR_PREPAYIN.CARD_NO
-                <if test="states != null">
-                        AND T1.PRE_STATE IN
-                    <foreach collection="states" item="item" open="(" separator="," close=")">
-                            #{item}
-                    </foreach>
-                </if>
-                )
+            <if test="true">
+                AND ROWNUM = 1
             </if>
         </where>
     </select>

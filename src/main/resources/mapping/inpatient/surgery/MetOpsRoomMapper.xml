@@ -21,11 +21,8 @@
         FROM
             MET_OPS_ROOM
         <where>
-            <if test="roomId != null">
+            <if test="true">
                 AND ROOM_ID = #{roomId}
-            </if>
-            <if test="roomId == null">
-                AND ROOM_ID IS NULL
             </if>
         </where>
     </select>

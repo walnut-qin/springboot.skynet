@@ -13,16 +13,19 @@ public class ConfigMapMapperTests {
 
     @Test
     public void queryMapValue() {
+        this.configMapMapper.queryMapValue(null);
         this.configMapMapper.queryMapValue("name");
     }
 
     @Test
     public void queryMultiMapItemValue() {
+        this.configMapMapper.queryMultiMapItemValue("name", null);
         this.configMapMapper.queryMultiMapItemValue("name", "value");
     }
 
     @Test
     public void queryMultiMapValues() {
+        this.configMapMapper.queryMultiMapValues(null);
         this.configMapMapper.queryMultiMapValues("name");
     }
 }

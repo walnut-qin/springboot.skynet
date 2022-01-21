@@ -57,10 +57,10 @@
         FROM
             XYHIS.FIN_IPB_BALANCEHEAD
         <where>
-            <if test="invoiceNo != null">
+            <if test = "true">
                 AND INVOICE_NO = #{invoiceNo}
             </if>
-            <if test="transType != null">
+            <if test = "true">
                 AND TRANS_TYPE = #{transType}
             </if>
         </where>

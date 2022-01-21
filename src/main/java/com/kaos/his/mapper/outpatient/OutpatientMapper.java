@@ -6,8 +6,9 @@ import com.kaos.his.enums.TransTypeEnum;
 public interface OutpatientMapper {
     /**
      * 主键查询
-     * @param clinicCode
-     * @param transType
+     * 
+     * @param clinicCode 门诊号；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param transType  交易类型；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     Outpatient queryOutpatient(String clinicCode, TransTypeEnum transType);

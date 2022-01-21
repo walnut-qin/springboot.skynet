@@ -11,7 +11,7 @@ public interface ConfigMapMapper {
     /**
      * 主键查询
      * 
-     * @param name
+     * @param name 变量名；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     ConfigMap queryMapValue(String name);
@@ -19,8 +19,8 @@ public interface ConfigMapMapper {
     /**
      * 查询参数列表
      * 
-     * @param name
-     * @param valid
+     * @param name  变量名；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param value 变量值；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     ConfigMap queryMultiMapItemValue(String name, String value);
@@ -28,8 +28,7 @@ public interface ConfigMapMapper {
     /**
      * 查询参数列表
      * 
-     * @param name
-     * @param valid
+     * @param name 变量名；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     List<ConfigMap> queryMultiMapValues(String name);

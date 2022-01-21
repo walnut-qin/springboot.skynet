@@ -10,6 +10,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.kaos.his.enums.*;
+import com.kaos.his.enums.pharmacy.DrugTypeEnum;
 
 import java.lang.reflect.Type;
 
@@ -55,12 +56,12 @@ public class GsonConverterConfig {
         builder.registerTypeAdapter(DeptOwnEnum.class, new GsonEnumTypeAdapter<>(DeptOwnEnum.class));
         builder.registerTypeAdapter(DrugItemGradeEnum.class, new GsonEnumTypeAdapter<>(DrugItemGradeEnum.class));
         builder.registerTypeAdapter(DrugShiftTypeEnum.class, new GsonEnumTypeAdapter<>(DrugShiftTypeEnum.class));
-        builder.registerTypeAdapter(DrugValidStateEnum.class, new GsonEnumTypeAdapter<>(DrugValidStateEnum.class));
         builder.registerTypeAdapter(EscortActionEnum.class, new GsonEnumTypeAdapter<>(EscortActionEnum.class));
         builder.registerTypeAdapter(EscortStateEnum.class, new GsonEnumTypeAdapter<>(EscortStateEnum.class));
         builder.registerTypeAdapter(InpatientStateEnum.class, new GsonEnumTypeAdapter<>(InpatientStateEnum.class));
         builder.registerTypeAdapter(OutpatientStateEnum.class, new GsonEnumTypeAdapter<>(OutpatientStateEnum.class));
-        builder.registerTypeAdapter(FinIprPrepayInStateEnum.class, new GsonEnumTypeAdapter<>(FinIprPrepayInStateEnum.class));
+        builder.registerTypeAdapter(FinIprPrepayInStateEnum.class,
+                new GsonEnumTypeAdapter<>(FinIprPrepayInStateEnum.class));
         builder.registerTypeAdapter(SexEnum.class, new GsonEnumTypeAdapter<>(SexEnum.class));
         builder.registerTypeAdapter(TransTypeEnum.class, new GsonEnumTypeAdapter<>(TransTypeEnum.class));
         builder.registerTypeAdapter(BalancePayTransKindEnum.class,
@@ -70,7 +71,6 @@ public class GsonConverterConfig {
         builder.registerTypeAdapter(AnesTypeEnum.class, new GsonEnumTypeAdapter<>(AnesTypeEnum.class));
         builder.registerTypeAdapter(SurgeryDegreeEnum.class, new GsonEnumTypeAdapter<>(SurgeryDegreeEnum.class));
         builder.registerTypeAdapter(SurgeryStatusEnum.class, new GsonEnumTypeAdapter<>(SurgeryStatusEnum.class));
-        builder.registerTypeAdapter(DeptStateEnum.class, new GsonEnumTypeAdapter<>(DeptStateEnum.class));
         builder.registerTypeAdapter(PositionEnum.class, new GsonEnumTypeAdapter<>(PositionEnum.class));
         builder.registerTypeAdapter(RankEnum.class, new GsonEnumTypeAdapter<>(RankEnum.class));
         builder.registerTypeAdapter(BedStateEnum.class, new GsonEnumTypeAdapter<>(BedStateEnum.class));
@@ -82,6 +82,16 @@ public class GsonConverterConfig {
         builder.registerTypeAdapter(SurgeryArrangeRoleEnum.class,
                 new GsonEnumTypeAdapter<>(SurgeryArrangeRoleEnum.class));
 
+        // 药品枚举
+        GsonConverterConfig.addPharmacyConverter(builder);
+
         return builder.create();
+    }
+
+    /**
+     * 添加药品类枚举
+     */
+    private static void addPharmacyConverter(GsonBuilder builder) {
+        builder.registerTypeAdapter(DrugTypeEnum.class, new GsonEnumTypeAdapter<>(DrugTypeEnum.class));
     }
 }

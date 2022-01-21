@@ -8,8 +8,8 @@ public interface MetOpsItemMapper {
     /**
      * 主键查询
      * 
-     * @param operationNo
-     * @param itemName
+     * @param operationNo 手术编码；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param itemName    项目编码；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     MetOpsItem queryMetOpsItem(String operationNo, String itemCode);
@@ -17,7 +17,7 @@ public interface MetOpsItemMapper {
     /**
      * 查询某手术所有项目
      * 
-     * @param operationNo
+     * @param operationNo 手术编码；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     List<MetOpsItem> queryMetOpsItems(String operationNo);

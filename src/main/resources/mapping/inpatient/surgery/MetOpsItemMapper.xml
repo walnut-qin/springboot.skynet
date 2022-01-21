@@ -19,10 +19,10 @@
         FROM
             MET_OPS_OPERATIONITEM
         <where>
-            <if test="operationNo != null">
+            <if test="true">
                 AND OPERATIONNO = #{operationNo}
             </if>
-            <if test="itemCode != null">
+            <if test="true">
                 AND ITEM_CODE = #{itemCode}
             </if>
         </where>
@@ -34,7 +34,7 @@
         FROM
             MET_OPS_OPERATIONITEM
         <where>
-            <if test="operationNo != null">
+            <if test="true">
                 AND OPERATIONNO = #{operationNo}
             </if>
         </where>

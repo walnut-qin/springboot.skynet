@@ -9,10 +9,10 @@ public interface FinOpbFeeDetailMapper {
     /**
      * 查询患者门诊划价
      * 
-     * @param cardNo
-     * @param itemCode
-     * @param beginDate
-     * @param endDate
+     * @param clinicCode 门诊号；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param itemCode   项目编码；等于 {@code null} 时，不作为判断条件
+     * @param beginDate  开始时间；等于 {@code null} 时，不作为判断条件
+     * @param endDate    结束时间；等于 {@code null} 时，不作为判断条件
      * @return
      */
     List<FinOpbFeeDetail> queryFeeDetailsWithClinicCode(String clinicCode, String itemCode, Date beginDate,
@@ -21,10 +21,10 @@ public interface FinOpbFeeDetailMapper {
     /**
      * 查询患者门诊划价
      * 
-     * @param cardNo
-     * @param itemCode
-     * @param beginDate
-     * @param endDate
+     * @param cardNo    就诊卡号；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param itemCode  项目编码；等于 {@code null} 时，不作为判断条件
+     * @param beginDate 开始时间；等于 {@code null} 时，不作为判断条件
+     * @param endDate   结束时间；等于 {@code null} 时，不作为判断条件
      * @return
      */
     List<FinOpbFeeDetail> queryFeeDetailsWithCardNo(String cardNo, String itemCode, Date beginDate, Date endDate);

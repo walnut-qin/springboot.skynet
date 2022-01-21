@@ -19,10 +19,10 @@
         FROM
             XYHIS.FIN_IPB_DAYREPORTDETAIL
         <where>
-            <if test="statNo != null">
+            <if test = "true">
                 AND STATIC_NO = #{statNo}
             </if>
-            <if test="statCode != null">
+            <if test = "true">
                 AND STAT_CODE = #{statCode}
             </if>
         </where>
@@ -34,7 +34,7 @@
         FROM
             XYHIS.FIN_IPB_DAYREPORTDETAIL
         <where>
-            <if test="statNo != null">
+            <if test = "true">
                 AND STATIC_NO = #{statNo}
             </if>
         </where>
@@ -43,18 +43,15 @@
     <update id="updateDayReportDetail">
         UPDATE XYHIS.FIN_IPB_DAYREPORTDETAIL
         <trim prefix="SET" suffixOverrides=",">
-            <if test="totCost != null">
+            <if test="true">
                 TOT_COST = #{totCost},
-            </if>
-            <if test="totCost == null">
-                TOT_COST = NULL,
             </if>
         </trim>
         <where>
-            <if test="statNo != null">
+            <if test="true">
                 AND STATIC_NO = #{statNo}
             </if>
-            <if test="statCode != null">
+            <if test="true">
                 AND STAT_CODE = #{statCode}
             </if>
         </where>

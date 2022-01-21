@@ -9,8 +9,8 @@ public interface MetOpsArrangeMapper {
     /**
      * 查询列表
      * 
-     * @param operationNo
-     * @param roles
+     * @param operationNo 手术编码；等于 {@code null} 时，不作为判断条件
+     * @param roles       安排内容；等于 {@code null} 时，不作为判断条件
      * @return
      */
     List<MetOpsArrange> queryMetOpsArranges(String operationNo, List<SurgeryArrangeRoleEnum> roles);

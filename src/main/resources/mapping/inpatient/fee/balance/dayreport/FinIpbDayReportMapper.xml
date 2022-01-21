@@ -29,37 +29,45 @@
         FROM
             XYHIS.FIN_IPB_DAYREPORT
         <where>
-            <if test="statNo != null">
+            <if test = "true">
                 AND STAT_NO = #{statNo}
             </if>
         </where>
     </select>
 
+    <sql id = "rank1">
+        SELECT
+            T1.*,
+            T3.DEPTOWN
+        FROM
+            XYHIS.FIN_IPB_DAYREPORT T1
+            LEFT JOIN XYHIS.DAWN_ORG_EMPL T2 ON T2.EMPL_ID = T1.OPER_CODE AND T2.VALID_STATE = 1
+            LEFT JOIN XYHIS.DAWN_ORG_DEPT T3 ON T3.DEPT_ID = T2.DEPT_ID AND T3.VALID_STATE = 1
+        <where>
+            <if test = "beginDate != null">
+                AND T1.OPER_DATE &gt;= #{beginDate}
+            </if>
+            <if test = "endDate != null">
+                AND T1.OPER_DATE &lt;= #{endDate}
+            </if>
+        </where>
+        ORDER BY
+            T1.STAT_NO
+    </sql>
+
     <select id="queryDayReprots" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
-            XYHIS.FIN_IPB_DAYREPORT
+        (
+        <include refid = "rank1"/>
+        )
         <where>
-            <if test="beginDate != null">
-                AND OPER_DATE &gt;= #{beginDate}
-            </if>
-            <if test="endDate != null">
-                AND OPER_DATE &lt;= #{endDate}
-            </if>
-            <if test="deptOwn != null and deptOwn != @com.kaos.his.enums.DeptOwnEnum@All">
-                AND (
-                    SELECT
-                        T2.DEPTOWN
-                    FROM
-                        DAWN_ORG_EMPL T1
-                        LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_ID
-                    WHERE
-                        T1.VALID_STATE = 1
-                        AND T2.VALID_STATE = 1
-                        AND T1.EMPL_ID = XYHIS.FIN_IPB_DAYREPORT.OPER_CODE
-                ) = #{deptOwn}
+            <if test = "deptOwn != null and deptOwn != @com.kaos.his.enums.DeptOwnEnum@All">
+                AND DEPTOWN = #{deptOwn}
             </if>
         </where>
+        ORDER BY
+            STAT_NO
     </select>
 </mapper>

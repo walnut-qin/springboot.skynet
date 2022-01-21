@@ -21,7 +21,7 @@
         FROM
             COM_BEDINFO
         <where>
-            <if test="bedNo!=null">
+            <if test="true">
                 AND BED_NO = #{bedNo}
             </if>
         </where>

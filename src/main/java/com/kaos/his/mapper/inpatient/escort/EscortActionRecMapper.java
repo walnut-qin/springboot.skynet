@@ -6,22 +6,17 @@ import com.kaos.his.entity.inpatient.escort.EscortActionRec;
 
 public interface EscortActionRecMapper {
     /**
-     * 读取当前状态
-     */
-    EscortActionRec queryLastAction(String escortNo);
-
-    /**
-     * 读取状态列表
+     * 查询行为列表，按照登记顺序排序
      * 
-     * @param escortNo
+     * @param escortNo 陪护证号；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     List<EscortActionRec> queryActions(String escortNo);
 
     /**
-     * 插入一条动作
+     * 添加一条动作
      * 
-     * @param escortActionRec
+     * @param escortActionRec 动作实体，不必设置 {@code recNo}，执行语句时自动生成
      * @return
      */
     int insertAction(EscortActionRec escortActionRec);

@@ -1,31 +1,21 @@
 package com.kaos.his.mapper.inpatient.escort;
 
-import java.util.Date;
-import java.util.List;
-
 import com.kaos.his.entity.inpatient.escort.EscortAnnexChk;
 
 public interface EscortAnnexChkMapper {
     /**
-     * 查询审核结果
+     * 查询附件审核记录
      * 
-     * @param annexNo
+     * @param annexNo 附件号；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     EscortAnnexChk queryAnnexChk(String annexNo);
 
     /**
-     * 查询某个时段内的核酸结果
+     * 添加一条附件审核记录
      * 
-     * @param cardNo
-     * @param beginDate 核酸检测时间边界（非审核时间）
-     * @param endDate   核酸检测时间边界（非审核时间）
+     * @param escortAnnexChk 审核记录实体
      * @return
-     */
-    List<EscortAnnexChk> queryAnnexChks(String cardNo, Date beginDate, Date endDate);
-
-    /**
-     * 插入审核记录
      */
     int insertAnnexChk(EscortAnnexChk escortAnnexChk);
 }

@@ -10,7 +10,7 @@ public interface FinIpbDayReportMapper {
     /**
      * 主键查询
      * 
-     * @param statNo
+     * @param statNo 日结编号；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     FinIpbDayReport queryDayReport(String statNo);
@@ -18,9 +18,9 @@ public interface FinIpbDayReportMapper {
     /**
      * 指定院区查询某个时段内的日结
      * 
-     * @param beginDate
-     * @param endDate
-     * @param deptOwn
+     * @param beginDate 开始时间；等于 {@code null} 时，不作为判断条件
+     * @param endDate   结束时间；等于 {@code null} 时，不作为判断条件
+     * @param deptOwn   院区；等于 {@code null} 时，不作为判断条件
      * @return
      */
     List<FinIpbDayReport> queryDayReprots(Date beginDate, Date endDate, DeptOwnEnum deptOwn);

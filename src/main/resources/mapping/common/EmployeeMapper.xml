@@ -43,16 +43,13 @@
         FROM
             DAWN_ORG_EMPL
         <where>
-            <if test="emplCode!=null">
+            <if test="true">
                 AND EMPL_ID = #{emplCode}
-            </if>
-            <if test="valid!=null">
-                AND VALID_STATE = #{valid}
             </if>
         </where>
     </select>
 
-    <select id="queryInformalEmployee" resultMap="map">
+    <select id="queryOuterEmployee" resultMap="map">
         SELECT
             CODE AS EMPL_ID,
             NAME AS EMPL_NAME,
@@ -62,11 +59,8 @@
         FROM
             MET_OPSN_WYDOC
         <where>
-            <if test="emplCode!=null">
+            <if test="true">
                 AND CODE = #{emplCode}
-            </if>
-            <if test="valid!=null">
-                AND ISVALID = #{valid}
             </if>
         </where>
     </select>

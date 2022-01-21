@@ -21,7 +21,7 @@
         FROM
             KAOS.CONFIG_MAP
         <where>
-            <if test="name != null">
+            <if test="true">
                 AND NAME = #{name}
             </if>
         </where>
@@ -33,10 +33,10 @@
         FROM
             KAOS.CONFIG_MULTI_MAP
         <where>
-            <if test="name != null">
+            <if test="true">
                 AND NAME = #{name}
             </if>
-            <if test="value != null">
+            <if test="true">
                 AND VALUE = #{value}
             </if>
         </where>
@@ -48,7 +48,7 @@
         FROM
             KAOS.CONFIG_MULTI_MAP
         <where>
-            <if test="name != null">
+            <if test="true">
                 AND NAME = #{name}
             </if>
         </where>

@@ -9,10 +9,10 @@ public interface LisResultNewMapper {
     /**
      * 查询检验结果
      * 
-     * @param patientId 住院号或就诊卡号
-     * @param itemCode
-     * @param beginDate
-     * @param endDate
+     * @param patientId 住院号或就诊卡号；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param itemCode  住院号或就诊卡号；等于 {@code null} 时，不作为判断条件
+     * @param beginDate 住院号或就诊卡号；等于 {@code null} 时，不作为判断条件
+     * @param endDate   住院号或就诊卡号；等于 {@code null} 时，不作为判断条件
      * @return
      */
     List<LisResultNew> queryInspectResult(String patientId, String itemCode, Date beginDate, Date endDate);

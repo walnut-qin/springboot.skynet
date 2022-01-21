@@ -21,11 +21,8 @@
         FROM
             KAOS.CONFIG_SWITCH
         <where>
-            <if test="name != null">
+            <if test="true">
                 AND NAME = #{name}
-            </if>
-            <if test="valid != null">
-                AND VALID = #{valid}
             </if>
         </where>
     </select>

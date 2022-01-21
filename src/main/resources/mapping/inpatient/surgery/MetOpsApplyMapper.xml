@@ -87,8 +87,27 @@
         FROM
             MET_OPS_APPLY
         <where>
-            <if test="operationNo != null">
+            <if test = "true">
                 AND OPERATIONNO = #{operationNo}
+            </if>
+        </where>
+    </select>
+
+    <sql id = "rank1">
+        SELECT
+            T1.*,
+            T2.DEPT_CODE AS DEPT_ID,
+            T3.DEPTOWN AS DEPT_OWN
+        FROM
+            MET_OPS_APPLY T1
+            LEFT JOIN FIN_IPR_INMAININFO T2 ON T2.PATIENT_NO = T1.PATIENT_NO
+            LEFT JOIN DAWN_ORG_DEPT T3 ON T3.DEPT_ID = T2.DEPT_CODE
+        <where>
+            <if test="beginDate != null">
+                AND PRE_DATE &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND PRE_DATE &lt;= #{endDate}
             </if>
             <if test="status != null">
                 AND EXECSTATUS IN
@@ -100,38 +119,18 @@
                 AND YNVALID = #{valid}
             </if>
         </where>
-    </select>
+    </sql>
 
     <select id="queryMetOpsAppliesInDept" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
-            MET_OPS_APPLY
+        (
+            <include refid = "rank1"/>
+        )
         <where>
             <if test="deptCode != null">
-                AND (
-                    SELECT
-                        DEPT_CODE
-                    FROM
-                        FIN_IPR_INMAININFO
-                    WHERE
-                        INPATIENT_NO = 'ZY01' || MET_OPS_APPLY.PATIENT_NO
-                ) = #{deptCode}
-            </if>
-            <if test="beginDate != null">
-                AND PRE_DATE &gt;= #{beginDate}
-            </if>
-            <if test="beginDate != null">
-                AND PRE_DATE &lt;= #{endDate}
-            </if>
-            <if test="status != null">
-                AND EXECSTATUS IN
-                <foreach collection="status" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="valid != null">
-                AND YNVALID = #{valid}
+                AND DEPT_ID = #{deptCode}
             </if>
         </where>
     </select>
@@ -140,33 +139,12 @@
         SELECT
         <include refid="item"/>
         FROM
-            MET_OPS_APPLY
+        (
+            <include refid = "rank1"/>
+        )
         <where>
-            <if test="deptOwn != null and deptOwn != @com.kaos.his.enums.DeptOwnEnum@All">
-                AND (
-                    SELECT
-                        T2.DEPTOWN
-                    FROM
-                        FIN_IPR_INMAININFO T1
-                        LEFT JOIN DAWN_ORG_DEPT T2 ON T2.DEPT_ID = T1.DEPT_CODE
-                    WHERE
-                        T1.INPATIENT_NO = 'ZY01' || MET_OPS_APPLY.PATIENT_NO
-                ) = #{deptOwn}
-            </if>
-            <if test="beginDate != null">
-                AND PRE_DATE &gt;= #{beginDate}
-            </if>
-            <if test="beginDate != null">
-                AND PRE_DATE &lt;= #{endDate}
-            </if>
-            <if test="status != null">
-                AND EXECSTATUS IN
-                <foreach collection="status" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="valid != null">
-                AND YNVALID = #{valid}
+            <if test="deptOwn != null">
+                AND DEPT_OWN = #{deptOwn}
             </if>
         </where>
     </select>

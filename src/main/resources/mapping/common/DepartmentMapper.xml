@@ -21,7 +21,7 @@
         FROM
             DAWN_ORG_DEPT
         <where>
-            <if test="deptCode!=null">
+            <if test="true">
                 AND DEPT_ID = #{deptCode}
             </if>
         </where>

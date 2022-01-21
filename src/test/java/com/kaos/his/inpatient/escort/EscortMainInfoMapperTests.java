@@ -16,6 +16,7 @@ public class EscortMainInfoMapperTests {
 
     @Test
     public void queryEscortMainInfo() {
+        this.escortMainInfoMapper.queryEscortMainInfo(null);
         this.escortMainInfoMapper.queryEscortMainInfo("0000000018");
     }
 
@@ -60,7 +61,6 @@ public class EscortMainInfoMapperTests {
             }
         });
 
-        this.escortMainInfoMapper.queryLastEscortMainInfo("2000003605", 10, "2000003605", null);
         this.escortMainInfoMapper.queryLastEscortMainInfo("2000003605", 10, "2000003605",
                 new ArrayList<EscortStateEnum>() {
                     {

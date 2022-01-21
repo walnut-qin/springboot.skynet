@@ -32,10 +32,10 @@
             FIN_OPR_REGISTER T1
             LEFT JOIN COM_PATIENTINFO T2 ON T2.CARD_NO = T1.CARD_NO
         <where>
-            <if test="clinicCode != null">
+            <if test="true">
                 AND T1.CLINIC_CODE = #{clinicCode}
             </if>
-            <if test="transType != null">
+            <if test="true">
                 AND T1.TRANS_TYPE = #{transType}
             </if>
         </where>

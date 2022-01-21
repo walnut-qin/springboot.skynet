@@ -23,98 +23,84 @@
         FROM
             KAOS.ESCORT_MAIN_INFO
         <where>
-            <if test="escortNo != null">
+            <if test="true">
                 AND ESCORT_NO = #{escortNo}
             </if>
         </where>
     </select>
 
+    <sql id = "rank1">
+        SELECT
+            T1.*,
+            T2.STATE,
+            ROW_NUMBER() OVER (PARTITION BY T2.ESCORT_NO ORDER BY T2.REC_NO DESC) AS IDX
+        FROM
+            KAOS.ESCORT_MAIN_INFO T1
+            LEFT JOIN KAOS.ESCORT_STATE_REC T2 ON T2.ESCORT_NO = T1.ESCORT_NO
+        <where>
+            <if test="patientCardNo != null">
+                AND PATIENT_CARD_NO = #{patientCardNo}
+            </if>
+            <if test="happenNo != null">
+                AND HAPPEN_NO = #{happenNo}
+            </if>
+            <if test="helperCardNo != null">
+                AND HELPER_CARD_NO = #{helperCardNo}
+            </if>
+        </where>
+    </sql>
+
+    <sql id = "rank2">
+        SELECT
+            *
+        FROM
+        (
+        <include refid = "rank1"/>
+        )
+        <where>
+            <if test = "true">
+                AND IDX = 1
+            </if>
+            <if test="states != null">
+                AND STATE IN
+                <foreach collection="states" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
     <select id="queryEscortMainInfos" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
-            KAOS.ESCORT_MAIN_INFO
-        <where>
-            <if test="patientCardNo != null">
-                AND PATIENT_CARD_NO = #{patientCardNo}
-            </if>
-            <if test="happenNo != null">
-                AND HAPPEN_NO = #{happenNo}
-            </if>
-            <if test="helperCardNo != null">
-                AND HELPER_CARD_NO = #{helperCardNo}
-            </if>
-            <if test="states != null">
-                AND (
-                    SELECT
-                        T1.STATE
-                    FROM
-                        KAOS.ESCORT_STATE_REC T1
-                    WHERE
-                        T1.ESCORT_NO = KAOS.ESCORT_MAIN_INFO.ESCORT_NO
-                        AND T1.REC_NO = (
-                            SELECT
-                                MAX(T2.REC_NO)
-                            FROM
-                                KAOS.ESCORT_STATE_REC T2
-                            WHERE
-                                T2.ESCORT_NO = T1.ESCORT_NO
-                        )
-                ) IN
-                <foreach collection="states" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
-        </where>
+        (
+        <include refid = "rank2"/>
+        )
+        ORDER BY
+            ESCORT_NO
     </select>
 
-    <select id="queryLastEscortMainInfo" resultMap="map">
-        SELECT * FROM (SELECT
+    <sql id = "rank3">
+        SELECT
         <include refid="item"/>
         FROM
-            KAOS.ESCORT_MAIN_INFO
-        <where>
-            <if test="patientCardNo != null">
-                AND PATIENT_CARD_NO = #{patientCardNo}
-            </if>
-            <if test="happenNo != null">
-                AND HAPPEN_NO = #{happenNo}
-            </if>
-            <if test="helperCardNo != null">
-                AND HELPER_CARD_NO = #{helperCardNo}
-            </if>
-            <if test="states != null">
-                AND (
-                    SELECT
-                        T1.STATE
-                    FROM
-                        KAOS.ESCORT_STATE_REC T1
-                    WHERE
-                        T1.ESCORT_NO = KAOS.ESCORT_MAIN_INFO.ESCORT_NO
-                        AND T1.REC_NO = (
-                            SELECT
-                                MAX(T2.REC_NO)
-                            FROM
-                                KAOS.ESCORT_STATE_REC T2
-                            WHERE
-                                T2.ESCORT_NO = T1.ESCORT_NO
-                        )
-                ) IN
-                <foreach collection="states" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
-        </where>
+        (
+        <include refid = "rank2"/>
+        )
         ORDER BY
-            (
-                SELECT
-                    OPER_DATE
-                FROM
-                    KAOS.ESCORT_STATE_REC
-                WHERE
-                    ESCORT_NO = KAOS.ESCORT_MAIN_INFO.ESCORT_NO
-                    AND REC_NO = 1
-            ) DESC ) WHERE ROWNUM = 1
+            ESCORT_NO DESC
+    </sql>
+
+    <select id="queryLastEscortMainInfo" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+        (
+        <include refid = "rank3"/>
+        )
+        WHERE
+            ROWNUM = 1
     </select>
 
     <insert id="insertEscortMainInfo">

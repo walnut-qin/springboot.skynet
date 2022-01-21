@@ -1,6 +1,5 @@
 package com.kaos.his.common.config;
 
-import com.kaos.his.enums.ValidStateEnum;
 import com.kaos.his.mapper.common.config.ConfigSwitchMapper;
 
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ public class ConfigSwitchMapperTests {
 
     @Test
     public void queryConfigSwitch() {
-        this.configSwitchMapper.queryConfigSwitch("switch", null);
-        this.configSwitchMapper.queryConfigSwitch("switch", ValidStateEnum.有效);
+        this.configSwitchMapper.queryConfigSwitch(null);
+        this.configSwitchMapper.queryConfigSwitch("switch");
     }
 }

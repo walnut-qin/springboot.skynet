@@ -6,8 +6,7 @@ public interface DepartmentMapper {
     /**
      * 主键查询
      * 
-     * @param deptCode 科室编码
-     * @param valid    有效标识，若为null，则不纳入判断
+     * @param deptCode 科室编码；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
     Department queryDepartment(String deptCode);

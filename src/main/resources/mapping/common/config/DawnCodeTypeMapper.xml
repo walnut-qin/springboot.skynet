@@ -21,11 +21,8 @@
         FROM
             DAWN_CODE_TYPE
         <where>
-            <if test="constTypeId != null">
+            <if test="true">
                 AND CONS_TYPE_ID = #{constTypeId}
-            </if>
-            <if test="valid != null">
-                AND VALID_STATE = #{valid}
             </if>
         </where>
     </select>

@@ -1,7 +1,10 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.pharmacy;
 
-public enum DeptStateEnum implements IEnum {
-    停用("0", "停用"), 在用("1", "在用"), 废弃("2", "废弃");
+import com.kaos.his.enums.IEnum;
+
+public enum DrugTypeEnum implements IEnum {
+    中草药("C", "中草药"), 卫生材料("D", "卫生材料"), 自制药品("E", "自制药品"), 化验药品("F", "化验药品"), 制剂用品("G", "制剂用品"), 西药("P", "西药"),
+    中成药("Z", "中成药");
 
     /**
      * 数据库存值
@@ -19,8 +22,8 @@ public enum DeptStateEnum implements IEnum {
      * @param index
      * @param description
      */
-    DeptStateEnum(String index, String description) {
-        this.value = index;
+    DrugTypeEnum(String value, String description) {
+        this.value = value;
         this.description = description;
     }
 

@@ -1,15 +1,13 @@
 package com.kaos.his.mapper.common.config;
 
 import com.kaos.his.entity.common.config.ConfigSwitch;
-import com.kaos.his.enums.ValidStateEnum;
 
 public interface ConfigSwitchMapper {
     /**
      * 主键查询
      * 
-     * @param name
-     * @param valid
+     * @param name 变量名；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
-    ConfigSwitch queryConfigSwitch(String name, ValidStateEnum valid);
+    ConfigSwitch queryConfigSwitch(String name);
 }

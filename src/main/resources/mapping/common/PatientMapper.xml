@@ -33,7 +33,7 @@
         FROM
             COM_PATIENTINFO
         <where>
-            <if test="cardNo!=null">
+            <if test="true">
                 AND CARD_NO = #{cardNo}
             </if>
         </where>

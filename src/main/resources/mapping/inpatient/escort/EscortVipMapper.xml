@@ -23,10 +23,10 @@
         FROM
             KAOS.ESCORT_VIP
         <where>
-            <if test="patientCardNo != null">
+            <if test = "true">
                 AND PATIENT_CARD_NO = #{patientCardNo}
             </if>
-            <if test="happenNo != null">
+            <if test = "true">
                 AND HAPPEN_NO = #{happenNo}
             </if>
         </where>

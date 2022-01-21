@@ -66,5 +66,6 @@ spring:
 mybatis-plus:
   configuration:
     default-enum-type-handler: com.kaos.his.config.MybatisEnumTypeHandler
+    jdbc-type-for-null: 'null'
   mapper-locations:
   - classpath:mapping/**/*.xml
