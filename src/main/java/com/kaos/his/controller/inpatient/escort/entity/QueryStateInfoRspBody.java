@@ -2,8 +2,6 @@ package com.kaos.his.controller.inpatient.escort.entity;
 
 import java.util.Date;
 
-import com.kaos.his.enums.EscortStateEnum;
-
 public class QueryStateInfoRspBody {
     /**
      * 患者卡号
@@ -23,5 +21,5 @@ public class QueryStateInfoRspBody {
     /**
      * 当前状态
      */
-    public EscortStateEnum state = null;
+    public String state = null;
 }

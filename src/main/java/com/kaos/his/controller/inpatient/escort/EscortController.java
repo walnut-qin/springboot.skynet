@@ -214,7 +214,7 @@ public class EscortController {
         rspBody.escortCardNo = srvRt.helperCardNo;
         if (srvRt.associateEntity.stateRecs != null) {
             rspBody.regDate = srvRt.associateEntity.stateRecs.get(0).recDate;
-            rspBody.state = ListHelper.GetLast(srvRt.associateEntity.stateRecs).state;
+            rspBody.state = ListHelper.GetLast(srvRt.associateEntity.stateRecs).state.getValue();
         }
 
         return GsonHelper.ToJson(rspBody);
