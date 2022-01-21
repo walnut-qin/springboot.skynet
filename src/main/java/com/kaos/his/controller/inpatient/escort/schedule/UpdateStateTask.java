@@ -12,6 +12,7 @@ import com.kaos.util.LockHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,8 +29,8 @@ public class UpdateStateTask {
     ThreadPoolExecutor azusaTask = new ThreadPoolExecutor(1, 1, 2, TimeUnit.HOURS,
             new LinkedBlockingDeque<Runnable>());
 
-    // @Scheduled(cron = "0 0 0,4,12,13,18,19,22 * * ?")
-    // @Scheduled(cron = "0 0/15 8-11,14-17 * * ?")
+    @Scheduled(cron = "0 0 0,4,12,13,18,19,22 * * ?")
+    @Scheduled(cron = "0 0/15 8-11,14-17 * * ?")
     public void Run() {
         // 执行业务
         this.azusaTask.execute(new Azusa());
