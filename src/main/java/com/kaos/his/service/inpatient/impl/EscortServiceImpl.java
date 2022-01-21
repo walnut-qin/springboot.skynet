@@ -539,7 +539,9 @@ public class EscortServiceImpl implements EscortService {
                 if (inpatients != null && inpatients.size() == 1) {
                     var ipt = inpatients.get(0);
                     ipt.associateEntity.stayedDept = this.departmentMapper.queryDepartment(ipt.stayedDeptCode);
-                    ipt.associateEntity.bed = this.comBedInfoMapper.queryBedInfo(ipt.bedNo);
+                    if (ipt.bedNo != null) {
+                        ipt.associateEntity.bed = this.comBedInfoMapper.queryBedInfo(ipt.bedNo);
+                    }
                     rt.associateEntity.finIprPrepayIn.associateEntity.patient = ipt;
                 } else {
                     rt.associateEntity.finIprPrepayIn.associateEntity.patient = this.patientMapper
