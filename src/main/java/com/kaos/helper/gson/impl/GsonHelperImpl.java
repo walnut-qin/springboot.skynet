@@ -42,6 +42,11 @@ public class GsonHelperImpl implements GsonHelper {
     }
 
     @Override
+    public Gson getGson() {
+        return this.gson;
+    }
+
+    @Override
     public String toJson(Object src) {
         return this.gson.toJson(src);
     }

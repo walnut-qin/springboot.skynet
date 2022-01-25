@@ -1,6 +1,15 @@
 package com.kaos.helper.gson;
 
+import com.google.gson.Gson;
+
 public interface GsonHelper {
+    /**
+     * 获取Gson对象
+     * 
+     * @return
+     */
+    Gson getGson();
+
     /**
      * json序列化
      * 
