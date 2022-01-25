@@ -5,14 +5,14 @@ package com.kaos.inf;
  */
 public interface IEnum {
     /**
-     * 值用于mybatis映射数据库
+     * 写入数据库的值
      * 
      * @return
      */
     String getValue();
 
     /**
-     * 值用于gson序列化与反序列化
+     * 序列化入json的值
      * 
      * @return
      */
