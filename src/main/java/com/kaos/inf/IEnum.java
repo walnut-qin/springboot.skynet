@@ -1,4 +1,4 @@
-package com.kaos.his.enums;
+package com.kaos.inf;
 
 /**
  * 定制枚举接口

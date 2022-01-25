@@ -1,5 +1,7 @@
 package com.kaos.his.enums;
 
+import com.kaos.inf.IEnum;
+
 public enum ValidStateEnum implements IEnum {
     无效("0", "无效"), 有效("1", "有效"), 作废("2", "作废");
 

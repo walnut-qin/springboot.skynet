@@ -1,5 +1,7 @@
 package com.kaos.his.enums;
 
+import com.kaos.inf.IEnum;
+
 /**
  * 手术检验结果
  */

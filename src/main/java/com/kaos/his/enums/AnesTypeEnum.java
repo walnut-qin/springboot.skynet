@@ -1,5 +1,7 @@
 package com.kaos.his.enums;
 
+import com.kaos.inf.IEnum;
+
 public enum AnesTypeEnum implements IEnum {
     全麻("1", "全麻"), 局麻("2", "局麻"), 硬膜外麻醉("3", "硬膜外麻醉"), 腰麻("4", "腰麻"), 氯胺酮("5", "氯胺酮"), 臂丛麻醉("6", "臂丛麻醉"),
     基础麻醉("7", "基础麻醉"),

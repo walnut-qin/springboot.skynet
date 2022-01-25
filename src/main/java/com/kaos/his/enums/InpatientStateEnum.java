@@ -1,5 +1,7 @@
 package com.kaos.his.enums;
 
+import com.kaos.inf.IEnum;
+
 public enum InpatientStateEnum implements IEnum {
     住院登记("R", "住院登记"), 病房接诊("I", "病房接诊"), 出院登记("B", "出院登记"), 出院结算("O", "出院结算"), 预约出院("P", "预约出院"), 无费退院("N", "无费退院");
 

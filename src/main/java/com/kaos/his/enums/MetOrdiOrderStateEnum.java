@@ -1,5 +1,7 @@
 package com.kaos.his.enums;
 
+import com.kaos.inf.IEnum;
+
 public enum MetOrdiOrderStateEnum implements IEnum {
     待审核("10", "待审核"), 暂存("15", "暂存"), 签发("20", "已提交(签发)"), 已接收("30", "已接收"), 已执行("40", "已执行"),
     已完成("50", "已完成"), 停止作废("90", "停止作废");

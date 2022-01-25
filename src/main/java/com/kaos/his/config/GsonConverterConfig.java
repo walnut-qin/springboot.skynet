@@ -11,6 +11,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.kaos.his.enums.*;
 import com.kaos.his.enums.pharmacy.DrugTypeEnum;
+import com.kaos.inf.IEnum;
 
 import java.lang.reflect.Type;
 

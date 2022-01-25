@@ -1,5 +1,7 @@
 package com.kaos.his.enums;
 
+import com.kaos.inf.IEnum;
+
 public enum BedStateEnum implements IEnum {
     占床("O", "占床"), 空床("U", "空床"), 关闭("C", "关闭"), 挂床("H", "挂床"), 包床("W", "包床"), 污染("K", "污染"), 隔离("I", "隔离"),
     请假("R", "请假");
