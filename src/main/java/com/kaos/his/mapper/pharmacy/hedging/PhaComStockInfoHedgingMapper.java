@@ -11,4 +11,12 @@ public interface PhaComStockInfoHedgingMapper {
      * @return
      */
     PhaComStockInfoHedging queryStockInfo(String deptCode, String drugCode);
+
+    /**
+     * 插入一条记录
+     * 
+     * @param phaComStockInfoHedging 插入药品对冲表库存表
+     * @return
+     */
+    int insertStockInfo(PhaComStockInfoHedging phaComStockInfoHedging);
 }

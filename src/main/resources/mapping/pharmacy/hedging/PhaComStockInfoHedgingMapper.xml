@@ -85,4 +85,77 @@
             </if>
         </where>
     </select>
+
+    <insert id="insertStockInfo">
+        INSERT INTO
+            XYHIS.PHA_COM_STOCKINFO_HEDGING (
+                DRUG_DEPT_CODE,
+                DRUG_CODE,
+                DRUG_QUALITY,
+                PACK_UNIT,
+                PACK_QTY,
+                MIN_UNIT,
+                SHOW_FLAG,
+                SHOW_UNIT,
+                RETAIL_PRICE,
+                STORE_SUM,
+                STORE_COST,
+                PREOUT_SUM,
+                PREOUT_COST,
+                VALID_DATE,
+                PLACE_CODE,
+                PRODUCER_CODE,
+                MANAGE_QUALITY,
+                LOW_SUM,
+                TOP_SUM,
+                NEED_BATCH,
+                USEFUL_DAYS,
+                LACK_FLAG,
+                DAILTYCHECK_FLAG,
+                UNIT_FLAG,
+                CHANGE_FLAG,
+                VALID_STATE,
+                MARK,
+                OPER_CODE,
+                OPER_DATE,
+                DRUG_TYPE,
+                ARK_FLAG,
+                ARK_QTY
+            )
+        VALUES
+            (
+                #{drugDeptCode},
+                #{drugCode},
+                #{drugQuality},
+                #{packUnit},
+                #{packQty},
+                #{minUnit},
+                #{showFlag},
+                #{showUnit},
+                #{retailPrice},
+                #{storeSum},
+                #{storeCost},
+                #{preOutSum},
+                #{preOutCost},
+                #{validDate},
+                #{placeCode},
+                #{producerCode},
+                #{manageQuality},
+                #{lowSum},
+                #{topSum},
+                #{needBatch},
+                #{usefulDays},
+                #{lackFlag},
+                #{dayChkFlag},
+                #{unitFlag},
+                #{changeFlag},
+                #{valid},
+                #{remark},
+                #{emplCode},
+                #{operDate},
+                #{drugType},
+                #{arkFlag},
+                #{arkQty}
+            )
+    </insert>
 </mapper>
