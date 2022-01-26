@@ -1,9 +1,9 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient.fee.balance;
 
 import com.kaos.inf.IEnum;
 
-public enum DrugItemGradeEnum implements IEnum {
-    甲("1", "甲类"), 乙("2", "乙类"), 丙("3", "丙类");
+public enum BalancePayTransKindEnum implements IEnum {
+    预交款("0", "预交款"), 结算款("1", "结算款");
 
     /**
      * 数据库存值
@@ -21,7 +21,7 @@ public enum DrugItemGradeEnum implements IEnum {
      * @param index
      * @param description
      */
-    DrugItemGradeEnum(String index, String description) {
+    BalancePayTransKindEnum(String index, String description) {
         this.value = index;
         this.description = description;
     }

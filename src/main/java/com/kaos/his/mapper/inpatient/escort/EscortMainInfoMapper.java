@@ -3,7 +3,7 @@ package com.kaos.his.mapper.inpatient.escort;
 import java.util.List;
 
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
-import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
 
 public interface EscortMainInfoMapper {
     /**

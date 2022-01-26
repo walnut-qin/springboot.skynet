@@ -1,9 +1,9 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient.escort;
 
 import com.kaos.inf.IEnum;
 
-public enum ValidStateEnum implements IEnum {
-    无效("0", "无效"), 有效("1", "有效"), 作废("2", "作废");
+public enum EscortActionEnum implements IEnum {
+    进入("I", "进入"), 外出("O", "外出");
 
     /**
      * 数据库存值
@@ -21,7 +21,7 @@ public enum ValidStateEnum implements IEnum {
      * @param index
      * @param description
      */
-    ValidStateEnum(String index, String description) {
+    EscortActionEnum(String index, String description) {
         this.value = index;
         this.description = description;
     }

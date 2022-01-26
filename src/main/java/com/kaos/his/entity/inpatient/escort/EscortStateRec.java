@@ -3,7 +3,7 @@ package com.kaos.his.entity.inpatient.escort;
 import java.util.Date;
 
 import com.kaos.his.entity.common.Employee;
-import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
 
 /**
  * 实体：陪护证状态（KAOS.ESCORT_STATE_REC）

@@ -15,7 +15,7 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.entity.inpatient.surgery.MetOpsItem;
 import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
-import com.kaos.his.enums.SurgeryStatusEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
 import com.kaos.his.service.inpatient.SurgeryService;
 
 import org.apache.log4j.Logger;

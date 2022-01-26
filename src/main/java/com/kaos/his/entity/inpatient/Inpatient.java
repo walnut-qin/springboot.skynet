@@ -5,8 +5,8 @@ import java.util.Date;
 import com.kaos.his.entity.common.Department;
 import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.common.Patient;
-import com.kaos.his.enums.InpatientSourceEnum;
-import com.kaos.his.enums.InpatientStateEnum;
+import com.kaos.his.enums.inpatient.InpatientSourceEnum;
+import com.kaos.his.enums.inpatient.InpatientStateEnum;
 
 /**
  * 实体：住院患者（FIN_IPR_INMAININFO）

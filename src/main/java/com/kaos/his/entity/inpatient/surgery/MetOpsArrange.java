@@ -1,7 +1,7 @@
 package com.kaos.his.entity.inpatient.surgery;
 
 import com.kaos.his.entity.common.Employee;
-import com.kaos.his.enums.SurgeryArrangeRoleEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
 
 /**
  * 手术人员安排（XYHIS.MET_OPS_ARRANGE）

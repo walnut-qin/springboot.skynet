@@ -3,8 +3,8 @@ package com.kaos.his.entity.common;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.his.enums.SexEnum;
-import com.kaos.his.enums.ValidStateEnum;
+import com.kaos.his.enums.common.SexEnum;
+import com.kaos.his.enums.common.ValidStateEnum;
 
 /**
  * 实体：患者信息（XYHIS.COM_PATIENTINFO）

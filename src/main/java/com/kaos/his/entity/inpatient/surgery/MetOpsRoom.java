@@ -1,7 +1,7 @@
 package com.kaos.his.entity.inpatient.surgery;
 
 import com.kaos.his.entity.common.Department;
-import com.kaos.his.enums.ValidStateEnum;
+import com.kaos.his.enums.common.ValidStateEnum;
 
 /**
  * 手术间信息（XYHIS.MET_OPS_ROOM）

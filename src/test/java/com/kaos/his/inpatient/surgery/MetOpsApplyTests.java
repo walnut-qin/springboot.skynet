@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.kaos.his.enums.DeptOwnEnum;
-import com.kaos.his.enums.SurgeryStatusEnum;
+import com.kaos.his.enums.common.DeptOwnEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsApplyMapper;
 
 import org.junit.jupiter.api.Test;

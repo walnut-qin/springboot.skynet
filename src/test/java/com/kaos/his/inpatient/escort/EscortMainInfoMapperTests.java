@@ -2,7 +2,7 @@ package com.kaos.his.inpatient.escort;
 
 import java.util.ArrayList;
 
-import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.his.mapper.inpatient.escort.EscortMainInfoMapper;
 
 import org.junit.jupiter.api.Test;

@@ -6,7 +6,7 @@ import com.kaos.his.entity.common.Department;
 import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.common.Patient;
 import com.kaos.his.entity.inpatient.escort.EscortVip;
-import com.kaos.his.enums.FinIprPrepayInStateEnum;
+import com.kaos.his.enums.inpatient.FinIprPrepayInStateEnum;
 
 /**
  * 实体：住院证（XYHIS.FIN_IPR_PREPAYIN）

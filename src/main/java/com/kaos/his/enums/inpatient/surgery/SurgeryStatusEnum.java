@@ -1,4 +1,4 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient.surgery;
 
 import com.kaos.inf.IEnum;
 

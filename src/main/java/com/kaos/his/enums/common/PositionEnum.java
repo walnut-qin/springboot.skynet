@@ -1,9 +1,12 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.common;
 
 import com.kaos.inf.IEnum;
 
-public enum PayWayEnum implements IEnum {
-    CA("CA", "现金");
+/**
+ * 枚举：职务
+ */
+public enum PositionEnum implements IEnum {
+    院长("1", "院长"), 主任("2", "主任"), 科长("3", "科长"), 科员("4", "科员");
 
     /**
      * 数据库存值
@@ -21,7 +24,7 @@ public enum PayWayEnum implements IEnum {
      * @param index
      * @param description
      */
-    PayWayEnum(String value, String description) {
+    PositionEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

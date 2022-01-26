@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.Department;
 import com.kaos.his.entity.common.Patient;
-import com.kaos.his.enums.TransTypeEnum;
+import com.kaos.his.enums.common.TransTypeEnum;
 
 /**
  * 门诊患者

@@ -1,9 +1,13 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.outpatient;
 
 import com.kaos.inf.IEnum;
 
-public enum FinIprPrepayInStateEnum implements IEnum {
-    预约("0", "预约"), 作废("1", "作废"), 转住院("2", "转住院"), 签床("3", "签床"), 预住院预约("4", "预住院预约");
+/**
+ * 门诊患者状态枚举
+ */
+public enum OutpatientStateEnum implements IEnum {
+    正常挂号("N", "正常挂号"), 留观登记("R", "留观登记"), 正在留观("I", "正在留观"), 出观登记("P", "出观登记"), 留观出院完成("B", "留观出院完成"),
+    留观转住院登记("E", "留观转住院登记"), 留观转住院完成("C", "留观转住院完成");
 
     /**
      * 数据库存值
@@ -21,7 +25,7 @@ public enum FinIprPrepayInStateEnum implements IEnum {
      * @param index
      * @param description
      */
-    FinIprPrepayInStateEnum(String value, String description) {
+    OutpatientStateEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

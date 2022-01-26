@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
-import com.kaos.his.enums.SurgeryStatusEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
 
 public interface SurgeryService {
     /**

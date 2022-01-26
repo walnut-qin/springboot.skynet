@@ -2,7 +2,7 @@ package com.kaos.his.inpatient;
 
 import java.util.ArrayList;
 
-import com.kaos.his.enums.InpatientStateEnum;
+import com.kaos.his.enums.inpatient.InpatientStateEnum;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
 
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,12 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient;
 
 import com.kaos.inf.IEnum;
 
-public enum MetOrdiOrderStateEnum implements IEnum {
-    待审核("10", "待审核"), 暂存("15", "暂存"), 签发("20", "已提交(签发)"), 已接收("30", "已接收"), 已执行("40", "已执行"),
-    已完成("50", "已完成"), 停止作废("90", "停止作废");
+/**
+ * 枚举：入院来源
+ */
+public enum InpatientSourceEnum implements IEnum {
+    门诊("1", "门诊"), 急诊("2", "急诊"), 转科("3", "转科"), 转院("4", "转院");
 
     /**
      * 数据库存值
@@ -22,7 +24,7 @@ public enum MetOrdiOrderStateEnum implements IEnum {
      * @param index
      * @param description
      */
-    MetOrdiOrderStateEnum(String value, String description) {
+    InpatientSourceEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

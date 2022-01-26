@@ -5,7 +5,7 @@ import java.util.Date;
 import com.google.common.base.Optional;
 import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.inpatient.Inpatient;
-import com.kaos.his.enums.TransTypeEnum;
+import com.kaos.his.enums.common.TransTypeEnum;
 
 /**
  * 实体：结算头表（XYHIS.FIN_IPB_BALANCEHEAD）

@@ -1,9 +1,9 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.common;
 
 import com.kaos.inf.IEnum;
 
-public enum BalancePayTransKindEnum implements IEnum {
-    预交款("0", "预交款"), 结算款("1", "结算款");
+public enum PayWayEnum implements IEnum {
+    CA("CA", "现金");
 
     /**
      * 数据库存值
@@ -21,8 +21,8 @@ public enum BalancePayTransKindEnum implements IEnum {
      * @param index
      * @param description
      */
-    BalancePayTransKindEnum(String index, String description) {
-        this.value = index;
+    PayWayEnum(String value, String description) {
+        this.value = value;
         this.description = description;
     }
 

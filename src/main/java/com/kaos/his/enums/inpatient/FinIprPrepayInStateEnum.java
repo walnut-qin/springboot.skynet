@@ -1,12 +1,9 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient;
 
 import com.kaos.inf.IEnum;
 
-/**
- * 枚举：入院来源
- */
-public enum InpatientSourceEnum implements IEnum {
-    门诊("1", "门诊"), 急诊("2", "急诊"), 转科("3", "转科"), 转院("4", "转院");
+public enum FinIprPrepayInStateEnum implements IEnum {
+    预约("0", "预约"), 作废("1", "作废"), 转住院("2", "转住院"), 签床("3", "签床"), 预住院预约("4", "预住院预约");
 
     /**
      * 数据库存值
@@ -24,7 +21,7 @@ public enum InpatientSourceEnum implements IEnum {
      * @param index
      * @param description
      */
-    InpatientSourceEnum(String value, String description) {
+    FinIprPrepayInStateEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

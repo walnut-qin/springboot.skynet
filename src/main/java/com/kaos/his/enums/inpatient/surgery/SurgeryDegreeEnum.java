@@ -1,13 +1,9 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient.surgery;
 
 import com.kaos.inf.IEnum;
 
-/**
- * 枚举：职级
- */
-public enum RankEnum implements IEnum {
-    特殊津贴专家("1", "特殊津贴专家"), 主任医师("2", "主任医师"), 副主任医师("3", "副主任医师"), 主治医师("4", "主治医师"), 医师("5", "医师"),
-    见习医师("6", "见习医师"), 副主任护师("7", "副主任护师"), 主管护师("8", "主管护师"), 护师("9", "护师");
+public enum SurgeryDegreeEnum implements IEnum {
+    一级("1级", "一级"), 二级("2级", "二级"), 三级("3级", "三级"), 四级("4级", "四级");
 
     /**
      * 数据库存值
@@ -25,7 +21,7 @@ public enum RankEnum implements IEnum {
      * @param index
      * @param description
      */
-    RankEnum(String value, String description) {
+    SurgeryDegreeEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

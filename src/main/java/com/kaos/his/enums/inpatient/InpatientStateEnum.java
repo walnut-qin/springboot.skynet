@@ -1,13 +1,9 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient;
 
 import com.kaos.inf.IEnum;
 
-/**
- * 门诊患者状态枚举
- */
-public enum OutpatientStateEnum implements IEnum {
-    正常挂号("N", "正常挂号"), 留观登记("R", "留观登记"), 正在留观("I", "正在留观"), 出观登记("P", "出观登记"), 留观出院完成("B", "留观出院完成"),
-    留观转住院登记("E", "留观转住院登记"), 留观转住院完成("C", "留观转住院完成");
+public enum InpatientStateEnum implements IEnum {
+    住院登记("R", "住院登记"), 病房接诊("I", "病房接诊"), 出院登记("B", "出院登记"), 出院结算("O", "出院结算"), 预约出院("P", "预约出院"), 无费退院("N", "无费退院");
 
     /**
      * 数据库存值
@@ -25,7 +21,7 @@ public enum OutpatientStateEnum implements IEnum {
      * @param index
      * @param description
      */
-    OutpatientStateEnum(String value, String description) {
+    InpatientStateEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

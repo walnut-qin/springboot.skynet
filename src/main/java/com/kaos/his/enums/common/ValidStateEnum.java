@@ -1,10 +1,9 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.common;
 
 import com.kaos.inf.IEnum;
 
-public enum BedStateEnum implements IEnum {
-    占床("O", "占床"), 空床("U", "空床"), 关闭("C", "关闭"), 挂床("H", "挂床"), 包床("W", "包床"), 污染("K", "污染"), 隔离("I", "隔离"),
-    请假("R", "请假");
+public enum ValidStateEnum implements IEnum {
+    无效("0", "无效"), 有效("1", "有效"), 作废("2", "作废");
 
     /**
      * 数据库存值
@@ -22,7 +21,7 @@ public enum BedStateEnum implements IEnum {
      * @param index
      * @param description
      */
-    BedStateEnum(String index, String description) {
+    ValidStateEnum(String index, String description) {
         this.value = index;
         this.description = description;
     }

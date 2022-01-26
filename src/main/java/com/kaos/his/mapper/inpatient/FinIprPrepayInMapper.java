@@ -3,7 +3,7 @@ package com.kaos.his.mapper.inpatient;
 import java.util.List;
 
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
-import com.kaos.his.enums.FinIprPrepayInStateEnum;
+import com.kaos.his.enums.inpatient.FinIprPrepayInStateEnum;
 
 public interface FinIprPrepayInMapper {
     /**

@@ -1,4 +1,4 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.common;
 
 import com.kaos.inf.IEnum;
 

@@ -1,9 +1,10 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient;
 
 import com.kaos.inf.IEnum;
 
-public enum EscortActionEnum implements IEnum {
-    进入("I", "进入"), 外出("O", "外出");
+public enum BedStateEnum implements IEnum {
+    占床("O", "占床"), 空床("U", "空床"), 关闭("C", "关闭"), 挂床("H", "挂床"), 包床("W", "包床"), 污染("K", "污染"), 隔离("I", "隔离"),
+    请假("R", "请假");
 
     /**
      * 数据库存值
@@ -21,7 +22,7 @@ public enum EscortActionEnum implements IEnum {
      * @param index
      * @param description
      */
-    EscortActionEnum(String index, String description) {
+    BedStateEnum(String index, String description) {
         this.value = index;
         this.description = description;
     }

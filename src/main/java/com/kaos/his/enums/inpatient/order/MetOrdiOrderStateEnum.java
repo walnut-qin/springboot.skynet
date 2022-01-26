@@ -1,9 +1,10 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient.order;
 
 import com.kaos.inf.IEnum;
 
-public enum MetOpsInciTypeEnum implements IEnum {
-    I类切口("1", "I类切口"), II类切口("2", "II类切口"), III类切口("3", "III类切口"), IV类切口("4", "IV类切口"), 零类切口("5", "零类切口");
+public enum MetOrdiOrderStateEnum implements IEnum {
+    待审核("10", "待审核"), 暂存("15", "暂存"), 签发("20", "已提交(签发)"), 已接收("30", "已接收"), 已执行("40", "已执行"),
+    已完成("50", "已完成"), 停止作废("90", "停止作废");
 
     /**
      * 数据库存值
@@ -21,7 +22,7 @@ public enum MetOpsInciTypeEnum implements IEnum {
      * @param index
      * @param description
      */
-    MetOpsInciTypeEnum(String value, String description) {
+    MetOrdiOrderStateEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

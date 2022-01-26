@@ -6,13 +6,13 @@ import java.util.List;
 import com.kaos.his.entity.common.Department;
 import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.inpatient.Inpatient;
-import com.kaos.his.enums.AnesTypeEnum;
-import com.kaos.his.enums.MetOpsInciTypeEnum;
-import com.kaos.his.enums.SurgeryDegreeEnum;
-import com.kaos.his.enums.SurgeryInspectResultEnum;
-import com.kaos.his.enums.SurgeryKindEnum;
-import com.kaos.his.enums.SurgeryStatusEnum;
-import com.kaos.his.enums.ValidStateEnum;
+import com.kaos.his.enums.common.ValidStateEnum;
+import com.kaos.his.enums.inpatient.surgery.AnesTypeEnum;
+import com.kaos.his.enums.inpatient.surgery.MetOpsInciTypeEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryDegreeEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryInspectResultEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryKindEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
 
 /**
  * 手术申请（XYHIS.MET_OPS_APPLY）

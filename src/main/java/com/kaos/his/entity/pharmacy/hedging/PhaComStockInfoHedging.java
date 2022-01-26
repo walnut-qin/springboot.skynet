@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.Department;
 import com.kaos.his.entity.common.Employee;
-import com.kaos.his.enums.ValidStateEnum;
+import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.pharmacy.DrugTypeEnum;
 
 /**

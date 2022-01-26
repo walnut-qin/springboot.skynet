@@ -19,8 +19,8 @@ import com.kaos.his.controller.inpatient.escort.entity.QueryHelperInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryPatientInfoRspBody;
 import com.kaos.his.controller.inpatient.escort.entity.QueryStateInfoRspBody;
 import com.kaos.his.entity.inpatient.Inpatient;
-import com.kaos.his.enums.EscortActionEnum;
-import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.inpatient.escort.EscortActionEnum;
+import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.his.service.inpatient.EscortService;
 
 import org.apache.log4j.Logger;

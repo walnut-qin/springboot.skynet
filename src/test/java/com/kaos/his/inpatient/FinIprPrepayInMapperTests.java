@@ -2,7 +2,7 @@ package com.kaos.his.inpatient;
 
 import java.util.ArrayList;
 
-import com.kaos.his.enums.FinIprPrepayInStateEnum;
+import com.kaos.his.enums.inpatient.FinIprPrepayInStateEnum;
 import com.kaos.his.mapper.inpatient.FinIprPrepayInMapper;
 
 import org.junit.jupiter.api.Test;

@@ -8,8 +8,8 @@ import com.kaos.his.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.his.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.his.entity.inpatient.escort.EscortStateRec;
-import com.kaos.his.enums.EscortActionEnum;
-import com.kaos.his.enums.EscortStateEnum;
+import com.kaos.his.enums.inpatient.escort.EscortActionEnum;
+import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
 
 public interface EscortService {
     /**

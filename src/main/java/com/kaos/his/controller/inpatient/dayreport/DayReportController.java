@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
-import com.kaos.his.enums.DeptOwnEnum;
+import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.service.inpatient.DayReportService;
 
 import org.apache.log4j.Logger;

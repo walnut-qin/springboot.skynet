@@ -5,7 +5,7 @@ import java.util.Date;
 import com.kaos.his.entity.common.Department;
 import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.inpatient.Inpatient;
-import com.kaos.his.enums.MetOrdiOrderStateEnum;
+import com.kaos.his.enums.inpatient.order.MetOrdiOrderStateEnum;
 
 public class MetOrdiOrder {
     /**

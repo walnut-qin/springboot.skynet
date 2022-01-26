@@ -1,7 +1,7 @@
 package com.kaos.his.mapper.outpatient;
 
 import com.kaos.his.entity.outpatient.Outpatient;
-import com.kaos.his.enums.TransTypeEnum;
+import com.kaos.his.enums.common.TransTypeEnum;
 
 public interface OutpatientMapper {
     /**

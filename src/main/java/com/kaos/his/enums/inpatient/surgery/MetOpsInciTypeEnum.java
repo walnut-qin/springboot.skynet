@@ -1,9 +1,9 @@
-package com.kaos.his.enums;
+package com.kaos.his.enums.inpatient.surgery;
 
 import com.kaos.inf.IEnum;
 
-public enum DrugShiftTypeEnum implements IEnum {
-    更新("U", "更新"), 特殊修改("M", "特殊修改"), 新药("N", "新药"), 停用("S", "停用"), 调价("A", "调价");
+public enum MetOpsInciTypeEnum implements IEnum {
+    I类切口("1", "I类切口"), II类切口("2", "II类切口"), III类切口("3", "III类切口"), IV类切口("4", "IV类切口"), 零类切口("5", "零类切口");
 
     /**
      * 数据库存值
@@ -21,8 +21,8 @@ public enum DrugShiftTypeEnum implements IEnum {
      * @param index
      * @param description
      */
-    DrugShiftTypeEnum(String index, String description) {
-        this.value = index;
+    MetOpsInciTypeEnum(String value, String description) {
+        this.value = value;
         this.description = description;
     }
 

@@ -1,6 +1,6 @@
 package com.kaos.his.outpatient;
 
-import com.kaos.his.enums.TransTypeEnum;
+import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.mapper.outpatient.OutpatientMapper;
 
 import org.junit.jupiter.api.Test;

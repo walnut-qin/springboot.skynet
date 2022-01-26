@@ -1,8 +1,8 @@
 package com.kaos.his.entity.inpatient;
 
 import com.kaos.his.entity.common.Department;
-import com.kaos.his.enums.BedStateEnum;
-import com.kaos.his.enums.ValidStateEnum;
+import com.kaos.his.enums.common.ValidStateEnum;
+import com.kaos.his.enums.inpatient.BedStateEnum;
 
 /**
  * 床位信息（XYHIS.COM_BEDINFO）

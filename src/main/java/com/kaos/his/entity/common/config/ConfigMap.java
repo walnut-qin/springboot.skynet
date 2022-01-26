@@ -1,6 +1,6 @@
 package com.kaos.his.entity.common.config;
 
-import com.kaos.his.enums.ValidStateEnum;
+import com.kaos.his.enums.common.ValidStateEnum;
 
 /**
  * 控制变量（KAOS.CONFIG_VARIABLE || KAOS.CONFIG_LIST）
