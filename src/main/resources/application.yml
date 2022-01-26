@@ -59,7 +59,7 @@ spring:
         exclusions: .gif,.html
   thymeleaf:
     # 模板支持，支持 HTML，XML TEXT JAVASCRIPT
-    mode: HTML5
+    mode: HTML
     encoding: UTF-8
     cache: false
     prefix: classpath:/templates

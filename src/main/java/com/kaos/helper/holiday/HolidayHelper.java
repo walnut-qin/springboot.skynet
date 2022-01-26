@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.kaos.helper.holiday.entity.DayInfo;
 
-public interface HolidayManager {
+public interface HolidayHelper {
     /**
      * 获取节假日信息
      * 
