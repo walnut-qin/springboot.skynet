@@ -2,12 +2,13 @@ package com.kaos.his.controller.inpatient.escort;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.kaos.helper.lock.LockHelper;
+import com.kaos.helper.lock.impl.LockHelperImpl;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.escort.entity.EscortActionRec;
@@ -21,7 +22,6 @@ import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.inpatient.EscortService;
 import com.kaos.util.GsonHelper;
-import com.kaos.util.LockHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,84 +48,22 @@ public class EscortController {
     /**
      * 20个陪护证状态锁
      */
-    public static final List<Object> stateLocks = new ArrayList<>() {
-        {
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-        }
-    };
+    public static final LockHelper stateLockHelper = new LockHelperImpl("stateLock", 20);
 
     /**
      * 10个陪护证动作锁
      */
-    public static final List<Object> actionLocks = new ArrayList<>() {
-        {
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-        }
-    };
+    public static final LockHelper actionLockHelper = new LockHelperImpl("actionLock", 10);
 
     /**
      * 10个患者锁
      */
-    public static final List<Object> patientLocks = new ArrayList<>() {
-        {
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-        }
-    };
+    public static final LockHelper patientLockHelper = new LockHelperImpl("patientLock", 10);
 
     /**
      * 10个陪护锁
      */
-    public static final List<Object> helperLocks = new ArrayList<>() {
-        {
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-            add(new Object());
-        }
-    };
+    public static final LockHelper helperLockHelper = new LockHelperImpl("helperLock", 10);
 
     /**
      * 陪护证服务
@@ -143,10 +81,10 @@ public class EscortController {
         this.logger.info(String.format("登记陪护证(patientCardNo = %s, helperCardNo = %s)", patientCardNo, helperCardNo));
 
         try {
-            synchronized (LockHelper.mapToLock(patientCardNo, patientLocks)) {
+            synchronized (patientLockHelper.mapToLock(patientCardNo)) {
                 this.logger.info("加锁(patientLock)");
                 try {
-                    synchronized (LockHelper.mapToLock(helperCardNo, helperLocks)) {
+                    synchronized (helperLockHelper.mapToLock(helperCardNo)) {
                         this.logger.info("加锁(helperLock)");
 
                         // 执行服务
@@ -174,7 +112,7 @@ public class EscortController {
                 state, emplCode));
 
         try {
-            synchronized (LockHelper.mapToLock(escortNo, stateLocks)) {
+            synchronized (stateLockHelper.mapToLock(escortNo)) {
                 this.logger.info("加锁(stateLock)");
                 // 执行业务
                 this.escortService.updateEscortState(escortNo, state, emplCode, "收到客户端请求");
@@ -193,7 +131,7 @@ public class EscortController {
         this.logger.info(String.format("记录陪护证行为(escortNo = %s, action = %s)", escortNo, action));
 
         try {
-            synchronized (LockHelper.mapToLock(escortNo, actionLocks)) {
+            synchronized (actionLockHelper.mapToLock(escortNo)) {
                 this.logger.info("加锁(actionLock)");
                 // 执行业务
                 this.escortService.recordEscortAction(escortNo, action, "收到客户端请求");

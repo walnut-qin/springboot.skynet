@@ -43,6 +43,11 @@ public class LockHelperImpl implements LockHelper {
     }
 
     @Override
+    public Integer getLockSize() {
+        return this.locks.size();
+    }
+
+    @Override
     public Object mapToLock(String src) {
         // 初始日志
         this.logger.debug(String.format("获取锁对象(src = %s)", src));

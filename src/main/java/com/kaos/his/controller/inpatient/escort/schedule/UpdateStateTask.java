@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.kaos.his.controller.inpatient.escort.EscortController;
 import com.kaos.his.service.inpatient.EscortService;
-import com.kaos.util.LockHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +47,8 @@ public class UpdateStateTask {
         /**
          * 线程池
          */
-        ThreadPoolExecutor missionTask = new ThreadPoolExecutor(EscortController.stateLocks.size(),
-                EscortController.stateLocks.size(),
+        ThreadPoolExecutor missionTask = new ThreadPoolExecutor(EscortController.stateLockHelper.getLockSize(),
+                EscortController.stateLockHelper.getLockSize(),
                 2, TimeUnit.HOURS,
                 new LinkedBlockingDeque<Runnable>());
 
@@ -106,7 +105,7 @@ public class UpdateStateTask {
             @Override
             public void run() {
                 try {
-                    synchronized (LockHelper.mapToLock(this.escortNo, EscortController.stateLocks)) {
+                    synchronized (EscortController.stateLockHelper.mapToLock(this.escortNo)) {
                         // 执行业务
                         UpdateStateTask.this.escortService.updateEscortState(escortNo, null, "server", "定期任务");
                     }
