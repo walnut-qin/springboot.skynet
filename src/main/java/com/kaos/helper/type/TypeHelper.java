@@ -21,5 +21,14 @@ public interface TypeHelper {
      * @param list
      * @return
      */
+    <T> T getFirst(List<T> list);
+
+    /**
+     * 获取列表最后一个元素
+     * 
+     * @param <T>
+     * @param list
+     * @return
+     */
     <T> T getLast(List<T> list);
 }

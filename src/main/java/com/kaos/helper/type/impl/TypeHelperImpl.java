@@ -42,6 +42,15 @@ public class TypeHelperImpl implements TypeHelper {
     }
 
     @Override
+    public <T> T getFirst(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        } else {
+            return list.get(0);
+        }
+    }
+
+    @Override
     public <T> T getLast(List<T> list) {
         if (list == null || list.isEmpty()) {
             return null;

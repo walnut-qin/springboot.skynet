@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.kaos.helper.type.TypeHelper;
+import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.entity.common.Patient;
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.his.entity.inpatient.Inpatient;
@@ -37,7 +39,6 @@ import com.kaos.his.mapper.inpatient.order.MetOrdiOrderMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.his.service.inpatient.EscortService;
-import com.kaos.util.ListHelper;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -51,6 +52,11 @@ public class EscortServiceImpl implements EscortService {
      * 日志接口
      */
     Logger logger = Logger.getLogger(DayReportServiceImpl.class.getName());
+
+    /**
+     * 基本类型助手
+     */
+    TypeHelper typeHelper = new TypeHelperImpl();
 
     /**
      * 注解自身
@@ -163,7 +169,7 @@ public class EscortServiceImpl implements EscortService {
             ntt.stateRecs = this.escortStateRecMapper.queryStates(context.escortNo);
         }
         if (ntt.stateRecs != null && !ntt.stateRecs.isEmpty()) {
-            var curState = ListHelper.GetLast(ntt.stateRecs).state;
+            var curState = this.typeHelper.getLast(ntt.stateRecs).state;
             if (curState == EscortStateEnum.注销) {
                 return EscortStateEnum.注销;
             }

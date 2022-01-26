@@ -21,7 +21,6 @@ import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.inpatient.EscortService;
 import com.kaos.util.GsonHelper;
-import com.kaos.util.ListHelper;
 import com.kaos.util.LockHelper;
 
 import org.apache.log4j.Logger;
@@ -219,8 +218,8 @@ public class EscortController {
         rspBody.patientCardNo = srvRt.patientCardNo;
         rspBody.escortCardNo = srvRt.helperCardNo;
         if (srvRt.associateEntity.stateRecs != null) {
-            rspBody.regDate = srvRt.associateEntity.stateRecs.get(0).recDate;
-            rspBody.state = ListHelper.GetLast(srvRt.associateEntity.stateRecs).state.getValue();
+            rspBody.regDate = this.typeHelper.getFirst(srvRt.associateEntity.stateRecs).recDate;
+            rspBody.state = this.typeHelper.getLast(srvRt.associateEntity.stateRecs).state.getValue();
         }
 
         return GsonHelper.ToJson(rspBody);
