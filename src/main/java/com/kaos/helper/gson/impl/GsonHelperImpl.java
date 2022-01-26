@@ -1,11 +1,10 @@
 package com.kaos.helper.gson.impl;
 
-import java.lang.reflect.Type;
-import java.util.HashMap;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kaos.helper.gson.GsonHelper;
+import com.kaos.helper.gson.adapter.EnumTypeAdapter;
+import com.kaos.inf.IEnum;
 
 public class GsonHelperImpl implements GsonHelper {
     /**
@@ -23,7 +22,7 @@ public class GsonHelperImpl implements GsonHelper {
     /**
      * 带参构造
      */
-    public GsonHelperImpl(String dateFormat, HashMap<Type, Object> typeAdapters) {
+    public GsonHelperImpl(String dateFormat) {
         GsonBuilder builder = new GsonBuilder();
 
         // 设置时间转换格式
@@ -32,11 +31,7 @@ public class GsonHelperImpl implements GsonHelper {
         }
 
         // 注册转换器
-        if (typeAdapters != null) {
-            for (var type : typeAdapters.keySet()) {
-                builder.registerTypeAdapter(type, typeAdapters.get(type));
-            }
-        }
+        builder.registerTypeHierarchyAdapter(IEnum.class, new EnumTypeAdapter<>());
 
         this.gson = builder.create();
     }
