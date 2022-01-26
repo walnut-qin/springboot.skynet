@@ -3,6 +3,7 @@ package com.kaos.his.controller.inpatient.surgery;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -16,7 +17,6 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsItem;
 import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.his.enums.SurgeryStatusEnum;
 import com.kaos.his.service.inpatient.SurgeryService;
-import com.kaos.util.GsonHelper;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -50,8 +50,10 @@ public class SurgeryController {
 
     @ResponseBody
     @RequestMapping(value = "queryArrangedMetOpsAppliesInDept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String queryArrangedMetOpsAppliesInDept(@RequestParam("deptCode") String deptCode,
-            @RequestParam("beginDate") Date beginDate, @RequestParam("endDate") Date endDate) {
+    public List<QueryArrangedMetOpsAppliesInDeptRspBody> queryArrangedMetOpsAppliesInDept(
+            @RequestParam("deptCode") String deptCode,
+            @RequestParam("beginDate") Date beginDate,
+            @RequestParam("endDate") Date endDate) {
         // 入参判断
         if (deptCode.isEmpty()) {
             throw new InvalidParameterException("科室编码不能为空");
@@ -78,7 +80,7 @@ public class SurgeryController {
             rspBodies.add(this.createQueryMetOpsAppliesInDeptRspBody(item));
         }
 
-        return GsonHelper.ToJson(rspBodies);
+        return rspBodies;
     }
 
     /**

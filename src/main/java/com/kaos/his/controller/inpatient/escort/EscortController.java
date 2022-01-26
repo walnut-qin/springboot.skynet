@@ -2,6 +2,7 @@ package com.kaos.his.controller.inpatient.escort;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
@@ -21,14 +22,12 @@ import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.inpatient.EscortService;
-import com.kaos.util.GsonHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -71,7 +70,6 @@ public class EscortController {
     @Autowired
     EscortService escortService;
 
-    @ResponseBody
     @RequestMapping(value = "register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
             @NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
@@ -102,7 +100,6 @@ public class EscortController {
         }
     }
 
-    @ResponseBody
     @RequestMapping(value = "updateState", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void updateState(@NotBlank(message = "陪护证号不能为空") String escortNo,
             @Nullable EscortStateEnum state,
@@ -123,7 +120,6 @@ public class EscortController {
         }
     }
 
-    @ResponseBody
     @RequestMapping(value = "recordAction", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void recordAction(@NotBlank(message = "陪护证号不能为空") String escortNo,
             @Nullable EscortActionEnum action) {
@@ -142,9 +138,8 @@ public class EscortController {
         }
     }
 
-    @ResponseBody
     @RequestMapping(value = "queryStateInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String queryStateInfo(@NotBlank(message = "陪护证号不能为空") String escortNo) {
+    public QueryStateInfoRspBody queryStateInfo(@NotBlank(message = "陪护证号不能为空") String escortNo) {
         // 记录日志
         this.logger.info(String.format("查询陪护证 %s 的状态", escortNo));
 
@@ -160,12 +155,11 @@ public class EscortController {
             rspBody.state = this.typeHelper.getLast(srvRt.associateEntity.stateRecs).state.getValue();
         }
 
-        return GsonHelper.ToJson(rspBody);
+        return rspBody;
     }
 
-    @ResponseBody
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String queryPatientInfo(@NotBlank(message = "陪护人卡号不能为空") String helperCardNo) {
+    public List<QueryPatientInfoRspBody> queryPatientInfo(@NotBlank(message = "陪护人卡号不能为空") String helperCardNo) {
         // 记录日志
         this.logger.info(String.format("查询陪护的患者信息 %s 的状态", helperCardNo));
 
@@ -246,12 +240,11 @@ public class EscortController {
             rspBody.add(rspItem);
         }
 
-        return GsonHelper.ToJson(rspBody);
+        return rspBody;
     }
 
-    @ResponseBody
     @RequestMapping(value = "queryHelperInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String queryHelperInfo(@NotBlank(message = "患者卡号不能为空") String patientCardNo) {
+    public List<QueryHelperInfoRspBody> queryHelperInfo(@NotBlank(message = "患者卡号不能为空") String patientCardNo) {
         // 记录日志
         this.logger.info(String.format("查询患者的陪护人信息 %s 的状态", patientCardNo));
 
@@ -302,10 +295,9 @@ public class EscortController {
             rspBody.add(rspItem);
         }
 
-        return GsonHelper.ToJson(rspBody);
+        return rspBody;
     }
 
-    @ResponseBody
     @RequestMapping(value = "uploadAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String uploadAnnex(@NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
             @NotBlank(message = "附件链接不能为空") String url) {
@@ -318,7 +310,6 @@ public class EscortController {
         return rt.annexNo;
     }
 
-    @ResponseBody
     @RequestMapping(value = "checkAnnex", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void checkAnnex(@NotBlank(message = "附件号不能为空") String annexNo,
             @NotBlank(message = "审核人不能为空") String checker,
@@ -331,9 +322,8 @@ public class EscortController {
         this.escortService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
     }
 
-    @ResponseBody
     @RequestMapping(value = "queryAnnexInDept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String queryAnnexInDept(@NotBlank(message = "科室编码不能为空") String deptCode,
+    public List<QueryAnnexInDeptRspBody> queryAnnexInDept(@NotBlank(message = "科室编码不能为空") String deptCode,
             @NotNull(message = "审核标识不能为空") Boolean checked) {
         // 记录日志
         this.logger.info(String.format("查询附件(deptCode = %s, checked = %s)", deptCode, checked.toString()));
@@ -354,6 +344,6 @@ public class EscortController {
             rspBody.add(rspItem);
         }
 
-        return GsonHelper.ToJson(rspBody);
+        return rspBody;
     }
 }

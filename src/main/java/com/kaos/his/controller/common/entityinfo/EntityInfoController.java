@@ -6,14 +6,12 @@ import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
 import com.kaos.his.service.common.EntityInfoService;
-import com.kaos.util.GsonHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -36,9 +34,8 @@ public class EntityInfoController {
     @Autowired
     EntityInfoService entityInfoService;
 
-    @ResponseBody
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
+    public QueryPatientInfoRspBody queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
         // 记录日志
         this.logger.info(String.format("查询患者信息(cardNo = %s)", cardNo));
 
@@ -54,6 +51,6 @@ public class EntityInfoController {
         rspBody.identityCardNo = patient.identityCardNo;
         rspBody.tel = patient.tel;
 
-        return GsonHelper.ToJson(rspBody);
+        return rspBody;
     }
 }
