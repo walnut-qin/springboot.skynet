@@ -3,13 +3,14 @@ package com.kaos.helper.gson.adapter;
 import java.lang.reflect.Type;
 
 import com.google.gson.*;
+import com.kaos.helper.gson.converter.EnumTypeConverter;
 import com.kaos.inf.IEnum;
 
 public class EnumTypeAdapter<E extends IEnum> implements JsonSerializer<E>, JsonDeserializer<E> {
     /**
-     * 枚举的全部成员
+     * 枚举转换器
      */
-    E[] enums = null;
+    EnumTypeConverter<E> enumTypeConverter = null;
 
     /**
      * 构造函数
@@ -17,7 +18,7 @@ public class EnumTypeAdapter<E extends IEnum> implements JsonSerializer<E>, Json
      * @param classOfE 泛型E的class对象
      */
     public EnumTypeAdapter(Class<E> classOfE) {
-        this.enums = classOfE.getEnumConstants();
+        this.enumTypeConverter = new EnumTypeConverter<>(classOfE);
     }
 
     @Override
@@ -32,12 +33,7 @@ public class EnumTypeAdapter<E extends IEnum> implements JsonSerializer<E>, Json
     public E deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         if (json != null) {
-            var valOrDesc = json.getAsString();
-            for (E e : enums) {
-                if (e.getValue().equals(valOrDesc) || e.getDescription().equals(valOrDesc)) {
-                    return e;
-                }
-            }
+            return this.enumTypeConverter.convert(json.getAsString());
         }
         return null;
     }
