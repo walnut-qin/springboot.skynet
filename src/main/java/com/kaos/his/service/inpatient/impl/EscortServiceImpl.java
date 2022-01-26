@@ -262,8 +262,8 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 查询院外核酸报告（已审核）
-        var checkedAnnexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(fip.cardNo, beginDate, null, true);
-        if (checkedAnnexInfos != null) {
+        var checkedAnnexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(context.helperCardNo, beginDate, null, true);
+        if (checkedAnnexInfos != null && !checkedAnnexInfos.isEmpty()) {
             // 提取最近一次测试结果
             EscortAnnexChk lastRecord = null;
             for (var annexInfo : checkedAnnexInfos) {
@@ -279,13 +279,13 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 查询7日内划价记录
-        var fees = this.finOpbFeeDetailMapper.queryFeeDetailsWithCardNo(fip.cardNo, "F00000068231", beginDate, null);
+        var fees = this.finOpbFeeDetailMapper.queryFeeDetailsWithCardNo(context.helperCardNo, "F00000068231", beginDate, null);
         if (fees != null && !fees.isEmpty()) {
             return EscortStateEnum.等待院内核酸检测结果;
         }
 
         // 查询7日内上传的院外待审记录
-        var unCheckedAnnexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(fip.cardNo, beginDate, null, false);
+        var unCheckedAnnexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(context.helperCardNo, beginDate, null, false);
         if (unCheckedAnnexInfos != null && !unCheckedAnnexInfos.isEmpty()) {
             return EscortStateEnum.等待院外核酸检测结果审核;
         }
