@@ -158,4 +158,115 @@
                 #{arkQty}
             )
     </insert>
+
+    <update id="updateStockInfo">
+        UPDATE
+            XYHIS.PHA_COM_STOCKINFO_HEDGING
+        <trim prefix="SET" suffixOverrides=",">
+            <if test = "true">
+                DRUG_DEPT_CODE = #{drugDeptCode},
+            </if>
+            <if test = "true">
+                DRUG_CODE = #{drugCode},
+            </if>
+            <if test = "true">
+                DRUG_QUALITY = #{drugQuality},
+            </if>
+            <if test = "true">
+                PACK_UNIT = #{packUnit},
+            </if>
+            <if test = "true">
+                PACK_QTY = #{packQty},
+            </if>
+            <if test = "true">
+                MIN_UNIT = #{minUnit},
+            </if>
+            <if test = "true">
+                SHOW_FLAG = #{showFlag},
+            </if>
+            <if test = "true">
+                SHOW_UNIT = #{showUnit},
+            </if>
+            <if test = "true">
+                RETAIL_PRICE = #{retailPrice},
+            </if>
+            <if test = "true">
+                STORE_SUM = #{storeSum},
+            </if>
+            <if test = "true">
+                STORE_COST = #{storeCost},
+            </if>
+            <if test = "true">
+                PREOUT_SUM = #{preOutSum},
+            </if>
+            <if test = "true">
+                PREOUT_COST = #{preOutCost},
+            </if>
+            <if test = "true">
+                VALID_DATE = #{validDate},
+            </if>
+            <if test = "true">
+                PLACE_CODE = #{placeCode},
+            </if>
+            <if test = "true">
+                PRODUCER_CODE = #{producerCode},
+            </if>
+            <if test = "true">
+                MANAGE_QUALITY = #{manageQuality},
+            </if>
+            <if test = "true">
+                LOW_SUM = #{lowSum},
+            </if>
+            <if test = "true">
+                TOP_SUM = #{topSum},
+            </if>
+            <if test = "true">
+                NEED_BATCH = #{needBatch},
+            </if>
+            <if test = "true">
+                USEFUL_DAYS = #{usefulDays},
+            </if>
+            <if test = "true">
+                LACK_FLAG = #{lackFlag},
+            </if>
+            <if test = "true">
+                DAILTYCHECK_FLAG = #{dayChkFlag},
+            </if>
+            <if test = "true">
+                UNIT_FLAG = #{unitFlag},
+            </if>
+            <if test = "true">
+                CHANGE_FLAG = #{changeFlag},
+            </if>
+            <if test = "true">
+                VALID_STATE = #{valid},
+            </if>
+            <if test = "true">
+                MARK = #{remark},
+            </if>
+            <if test = "true">
+                OPER_CODE = #{emplCode},
+            </if>
+            <if test = "true">
+                OPER_DATE = #{operDate},
+            </if>
+            <if test = "true">
+                DRUG_TYPE = #{drugType},
+            </if>
+            <if test = "true">
+                ARK_FLAG = #{arkFlag},
+            </if>
+            <if test = "true">
+                ARK_QTY = #{arkQty},
+            </if>
+        </trim>
+        <where>
+            <if test="true">
+                AND DRUG_DEPT_CODE = #{deptCode}
+            </if>
+            <if test="true">
+                AND DRUG_CODE = #{drugCode}
+            </if>
+        </where>
+    </update>
 </mapper>

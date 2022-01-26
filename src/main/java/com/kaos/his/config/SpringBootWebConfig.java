@@ -1,5 +1,7 @@
 package com.kaos.his.config;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.kaos.helper.gson.converter.EnumTypeConverter;
@@ -26,6 +28,27 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         // 添加自定义工厂实体
         registry.addConverterFactory(new EnumTypeConverterFactory());
+
+        // 注入时间解析
+        registry.addConverter(new Converter<String, Date>() {
+            @Override
+            public Date convert(String source) {
+                // 判空
+                if (source == null || source.isEmpty()) {
+                    return null;
+                }
+
+                // 创建格式化工具
+                var fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                // 格式化
+                try {
+                    return fmt.parse(source);
+                } catch (Exception e) {
+                    throw new RuntimeException(String.format("格式化Date参数失败(%s)", e.getMessage()));
+                }
+            }
+        });
 
         WebMvcConfigurer.super.addFormatters(registry);
     }

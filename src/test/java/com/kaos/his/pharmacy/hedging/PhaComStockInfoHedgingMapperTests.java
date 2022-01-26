@@ -14,6 +14,8 @@ public class PhaComStockInfoHedgingMapperTests {
     @Test
     public void queryStockInfo() {
         this.phaComStockInfoHedgingMapper.queryStockInfo("1240", null);
-        this.phaComStockInfoHedgingMapper.queryStockInfo("1240", "Y00000016786");
+        var org = this.phaComStockInfoHedgingMapper.queryStockInfo("1240", "Y00000016786");
+        org.drugCode = "bak";
+        this.phaComStockInfoHedgingMapper.insertStockInfo(org);
     }
 }

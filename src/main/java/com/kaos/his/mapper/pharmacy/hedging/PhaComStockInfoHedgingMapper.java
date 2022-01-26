@@ -19,4 +19,12 @@ public interface PhaComStockInfoHedgingMapper {
      * @return
      */
     int insertStockInfo(PhaComStockInfoHedging phaComStockInfoHedging);
+
+    /**
+     * 修改记录
+     * 
+     * @param phaComStockInfoHedging 主键作索引，主键值为 {@code null} 时，将 IS NULL作为判断条件
+     * @return
+     */
+    int updateStockInfo(PhaComStockInfoHedging phaComStockInfoHedging);
 }
