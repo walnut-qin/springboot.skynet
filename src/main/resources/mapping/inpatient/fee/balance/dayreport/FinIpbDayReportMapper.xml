@@ -63,7 +63,7 @@
         <include refid = "rank1"/>
         )
         <where>
-            <if test = "deptOwn != null and deptOwn != @com.kaos.his.enums.DeptOwnEnum@All">
+            <if test = "deptOwn != null and deptOwn != @com.kaos.his.enums.common.DeptOwnEnum@All">
                 AND DEPTOWN = #{deptOwn}
             </if>
         </where>
