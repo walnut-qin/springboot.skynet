@@ -20,7 +20,6 @@ import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.EscortActionEnum;
 import com.kaos.his.enums.EscortStateEnum;
 import com.kaos.his.service.inpatient.EscortService;
-import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
 import com.kaos.util.ListHelper;
 import com.kaos.util.LockHelper;
@@ -326,36 +325,42 @@ public class EscortController {
             var rspItem = new QueryHelperInfoRspBody();
             // 就诊卡号
             rspItem.cardNo = rt.helperCardNo;
-            // 姓名
-            rspItem.name = rt.associateEntity.helper.name;
-            // 性别
-            rspItem.sex = rt.associateEntity.helper.sex;
-            // 年龄
-            rspItem.age = DateHelper.GetAgeDetail(rt.associateEntity.helper.birthday);
-            // 免费标识
-            rspItem.freeFlag = rt.associateEntity.finIprPrepayIn.associateEntity.escortVip.helperCardNo
-                    .equals(rt.helperCardNo) ? "1" : "0";
+            if (rt.associateEntity.helper != null) {
+                var helper = rt.associateEntity.helper;
+                // 姓名
+                rspItem.name = helper.name;
+                // 性别
+                rspItem.sex = helper.sex;
+                // 年龄
+                rspItem.age = this.typeHelper.getAge(helper.birthday).toString();
+            }
+            if (rt.associateEntity.finIprPrepayIn != null) {
+                var fip = rt.associateEntity.finIprPrepayIn;
+                if (fip.associateEntity.escortVip != null) {
+                    var escortVip = fip.associateEntity.escortVip;
+                    // 免费标识
+                    rspItem.freeFlag = escortVip.helperCardNo.equals(rt.helperCardNo) ? "1" : "0";
+                }
+            }
             // 陪护证号
             rspItem.escortNo = rt.escortNo;
             // 状态列表
-            rspItem.states = new ArrayList<>();
-            for (var item : rt.associateEntity.stateRecs) {
-                var stateItem = new EscortStateRec();
-                stateItem.recNo = item.recNo;
-                stateItem.state = item.state;
-                stateItem.recEmplCode = item.recEmplCode;
-                stateItem.recDate = item.recDate;
-                rspItem.states.add(stateItem);
-            }
+            rspItem.states = rt.associateEntity.stateRecs.stream().map((x) -> {
+                var rec = new EscortStateRec();
+                rec.recNo = x.recNo;
+                rec.state = x.state;
+                rec.recEmplCode = x.recEmplCode;
+                rec.recDate = x.recDate;
+                return rec;
+            }).toList();
             // 动作列表
-            rspItem.actions = new ArrayList<>();
-            for (var item : rt.associateEntity.actionRecs) {
-                var actionItem = new EscortActionRec();
-                actionItem.recNo = item.recNo;
-                actionItem.action = item.action;
-                actionItem.recDate = item.recDate;
-                rspItem.actions.add(actionItem);
-            }
+            rspItem.actions = rt.associateEntity.actionRecs.stream().map((x) -> {
+                var rec = new EscortActionRec();
+                rec.recNo = x.recNo;
+                rec.action = x.action;
+                rec.recDate = x.recDate;
+                return rec;
+            }).toList();
 
             rspBody.add(rspItem);
         }
