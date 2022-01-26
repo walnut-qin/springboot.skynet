@@ -2,6 +2,7 @@ package com.kaos.helper.holiday.impl;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -14,31 +15,30 @@ import com.kaos.helper.holiday.enums.CodeEnum;
 import com.kaos.helper.holiday.enums.DayTypeEnum;
 import com.kaos.helper.holiday.enums.WeekEnum;
 
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 public class HolidayManagerImpl implements HolidayManager {
     /**
-     * HTTP句柄
+     * GsonHelper实体
      */
-    RestTemplate restTemplate = new RestTemplate();
+    GsonHelper gsonHelper = new GsonHelperImpl("yyyy-MM-dd", new HashMap<Type, Object>() {
+        {
+            put(CodeEnum.class, new EnumTypeAdapter<>(CodeEnum.class));
+            put(DayTypeEnum.class, new EnumTypeAdapter<>(DayTypeEnum.class));
+            put(WeekEnum.class, new EnumTypeAdapter<>(WeekEnum.class));
+        }
+    });
 
     /**
-     * 构造函数
+     * HTTP句柄
      */
-    public HolidayManagerImpl() {
-        GsonHelper gsonHelper = new GsonHelperImpl("yyyy-MM-dd", new HashMap<Type, Object>() {
-            {
-                put(CodeEnum.class, new EnumTypeAdapter<>(CodeEnum.class));
-                put(DayTypeEnum.class, new EnumTypeAdapter<>(DayTypeEnum.class));
-                put(WeekEnum.class, new EnumTypeAdapter<>(WeekEnum.class));
-            }
-        });
-
-        // 重置json解析器
-        this.restTemplate.getMessageConverters().clear();
-        this.restTemplate.getMessageConverters().add(new GsonHttpMessageConverter(gsonHelper.getGson()));
-    }
+    RestTemplate restTemplate = new RestTemplate(new ArrayList<HttpMessageConverter<?>>() {
+        {
+            add(new GsonHttpMessageConverter(HolidayManagerImpl.this.gsonHelper.getGson()));
+        }
+    });
 
     /**
      * 获取节假日信息
