@@ -213,11 +213,11 @@ public class DayReportServiceImpl implements DayReportService {
                     public double applyAsDouble(FinIpbBalanceHead arg0) {
                         return arg0.pubCost;
                     }
-                }), balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+                }).sum(), balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
                     @Override
                     public double applyAsDouble(FinIpbBalanceHead arg0) {
                         return arg0.payCost;
                     }
-                })));
+                }).sum()));
     }
 }
