@@ -105,6 +105,7 @@ public class DayReportController {
         return sum.toString();
     }
 
+    @ResponseBody
     @RequestMapping(value = "exportNewYbData", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String exportNewYbData(@NotNull(message = "开始时间不能为空") Date beginDate,
             @NotNull(message = "结束时间不能为空") Date endDate,

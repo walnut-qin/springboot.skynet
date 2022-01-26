@@ -68,11 +68,8 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
      */
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        // 清空原有转换器
-        converters.clear();
-
-        // 设置定制转换器
-        converters.add(new GsonHttpMessageConverter(new GsonHelperImpl("yyyy-MM-dd HH:mm:ss").getGson()));
+        // 设置定制转换器，插入队列最前段，给予最高优先级
+        converters.add(0, new GsonHttpMessageConverter(new GsonHelperImpl("yyyy-MM-dd HH:mm:ss").getGson()));
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
     }
