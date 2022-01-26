@@ -2,9 +2,10 @@ package com.kaos.his.controller.common.entityinfo;
 
 import javax.validation.constraints.NotBlank;
 
+import com.kaos.helper.type.TypeHelper;
+import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
 import com.kaos.his.service.common.EntityInfoService;
-import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
 
 import org.apache.log4j.Logger;
@@ -23,6 +24,11 @@ public class EntityInfoController {
      * 日志接口
      */
     Logger logger = Logger.getLogger(EntityInfoController.class.getName());
+
+    /**
+     * 基本类型助手
+     */
+    TypeHelper typeHelper = new TypeHelperImpl();
 
     /**
      * 实体信息服务
@@ -44,7 +50,7 @@ public class EntityInfoController {
         rspBody.cardNo = patient.cardNo;
         rspBody.name = patient.name;
         rspBody.sex = patient.sex;
-        rspBody.age = DateHelper.GetAgeDetail(patient.birthday);
+        rspBody.age = this.typeHelper.getAge(patient.birthday).toString();
         rspBody.identityCardNo = patient.identityCardNo;
         rspBody.tel = patient.tel;
 

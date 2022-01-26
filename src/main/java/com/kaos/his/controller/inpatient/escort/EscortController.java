@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.kaos.helper.type.TypeHelper;
+import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.escort.entity.EscortActionRec;
 import com.kaos.his.controller.inpatient.escort.entity.EscortStateRec;
 import com.kaos.his.controller.inpatient.escort.entity.QueryAnnexInDeptRspBody;
@@ -39,6 +41,11 @@ public class EscortController {
      * 接口：日志服务
      */
     Logger logger = Logger.getLogger(EscortController.class.getName());
+
+    /**
+     * 基本类型助手
+     */
+    TypeHelper typeHelper = new TypeHelperImpl();
 
     /**
      * 20个陪护证状态锁
@@ -233,68 +240,72 @@ public class EscortController {
             var rspItem = new QueryPatientInfoRspBody();
             // 就诊卡号
             rspItem.cardNo = rt.patientCardNo;
-            // 姓名
-            rspItem.name = rt.associateEntity.finIprPrepayIn.associateEntity.patient.name;
-            // 性别
-            rspItem.sex = rt.associateEntity.finIprPrepayIn.associateEntity.patient.sex;
-            // 年龄
-            rspItem.age = DateHelper.GetAgeDetail(rt.associateEntity.finIprPrepayIn.associateEntity.patient.birthday);
-
-            if (rt.associateEntity.finIprPrepayIn.associateEntity.patient instanceof Inpatient) {
-                var inpatient = (Inpatient) rt.associateEntity.finIprPrepayIn.associateEntity.patient;
-                // 科室
-                if (inpatient.associateEntity.stayedDept == null) {
-                    rspItem.deptName = inpatient.stayedDeptCode;
-                } else {
-                    rspItem.deptName = inpatient.associateEntity.stayedDept.deptName;
+            if (rt.associateEntity.finIprPrepayIn != null) {
+                var fip = rt.associateEntity.finIprPrepayIn;
+                // 姓名
+                rspItem.name = fip.associateEntity.patient.name;
+                // 性别
+                rspItem.sex = fip.associateEntity.patient.sex;
+                if (fip.associateEntity.patient != null) {
+                    var patient = fip.associateEntity.patient;
+                    // 年龄
+                    rspItem.age = this.typeHelper.getAge(patient.birthday).toString();
+                    if (patient instanceof Inpatient) {
+                        var inpatient = (Inpatient) patient;
+                        // 科室
+                        if (inpatient.associateEntity.stayedDept == null) {
+                            rspItem.deptName = inpatient.stayedDeptCode;
+                        } else {
+                            rspItem.deptName = inpatient.associateEntity.stayedDept.deptName;
+                        }
+                        // 床号
+                        if (inpatient.associateEntity.bed == null) {
+                            rspItem.bedNo = inpatient.bedNo;
+                        } else {
+                            rspItem.bedNo = inpatient.associateEntity.bed.getBriefBedNo();
+                        }
+                        // 住院号
+                        rspItem.patientNo = inpatient.patientNo;
+                    } else {
+                        // 科室
+                        if (fip.associateEntity.preDept == null) {
+                            rspItem.deptName = fip.preDeptCode;
+                        } else {
+                            rspItem.deptName = fip.associateEntity.preDept.deptName;
+                        }
+                        // 床号
+                        if (fip.associateEntity.bedInfo == null) {
+                            rspItem.bedNo = fip.bedNo;
+                        } else {
+                            rspItem.bedNo = fip.associateEntity.bedInfo.getBriefBedNo();
+                        }
+                    }
                 }
-                // 床号
-                if (inpatient.associateEntity.bed == null) {
-                    rspItem.bedNo = inpatient.bedNo;
-                } else {
-                    rspItem.bedNo = inpatient.associateEntity.bed.getBriefBedNo();
-                }
-                // 住院号
-                rspItem.patientNo = inpatient.patientNo;
-            } else {
-                // 科室
-                if (rt.associateEntity.finIprPrepayIn.associateEntity.preDept == null) {
-                    rspItem.deptName = rt.associateEntity.finIprPrepayIn.preDeptCode;
-                } else {
-                    rspItem.deptName = rt.associateEntity.finIprPrepayIn.associateEntity.preDept.deptName;
-                }
-                // 床号
-                if (rt.associateEntity.finIprPrepayIn.associateEntity.bedInfo == null) {
-                    rspItem.bedNo = rt.associateEntity.finIprPrepayIn.bedNo;
-                } else {
-                    rspItem.bedNo = rt.associateEntity.finIprPrepayIn.associateEntity.bedInfo.getBriefBedNo();
+                if (fip.associateEntity.escortVip != null) {
+                    var escortVip = fip.associateEntity.escortVip;
+                    // 免费标识
+                    rspItem.freeFlag = escortVip.helperCardNo.equals(rt.helperCardNo) ? "1" : "0";
                 }
             }
-
-            // 免费标识
-            rspItem.freeFlag = rt.associateEntity.finIprPrepayIn.associateEntity.escortVip.helperCardNo
-                    .equals(rt.helperCardNo) ? "1" : "0";
             // 陪护证号
             rspItem.escortNo = rt.escortNo;
             // 状态列表
-            rspItem.states = new ArrayList<>();
-            for (var item : rt.associateEntity.stateRecs) {
-                var stateItem = new EscortStateRec();
-                stateItem.recNo = item.recNo;
-                stateItem.state = item.state;
-                stateItem.recEmplCode = item.recEmplCode;
-                stateItem.recDate = item.recDate;
-                rspItem.states.add(stateItem);
-            }
+            rspItem.states = rt.associateEntity.stateRecs.stream().map((x) -> {
+                var rec = new EscortStateRec();
+                rec.recNo = x.recNo;
+                rec.state = x.state;
+                rec.recEmplCode = x.recEmplCode;
+                rec.recDate = x.recDate;
+                return rec;
+            }).toList();
             // 动作列表
-            rspItem.actions = new ArrayList<>();
-            for (var item : rt.associateEntity.actionRecs) {
-                var actionItem = new EscortActionRec();
-                actionItem.recNo = item.recNo;
-                actionItem.action = item.action;
-                actionItem.recDate = item.recDate;
-                rspItem.actions.add(actionItem);
-            }
+            rspItem.actions = rt.associateEntity.actionRecs.stream().map((x) -> {
+                var rec = new EscortActionRec();
+                rec.recNo = x.recNo;
+                rec.action = x.action;
+                rec.recDate = x.recDate;
+                return rec;
+            }).toList();
 
             rspBody.add(rspItem);
         }

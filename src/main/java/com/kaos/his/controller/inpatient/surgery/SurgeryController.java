@@ -7,6 +7,8 @@ import java.util.Date;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.kaos.helper.type.TypeHelper;
+import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryArrangedMetOpsAppliesInDeptRspBody;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
@@ -14,7 +16,6 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsItem;
 import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.his.enums.SurgeryStatusEnum;
 import com.kaos.his.service.inpatient.SurgeryService;
-import com.kaos.util.DateHelper;
 import com.kaos.util.GsonHelper;
 
 import org.apache.log4j.Logger;
@@ -35,6 +36,11 @@ public class SurgeryController {
      * 接口：日志服务
      */
     Logger logger = Logger.getLogger(SurgeryController.class.getName());
+
+    /**
+     * 基本类型助手
+     */
+    TypeHelper typeHelper = new TypeHelperImpl();
 
     /**
      * 接口：手术服务
@@ -102,7 +108,7 @@ public class SurgeryController {
             }
             rspBody.name = inpatient.name;
             rspBody.sex = inpatient.sex;
-            rspBody.age = DateHelper.GetAgeDetail(inpatient.birthday);
+            rspBody.age = this.typeHelper.getAge(inpatient.birthday).toString();
             rspBody.eras = Optional.fromNullable(inpatient.erasFlag).or(false) ? "是" : "否";
             rspBody.vte = inpatient.vteRank;
         }
