@@ -16,9 +16,6 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
      */
     private E[] enums;
 
-    public MybatisEnumTypeHandler() {
-    }
-
     public MybatisEnumTypeHandler(Class<E> typeOfE) {
         if (typeOfE == null) {
             throw new IllegalArgumentException("Type argument cannot be null");
@@ -31,12 +28,20 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
         }
     }
 
-    private E loadEnum(String index) {
+    /**
+     * 字符串转枚举
+     * 
+     * @param valOrDesc
+     * @return
+     */
+    private E mapToEnum(String valOrDesc) {
+        // 轮训枚举
         for (E e : enums) {
-            if (e.getValue().equals(index)) {
+            if (e.getValue().equals(valOrDesc) || e.getDescription().equals(valOrDesc)) {
                 return e;
             }
         }
+
         return null;
     }
 
@@ -51,7 +56,7 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
             return null;
         }
         String index = rs.getString(columnName);
-        return loadEnum(index);
+        return mapToEnum(index);
     }
 
     @Override
@@ -60,7 +65,7 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
             return null;
         }
         String index = rs.getString(columnIndex);
-        return loadEnum(index);
+        return mapToEnum(index);
     }
 
     @Override
@@ -69,6 +74,6 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
             return null;
         }
         String index = cs.getString(columnIndex);
-        return loadEnum(index);
+        return mapToEnum(index);
     }
 }
