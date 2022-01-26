@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.kaos.helper.gson.converter.EnumTypeConverter;
 import com.kaos.inf.IEnum;
 
 import org.apache.ibatis.type.BaseTypeHandler;
@@ -12,37 +13,13 @@ import org.apache.ibatis.type.JdbcType;
 
 public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> {
     /**
-     * 枚举值数组
+     * 枚举转换器
      */
-    private E[] enums;
+    EnumTypeConverter<E> enumTypeConverter = null;
 
     public MybatisEnumTypeHandler(Class<E> typeOfE) {
-        if (typeOfE == null) {
-            throw new IllegalArgumentException("Type argument cannot be null");
-        }
-
-        // this.enumType = typeOfE;
-        this.enums = typeOfE.getEnumConstants();
-        if (this.enums == null) {
-            throw new IllegalArgumentException(typeOfE.getName() + " does not represent an enum type.");
-        }
-    }
-
-    /**
-     * 字符串转枚举
-     * 
-     * @param valOrDesc
-     * @return
-     */
-    private E mapToEnum(String valOrDesc) {
-        // 轮训枚举
-        for (E e : enums) {
-            if (e.getValue().equals(valOrDesc) || e.getDescription().equals(valOrDesc)) {
-                return e;
-            }
-        }
-
-        return null;
+        // 构造转换器实体
+        this.enumTypeConverter = new EnumTypeConverter<>(typeOfE);
     }
 
     @Override
@@ -56,7 +33,7 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
             return null;
         }
         String index = rs.getString(columnName);
-        return mapToEnum(index);
+        return this.enumTypeConverter.convert(index);
     }
 
     @Override
@@ -65,7 +42,7 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
             return null;
         }
         String index = rs.getString(columnIndex);
-        return mapToEnum(index);
+        return this.enumTypeConverter.convert(index);
     }
 
     @Override
@@ -74,6 +51,6 @@ public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> 
             return null;
         }
         String index = cs.getString(columnIndex);
-        return mapToEnum(index);
+        return this.enumTypeConverter.convert(index);
     }
 }
