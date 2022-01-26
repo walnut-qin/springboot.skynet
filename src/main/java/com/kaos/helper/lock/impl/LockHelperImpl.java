@@ -50,18 +50,18 @@ public class LockHelperImpl implements LockHelper {
     @Override
     public Object mapToLock(String src) {
         // 初始日志
-        this.logger.debug(String.format("获取锁对象(src = %s)", src));
+        this.logger.debug(String.format("获取锁对象(name = %s, src = %s)", this.name, src));
 
         // 计算索引
         var dst = src.replaceAll("[^0-9]", "");
-        this.logger.debug(String.format("剔除非数字字符(%s -> %s)", src, dst));
+        this.logger.debug(String.format("剔除非数字字符(name = %s, %s -> %s)", this.name, src, dst));
 
         // 映射到有效索引
         var idx = Long.valueOf(dst) % this.locks.size();
-        this.logger.debug(String.format("映射到有效索引(%s -> %d)", dst, idx));
+        this.logger.debug(String.format("映射到有效索引(name = %s, %s -> %d)", this.name, dst, idx));
 
         var lock = this.locks.get((int) idx);
-        this.logger.debug(String.format("检索锁对象(hash = %d)", lock.hashCode()));
+        this.logger.debug(String.format("检索锁对象(name = %s, hash = %d)", this.name, lock.hashCode()));
 
         return lock;
     }
