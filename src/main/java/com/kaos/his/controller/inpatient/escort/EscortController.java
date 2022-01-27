@@ -70,7 +70,7 @@ public class EscortController {
     @Autowired
     EscortService escortService;
 
-    @RequestMapping(value = "register", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "register", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
             @NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
             @NotBlank(message = "操作员编码不能为空") String emplCode,
