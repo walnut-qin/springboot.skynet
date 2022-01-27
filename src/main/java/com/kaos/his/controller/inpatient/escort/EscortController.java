@@ -141,10 +141,13 @@ public class EscortController {
     @RequestMapping(value = "queryStateInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public QueryStateInfoRspBody queryStateInfo(@NotBlank(message = "陪护证号不能为空") String escortNo) {
         // 记录日志
-        this.logger.info(String.format("查询陪护证 %s 的状态", escortNo));
+        this.logger.info(String.format("查询陪护证(%s)的状态", escortNo));
 
         // 调用服务
         var srvRt = this.escortService.queryEscortStateInfo(escortNo);
+        if (srvRt == null) {
+            throw new RuntimeException(String.format("未查询到陪护证(escortNo = %s)", escortNo));
+        }
 
         // 构造响应
         var rspBody = new QueryStateInfoRspBody();
@@ -161,7 +164,7 @@ public class EscortController {
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public List<QueryPatientInfoRspBody> queryPatientInfo(@NotBlank(message = "陪护人卡号不能为空") String helperCardNo) {
         // 记录日志
-        this.logger.info(String.format("查询陪护的患者信息 %s 的状态", helperCardNo));
+        this.logger.info(String.format("查询陪护人(%s)陪护的患者信息", helperCardNo));
 
         // 调用服务
         var rspBody = new ArrayList<QueryPatientInfoRspBody>();
@@ -246,7 +249,7 @@ public class EscortController {
     @RequestMapping(value = "queryHelperInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public List<QueryHelperInfoRspBody> queryHelperInfo(@NotBlank(message = "患者卡号不能为空") String patientCardNo) {
         // 记录日志
-        this.logger.info(String.format("查询患者的陪护人信息 %s 的状态", patientCardNo));
+        this.logger.info(String.format("查询患者(%s)的陪护人信息", patientCardNo));
 
         // 调用服务
         var rspBody = new ArrayList<QueryHelperInfoRspBody>();
