@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.text.AbstractDocument.Content;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.kaos.helper.type.TypeHelper;
