@@ -72,6 +72,7 @@ public class HolidayHelperImpl implements HolidayHelper {
         }
 
         // 无有效cache节点
+        this.logger.info("cache节点失效，重新获取");
         try {
             this.logger.info("加锁(holidayCacheLock)");
             synchronized (cacheLock.mapToLock(key)) {
@@ -86,7 +87,6 @@ public class HolidayHelperImpl implements HolidayHelper {
 
                 // 构造请求url
                 String url = String.format("http://timor.tech/api/holiday/info/%s", key);
-                this.logger.info(String.format("cache节点失效，重新获取(url = %s)", url));
 
                 // 发送web请求
                 var dayInfo = this.restTemplate.getForObject(url, DayInfo.class);
