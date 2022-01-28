@@ -54,7 +54,7 @@ public class HolidayHelperImpl implements HolidayHelper {
     @Override
     public DayInfo getDayInfo(Date date) {
         // 初始日志
-        this.logger.debug(String.format("获取节假日信息", date.toString()));
+        this.logger.info(String.format("获取节假日信息", date.toString()));
 
         // 初始化时间格式化工具
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -66,6 +66,7 @@ public class HolidayHelperImpl implements HolidayHelper {
         if (holidayCache.containsKey(key)) {
             var node = holidayCache.get(key);
             if (node.validDate.after(new Date())) {
+                this.logger.info("命中有效cache节点");
                 return node.dayInfo;
             }
         }
