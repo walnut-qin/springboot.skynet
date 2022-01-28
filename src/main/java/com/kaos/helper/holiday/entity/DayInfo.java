@@ -58,6 +58,16 @@ public class DayInfo implements Serializable {
         public Integer wage = null;
 
         /**
+         * 调休时有该字段，表示哪个节日的调休
+         */
+        public String target = null;
+
+        /**
+         * 调休下有该字段，true表示放完假再调休，false表示先调休再放假
+         */
+        public Boolean after = null;
+
+        /**
          * 日期
          */
         public Date date = null;
