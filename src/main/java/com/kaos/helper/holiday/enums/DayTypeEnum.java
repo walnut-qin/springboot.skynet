@@ -3,7 +3,7 @@ package com.kaos.helper.holiday.enums;
 import com.kaos.inf.IEnum;
 
 public enum DayTypeEnum implements IEnum {
-    工作日("0", "工作日"), 周末("-1", "周末"), 节日("2", "节日"), 调休("3", "调休");
+    工作日("0", "工作日"), 周末("1", "周末"), 节日("2", "节日"), 调休("3", "调休");
 
     /**
      * 数据库存值
