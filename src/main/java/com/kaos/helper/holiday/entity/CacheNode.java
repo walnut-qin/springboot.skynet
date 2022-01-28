@@ -12,7 +12,7 @@ public class CacheNode {
     public DayInfo dayInfo = null;
 
     /**
-     * 更新时间
+     * 有效期至
      */
-    public Date recDate = null;
+    public Date validDate = null;
 }

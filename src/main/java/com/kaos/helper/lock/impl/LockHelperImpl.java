@@ -7,6 +7,9 @@ import com.kaos.helper.lock.LockHelper;
 
 import org.apache.log4j.Logger;
 
+/**
+ * 分段锁
+ */
 public class LockHelperImpl implements LockHelper {
     /**
      * 日志工具
