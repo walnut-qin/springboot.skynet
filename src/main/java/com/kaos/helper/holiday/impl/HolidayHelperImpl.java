@@ -95,7 +95,7 @@ public class HolidayHelperImpl implements HolidayHelper {
 
                 // 如果存在旧节点，更新旧节点，否则插入新节点
                 Calendar validDate = Calendar.getInstance();
-                validDate.add(Calendar.DATE, 1);
+                validDate.add(Calendar.DATE, 7);
                 if (holidayCache.containsKey(key)) {
                     var node = holidayCache.get(key);
                     node.dayInfo = dayInfo;
