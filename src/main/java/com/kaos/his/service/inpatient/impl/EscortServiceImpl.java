@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.text.AbstractDocument.Content;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.kaos.helper.type.TypeHelper;
@@ -244,7 +246,8 @@ public class EscortServiceImpl implements EscortService {
                 break;
 
             default:
-                throw new RuntimeException(String.format("住院证(%s)存在多张关联的有效住院实体，无法判断状态", context.escortNo));
+                throw new RuntimeException(String.format("住院证(cardNo = %s, happenNo = %s)存在多张关联的有效住院实体，无法判断状态",
+                        context.patientCardNo, context.happenNo));
         }
 
         // 锚定7天前的当前时间
@@ -279,13 +282,15 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 查询7日内划价记录
-        var fees = this.finOpbFeeDetailMapper.queryFeeDetailsWithCardNo(context.helperCardNo, "F00000068231", beginDate, null);
+        var fees = this.finOpbFeeDetailMapper.queryFeeDetailsWithCardNo(context.helperCardNo, "F00000068231", beginDate,
+                null);
         if (fees != null && !fees.isEmpty()) {
             return EscortStateEnum.等待院内核酸检测结果;
         }
 
         // 查询7日内上传的院外待审记录
-        var unCheckedAnnexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(context.helperCardNo, beginDate, null, false);
+        var unCheckedAnnexInfos = this.escortAnnexInfoMapper.queryAnnexInfos(context.helperCardNo, beginDate, null,
+                false);
         if (unCheckedAnnexInfos != null && !unCheckedAnnexInfos.isEmpty()) {
             return EscortStateEnum.等待院外核酸检测结果审核;
         }
