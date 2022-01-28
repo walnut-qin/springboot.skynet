@@ -13,6 +13,7 @@ import com.kaos.helper.holiday.entity.*;
 import com.kaos.helper.lock.LockHelper;
 import com.kaos.helper.lock.impl.LockHelperImpl;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -113,5 +114,10 @@ public class HolidayHelperImpl implements HolidayHelper {
         } finally {
             this.logger.info("解锁(holidayCacheLock)");
         }
+    }
+
+    @Override
+    public ConcurrentHashMap<String, CacheNode> getCache() {
+        return SerializationUtils.clone(holidayCache);
     }
 }
