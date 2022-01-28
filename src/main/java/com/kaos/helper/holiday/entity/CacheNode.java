@@ -1,11 +1,12 @@
 package com.kaos.helper.holiday.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * cache 节点
  */
-public class CacheNode {
+public class CacheNode implements Serializable {
     /**
      * 日期信息
      */

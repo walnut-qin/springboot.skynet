@@ -1,12 +1,13 @@
 package com.kaos.helper.holiday.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.kaos.helper.holiday.enums.CodeEnum;
 import com.kaos.helper.holiday.enums.DayTypeEnum;
 import com.kaos.helper.holiday.enums.WeekEnum;
 
-public class DayInfo {
+public class DayInfo implements Serializable {
     /**
      * 服务状态
      */
@@ -15,7 +16,7 @@ public class DayInfo {
     /**
      * Type 定义
      */
-    public class Type {
+    public class Type implements Serializable {
         /**
          * 日期类型
          */
@@ -40,7 +41,7 @@ public class DayInfo {
     /**
      * Holiday 定义
      */
-    public class Holiday {
+    public class Holiday implements Serializable {
         /**
          * 是否为节假日标识
          */
