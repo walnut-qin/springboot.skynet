@@ -1,9 +1,8 @@
 package com.kaos.helper.holiday;
 
 import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-import com.kaos.helper.holiday.entity.CacheNode;
 import com.kaos.helper.holiday.entity.DayInfo;
 
 public interface HolidayHelper {
@@ -20,5 +19,5 @@ public interface HolidayHelper {
      * 
      * @return
      */
-    ConcurrentHashMap<String, CacheNode> getCache();
+    ConcurrentMap<String, DayInfo> getCache();
 }

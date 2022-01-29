@@ -2,18 +2,18 @@ package com.kaos.helper.holiday.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
-import com.kaos.helper.gson.GsonHelper;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.kaos.helper.gson.impl.GsonHelperImpl;
 import com.kaos.helper.holiday.HolidayHelper;
 import com.kaos.helper.holiday.entity.*;
 import com.kaos.helper.lock.LockHelper;
 import com.kaos.helper.lock.impl.LockHelperImpl;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -26,32 +26,27 @@ public class HolidayHelperImpl implements HolidayHelper {
     Logger logger = Logger.getLogger(HolidayHelperImpl.class.getName());
 
     /**
-     * GsonHelper实体
-     */
-    GsonHelper gsonHelper = new GsonHelperImpl("yyyy-MM-dd");
-
-    /**
-     * 用线程安全的容器作为cache，存储本地数据，原则上cache节点有效时间为24小时
-     */
-    static final ConcurrentHashMap<String, CacheNode> holidayCache = new ConcurrentHashMap<>();
-
-    /**
-     * cache锁，保证
-     */
-    static final LockHelper cacheLock = new LockHelperImpl("holidayCacheLock", 20);
-
-    /**
      * HTTP句柄
      */
     RestTemplate restTemplate = new RestTemplate(new ArrayList<HttpMessageConverter<?>>() {
         {
-            add(new GsonHttpMessageConverter(HolidayHelperImpl.this.gsonHelper.getGson()));
+            add(new GsonHttpMessageConverter(new GsonHelperImpl("yyyy-MM-dd").getGson()));
         }
     });
 
     /**
-     * 获取节假日信息
+     * 本地缓存
      */
+    static final Cache<String, DayInfo> cache = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .expireAfterWrite(24, TimeUnit.HOURS)
+            .build();
+
+    /**
+     * 节点更新锁，确保每个节点不会同时被多个线程更新
+     */
+    static final LockHelper lockHelper = new LockHelperImpl("holidayCacheLock", 20);
+
     @Override
     public DayInfo getDayInfo(Date date) {
         // 初始日志
@@ -63,61 +58,48 @@ public class HolidayHelperImpl implements HolidayHelper {
         // 获取索引
         var key = formatter.format(date);
 
-        // 若cache节点有效，则无需网络调用
-        if (holidayCache.containsKey(key)) {
-            var node = holidayCache.get(key);
-            if (node.validDate.after(new Date())) {
-                this.logger.info("命中有效cache节点");
-                return node.dayInfo;
-            }
+        // 尝试从cache获取
+        var node = cache.getIfPresent(key);
+        if (node != null) {
+            this.logger.info("命中cache");
+            return node;
         }
 
-        // 无有效cache节点
-        this.logger.info("cache节点失效，重新获取");
+        // 未命中cache，从网络侧获取
+        this.logger.info("未命中cache");
+        var lock = lockHelper.mapToLock(key);
         try {
-            this.logger.info("加锁(holidayCacheLock)");
-            synchronized (cacheLock.mapToLock(key)) {
-                // Double-Check，防止多个线程重复更新
-                if (holidayCache.containsKey(key)) {
-                    var node = holidayCache.get(key);
-                    if (node.validDate.after(new Date())) {
-                        this.logger.info("cache节点已被其他线程更新");
-                        return node.dayInfo;
-                    }
+            this.logger.info(String.format("加锁中(%s)", lock.hashCode()));
+            synchronized (lock) {
+                this.logger.info(String.format("加锁完成(%s)", lock.hashCode()));
+                // Double-Check
+                node = cache.getIfPresent(key);
+                if (node != null) {
+                    this.logger.info("Double-Check, 命中cache, 节点已被其他线程更新");
+                    return node;
                 }
 
-                // 构造请求url
-                String url = String.format("http://timor.tech/api/holiday/info/%s", key);
-
-                // 发送web请求
+                // 网络调用
+                var url = String.format("http://timor.tech/api/holiday/info/%s", key);
                 var dayInfo = this.restTemplate.getForObject(url, DayInfo.class);
-                this.logger.info(String.format("网络响应实体 = %s", this.gsonHelper.toJson(dayInfo)));
+                this.logger.info("网络调用成功");
 
-                // 如果存在旧节点，更新旧节点，否则插入新节点
-                Calendar validDate = Calendar.getInstance();
-                validDate.add(Calendar.DATE, 7);
-                if (holidayCache.containsKey(key)) {
-                    var node = holidayCache.get(key);
-                    node.dayInfo = dayInfo;
-                    node.validDate = validDate.getTime();
-                    this.logger.info(String.format("更新旧cache节点(validDate -> %s)", node.validDate.toString()));
-                } else {
-                    var node = new CacheNode();
-                    node.dayInfo = dayInfo;
-                    node.validDate = validDate.getTime();
-                    holidayCache.put(key, node);
-                    this.logger.info(String.format("插入新cache节点(validDate -> %s)", node.validDate.toString()));
-                }
+                // 更新cache
+                cache.put(key, dayInfo);
+                this.logger.info("将新节点加入cache");
 
                 return dayInfo;
             }
+        } catch (Exception ex) {
+            this.logger.error(ex.getMessage());
+            throw new RuntimeException(ex.getMessage());
         } finally {
-            this.logger.info("解锁(holidayCacheLock)");
+            this.logger.info(String.format("解锁(%s)", lock.hashCode()));
         }
     }
 
     @Override
-    public ConcurrentHashMap<String, CacheNode> getCache() {
-        return SerializationUtils.clone(holidayCache);
+    public ConcurrentMap<String, DayInfo> getCache() {
+        return cache.asMap();
     }
 }
