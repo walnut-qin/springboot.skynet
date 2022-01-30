@@ -1,11 +1,11 @@
 package com.kaos.his.controller.inpatient.escort.schedule;
 
-import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Stopwatch;
 import com.kaos.his.controller.inpatient.escort.EscortController;
 import com.kaos.his.service.inpatient.EscortService;
 
@@ -53,9 +53,14 @@ public class UpdateStateTask {
                 new LinkedBlockingDeque<Runnable>());
 
         /**
-         * 计数器
+         * 发令枪
          */
         CountDownLatch counter = null;
+
+        /**
+         * 计时器
+         */
+        Stopwatch timer = Stopwatch.createStarted();
 
         @Override
         public void run() {
@@ -63,12 +68,13 @@ public class UpdateStateTask {
             // 读取所有尚未注销的陪护证记录
             var escortNos = UpdateStateTask.this.escortService.queryUncanceledEscortNos();
 
-            // 初始化计数器
+            // 初始化发令枪和计时器
             this.counter = new CountDownLatch(escortNos.size());
+            this.timer.reset();
 
             // 执行任务
             this.logger.info(String.format("活跃陪护证数量: %d 个", escortNos.size()));
-            Date beginDate = new Date();
+            this.timer.start();
             for (String escortNo : escortNos) {
                 this.missionTask.execute(new Mission(escortNo));
             }
@@ -78,9 +84,10 @@ public class UpdateStateTask {
                 this.counter.await();
             } catch (Exception e) {
                 this.logger.error(e.getMessage());
+            } finally {
+                this.timer.stop();
             }
-            Date endDate = new Date();
-            this.logger.info(String.format("更新用时: %d ms", endDate.getTime() - beginDate.getTime()));
+            this.logger.info(String.format("更新用时: %s", this.timer.toString()));
             this.logger.info("==== Mission Complete ====");
         }
 
