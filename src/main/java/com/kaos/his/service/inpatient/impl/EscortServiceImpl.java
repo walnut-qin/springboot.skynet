@@ -407,7 +407,7 @@ public class EscortServiceImpl implements EscortService {
             var inp = inps.get(0);
             fip = this.finIprPrepayInMapper.queryPrepayIn(inp.cardNo, inp.happenNo);
             if (fip == null) {
-                throw new RuntimeException(String.format("患者(%s)住院记录(%s)未关联住院证，无法判断关联数据", inp.patientNo));
+                throw new RuntimeException(String.format("患者(%s)住院记录(%s)未关联住院证，无法判断关联数据", inp.cardNo, inp.patientNo));
             }
             fip.associateEntity.patient = inp;
         } else {
