@@ -1,5 +1,6 @@
 package com.kaos.his.cache.common;
 
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
@@ -7,14 +8,17 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.kaos.his.entity.common.Department;
 import com.kaos.his.mapper.common.DepartmentMapper;
+import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 科室字典
  */
-public class DepartmentCache {
+@Component
+public class DepartmentCache implements ICache<Department> {
     /**
      * 数据库接口
      */
@@ -31,7 +35,7 @@ public class DepartmentCache {
      */
     LoadingCache<String, Department> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
-            .expireAfterAccess(1, TimeUnit.HOURS)
+            .refreshAfterWrite(1, TimeUnit.DAYS)
             .build(new CacheLoader<String, Department>() {
                 @Override
                 public Department load(String key) throws Exception {
@@ -39,13 +43,8 @@ public class DepartmentCache {
                 };
             });
 
-    /**
-     * 查询科室实体
-     * 
-     * @param key
-     * @return
-     */
-    public Department queryDepartment(String key) {
+    @Override
+    public Department getValue(String key) {
         try {
             return this.cache.get(key);
         } catch (Exception e) {
@@ -54,12 +53,13 @@ public class DepartmentCache {
         }
     }
 
-    /**
-     * 刷新cache
-     * 
-     * @param key
-     */
-    public void refreshItem(String key) {
+    @Override
+    public void refresh(String key) {
         this.cache.refresh(key);
+    }
+
+    @Override
+    public ConcurrentMap<String, Department> show() {
+        return this.cache.asMap();
     }
 }
