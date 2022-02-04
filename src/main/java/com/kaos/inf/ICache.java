@@ -12,16 +12,16 @@ public interface ICache<E> {
     E getValue(String key);
 
     /**
-     * 手动刷新值
-     * 
-     * @param key
-     */
-    void refresh(String key);
-
-    /**
      * 展示cache内容
      * 
      * @return
      */
     ConcurrentMap<String, E> show();
+
+    /**
+     * 清除缓存
+     * 
+     * @param key
+     */
+    void invalidateAll();
 }

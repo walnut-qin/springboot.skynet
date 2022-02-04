@@ -10,14 +10,13 @@ import com.kaos.his.entity.common.Department;
 import com.kaos.his.mapper.common.DepartmentMapper;
 import com.kaos.inf.ICache;
 
+import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * 科室字典
  */
-@Component
 public class DepartmentCache implements ICache<Department> {
     /**
      * 数据库接口
@@ -43,6 +42,14 @@ public class DepartmentCache implements ICache<Department> {
                 };
             });
 
+    /**
+     * 禁止实例化
+     * 
+     * @throws ExecutorException
+     */
+    private DepartmentCache() throws ExecutorException {
+    }
+
     @Override
     public Department getValue(String key) {
         try {
@@ -54,12 +61,28 @@ public class DepartmentCache implements ICache<Department> {
     }
 
     @Override
-    public void refresh(String key) {
-        this.cache.refresh(key);
+    public ConcurrentMap<String, Department> show() {
+        return this.cache.asMap();
     }
 
     @Override
-    public ConcurrentMap<String, Department> show() {
-        return this.cache.asMap();
+    public void invalidateAll() {
+        this.cache.invalidateAll();
+    }
+
+    /**
+     * 静态内部类
+     */
+    static class InnerDepartmentCache {
+        static DepartmentCache departmentCache = new DepartmentCache();
+    }
+
+    /**
+     * 获取单例
+     * 
+     * @return
+     */
+    public static DepartmentCache getInstance() {
+        return InnerDepartmentCache.departmentCache;
     }
 }
