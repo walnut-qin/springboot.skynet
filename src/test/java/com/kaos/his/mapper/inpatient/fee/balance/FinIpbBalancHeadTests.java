@@ -22,4 +22,10 @@ public class FinIpbBalancHeadTests {
     public void queryBalanceHeadsInBalancer() {
         this.finIpbBalanceHeadMapper.queryBalanceHeadsInBalancer("006017", new Date(), new Date(), "18");
     }
+
+    @Test
+    public void queryBalanceHeadsInDayReport() {
+        this.finIpbBalanceHeadMapper.queryBalanceHeadsInDayReport(null);
+        this.finIpbBalanceHeadMapper.queryBalanceHeadsInDayReport("163411");
+    }
 }

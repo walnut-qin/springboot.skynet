@@ -88,4 +88,16 @@
             </if>
         </where>
     </select>
+
+    <select id="queryBalanceHeadsInDayReport" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_BALANCEHEAD
+        <where>
+            <if test="true">
+                AND DAYBALANCE_NO = #{statNo}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -220,4 +220,19 @@ public class DayReportServiceImpl implements DayReportService {
                     }
                 }).sum()));
     }
+
+    @Override
+    public void checkDayReportData(String statNo) {
+        // 检索所有本次日结关联的结算记录
+        var balanceHeads = this.finIpbBalanceHeadMapper.queryBalanceHeadsInDayReport(statNo);
+
+        // 计算第四大项综合
+        this.logger.info(String.format("第四大项总额 = %f",
+                balanceHeads.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+                    @Override
+                    public double applyAsDouble(FinIpbBalanceHead arg0) {
+                        return arg0.totCost;
+                    }
+                }).sum()));
+    }
 }

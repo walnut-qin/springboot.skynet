@@ -50,4 +50,11 @@ public interface DayReportService {
      * @param deptOwn
      */
     void exportNewYbData(Date beginDate, Date endDate, DeptOwnEnum deptOwn);
+
+    /**
+     * 核对日结记录
+     * 
+     * @param statNo 日结编号
+     */
+    void checkDayReportData(String statNo);
 }

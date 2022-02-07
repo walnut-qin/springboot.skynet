@@ -26,4 +26,12 @@ public interface FinIpbBalanceHeadMapper {
      * @return
      */
     List<FinIpbBalanceHead> queryBalanceHeadsInBalancer(String balancer, Date beginDate, Date endDate, String pactCode);
+
+    /**
+     * 查询某次日结的所有结算记录
+     * 
+     * @param statNo 日结编号；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @return
+     */
+    List<FinIpbBalanceHead> queryBalanceHeadsInDayReport(String statNo);
 }
