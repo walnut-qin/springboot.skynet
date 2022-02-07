@@ -238,7 +238,26 @@ public class DayReportServiceImpl implements DayReportService {
         // 轮训输出
         this.logger.info(String.format("总量 = %d", balanceHeads.size()));
         for (FinIpbBalanceHead balanceHead : balanceHeads) {
-            this.logger.info(String.format("住院号 = %s", balanceHead.inpatientNo));
+            this.logger.info(String.format("发票号 = %s, 住院号 = %s, 医保编码 = %s, 统筹 = %f, 账户 = %f", balanceHead.invoiceNo,
+                    balanceHead.inpatientNo, balanceHead.pactCode, balanceHead.pubCost, balanceHead.payCost));
         }
+
+        // 统筹总额
+        this.logger.info(String.format("统筹总额 = %f",
+                balanceHeads.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+                    @Override
+                    public double applyAsDouble(FinIpbBalanceHead arg0) {
+                        return arg0.pubCost;
+                    }
+                }).sum()));
+
+        // 账户总额
+        this.logger.info(String.format("账户总额 = %f",
+                balanceHeads.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+                    @Override
+                    public double applyAsDouble(FinIpbBalanceHead arg0) {
+                        return arg0.payCost;
+                    }
+                }).sum()));
     }
 }
