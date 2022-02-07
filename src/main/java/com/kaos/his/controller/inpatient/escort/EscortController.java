@@ -122,13 +122,14 @@ public class EscortController {
 
     @RequestMapping(value = "recordAction", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public void recordAction(@NotBlank(message = "陪护证号不能为空") String escortNo,
-            @Nullable EscortActionEnum action) {
+            @NotNull(message = "行为枚举不能为空") EscortActionEnum action) {
         // 记录日志
         this.logger.info(String.format("记录陪护证行为(escortNo = %s, action = %s)", escortNo, action));
 
         try {
+            this.logger.info("加锁中(actionLock)");
             synchronized (actionLockHelper.mapToLock(escortNo)) {
-                this.logger.info("加锁(actionLock)");
+                this.logger.info("加锁成功(actionLock)");
                 // 执行业务
                 this.escortService.recordEscortAction(escortNo, action, "收到客户端请求");
                 this.logger.info("业务执行成功");
