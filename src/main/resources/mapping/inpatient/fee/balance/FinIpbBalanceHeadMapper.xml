@@ -24,6 +24,7 @@
         <result column="JZFPBCYZF_COST" jdbcType="VARCHAR" property="jzfpCost"/>
         <result column="GYBAPI_COST" jdbcType="VARCHAR" property="gybCost"/>
         <result column="HOS_COST" jdbcType="VARCHAR" property="hosCost"/>
+        <result column="DAYBALANCE_NO" jdbcType="VARCHAR" property="dayReportNo"/>
     </resultMap>
 
     <sql id="item">
@@ -48,7 +49,8 @@
         CL_COST,
         JZFPBCYZF_COST,
         GYBAPI_COST,
-        HOS_COST
+        HOS_COST,
+        DAYBALANCE_NO
     </sql>
 
     <select id="queryBalanceHead" resultMap="map">

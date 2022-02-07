@@ -5,6 +5,7 @@ import java.util.Date;
 import com.google.common.base.Optional;
 import com.kaos.his.entity.common.Employee;
 import com.kaos.his.entity.inpatient.Inpatient;
+import com.kaos.his.entity.inpatient.fee.balance.dayreport.FinIpbDayReport;
 import com.kaos.his.enums.common.TransTypeEnum;
 
 /**
@@ -122,6 +123,11 @@ public class FinIpbBalanceHead {
     public Double hosCost = null;
 
     /**
+     * 日结编号
+     */
+    public String dayReportNo = null;
+
+    /**
      * 关联实体
      */
     public class AssociateEntity {
@@ -134,6 +140,11 @@ public class FinIpbBalanceHead {
          * 实体：结算员
          */
         public Employee balanceEmployee = null;
+
+        /**
+         * 实体：日结记录
+         */
+        public FinIpbDayReport finIpbDayReport = null;
     }
 
     /**
@@ -162,7 +173,7 @@ public class FinIpbBalanceHead {
         var round = tot - (own + med + der);
         if (Math.abs(round) > 0.1) {
             throw new RuntimeException(
-                    String.format("结算数据分析中，四舍五入值过大，可能存在异常(invoiceNo = %s, round = %f)", this.invoiceNo, round));
+                    String.format("结算数据分析中, 四舍五入值过大, 可能存在异常(invoiceNo = %s, round = %f)", this.invoiceNo, round));
         }
 
         return round;
