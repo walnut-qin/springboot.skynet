@@ -19,6 +19,13 @@ public interface ICache<E> {
     ConcurrentMap<String, E> show();
 
     /**
+     * 显式刷新某一个元素
+     * 
+     * @param key
+     */
+    void refresh(String key);
+
+    /**
      * 清除缓存
      * 
      * @param key

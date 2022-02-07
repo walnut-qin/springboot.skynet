@@ -1,4 +1,4 @@
-package com.kaos.his.cache.common;
+package com.kaos.his.cache.common.config;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.mapper.common.DepartmentMapper;
+import com.kaos.his.entity.common.config.ConfigMap;
+import com.kaos.his.mapper.common.config.ConfigMapMapper;
 import com.kaos.inf.ICache;
 
 import org.apache.ibatis.executor.ExecutorException;
@@ -15,30 +15,30 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 科室字典，容量 = 300，不过期，刷新评率 = 1次/天
+ * 开关缓存，容量 = 20，不过期，刷新评率 = 1次/天
  */
-public class DepartmentCache implements ICache<Department> {
+public class ConfigMapCache implements ICache<ConfigMap> {
     /**
      * 数据库接口
      */
     @Autowired
-    DepartmentMapper departmentMapper;
+    ConfigMapMapper configMapMapper;
 
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(DepartmentCache.class.getName());
+    Logger logger = Logger.getLogger(ConfigMapCache.class.getName());
 
     /**
      * Loading cache
      */
-    LoadingCache<String, Department> cache = CacheBuilder.newBuilder()
-            .maximumSize(300)
+    LoadingCache<String, ConfigMap> cache = CacheBuilder.newBuilder()
+            .maximumSize(20)
             .refreshAfterWrite(1, TimeUnit.DAYS)
-            .build(new CacheLoader<String, Department>() {
+            .build(new CacheLoader<String, ConfigMap>() {
                 @Override
-                public Department load(String key) throws Exception {
-                    return DepartmentCache.this.departmentMapper.queryDepartment(key);
+                public ConfigMap load(String key) throws Exception {
+                    return ConfigMapCache.this.configMapMapper.queryMapValue(key);
                 };
             });
 
@@ -47,11 +47,11 @@ public class DepartmentCache implements ICache<Department> {
      * 
      * @throws ExecutorException
      */
-    private DepartmentCache() throws ExecutorException {
+    private ConfigMapCache() throws ExecutorException {
     }
 
     @Override
-    public Department getValue(String key) {
+    public ConfigMap getValue(String key) {
         try {
             return this.cache.get(key);
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class DepartmentCache implements ICache<Department> {
     }
 
     @Override
-    public ConcurrentMap<String, Department> show() {
+    public ConcurrentMap<String, ConfigMap> show() {
         return this.cache.asMap();
     }
 
@@ -79,7 +79,7 @@ public class DepartmentCache implements ICache<Department> {
      * 静态内部类
      */
     static class InnerDepartmentCache {
-        static DepartmentCache departmentCache = new DepartmentCache();
+        static ConfigMapCache departmentCache = new ConfigMapCache();
     }
 
     /**
@@ -87,7 +87,7 @@ public class DepartmentCache implements ICache<Department> {
      * 
      * @return
      */
-    public static DepartmentCache getInstance() {
+    public static ConfigMapCache getInstance() {
         return InnerDepartmentCache.departmentCache;
     }
 }

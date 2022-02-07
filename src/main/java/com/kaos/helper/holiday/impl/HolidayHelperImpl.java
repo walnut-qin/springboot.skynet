@@ -18,6 +18,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * 节假日API，Cache容量 = 365，过期时长 = 7天，不自动刷新
+ */
 public class HolidayHelperImpl implements HolidayHelper {
     /**
      * 日志工具
@@ -37,8 +40,8 @@ public class HolidayHelperImpl implements HolidayHelper {
      * 线程安全的Guava Cache
      */
     static final LoadingCache<String, DayInfo> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
-            .expireAfterWrite(24, TimeUnit.HOURS)
+            .maximumSize(365)
+            .expireAfterWrite(7, TimeUnit.DAYS)
             .build(new CacheLoader<String, DayInfo>() {
                 @Override
                 public DayInfo load(String key) throws Exception {
