@@ -234,5 +234,11 @@ public class DayReportServiceImpl implements DayReportService {
                         return arg0.totCost;
                     }
                 }).sum()));
+
+        // 轮训输出
+        this.logger.info(String.format("总量 = %d", balanceHeads.size()));
+        for (FinIpbBalanceHead balanceHead : balanceHeads) {
+            this.logger.info(String.format("住院号 = %s", balanceHead.inpatientNo));
+        }
     }
 }
