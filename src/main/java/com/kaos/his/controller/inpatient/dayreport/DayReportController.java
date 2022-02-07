@@ -3,6 +3,7 @@ package com.kaos.his.controller.inpatient.dayreport;
 import java.util.Date;
 
 import javax.annotation.Nullable;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.his.enums.common.DeptOwnEnum;
@@ -110,10 +111,18 @@ public class DayReportController {
     public String exportNewYbData(@NotNull(message = "开始时间不能为空") Date beginDate,
             @NotNull(message = "结束时间不能为空") Date endDate,
             @NotNull(message = "院区不能为空") DeptOwnEnum deptOwn) {
-
         // 执行业务
         this.dayReportService.exportNewYbData(beginDate, endDate, deptOwn);
 
-        return "导出成功，查看日志";
+        return "导出成功, 查看日志";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "checkDayReportData", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    public String checkDayReportData(@NotBlank(message = "日结编号不能为空") String statNo) {
+        // 执行业务
+        this.dayReportService.checkDayReportData(statNo);
+
+        return "检查结束, 查看日志";
     }
 }
