@@ -42,4 +42,14 @@ public interface MetOpsApplyMapper {
      */
     List<MetOpsApply> queryMetOpsAppliesInDeptOwn(DeptOwnEnum deptOwn, Date beginDate, Date endDate,
             List<SurgeryStatusEnum> status, ValidStateEnum valid);
+
+    /**
+     * 查询患者手术
+     * 
+     * @param patientNo 住院号; 等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param beginDate 开始时间, 等于 {@code null} 时，不作为判断条件
+     * @param endDate   结束时间, 等于 {@code null} 时，不作为判断条件
+     * @return
+     */
+    List<MetOpsApply> queryPatientMetOpsApplies(String patientNo, Date beginDate, Date endDate, ValidStateEnum valid);
 }

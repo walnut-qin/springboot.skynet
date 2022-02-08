@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.kaos.his.enums.common.DeptOwnEnum;
+import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
 
 import org.junit.jupiter.api.Test;
@@ -50,5 +51,16 @@ public class MetOpsApplyTests {
                 add(SurgeryStatusEnum.手术安排);
             }
         }, null);
+    }
+
+    @Test
+    public void queryPatientMetOpsApplies() {
+        Calendar now = Calendar.getInstance();
+        Date endDate = now.getTime();
+        now.add(Calendar.DATE, -1);
+        Date beginDate = now.getTime();
+
+        this.metOpsApplyMapper.queryPatientMetOpsApplies(null, null, null, null);
+        this.metOpsApplyMapper.queryPatientMetOpsApplies("0000703959", beginDate, endDate, ValidStateEnum.有效);
     }
 }

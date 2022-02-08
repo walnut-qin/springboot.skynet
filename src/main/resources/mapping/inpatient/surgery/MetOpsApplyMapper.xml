@@ -126,7 +126,7 @@
         <include refid="item"/>
         FROM
         (
-            <include refid = "rank1"/>
+        <include refid = "rank1"/>
         )
         <where>
             <if test="deptCode != null">
@@ -140,11 +140,32 @@
         <include refid="item"/>
         FROM
         (
-            <include refid = "rank1"/>
+        <include refid = "rank1"/>
         )
         <where>
             <if test="deptOwn != null">
                 AND DEPT_OWN = #{deptOwn}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPatientMetOpsApplies" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            MET_OPS_APPLY
+        <where>
+            <if test="true">
+                AND PATIENT_NO = #{patientNo}
+            </if>
+            <if test="beginDate != null">
+                AND PRE_DATE &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND PRE_DATE &lt;= #{endDate}
+            </if>
+            <if test="valid != null">
+                AND YNVALID = #{valid}
             </if>
         </where>
     </select>

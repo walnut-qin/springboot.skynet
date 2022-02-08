@@ -193,4 +193,18 @@ public class SurgeryServiceImpl implements SurgeryService {
 
         return rs;
     }
+
+    @Override
+    public String queryValidApplyNo(String patientNo, Date beginDate, Date endDate) {
+        // 检索手术申请记录
+        var applies = this.metOpsApplyMapper.queryPatientMetOpsApplies(patientNo, beginDate, endDate,
+                ValidStateEnum.有效);
+        if (applies == null || applies.size() == 0) {
+            throw new RuntimeException("未查询到符合条件的手术申请记录");
+        } else if (applies.size() >= 2) {
+            throw new RuntimeException("查询到多条符合条件的手术申请记录");
+        }
+
+        return applies.get(0).operationNo;
+    }
 }
