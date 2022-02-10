@@ -392,26 +392,21 @@ public class EscortServiceImpl implements EscortService {
         });
         FinIprPrepayIn fip = null;
         if (inps == null || inps.size() == 0) {
-            fip = this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, new ArrayList<>() {
-                {
-                    add(FinIprPrepayInStateEnum.预约);
-                    add(FinIprPrepayInStateEnum.转住院);
-                    add(FinIprPrepayInStateEnum.签床);
-                    add(FinIprPrepayInStateEnum.预住院预约);
-                }
-            });
-            if (fip == null) {
-                throw new RuntimeException(String.format("患者(%s)无有效住院证，无法判断关联数据", patientCardNo));
+            // 弱陪护，直接取最后一张住院证
+            fip = this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, null);
+            if (fip == null || fip.state == FinIprPrepayInStateEnum.作废) {
+                throw new RuntimeException(String.format("患者(%s)无有效住院证, 无法关联陪护", patientCardNo));
             }
         } else if (inps.size() == 1) {
+            // 强陪护，取住院证关联的陪护
             var inp = inps.get(0);
             fip = this.finIprPrepayInMapper.queryPrepayIn(inp.cardNo, inp.happenNo);
             if (fip == null) {
-                throw new RuntimeException(String.format("患者(%s)住院记录(%s)未关联住院证，无法判断关联数据", inp.cardNo, inp.patientNo));
+                throw new RuntimeException(String.format("患者(%s)住院记录(%s)未关联住院证, 无法判断关联数据", inp.cardNo, inp.patientNo));
             }
             fip.associateEntity.patient = inp;
         } else {
-            throw new RuntimeException(String.format("患者(%s)存在多条住院记录，无法判断关联数据", patientCardNo));
+            throw new RuntimeException(String.format("患者(%s)存在多条住院记录, 无法判断关联数据", patientCardNo));
         }
 
         // 陪护人对象

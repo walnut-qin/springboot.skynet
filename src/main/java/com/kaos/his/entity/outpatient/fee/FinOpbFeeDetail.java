@@ -8,6 +8,7 @@ import com.kaos.his.entity.outpatient.Outpatient;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.outpatient.ClassCodeEnum;
+import com.kaos.his.enums.pharmacy.DrugItemGradeEnum;
 import com.kaos.his.enums.pharmacy.DrugQualityEnum;
 
 /**
@@ -198,6 +199,21 @@ public class FinOpbFeeDetail {
      * 执行科室编码
      */
     public String execDeptCode = null;
+
+    /**
+     * 执行科室名称
+     */
+    public String execDeptName = null;
+
+    /**
+     * 医保中心项目代码
+     */
+    public String centerCode = null;
+
+    /**
+     * 项目等级
+     */
+    public DrugItemGradeEnum itemGrade = null;
 
     /**
      * 划价人编码
