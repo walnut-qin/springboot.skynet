@@ -28,4 +28,12 @@ public interface FinOpbFeeDetailMapper {
      * @return
      */
     List<FinOpbFeeDetail> queryFeeDetailsWithCardNo(String cardNo, String itemCode, Date beginDate, Date endDate);
+
+    /**
+     * 插入费用明细
+     * 
+     * @param feeDetail 待插入实体
+     * @return
+     */
+    int insertFeeDetail(FinOpbFeeDetail feeDetail);
 }

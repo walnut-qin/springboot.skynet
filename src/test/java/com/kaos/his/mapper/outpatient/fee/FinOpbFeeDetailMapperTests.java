@@ -18,14 +18,14 @@ public class FinOpbFeeDetailMapperTests {
         beginDate.set(Calendar.YEAR, 2013);
         beginDate.set(Calendar.MONTH, Calendar.SEPTEMBER);
         beginDate.set(Calendar.DATE, 1);
-        beginDate.set(Calendar.HOUR, 0);
+        beginDate.set(Calendar.HOUR_OF_DAY, 0);
         beginDate.set(Calendar.MINUTE, 0);
         beginDate.set(Calendar.SECOND, 0);
         Calendar endDate = Calendar.getInstance();
         endDate.set(Calendar.YEAR, 2013);
         endDate.set(Calendar.MONTH, Calendar.SEPTEMBER);
         endDate.set(Calendar.DATE, 1);
-        endDate.set(Calendar.HOUR, 23);
+        endDate.set(Calendar.HOUR_OF_DAY, 23);
         endDate.set(Calendar.MINUTE, 59);
         endDate.set(Calendar.SECOND, 59);
         this.finOpbFeeDetailMapper.queryFeeDetailsWithClinicCode("160670", "F00000005341", beginDate.getTime(),

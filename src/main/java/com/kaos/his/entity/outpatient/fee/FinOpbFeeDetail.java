@@ -293,7 +293,7 @@ public class FinOpbFeeDetail {
     /**
      * 确认时间
      */
-    public String confirmDate = null;
+    public Date confirmDate = null;
 
     /**
      * 优惠金额
