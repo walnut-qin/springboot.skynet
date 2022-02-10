@@ -6,8 +6,38 @@
         <result column="SEQUENCE_NO" jdbcType="VARCHAR" property="seqNo"/>
         <result column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
         <result column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
+        <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="REG_DATE" jdbcType="VARCHAR" property="regDate"/>
+        <result column="REG_DPCD" jdbcType="VARCHAR" property="regDeptCode"/>
+        <result column="DOCT_CODE" jdbcType="VARCHAR" property="docCode"/>
+        <result column="DOCT_DEPT" jdbcType="VARCHAR" property="docDeptCode"/>
         <result column="ITEM_CODE" jdbcType="VARCHAR" property="itemCode"/>
         <result column="ITEM_NAME" jdbcType="VARCHAR" property="itemName"/>
+        <result column="DRUG_FLAG" jdbcType="VARCHAR" property="drugFlag"/>
+        <result column="SPECS" jdbcType="VARCHAR" property="specs"/>
+        <result column="SELF_MADE" jdbcType="VARCHAR" property="selfMade"/>
+        <result column="DRUG_QUALITY" jdbcType="VARCHAR" property="drugQuality"/>
+        <result column="DOSE_MODEL_CODE" jdbcType="VARCHAR" property="doseModelCode"/>
+        <result column="FEE_CODE" jdbcType="VARCHAR" property="feeCode"/>
+        <result column="CLASS_CODE" jdbcType="VARCHAR" property="classCode"/>
+        <result column="UNIT_PRICE" jdbcType="VARCHAR" property="unitPrice"/>
+        <result column="QTY" jdbcType="VARCHAR" property="qty"/>
+        <result column="DAYS" jdbcType="VARCHAR" property="days"/>
+        <result column="FREQUENCY_CODE" jdbcType="VARCHAR" property="frequencyCode"/>
+        <result column="USAGE_CODE" jdbcType="VARCHAR" property="usageCode"/>
+        <result column="USE_NAME" jdbcType="VARCHAR" property="useName"/>
+        <result column="INJECT_NUMBER" jdbcType="VARCHAR" property="injectNumber"/>
+        <result column="EMC_FLAG" jdbcType="VARCHAR" property="emergencyFlag"/>
+        <result column="LAB_TYPE" jdbcType="VARCHAR" property="labType"/>
+        <result column="CHECK_BODY" jdbcType="VARCHAR" property="checkBody"/>
+        <result column="DOSE_ONCE" jdbcType="VARCHAR" property="doseOnce"/>
+        <result column="DOSE_UNIT" jdbcType="VARCHAR" property="doseUnit"/>
+        <result column="BASE_DOSE" jdbcType="VARCHAR" property="baseDose"/>
+        <result column="PACK_QTY" jdbcType="VARCHAR" property="packQty"/>
+        <result column="PRICE_UNIT" jdbcType="VARCHAR" property="priceUnit"/>
+        <result column="PUB_COST" jdbcType="VARCHAR" property="pubCost"/>
+        <result column="PAY_COST" jdbcType="VARCHAR" property="payCost"/>
+        <result column="OWN_COST" jdbcType="VARCHAR" property="ownCost"/>
         <result column="EXEC_DPCD" jdbcType="VARCHAR" property="execDeptCode"/>
         <result column="OPER_CODE" jdbcType="VARCHAR" property="feeEmplCode"/>
         <result column="OPER_DATE" jdbcType="VARCHAR" property="feeDate"/>
@@ -18,8 +48,38 @@
         SEQUENCE_NO,
         TRANS_TYPE,
         CLINIC_CODE,
+        CARD_NO,
+        REG_DATE,
+        REG_DPCD,
+        DOCT_CODE,
+        DOCT_DEPT,
         ITEM_CODE,
         ITEM_NAME,
+        DRUG_FLAG,
+        SPECS,
+        SELF_MADE,
+        DRUG_QUALITY,
+        DOSE_MODEL_CODE,
+        FEE_CODE,
+        CLASS_CODE,
+        UNIT_PRICE,
+        QTY,
+        DAYS,
+        FREQUENCY_CODE,
+        USAGE_CODE,
+        USE_NAME,
+        INJECT_NUMBER,
+        EMC_FLAG,
+        LAB_TYPE,
+        CHECK_BODY,
+        DOSE_ONCE,
+        DOSE_UNIT,
+        BASE_DOSE,
+        PACK_QTY,
+        PRICE_UNIT,
+        PUB_COST,
+        PAY_COST,
+        OWN_COST,
         EXEC_DPCD,
         OPER_CODE,
         OPER_DATE
