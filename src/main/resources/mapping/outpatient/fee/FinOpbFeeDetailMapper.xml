@@ -42,8 +42,67 @@
         <result column="EXEC_DPNM" jdbcType="VARCHAR" property="execDeptName"/>
         <result column="CENTER_CODE" jdbcType="VARCHAR" property="centerCode"/>
         <result column="ITEM_GRADE" jdbcType="VARCHAR" property="itemGrade"/>
-        <result column="OPER_CODE" jdbcType="VARCHAR" property="feeEmplCode"/>
-        <result column="OPER_DATE" jdbcType="VARCHAR" property="feeDate"/>
+        <result column="MAIN_DRUG" jdbcType="VARCHAR" property="mainDrugFlag"/>
+        <result column="COMB_NO" jdbcType="VARCHAR" property="combNo"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+        <result column="PAY_FLAG" jdbcType="VARCHAR" property="payFlag"/>
+        <result column="CANCEL_FLAG" jdbcType="VARCHAR" property="cancelFlag"/>
+        <result column="FEE_CPCD" jdbcType="VARCHAR" property="feeEmplCode"/>
+        <result column="FEE_DATE" jdbcType="VARCHAR" property="feeDate"/>
+        <result column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
+        <result column="INVO_CODE" jdbcType="VARCHAR" property="invoCode"/>
+        <result column="INVO_SEQUENCE" jdbcType="VARCHAR" property="invoSequence"/>
+        <result column="CONFIRM_FLAG" jdbcType="VARCHAR" property="confirmFlag"/>
+        <result column="CONFIRM_CODE" jdbcType="VARCHAR" property="confirmEmplCode"/>
+        <result column="CONFIRM_DEPT" jdbcType="VARCHAR" property="confirmDeptCode"/>
+        <result column="CONFIRM_DATE" jdbcType="VARCHAR" property="confirmDate"/>
+        <result column="ECO_COST" jdbcType="VARCHAR" property="ecoCost"/>
+        <result column="INVOICE_SEQ" jdbcType="VARCHAR" property="invoiceSeq"/>
+        <result column="NEW_ITEMRATE" jdbcType="VARCHAR" property="newItemRate"/>
+        <result column="OLD_ITEMRATE" jdbcType="VARCHAR" property="oldItemRate"/>
+        <result column="EXT_FLAG" jdbcType="VARCHAR" property="extFlag"/>
+        <result column="EXT_FLAG1" jdbcType="VARCHAR" property="extFlag1"/>
+        <result column="EXT_FLAG2" jdbcType="VARCHAR" property="extFlag2"/>
+        <result column="EXT_FLAG3" jdbcType="VARCHAR" property="extFlag3"/>
+        <result column="PACKAGE_CODE" jdbcType="VARCHAR" property="packageCode"/>
+        <result column="PACKAGE_NAME" jdbcType="VARCHAR" property="packageName"/>
+        <result column="NOBACK_NUM" jdbcType="VARCHAR" property="noBackNum"/>
+        <result column="CONFIRM_NUM" jdbcType="VARCHAR" property="confirmNum"/>
+        <result column="CONFIRM_INJECT" jdbcType="VARCHAR" property="confirmInject"/>
+        <result column="MO_ORDER" jdbcType="VARCHAR" property="moOrder"/>
+        <result column="SAMPLE_ID" jdbcType="VARCHAR" property="sampleId"/>
+        <result column="RECIPE_SEQ" jdbcType="VARCHAR" property="recipeSeq"/>
+        <result column="EXCESS_COST" jdbcType="VARCHAR" property="excessCost"/>
+        <result column="DRUG_OWNCOST" jdbcType="VARCHAR" property="drugOwnCost"/>
+        <result column="COST_SOURCE" jdbcType="VARCHAR" property="costSource"/>
+        <result column="SUBJOB_FLAG" jdbcType="VARCHAR" property="subJobFlag"/>
+        <result column="ACCOUNT_FLAG" jdbcType="VARCHAR" property="accountFlag"/>
+        <result column="UPDATE_SEQUENCENO" jdbcType="VARCHAR" property="updateSequenceNo"/>
+        <result column="DOCTINDEPT" jdbcType="VARCHAR" property="docInDept"/>
+        <result column="MEDICALGROUPCODE" jdbcType="VARCHAR" property="medGrpCode"/>
+        <result column="ISPRINT_EXEBILL" jdbcType="VARCHAR" property="isPrintExeBill"/>
+        <result column="ISPRINT_DRUGCARD" jdbcType="VARCHAR" property="isPrintDrugCard"/>
+        <result column="ACCOUNT_NO" jdbcType="VARCHAR" property="accountNo"/>
+        <result column="GROUP_CODE" jdbcType="VARCHAR" property="grpCode"/>
+        <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
+        <result column="EMPLOYEEOWN" jdbcType="VARCHAR" property="emplOwn"/>
+        <result column="LIS_FLAG" jdbcType="VARCHAR" property="lisFlag"/>
+        <result column="DR_LIS_FLAG" jdbcType="VARCHAR" property="drLisFlag"/>
+        <result column="GREENROAD" jdbcType="VARCHAR" property="greeRoad"/>
+        <result column="SEND_FLAG" jdbcType="VARCHAR" property="sendFlag"/>
+        <result column="SEND_OPERCODE" jdbcType="VARCHAR" property="sendOperCode"/>
+        <result column="SEND_DATE" jdbcType="VARCHAR" property="sendDate"/>
+        <result column="SEND_REMARK" jdbcType="VARCHAR" property="sendRemark"/>
+        <result column="ATERMNO" jdbcType="VARCHAR" property="aTermNo"/>
+        <result column="ORDER_STATE" jdbcType="VARCHAR" property="orderState"/>
+        <result column="BAR_CODE" jdbcType="VARCHAR" property="barCode"/>
+        <result column="IVN_CODE" jdbcType="VARCHAR" property="invCode"/>
+        <result column="OVER_COST" jdbcType="VARCHAR" property="overCost"/>
+        <result column="PREP_TYPE" jdbcType="VARCHAR" property="prepType"/>
+        <result column="SELFPAY_PROP" jdbcType="VARCHAR" property="selfPayProp"/>
+        <result column="FULAMT_OWNPAY_AMT" jdbcType="VARCHAR" property="fulAmtOwnPayAmt"/>
+        <result column="CENTER_FEE_CODE" jdbcType="VARCHAR" property="centerFeeCode"/>
     </resultMap>
 
     <sql id="item">
@@ -87,8 +146,67 @@
         EXEC_DPNM,
         CENTER_CODE,
         ITEM_GRADE,
+        MAIN_DRUG,
+        COMB_NO,
         OPER_CODE,
-        OPER_DATE
+        OPER_DATE,
+        PAY_FLAG,
+        CANCEL_FLAG,
+        FEE_CPCD,
+        FEE_DATE,
+        INVOICE_NO,
+        INVO_CODE,
+        INVO_SEQUENCE,
+        CONFIRM_FLAG,
+        CONFIRM_CODE,
+        CONFIRM_DEPT,
+        CONFIRM_DATE,
+        ECO_COST,
+        INVOICE_SEQ,
+        NEW_ITEMRATE,
+        OLD_ITEMRATE,
+        EXT_FLAG,
+        EXT_FLAG1,
+        EXT_FLAG2,
+        EXT_FLAG3,
+        PACKAGE_CODE,
+        PACKAGE_NAME,
+        NOBACK_NUM,
+        CONFIRM_NUM,
+        CONFIRM_INJECT,
+        MO_ORDER,
+        SAMPLE_ID,
+        RECIPE_SEQ,
+        EXCESS_COST,
+        DRUG_OWNCOST,
+        COST_SOURCE,
+        SUBJOB_FLAG,
+        ACCOUNT_FLAG,
+        UPDATE_SEQUENCENO,
+        DOCTINDEPT,
+        MEDICALGROUPCODE,
+        ISPRINT_EXEBILL,
+        ISPRINT_DRUGCARD,
+        ACCOUNT_NO,
+        GROUP_CODE,
+        DEPTOWN,
+        EMPLOYEEOWN,
+        LIS_FLAG,
+        DR_LIS_FLAG,
+        GREENROAD,
+        SEND_FLAG,
+        SEND_OPERCODE,
+        SEND_DATE,
+        SEND_REMARK,
+        ATERMNO,
+        ORDER_STATE,
+        BAR_CODE,
+        IVN_CODE,
+        OVER_COST,
+        PREP_TYPE,
+        SELFPAY_PROP,
+        FULAMT_OWNPAY_AMT,
+        CENTER_FEE_CODE
     </sql>
 
     <select id="queryFeeDetailsWithClinicCode" resultMap="map">

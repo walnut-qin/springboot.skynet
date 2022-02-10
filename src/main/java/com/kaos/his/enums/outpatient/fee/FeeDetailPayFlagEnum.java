@@ -1,13 +1,9 @@
-package com.kaos.his.enums.outpatient;
+package com.kaos.his.enums.outpatient.fee;
 
 import com.kaos.inf.IEnum;
 
-/**
- * 门诊系统类别，维护在COM_DICTIONARY的MZEXECBILL类型
- */
-public enum ClassCodeEnum implements IEnum {
-    西药("P", "西药"), 中成药("PCZ", "中成药"), 中草药("PCC", "中草药"), 治疗("UZ", "治疗"), 检查("UC", "检查"), 手术("UO", "手术"), 检验("UL", "检验"),
-    非药品("U", "非药品"), 其他("UT", "其他");
+public enum FeeDetailPayFlagEnum implements IEnum {
+    划价("0", "划价"), 收费("1", "收费"), 预收费团体体检("3", "预收费团体体检"), 药品预审核("4", "药品预审核");
 
     /**
      * 数据库存值
@@ -25,7 +21,7 @@ public enum ClassCodeEnum implements IEnum {
      * @param index
      * @param description
      */
-    ClassCodeEnum(String value, String description) {
+    FeeDetailPayFlagEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }
