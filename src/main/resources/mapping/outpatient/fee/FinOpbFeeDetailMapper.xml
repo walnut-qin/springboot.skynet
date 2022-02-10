@@ -39,6 +39,9 @@
         <result column="PAY_COST" jdbcType="VARCHAR" property="payCost"/>
         <result column="OWN_COST" jdbcType="VARCHAR" property="ownCost"/>
         <result column="EXEC_DPCD" jdbcType="VARCHAR" property="execDeptCode"/>
+        <result column="EXEC_DPNM" jdbcType="VARCHAR" property="execDeptName"/>
+        <result column="CENTER_CODE" jdbcType="VARCHAR" property="centerCode"/>
+        <result column="ITEM_GRADE" jdbcType="VARCHAR" property="itemGrade"/>
         <result column="OPER_CODE" jdbcType="VARCHAR" property="feeEmplCode"/>
         <result column="OPER_DATE" jdbcType="VARCHAR" property="feeDate"/>
     </resultMap>
@@ -81,6 +84,9 @@
         PAY_COST,
         OWN_COST,
         EXEC_DPCD,
+        EXEC_DPNM,
+        CENTER_CODE,
+        ITEM_GRADE,
         OPER_CODE,
         OPER_DATE
     </sql>
