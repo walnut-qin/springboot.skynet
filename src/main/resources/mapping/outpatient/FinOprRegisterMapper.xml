@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.outpatient.FinOprRegisterMapper">
+    <resultMap id="map" type="com.kaos.his.entity.outpatient.FinOprRegister">
+        <id column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
+        <id column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
+        <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="REG_DATE" jdbcType="VARCHAR" property="regDate"/>
+        <result column="NOON_CODE" jdbcType="VARCHAR" property="noon"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="IDENNO" jdbcType="VARCHAR" property="idenNo"/>
+        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex"/>
+        <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
+        <result column="RELA_PHONE" jdbcType="VARCHAR" property="relaPhone"/>
+        <result column="ADDRESS" jdbcType="VARCHAR" property="address"/>
+        <result column="CARD_TYPE" jdbcType="VARCHAR" property="cardType"/>
+        <result column="PAYKIND_CODE" jdbcType="VARCHAR" property="payKindCode"/>
+        <result column="PAYKIND_NAME" jdbcType="VARCHAR" property="payKindName"/>
+        <result column="PACT_CODE" jdbcType="VARCHAR" property="pactCode"/>
+        <result column="PACT_NAME" jdbcType="VARCHAR" property="pactName"/>
+        <result column="MCARD_NO" jdbcType="VARCHAR" property="medCardNo"/>
+        <result column="REGLEVL_CODE" jdbcType="VARCHAR" property="regLevlCode"/>
+        <result column="REGLEVL_NAME" jdbcType="VARCHAR" property="regLevlName"/>
+        <result column="DEPT_CODE" jdbcType="VARCHAR" property="deptCode"/>
+        <result column="DEPT_NAME" jdbcType="VARCHAR" property="deptName"/>
+        <result column="SCHEMA_NO" jdbcType="VARCHAR" property="schemaNo"/>
+        <result column="ORDER_NO" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="SEENO" jdbcType="VARCHAR" property="seeNo"/>
+        <result column="BEGIN_TIME" jdbcType="VARCHAR" property="beginTime"/>
+        <result column="END_TIME" jdbcType="VARCHAR" property="endTime"/>
+        <result column="DOCT_CODE" jdbcType="VARCHAR" property="doctCode"/>
+        <result column="DOCT_NAME" jdbcType="VARCHAR" property="doctName"/>
+        <result column="YNREGCHRG" jdbcType="VARCHAR" property="ynRegCharge"/>
+        <result column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
+        <result column="RECIPE_NO" jdbcType="VARCHAR" property="recipeNo"/>
+        <result column="YNBOOK" jdbcType="VARCHAR" property="ynBook"/>
+        <result column="YNFR" jdbcType="VARCHAR" property="ynFr"/>
+        <result column="APPEND_FLAG" jdbcType="VARCHAR" property="appenFlag"/>
+        <result column="REG_FEE" jdbcType="VARCHAR" property="regFee"/>
+        <result column="CHCK_FEE" jdbcType="VARCHAR" property="checkFee"/>
+        <result column="DIAG_FEE" jdbcType="VARCHAR" property="diagFee"/>
+        <result column="OTH_FEE" jdbcType="VARCHAR" property="otherFee"/>
+        <result column="OWN_COST" jdbcType="VARCHAR" property="ownCost"/>
+        <result column="PUB_COST" jdbcType="VARCHAR" property="pubCost"/>
+        <result column="PAY_COST" jdbcType="VARCHAR" property="payCost"/>
+        <result column="VALID_FLAG" jdbcType="VARCHAR" property="validFlag"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+        <result column="CANCEL_OPCD" jdbcType="VARCHAR" property="cancelOperCode"/>
+        <result column="CANCEL_DATE" jdbcType="VARCHAR" property="cancelDate"/>
+        <result column="MEDICAL_TYPE" jdbcType="VARCHAR" property="medType"/>
+        <result column="ICD_CODE" jdbcType="VARCHAR" property="icdCode"/>
+        <result column="EXAM_CODE" jdbcType="VARCHAR" property="examCode"/>
+        <result column="EXAM_DATE" jdbcType="VARCHAR" property="examDate"/>
+        <result column="CHECK_FLAG" jdbcType="VARCHAR" property="checkFlag"/>
+        <result column="CHECK_OPCD" jdbcType="VARCHAR" property="checkOperCode"/>
+        <result column="CHECK_DATE" jdbcType="VARCHAR" property="checkOperDate"/>
+        <result column="BALANCE_FLAG" jdbcType="VARCHAR" property="balanceFlag"/>
+        <result column="BALANCE_NO" jdbcType="VARCHAR" property="balanceNo"/>
+        <result column="BALANCE_OPCD" jdbcType="VARCHAR" property="balanceOperCode"/>
+        <result column="BALANCE_DATE" jdbcType="VARCHAR" property="balanceDate"/>
+        <result column="YNSEE" jdbcType="VARCHAR" property="ynSee"/>
+        <result column="SEE_DATE" jdbcType="VARCHAR" property="seeDate"/>
+        <result column="TRIAGE_FLAG" jdbcType="VARCHAR" property="triageFlag"/>
+        <result column="TRIAGE_OPCD" jdbcType="VARCHAR" property="triageOperCode"/>
+        <result column="TRIAGE_DATE" jdbcType="VARCHAR" property="triageDate"/>
+        <result column="PRINT_INVOICECNT" jdbcType="VARCHAR" property="invoicePrintCnt"/>
+        <result column="SEE_DPCD" jdbcType="VARCHAR" property="seeDeptCode"/>
+        <result column="SEE_DOCD" jdbcType="VARCHAR" property="seeDocCode"/>
+        <result column="IN_SOURCE" jdbcType="VARCHAR" property="inSource"/>
+        <result column="IS_SENDINHOSCASE" jdbcType="VARCHAR" property="sendInHosCaseFlag"/>
+        <result column="IS_ENCRYPTNAME" jdbcType="VARCHAR" property="encryptNameFlag"/>
+        <result column="NORMALNAME" jdbcType="VARCHAR" property="normalName"/>
+        <result column="IN_DATE" jdbcType="VARCHAR" property="inDate"/>
+        <result column="OUT_DATE" jdbcType="VARCHAR" property="outDate"/>
+        <result column="ZG" jdbcType="VARCHAR" property="zg"/>
+        <result column="IN_STATE" jdbcType="VARCHAR" property="inState"/>
+        <result column="ECO_COST" jdbcType="VARCHAR" property="ecoCost"/>
+        <result column="IS_ACCOUNT" jdbcType="VARCHAR" property="isAccount"/>
+        <result column="IS_EMERGENCY" jdbcType="VARCHAR" property="emergencyFlag"/>
+        <result column="MARK1" jdbcType="VARCHAR" property="mark1"/>
+        <result column="RECEIPT_DOCT_CODE" jdbcType="VARCHAR" property="receiptDoctCode"/>
+        <result column="RECEIPT_DOCT_DATE" jdbcType="VARCHAR" property="receiptDate"/>
+        <result column="RECEIPT_FLAG" jdbcType="VARCHAR" property="receiptFlag"/>
+        <result column="ACCOUNT_NO" jdbcType="VARCHAR" property="accountNo"/>
+        <result column="EMR_REGID" jdbcType="VARCHAR" property="emrRegId"/>
+        <result column="NET_CARDNO" jdbcType="VARCHAR" property="netCardNo"/>
+        <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
+        <result column="EMPLOYEEOWN" jdbcType="VARCHAR" property="emplOwn"/>
+        <result column="SCHEMAQUEUE" jdbcType="VARCHAR" property="schemaQueue"/>
+        <result column="PAYMODE" jdbcType="VARCHAR" property="payMode"/>
+        <result column="REC_ID" jdbcType="VARCHAR" property="recId"/>
+        <result column="PAYORDERNO" jdbcType="VARCHAR" property="payOrderNo"/>
+        <result column="CLIENTORDERID" jdbcType="VARCHAR" property="clinicOrderId"/>
+        <result column="ISMODFIYPRINT" jdbcType="VARCHAR" property="isModifyPrint"/>
+    </resultMap>
+
+    <sql id="item">
+        CLINIC_CODE,
+        TRANS_TYPE,
+        CARD_NO,
+        REG_DATE,
+        NOON_CODE,
+        NAME,
+        IDENNO,
+        SEX_CODE,
+        BIRTHDAY,
+        RELA_PHONE,
+        ADDRESS,
+        CARD_TYPE,
+        PAYKIND_CODE,
+        PAYKIND_NAME,
+        PACT_CODE,
+        PACT_NAME,
+        MCARD_NO,
+        REGLEVL_CODE,
+        REGLEVL_NAME,
+        DEPT_CODE,
+        DEPT_NAME,
+        SCHEMA_NO,
+        ORDER_NO,
+        SEENO,
+        BEGIN_TIME,
+        END_TIME,
+        DOCT_CODE,
+        DOCT_NAME,
+        YNREGCHRG,
+        INVOICE_NO,
+        RECIPE_NO,
+        YNBOOK,
+        YNFR,
+        APPEND_FLAG,
+        REG_FEE,
+        CHCK_FEE,
+        DIAG_FEE,
+        OTH_FEE,
+        OWN_COST,
+        PUB_COST,
+        PAY_COST,
+        VALID_FLAG,
+        OPER_CODE,
+        OPER_DATE,
+        CANCEL_OPCD,
+        CANCEL_DATE,
+        MEDICAL_TYPE,
+        ICD_CODE,
+        EXAM_CODE,
+        EXAM_DATE,
+        CHECK_FLAG,
+        CHECK_OPCD,
+        CHECK_DATE,
+        BALANCE_FLAG,
+        BALANCE_NO,
+        BALANCE_OPCD,
+        BALANCE_DATE,
+        YNSEE,
+        SEE_DATE,
+        TRIAGE_FLAG,
+        TRIAGE_OPCD,
+        TRIAGE_DATE,
+        PRINT_INVOICECNT,
+        SEE_DPCD,
+        SEE_DOCD,
+        IN_SOURCE,
+        IS_SENDINHOSCASE,
+        IS_ENCRYPTNAME,
+        NORMALNAME,
+        IN_DATE,
+        OUT_DATE,
+        ZG,
+        IN_STATE,
+        ECO_COST,
+        IS_ACCOUNT,
+        IS_EMERGENCY,
+        MARK1,
+        RECEIPT_DOCT_CODE,
+        RECEIPT_DOCT_DATE,
+        RECEIPT_FLAG,
+        ACCOUNT_NO,
+        EMR_REGID,
+        NET_CARDNO,
+        DEPTOWN,
+        EMPLOYEEOWN,
+        SCHEMAQUEUE,
+        PAYMODE,
+        REC_ID,
+        PAYORDERNO,
+        CLIENTORDERID,
+        ISMODFIYPRINT
+    </sql>
+
+    <select id="queryRegisterRec" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            FIN_OPR_REGISTER
+        <where>
+            <if test="true">
+                AND CLINIC_CODE = #{clinicCode}
+            </if>
+            <if test="true">
+                AND TRANS_TYPE = #{transType}
+            </if>
+        </where>
+    </select>
+</mapper>
