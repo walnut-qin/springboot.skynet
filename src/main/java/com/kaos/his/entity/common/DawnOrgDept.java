@@ -6,7 +6,7 @@ import com.kaos.his.enums.common.ValidStateEnum;
 /**
  * 实体：科室信息（XYHIS.DAWN_ORG_DEPT）
  */
-public class Department {
+public class DawnOrgDept {
     /**
      * 科室编码
      */

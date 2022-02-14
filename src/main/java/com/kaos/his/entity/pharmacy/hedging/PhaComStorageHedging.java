@@ -2,7 +2,7 @@ package com.kaos.his.entity.pharmacy.hedging;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Department;
+import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.pharmacy.DrugQualityEnum;
 import com.kaos.his.enums.pharmacy.DrugTypeEnum;
@@ -138,7 +138,7 @@ public class PhaComStorageHedging {
         /**
          * 实体：药库科室
          */
-        public Department drugDept = null;
+        public DawnOrgDept drugDept = null;
     }
 
     /**

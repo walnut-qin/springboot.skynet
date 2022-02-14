@@ -67,7 +67,7 @@ public class Patient {
         /**
          * 基本信息操作员
          */
-        public Employee operator = null;
+        public DawnOrgEmpl operator = null;
 
         /**
          * 陪护的患者

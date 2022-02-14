@@ -1,6 +1,6 @@
 package com.kaos.his.entity.inpatient.surgery;
 
-import com.kaos.his.entity.common.Department;
+import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.enums.common.ValidStateEnum;
 
 /**
@@ -34,7 +34,7 @@ public class MetOpsRoom {
         /**
          * 归属科室
          */
-        public Department department = null;
+        public DawnOrgDept department = null;
     }
 
     /**

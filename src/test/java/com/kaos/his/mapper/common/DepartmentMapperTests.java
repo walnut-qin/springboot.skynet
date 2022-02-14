@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class DepartmentMapperTests {
     @Autowired
-    DepartmentMapper departmentMapper;
+    DawnOrgDeptMapper departmentMapper;
 
     @Test
     public void queryDepartment() throws Exception {

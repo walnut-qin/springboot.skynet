@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.his.mapper.common.EmployeeMapper">
-    <resultMap id="map" type="com.kaos.his.entity.common.Employee">
+<mapper namespace="com.kaos.his.mapper.common.DawnOrgEmplMapper">
+    <resultMap id="map" type="com.kaos.his.entity.common.DawnOrgEmpl">
         <id column="EMPL_ID" jdbcType="VARCHAR" property="emplCode"/>
         <result column="EMPL_NAME" jdbcType="VARCHAR" property="emplName"/>
         <result column="SPELL_CODE" jdbcType="VARCHAR" property="emplNameSpellCode"/>
-        <result column="EMPL_TYPE" jdbcType="VARCHAR" property="emplType"/>
         <result column="SEX_CODE" jdbcType="VARCHAR" property="sex"/>
         <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
-        <result column="IDENNO" jdbcType="VARCHAR" property="identityCardNo"/>
         <result column="POSI_CODE" jdbcType="VARCHAR" property="position"/>
         <result column="LEVL_CODE" jdbcType="VARCHAR" property="rank"/>
+        <result column="EMPL_TYPE" jdbcType="VARCHAR" property="emplType"/>
+        <result column="IDENNO" jdbcType="VARCHAR" property="identityCardNo"/>
         <result column="DEPT_ID" jdbcType="VARCHAR" property="deptCode"/>
         <result column="NURSE_CELL_ID" jdbcType="VARCHAR" property="nurseCellCode"/>
-        <result column="TEL" jdbcType="VARCHAR" property="tel"/>
         <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="TEL" jdbcType="VARCHAR" property="tel"/>
         <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
         <result column="VALID_STATE" jdbcType="VARCHAR" property="valid"/>
     </resultMap>
@@ -23,16 +23,16 @@
         EMPL_ID,
         EMPL_NAME,
         SPELL_CODE,
-        EMPL_TYPE,
         SEX_CODE,
         BIRTHDAY,
-        IDENNO,
         POSI_CODE,
         LEVL_CODE,
+        EMPL_TYPE,
+        IDENNO,
         DEPT_ID,
         NURSE_CELL_ID,
-        TEL,
         EMAIL,
+        TEL,
         REMARK,
         VALID_STATE
     </sql>

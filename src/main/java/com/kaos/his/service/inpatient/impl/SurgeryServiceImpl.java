@@ -5,16 +5,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
-import com.kaos.his.mapper.common.DepartmentMapper;
-import com.kaos.his.mapper.common.EmployeeMapper;
+import com.kaos.his.mapper.common.DawnOrgDeptMapper;
+import com.kaos.his.mapper.common.DawnOrgEmplMapper;
 import com.kaos.his.mapper.inpatient.ComBedInfoMapper;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsApplyMapper;
@@ -56,13 +56,13 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 科室接口
      */
     @Autowired
-    DepartmentMapper departmentMapper;
+    DawnOrgDeptMapper departmentMapper;
 
     /**
      * 职工接口
      */
     @Autowired
-    EmployeeMapper employeeMapper;
+    DawnOrgEmplMapper employeeMapper;
 
     /**
      * 手术间接口
@@ -112,8 +112,8 @@ public class SurgeryServiceImpl implements SurgeryService {
         }
 
         // cache模块，加速查询
-        HashMap<String, Employee> employeeCache = new HashMap<>();
-        HashMap<String, Department> departmentCache = new HashMap<>();
+        HashMap<String, DawnOrgEmpl> employeeCache = new HashMap<>();
+        HashMap<String, DawnOrgDept> departmentCache = new HashMap<>();
         HashMap<String, MetOpsRoom> roomCache = new HashMap<>();
 
         // 填充关联实体

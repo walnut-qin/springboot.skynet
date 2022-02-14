@@ -10,7 +10,7 @@ import com.kaos.his.enums.common.ValidStateEnum;
 /**
  * 实体：职员（DAWN_ORG_EMPL）
  */
-public class Employee {
+public class DawnOrgEmpl {
     /**
      * 工号
      */
@@ -27,11 +27,6 @@ public class Employee {
     public String emplNameSpellCode = null;
 
     /**
-     * 人员类型
-     */
-    public String emplType = null;
-
-    /**
      * 性别
      */
     public SexEnum sex = null;
@@ -40,11 +35,6 @@ public class Employee {
      * 生日
      */
     public Date birthday = null;
-
-    /**
-     * 身份证号
-     */
-    public String identityCardNo = null;
 
     /**
      * 职务
@@ -57,6 +47,16 @@ public class Employee {
     public RankEnum rank = null;
 
     /**
+     * 人员类型
+     */
+    public String emplType = null;
+
+    /**
+     * 身份证号
+     */
+    public String identityCardNo = null;
+
+    /**
      * 归属科室编码
      */
     public String deptCode = null;
@@ -67,14 +67,14 @@ public class Employee {
     public String nurseCellCode = null;
 
     /**
-     * 电话号码
-     */
-    public String tel = null;
-
-    /**
      * 电子邮件
      */
     public String email = null;
+
+    /**
+     * 电话号码
+     */
+    public String tel = null;
 
     /**
      * 备注
@@ -93,12 +93,12 @@ public class Employee {
         /**
          * 归属科室
          */
-        public Department dept = null;
+        public DawnOrgDept dept = null;
 
         /**
          * 归属护士站
          */
-        public Department nurceCell = null;
+        public DawnOrgDept nurceCell = null;
     }
 
     /**

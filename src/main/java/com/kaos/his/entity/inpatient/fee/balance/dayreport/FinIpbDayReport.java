@@ -2,7 +2,7 @@ package com.kaos.his.entity.inpatient.fee.balance.dayreport;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 
 /**
  * 实体：日结主表（XYHIS.FIN_IPB_DAYREPORT）
@@ -55,12 +55,12 @@ public class FinIpbDayReport {
         /**
          * 日结操作员
          */
-        public Employee rptEmployee = null;
+        public DawnOrgEmpl rptEmployee = null;
 
         /**
          * 审核员
          */
-        public Employee chkEmployee = null;
+        public DawnOrgEmpl chkEmployee = null;
     }
 
     /**

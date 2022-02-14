@@ -2,8 +2,8 @@ package com.kaos.his.entity.inpatient;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.common.Patient;
 import com.kaos.his.entity.inpatient.escort.EscortVip;
 import com.kaos.his.enums.inpatient.FinIprPrepayInStateEnum;
@@ -74,17 +74,17 @@ public class FinIprPrepayIn {
         /**
          * 实体：预约医师
          */
-        public Employee preDoc = null;
+        public DawnOrgEmpl preDoc = null;
 
         /**
          * 实体：预约科室
          */
-        public Department preDept = null;
+        public DawnOrgDept preDept = null;
 
         /**
          * 实体：开立医师
          */
-        public Employee openDoc = null;
+        public DawnOrgEmpl openDoc = null;
 
         /**
          * 实体：陪护证VIP

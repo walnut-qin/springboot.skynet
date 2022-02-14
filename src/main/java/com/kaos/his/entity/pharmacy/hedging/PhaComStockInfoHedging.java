@@ -2,8 +2,8 @@ package com.kaos.his.entity.pharmacy.hedging;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.pharmacy.DrugTypeEnum;
 
@@ -178,12 +178,12 @@ public class PhaComStockInfoHedging {
         /**
          * 实体：药库科室
          */
-        public Department drugDept = null;
+        public DawnOrgDept drugDept = null;
 
         /**
          * 实体：操作员
          */
-        public Employee employee = null;
+        public DawnOrgEmpl employee = null;
     }
 
     /**

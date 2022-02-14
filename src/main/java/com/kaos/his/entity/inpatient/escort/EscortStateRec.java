@@ -2,7 +2,7 @@ package com.kaos.his.entity.inpatient.escort;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
 
 /**
@@ -51,7 +51,7 @@ public class EscortStateRec {
         /**
          * 实体：记录员
          */
-        public Employee recEmpl = null;
+        public DawnOrgEmpl recEmpl = null;
     }
 
     /**

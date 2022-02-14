@@ -2,7 +2,7 @@ package com.kaos.his.entity.outpatient;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Department;
+import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.Patient;
 import com.kaos.his.enums.common.TransTypeEnum;
 
@@ -37,7 +37,7 @@ public class Outpatient extends Patient {
         /**
          * 实体：挂号科室
          */
-        public Department regDept = null;
+        public DawnOrgDept regDept = null;
     }
 
     /**

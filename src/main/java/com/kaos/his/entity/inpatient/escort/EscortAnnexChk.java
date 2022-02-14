@@ -2,7 +2,7 @@ package com.kaos.his.entity.inpatient.escort;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 
 /**
  * 实体：附件审核（KAOS.ESCORT_ANNEX_CHK）
@@ -40,7 +40,7 @@ public class EscortAnnexChk {
         /**
          * 实体：陪护证
          */
-        public Employee chkEmpl = null;
+        public DawnOrgEmpl chkEmpl = null;
     }
 
     /**

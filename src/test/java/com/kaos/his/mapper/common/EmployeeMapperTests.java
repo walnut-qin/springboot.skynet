@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class EmployeeMapperTests {
     @Autowired
-    EmployeeMapper employeeMapper;
+    DawnOrgEmplMapper employeeMapper;
 
     @Test
     public void queryEmployee() throws Exception {

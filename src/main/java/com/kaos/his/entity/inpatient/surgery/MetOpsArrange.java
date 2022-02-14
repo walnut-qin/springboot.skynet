@@ -1,6 +1,6 @@
 package com.kaos.his.entity.inpatient.surgery;
 
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
 
 /**
@@ -34,7 +34,7 @@ public class MetOpsArrange {
         /**
          * 实体：职员
          */
-        public Employee employee = null;
+        public DawnOrgEmpl employee = null;
     }
 
     /**

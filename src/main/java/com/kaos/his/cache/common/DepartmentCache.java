@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.mapper.common.DepartmentMapper;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.mapper.common.DawnOrgDeptMapper;
 import com.kaos.inf.ICache;
 
 import org.apache.ibatis.executor.ExecutorException;
@@ -17,12 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * 科室字典，容量 = 300，不过期，刷新评率 = 1次/天
  */
-public class DepartmentCache implements ICache<Department> {
+public class DepartmentCache implements ICache<DawnOrgDept> {
     /**
      * 数据库接口
      */
     @Autowired
-    DepartmentMapper departmentMapper;
+    DawnOrgDeptMapper departmentMapper;
 
     /**
      * 日志接口
@@ -32,12 +32,12 @@ public class DepartmentCache implements ICache<Department> {
     /**
      * Loading cache
      */
-    LoadingCache<String, Department> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, DawnOrgDept> cache = CacheBuilder.newBuilder()
             .maximumSize(300)
             .refreshAfterWrite(1, TimeUnit.DAYS)
-            .build(new CacheLoader<String, Department>() {
+            .build(new CacheLoader<String, DawnOrgDept>() {
                 @Override
-                public Department load(String key) throws Exception {
+                public DawnOrgDept load(String key) throws Exception {
                     return DepartmentCache.this.departmentMapper.queryDepartment(key);
                 };
             });
@@ -51,7 +51,7 @@ public class DepartmentCache implements ICache<Department> {
     }
 
     @Override
-    public Department getValue(String key) {
+    public DawnOrgDept getValue(String key) {
         try {
             return this.cache.get(key);
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class DepartmentCache implements ICache<Department> {
     }
 
     @Override
-    public ConcurrentMap<String, Department> show() {
+    public ConcurrentMap<String, DawnOrgDept> show() {
         return this.cache.asMap();
     }
 

@@ -2,8 +2,8 @@ package com.kaos.his.entity.outpatient.fee;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.outpatient.Outpatient;
 import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
@@ -537,42 +537,42 @@ public class FinOpbFeeDetail {
         /**
          * 开单科室
          */
-        public Department regDept = null;
+        public DawnOrgDept regDept = null;
 
         /**
          * 开方医师
          */
-        public Employee doctor = null;
+        public DawnOrgEmpl doctor = null;
 
         /**
          * 实体：执行科室
          */
-        public Department execDept = null;
+        public DawnOrgDept execDept = null;
 
         /**
          * 实体：划价员
          */
-        public Employee operEmpl = null;
+        public DawnOrgEmpl operEmpl = null;
 
         /**
          * 收费员
          */
-        public Employee feeEmpl = null;
+        public DawnOrgEmpl feeEmpl = null;
 
         /**
          * 确认人
          */
-        public Employee cfmEmpl = null;
+        public DawnOrgEmpl cfmEmpl = null;
 
         /**
          * 确认科室
          */
-        public Department cfmDept = null;
+        public DawnOrgDept cfmDept = null;
 
         /**
          * 转费操作员
          */
-        public Employee sendEmpl = null;
+        public DawnOrgEmpl sendEmpl = null;
     }
 
     /**

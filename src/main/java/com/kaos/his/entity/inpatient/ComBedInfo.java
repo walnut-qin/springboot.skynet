@@ -1,6 +1,6 @@
 package com.kaos.his.entity.inpatient;
 
-import com.kaos.his.entity.common.Department;
+import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.inpatient.BedStateEnum;
 
@@ -35,7 +35,7 @@ public class ComBedInfo {
         /**
          * 基本信息操作员
          */
-        public Department nurseCell = null;
+        public DawnOrgDept nurseCell = null;
     }
 
     /**

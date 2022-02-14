@@ -2,8 +2,8 @@ package com.kaos.his.entity.inpatient;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.common.Patient;
 import com.kaos.his.enums.inpatient.InpatientSourceEnum;
 import com.kaos.his.enums.inpatient.InpatientStateEnum;
@@ -99,7 +99,7 @@ public class Inpatient extends Patient {
         /**
          * 实体：住院科室
          */
-        public Department stayedDept = null;
+        public DawnOrgDept stayedDept = null;
 
         /**
          * 实体：床位
@@ -109,27 +109,27 @@ public class Inpatient extends Patient {
         /**
          * 实体：住院病区
          */
-        public Department stayedNurseCell = null;
+        public DawnOrgDept stayedNurseCell = null;
 
         /**
          * 实体：住院医师
          */
-        public Employee houseDoctor = null;
+        public DawnOrgEmpl houseDoctor = null;
 
         /**
          * 实体：主治医师
          */
-        public Employee chargeDoctor = null;
+        public DawnOrgEmpl chargeDoctor = null;
 
         /**
          * 实体：主任医师
          */
-        public Employee chiefDoctor = null;
+        public DawnOrgEmpl chiefDoctor = null;
 
         /**
          * 实体：责任护士
          */
-        public Employee dutyNurse = null;
+        public DawnOrgEmpl dutyNurse = null;
     }
 
     /**

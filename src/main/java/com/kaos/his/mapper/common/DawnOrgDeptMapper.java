@@ -1,13 +1,13 @@
 package com.kaos.his.mapper.common;
 
-import com.kaos.his.entity.common.Department;
+import com.kaos.his.entity.common.DawnOrgDept;
 
-public interface DepartmentMapper {
+public interface DawnOrgDeptMapper {
     /**
      * 主键查询
      * 
      * @param deptCode 科室编码；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
-    Department queryDepartment(String deptCode);
+    DawnOrgDept queryDepartment(String deptCode);
 }

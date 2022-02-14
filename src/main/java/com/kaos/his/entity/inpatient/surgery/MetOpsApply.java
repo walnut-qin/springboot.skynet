@@ -3,8 +3,8 @@ package com.kaos.his.entity.inpatient.surgery;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.inpatient.surgery.AnesTypeEnum;
@@ -226,37 +226,37 @@ public class MetOpsApply {
         /**
          * 实体：手术医生
          */
-        public Employee opsDoctor = null;
+        public DawnOrgEmpl opsDoctor = null;
 
         /**
          * 实体：指导医生
          */
-        public Employee guiDoctor = null;
+        public DawnOrgEmpl guiDoctor = null;
 
         /**
          * 实体：手术科室
          */
-        public Department surgeryDept = null;
+        public DawnOrgDept surgeryDept = null;
 
         /**
          * 实体：申请医生
          */
-        public Employee applyDoctor = null;
+        public DawnOrgEmpl applyDoctor = null;
 
         /**
          * 实体：审批医生
          */
-        public Employee apprDoctor = null;
+        public DawnOrgEmpl apprDoctor = null;
 
         /**
          * 麻醉医生
          */
-        public Employee anesDoctor = null;
+        public DawnOrgEmpl anesDoctor = null;
 
         /**
          * 实体：申请人
          */
-        public Employee operator = null;
+        public DawnOrgEmpl operator = null;
 
         /**
          * 实体：手术间

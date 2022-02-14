@@ -23,8 +23,8 @@ import com.kaos.his.enums.inpatient.FinIprPrepayInStateEnum;
 import com.kaos.his.enums.inpatient.InpatientStateEnum;
 import com.kaos.his.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
-import com.kaos.his.mapper.common.DepartmentMapper;
-import com.kaos.his.mapper.common.EmployeeMapper;
+import com.kaos.his.mapper.common.DawnOrgDeptMapper;
+import com.kaos.his.mapper.common.DawnOrgEmplMapper;
 import com.kaos.his.mapper.common.PatientMapper;
 import com.kaos.his.mapper.inpatient.ComBedInfoMapper;
 import com.kaos.his.mapper.inpatient.FinIprPrepayInMapper;
@@ -140,13 +140,13 @@ public class EscortServiceImpl implements EscortService {
      * 员工接口
      */
     @Autowired
-    EmployeeMapper employeeMapper;
+    DawnOrgEmplMapper employeeMapper;
 
     /**
      * 科室接口
      */
     @Autowired
-    DepartmentMapper departmentMapper;
+    DawnOrgDeptMapper departmentMapper;
 
     /**
      * 床位接口

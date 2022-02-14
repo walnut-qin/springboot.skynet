@@ -3,7 +3,7 @@ package com.kaos.his.entity.inpatient.fee.balance;
 import java.util.Date;
 
 import com.google.common.base.Optional;
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.fee.balance.dayreport.FinIpbDayReport;
 import com.kaos.his.enums.common.TransTypeEnum;
@@ -139,7 +139,7 @@ public class FinIpbBalanceHead {
         /**
          * 实体：结算员
          */
-        public Employee balanceEmployee = null;
+        public DawnOrgEmpl balanceEmployee = null;
 
         /**
          * 实体：日结记录

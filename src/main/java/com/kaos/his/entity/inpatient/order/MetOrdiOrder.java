@@ -2,8 +2,8 @@ package com.kaos.his.entity.inpatient.order;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Department;
-import com.kaos.his.entity.common.Employee;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.inpatient.order.MetOrdiOrderStateEnum;
 
@@ -60,12 +60,12 @@ public class MetOrdiOrder {
         /**
          * 开立医生
          */
-        public Employee moDoc = null;
+        public DawnOrgEmpl moDoc = null;
 
         /**
          * 执行科室
          */
-        public Department execDept = null;
+        public DawnOrgDept execDept = null;
     }
 
     /**
