@@ -30,6 +30,13 @@ public interface FinOpbFeeDetailMapper {
     List<FinOpbFeeDetail> queryFeeDetailsWithCardNo(String cardNo, String itemCode, Date beginDate, Date endDate);
 
     /**
+     * 获取插入前实体，填充一些序列的值
+     * 
+     * @return
+     */
+    FinOpbFeeDetail queryPreInsertItem();
+
+    /**
      * 插入费用明细
      * 
      * @param feeDetail 待插入实体
