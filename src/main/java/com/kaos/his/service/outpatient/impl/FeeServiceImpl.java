@@ -2,6 +2,7 @@ package com.kaos.his.service.outpatient.impl;
 
 import java.util.List;
 
+import com.kaos.his.cache.common.DawnOrgEmplCache;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
@@ -29,6 +30,11 @@ public class FeeServiceImpl implements FeeService {
      */
     @Autowired
     FinOpbFeeDetailMapper feeDetailMapper;
+
+    /**
+     * 职工cache
+     */
+    DawnOrgEmplCache dawnOrgEmplCache = DawnOrgEmplCache.getInstance();
 
     @Override
     public void undrugPriced(String clinicCode, String operCode, List<String> itemCodes, String termNo) {
