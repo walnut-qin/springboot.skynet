@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.kaos.his.cache.common.DawnOrgDeptCache;
 import com.kaos.his.cache.common.DawnOrgEmplCache;
+import com.kaos.his.enums.common.SysClassEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
-import com.kaos.his.enums.outpatient.fee.FeeDetailClassCodeEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.service.outpatient.FeeService;
@@ -96,7 +96,7 @@ public class FeeServiceImpl implements FeeService {
                             throw new RuntimeException("不支持的院区");
                     }
                     feeDetail.feeCode = MinFeeEnum.化验费;
-                    feeDetail.classCode = FeeDetailClassCodeEnum.检验;
+                    feeDetail.classCode = SysClassEnum.检验;
                     break;
 
                 case "F00000043248":
@@ -130,7 +130,7 @@ public class FeeServiceImpl implements FeeService {
                             throw new RuntimeException("不支持的院区");
                     }
                     feeDetail.feeCode = MinFeeEnum.彩超;
-                    feeDetail.classCode = FeeDetailClassCodeEnum.检查;
+                    feeDetail.classCode = SysClassEnum.检查;
                     break;
 
                 default:

@@ -6,14 +6,14 @@ import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.outpatient.Outpatient;
 import com.kaos.his.enums.common.DeptOwnEnum;
+import com.kaos.his.enums.common.ItemGradeEnum;
+import com.kaos.his.enums.common.SysClassEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.outpatient.fee.FeeDetailCancelFlagEnum;
-import com.kaos.his.enums.outpatient.fee.FeeDetailClassCodeEnum;
 import com.kaos.his.enums.outpatient.fee.FeeDetailCostSourceEnum;
 import com.kaos.his.enums.outpatient.fee.FeeDetailPayFlagEnum;
 import com.kaos.his.enums.outpatient.fee.FeeDetailSendFlagEnum;
-import com.kaos.his.enums.pharmacy.DrugItemGradeEnum;
 import com.kaos.his.enums.pharmacy.DrugQualityEnum;
 
 /**
@@ -108,7 +108,7 @@ public class FinOpbFeeDetail {
     /**
      * 系统类别
      */
-    public FeeDetailClassCodeEnum classCode = null;
+    public SysClassEnum classCode = null;
 
     /**
      * 单价
@@ -218,7 +218,7 @@ public class FinOpbFeeDetail {
     /**
      * 项目等级
      */
-    public DrugItemGradeEnum itemGrade = null;
+    public ItemGradeEnum itemGrade = null;
 
     /**
      * 主药标识

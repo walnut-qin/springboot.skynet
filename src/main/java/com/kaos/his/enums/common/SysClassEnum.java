@@ -1,9 +1,13 @@
-package com.kaos.his.enums.pharmacy;
+package com.kaos.his.enums.common;
 
 import com.kaos.inf.IEnum;
 
-public enum DrugItemGradeEnum implements IEnum {
-    甲("1", "甲类"), 乙("2", "乙类"), 丙("3", "丙类");
+/**
+ * 门诊系统类别，维护在COM_DICTIONARY的MZEXECBILL类型
+ */
+public enum SysClassEnum implements IEnum {
+    西药("P", "西药"), 中成药("PCZ", "中成药"), 中草药("PCC", "中草药"), 治疗("UZ", "治疗"), 检查("UC", "检查"), 手术("UO", "手术"), 检验("UL", "检验"),
+    非药品("U", "非药品"), 其他("UT", "其他");
 
     /**
      * 数据库存值
@@ -21,8 +25,8 @@ public enum DrugItemGradeEnum implements IEnum {
      * @param index
      * @param description
      */
-    DrugItemGradeEnum(String index, String description) {
-        this.value = index;
+    SysClassEnum(String value, String description) {
+        this.value = value;
         this.description = description;
     }
 
