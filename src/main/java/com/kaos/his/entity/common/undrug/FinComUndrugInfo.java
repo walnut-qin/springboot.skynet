@@ -1,6 +1,9 @@
 package com.kaos.his.entity.common.undrug;
 
+import java.util.Date;
+
 import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.enums.common.ItemGradeEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.SysClassEnum;
@@ -171,6 +174,126 @@ public class FinComUndrugInfo {
     public String operateKind = null;
 
     /**
+     * 手术规模
+     */
+    public String operateType = null;
+
+    /**
+     * 是否有物资项目与之对照(1有，0没有)
+     */
+    public Boolean collateFlag = null;
+
+    /**
+     * 备注
+     */
+    public String mark = null;
+
+    /**
+     * 操作员 {@link FinComUndrugInfo.AssociateEntity#operEmpl}
+     */
+    public String operCode = null;
+
+    /**
+     * 操作时间
+     */
+    public Date operDate = null;
+
+    /**
+     * 疾病分类(开立检验项目时使用)
+     */
+    public String diseaseClass = null;
+
+    /**
+     * 农合医保类别
+     */
+    public String specialDept = null;
+
+    /**
+     * 是否需要打印知情同意书
+     */
+    public Boolean conSentFlag = null;
+
+    /**
+     * 住院医保类别
+     */
+    public String mark1 = null;
+
+    /**
+     * 检查要求(襄阳保存二汽医保类别)
+     */
+    public String mark2 = null;
+
+    /**
+     * 注意事项(开立检查申请单时使用) 暂用为半价处理标示 1奇数全家偶数半价 2首个全价之后全部半价
+     */
+    public String mark3 = null;
+
+    /**
+     * 检查申请单名称 暂用为半价系数
+     */
+    public String mark4 = null;
+
+    /**
+     * 是否需要预约
+     */
+    public Boolean needBespeak = null;
+
+    /**
+     * 项目范围
+     */
+    public String itemArea = null;
+
+    /**
+     * 项目例外
+     */
+    public String itemNoArea = null;
+
+    /**
+     * 单位标识 true: 组套, false: 明细
+     */
+    public Boolean unitFlag = null;
+
+    /**
+     * 适用范围(0: 全部, 1: 门诊, 2: 住院)
+     */
+    public String applicabilityArea = null;
+
+    /**
+     * 允许开立的科室列表，ALL表示全有
+     */
+    public String deptList = null;
+
+    /**
+     * 物价费用类别
+     */
+    public String itemPriceType = null;
+
+    /**
+     * 该项目是否打印医嘱单
+     */
+    public Boolean orderPrintTag = null;
+
+    /**
+     * 是否在打印医嘱单的时候显示该项目的频次
+     */
+    public Boolean showFre = null;
+
+    /**
+     * 医院等级
+     */
+    public String hosLevel = null;
+
+    /**
+     * 用于标注SPD的高低值耗材，1高值、2低值。0非高非低
+     */
+    public String spdGd = null;
+
+    /**
+     * 院区标识
+     */
+    public String branch = null;
+
+    /**
      * 关联实体
      */
     public class AssociateEntity {
@@ -178,6 +301,11 @@ public class FinComUndrugInfo {
          * 执行科室 {@link FinComUndrugInfo#execDeptCode}
          */
         public DawnOrgDept execDept = null;
+
+        /**
+         * 操作员 {@link FinComUndrugInfo#operCode}
+         */
+        public DawnOrgEmpl operEmpl = null;
     }
 
     /**
