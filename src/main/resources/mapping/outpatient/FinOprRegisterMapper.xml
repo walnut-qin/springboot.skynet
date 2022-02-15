@@ -203,4 +203,22 @@
             </if>
         </where>
     </select>
+
+    <update id="updateSeeFlag">
+        UPDATE
+            XYHIS.FIN_OPR_REGISTER
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="true">
+                YNSEE = #{seeFlag},
+            </if>
+        </trim>
+        <where>
+            <if test="true">
+                AND CLINIC_CODE = #{clinicCode}
+            </if>
+            <if test="true">
+                AND TRANS_TYPE = #{transType}
+            </if>
+        </where>
+    </update>
 </mapper>
