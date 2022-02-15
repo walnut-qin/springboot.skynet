@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class DepartmentCacheTests {
-    ICache<DawnOrgDept> departmentCache = DepartmentCache.getInstance();
+public class DawnOrgDeptCacheTests {
+    ICache<DawnOrgDept> dawnOrgDeptCache = DawnOrgDeptCache.getCache();
 
     @Test
-    public void queryDepartment() {
-        this.departmentCache.getValue("1000");
+    public void getCacheValue() {
+        this.dawnOrgDeptCache.getValue("1000");
     }
 }

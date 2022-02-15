@@ -84,7 +84,7 @@ public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
      * 
      * @return
      */
-    public static DawnOrgEmplCache getInstance() {
+    public static DawnOrgEmplCache getCache() {
         return InnerDawnOrgEmplCache.dawnOrgEmplCache;
     }
 }

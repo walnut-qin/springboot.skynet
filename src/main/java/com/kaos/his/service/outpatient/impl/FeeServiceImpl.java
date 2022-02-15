@@ -34,7 +34,7 @@ public class FeeServiceImpl implements FeeService {
     /**
      * 职工cache
      */
-    DawnOrgEmplCache dawnOrgEmplCache = DawnOrgEmplCache.getInstance();
+    DawnOrgEmplCache dawnOrgEmplCache = DawnOrgEmplCache.getCache();
 
     @Override
     public void undrugPriced(String clinicCode, String operCode, List<String> itemCodes, String termNo) {
