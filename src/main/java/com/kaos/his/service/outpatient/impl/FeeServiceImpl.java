@@ -1,12 +1,17 @@
 package com.kaos.his.service.outpatient.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.kaos.his.cache.common.DawnOrgDeptCache;
 import com.kaos.his.cache.common.DawnOrgEmplCache;
+import com.kaos.his.cache.common.undrug.FinComUndrugInfoCache;
 import com.kaos.his.enums.common.SysClassEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
+import com.kaos.his.enums.outpatient.fee.FeeDetailCancelFlagEnum;
+import com.kaos.his.enums.outpatient.fee.FeeDetailCostSourceEnum;
+import com.kaos.his.enums.outpatient.fee.FeeDetailPayFlagEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.service.outpatient.FeeService;
@@ -45,6 +50,11 @@ public class FeeServiceImpl implements FeeService {
      */
     DawnOrgDeptCache dawnOrgDeptCache = DawnOrgDeptCache.getCache();
 
+    /**
+     * 非药品信息cache
+     */
+    FinComUndrugInfoCache undrugInfoCache = FinComUndrugInfoCache.getCache();
+
     @Transactional
     @Override
     public void undrugPriced(String clinicCode, String operCode, List<String> itemCodes, String termNo) {
@@ -65,6 +75,7 @@ public class FeeServiceImpl implements FeeService {
             throw new RuntimeException("FinOpbFeeDetail插入准备出错");
         }
 
+        // 依次对每一个项目操作
         for (int i = 0; i < itemCodes.size(); i++) {
             var itemCode = itemCodes.get(i);
             switch (itemCode) {
@@ -136,6 +147,65 @@ public class FeeServiceImpl implements FeeService {
                 default:
                     throw new RuntimeException("不支持的项目");
             }
+
+            // 检索项目信息
+            var undrugInfo = this.undrugInfoCache.getValue(itemCode);
+            if (undrugInfo == null) {
+                throw new RuntimeException(String.format("未检索到非药品项目(%s)的信息", itemCode));
+            }
+
+            // 填充其他待插字段
+            feeDetail.seqNo = i + 1;
+            feeDetail.transType = TransTypeEnum.Positive;
+            feeDetail.clinicCode = clinicCode;
+            feeDetail.cardNo = register.cardNo;
+            feeDetail.regDate = new Date();
+            feeDetail.regDeptCode = register.deptCode;
+            feeDetail.doctCode = register.doctCode;
+            feeDetail.itemCode = itemCode;
+            feeDetail.itemName = undrugInfo.itemName;
+            feeDetail.drugFlag = false;
+            feeDetail.specs = undrugInfo.spec;
+            feeDetail.unitPrice = undrugInfo.unitPrice;
+            feeDetail.qty = 1.0;
+            feeDetail.days = 1;
+            feeDetail.injectNumber = 0;
+            feeDetail.emergencyFlag = false;
+            feeDetail.doseOnce = 0.0;
+            feeDetail.packQty = 1;
+            feeDetail.priceUnit = "次";
+            feeDetail.pubCost = 0.0;
+            feeDetail.payCost = 0.0;
+            feeDetail.unitPrice = undrugInfo.unitPrice;
+            feeDetail.mainDrugFlag = false;
+            feeDetail.operCode = operCode;
+            feeDetail.operDate = new Date();
+            feeDetail.payFlag = FeeDetailPayFlagEnum.划价;
+            feeDetail.cancelFlag = FeeDetailCancelFlagEnum.正常;
+            feeDetail.confirmFlag = false;
+            feeDetail.newItemRate = 1.0;
+            feeDetail.oldItemRate = 1.0;
+            feeDetail.extFlag = true;
+            feeDetail.extFlag3 = false;
+            feeDetail.noBackNum = 1.0;
+            feeDetail.confirmNum = 0.0;
+            feeDetail.confirmInject = 0;
+            feeDetail.ecoCost = 0.0;
+            feeDetail.overCost = undrugInfo.unitPrice;
+            feeDetail.excessCost = 0.0;
+            feeDetail.drugOwnCost = 0.0;
+            feeDetail.costSource = FeeDetailCostSourceEnum.操作员;
+            feeDetail.subJobFlag = false;
+            feeDetail.accountFlag = false;
+            feeDetail.updateSequenceNo = 0;
+            feeDetail.docInDept = register.deptCode;
+            feeDetail.aTermNo = termNo;
+
+            // 插入数据
+            this.feeDetailMapper.insertFeeDetail(feeDetail);
+
+            // 更新看诊标识
+            this.registerMapper.updateSeeFlag(clinicCode, TransTypeEnum.Positive, true);
         }
     }
 }

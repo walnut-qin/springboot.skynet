@@ -56,9 +56,9 @@ public class FinOpbFeeDetail {
     public String regDeptCode = null;
 
     /**
-     * 开方医师
+     * 开方医师 {@link FinOpbFeeDetail.AssociateEntity#doctor}
      */
-    public String docCode = null;
+    public String doctCode = null;
 
     /**
      * 开方医师所在科室
@@ -316,22 +316,22 @@ public class FinOpbFeeDetail {
     public Double oldItemRate = null;
 
     /**
-     * 扩展标识
+     * 特殊项目标志
      */
     public Boolean extFlag = null;
 
     /**
-     * 扩展标识1
+     * 正常个人体检
      */
     public Boolean extFlag1 = null;
 
     /**
-     * 扩展标识2
+     * 日结
      */
     public Boolean extFlag2 = null;
 
     /**
-     * 扩展标识3
+     * 包装单位
      */
     public Boolean extFlag3 = null;
 
@@ -540,7 +540,7 @@ public class FinOpbFeeDetail {
         public DawnOrgDept regDept = null;
 
         /**
-         * 开方医师
+         * 开方医师 {@link FinOpbFeeDetail#doctCode}
          */
         public DawnOrgEmpl doctor = null;
 

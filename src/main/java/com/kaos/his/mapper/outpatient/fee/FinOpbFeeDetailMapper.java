@@ -31,6 +31,14 @@ public interface FinOpbFeeDetailMapper {
 
     /**
      * 获取插入前实体，填充一些序列的值
+     * <p/>
+     * {@link FinOpbFeeDetail#recipeNo}
+     * <p/>
+     * {@link FinOpbFeeDetail#recipeSeq}
+     * <p/>
+     * {@link FinOpbFeeDetail#combNo}
+     * <p/>
+     * {@link FinOpbFeeDetail#moOrder}
      * 
      * @return
      */

@@ -255,7 +255,8 @@
         SELECT
             SEQ_OPB_RECIPE_NO.NEXTVAL AS RECIPE_NO,
             SEQ_FIN_OPB_RECIPESEQ.nextval AS RECIPE_SEQ,
-            SEQ_ORD_COMB.nextval AS COMB_NO
+            SEQ_ORD_COMB.nextval AS COMB_NO,
+            SEQ_MET_ORDER_ID.nextval AS MO_ORDER
         FROM
             DUAL;
     </select>
