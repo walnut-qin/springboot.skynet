@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.common.undrug.FinComUndrugInfoMapper">
+    <resultMap id="map" type="com.kaos.his.entity.common.undrug.FinComUndrugInfo">
+        <id column="ITEM_CODE" jdbcType="VARCHAR" property="itemCode"/>
+        <result column="ITEM_NAME" jdbcType="VARCHAR" property="itemName"/>
+        <result column="SYS_CLASS" jdbcType="VARCHAR" property="sysClass"/>
+        <result column="FEE_CODE" jdbcType="VARCHAR" property="feeCode"/>
+        <result column="INPUT_CODE" jdbcType="VARCHAR" property="inputCode"/>
+        <result column="SPELL_CODE" jdbcType="VARCHAR" property="spellCode"/>
+        <result column="WB_CODE" jdbcType="VARCHAR" property="wbCode"/>
+        <result column="GB_CODE" jdbcType="VARCHAR" property="internalCode"/>
+        <result column="INTERNATIONAL_CODE" jdbcType="VARCHAR" property="internationalCode"/>
+        <result column="UNIT_PRICE" jdbcType="VARCHAR" property="unitPrice"/>
+        <result column="UNIT_PRICE1" jdbcType="VARCHAR" property="unitPrice1"/>
+        <result column="UNIT_PRICE2" jdbcType="VARCHAR" property="unitPrice2"/>
+        <result column="UNIT_PRICE3" jdbcType="VARCHAR" property="unitPrice3"/>
+        <result column="UNIT_PRICE4" jdbcType="VARCHAR" property="unitPrice4"/>
+        <result column="EMERG_SCALE" jdbcType="VARCHAR" property="emergencyScale"/>
+        <result column="STOCK_UNIT" jdbcType="VARCHAR" property="stockUnit"/>
+        <result column="SPECIAL_FLAG" jdbcType="VARCHAR" property="specialFlag"/>
+        <result column="SPECIAL_FLAG1" jdbcType="VARCHAR" property="specialFlag1"/>
+        <result column="SPECIAL_FLAG2" jdbcType="VARCHAR" property="specialFlag2"/>
+        <result column="SPECIAL_FLAG3" jdbcType="VARCHAR" property="specialFlag3"/>
+        <result column="SPECIAL_FLAG4" jdbcType="VARCHAR" property="specialFlag4"/>
+        <result column="FAMILY_PLANE" jdbcType="VARCHAR" property="familyPlan"/>
+        <result column="SPECIAL_ITEM" jdbcType="VARCHAR" property="specialItem"/>
+        <result column="ITEM_GRADE" jdbcType="VARCHAR" property="itemGrad"/>
+        <result column="CONFIRM_FLAG" jdbcType="VARCHAR" property="confirmFlag"/>
+        <result column="VALID_STATE" jdbcType="VARCHAR" property="validState"/>
+        <result column="SPECS" jdbcType="VARCHAR" property="spec"/>
+        <result column="EXEDEPT_CODE" jdbcType="VARCHAR" property="execDeptCode"/>
+        <result column="FACILITY_NO" jdbcType="VARCHAR" property="facilityNo"/>
+        <result column="DEFAULT_SAMPLE" jdbcType="VARCHAR" property="defaultSample"/>
+        <result column="OPERATE_CODE" jdbcType="VARCHAR" property="operateCode"/>
+        <result column="OPERATE_KIND" jdbcType="VARCHAR" property="operateKind"/>
+        <result column="OPERATE_TYPE" jdbcType="VARCHAR" property="operateType"/>
+        <result column="COLLATE_FLAG" jdbcType="VARCHAR" property="collateFlag"/>
+        <result column="MARK" jdbcType="VARCHAR" property="mark"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+        <result column="DISEASE_CLASS" jdbcType="VARCHAR" property="diseaseClass"/>
+        <result column="SPECIAL_DEPT" jdbcType="VARCHAR" property="specialDept"/>
+        <result column="CONSENT_FLAG" jdbcType="VARCHAR" property="conSentFlag"/>
+        <result column="MARK1" jdbcType="VARCHAR" property="mark1"/>
+        <result column="MARK2" jdbcType="VARCHAR" property="mark2"/>
+        <result column="MARK3" jdbcType="VARCHAR" property="mark3"/>
+        <result column="MARK4" jdbcType="VARCHAR" property="mark4"/>
+        <result column="NEEDBESPEAK" jdbcType="VARCHAR" property="needBespeak"/>
+        <result column="ITEM_AREA" jdbcType="VARCHAR" property="itemArea"/>
+        <result column="ITEM_NOAREA" jdbcType="VARCHAR" property="itemNoArea"/>
+        <result column="UNITFLAG" jdbcType="VARCHAR" property="unitFlag"/>
+        <result column="APPLICABILITYAREA" jdbcType="VARCHAR" property="applicabilityArea"/>
+        <result column="DEPT_LIST" jdbcType="VARCHAR" property="deptList"/>
+        <result column="ITEM_PRICETYPE" jdbcType="VARCHAR" property="itemPriceType"/>
+        <result column="ORDERPRINT_TAG" jdbcType="VARCHAR" property="orderPrintTag"/>
+        <result column="SHOW_FRE" jdbcType="VARCHAR" property="showFre"/>
+        <result column="HOS_LEVEL" jdbcType="VARCHAR" property="hosLevel"/>
+        <result column="SPD_GD" jdbcType="VARCHAR" property="spdGd"/>
+        <result column="BRANCH" jdbcType="VARCHAR" property="branch"/>
+    </resultMap>
+
+    <sql id="item">
+        ITEM_CODE,
+        ITEM_NAME,
+        SYS_CLASS,
+        FEE_CODE,
+        INPUT_CODE,
+        SPELL_CODE,
+        WB_CODE,
+        GB_CODE,
+        INTERNATIONAL_CODE,
+        UNIT_PRICE,
+        UNIT_PRICE1,
+        UNIT_PRICE2,
+        UNIT_PRICE3,
+        UNIT_PRICE4,
+        EMERG_SCALE,
+        STOCK_UNIT,
+        SPECIAL_FLAG,
+        SPECIAL_FLAG1,
+        SPECIAL_FLAG2,
+        SPECIAL_FLAG3,
+        SPECIAL_FLAG4,
+        FAMILY_PLANE,
+        SPECIAL_ITEM,
+        ITEM_GRADE,
+        CONFIRM_FLAG,
+        VALID_STATE,
+        SPECS,
+        EXEDEPT_CODE,
+        FACILITY_NO,
+        DEFAULT_SAMPLE,
+        OPERATE_CODE,
+        OPERATE_KIND,
+        OPERATE_TYPE,
+        COLLATE_FLAG,
+        MARK,
+        OPER_CODE,
+        OPER_DATE,
+        DISEASE_CLASS,
+        SPECIAL_DEPT,
+        CONSENT_FLAG,
+        MARK1,
+        MARK2,
+        MARK3,
+        MARK4,
+        NEEDBESPEAK,
+        ITEM_AREA,
+        ITEM_NOAREA,
+        UNITFLAG,
+        APPLICABILITYAREA,
+        DEPT_LIST,
+        ITEM_PRICETYPE,
+        ORDERPRINT_TAG,
+        SHOW_FRE,
+        HOS_LEVEL,
+        SPD_GD,
+        BRANCH
+    </sql>
+
+    <select id="queryUndrugInfo" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_COM_UNDRUGINFO
+        <where>
+            <if test="true">
+                AND ITEM_CODE = #{itemCode}
+            </if>
+        </where>
+    </select>
+</mapper>
