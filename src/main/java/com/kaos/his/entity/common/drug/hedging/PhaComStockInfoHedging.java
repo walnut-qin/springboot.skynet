@@ -1,4 +1,4 @@
-package com.kaos.his.entity.pharmacy.hedging;
+package com.kaos.his.entity.common.drug.hedging;
 
 import java.util.Date;
 

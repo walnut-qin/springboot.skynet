@@ -1,4 +1,4 @@
-package com.kaos.his.mapper.pharmacy.hedging;
+package com.kaos.his.mapper.common.drug.hedging;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

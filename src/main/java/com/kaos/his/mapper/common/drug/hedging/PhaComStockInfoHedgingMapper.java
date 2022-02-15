@@ -1,6 +1,6 @@
-package com.kaos.his.mapper.pharmacy.hedging;
+package com.kaos.his.mapper.common.drug.hedging;
 
-import com.kaos.his.entity.pharmacy.hedging.PhaComStockInfoHedging;
+import com.kaos.his.entity.common.drug.hedging.PhaComStockInfoHedging;
 
 public interface PhaComStockInfoHedgingMapper {
     /**
