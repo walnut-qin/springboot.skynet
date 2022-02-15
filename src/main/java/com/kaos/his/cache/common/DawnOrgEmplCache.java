@@ -6,39 +6,36 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.kaos.his.entity.common.DawnOrgDept;
-import com.kaos.his.mapper.common.DawnOrgDeptMapper;
+import com.kaos.his.entity.common.DawnOrgEmpl;
+import com.kaos.his.mapper.common.DawnOrgEmplMapper;
 import com.kaos.inf.ICache;
 
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * 科室字典，容量 = 300，不过期，刷新评率 = 1次/天
- */
-public class DepartmentCache implements ICache<DawnOrgDept> {
+public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
     /**
      * 数据库接口
      */
     @Autowired
-    DawnOrgDeptMapper departmentMapper;
+    DawnOrgEmplMapper dawnOrgEmplMapper;
 
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(DepartmentCache.class.getName());
+    Logger logger = Logger.getLogger(DawnOrgDeptCache.class.getName());
 
     /**
      * Loading cache
      */
-    LoadingCache<String, DawnOrgDept> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, DawnOrgEmpl> cache = CacheBuilder.newBuilder()
             .maximumSize(300)
             .refreshAfterWrite(1, TimeUnit.DAYS)
-            .build(new CacheLoader<String, DawnOrgDept>() {
+            .build(new CacheLoader<String, DawnOrgEmpl>() {
                 @Override
-                public DawnOrgDept load(String key) throws Exception {
-                    return DepartmentCache.this.departmentMapper.queryDepartment(key);
+                public DawnOrgEmpl load(String key) throws Exception {
+                    return DawnOrgEmplCache.this.dawnOrgEmplMapper.queryEmployee(key);
                 };
             });
 
@@ -47,11 +44,11 @@ public class DepartmentCache implements ICache<DawnOrgDept> {
      * 
      * @throws ExecutorException
      */
-    private DepartmentCache() throws ExecutorException {
+    private DawnOrgEmplCache() throws ExecutorException {
     }
 
     @Override
-    public DawnOrgDept getValue(String key) {
+    public DawnOrgEmpl getValue(String key) {
         try {
             return this.cache.get(key);
         } catch (Exception e) {
@@ -61,7 +58,7 @@ public class DepartmentCache implements ICache<DawnOrgDept> {
     }
 
     @Override
-    public ConcurrentMap<String, DawnOrgDept> show() {
+    public ConcurrentMap<String, DawnOrgEmpl> show() {
         return this.cache.asMap();
     }
 
@@ -78,8 +75,8 @@ public class DepartmentCache implements ICache<DawnOrgDept> {
     /**
      * 静态内部类
      */
-    static class InnerDepartmentCache {
-        static DepartmentCache departmentCache = new DepartmentCache();
+    static class InnerDawnOrgEmplCache {
+        static DawnOrgEmplCache dawnOrgEmplCache = new DawnOrgEmplCache();
     }
 
     /**
@@ -87,7 +84,7 @@ public class DepartmentCache implements ICache<DawnOrgDept> {
      * 
      * @return
      */
-    public static DepartmentCache getInstance() {
-        return InnerDepartmentCache.departmentCache;
+    public static DawnOrgEmplCache getInstance() {
+        return InnerDawnOrgEmplCache.dawnOrgEmplCache;
     }
 }
