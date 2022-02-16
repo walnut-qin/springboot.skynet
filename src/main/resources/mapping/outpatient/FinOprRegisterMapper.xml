@@ -223,10 +223,11 @@
     </update>
 
     <insert id="insertRegisterRec">
-        <selectKey keyProperty="invoiceNo,clinicCode" order="BEFORE" resultType="com.kaos.his.entity.outpatient.FinOprRegister">
+        <selectKey keyProperty="invoiceNo,clinicCode,emrRegId" order="BEFORE" resultType="com.kaos.his.entity.outpatient.FinOprRegister">
             SELECT
                 SEQ_FIN_CLINICNO.NEXTVAL AS CLINIC_CODE,
-                TO_CHAR(SYSDATE,'YYMMDD') || LPAD(SEQ_FIN_OPB_PAYINVOICE.NEXTVAL, 6, '0') AS INVOICE_NO
+                TO_CHAR(SYSDATE,'YYMMDD') || LPAD(SEQ_FIN_OPB_PAYINVOICE.NEXTVAL, 6, '0') AS INVOICE_NO,
+                SEQ_FIN_REGID.NEXTVAL AS EMR_REGID
             FROM
                 DUAL
         </selectKey>
