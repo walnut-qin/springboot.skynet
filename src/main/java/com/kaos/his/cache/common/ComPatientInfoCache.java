@@ -35,7 +35,7 @@ public class ComPatientInfoCache implements ICache<ComPatientInfo> {
      * Loading cache
      */
     LoadingCache<String, ComPatientInfo> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(300)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .build(new CacheLoader<String, ComPatientInfo>() {
                 @Override
