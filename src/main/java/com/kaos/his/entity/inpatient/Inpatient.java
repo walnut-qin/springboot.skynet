@@ -4,14 +4,14 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.enums.inpatient.InpatientSourceEnum;
 import com.kaos.his.enums.inpatient.InpatientStateEnum;
 
 /**
  * 实体：住院患者（FIN_IPR_INMAININFO）
  */
-public class Inpatient extends Patient {
+public class Inpatient extends ComPatientInfo {
     /**
      * 住院流水号
      */
@@ -95,7 +95,7 @@ public class Inpatient extends Patient {
     /**
      * 关联实体
      */
-    public class AssociateEntity extends Patient.AssociateEntity {
+    public class AssociateEntity extends ComPatientInfo.AssociateEntity {
         /**
          * 实体：住院科室
          */

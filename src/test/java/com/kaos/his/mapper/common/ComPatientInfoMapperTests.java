@@ -5,13 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class DepartmentMapperTests {
+public class ComPatientInfoMapperTests {
     @Autowired
-    DawnOrgDeptMapper departmentMapper;
+    ComPatientInfoMapper patientMapper;
 
     @Test
-    public void queryDepartment() throws Exception {
-        this.departmentMapper.queryDepartment(null);
-        this.departmentMapper.queryDepartment("1000");
+    public void queryPatient() {
+        this.patientMapper.queryPatientInfo(null);
+        this.patientMapper.queryPatientInfo("2009999999");
     }
 }

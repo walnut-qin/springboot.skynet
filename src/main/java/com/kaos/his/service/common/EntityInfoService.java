@@ -1,6 +1,6 @@
 package com.kaos.his.service.common;
 
-import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.common.ComPatientInfo;
 
 public interface EntityInfoService {
     /**
@@ -9,5 +9,5 @@ public interface EntityInfoService {
      * @param cardNo 就诊卡号
      * @return
      */
-    Patient queryPatient(String cardNo);
+    ComPatientInfo queryPatient(String cardNo);
 }

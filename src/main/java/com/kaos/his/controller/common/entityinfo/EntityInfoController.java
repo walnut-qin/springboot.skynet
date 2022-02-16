@@ -49,7 +49,7 @@ public class EntityInfoController {
         rspBody.sex = patient.sex;
         rspBody.age = this.typeHelper.getAge(patient.birthday).toString();
         rspBody.identityCardNo = patient.identityCardNo;
-        rspBody.tel = patient.tel;
+        rspBody.tel = patient.homeTel;
 
         return rspBody;
     }

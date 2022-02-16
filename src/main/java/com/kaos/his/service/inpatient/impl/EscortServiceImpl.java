@@ -10,7 +10,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
-import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.escort.EscortActionRec;
@@ -25,7 +25,7 @@ import com.kaos.his.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.his.mapper.common.DawnOrgDeptMapper;
 import com.kaos.his.mapper.common.DawnOrgEmplMapper;
-import com.kaos.his.mapper.common.PatientMapper;
+import com.kaos.his.mapper.common.ComPatientInfoMapper;
 import com.kaos.his.mapper.inpatient.ComBedInfoMapper;
 import com.kaos.his.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
@@ -104,7 +104,7 @@ public class EscortServiceImpl implements EscortService {
      * 患者接口
      */
     @Autowired
-    PatientMapper patientMapper;
+    ComPatientInfoMapper patientMapper;
 
     /**
      * 附件接口
@@ -302,7 +302,7 @@ public class EscortServiceImpl implements EscortService {
      * @param patientCardNo
      * @param helperCardNo
      */
-    private void canRegister(FinIprPrepayIn fip, Patient helper) throws RuntimeException {
+    private void canRegister(FinIprPrepayIn fip, ComPatientInfo helper) throws RuntimeException {
         // 入参判断
         if (fip == null) {
             throw new RuntimeException("住院证不存在");
@@ -410,7 +410,7 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 陪护人对象
-        var helper = this.patientMapper.queryPatient(helperCardNo);
+        var helper = this.patientMapper.queryPatientInfo(helperCardNo);
 
         // 权限判断
         this.canRegister(fip, helper);
@@ -557,7 +557,7 @@ public class EscortServiceImpl implements EscortService {
                     rt.associateEntity.finIprPrepayIn.associateEntity.patient = ipt;
                 } else {
                     rt.associateEntity.finIprPrepayIn.associateEntity.patient = this.patientMapper
-                            .queryPatient(rt.patientCardNo);
+                            .queryPatientInfo(rt.patientCardNo);
                 }
                 // 科室信息
                 if (rt.associateEntity.finIprPrepayIn.preDeptCode != null) {
@@ -597,7 +597,7 @@ public class EscortServiceImpl implements EscortService {
             // 住院证
             rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
             // 助手实体
-            rt.associateEntity.helper = this.patientMapper.queryPatient(rt.helperCardNo);
+            rt.associateEntity.helper = this.patientMapper.queryPatientInfo(rt.helperCardNo);
             if (rt.associateEntity.finIprPrepayIn != null) {
                 // vip
                 rt.associateEntity.finIprPrepayIn.associateEntity.escortVip = this.escortVipMapper
@@ -691,7 +691,7 @@ public class EscortServiceImpl implements EscortService {
                             annex.associateEntity.patient.associateEntity.escortedPatients.add(inpatient);
                         }
                     } else {
-                        annex.associateEntity.patient = this.patientMapper.queryPatient(escort.helperCardNo);
+                        annex.associateEntity.patient = this.patientMapper.queryPatientInfo(escort.helperCardNo);
                         if (annex.associateEntity.patient != null) {
                             annex.associateEntity.patient.associateEntity.escortedPatients = new ArrayList<>();
                             annex.associateEntity.patient.associateEntity.escortedPatients.add(inpatient);

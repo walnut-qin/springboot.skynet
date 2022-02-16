@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.inpatient.escort.EscortVip;
 import com.kaos.his.enums.inpatient.FinIprPrepayInStateEnum;
 
@@ -64,7 +64,7 @@ public class FinIprPrepayIn {
         /**
          * 实体：患者信息（入院后应当更新为住院实体）
          */
-        public Patient patient = null;
+        public ComPatientInfo patient = null;
 
         /**
          * 实体：床位信息

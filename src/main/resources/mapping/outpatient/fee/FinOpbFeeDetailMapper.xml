@@ -9,7 +9,7 @@
         <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
         <result column="REG_DATE" jdbcType="VARCHAR" property="regDate"/>
         <result column="REG_DPCD" jdbcType="VARCHAR" property="regDeptCode"/>
-        <result column="DOCT_CODE" jdbcType="VARCHAR" property="docCode"/>
+        <result column="DOCT_CODE" jdbcType="VARCHAR" property="doctCode"/>
         <result column="DOCT_DEPT" jdbcType="VARCHAR" property="docDeptCode"/>
         <result column="ITEM_CODE" jdbcType="VARCHAR" property="itemCode"/>
         <result column="ITEM_NAME" jdbcType="VARCHAR" property="itemName"/>
@@ -275,7 +275,7 @@
                 #{cardNo},
                 #{regDate},
                 #{regDeptCode},
-                #{docCode},
+                #{doctCode},
                 #{docDeptCode},
                 #{itemCode},
                 #{itemName},

@@ -2,7 +2,7 @@ package com.kaos.his.entity.inpatient.escort;
 
 import java.util.List;
 
-import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 
 /**
@@ -46,7 +46,7 @@ public class EscortMainInfo {
         /**
          * 实体：陪护人
          */
-        public Patient helper = null;
+        public ComPatientInfo helper = null;
 
         /**
          * 状态列表

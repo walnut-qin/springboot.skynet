@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.his.mapper.common.ComPatientInfoMapper">
+    <resultMap id="map" type="com.kaos.his.entity.common.ComPatientInfo">
+        <id column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="IC_CARDNO" jdbcType="VARCHAR" property="icCardNo"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="SPELL_CODE" jdbcType="VARCHAR" property="spellCode"/>
+        <result column="WB_CODE" jdbcType="VARCHAR" property="wbCode"/>
+        <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
+        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex"/>
+        <result column="IDENNO" jdbcType="VARCHAR" property="identityCardNo"/>
+        <result column="BLOOD_CODE" jdbcType="VARCHAR" property="bloodCode"/>
+        <result column="PROF_CODE" jdbcType="VARCHAR" property="profCode"/>
+        <result column="WORK_HOME" jdbcType="VARCHAR" property="workHome"/>
+        <result column="WORK_TEL" jdbcType="VARCHAR" property="workTel"/>
+        <result column="WORK_ZIP" jdbcType="VARCHAR" property="workZip"/>
+        <result column="HOME" jdbcType="VARCHAR" property="home"/>
+        <result column="HOME_TEL" jdbcType="VARCHAR" property="homeTel"/>
+        <result column="HOME_ZIP" jdbcType="VARCHAR" property="homeZip"/>
+        <result column="DISTRICT" jdbcType="VARCHAR" property="district"/>
+        <result column="NATION_CODE" jdbcType="VARCHAR" property="nationCode"/>
+        <result column="LINKMAN_NAME" jdbcType="VARCHAR" property="linkmanName"/>
+        <result column="LINKMAN_TEL" jdbcType="VARCHAR" property="linkmanTel"/>
+        <result column="LINKMAN_ADD" jdbcType="VARCHAR" property="linkmanAddress"/>
+        <result column="RELA_CODE" jdbcType="VARCHAR" property="linkmanRelation"/>
+        <result column="MARI" jdbcType="VARCHAR" property="mari"/>
+        <result column="COUN_CODE" jdbcType="VARCHAR" property="country"/>
+        <result column="PAYKIND_CODE" jdbcType="VARCHAR" property="payKindCode"/>
+        <result column="PAYKIND_NAME" jdbcType="VARCHAR" property="payKindName"/>
+        <result column="PACT_CODE" jdbcType="VARCHAR" property="pactCode"/>
+        <result column="PACT_NAME" jdbcType="VARCHAR" property="pactName"/>
+        <result column="MCARD_NO" jdbcType="VARCHAR" property="medCardNo"/>
+        <result column="AREA_CODE" jdbcType="VARCHAR" property="areaCode"/>
+        <result column="FRAMT" jdbcType="VARCHAR" property="framt"/>
+        <result column="ANAPHY_FLAG" jdbcType="VARCHAR" property="anaphyFlag"/>
+        <result column="HEPATITIS_FLAG" jdbcType="VARCHAR" property="hepatitisFlag"/>
+        <result column="ACT_CODE" jdbcType="VARCHAR" property="passwd"/>
+        <result column="ACT_AMT" jdbcType="VARCHAR" property="accountAmt"/>
+        <result column="LACT_SUM" jdbcType="VARCHAR" property="lastSum"/>
+        <result column="LBANK_SUM" jdbcType="VARCHAR" property="lastBankSum"/>
+        <result column="ARREAR_TIMES" jdbcType="VARCHAR" property="arrearTimes"/>
+        <result column="ARREAR_SUM" jdbcType="VARCHAR" property="arrearSum"/>
+        <result column="INHOS_SOURCE" jdbcType="VARCHAR" property="inHosSource"/>
+        <result column="LIHOS_DATE" jdbcType="VARCHAR" property="lastInHosDate"/>
+        <result column="INHOS_TIMES" jdbcType="VARCHAR" property="inHosTimes"/>
+        <result column="LOUTHOS_DATE" jdbcType="VARCHAR" property="lastOutHosDate"/>
+        <result column="FIR_SEE_DATE" jdbcType="VARCHAR" property="firstSeeDate"/>
+        <result column="LREG_DATE" jdbcType="VARCHAR" property="lastRegDate"/>
+        <result column="DISOBY_CNT" jdbcType="VARCHAR" property="disobyCnt"/>
+        <result column="END_DATE" jdbcType="VARCHAR" property="endDate"/>
+        <result column="MARK" jdbcType="VARCHAR" property="mark"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+        <result column="IS_VALID" jdbcType="VARCHAR" property="isValid"/>
+        <result column="FEE_KIND" jdbcType="VARCHAR" property="feeKind"/>
+        <result column="OLD_CARDNO" jdbcType="VARCHAR" property="oldCardNo"/>
+        <result column="IS_ENCRYPTNAME" jdbcType="VARCHAR" property="isEncryptName"/>
+        <result column="NORMALNAME" jdbcType="VARCHAR" property="normalName"/>
+        <result column="IDCARDTYPE" jdbcType="VARCHAR" property="idCardType"/>
+        <result column="VIP_FLAG" jdbcType="VARCHAR" property="vipFlag"/>
+        <result column="MONTHER_NAME" jdbcType="VARCHAR" property="motherName"/>
+        <result column="IS_TREATMENT" jdbcType="VARCHAR" property="isTreatment"/>
+        <result column="CASE_NO" jdbcType="VARCHAR" property="caseNo"/>
+        <result column="INSURANCE_ID" jdbcType="VARCHAR" property="insuranceId"/>
+        <result column="INSURANCE_NAME" jdbcType="VARCHAR" property="insuranceName"/>
+        <result column="HOME_DOOR_NO" jdbcType="VARCHAR" property="homeDoorNo"/>
+        <result column="LINKMAN_DOOR_NO" jdbcType="VARCHAR" property="linkmanDoorNo"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="EMR_PATID" jdbcType="VARCHAR" property="emrPatId"/>
+        <result column="PATIENT_SOURCE" jdbcType="VARCHAR" property="patientSource"/>
+        <result column="DEPTOWN" jdbcType="VARCHAR" property="detpOwn"/>
+        <result column="GREENROAD" jdbcType="VARCHAR" property="greenRoad"/>
+        <result column="CREATE_DATE" jdbcType="VARCHAR" property="createDate"/>
+        <result column="IS_2019NCOV" jdbcType="VARCHAR" property="is2019ncov"/>
+        <result column="LINKMAN_IDENTYPE" jdbcType="VARCHAR" property="linkmanIdenType"/>
+        <result column="LINKMAN_IDENNO" jdbcType="VARCHAR" property="linkmanIdenNo"/>
+        <result column="IDEN_FLAG" jdbcType="VARCHAR" property="idenFlag"/>
+        <result column="PROVINCE" jdbcType="VARCHAR" property="province"/>
+        <result column="CITY" jdbcType="VARCHAR" property="city"/>
+        <result column="AREA" jdbcType="VARCHAR" property="area"/>
+        <result column="VIP2_FLAG" jdbcType="VARCHAR" property="vip2Flag"/>
+        <result column="REPRODUCTIVEFUND" jdbcType="VARCHAR" property="reproductiveFund"/>
+        <result column="ACCOMPANYCARDNO" jdbcType="VARCHAR" property="accompanyCardNo"/>
+        <result column="ISEMPLOYEE" jdbcType="VARCHAR" property="isEmpl"/>
+        <result column="EMPI" jdbcType="VARCHAR" property="empi"/>
+        <result column="EMPL_CODE" jdbcType="VARCHAR" property="emplCode"/>
+        <result column="GCPOUTPATIENT" jdbcType="VARCHAR" property="gcpFlag"/>
+        <result column="ROAD" jdbcType="VARCHAR" property="road"/>
+    </resultMap>
+
+    <sql id="item">
+        CARD_NO,
+        IC_CARDNO,
+        NAME,
+        SPELL_CODE,
+        WB_CODE,
+        BIRTHDAY,
+        SEX_CODE,
+        IDENNO,
+        BLOOD_CODE,
+        PROF_CODE,
+        WORK_HOME,
+        WORK_TEL,
+        WORK_ZIP,
+        HOME,
+        HOME_TEL,
+        HOME_ZIP,
+        DISTRICT,
+        NATION_CODE,
+        LINKMAN_NAME,
+        LINKMAN_TEL,
+        LINKMAN_ADD,
+        RELA_CODE,
+        MARI,
+        COUN_CODE,
+        PAYKIND_CODE,
+        PAYKIND_NAME,
+        PACT_CODE,
+        PACT_NAME,
+        MCARD_NO,
+        AREA_CODE,
+        FRAMT,
+        ANAPHY_FLAG,
+        HEPATITIS_FLAG,
+        ACT_CODE,
+        ACT_AMT,
+        LACT_SUM,
+        LBANK_SUM,
+        ARREAR_TIMES,
+        ARREAR_SUM,
+        INHOS_SOURCE,
+        LIHOS_DATE,
+        INHOS_TIMES,
+        LOUTHOS_DATE,
+        FIR_SEE_DATE,
+        LREG_DATE,
+        DISOBY_CNT,
+        END_DATE,
+        MARK,
+        OPER_CODE,
+        OPER_DATE,
+        IS_VALID,
+        FEE_KIND,
+        OLD_CARDNO,
+        IS_ENCRYPTNAME,
+        NORMALNAME,
+        IDCARDTYPE,
+        VIP_FLAG,
+        MONTHER_NAME,
+        IS_TREATMENT,
+        CASE_NO,
+        INSURANCE_ID,
+        INSURANCE_NAME,
+        HOME_DOOR_NO,
+        LINKMAN_DOOR_NO,
+        EMAIL,
+        EMR_PATID,
+        PATIENT_SOURCE,
+        DEPTOWN,
+        GREENROAD,
+        CREATE_DATE,
+        IS_2019NCOV,
+        LINKMAN_IDENTYPE,
+        LINKMAN_IDENNO,
+        IDEN_FLAG,
+        PROVINCE,
+        CITY,
+        AREA,
+        VIP2_FLAG,
+        REPRODUCTIVEFUND,
+        ACCOMPANYCARDNO,
+        ISEMPLOYEE,
+        EMPI,
+        EMPL_CODE,
+        GCPOUTPATIENT,
+        ROAD
+    </sql>
+
+    <select id="queryPatientInfo" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            COM_PATIENTINFO
+        <where>
+            <if test="true">
+                AND CARD_NO = #{cardNo}
+            </if>
+        </where>
+    </select>
+</mapper>

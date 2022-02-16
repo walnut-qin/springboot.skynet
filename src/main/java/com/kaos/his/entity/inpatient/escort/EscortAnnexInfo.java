@@ -2,7 +2,7 @@ package com.kaos.his.entity.inpatient.escort;
 
 import java.util.Date;
 
-import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.common.ComPatientInfo;
 
 public class EscortAnnexInfo {
     /**
@@ -32,7 +32,7 @@ public class EscortAnnexInfo {
         /**
          * 实体：患者信息
          */
-        public Patient patient = null;
+        public ComPatientInfo patient = null;
 
         /**
          * 审核记录

@@ -3,13 +3,13 @@ package com.kaos.his.entity.outpatient;
 import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
-import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.enums.common.TransTypeEnum;
 
 /**
  * 门诊患者
  */
-public class Outpatient extends Patient {
+public class Outpatient extends ComPatientInfo {
     /**
      * 门诊号
      */
@@ -33,7 +33,7 @@ public class Outpatient extends Patient {
     /**
      * 关联实体
      */
-    public class AssociateEntity extends Patient.AssociateEntity {
+    public class AssociateEntity extends ComPatientInfo.AssociateEntity {
         /**
          * 实体：挂号科室
          */

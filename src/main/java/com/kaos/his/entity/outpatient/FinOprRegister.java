@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.entity.common.Patient;
+import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.enums.common.NoonEnum;
 import com.kaos.his.enums.common.SexEnum;
@@ -479,7 +479,7 @@ public class FinOprRegister {
         /**
          * 患者实体 {@link FinOprRegister#cardNo}
          */
-        public Patient patient = null;
+        public ComPatientInfo patient = null;
 
         /**
          * 挂号科室 {@link FinOprRegister#deptCode}

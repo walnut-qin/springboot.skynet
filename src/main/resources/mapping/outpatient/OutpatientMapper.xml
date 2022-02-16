@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.his.mapper.outpatient.OutpatientMapper">
-    <resultMap id="map" type="com.kaos.his.entity.outpatient.Outpatient" extends="com.kaos.his.mapper.common.PatientMapper.map">
+    <resultMap id="map" type="com.kaos.his.entity.outpatient.Outpatient" extends="com.kaos.his.mapper.common.ComPatientInfoMapper.map">
         <id column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
         <result column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
         <result column="REG_DATE" jdbcType="VARCHAR" property="regDate"/>
