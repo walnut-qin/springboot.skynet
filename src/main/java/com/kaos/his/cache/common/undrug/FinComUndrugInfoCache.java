@@ -13,7 +13,9 @@ import com.kaos.inf.ICache;
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FinComUndrugInfoCache implements ICache<FinComUndrugInfo> {
     /**
      * 数据库接口
@@ -75,21 +77,5 @@ public class FinComUndrugInfoCache implements ICache<FinComUndrugInfo> {
     @Override
     public void invalidateAll() {
         this.cache.invalidateAll();
-    }
-
-    /**
-     * 静态内部类
-     */
-    static class InnerFinComUndrugInfoCache {
-        static FinComUndrugInfoCache undrugInfoCache = new FinComUndrugInfoCache();
-    }
-
-    /**
-     * 获取单例
-     * 
-     * @return
-     */
-    public static FinComUndrugInfoCache getCache() {
-        return InnerFinComUndrugInfoCache.undrugInfoCache;
     }
 }

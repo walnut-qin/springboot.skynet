@@ -4,14 +4,16 @@ import com.kaos.his.entity.common.config.ConfigSwitch;
 import com.kaos.inf.ICache;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class ConfigSwitchCacheTests {
-    ICache<ConfigSwitch> switchCache = ConfigSwitchCache.getCache();
+    @Autowired
+    ICache<ConfigSwitch> switchCache;
 
     @Test
     public void getCacheValue() {
-        this.switchCache.getValue(null);
+        this.switchCache.getValue("var1");
     }
 }

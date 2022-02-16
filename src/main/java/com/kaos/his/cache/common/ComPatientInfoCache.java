@@ -13,10 +13,12 @@ import com.kaos.inf.ICache;
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 患者基本信息cache
  */
+@Component
 public class ComPatientInfoCache implements ICache<ComPatientInfo> {
     /**
      * 数据库接口
@@ -78,21 +80,5 @@ public class ComPatientInfoCache implements ICache<ComPatientInfo> {
     @Override
     public void invalidateAll() {
         this.cache.invalidateAll();
-    }
-
-    /**
-     * 静态内部类
-     */
-    static class InnerComPatientInfoCache {
-        static ComPatientInfoCache comPatientInfoCache = new ComPatientInfoCache();
-    }
-
-    /**
-     * 获取单例
-     * 
-     * @return
-     */
-    public static ComPatientInfoCache getCache() {
-        return InnerComPatientInfoCache.comPatientInfoCache;
     }
 }

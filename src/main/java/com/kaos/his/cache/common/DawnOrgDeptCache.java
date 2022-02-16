@@ -13,10 +13,12 @@ import com.kaos.inf.ICache;
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 科室字典，容量 = 300，不过期，刷新评率 = 1次/天
  */
+@Component
 public class DawnOrgDeptCache implements ICache<DawnOrgDept> {
     /**
      * 数据库接口
@@ -78,21 +80,5 @@ public class DawnOrgDeptCache implements ICache<DawnOrgDept> {
     @Override
     public void invalidateAll() {
         this.cache.invalidateAll();
-    }
-
-    /**
-     * 静态内部类
-     */
-    static class InnerDawnOrgDeptCache {
-        static DawnOrgDeptCache dawnOrgDeptCache = new DawnOrgDeptCache();
-    }
-
-    /**
-     * 获取单例
-     * 
-     * @return
-     */
-    public static DawnOrgDeptCache getCache() {
-        return InnerDawnOrgDeptCache.dawnOrgDeptCache;
     }
 }

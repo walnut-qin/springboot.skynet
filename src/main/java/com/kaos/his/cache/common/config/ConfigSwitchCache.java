@@ -10,10 +10,11 @@ import com.kaos.his.entity.common.config.ConfigSwitch;
 import com.kaos.his.mapper.common.config.ConfigSwitchMapper;
 import com.kaos.inf.ICache;
 
-import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConfigSwitchCache implements ICache<ConfigSwitch> {
     /**
      * 数据库接口
@@ -38,14 +39,6 @@ public class ConfigSwitchCache implements ICache<ConfigSwitch> {
                     return ConfigSwitchCache.this.switchMapper.queryConfigSwitch(key);
                 };
             });
-
-    /**
-     * 禁止实例化
-     * 
-     * @throws ExecutorException
-     */
-    private ConfigSwitchCache() throws ExecutorException {
-    }
 
     @Override
     public ConfigSwitch getValue(String key) {
@@ -75,21 +68,5 @@ public class ConfigSwitchCache implements ICache<ConfigSwitch> {
     @Override
     public void invalidateAll() {
         this.cache.invalidateAll();
-    }
-
-    /**
-     * 静态内部类
-     */
-    static class InnerConfigSwitchCache {
-        static ConfigSwitchCache switchCache = new ConfigSwitchCache();
-    }
-
-    /**
-     * 获取单例
-     * 
-     * @return
-     */
-    public static ConfigSwitchCache getCache() {
-        return InnerConfigSwitchCache.switchCache;
     }
 }

@@ -4,14 +4,16 @@ import com.kaos.his.entity.common.config.ConfigMap;
 import com.kaos.inf.ICache;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class ConfigMapCacheTests {
-    ICache<ConfigMap> mapCache = ConfigMapCache.getCache();
+    @Autowired
+    ICache<ConfigMap> mapCache;
 
     @Test
     public void getCacheValue() {
-        this.mapCache.getValue(null);
+        this.mapCache.getValue("EscortRegOffset");
     }
 }

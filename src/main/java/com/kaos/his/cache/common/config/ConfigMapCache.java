@@ -13,10 +13,12 @@ import com.kaos.inf.ICache;
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 开关缓存，容量 = 20，不过期，刷新评率 = 1次/天
  */
+@Component
 public class ConfigMapCache implements ICache<ConfigMap> {
     /**
      * 数据库接口
@@ -78,21 +80,5 @@ public class ConfigMapCache implements ICache<ConfigMap> {
     @Override
     public void invalidateAll() {
         this.cache.invalidateAll();
-    }
-
-    /**
-     * 静态内部类
-     */
-    static class InnerDepartmentCache {
-        static ConfigMapCache mapCache = new ConfigMapCache();
-    }
-
-    /**
-     * 获取单例
-     * 
-     * @return
-     */
-    public static ConfigMapCache getCache() {
-        return InnerDepartmentCache.mapCache;
     }
 }

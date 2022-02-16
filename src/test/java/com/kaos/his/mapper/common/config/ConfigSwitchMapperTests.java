@@ -12,6 +12,6 @@ public class ConfigSwitchMapperTests {
     @Test
     public void queryConfigSwitch() {
         this.configSwitchMapper.queryConfigSwitch(null);
-        this.configSwitchMapper.queryConfigSwitch("switch");
+        this.configSwitchMapper.queryConfigSwitch("var1");
     }
 }

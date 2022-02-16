@@ -43,17 +43,20 @@ public class FeeServiceImpl implements FeeService {
     /**
      * 职工cache
      */
-    DawnOrgEmplCache dawnOrgEmplCache = DawnOrgEmplCache.getCache();
+    @Autowired
+    DawnOrgEmplCache dawnOrgEmplCache;
 
     /**
      * 科室cache
      */
-    DawnOrgDeptCache dawnOrgDeptCache = DawnOrgDeptCache.getCache();
+    @Autowired
+    DawnOrgDeptCache dawnOrgDeptCache;
 
     /**
      * 非药品信息cache
      */
-    FinComUndrugInfoCache undrugInfoCache = FinComUndrugInfoCache.getCache();
+    @Autowired
+    FinComUndrugInfoCache undrugInfoCache;
 
     @Transactional
     @Override

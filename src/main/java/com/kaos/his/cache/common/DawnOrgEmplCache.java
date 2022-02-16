@@ -13,7 +13,9 @@ import com.kaos.inf.ICache;
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
     /**
      * 数据库接口
@@ -75,21 +77,5 @@ public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
     @Override
     public void invalidateAll() {
         this.cache.invalidateAll();
-    }
-
-    /**
-     * 静态内部类
-     */
-    static class InnerDawnOrgEmplCache {
-        static DawnOrgEmplCache dawnOrgEmplCache = new DawnOrgEmplCache();
-    }
-
-    /**
-     * 获取单例
-     * 
-     * @return
-     */
-    public static DawnOrgEmplCache getCache() {
-        return InnerDawnOrgEmplCache.dawnOrgEmplCache;
     }
 }
