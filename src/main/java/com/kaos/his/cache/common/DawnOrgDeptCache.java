@@ -53,7 +53,12 @@ public class DawnOrgDeptCache implements ICache<DawnOrgDept> {
     @Override
     public DawnOrgDept getValue(String key) {
         try {
-            return this.cache.get(key);
+            if (key == null) {
+                this.logger.warn("键值为空");
+                return null;
+            } else {
+                return this.cache.get(key);
+            }
         } catch (Exception e) {
             this.logger.warn(e.getMessage());
             return null;

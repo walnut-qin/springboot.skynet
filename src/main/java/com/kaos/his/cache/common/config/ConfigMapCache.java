@@ -27,13 +27,13 @@ public class ConfigMapCache implements ICache<ConfigMap> {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(ConfigMapCache.class.getName());
+    Logger logger = Logger.getLogger(ConfigMapCache.class);
 
     /**
      * Loading cache
      */
     LoadingCache<String, ConfigMap> cache = CacheBuilder.newBuilder()
-            .maximumSize(20)
+            .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .build(new CacheLoader<String, ConfigMap>() {
                 @Override
@@ -53,7 +53,12 @@ public class ConfigMapCache implements ICache<ConfigMap> {
     @Override
     public ConfigMap getValue(String key) {
         try {
-            return this.cache.get(key);
+            if (key == null) {
+                this.logger.warn("键值为空");
+                return null;
+            } else {
+                return this.cache.get(key);
+            }
         } catch (Exception e) {
             this.logger.warn(e.getMessage());
             return null;
@@ -79,7 +84,7 @@ public class ConfigMapCache implements ICache<ConfigMap> {
      * 静态内部类
      */
     static class InnerDepartmentCache {
-        static ConfigMapCache departmentCache = new ConfigMapCache();
+        static ConfigMapCache mapCache = new ConfigMapCache();
     }
 
     /**
@@ -87,7 +92,7 @@ public class ConfigMapCache implements ICache<ConfigMap> {
      * 
      * @return
      */
-    public static ConfigMapCache getInstance() {
-        return InnerDepartmentCache.departmentCache;
+    public static ConfigMapCache getCache() {
+        return InnerDepartmentCache.mapCache;
     }
 }

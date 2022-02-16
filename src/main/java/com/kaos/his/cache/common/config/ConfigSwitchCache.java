@@ -1,4 +1,4 @@
-package com.kaos.his.cache.common;
+package com.kaos.his.cache.common.config;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -6,36 +6,36 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.mapper.common.DawnOrgEmplMapper;
+import com.kaos.his.entity.common.config.ConfigSwitch;
+import com.kaos.his.mapper.common.config.ConfigSwitchMapper;
 import com.kaos.inf.ICache;
 
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
+public class ConfigSwitchCache implements ICache<ConfigSwitch> {
     /**
      * 数据库接口
      */
     @Autowired
-    DawnOrgEmplMapper dawnOrgEmplMapper;
+    ConfigSwitchMapper switchMapper;
 
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(DawnOrgDeptCache.class.getName());
+    Logger logger = Logger.getLogger(ConfigSwitchCache.class);
 
     /**
      * Loading cache
      */
-    LoadingCache<String, DawnOrgEmpl> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
+    LoadingCache<String, ConfigSwitch> cache = CacheBuilder.newBuilder()
+            .maximumSize(50)
             .refreshAfterWrite(1, TimeUnit.DAYS)
-            .build(new CacheLoader<String, DawnOrgEmpl>() {
+            .build(new CacheLoader<String, ConfigSwitch>() {
                 @Override
-                public DawnOrgEmpl load(String key) throws Exception {
-                    return DawnOrgEmplCache.this.dawnOrgEmplMapper.queryEmployee(key);
+                public ConfigSwitch load(String key) throws Exception {
+                    return ConfigSwitchCache.this.switchMapper.queryConfigSwitch(key);
                 };
             });
 
@@ -44,11 +44,11 @@ public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
      * 
      * @throws ExecutorException
      */
-    private DawnOrgEmplCache() throws ExecutorException {
+    private ConfigSwitchCache() throws ExecutorException {
     }
 
     @Override
-    public DawnOrgEmpl getValue(String key) {
+    public ConfigSwitch getValue(String key) {
         try {
             if (key == null) {
                 this.logger.warn("键值为空");
@@ -63,7 +63,7 @@ public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
     }
 
     @Override
-    public ConcurrentMap<String, DawnOrgEmpl> show() {
+    public ConcurrentMap<String, ConfigSwitch> show() {
         return this.cache.asMap();
     }
 
@@ -80,8 +80,8 @@ public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
     /**
      * 静态内部类
      */
-    static class InnerDawnOrgEmplCache {
-        static DawnOrgEmplCache dawnOrgEmplCache = new DawnOrgEmplCache();
+    static class InnerConfigSwitchCache {
+        static ConfigSwitchCache switchCache = new ConfigSwitchCache();
     }
 
     /**
@@ -89,7 +89,7 @@ public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
      * 
      * @return
      */
-    public static DawnOrgEmplCache getCache() {
-        return InnerDawnOrgEmplCache.dawnOrgEmplCache;
+    public static ConfigSwitchCache getCache() {
+        return InnerConfigSwitchCache.switchCache;
     }
 }
