@@ -22,4 +22,12 @@ public interface FinOprRegisterMapper {
      * @return
      */
     int updateSeeFlag(String clinicCode, TransTypeEnum transType, Boolean seeFlag);
+
+    /**
+     * 插入记录
+     * 
+     * @param register 挂号记录
+     * @return
+     */
+    int insertRegisterRec(FinOprRegister register);
 }

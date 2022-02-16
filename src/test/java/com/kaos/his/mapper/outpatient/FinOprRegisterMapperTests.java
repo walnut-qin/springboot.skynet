@@ -9,10 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class FinOprRegisterMapperTests {
     @Autowired
-    FinOprRegisterMapper fubFinOprRegisterMapper;
+    FinOprRegisterMapper registerMapper;
 
     @Test
     public void queryRegisterRec() {
-        this.fubFinOprRegisterMapper.queryRegisterRec("clinicCode", TransTypeEnum.Positive);
+        this.registerMapper.queryRegisterRec("clinicCode", TransTypeEnum.Positive);
     }
 }

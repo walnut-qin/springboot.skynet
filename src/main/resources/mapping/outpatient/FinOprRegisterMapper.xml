@@ -221,4 +221,112 @@
             </if>
         </where>
     </update>
+
+    <insert id="insertRegisterRec">
+        <selectKey keyProperty="invoiceNo,clinicCode" order="BEFORE" resultType="com.kaos.his.entity.outpatient.FinOprRegister">
+            SELECT
+                SEQ_FIN_CLINICNO.NEXTVAL AS CLINIC_CODE,
+                TO_CHAR(SYSDATE,'YYMMDD') || LPAD(SEQ_FIN_OPB_PAYINVOICE.NEXTVAL, 6, '0') AS INVOICE_NO
+            FROM
+                DUAL
+        </selectKey>
+        INSERT INTO
+            XYHIS.FIN_OPR_REGISTER (
+        <include refid="item"/>
+            )
+        VALUES
+            (
+                #{clinicCode},
+                #{transType},
+                #{cardNo},
+                #{regDate},
+                #{noon},
+                #{name},
+                #{idenNo},
+                #{sex},
+                #{birthday},
+                #{relaPhone},
+                #{address},
+                #{cardType},
+                #{payKindCode},
+                #{payKindName},
+                #{pactCode},
+                #{pactName},
+                #{medCardNo},
+                #{regLevlCode},
+                #{regLevlName},
+                #{deptCode},
+                #{deptName},
+                #{schemaNo},
+                #{orderNo},
+                #{seeNo},
+                #{beginTime},
+                #{endTime},
+                #{doctCode},
+                #{doctName},
+                #{ynRegCharge},
+                #{invoiceNo},
+                #{recipeNo},
+                #{ynBook},
+                #{ynFr},
+                #{appenFlag},
+                #{regFee},
+                #{checkFee},
+                #{diagFee},
+                #{otherFee},
+                #{ownCost},
+                #{pubCost},
+                #{payCost},
+                #{validFlag},
+                #{operCode},
+                #{operDate},
+                #{cancelOperCode},
+                #{cancelDate},
+                #{medType},
+                #{icdCode},
+                #{examCode},
+                #{examDate},
+                #{checkFlag},
+                #{checkOperCode},
+                #{checkOperDate},
+                #{balanceFlag},
+                #{balanceNo},
+                #{balanceOperCode},
+                #{balanceDate},
+                #{ynSee},
+                #{seeDate},
+                #{triageFlag},
+                #{triageOperCode},
+                #{triageDate},
+                #{invoicePrintCnt},
+                #{seeDeptCode},
+                #{seeDocCode},
+                #{inSource},
+                #{sendInHosCaseFlag},
+                #{encryptNameFlag},
+                #{normalName},
+                #{inDate},
+                #{outDate},
+                #{zg},
+                #{inState},
+                #{ecoCost},
+                #{isAccount},
+                #{emergencyFlag},
+                #{mark1},
+                #{receiptDoctCode},
+                #{receiptDate},
+                #{receiptFlag},
+                #{accountNo},
+                #{emrRegId},
+                #{netCardNo},
+                #{deptOwn},
+                #{emplOwn},
+                #{schemaQueue},
+                #{payMode},
+                #{recId},
+                #{payOrderNo},
+                #{clinicOrderId},
+                #{isModifyPrint}
+            )
+    </insert>
 </mapper>

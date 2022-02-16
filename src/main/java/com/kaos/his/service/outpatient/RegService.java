@@ -12,5 +12,5 @@ public interface RegService {
      * @param docCode  看诊医生
      * @param seeDate  看诊时间
      */
-    void freeRegister(String cardNo, String idenNo, String deptCode, String docCode, Date seeDate);
+    void freeRegister(String cardNo, String idenNo, String deptCode, String doctCode, Date seeDate);
 }
