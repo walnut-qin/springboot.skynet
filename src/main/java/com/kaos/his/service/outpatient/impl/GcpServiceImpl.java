@@ -1,9 +1,11 @@
 package com.kaos.his.service.outpatient.impl;
 
+import com.google.common.base.Optional;
+import com.kaos.his.cache.common.ComPatientInfoCache;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.mapper.common.config.ConfigMapMapper;
-import com.kaos.his.mapper.outpatient.OutpatientMapper;
+import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.outpatient.GcpService;
 
 import org.apache.log4j.Logger;
@@ -27,7 +29,13 @@ public class GcpServiceImpl implements GcpService {
      * 门诊患者接口
      */
     @Autowired
-    OutpatientMapper outpatientMapper;
+    FinOprRegisterMapper registerMapper;
+
+    /**
+     * 患者基本信息缓存
+     */
+    @Autowired
+    ComPatientInfoCache patientInfoCache;
 
     @Override
     public Boolean checkGcpPrivilege(String deptCode, String clinicCode) {
@@ -38,11 +46,16 @@ public class GcpServiceImpl implements GcpService {
         }
 
         // 获取门诊实体
-        var outpatient = this.outpatientMapper.queryOutpatient(clinicCode, TransTypeEnum.Positive);
-        if (outpatient == null || !outpatient.gcpFlag) {
+        var register = this.registerMapper.queryRegisterRec(clinicCode, TransTypeEnum.Positive);
+        if (register == null) {
             return false;
+        } else {
+            var patient = this.patientInfoCache.getValue(register.cardNo);
+            if (patient == null) {
+                return false;
+            } else {
+                return Optional.fromNullable(patient.gcpFlag).or(false);
+            }
         }
-
-        return true;
     }
 }

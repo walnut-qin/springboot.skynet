@@ -479,7 +479,7 @@ public class FinOprRegister {
         /**
          * 患者实体 {@link FinOprRegister#cardNo}
          */
-        public ComPatientInfo patient = null;
+        public ComPatientInfo patientInfo = null;
 
         /**
          * 挂号科室 {@link FinOprRegister#deptCode}

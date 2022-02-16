@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.entity.outpatient.Outpatient;
+import com.kaos.his.entity.outpatient.FinOprRegister;
 import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.enums.common.ItemGradeEnum;
 import com.kaos.his.enums.common.SysClassEnum;
@@ -36,7 +36,7 @@ public class FinOpbFeeDetail {
     public TransTypeEnum transType = null;
 
     /**
-     * 门诊号
+     * 门诊号 {@link FinOpbFeeDetail.AssociateEntity#register}
      */
     public String clinicCode = null;
 
@@ -530,9 +530,9 @@ public class FinOpbFeeDetail {
      */
     public class AssociateEntity {
         /**
-         * 实体：门诊患者
+         * 挂号信息 {@link FinOpbFeeDetail#clinicCode}
          */
-        public Outpatient outpatient = null;
+        public FinOprRegister register = null;
 
         /**
          * 开单科室
