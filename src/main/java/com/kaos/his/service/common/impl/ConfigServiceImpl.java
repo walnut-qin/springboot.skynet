@@ -1,6 +1,7 @@
 package com.kaos.his.service.common.impl;
 
 import com.kaos.his.entity.common.config.ConfigSwitch;
+import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.service.common.ConfigService;
 import com.kaos.inf.ICache;
 
@@ -18,7 +19,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public Boolean querySwitchValue(String key) {
         var etty = this.switchCache.getValue(key);
-        if (etty == null) {
+        if (etty == null || etty.valid != ValidStateEnum.有效) {
             return false;
         } else {
             return etty.value;
