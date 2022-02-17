@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -69,6 +70,7 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 设置定制转换器，插入队列最前段，给予最高优先级
+        converters.add(0, new BufferedImageHttpMessageConverter());
         converters.add(0, new GsonHttpMessageConverter(new GsonHelperImpl("yyyy-MM-dd HH:mm:ss").getGson()));
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
