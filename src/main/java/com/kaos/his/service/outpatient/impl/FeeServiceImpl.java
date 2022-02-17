@@ -11,7 +11,7 @@ import com.kaos.his.entity.common.FinComFeeCodeStat;
 import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
 import com.kaos.his.entity.outpatient.fee.FinOpbFeeDetail;
 import com.kaos.his.enums.common.SysClassEnum;
-import com.kaos.his.enums.common.FeeStatTypeEnum;
+import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.outpatient.fee.FeeDetailCancelFlagEnum;
@@ -69,7 +69,7 @@ public class FeeServiceImpl implements FeeService {
      * 统计大小类对照cache
      */
     @Autowired
-    ICache<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat> feeCodeStatCache;
+    ICache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> feeCodeStatCache;
 
     @Transactional
     @Override
@@ -237,7 +237,7 @@ public class FeeServiceImpl implements FeeService {
             } else if (feeDetail.cancelFlag != FeeDetailCancelFlagEnum.正常) {
                 continue;
             }
-            var feeCodeStat = this.feeCodeStatCache.getValue(new Pair<>(FeeStatTypeEnum.门诊发票, feeDetail.feeCode));
+            var feeCodeStat = this.feeCodeStatCache.getValue(new Pair<>(ReportTypeEnum.门诊发票, feeDetail.feeCode));
             if (feeCodeStat == null) {
                 throw new RuntimeException(String.format("获取统计大类异常(recipeNo = %s)", feeDetail.recipeNo));
             }

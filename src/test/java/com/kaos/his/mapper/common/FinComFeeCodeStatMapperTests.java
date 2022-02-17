@@ -1,6 +1,6 @@
 package com.kaos.his.mapper.common;
 
-import com.kaos.his.enums.common.FeeStatTypeEnum;
+import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,6 @@ public class FinComFeeCodeStatMapperTests {
     @Test
     public void queryFeeCodeStat() throws Exception {
         this.feeCodeStatMapper.queryFeeCodeStat(null, null);
-        this.feeCodeStatMapper.queryFeeCodeStat(FeeStatTypeEnum.门诊发票, MinFeeEnum.B超);
+        this.feeCodeStatMapper.queryFeeCodeStat(ReportTypeEnum.门诊发票, MinFeeEnum.B超);
     }
 }

@@ -7,7 +7,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.kaos.his.entity.common.FinComFeeCodeStat;
-import com.kaos.his.enums.common.FeeStatTypeEnum;
+import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.mapper.common.FinComFeeCodeStatMapper;
 import com.kaos.inf.ICache;
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FinComFeeCodeStatCache implements ICache<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat> {
+public class FinComFeeCodeStatCache implements ICache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> {
     /**
      * 数据库接口
      */
@@ -33,18 +33,18 @@ public class FinComFeeCodeStatCache implements ICache<Pair<FeeStatTypeEnum, MinF
     /**
      * Loading cache
      */
-    LoadingCache<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
+    LoadingCache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
-            .build(new CacheLoader<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat>() {
+            .build(new CacheLoader<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat>() {
                 @Override
-                public FinComFeeCodeStat load(Pair<FeeStatTypeEnum, MinFeeEnum> key) throws Exception {
+                public FinComFeeCodeStat load(Pair<ReportTypeEnum, MinFeeEnum> key) throws Exception {
                     return FinComFeeCodeStatCache.this.mapper.queryFeeCodeStat(key.getValue0(), key.getValue1());
                 };
             });
 
     @Override
-    public FinComFeeCodeStat getValue(Pair<FeeStatTypeEnum, MinFeeEnum> key) {
+    public FinComFeeCodeStat getValue(Pair<ReportTypeEnum, MinFeeEnum> key) {
         try {
             if (key == null) {
                 this.logger.warn("键值为空");
@@ -59,12 +59,12 @@ public class FinComFeeCodeStatCache implements ICache<Pair<FeeStatTypeEnum, MinF
     }
 
     @Override
-    public ConcurrentMap<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat> show() {
+    public ConcurrentMap<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> show() {
         return this.cache.asMap();
     }
 
     @Override
-    public void refresh(Pair<FeeStatTypeEnum, MinFeeEnum> key) {
+    public void refresh(Pair<ReportTypeEnum, MinFeeEnum> key) {
         this.cache.refresh(key);
     }
 

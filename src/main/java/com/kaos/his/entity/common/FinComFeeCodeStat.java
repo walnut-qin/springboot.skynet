@@ -2,7 +2,7 @@ package com.kaos.his.entity.common;
 
 import java.util.Date;
 
-import com.kaos.his.enums.common.FeeStatTypeEnum;
+import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.ValidStateEnum;
 
@@ -13,7 +13,7 @@ public class FinComFeeCodeStat {
     /**
      * 报表代码 {@code 主键}
      */
-    public FeeStatTypeEnum reportCode = null;
+    public ReportTypeEnum reportCode = null;
 
     /**
      * 最小费用类别 {@code 主键}
