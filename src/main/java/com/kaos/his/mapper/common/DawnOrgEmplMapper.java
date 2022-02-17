@@ -2,9 +2,6 @@ package com.kaos.his.mapper.common;
 
 import com.kaos.his.entity.common.DawnOrgEmpl;
 
-import org.springframework.validation.annotation.Validated;
-
-@Validated
 public interface DawnOrgEmplMapper {
     /**
      * 查询本院职工实体
