@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
+import com.kaos.his.entity.common.FinComFeeCodeStat;
 import com.kaos.his.entity.outpatient.FinOprRegister;
 import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.enums.common.ItemGradeEnum;
@@ -101,7 +102,7 @@ public class FinOpbFeeDetail {
     public String doseModelCode = null;
 
     /**
-     * 最小费用编码
+     * 最小费用编码 {@link FinOpbFeeDetail.AssociateEntity#feeCodeStat}
      */
     public MinFeeEnum feeCode = null;
 
@@ -543,6 +544,11 @@ public class FinOpbFeeDetail {
          * 开方医师 {@link FinOpbFeeDetail#doctCode}
          */
         public DawnOrgEmpl doctor = null;
+
+        /**
+         * 统计大小类对照 {@link FinOpbFeeDetail#feeCode}
+         */
+        public FinComFeeCodeStat feeCodeStat = null;
 
         /**
          * 实体：执行科室
