@@ -1,4 +1,4 @@
-package com.kaos.his.cache.common.config;
+package com.kaos.his.cache.common;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -6,45 +6,45 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.kaos.his.entity.common.config.ConfigMap;
-import com.kaos.his.mapper.common.config.ConfigMapMapper;
+import com.kaos.his.entity.common.FinComFeeCodeStat;
+import com.kaos.his.enums.common.FeeStatTypeEnum;
+import com.kaos.his.enums.common.MinFeeEnum;
+import com.kaos.his.mapper.common.FinComFeeCodeStatMapper;
 import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * 开关缓存，容量 = 20，不过期，刷新评率 = 1次/天
- */
 @Component
-public class ConfigMapCache implements ICache<String, ConfigMap> {
+public class FinComFeeCodeStatCache implements ICache<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat> {
     /**
      * 数据库接口
      */
     @Autowired
-    ConfigMapMapper configMapMapper;
+    FinComFeeCodeStatMapper mapper;
 
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(ConfigMapCache.class);
+    Logger logger = Logger.getLogger(FinComFeeCodeStatCache.class);
 
     /**
      * Loading cache
      */
-    LoadingCache<String, ConfigMap> cache = CacheBuilder.newBuilder()
+    LoadingCache<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
-            .build(new CacheLoader<String, ConfigMap>() {
+            .build(new CacheLoader<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat>() {
                 @Override
-                public ConfigMap load(String key) throws Exception {
-                    return ConfigMapCache.this.configMapMapper.queryMapValue(key);
+                public FinComFeeCodeStat load(Pair<FeeStatTypeEnum, MinFeeEnum> key) throws Exception {
+                    return FinComFeeCodeStatCache.this.mapper.queryFeeCodeStat(key.getValue0(), key.getValue1());
                 };
             });
 
     @Override
-    public ConfigMap getValue(String key) {
+    public FinComFeeCodeStat getValue(Pair<FeeStatTypeEnum, MinFeeEnum> key) {
         try {
             if (key == null) {
                 this.logger.warn("键值为空");
@@ -59,12 +59,12 @@ public class ConfigMapCache implements ICache<String, ConfigMap> {
     }
 
     @Override
-    public ConcurrentMap<String, ConfigMap> show() {
+    public ConcurrentMap<Pair<FeeStatTypeEnum, MinFeeEnum>, FinComFeeCodeStat> show() {
         return this.cache.asMap();
     }
 
     @Override
-    public void refresh(String key) {
+    public void refresh(Pair<FeeStatTypeEnum, MinFeeEnum> key) {
         this.cache.refresh(key);
     }
 

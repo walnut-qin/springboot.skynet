@@ -10,7 +10,6 @@ import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
 import com.kaos.his.mapper.common.undrug.FinComUndrugInfoMapper;
 import com.kaos.inf.ICache;
 
-import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,14 +39,6 @@ public class FinComUndrugInfoCache implements ICache<String, FinComUndrugInfo> {
                     return FinComUndrugInfoCache.this.undrugInfoMapper.queryUndrugInfo(key);
                 };
             });
-
-    /**
-     * 禁止实例化
-     * 
-     * @throws ExecutorException
-     */
-    private FinComUndrugInfoCache() throws ExecutorException {
-    }
 
     @Override
     public FinComUndrugInfo getValue(String key) {

@@ -10,7 +10,6 @@ import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.mapper.common.ComPatientInfoMapper;
 import com.kaos.inf.ICache;
 
-import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,14 +42,6 @@ public class ComPatientInfoCache implements ICache<String, ComPatientInfo> {
                     return ComPatientInfoCache.this.patientInfoMapper.queryPatientInfo(key);
                 };
             });
-
-    /**
-     * 禁止实例化
-     * 
-     * @throws ExecutorException
-     */
-    private ComPatientInfoCache() throws ExecutorException {
-    }
 
     @Override
     public ComPatientInfo getValue(String key) {

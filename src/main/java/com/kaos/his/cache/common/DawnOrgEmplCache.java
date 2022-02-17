@@ -10,7 +10,6 @@ import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.mapper.common.DawnOrgEmplMapper;
 import com.kaos.inf.ICache;
 
-import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,14 +39,6 @@ public class DawnOrgEmplCache implements ICache<String, DawnOrgEmpl> {
                     return DawnOrgEmplCache.this.dawnOrgEmplMapper.queryEmployee(key);
                 };
             });
-
-    /**
-     * 禁止实例化
-     * 
-     * @throws ExecutorException
-     */
-    private DawnOrgEmplCache() throws ExecutorException {
-    }
 
     @Override
     public DawnOrgEmpl getValue(String key) {

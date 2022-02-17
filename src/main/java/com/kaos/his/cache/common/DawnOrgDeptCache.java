@@ -10,7 +10,6 @@ import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.mapper.common.DawnOrgDeptMapper;
 import com.kaos.inf.ICache;
 
-import org.apache.ibatis.executor.ExecutorException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,14 +42,6 @@ public class DawnOrgDeptCache implements ICache<String, DawnOrgDept> {
                     return DawnOrgDeptCache.this.dawnOrgDeptMapper.queryDepartment(key);
                 };
             });
-
-    /**
-     * 禁止实例化
-     * 
-     * @throws ExecutorException
-     */
-    private DawnOrgDeptCache() throws ExecutorException {
-    }
 
     @Override
     public DawnOrgDept getValue(String key) {
