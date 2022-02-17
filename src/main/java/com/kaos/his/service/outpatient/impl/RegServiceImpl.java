@@ -7,9 +7,9 @@ import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.outpatient.FinOprRegister;
 import com.kaos.his.enums.common.NoonEnum;
+import com.kaos.his.enums.common.PayModeEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.common.ValidStateEnum;
-import com.kaos.his.enums.outpatient.RegisterPayModeEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.outpatient.RegService;
 import com.kaos.inf.ICache;
@@ -51,7 +51,7 @@ public class RegServiceImpl implements RegService {
     @Transactional
     @Override
     public void freeRegister(String cardNo, String deptCode, String doctCode, Date seeDate, NoonEnum noon,
-            String opercode, RegisterPayModeEnum payMode) {
+            String opercode, PayModeEnum payMode) {
         // 获取患者基本信息
         var patientInfo = this.patientInfoCache.getValue(cardNo);
         if (patientInfo == null || patientInfo.isValid != ValidStateEnum.有效) {

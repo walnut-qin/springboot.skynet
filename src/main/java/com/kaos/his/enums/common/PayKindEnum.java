@@ -1,10 +1,12 @@
-package com.kaos.his.enums.outpatient;
+package com.kaos.his.enums.common;
 
 import com.kaos.inf.IEnum;
 
-public enum RegisterPayModeEnum implements IEnum {
-    账户余额("1", "账户余额"), 工行银行卡("2", "工行银行卡"), 支付宝("3", "支付宝"), 微信("4", "微信"), 现金("5", "现金"), 老医保("6", "老医保"),
-    新医保("7", "新医保"), 诊间银行卡("8", "诊间银行卡"), 建行银行卡("10", "建行银行卡"), 扫码挂号("11", "扫码挂号");
+/**
+ * 结算类别代码(COM_DICTIONARY#PAYKIND)
+ */
+public enum PayKindEnum implements IEnum {
+    自费("01", "自费"), 医保("02", "医保"), 公费("03", "公费"), 特约单位("04", "特约单位"), 本院职工("05", "本院职工");
 
     /**
      * 数据库存值
@@ -22,7 +24,7 @@ public enum RegisterPayModeEnum implements IEnum {
      * @param index
      * @param description
      */
-    RegisterPayModeEnum(String value, String description) {
+    PayKindEnum(String value, String description) {
         this.value = value;
         this.description = description;
     }

@@ -3,7 +3,7 @@ package com.kaos.his.service.outpatient;
 import java.util.Date;
 
 import com.kaos.his.enums.common.NoonEnum;
-import com.kaos.his.enums.outpatient.RegisterPayModeEnum;
+import com.kaos.his.enums.common.PayModeEnum;
 
 public interface RegService {
     /**
@@ -19,5 +19,5 @@ public interface RegService {
      * @param payMode  支付方式
      */
     void freeRegister(String cardNo, String deptCode, String doctCode, Date seeDate, NoonEnum noon, String operCode,
-            RegisterPayModeEnum payMode);
+            PayModeEnum payMode);
 }
