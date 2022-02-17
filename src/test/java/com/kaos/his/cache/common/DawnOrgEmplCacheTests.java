@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class DawnOrgEmplCacheTests {
     @Autowired
-    ICache<DawnOrgEmpl> dawnOrgEmplCache;
+    ICache<String, DawnOrgEmpl> dawnOrgEmplCache;
 
     @Test
     public void getCacheValue() {

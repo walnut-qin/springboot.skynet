@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DawnOrgEmplCache implements ICache<DawnOrgEmpl> {
+public class DawnOrgEmplCache implements ICache<String, DawnOrgEmpl> {
     /**
      * 数据库接口
      */

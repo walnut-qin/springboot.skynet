@@ -2,9 +2,9 @@ package com.kaos.his.service.outpatient.impl;
 
 import java.util.Date;
 
-import com.kaos.his.cache.common.ComPatientInfoCache;
-import com.kaos.his.cache.common.DawnOrgDeptCache;
-import com.kaos.his.cache.common.DawnOrgEmplCache;
+import com.kaos.his.entity.common.ComPatientInfo;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.outpatient.FinOprRegister;
 import com.kaos.his.enums.common.NoonEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
@@ -12,6 +12,7 @@ import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.outpatient.RegisterPayModeEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.outpatient.RegService;
+import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +34,19 @@ public class RegServiceImpl implements RegService {
      * 患者基本信息cache
      */
     @Autowired
-    ComPatientInfoCache patientInfoCache;
+    ICache<String, ComPatientInfo> patientInfoCache;
 
     /**
      * 职工信息cache
      */
     @Autowired
-    DawnOrgEmplCache dawnOrgEmplCache;
+    ICache<String, DawnOrgEmpl> dawnOrgEmplCache;
 
     /**
      * 科室信息cache
      */
     @Autowired
-    DawnOrgDeptCache dawnOrgDeptCache;
+    ICache<String, DawnOrgDept> dawnOrgDeptCache;
 
     @Transactional
     @Override

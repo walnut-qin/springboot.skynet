@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ComPatientInfoCacheTests {
     @Autowired
-    ICache<ComPatientInfo> comPatientCache;
+    ICache<String, ComPatientInfo> comPatientCache;
 
     @Test
     public void getCacheValue() {

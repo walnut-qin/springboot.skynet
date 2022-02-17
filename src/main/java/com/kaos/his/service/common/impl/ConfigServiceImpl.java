@@ -14,7 +14,7 @@ public class ConfigServiceImpl implements ConfigService {
      * 开关cache
      */
     @Autowired
-    ICache<ConfigSwitch> switchCache;
+    ICache<String, ConfigSwitch> switchCache;
 
     @Override
     public Boolean querySwitchValue(String key) {

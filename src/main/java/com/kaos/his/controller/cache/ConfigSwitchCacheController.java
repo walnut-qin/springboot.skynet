@@ -4,8 +4,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.cache.common.config.ConfigSwitchCache;
 import com.kaos.his.entity.common.config.ConfigSwitch;
+import com.kaos.inf.ICache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,7 @@ public class ConfigSwitchCacheController {
      * 实体信息服务
      */
     @Autowired
-    ConfigSwitchCache switchCache;
+    ICache<String, ConfigSwitch> switchCache;
 
     /**
      * 检索开关变量的值

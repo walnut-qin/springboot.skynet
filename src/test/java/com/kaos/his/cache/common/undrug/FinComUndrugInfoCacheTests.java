@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class FinComUndrugInfoCacheTests {
     @Autowired
-    ICache<FinComUndrugInfo> dawnOrgDeptCache;
+    ICache<String, FinComUndrugInfo> dawnOrgDeptCache;
 
     @Test
     public void getCacheValue() {

@@ -2,28 +2,28 @@ package com.kaos.inf;
 
 import java.util.concurrent.ConcurrentMap;
 
-public interface ICache<E> {
+public interface ICache<K, V> {
     /**
      * 获取值
      * 
      * @param key
      * @return
      */
-    E getValue(String key);
+    V getValue(K key);
 
     /**
      * 展示cache内容
      * 
      * @return
      */
-    ConcurrentMap<String, E> show();
+    ConcurrentMap<K, V> show();
 
     /**
      * 显式刷新某一个元素
      * 
      * @param key
      */
-    void refresh(String key);
+    void refresh(K key);
 
     /**
      * 清除缓存

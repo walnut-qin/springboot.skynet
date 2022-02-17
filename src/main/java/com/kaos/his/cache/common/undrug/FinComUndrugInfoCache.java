@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FinComUndrugInfoCache implements ICache<FinComUndrugInfo> {
+public class FinComUndrugInfoCache implements ICache<String, FinComUndrugInfo> {
     /**
      * 数据库接口
      */

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * 患者基本信息cache
  */
 @Component
-public class ComPatientInfoCache implements ICache<ComPatientInfo> {
+public class ComPatientInfoCache implements ICache<String, ComPatientInfo> {
     /**
      * 数据库接口
      */

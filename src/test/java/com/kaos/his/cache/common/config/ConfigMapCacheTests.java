@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ConfigMapCacheTests {
     @Autowired
-    ICache<ConfigMap> mapCache;
+    ICache<String, ConfigMap> mapCache;
 
     @Test
     public void getCacheValue() {

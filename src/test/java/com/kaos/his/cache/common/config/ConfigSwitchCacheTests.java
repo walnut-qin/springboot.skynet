@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ConfigSwitchCacheTests {
     @Autowired
-    ICache<ConfigSwitch> switchCache;
+    ICache<String, ConfigSwitch> switchCache;
 
     @Test
     public void getCacheValue() {

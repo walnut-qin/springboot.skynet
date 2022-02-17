@@ -3,9 +3,9 @@ package com.kaos.his.service.outpatient.impl;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.his.cache.common.DawnOrgDeptCache;
-import com.kaos.his.cache.common.DawnOrgEmplCache;
-import com.kaos.his.cache.common.undrug.FinComUndrugInfoCache;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
+import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
 import com.kaos.his.enums.common.SysClassEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
@@ -15,6 +15,7 @@ import com.kaos.his.enums.outpatient.fee.FeeDetailPayFlagEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.service.outpatient.FeeService;
+import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,19 +45,19 @@ public class FeeServiceImpl implements FeeService {
      * 职工cache
      */
     @Autowired
-    DawnOrgEmplCache dawnOrgEmplCache;
+    ICache<String, DawnOrgEmpl> dawnOrgEmplCache;
 
     /**
      * 科室cache
      */
     @Autowired
-    DawnOrgDeptCache dawnOrgDeptCache;
+    ICache<String, DawnOrgDept> dawnOrgDeptCache;
 
     /**
      * 非药品信息cache
      */
     @Autowired
-    FinComUndrugInfoCache undrugInfoCache;
+    ICache<String, FinComUndrugInfo> undrugInfoCache;
 
     @Transactional
     @Override

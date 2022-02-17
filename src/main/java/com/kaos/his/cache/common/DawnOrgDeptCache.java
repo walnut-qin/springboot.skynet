@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * 科室字典，容量 = 300，不过期，刷新评率 = 1次/天
  */
 @Component
-public class DawnOrgDeptCache implements ICache<DawnOrgDept> {
+public class DawnOrgDeptCache implements ICache<String, DawnOrgDept> {
     /**
      * 数据库接口
      */

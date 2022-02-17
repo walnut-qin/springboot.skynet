@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ConfigSwitchCache implements ICache<ConfigSwitch> {
+public class ConfigSwitchCache implements ICache<String, ConfigSwitch> {
     /**
      * 数据库接口
      */

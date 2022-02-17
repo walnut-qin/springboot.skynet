@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * 开关缓存，容量 = 20，不过期，刷新评率 = 1次/天
  */
 @Component
-public class ConfigMapCache implements ICache<ConfigMap> {
+public class ConfigMapCache implements ICache<String, ConfigMap> {
     /**
      * 数据库接口
      */
