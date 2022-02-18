@@ -36,7 +36,11 @@ public class DawnOrgEmplCache implements ICache<String, DawnOrgEmpl> {
             .build(new CacheLoader<String, DawnOrgEmpl>() {
                 @Override
                 public DawnOrgEmpl load(String key) throws Exception {
-                    return DawnOrgEmplCache.this.dawnOrgEmplMapper.queryEmployee(key);
+                    var empl = DawnOrgEmplCache.this.dawnOrgEmplMapper.queryEmployee(key);
+                    if (empl == null) {
+                        empl = DawnOrgEmplCache.this.dawnOrgEmplMapper.queryOuterEmployee(key);
+                    }
+                    return empl;
                 };
             });
 

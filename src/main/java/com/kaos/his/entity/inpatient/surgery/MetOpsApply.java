@@ -2,6 +2,7 @@ package com.kaos.his.entity.inpatient.surgery;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
@@ -9,6 +10,7 @@ import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.inpatient.surgery.AnesTypeEnum;
 import com.kaos.his.enums.inpatient.surgery.MetOpsInciTypeEnum;
+import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.his.enums.inpatient.surgery.SurgeryDegreeEnum;
 import com.kaos.his.enums.inpatient.surgery.SurgeryInspectResultEnum;
 import com.kaos.his.enums.inpatient.surgery.SurgeryKindEnum;
@@ -45,12 +47,12 @@ public class MetOpsApply {
     public SurgeryKindEnum surgeryKind = null;
 
     /**
-     * 手术医生编码
+     * 手术医生编码 {@link MetOpsApply.AssociateEntity#opsDoc}
      */
     public String opsDocCode = null;
 
     /**
-     * 指导医生编码
+     * 指导医生编码 {@link MetOpsApply.AssociateEntity#guiDoc}
      */
     public String guiDocCode = null;
 
@@ -65,12 +67,12 @@ public class MetOpsApply {
     public AnesTypeEnum anesType = null;
 
     /**
-     * 手术科室（三个院区各自的手术室）
+     * 手术科室（三个院区各自的手术室） {@link MetOpsApply.AssociateEntity#surgeryDept}
      */
     public String surgeryDeptCode = null;
 
     /**
-     * 申请医生编码
+     * 申请医生编码 {@link MetOpsApply.AssociateEntity#applyDoc}
      */
     public String applyDocCode = null;
 
@@ -85,7 +87,7 @@ public class MetOpsApply {
     public String applyNote = null;
 
     /**
-     * 审批医生编码
+     * 审批医生编码 {@link MetOpsApply.AssociateEntity#apprDoc}
      */
     public String apprDocCode = null;
 
@@ -100,7 +102,7 @@ public class MetOpsApply {
     public String apprNote = null;
 
     /**
-     * 麻醉医生编码
+     * 麻醉医生编码 {@link MetOpsApply.AssociateEntity#anesDoc}
      */
     public String anesDocCode = null;
 
@@ -145,7 +147,7 @@ public class MetOpsApply {
     public Boolean specialFlag = null;
 
     /**
-     * 申请人编码
+     * 申请人编码 {@link MetOpsApply.AssociateEntity#operEmpl}
      */
     public String operCode = null;
 
@@ -160,7 +162,7 @@ public class MetOpsApply {
     public ValidStateEnum valid = null;
 
     /**
-     * 手术间编码
+     * 手术间编码 {@link MetOpsApply.AssociateEntity#room}
      */
     public String roomId = null;
 
@@ -216,7 +218,7 @@ public class MetOpsApply {
         /**
          * 手术安排数据
          */
-        public List<MetOpsArrange> metOpsArranges = null;
+        public Map<SurgeryArrangeRoleEnum, MetOpsArrange> metOpsArranges = null;
 
         /**
          * 住院患者
@@ -224,42 +226,42 @@ public class MetOpsApply {
         public Inpatient inpatient = null;
 
         /**
-         * 实体：手术医生
+         * 实体：手术医生 {@link MetOpsApply#opsDocCode}
          */
-        public DawnOrgEmpl opsDoctor = null;
+        public DawnOrgEmpl opsDoc = null;
 
         /**
-         * 实体：指导医生
+         * 实体：指导医生 {@link MetOpsApply#guiDocCode}
          */
-        public DawnOrgEmpl guiDoctor = null;
+        public DawnOrgEmpl guiDoc = null;
 
         /**
-         * 实体：手术科室
+         * 实体：手术科室 {@link MetOpsApply#surgeryDeptCode}
          */
         public DawnOrgDept surgeryDept = null;
 
         /**
-         * 实体：申请医生
+         * 实体：申请医生 {@link MetOpsApply#applyDocCode}
          */
-        public DawnOrgEmpl applyDoctor = null;
+        public DawnOrgEmpl applyDoc = null;
 
         /**
-         * 实体：审批医生
+         * 实体：审批医生 {@link MetOpsApply#apprDocCode}
          */
-        public DawnOrgEmpl apprDoctor = null;
+        public DawnOrgEmpl apprDoc = null;
 
         /**
-         * 麻醉医生
+         * 麻醉医生 {@link MetOpsApply#anesDocCode}
          */
-        public DawnOrgEmpl anesDoctor = null;
+        public DawnOrgEmpl anesDoc = null;
 
         /**
-         * 实体：申请人
+         * 实体：申请人 {@link MetOpsApply#operCode}
          */
-        public DawnOrgEmpl operator = null;
+        public DawnOrgEmpl operEmpl = null;
 
         /**
-         * 实体：手术间
+         * 实体：手术间 {@link MetOpsApply#roomId}
          */
         public MetOpsRoom room = null;
     }
