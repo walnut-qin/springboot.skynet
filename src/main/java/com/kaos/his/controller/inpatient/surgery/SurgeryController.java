@@ -9,20 +9,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryArrangedMetOpsAppliesInDeptRspBody;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
-import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.entity.inpatient.surgery.MetOpsItem;
 import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
 import com.kaos.his.service.inpatient.SurgeryService;
 
 import org.apache.log4j.Logger;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -121,102 +117,11 @@ public class SurgeryController {
         rspBody.surgeryName = Optional.fromNullable(item.associateEntity.metOpsItem).or(new MetOpsItem()).itemName;
         rspBody.operRemark = item.operRemark;
         rspBody.degree = item.degree;
-        if (item.associateEntity.opsDoctor != null) {
-            rspBody.surgeryDocName = item.associateEntity.opsDoctor.emplName;
+        if (item.associateEntity.opsDoc != null) {
+            rspBody.surgeryDocName = item.associateEntity.opsDoc.emplName;
         } else {
             rspBody.surgeryDocName = item.opsDocCode;
         }
-        if (item.associateEntity.metOpsArranges != null) {
-            rspBody.helperNames = Collections2
-                    .filter(item.associateEntity.metOpsArranges, new Predicate<MetOpsArrange>() {
-                        @Override
-                        public boolean apply(@Nullable MetOpsArrange input) {
-                            switch (input.role) {
-                                case Helper1:
-                                case Helper2:
-                                case Helper3:
-                                    return true;
-
-                                default:
-                                    break;
-                            }
-                            return false;
-                        }
-                    }).stream().map(x -> {
-                        if (x.associateEntity.employee == null) {
-                            return x.emplCode;
-                        } else {
-                            return x.associateEntity.employee.emplName;
-                        }
-                    }).toList();
-            rspBody.anesDocNames = Collections2
-                    .filter(item.associateEntity.metOpsArranges, new Predicate<MetOpsArrange>() {
-                        @Override
-                        public boolean apply(@Nullable MetOpsArrange input) {
-                            switch (input.role) {
-                                case Anaesthetist:
-                                case AnaesthesiaHelper:
-                                    return true;
-
-                                default:
-                                    break;
-                            }
-                            return false;
-                        }
-                    }).stream().map(x -> {
-                        if (x.associateEntity.employee == null) {
-                            return x.emplCode;
-                        } else {
-                            return x.associateEntity.employee.emplName;
-                        }
-                    }).toList();
-            rspBody.washNurseNames = Collections2
-                    .filter(item.associateEntity.metOpsArranges, new Predicate<MetOpsArrange>() {
-                        @Override
-                        public boolean apply(@Nullable MetOpsArrange input) {
-                            switch (input.role) {
-                                case WashingHandNurse:
-                                case WashingHandNurse1:
-                                    return true;
-
-                                default:
-                                    break;
-                            }
-                            return false;
-                        }
-                    }).stream().map(x -> {
-                        if (x.associateEntity.employee == null) {
-                            return x.emplCode;
-                        } else {
-                            return x.associateEntity.employee.emplName;
-                        }
-                    }).toList();
-            rspBody.itinerantNurseNames = Collections2
-                    .filter(item.associateEntity.metOpsArranges, new Predicate<MetOpsArrange>() {
-                        @Override
-                        public boolean apply(@Nullable MetOpsArrange input) {
-                            switch (input.role) {
-                                case ItinerantNurse:
-                                case ItinerantNurse1:
-                                    return true;
-
-                                default:
-                                    break;
-                            }
-                            return false;
-                        }
-                    }).stream().map(x -> {
-                        if (x.associateEntity.employee == null) {
-                            return x.emplCode;
-                        } else {
-                            return x.associateEntity.employee.emplName;
-                        }
-                    }).toList();
-        }
-        rspBody.anesType = item.anesType;
-        rspBody.applyNote = item.applyNote;
-        rspBody.inspectResult = item.inpectResult;
-        rspBody.publishFlag = Optional.fromNullable(item.publishFlag).or(false) ? "是" : "否";
 
         return rspBody;
     }
