@@ -98,6 +98,9 @@
             <if test="true">
                 AND DAYBALANCE_NO = #{statNo}
             </if>
+            <if test="pactCode != null">
+                AND PACT_CODE = #{pactCode}
+            </if>
         </where>
     </select>
 </mapper>

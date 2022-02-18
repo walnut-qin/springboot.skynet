@@ -30,8 +30,9 @@ public interface FinIpbBalanceHeadMapper {
     /**
      * 查询某次日结的所有结算记录
      * 
-     * @param statNo 日结编号；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param statNo   日结编号；等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @param pactCode 医保编码；等于 {@code null} 时，不作为判断条件
      * @return
      */
-    List<FinIpbBalanceHead> queryBalancesInDayReport(String statNo);
+    List<FinIpbBalanceHead> queryBalancesInDayReport(String statNo, String pactCode);
 }

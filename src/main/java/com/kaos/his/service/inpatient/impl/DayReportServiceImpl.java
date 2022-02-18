@@ -1,5 +1,6 @@
 package com.kaos.his.service.inpatient.impl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.function.ToDoubleFunction;
@@ -19,6 +20,7 @@ import com.kaos.his.service.inpatient.DayReportService;
 import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -81,67 +83,45 @@ public class DayReportServiceImpl implements DayReportService {
         }
 
         // 查询日结员关联的所有结算记录
-        var balances = this.balanceHeadMapper.queryBalancesInBalancer(rpt.rptEmplCode, rpt.beginDate,
-                rpt.endDate, "18");
-        if (balances == null || balances.isEmpty()) {
-            this.logger.info(String.format("结算员无新医保相关结算记录(balancer = %s)", rpt.rptEmplCode));
-            return;
-        } else {
-            this.logger.info(String.format("结算员新医保相关结算记录(balancer = %s):", rpt.rptEmplCode));
-            for (var balance : balances) {
-                this.logger.info(String.format("住院号 = %s, 统筹 = %f, 账户 = %f", balance.inpatientNo, balance.pubCost,
-                        balance.payCost));
-            }
+        Pair<Double, Double> cost = new Pair<Double, Double>(0d, 0d);
+        var balances = this.balanceHeadMapper.queryBalancesInDayReport(rpt.statNo, "18");
+        for (var balance : Optional.fromNullable(balances).or(new ArrayList<>())) {
+            this.logger.info(String.format("发票号 = %s, 住院号 = %s, 统筹 = %f, 账户 = %f", balance.invoiceNo,
+                    balance.inpatientNo, balance.pubCost, balance.payCost));
+            cost = cost.setAt0(cost.getValue0() + balance.pubCost);
+            cost = cost.setAt1(cost.getValue1() + balance.payCost);
         }
-
-        // 计算统筹总额
-        var pubCost = balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
-            @Override
-            public double applyAsDouble(FinIpbBalanceHead arg0) {
-                return Optional.fromNullable(arg0.pubCost).or(0.0);
-            }
-        }).sum();
-        var payCost = balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
-            @Override
-            public double applyAsDouble(FinIpbBalanceHead arg0) {
-                return Optional.fromNullable(arg0.payCost).or(0.0);
-            }
-        }).sum();
 
         // 修改统筹数据
         var pubRpt = this.finIpbDayReportDetailMapper.queryDayReportDetail(rpt.statNo, "市直医保_门诊");
         if (pubRpt == null) {
-            this.finIpbDayReportDetailMapper.insertDayReportDetail(new FinIpbDayReportDetail() {
-                {
-                    statNo = rpt.statNo;
-                    statCode = "市直医保_门诊";
-                    totCost = pubCost;
-                }
-            });
-            this.logger.info(String.format("插入统筹数据(statNo = %s, statCode = %s, totCost = %f)", rpt.statNo, "市直医保_门诊",
-                    pubCost));
+            var reportDetail = new FinIpbDayReportDetail();
+            reportDetail.statNo = rpt.statNo;
+            reportDetail.statCode = "市直医保_门诊";
+            reportDetail.totCost = cost.getValue0();
+            this.finIpbDayReportDetailMapper.insertDayReportDetail(reportDetail);
+            this.logger.info(String.format("插入统筹数据(statNo = %s, statCode = %s, totCost = %f)", reportDetail.statNo,
+                    reportDetail.statCode, reportDetail.totCost));
         } else {
-            this.finIpbDayReportDetailMapper.updateDayReportDetail(rpt.statNo, "市直医保_门诊", pubCost);
+            this.finIpbDayReportDetailMapper.updateDayReportDetail(rpt.statNo, "市直医保_门诊", cost.getValue0());
             this.logger.info(String.format("修改统筹数据(statNo = %s, statCode = %s, totCost = %f)", rpt.statNo, "市直医保_门诊",
-                    pubCost));
+                    cost.getValue0()));
         }
 
         // 修改账户数据
         var payRpt = this.finIpbDayReportDetailMapper.queryDayReportDetail(rpt.statNo, "市直统筹市直外伤");
         if (payRpt == null) {
-            this.finIpbDayReportDetailMapper.insertDayReportDetail(new FinIpbDayReportDetail() {
-                {
-                    statNo = rpt.statNo;
-                    statCode = "市直统筹市直外伤";
-                    totCost = payCost;
-                }
-            });
-            this.logger.info(String.format("插入账户数据(statNo = %s, statCode = %s, totCost = %f)", rpt.statNo, "市直统筹市直外伤",
-                    payCost));
+            var reportDetail = new FinIpbDayReportDetail();
+            reportDetail.statNo = rpt.statNo;
+            reportDetail.statCode = "市直统筹市直外伤";
+            reportDetail.totCost = cost.getValue1();
+            this.finIpbDayReportDetailMapper.insertDayReportDetail(reportDetail);
+            this.logger.info(String.format("插入账户数据(statNo = %s, statCode = %s, totCost = %f)", reportDetail.statNo,
+                    reportDetail.statCode, reportDetail.totCost));
         } else {
-            this.finIpbDayReportDetailMapper.updateDayReportDetail(rpt.statNo, "市直统筹市直外伤", payCost);
+            this.finIpbDayReportDetailMapper.updateDayReportDetail(rpt.statNo, "市直统筹市直外伤", cost.getValue1());
             this.logger.info(String.format("修改账户数据(statNo = %s, statCode = %s, totCost = %f)", rpt.statNo, "市直统筹市直外伤",
-                    payCost));
+                    cost.getValue1()));
         }
     }
 
@@ -245,7 +225,7 @@ public class DayReportServiceImpl implements DayReportService {
     @Override
     public void checkDayReportData(String statNo) {
         // 检索所有本次日结关联的结算记录
-        var Balances = this.balanceHeadMapper.queryBalancesInDayReport(statNo);
+        var Balances = this.balanceHeadMapper.queryBalancesInDayReport(statNo, null);
 
         // 计算第四大项综合
         this.logger.info(String.format("第四大项总额 = %f",

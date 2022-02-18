@@ -25,7 +25,7 @@ public class FinIpbBalancHeadTests {
 
     @Test
     public void queryBalanceHeadsInDayReport() {
-        this.finIpbBalanceHeadMapper.queryBalancesInDayReport(null);
-        this.finIpbBalanceHeadMapper.queryBalancesInDayReport("163411");
+        this.finIpbBalanceHeadMapper.queryBalancesInDayReport(null, null);
+        this.finIpbBalanceHeadMapper.queryBalancesInDayReport("163411", null);
     }
 }
