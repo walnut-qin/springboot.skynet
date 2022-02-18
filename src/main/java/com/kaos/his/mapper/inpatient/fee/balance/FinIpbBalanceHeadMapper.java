@@ -14,7 +14,7 @@ public interface FinIpbBalanceHeadMapper {
      * @param transType 交易类型；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
-    FinIpbBalanceHead queryBalanceHead(String invoiceNo, TransTypeEnum transType);
+    FinIpbBalanceHead queryBalance(String invoiceNo, TransTypeEnum transType);
 
     /**
      * 以结算员的角度查询结算头表信息
@@ -25,7 +25,7 @@ public interface FinIpbBalanceHeadMapper {
      * @param pactCode        医保编码；等于 {@code null} 时，不作为判断条件
      * @return
      */
-    List<FinIpbBalanceHead> queryBalanceHeadsInBalancer(String balancer, Date beginDate, Date endDate, String pactCode);
+    List<FinIpbBalanceHead> queryBalancesInBalancer(String balancer, Date beginDate, Date endDate, String pactCode);
 
     /**
      * 查询某次日结的所有结算记录
@@ -33,5 +33,5 @@ public interface FinIpbBalanceHeadMapper {
      * @param statNo 日结编号；等于 {@code null} 时，将 IS NULL 作为判断条件
      * @return
      */
-    List<FinIpbBalanceHead> queryBalanceHeadsInDayReport(String statNo);
+    List<FinIpbBalanceHead> queryBalancesInDayReport(String statNo);
 }
