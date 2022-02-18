@@ -4,15 +4,51 @@
     <resultMap id="map" type="com.kaos.his.entity.inpatient.ComBedInfo">
         <id column="BED_NO" jdbcType="VARCHAR" property="bedNo"/>
         <result column="NURSE_CELL_CODE" jdbcType="VARCHAR" property="nurseCellCode"/>
-        <result column="BED_STATE" jdbcType="VARCHAR" property="state"/>
-        <result column="VALID_STATE" jdbcType="VARCHAR" property="valid"/>
+        <result column="FEE_GRADE_CODE" jdbcType="VARCHAR" property="feeGradeCode"/>
+        <result column="BED_WEAVE" jdbcType="VARCHAR" property="bedWeave"/>
+        <result column="BED_STATE" jdbcType="VARCHAR" property="bedState"/>
+        <result column="WARD_NO" jdbcType="VARCHAR" property="wardNo"/>
+        <result column="DOC_CODE" jdbcType="VARCHAR" property="docCode"/>
+        <result column="BED_PHONECODE" jdbcType="VARCHAR" property="bedPhoneCode"/>
+        <result column="OWNER_PC" jdbcType="VARCHAR" property="ownerPc"/>
+        <result column="CLINIC_NO" jdbcType="VARCHAR" property="clinicNo"/>
+        <result column="PREPAY_OUTDATE" jdbcType="VARCHAR" property="prepayOutDate"/>
+        <result column="VALID_STATE" jdbcType="VARCHAR" property="validState"/>
+        <result column="PREPAY_FLAG" jdbcType="VARCHAR" property="prepayFlag"/>
+        <result column="SORT_ID" jdbcType="VARCHAR" property="sortId"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+        <result column="NURSETEND_GROUP" jdbcType="VARCHAR" property="nurseTendGroup"/>
+        <result column="HOUSE_DOC_CODE" jdbcType="VARCHAR" property="houseDocCode"/>
+        <result column="CHARGE_DOC_CODE" jdbcType="VARCHAR" property="chargeDocCode"/>
+        <result column="CHIEF_DOC_CODE" jdbcType="VARCHAR" property="chiefDocCode"/>
+        <result column="DUTY_NURSE_CODE" jdbcType="VARCHAR" property="dutyNurseCode"/>
+        <result column="BED_SEX" jdbcType="VARCHAR" property="bedSex"/>
     </resultMap>
 
     <sql id="item">
         BED_NO,
         NURSE_CELL_CODE,
+        FEE_GRADE_CODE,
+        BED_WEAVE,
         BED_STATE,
-        VALID_STATE
+        WARD_NO,
+        DOC_CODE,
+        BED_PHONECODE,
+        OWNER_PC,
+        CLINIC_NO,
+        PREPAY_OUTDATE,
+        VALID_STATE,
+        PREPAY_FLAG,
+        SORT_ID,
+        OPER_CODE,
+        OPER_DATE,
+        NURSETEND_GROUP,
+        HOUSE_DOC_CODE,
+        CHARGE_DOC_CODE,
+        CHIEF_DOC_CODE,
+        DUTY_NURSE_CODE,
+        BED_SEX
     </sql>
 
     <select id="queryBedInfo" resultMap="map">
