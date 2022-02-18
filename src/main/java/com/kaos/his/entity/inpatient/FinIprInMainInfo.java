@@ -8,6 +8,9 @@ import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.enums.common.BloodTypeEnum;
 import com.kaos.his.enums.common.PayKindEnum;
 import com.kaos.his.enums.common.SexEnum;
+import com.kaos.his.enums.inpatient.InAvenueEnum;
+import com.kaos.his.enums.inpatient.InCircsEnum;
+import com.kaos.his.enums.inpatient.InSourceEnum;
 
 /**
  * 住院主表信息(XYHIS.FIN_IPR_INMAININFO)
@@ -249,109 +252,109 @@ public class FinIprInMainInfo {
     public String chiefDocName = null;
 
     /**
-     *
+     * 责任护士编码 {@link FinIprInMainInfo.AssociateEntity#dutyNurse}
      */
-    public String DUTY_NURSE_CODE = null;
+    public String dutyNurseCode = null;
 
     /**
-     *
+     * 责任护士姓名
      */
-    public String DUTY_NURSE_NAME = null;
+    public String dutyNurseName = null;
 
     /**
-     *
+     * 入院情况
      */
-    public String IN_CIRCS = null;
+    public InCircsEnum inCircs = null;
 
     /**
-     *
+     * 入院途径
      */
-    public String IN_AVENUE = null;
+    public InAvenueEnum inAvenue = null;
 
     /**
-     *
+     * 入院来源
      */
-    public String IN_SOURCE = null;
+    public InSourceEnum inSourceEnum = null;
 
     /**
-     *
+     * 入院次数
      */
-    public String IN_TIMES = null;
+    public Integer inTimes = null;
 
     /**
-     *
+     * 预交金额(未结)
      */
-    public String PREPAY_COST = null;
+    public Double prepayCost = null;
 
     /**
-     *
+     * 转入预交金额（未结)
      */
-    public String CHANGE_PREPAYCOST = null;
+    public Double changePrepayCost = null;
 
     /**
-     *
+     * 警戒线
      */
-    public String MONEY_ALERT = null;
+    public Double moneyAlert = null;
 
     /**
-     *
+     * 总费用
      */
-    public String TOT_COST = null;
+    public Double totCost = null;
 
     /**
-     *
+     * 自费金额
      */
-    public String OWN_COST = null;
+    public Double ownCost = null;
 
     /**
-     *
+     * 自付金额(未结)
      */
-    public String PAY_COST = null;
+    public Double payCost = null;
 
     /**
-     *
+     * 统筹金额(未结)
      */
-    public String PUB_COST = null;
+    public Double pubCost = null;
 
     /**
-     *
+     * 优惠金额(未结)
      */
-    public String ECO_COST = null;
+    public Double ecoCost = null;
 
     /**
-     *
+     * 余额(未结)
      */
-    public String FREE_COST = null;
+    public Double feeCost = null;
 
     /**
-     *
+     * 转入费用金额(未结)
      */
-    public String CHANGE_TOTCOST = null;
+    public Double changeTotCost = null;
 
     /**
-     *
+     * 待遇上限
      */
-    public String UPPER_LIMIT = null;
+    public Double upperLimit = null;
 
     /**
-     *
+     * 固定费用间隔天数
      */
-    public String FEE_INTERVAL = null;
+    public Integer feeInterval = null;
 
     /**
-     *
+     * 结算序号
      */
-    public String BALANCE_NO = null;
+    public Integer balanceNo = null;
 
     /**
-     *
+     * 费用金额(已结)
      */
-    public String BALANCE_COST = null;
+    public Double balanceCost = null;
 
     /**
-     *
+     * 预交金额(已结)
      */
-    public String BALANCE_PREPAY = null;
+    public Double balancePrepay = null;
 
     /**
      *
@@ -771,6 +774,11 @@ public class FinIprInMainInfo {
          * 主治医师 {@link FinIprInMainInfo#chiefDocCode}
          */
         public DawnOrgEmpl chiefDoc = null;
+
+        /**
+         * 主治医师 {@link FinIprInMainInfo#dutyNurseCode}
+         */
+        public DawnOrgEmpl dutyNurse = null;
     }
 
     /**
