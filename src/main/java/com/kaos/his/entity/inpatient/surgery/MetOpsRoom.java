@@ -1,6 +1,7 @@
 package com.kaos.his.entity.inpatient.surgery;
 
 import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.enums.common.ValidStateEnum;
 
 /**
@@ -18,7 +19,12 @@ public class MetOpsRoom {
     public String roomName = null;
 
     /**
-     * 归属科室
+     * 助记码
+     */
+    public String inputCode = null;
+
+    /**
+     * 归属科室 {@link MetOpsRoom.AssociateEntity#dept}
      */
     public String deptCode = null;
 
@@ -28,13 +34,28 @@ public class MetOpsRoom {
     public ValidStateEnum valid = null;
 
     /**
+     * 操作员 {@link MetOpsRoom.AssociateEntity#operEmpl}
+     */
+    public String operCode = null;
+
+    /**
+     * 操作时间
+     */
+    public String operDate = null;
+
+    /**
      * 关联实体
      */
     public class AssociateEntity {
         /**
-         * 归属科室
+         * 归属科室 {@link MetOpsRoom#deptCode}
          */
-        public DawnOrgDept department = null;
+        public DawnOrgDept dept = null;
+
+        /**
+         * 操作员 {@link MetOpsRoom#operCode}
+         */
+        public DawnOrgEmpl operEmpl = null;
     }
 
     /**

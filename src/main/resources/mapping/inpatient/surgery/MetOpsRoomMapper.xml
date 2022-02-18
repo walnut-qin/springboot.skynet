@@ -4,15 +4,21 @@
     <resultMap id="map" type="com.kaos.his.entity.inpatient.surgery.MetOpsRoom">
         <id column="ROOM_ID" jdbcType="VARCHAR" property="roomId"/>
         <result column="ROOM_NAME" jdbcType="VARCHAR" property="roomName"/>
+        <result column="INPUT_CODE" jdbcType="VARCHAR" property="inputCode"/>
         <result column="DEPT_CODE" jdbcType="VARCHAR" property="deptCode"/>
         <result column="VALID_FLAG" jdbcType="VARCHAR" property="valid"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
     </resultMap>
 
     <sql id="item">
         ROOM_ID,
         ROOM_NAME,
+        INPUT_CODE,
         DEPT_CODE,
-        VALID_FLAG
+        VALID_FLAG,
+        OPER_CODE,
+        OPER_DATE
     </sql>
 
     <select id="queryMetOpsRoom" resultMap="map">
