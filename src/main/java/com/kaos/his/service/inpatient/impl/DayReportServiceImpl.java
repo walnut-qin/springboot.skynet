@@ -239,7 +239,7 @@ public class DayReportServiceImpl implements DayReportService {
                 }
             }
         }
-        this.logger.info(String.format("新医保汇总 = <统筹 - %f, 账户 - %f>", pubSum, paySum));
+        this.logger.info(String.format("新医保汇总 = <统筹 = %f, 账户 = %f>", pubSum, paySum));
     }
 
     @Override

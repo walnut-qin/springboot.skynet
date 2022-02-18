@@ -15,17 +15,17 @@ public class FinIpbBalancHeadTests {
 
     @Test
     public void queryBalanceHead() {
-        this.finIpbBalanceHeadMapper.queryBalanceHead("000001914165", TransTypeEnum.Positive);
+        this.finIpbBalanceHeadMapper.queryBalance("000001914165", TransTypeEnum.Positive);
     }
 
     @Test
     public void queryBalanceHeadsInBalancer() {
-        this.finIpbBalanceHeadMapper.queryBalanceHeadsInBalancer("006017", new Date(), new Date(), "18");
+        this.finIpbBalanceHeadMapper.queryBalancesInBalancer("006017", new Date(), new Date(), "18");
     }
 
     @Test
     public void queryBalanceHeadsInDayReport() {
-        this.finIpbBalanceHeadMapper.queryBalanceHeadsInDayReport(null);
-        this.finIpbBalanceHeadMapper.queryBalanceHeadsInDayReport("163411");
+        this.finIpbBalanceHeadMapper.queryBalancesInDayReport(null);
+        this.finIpbBalanceHeadMapper.queryBalancesInDayReport("163411");
     }
 }

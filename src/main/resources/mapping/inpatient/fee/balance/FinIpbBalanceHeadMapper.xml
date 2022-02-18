@@ -53,7 +53,7 @@
         DAYBALANCE_NO
     </sql>
 
-    <select id="queryBalanceHead" resultMap="map">
+    <select id="queryBalance" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
@@ -68,7 +68,7 @@
         </where>
     </select>
 
-    <select id="queryBalanceHeadsInBalancer" resultMap="map">
+    <select id="queryBalancesInBalancer" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
@@ -89,7 +89,7 @@
         </where>
     </select>
 
-    <select id="queryBalanceHeadsInDayReport" resultMap="map">
+    <select id="queryBalancesInDayReport" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
