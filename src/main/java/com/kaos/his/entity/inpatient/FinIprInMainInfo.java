@@ -3,6 +3,10 @@ package com.kaos.his.entity.inpatient;
 import java.util.Date;
 
 import com.kaos.his.entity.common.ComPatientInfo;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
+import com.kaos.his.enums.common.BloodTypeEnum;
+import com.kaos.his.enums.common.PayKindEnum;
 import com.kaos.his.enums.common.SexEnum;
 
 /**
@@ -130,119 +134,119 @@ public class FinIprInMainInfo {
     public String linkmanRelation = null;
 
     /**
-     *
+     * 婚姻状况
      */
-    public String MARI = null;
+    public String mari = null;
 
     /**
-     *
+     * 国籍
      */
-    public String COUN_CODE = null;
+    public String country = null;
 
     /**
-     *
+     * 身高
      */
-    public String HEIGHT = null;
+    public Double height = null;
 
     /**
-     *
+     * 体重
      */
-    public String WEIGHT = null;
+    public Double weight = null;
 
     /**
-     *
+     * 血压
      */
-    public String BLOOD_DRESS = null;
+    public String bloodDress = null;
 
     /**
-     *
+     * 血型
      */
-    public String BLOOD_CODE = null;
+    public BloodTypeEnum bloodCode = null;
 
     /**
-     *
+     * 重大疾病编码
      */
-    public String HEPATITIS_FLAG = null;
+    public Boolean hepatitisFlag = null;
 
     /**
-     *
+     * 过敏标志
      */
-    public String ANAPHY_FLAG = null;
+    public Boolean anaphyFlag = null;
 
     /**
-     *
+     * 入院日期
      */
-    public String IN_DATE = null;
+    public Date inDate = null;
 
     /**
-     *
+     * 科室代码 {@link FinIprInMainInfo.AssociateEntity#dept}
      */
-    public String DEPT_CODE = null;
+    public String deptCode = null;
 
     /**
-     *
+     * 科室名称
      */
-    public String DEPT_NAME = null;
+    public String deptName = null;
 
     /**
-     *
+     * 结算类型
      */
-    public String PAYKIND_CODE = null;
+    public PayKindEnum payKind = null;
 
     /**
-     *
+     * 合同单位编码
      */
-    public String PACT_CODE = null;
+    public String pactCode = null;
 
     /**
-     *
+     * 合同单位名
      */
-    public String PACT_NAME = null;
+    public String pactName = null;
 
     /**
-     *
+     * 床位号 {@link FinIprInMainInfo.AssociateEntity#bedInfo}
      */
-    public String BED_NO = null;
+    public String bedNo = null;
 
     /**
-     *
+     * 病区编码 {@link FinIprInMainInfo.AssociateEntity#nurseCell}
      */
-    public String NURSE_CELL_CODE = null;
+    public String nurseCellCode = null;
 
     /**
-     *
+     * 病区名称
      */
-    public String NURSE_CELL_NAME = null;
+    public String nurseCellName = null;
 
     /**
-     *
+     * 住院医师代码 {@link FinIprInMainInfo.AssociateEntity#houseDoc}
      */
-    public String HOUSE_DOC_CODE = null;
+    public String houseDocCode = null;
 
     /**
-     *
+     * 住院医师姓名
      */
-    public String HOUSE_DOC_NAME = null;
+    public String houseDocName = null;
 
     /**
-     *
+     * 主治医师代码 {@link FinIprInMainInfo.AssociateEntity#chargeDoc}
      */
-    public String CHARGE_DOC_CODE = null;
+    public String chargeDocCode = null;
 
     /**
-     *
+     * 主治医师姓名
      */
-    public String CHARGE_DOC_NAME = null;
+    public String chargeDocName = null;
 
     /**
-     *
+     * 主任医师代码 {@link FinIprInMainInfo.AssociateEntity#chiefDoc}
      */
-    public String CHIEF_DOC_CODE = null;
+    public String chiefDocCode = null;
 
     /**
-     *
+     * 主任医师姓名
      */
-    public String CHIEF_DOC_NAME = null;
+    public String chiefDocName = null;
 
     /**
      *
@@ -737,6 +741,36 @@ public class FinIprInMainInfo {
          * 患者基本信息 {@link FinIprInMainInfo#cardNo}
          */
         public ComPatientInfo patientInfo = null;
+
+        /**
+         * 科室信息 {@link FinIprInMainInfo#deptCode}
+         */
+        public DawnOrgDept dept = null;
+
+        /**
+         * 床位信息 {@link FinIprInMainInfo#bedNo}
+         */
+        public ComBedInfo bedInfo = null;
+
+        /**
+         * 病区信息 {@link FinIprInMainInfo#nurseCellCode}
+         */
+        public DawnOrgDept nurseCell = null;
+
+        /**
+         * 住院医师 {@link FinIprInMainInfo#houseDocCode}
+         */
+        public DawnOrgEmpl houseDoc = null;
+
+        /**
+         * 主治医师 {@link FinIprInMainInfo#chargeDocCode}
+         */
+        public DawnOrgEmpl chargeDoc = null;
+
+        /**
+         * 主治医师 {@link FinIprInMainInfo#chiefDocCode}
+         */
+        public DawnOrgEmpl chiefDoc = null;
     }
 
     /**
