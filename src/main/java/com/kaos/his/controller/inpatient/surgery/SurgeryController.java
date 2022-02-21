@@ -8,7 +8,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Function;
-import com.kaos.helper.gson.impl.GsonHelperImpl;
+import com.kaos.helper.http.HttpHelper;
+import com.kaos.helper.http.enums.ServerEnum;
+import com.kaos.helper.http.impl.HttpHelperImpl;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryArrangedMetOpsAppliesInDeptRspBody;
@@ -23,14 +25,11 @@ import com.kaos.his.service.inpatient.SurgeryService;
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @Validated
 @RestController
@@ -53,13 +52,9 @@ public class SurgeryController {
     SurgeryService surgeryService;
 
     /**
-     * web接口
+     * HttpHelper
      */
-    RestTemplate restTemplate = new RestTemplate(new ArrayList<HttpMessageConverter<?>>() {
-        {
-            add(new GsonHttpMessageConverter(new GsonHelperImpl("yyyy-MM-dd").getGson()));
-        }
-    });
+    HttpHelper httpHelper = HttpHelperImpl.getHelper(ServerEnum.docare);
 
     /**
      * 构造响应体元素
@@ -248,19 +243,18 @@ public class SurgeryController {
         this.logger.info(String.format("查询科室手术(count = %d)", rs.size()));
 
         // 获取手麻系统中的状态
-        var stateReq = new QueryStatesReq();
-        stateReq.applyNos = rs.stream().map((x) -> {
+        var reqBody = new QueryStatesReq();
+        reqBody.applyNos = rs.stream().map((x) -> {
             return x.operationNo;
         }).toList();
-        var states = this.restTemplate.postForObject("http://172.16.100.252:8002/ms/operation/queryStates", stateReq,
-                QueryStatesRsp.class).states;
+        var stateMap = this.httpHelper.postForObject("/ms/operation/queryStates", reqBody, QueryStatesRsp.class).states;
 
         // 构造响应体
         var rspBodies = new ArrayList<QueryArrangedMetOpsAppliesInDeptRspBody>();
         for (var item : rs) {
             var rspItem = this.createQueryMetOpsAppliesInDeptRspBody(item);
-            if (states.containsKey(item.operationNo)) {
-                rspItem.surgeryState = states.get(item.operationNo);
+            if (stateMap.containsKey(item.operationNo)) {
+                rspItem.surgeryState = stateMap.get(item.operationNo);
             }
             rspBodies.add(rspItem);
         }
