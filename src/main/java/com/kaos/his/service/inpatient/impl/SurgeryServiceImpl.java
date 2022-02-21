@@ -159,7 +159,12 @@ public class SurgeryServiceImpl implements SurgeryService {
             public int compare(MetOpsApply arg0, MetOpsApply arg1) {
                 String key1 = arg0.associateEntity.room == null ? "" : arg0.associateEntity.room.roomName;
                 String key2 = arg1.associateEntity.room == null ? "" : arg1.associateEntity.room.roomName;
-                return key1.compareTo(key2);
+                Integer rt = key1.compareTo(key2);
+                if (rt.equals(0)) {
+                    return arg0.preDate.compareTo(arg1.preDate);
+                } else {
+                    return rt;
+                }
             }
         });
 
