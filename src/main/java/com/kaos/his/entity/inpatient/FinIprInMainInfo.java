@@ -5,12 +5,15 @@ import java.util.Date;
 import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
+import com.kaos.his.entity.outpatient.FinOprRegister;
 import com.kaos.his.enums.common.BloodTypeEnum;
+import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.enums.common.PayKindEnum;
 import com.kaos.his.enums.common.SexEnum;
 import com.kaos.his.enums.inpatient.InAvenueEnum;
 import com.kaos.his.enums.inpatient.InCircsEnum;
 import com.kaos.his.enums.inpatient.InSourceEnum;
+import com.kaos.his.enums.inpatient.InStateEnum;
 
 /**
  * 住院主表信息(XYHIS.FIN_IPR_INMAININFO)
@@ -357,384 +360,384 @@ public class FinIprInMainInfo {
     public Double balancePrepay = null;
 
     /**
-     *
+     * 结算日期
      */
-    public String BALANCE_DATE = null;
+    public Date balanceDate = null;
 
     /**
-     *
+     * 是否关账
      */
-    public String STOP_ACOUNT = null;
+    public Boolean stopAccount = null;
 
     /**
-     *
+     * 是否为婴儿
      */
-    public String BABY_FLAG = null;
+    public Boolean babyFlag = null;
 
     /**
-     *
+     * 病案状态: 0 无需病案 1 需要病案 2 医生站形成病案 3 病案室形成病案 4病案封存
      */
-    public String CASE_FLAG = null;
+    public String caseFlag = null;
 
     /**
-     *
+     * 在院状态
      */
-    public String IN_STATE = null;
+    public InStateEnum inState = null;
 
     /**
-     *
+     * 是否请假
      */
-    public String LEAVE_FLAG = null;
+    public Boolean leaveFlag = null;
 
     /**
-     *
+     * 出院日期(预约)
      */
-    public String PREPAY_OUTDATE = null;
+    public Date prepayOutDate = null;
 
     /**
      *
      */
-    public String OUT_DATE = null;
+    public Date outDate = null;
 
     /**
-     *
+     * 转归代号
      */
-    public String ZG = null;
+    public String zg = null;
 
     /**
-     *
+     * 开据医师 {@link FinIprInMainInfo.AssociateEntity#empl}
      */
-    public String EMPL_CODE = null;
+    public String emplCode = null;
 
     /**
-     *
+     * 是否在ICU
      */
-    public String IN_ICU = null;
+    public Boolean inICU = null;
 
     /**
-     *
+     * 病案送入病案室否0未1送
      */
-    public String CASESEND_FLAG = null;
+    public Boolean caseSendFlag = null;
 
     /**
-     *
+     * 护理级别(TEND):名称显示护理级别名称(一级护理，二级护理，三级护理)
      */
-    public String TEND = null;
+    public String tend = null;
 
     /**
-     *
+     * 病危：0 普通 1 病重 2 病危
      */
-    public String CRITICAL_FLAG = null;
+    public String criticalFlag = null;
 
     /**
-     *
+     * 上次固定费用时间
      */
-    public String PREFIXFEE_DATE = null;
+    public Date prefixFeeDate = null;
 
     /**
-     *
+     * 操作员 {@link FinIprInMainInfo.AssociateEntity#empl}
      */
-    public String OPER_CODE = null;
+    public String operCode = null;
 
     /**
      *
      */
-    public String OPER_DATE = null;
+    public Date operDate = null;
 
     /**
-     *
+     * 血滞纳金
      */
-    public String BLOOD_LATEFEE = null;
+    public Double bloodLateFee = null;
 
     /**
-     *
+     * 公费患者日限额
      */
-    public String DAY_LIMIT = null;
+    public Double dayLimit = null;
 
     /**
-     *
+     * 公费患者日限额累计
      */
-    public String LIMIT_TOT = null;
+    public Double limitTot = null;
 
     /**
-     *
+     * 公费患者日限额超标部分金额
      */
-    public String LIMIT_OVERTOP = null;
+    public Double limitOverTop = null;
 
     /**
-     *
+     * 门诊诊断
      */
-    public String CLINIC_DIAGNOSE = null;
+    public String clinicDiagnose = null;
 
     /**
-     *
+     * 生育保险患者电脑号(医保用作欠费标记1为欠费)
      */
-    public String PROCREATE_PCNO = null;
+    public String procreatePcNo = null;
 
     /**
-     *
+     * 饮食
      */
-    public String DIETETIC_MARK = null;
+    public String dieteticMark = null;
 
     /**
-     *
+     * 公费患者公费药品累计(日限额)
      */
-    public String BURSARY_TOTMEDFEE = null;
+    public Double bursaryTotMedFee = null;
 
     /**
-     *
+     * 备注
      */
-    public String MEMO = null;
+    public String memo = null;
 
     /**
-     *
+     * 床位上限
      */
-    public String BED_LIMIT = null;
+    public Double bedLimit = null;
 
     /**
-     *
+     * 空调上限
      */
-    public String AIR_LIMIT = null;
+    public Double airLimit = null;
 
     /**
-     *
+     * 床费超标处理 0超标不限 1超标自理 2超标不计
      */
-    public String BEDOVERDEAL = null;
+    public String bedOverDeal = null;
 
     /**
-     *
+     * 扩展标记[无费入院标记]
      */
-    public String EXT_FLAG = null;
+    public String extFlag = null;
 
     /**
-     *
+     * 扩展标记1
      */
-    public String EXT_FLAG1 = null;
+    public String extFlag1 = null;
 
     /**
-     *
+     * 扩展标记2(襄阳保存特殊自费类型:火灾，弃婴，车祸等)
      */
-    public String EXT_FLAG2 = null;
+    public String extFlag2 = null;
 
     /**
-     *
+     * 膳食花费总额
      */
-    public String BOARD_COST = null;
+    public Double boardCost = null;
 
     /**
-     *
+     * 膳食预交金额
      */
-    public String BOARD_PREPAY = null;
+    public Double boardPrepay = null;
 
     /**
-     *
+     * 膳食结算状态：0在院 1出院
      */
-    public String BOARD_STATE = null;
+    public String boardState = null;
 
     /**
-     *
+     * 自费比例
      */
-    public String OWN_RATE = null;
+    public Double ownRate = null;
 
     /**
-     *
+     * 自付比例
      */
-    public String PAY_RATE = null;
+    public Double payRate = null;
 
     /**
-     *
+     * 扩展数值（中山一用作－剩余统筹金额）
      */
-    public String EXT_NUMBER = null;
+    public Double extNumber = null;
 
     /**
-     *
+     * 扩展编码（襄阳保存医保特殊记录：15r重复住院等）
      */
-    public String EXT_CODE = null;
+    public String extCode = null;
 
     /**
-     *
+     * 诊断名称（建议用此保存主诊断）
      */
-    public String DIAG_NAME = null;
+    public String diagName = null;
 
     /**
-     *
+     * 是否加密
      */
-    public String IS_ENCRYPTNAME = null;
+    public Boolean isEncryptName = null;
 
     /**
-     *
+     * 密文
      */
-    public String NORMALNAME = null;
+    public String normalName = null;
 
     /**
-     *
+     * 证件类型
      */
-    public String IDCARDTYPE = null;
+    public String idCardType = null;
 
     /**
-     *
+     * M 金额 D时间段
      */
-    public String ALTER_TYPE = null;
+    public String alterType = null;
 
     /**
-     *
+     * 警戒线开始时间
      */
-    public String ALTER_BEGIN = null;
+    public Date alterBegin = null;
 
     /**
-     *
+     * 警戒线结束时间
      */
-    public String ALTER_END = null;
+    public Date alterEnd = null;
 
     /**
-     *
+     * 警戒线批准人 {@link FinIprInMainInfo.AssociateEntity#alterApproveEmpl}
      */
-    public String ALTER_APPROVE_CODE = null;
+    public String alterApproveCode = null;
 
     /**
-     *
+     * 警戒线批准原因
      */
-    public String ALTER_APPROVE_DATE = null;
+    public Date alterApproveDate = null;
 
     /**
-     *
+     * 人民医院旧系统资格证书编号(导数据用)[襄阳暂存质控护士编码]
      */
-    public String OLDSI_NO = null;
+    public String oldSiNo = null;
 
     /**
-     *
+     * 患者医保审核确认标记
      */
-    public String LOCAL_EXT_FLAG1 = null;
+    public String localExtFlag1 = null;
 
     /**
-     *
+     * 医保普通备注
      */
-    public String LOCAL_EXT_FLAG2 = null;
+    public String localExtFlag2 = null;
 
     /**
-     *
+     * EMR住院流水号 SEQ_FIN_INPATIENTID
      */
-    public String EMR_INPATIENTID = null;
+    public String emrInpatientId = null;
 
     /**
-     *
+     * 是否是单病种患者0：非单病种1：单病种
      */
-    public String IS_SINGLEDIS = null;
+    public Boolean isSingleDis = null;
 
     /**
-     *
+     * 单病种ICD编码
      */
-    public String SINGLEDIS_ID = null;
+    public String singleDisId = null;
 
     /**
-     *
+     * 定额结算手术名称
      */
-    public String DISEASENAME = null;
+    public String diseaseName = null;
 
     /**
-     *
+     * 定额结算手术定额
      */
-    public String DISEASECOST = null;
+    public Double diseaseCost = null;
 
     /**
-     *
+     * 材料费用
      */
-    public String MATERIALCOST = null;
+    public String materialCost = null;
 
     /**
-     *
+     * 职员院区标识 0 全院 1 南区, 2北区 3东区
      */
-    public String DEPTOWN = null;
+    public DeptOwnEnum deptOwn = null;
 
     /**
-     *
+     * 急诊绿色通道结账
      */
-    public String IS_GREEN_BALANCE = null;
+    public Boolean isGreenBalance = null;
 
     /**
-     *
+     * 跨省医保省编码
      */
-    public String SI_PROVINCCODE = null;
+    public String siProvinceCode = null;
 
     /**
-     *
+     * 跨省医保省名称
      */
-    public String SI_PROVINCNAME = null;
+    public String siProvinceName = null;
 
     /**
-     *
+     * 跨省医保市编码
      */
-    public String SI_CITYCODE = null;
+    public String siCityCode = null;
 
     /**
-     *
+     * 跨省医保市名称
      */
-    public String SI_CITYNAME = null;
+    public String siCityName = null;
 
     /**
-     *
+     * 医保特殊备注
      */
-    public String LOCAL_EXT_FLAG3 = null;
+    public String localExtFlag3 = null;
 
     /**
-     *
+     * 是否是GCP患者，空值表示不是GCP患者，0取消GCP患者，1设置GCP患者。
      */
-    public String GCPINPATIENT = null;
+    public Boolean gcpInpatient = null;
 
     /**
-     *
+     * 绿色通道标志 1是 0不是
      */
-    public String GREENROAD = null;
+    public Boolean greenRoad = null;
 
     /**
-     *
+     * VIP患者标志 1是 0不是
      */
-    public String VIP_FLAG = null;
+    public Boolean vipFlag = null;
 
     /**
-     *
+     * 是否是ERAS患者，空值表示不是ERAS患者，0取消ERAS患者，1设置ERAS患者。
      */
-    public String ERASINPATIENT = null;
+    public Boolean erasInpatient = null;
 
     /**
-     *
+     * VTE等级
      */
-    public String VTE = null;
+    public String vte = null;
 
     /**
-     *
+     * VTE等级是否被医生确认：0 未确认；1 已确认
      */
-    public String VTE_CFM = null;
+    public Boolean vteCfm = null;
 
     /**
-     *
+     * 门诊号 {@link FinIprInMainInfo.AssociateEntity#register}
      */
-    public String CLINIC_CODE = null;
+    public String clinicCode = null;
 
     /**
-     *
+     * 住院预约发生序号
      */
-    public String HAPPEN_NO = null;
+    public Integer happenNo = null;
 
     /**
-     *
+     * 医疗照顾人员类别
      */
-    public String MEDICAL_STAFF = null;
+    public String medicalStaff = null;
 
     /**
-     *
+     * 备注
      */
-    public String REMARK = null;
+    public String remark = null;
 
     /**
-     *
+     * 
      */
-    public String CASE_APPROVE_FLAG = null;
+    public String caseApproveFlag = null;
 
     /**
      *
      */
-    public String CASE_REASON = null;
+    public String caseReason = null;
 
     /**
      * 关联实体
@@ -779,6 +782,26 @@ public class FinIprInMainInfo {
          * 主治医师 {@link FinIprInMainInfo#dutyNurseCode}
          */
         public DawnOrgEmpl dutyNurse = null;
+
+        /**
+         * 开据医师 {@link FinIprInMainInfo#emplCode}
+         */
+        public DawnOrgEmpl empl = null;
+
+        /**
+         * 操作员 {@link FinIprInMainInfo#operCode}
+         */
+        public DawnOrgEmpl operEmpl = null;
+
+        /**
+         * 操作员 {@link FinIprInMainInfo#alterApproveCode}
+         */
+        public DawnOrgEmpl alterApproveEmpl = null;
+
+        /**
+         * 挂号记录 {@link FinIprInMainInfo#clinicCode}
+         */
+        public FinOprRegister register = null;
     }
 
     /**
