@@ -21,7 +21,7 @@
         <result column="ANES_DOCD" jdbcType="VARCHAR" property="anesDocCode"/>
         <result column="DEGREE" jdbcType="VARCHAR" property="degree"/>
         <result column="INCI_TYPE" jdbcType="VARCHAR" property="inciType"/>
-        <result column="BLOOD_NUM" jdbcType="VARCHAR" property="inpectResult"/>
+        <result column="BLOOD_NUM" jdbcType="VARCHAR" property="inspectResult"/>
         <result column="EXECSTATUS" jdbcType="VARCHAR" property="surgeryStatus"/>
         <result column="YNFINISHED" jdbcType="VARCHAR" property="finishFlag"/>
         <result column="YNCHANGE" jdbcType="VARCHAR" property="chargeFlag"/>

@@ -94,6 +94,12 @@ public class SurgeryController {
             } else {
                 rspBody.name = inMainInfo.name;
             }
+
+            // ERAS
+            rspBody.eras = inMainInfo.erasInpatient ? "是" : "否";
+
+            // VTE
+            rspBody.vte = inMainInfo.vte;
         }
 
         // 诊断
@@ -188,13 +194,19 @@ public class SurgeryController {
                             }
                         }
                     }).toList());
-
-            // 特殊需求
-            rspBody.applyNote = apply.applyNote;
         }
 
         // 麻醉种类
         rspBody.anesType = apply.anesType;
+
+        // 特殊需求
+        rspBody.applyNote = apply.applyNote;
+
+        // 检验结果
+        rspBody.inspectResult = apply.inspectResult;
+
+        // 是否公布
+        rspBody.publishFlag = apply.publishFlag ? "是" : "否";
 
         return rspBody;
     }

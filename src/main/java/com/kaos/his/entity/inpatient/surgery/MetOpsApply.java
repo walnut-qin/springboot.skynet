@@ -118,7 +118,7 @@ public class MetOpsApply {
     /**
      * 检验结果
      */
-    public SurgeryInspectResultEnum inpectResult = null;
+    public SurgeryInspectResultEnum inspectResult = null;
 
     /**
      * 手术状态
