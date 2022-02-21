@@ -93,15 +93,11 @@
         </where>
     </select>
 
-    <sql id = "rank1">
+    <select id="queryApplies" resultMap="map">
         SELECT
-            T1.*,
-            T2.DEPT_CODE AS DEPT_ID,
-            T3.DEPTOWN AS DEPT_OWN
+        <include refid="item"/>
         FROM
-            MET_OPS_APPLY T1
-            LEFT JOIN FIN_IPR_INMAININFO T2 ON T2.PATIENT_NO = T1.PATIENT_NO
-            LEFT JOIN DAWN_ORG_DEPT T3 ON T3.DEPT_ID = T2.DEPT_CODE
+            MET_OPS_APPLY
         <where>
             <if test="beginDate != null">
                 AND PRE_DATE &gt;= #{beginDate}
@@ -117,34 +113,6 @@
             </if>
             <if test="valid != null">
                 AND YNVALID = #{valid}
-            </if>
-        </where>
-    </sql>
-
-    <select id="queryMetOpsAppliesInDept" resultMap="map">
-        SELECT
-        <include refid="item"/>
-        FROM
-        (
-        <include refid = "rank1"/>
-        )
-        <where>
-            <if test="deptCode != null">
-                AND DEPT_ID = #{deptCode}
-            </if>
-        </where>
-    </select>
-
-    <select id="queryMetOpsAppliesInDeptOwn" resultMap="map">
-        SELECT
-        <include refid="item"/>
-        FROM
-        (
-        <include refid = "rank1"/>
-        )
-        <where>
-            <if test="deptOwn != null">
-                AND DEPT_OWN = #{deptOwn}
             </if>
         </where>
     </select>

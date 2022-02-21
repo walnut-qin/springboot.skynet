@@ -8,12 +8,16 @@ import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
 
 public interface SurgeryService {
     /**
-     * 查询指定科室内的手术
+     * 查询符合条件的手术
      * 
-     * @param deptCode 科室编码
-     * @return 手术申请记录
+     * @param deptCode  科室编码
+     * @param roomNo    手术室编码
+     * @param beginDate 开始时间
+     * @param endDate   结束时间
+     * @param status    状态列表
+     * @return
      */
-    List<MetOpsApply> queryMetOpsAppliesInDept(String deptCode, Date beginDate, Date endDate,
+    List<MetOpsApply> queryApplies(String deptCode, String roomNo, Date beginDate, Date endDate,
             List<SurgeryStatusEnum> status);
 
     /**

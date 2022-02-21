@@ -8,24 +8,27 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Function;
+import com.kaos.helper.gson.GsonHelper;
+import com.kaos.helper.gson.impl.GsonHelperImpl;
 import com.kaos.helper.http.HttpHelper;
 import com.kaos.helper.http.enums.ServerEnum;
 import com.kaos.helper.http.impl.HttpHelperImpl;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
-import com.kaos.his.controller.inpatient.surgery.entity.QueryArrangedMetOpsAppliesInDeptRspBody;
+import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesReq;
+import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesRsp;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesReq;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesRsp;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
 import com.kaos.his.service.inpatient.SurgeryService;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,6 +42,11 @@ public class SurgeryController {
      * 接口：日志服务
      */
     Logger logger = Logger.getLogger(SurgeryController.class.getName());
+
+    /**
+     * gson处理器
+     */
+    GsonHelper gsonHelper = new GsonHelperImpl("yyyy-MM-dd HH:mm:ss");
 
     /**
      * 基本类型助手
@@ -62,9 +70,9 @@ public class SurgeryController {
      * @param item
      * @return
      */
-    private QueryArrangedMetOpsAppliesInDeptRspBody createQueryMetOpsAppliesInDeptRspBody(MetOpsApply apply) {
+    private QueryAppliesRsp createQueryMetOpsAppliesInDeptRspBody(MetOpsApply apply) {
         // 创建实体
-        var rspBody = new QueryArrangedMetOpsAppliesInDeptRspBody();
+        var rspBody = new QueryAppliesRsp();
 
         // 手术间
         if (apply.associateEntity.room != null) {
@@ -222,22 +230,14 @@ public class SurgeryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "queryArrangedApplies", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public List<QueryArrangedMetOpsAppliesInDeptRspBody> queryArrangedApplies(
-            @NotBlank(message = "科室不能空") String deptCode,
-            @NotNull(message = "开始时间不能为空") Date beginDate,
-            @NotNull(message = "结束时间不能为空") Date endDate) {
+    @RequestMapping(value = "queryArrangedApplies", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public List<QueryAppliesRsp> queryArrangedApplies(@RequestBody QueryAppliesReq req) {
         // 记录日志
-        this.logger.info(
-                String.format("查询已安排的手术(deptCode = %s, beginDate = %s, endDate = %s)", deptCode, beginDate, endDate));
+        this.logger.info("查询手术申请, 入参:");
+        this.logger.info(this.gsonHelper.toJson(req));
 
         // 调用服务
-        var rs = this.surgeryService.queryMetOpsAppliesInDept(deptCode, beginDate, endDate, new ArrayList<>() {
-            {
-                add(SurgeryStatusEnum.手术安排);
-                add(SurgeryStatusEnum.手术完成);
-            }
-        });
+        var rs = this.surgeryService.queryApplies(req.deptCode, req.roomNo, req.beginDate, req.endDate, req.states);
 
         // 记录日志
         this.logger.info(String.format("查询科室手术(count = %d)", rs.size()));
@@ -250,7 +250,7 @@ public class SurgeryController {
         var stateMap = this.httpHelper.postForObject("/ms/operation/queryStates", reqBody, QueryStatesRsp.class).states;
 
         // 构造响应体
-        var rspBodies = new ArrayList<QueryArrangedMetOpsAppliesInDeptRspBody>();
+        var rspBodies = new ArrayList<QueryAppliesRsp>();
         for (var item : rs) {
             var rspItem = this.createQueryMetOpsAppliesInDeptRspBody(item);
             if (stateMap.containsKey(item.operationNo)) {

@@ -10,7 +10,7 @@ import com.kaos.his.enums.inpatient.surgery.SurgeryInspectResultEnum;
 /**
  * 接口 QueryMetOpsAppliesInDept 的响应体
  */
-public class QueryArrangedMetOpsAppliesInDeptRspBody {
+public class QueryAppliesRsp {
     /**
      * 手术间
      */

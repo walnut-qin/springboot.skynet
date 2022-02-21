@@ -3,6 +3,7 @@ package com.kaos.his.service.inpatient.impl;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.google.common.collect.Maps;
 import com.kaos.his.cache.common.ComPatientInfoCache;
@@ -79,43 +80,159 @@ public class SurgeryServiceImpl implements SurgeryService {
     @Autowired
     ComBedInfoCache bedInfoCache;
 
-    @Override
-    public List<MetOpsApply> queryMetOpsAppliesInDept(String deptCode, Date beginDate, Date endDate,
-            List<SurgeryStatusEnum> status) {
-        // 声明结果集
-        List<MetOpsApply> metOpsApplies = null;
+    static class DeptOwnPredicate implements Predicate<MetOpsApply> {
+        /**
+         * 院区
+         */
+        DeptOwnEnum deptOwn = null;
 
-        // 查询结果
+        /**
+         * 手术间
+         */
+        String roomNo = null;
+
+        DeptOwnPredicate(DeptOwnEnum deptOwn, String roomNo) {
+            this.deptOwn = deptOwn;
+            this.roomNo = roomNo;
+        }
+
+        @Override
+        public boolean test(MetOpsApply apply) {
+            // 过滤手术室
+            if (roomNo != null) {
+                if (apply.associateEntity.room == null) {
+                    return false;
+                }
+                if (!apply.associateEntity.room.roomName.equals(roomNo)) {
+                    return false;
+                }
+            }
+
+            // 过滤科室
+            if (apply.associateEntity.inMainInfo == null) {
+                return false;
+            }
+            var inMainInfo = apply.associateEntity.inMainInfo;
+            if (inMainInfo.associateEntity.dept == null) {
+                return false;
+            }
+            var dept = inMainInfo.associateEntity.dept;
+            if (!dept.deptOwn.equals(this.deptOwn)) {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    static class DeptCodePredicate implements Predicate<MetOpsApply> {
+        /**
+         * 院区
+         */
+        String deptCode = null;
+
+        /**
+         * 手术间
+         */
+        String roomNo = null;
+
+        DeptCodePredicate(String deptCode, String roomNo) {
+            this.deptCode = deptCode;
+            this.roomNo = roomNo;
+        }
+
+        @Override
+        public boolean test(MetOpsApply apply) {
+            // 过滤手术室
+            if (roomNo != null) {
+                if (apply.associateEntity.room == null) {
+                    return false;
+                }
+                if (!apply.associateEntity.room.roomName.equals(roomNo)) {
+                    return false;
+                }
+            }
+
+            // 过滤科室
+            if (apply.associateEntity.inMainInfo == null) {
+                return false;
+            }
+            var inMainInfo = apply.associateEntity.inMainInfo;
+            if (inMainInfo.associateEntity.dept == null) {
+                return false;
+            }
+            var dept = inMainInfo.associateEntity.dept;
+            if (!dept.deptCode.equals(this.deptCode)) {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    static class MetComparator implements Comparator<MetOpsApply> {
+        @Override
+        public int compare(MetOpsApply arg0, MetOpsApply arg1) {
+            // 比较房间号
+            String key1 = arg0.associateEntity.room == null ? "" : arg0.associateEntity.room.roomName;
+            String key2 = arg1.associateEntity.room == null ? "" : arg1.associateEntity.room.roomName;
+            Integer cmp = key1.compareTo(key2);
+
+            // 若房间号相等，再比较时间
+            if (cmp.equals(0)) {
+                return arg0.preDate.compareTo(arg1.preDate);
+            }
+
+            return cmp;
+        }
+    }
+
+    /**
+     * 过滤手术
+     * 
+     * @param applies  手术列表
+     * @param deptCode 科室
+     * @param roomNo   手术间
+     * @return
+     */
+    private List<MetOpsApply> filterAndSort(List<MetOpsApply> applies, String deptCode, String roomNo) {
         switch (deptCode) {
             case "1290":
-                metOpsApplies = this.metOpsApplyMapper.queryMetOpsAppliesInDeptOwn(DeptOwnEnum.Sourth, beginDate,
-                        endDate, status, ValidStateEnum.有效);
+                applies = applies.stream().filter(new DeptOwnPredicate(DeptOwnEnum.Sourth, roomNo))
+                        .sorted(new MetComparator()).toList();
                 break;
 
             case "1291":
-                metOpsApplies = this.metOpsApplyMapper.queryMetOpsAppliesInDeptOwn(DeptOwnEnum.East, beginDate, endDate,
-                        status, ValidStateEnum.有效);
+                applies = applies.stream().filter(new DeptOwnPredicate(DeptOwnEnum.East, roomNo))
+                        .sorted(new MetComparator()).toList();
                 break;
 
             case "5206":
-                metOpsApplies = this.metOpsApplyMapper.queryMetOpsAppliesInDeptOwn(DeptOwnEnum.North, beginDate,
-                        endDate, status, ValidStateEnum.有效);
+                applies = applies.stream().filter(new DeptOwnPredicate(DeptOwnEnum.North, roomNo))
+                        .sorted(new MetComparator()).toList();
+                break;
 
             case "4015":
             case "4106":
             case "4078":
             case "0901":
-                metOpsApplies = this.metOpsApplyMapper.queryMetOpsAppliesInDeptOwn(DeptOwnEnum.All, beginDate, endDate,
-                        status, ValidStateEnum.有效);
+                applies = applies.stream().sorted(new MetComparator()).toList();
+                break;
 
             default:
-                metOpsApplies = this.metOpsApplyMapper.queryMetOpsAppliesInDept(deptCode, beginDate, endDate, status,
-                        ValidStateEnum.有效);
+                applies = applies.stream().filter(new DeptCodePredicate(deptCode, roomNo))
+                        .sorted(new MetComparator()).toList();
                 break;
         }
+        return applies;
+    }
 
-        // 填充关联实体
-        for (MetOpsApply apply : metOpsApplies) {
+    @Override
+    public List<MetOpsApply> queryApplies(String deptCode, String roomNo, Date beginDate, Date endDate,
+            List<SurgeryStatusEnum> status) {
+        // 初步查询目标手术
+        var applies = this.metOpsApplyMapper.queryApplies(beginDate, endDate, status, ValidStateEnum.有效);
+        for (var apply : applies) {
             // 实体：项目
             apply.associateEntity.metOpsItem = this.metOpsItemMapper.queryMetOpsItem(apply.operationNo, "S991");
 
@@ -153,22 +270,8 @@ public class SurgeryServiceImpl implements SurgeryService {
             apply.associateEntity.room = this.metOpsRoomCache.getValue(apply.roomId);
         }
 
-        // 按手术室排序
-        metOpsApplies.sort(new Comparator<MetOpsApply>() {
-            @Override
-            public int compare(MetOpsApply arg0, MetOpsApply arg1) {
-                String key1 = arg0.associateEntity.room == null ? "" : arg0.associateEntity.room.roomName;
-                String key2 = arg1.associateEntity.room == null ? "" : arg1.associateEntity.room.roomName;
-                Integer rt = key1.compareTo(key2);
-                if (rt.equals(0)) {
-                    return arg0.preDate.compareTo(arg1.preDate);
-                } else {
-                    return rt;
-                }
-            }
-        });
-
-        return metOpsApplies;
+        // 过滤
+        return this.filterAndSort(applies, deptCode, roomNo);
     }
 
     @Override
