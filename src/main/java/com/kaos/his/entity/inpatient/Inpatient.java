@@ -5,8 +5,8 @@ import java.util.Date;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.common.ComPatientInfo;
-import com.kaos.his.enums.inpatient.InpatientSourceEnum;
-import com.kaos.his.enums.inpatient.InpatientStateEnum;
+import com.kaos.his.enums.inpatient.InSourceEnum;
+import com.kaos.his.enums.inpatient.InStateEnum;
 
 /**
  * 实体：住院患者（FIN_IPR_INMAININFO）
@@ -60,12 +60,12 @@ public class Inpatient extends ComPatientInfo {
     /**
      * 入院来源
      */
-    public InpatientSourceEnum inSource = null;
+    public InSourceEnum inSource = null;
 
     /**
      * 在院状态
      */
-    public InpatientStateEnum inState = null;
+    public InStateEnum inState = null;
 
     /**
      * 入院日期

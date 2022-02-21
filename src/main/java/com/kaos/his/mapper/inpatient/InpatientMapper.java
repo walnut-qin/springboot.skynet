@@ -3,7 +3,7 @@ package com.kaos.his.mapper.inpatient;
 import java.util.List;
 
 import com.kaos.his.entity.inpatient.Inpatient;
-import com.kaos.his.enums.inpatient.InpatientStateEnum;
+import com.kaos.his.enums.inpatient.InStateEnum;
 
 public interface InpatientMapper {
     /**
@@ -31,5 +31,5 @@ public interface InpatientMapper {
      * @param states   在院状态；等于 {@code null} 时，不作为判断条件
      * @return
      */
-    List<Inpatient> queryInpatients(String cardNo, String deptCode, List<InpatientStateEnum> states);
+    List<Inpatient> queryInpatients(String cardNo, String deptCode, List<InStateEnum> states);
 }

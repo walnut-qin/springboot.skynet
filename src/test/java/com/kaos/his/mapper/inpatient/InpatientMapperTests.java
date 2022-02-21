@@ -2,7 +2,7 @@ package com.kaos.his.mapper.inpatient;
 
 import java.util.ArrayList;
 
-import com.kaos.his.enums.inpatient.InpatientStateEnum;
+import com.kaos.his.enums.inpatient.InStateEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +28,7 @@ public class InpatientMapperTests {
         this.inpatientMapper.queryInpatients("2000003605", null, null);
         this.inpatientMapper.queryInpatients("2000003605", null, new ArrayList<>() {
             {
-                add(InpatientStateEnum.病房接诊);
+                add(InStateEnum.病房接诊);
             }
         });
     }

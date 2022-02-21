@@ -20,7 +20,7 @@ import com.kaos.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.his.entity.inpatient.escort.EscortStateRec;
 import com.kaos.his.entity.inpatient.escort.EscortVip;
 import com.kaos.his.enums.inpatient.FinIprPrepayInStateEnum;
-import com.kaos.his.enums.inpatient.InpatientStateEnum;
+import com.kaos.his.enums.inpatient.InStateEnum;
 import com.kaos.his.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.his.mapper.common.DawnOrgDeptMapper;
@@ -386,8 +386,8 @@ public class EscortServiceImpl implements EscortService {
         // 判定住院证
         var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, new ArrayList<>() {
             {
-                add(InpatientStateEnum.住院登记);
-                add(InpatientStateEnum.病房接诊);
+                add(InStateEnum.住院登记);
+                add(InStateEnum.病房接诊);
             }
         });
         FinIprPrepayIn fip = null;
@@ -667,8 +667,8 @@ public class EscortServiceImpl implements EscortService {
         // 查询该科室的所有患者
         var inpatients = this.inpatientMapper.queryInpatients(null, deptCode, new ArrayList<>() {
             {
-                add(InpatientStateEnum.住院登记);
-                add(InpatientStateEnum.病房接诊);
+                add(InStateEnum.住院登记);
+                add(InStateEnum.病房接诊);
             }
         });
         for (var inpatient : inpatients) {
