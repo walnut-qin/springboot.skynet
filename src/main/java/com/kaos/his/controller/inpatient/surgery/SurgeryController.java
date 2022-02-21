@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @Validated
 @RestController
@@ -45,6 +46,11 @@ public class SurgeryController {
      */
     @Autowired
     SurgeryService surgeryService;
+
+    /**
+     * web接口
+     */
+    RestTemplate restTemplate = new RestTemplate(messageConverters)
 
     /**
      * 构造响应体元素
