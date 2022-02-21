@@ -6,20 +6,22 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import com.google.common.collect.Maps;
-import com.kaos.his.cache.common.ComPatientInfoCache;
-import com.kaos.his.cache.common.DawnOrgDeptCache;
-import com.kaos.his.cache.common.DawnOrgEmplCache;
-import com.kaos.his.cache.inpatient.ComBedInfoCache;
-import com.kaos.his.cache.inpatient.surgery.MetOpsRoomCache;
+import com.kaos.his.entity.common.ComPatientInfo;
+import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.entity.common.DawnOrgEmpl;
+import com.kaos.his.entity.common.config.ConfigSwitch;
+import com.kaos.his.entity.inpatient.ComBedInfo;
+import com.kaos.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
+import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
-import com.kaos.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.his.service.inpatient.SurgeryService;
+import com.kaos.inf.ICache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,37 +50,43 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 住院接口
      */
     @Autowired
-    FinIprInMainInfoMapper inMainInfoMapper;
+    ICache<String, FinIprInMainInfo> inMainInfoCache;
 
     /**
      * 患者基本信息cache
      */
     @Autowired
-    ComPatientInfoCache patientInfoCache;
+    ICache<String, ComPatientInfo> patientInfoCache;
 
     /**
      * 科室信息缓存
      */
     @Autowired
-    DawnOrgDeptCache deptCache;
+    ICache<String, DawnOrgDept> deptCache;
 
     /**
      * 职工接口
      */
     @Autowired
-    DawnOrgEmplCache emplCache;
+    ICache<String, DawnOrgEmpl> emplCache;
 
     /**
      * 手术间接口
      */
     @Autowired
-    MetOpsRoomCache metOpsRoomCache;
+    ICache<String, MetOpsRoom> metOpsRoomCache;
 
     /**
      * 床位接口
      */
     @Autowired
-    ComBedInfoCache bedInfoCache;
+    ICache<String, ComBedInfo> bedInfoCache;
+
+    /**
+     * 开关缓存
+     */
+    @Autowired
+    ICache<String, ConfigSwitch> switchCache;
 
     static class DeptOwnPredicate implements Predicate<MetOpsApply> {
         /**
@@ -109,14 +117,10 @@ public class SurgeryServiceImpl implements SurgeryService {
             }
 
             // 过滤科室
-            if (apply.associateEntity.inMainInfo == null) {
+            if (apply.associateEntity.surgeryDept == null) {
                 return false;
             }
-            var inMainInfo = apply.associateEntity.inMainInfo;
-            if (inMainInfo.associateEntity.dept == null) {
-                return false;
-            }
-            var dept = inMainInfo.associateEntity.dept;
+            var dept = apply.associateEntity.surgeryDept;
             if (!dept.deptOwn.equals(this.deptOwn)) {
                 return false;
             }
@@ -220,8 +224,17 @@ public class SurgeryServiceImpl implements SurgeryService {
                 break;
 
             default:
-                applies = applies.stream().filter(new DeptCodePredicate(deptCode, roomNo))
-                        .sorted(new MetComparator()).toList();
+                var swt = this.switchCache.getValue("SurgArrPrivCtrl");
+                if (swt == null || !swt.valid.equals(ValidStateEnum.有效) || !swt.value) {
+                    // 若开关未开，查本院区
+                    var dept = this.deptCache.getValue(deptCode);
+                    applies = applies.stream().filter(new DeptOwnPredicate(dept.deptOwn, roomNo))
+                            .sorted(new MetComparator()).toList();
+                } else {
+                    // 若开关打开，查本科室
+                    applies = applies.stream().filter(new DeptCodePredicate(deptCode, roomNo))
+                            .sorted(new MetComparator()).toList();
+                }
                 break;
         }
         return applies;
@@ -239,6 +252,9 @@ public class SurgeryServiceImpl implements SurgeryService {
             // 主刀医师
             apply.associateEntity.opsDoc = this.emplCache.getValue(apply.opsDocCode);
 
+            // 手术科室
+            apply.associateEntity.surgeryDept = this.deptCache.getValue(apply.surgeryDeptCode);
+
             // 实体：手术安排
             var arranges = this.metOpsArrangeMapper.queryMetOpsArranges(apply.operationNo, null);
             apply.associateEntity.metOpsArranges = Maps.uniqueIndex(arranges, (x) -> {
@@ -250,8 +266,8 @@ public class SurgeryServiceImpl implements SurgeryService {
                 arrange.associateEntity.employee = this.emplCache.getValue(arrange.emplCode);
             }
 
-            // 实体：住院患者
-            apply.associateEntity.inMainInfo = this.inMainInfoMapper.queryInMainInfo("ZY01" + apply.patientNo);
+            // 实体：住院患者(只需要科室信息，不需要实时数据，允许取cache)
+            apply.associateEntity.inMainInfo = this.inMainInfoCache.getValue("ZY01" + apply.patientNo);
             if (apply.associateEntity.inMainInfo != null) {
                 // 定位住院实体
                 var inMainInfo = apply.associateEntity.inMainInfo;
