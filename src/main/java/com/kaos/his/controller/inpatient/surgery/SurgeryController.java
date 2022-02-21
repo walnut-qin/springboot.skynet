@@ -232,6 +232,8 @@ public class SurgeryController {
         // 记录日志
         this.logger.info(String.format("查询科室手术(count = %d)", rs.size()));
 
+        // 获取手麻系统中的状态
+
         // 构造响应体
         var rspBodies = new ArrayList<QueryArrangedMetOpsAppliesInDeptRspBody>();
         for (var item : rs) {
