@@ -8,9 +8,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Function;
+import com.kaos.helper.gson.impl.GsonHelperImpl;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryArrangedMetOpsAppliesInDeptRspBody;
+import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesReq;
+import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesRsp;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
@@ -20,6 +23,8 @@ import com.kaos.his.service.inpatient.SurgeryService;
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +55,11 @@ public class SurgeryController {
     /**
      * web接口
      */
-    RestTemplate restTemplate = new RestTemplate(messageConverters)
+    RestTemplate restTemplate = new RestTemplate(new ArrayList<HttpMessageConverter<?>>() {
+        {
+            add(new GsonHttpMessageConverter(new GsonHelperImpl("yyyy-MM-dd").getGson()));
+        }
+    });
 
     /**
      * 构造响应体元素
@@ -239,11 +248,21 @@ public class SurgeryController {
         this.logger.info(String.format("查询科室手术(count = %d)", rs.size()));
 
         // 获取手麻系统中的状态
+        var stateReq = new QueryStatesReq();
+        stateReq.applyNos = rs.stream().map((x) -> {
+            return x.operationNo;
+        }).toList();
+        var states = this.restTemplate.postForObject("http://172.16.100.252:8002/ms/operation/queryStates", stateReq,
+                QueryStatesRsp.class).states;
 
         // 构造响应体
         var rspBodies = new ArrayList<QueryArrangedMetOpsAppliesInDeptRspBody>();
         for (var item : rs) {
-            rspBodies.add(this.createQueryMetOpsAppliesInDeptRspBody(item));
+            var rspItem = this.createQueryMetOpsAppliesInDeptRspBody(item);
+            if (states.containsKey(item.operationNo)) {
+                rspItem.surgeryState = states.get(item.operationNo);
+            }
+            rspBodies.add(rspItem);
         }
 
         return rspBodies;
