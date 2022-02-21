@@ -13,7 +13,7 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
-import com.kaos.his.mapper.inpatient.InpatientMapper;
+import com.kaos.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsItemMapper;
@@ -46,7 +46,7 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 住院接口
      */
     @Autowired
-    InpatientMapper inpatientMapper;
+    FinIprInMainInfoMapper inMainInfoMapper;
 
     /**
      * 科室信息缓存
@@ -127,28 +127,17 @@ public class SurgeryServiceImpl implements SurgeryService {
             }
 
             // 实体：住院患者
-            // item.associateEntity.inpatient = this.inpatientMapper.queryInpatient("ZY01" +
-            // item.patientNo);
-            // if (item.associateEntity.inpatient != null) {
-            // // 锚点
-            // Inpatient inpatient = item.associateEntity.inpatient;
+            apply.associateEntity.inMainInfo = this.inMainInfoMapper.queryInMainInfo("ZY01" + apply.patientNo);
+            if (apply.associateEntity.inMainInfo != null) {
+                // 定位住院实体
+                var inMainInfo = apply.associateEntity.inMainInfo;
 
-            // // 住院科室
-            // if (departmentCache.keySet().contains(inpatient.stayedDeptCode)) {
-            // // 取cache
-            // inpatient.associateEntity.stayedDept =
-            // departmentCache.get(inpatient.stayedDeptCode);
-            // } else {
-            // inpatient.associateEntity.stayedDept =
-            // this.deptCache.getValue(inpatient.stayedDeptCode);
-            // // 加入cache
-            // departmentCache.put(inpatient.stayedDeptCode,
-            // inpatient.associateEntity.stayedDept);
-            // }
+                // 住院科室
+                inMainInfo.associateEntity.dept = this.deptCache.getValue(inMainInfo.deptCode);
 
-            // // 床位
-            // inpatient.associateEntity.bed = this.bedInfoCache.getValue(inpatient.bedNo);
-            // }
+                // 床位
+                inMainInfo.associateEntity.bedInfo = this.bedInfoCache.getValue(inMainInfo.bedNo);
+            }
 
             // 实体：房间
             apply.associateEntity.room = this.metOpsRoomCache.getValue(apply.roomId);

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.entity.inpatient.Inpatient;
+import com.kaos.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.enums.inpatient.surgery.AnesTypeEnum;
 import com.kaos.his.enums.inpatient.surgery.MetOpsInciTypeEnum;
@@ -31,7 +31,7 @@ public class MetOpsApply {
     public String clinicCode = null;
 
     /**
-     * 住院号
+     * 住院号 {@link MetOpsApply.AssociateEntity#inMainInfo}
      */
     public String patientNo = null;
 
@@ -220,9 +220,9 @@ public class MetOpsApply {
         public Map<SurgeryArrangeRoleEnum, MetOpsArrange> metOpsArranges = null;
 
         /**
-         * 住院患者
+         * 住院患者 {@link MetOpsApply#patientNo}
          */
-        public Inpatient inpatient = null;
+        public FinIprInMainInfo inMainInfo = null;
 
         /**
          * 实体：手术医生 {@link MetOpsApply#opsDocCode}
