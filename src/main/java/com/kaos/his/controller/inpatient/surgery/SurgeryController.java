@@ -96,7 +96,7 @@ public class SurgeryController {
             }
 
             // ERAS
-            rspBody.eras = inMainInfo.erasInpatient ? "是" : "否";
+            rspBody.eras = inMainInfo.erasInpatient != null && inMainInfo.erasInpatient ? "是" : "否";
 
             // VTE
             rspBody.vte = inMainInfo.vte;
@@ -206,7 +206,7 @@ public class SurgeryController {
         rspBody.inspectResult = apply.inspectResult;
 
         // 是否公布
-        rspBody.publishFlag = apply.publishFlag ? "是" : "否";
+        rspBody.publishFlag = apply.publishFlag != null && apply.publishFlag ? "是" : "否";
 
         return rspBody;
     }
