@@ -1,7 +1,6 @@
 package com.kaos.his.controller.inpatient.surgery.entity;
 
 import java.util.Date;
-import java.util.List;
 
 import com.kaos.his.enums.common.SexEnum;
 import com.kaos.his.enums.inpatient.surgery.AnesTypeEnum;
@@ -73,14 +72,14 @@ public class QueryArrangedMetOpsAppliesInDeptRspBody {
     public SurgeryDegreeEnum degree = null;
 
     /**
-     * 主刀医师姓名
+     * 术者
      */
     public String surgeryDocName = null;
 
     /**
-     * 助手姓名
+     * 助手
      */
-    public List<String> helperNames = null;
+    public String helperNames = null;
 
     /**
      * 麻醉种类
@@ -88,24 +87,39 @@ public class QueryArrangedMetOpsAppliesInDeptRspBody {
     public AnesTypeEnum anesType = null;
 
     /**
-     * 麻醉医生姓名
+     * 主麻
      */
-    public List<String> anesDocNames = null;
+    public String anesDoc1 = null;
+
+    /**
+     * 副麻
+     */
+    public String anesDoc2 = null;
 
     /**
      * 洗手护士
      */
-    public List<String> washNurseNames = null;
+    public String washNurseNames = null;
 
     /**
      * 巡回护士
      */
-    public List<String> itinerantNurseNames = null;
+    public String itinerantNurseNames = null;
 
     /**
-     * 申请备注
+     * 特殊要求
      */
     public String applyNote = null;
+
+    /**
+     * 检验结果
+     */
+    public SurgeryInspectResultEnum inspectResult = null;
+
+    /**
+     * 是否公布
+     */
+    public String publishFlag = null;
 
     /**
      * ERAS信息
@@ -118,12 +132,7 @@ public class QueryArrangedMetOpsAppliesInDeptRspBody {
     public String vte = null;
 
     /**
-     * 检验结果
+     * 手术状态 (手麻系统中的状态)
      */
-    public SurgeryInspectResultEnum inspectResult = null;
-
-    /**
-     * 是否公布
-     */
-    public String publishFlag = null;
+    public String surgeryState = null;
 }

@@ -1,11 +1,21 @@
 package com.kaos.helper.type;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import com.kaos.helper.type.entity.Age;
 
 public interface TypeHelper {
+    /**
+     * 组合字符串
+     * 
+     * @param separator
+     * @param items
+     * @return
+     */
+    String join(String separator, Collection<String> items);
+
     /**
      * 获取年龄实体
      * 

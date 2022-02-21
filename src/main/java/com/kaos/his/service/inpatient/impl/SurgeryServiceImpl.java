@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.common.collect.Maps;
+import com.kaos.his.cache.common.ComPatientInfoCache;
 import com.kaos.his.cache.common.DawnOrgDeptCache;
 import com.kaos.his.cache.common.DawnOrgEmplCache;
 import com.kaos.his.cache.inpatient.ComBedInfoCache;
@@ -47,6 +48,12 @@ public class SurgeryServiceImpl implements SurgeryService {
      */
     @Autowired
     FinIprInMainInfoMapper inMainInfoMapper;
+
+    /**
+     * 患者基本信息cache
+     */
+    @Autowired
+    ComPatientInfoCache patientInfoCache;
 
     /**
      * 科室信息缓存
@@ -131,6 +138,9 @@ public class SurgeryServiceImpl implements SurgeryService {
             if (apply.associateEntity.inMainInfo != null) {
                 // 定位住院实体
                 var inMainInfo = apply.associateEntity.inMainInfo;
+
+                // 患者基本信息
+                inMainInfo.associateEntity.patientInfo = this.patientInfoCache.getValue(inMainInfo.cardNo);
 
                 // 住院科室
                 inMainInfo.associateEntity.dept = this.deptCache.getValue(inMainInfo.deptCode);

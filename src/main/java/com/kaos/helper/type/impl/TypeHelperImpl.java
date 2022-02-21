@@ -2,6 +2,7 @@ package com.kaos.helper.type.impl;
 
 import java.security.InvalidParameterException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,21 @@ import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.entity.Age;
 
 public class TypeHelperImpl implements TypeHelper {
+    @Override
+    public String join(String separator, Collection<String> items) {
+        String ret = null;
+        for (String item : items) {
+            if (item == null) {
+                continue;
+            } else if (ret == null) {
+                ret = item;
+            } else {
+                ret += String.format("%s%s", separator, item);
+            }
+        }
+        return ret;
+    }
+
     @Override
     public Age getAge(Date birthday) {
         // 合法性判断
