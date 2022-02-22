@@ -1,6 +1,5 @@
 package com.kaos.his.cache.common;
 
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
@@ -60,8 +59,12 @@ public class DawnOrgEmplCache implements ICache<String, DawnOrgEmpl> {
     }
 
     @Override
-    public ConcurrentMap<String, DawnOrgEmpl> show() {
-        return this.cache.asMap();
+    public View<String, DawnOrgEmpl> show() {
+        View<String, DawnOrgEmpl> view = new View<>();
+        view.size = this.cache.size();
+        view.stats = this.cache.stats();
+        view.cache = this.cache.asMap();
+        return view;
     }
 
     @Override

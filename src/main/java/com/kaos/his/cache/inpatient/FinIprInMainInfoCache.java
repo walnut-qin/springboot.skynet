@@ -1,6 +1,5 @@
 package com.kaos.his.cache.inpatient;
 
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
@@ -59,8 +58,12 @@ public class FinIprInMainInfoCache implements ICache<String, FinIprInMainInfo> {
     }
 
     @Override
-    public ConcurrentMap<String, FinIprInMainInfo> show() {
-        return this.cache.asMap();
+    public View<String, FinIprInMainInfo> show() {
+        View<String, FinIprInMainInfo> view = new View<>();
+        view.size = this.cache.size();
+        view.stats = this.cache.stats();
+        view.cache = this.cache.asMap();
+        return view;
     }
 
     @Override

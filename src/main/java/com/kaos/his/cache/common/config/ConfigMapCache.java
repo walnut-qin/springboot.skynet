@@ -1,6 +1,5 @@
 package com.kaos.his.cache.common.config;
 
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
@@ -59,8 +58,12 @@ public class ConfigMapCache implements ICache<String, ConfigMap> {
     }
 
     @Override
-    public ConcurrentMap<String, ConfigMap> show() {
-        return this.cache.asMap();
+    public View<String, ConfigMap> show() {
+        View<String, ConfigMap> view = new View<>();
+        view.size = this.cache.size();
+        view.stats = this.cache.stats();
+        view.cache = this.cache.asMap();
+        return view;
     }
 
     @Override

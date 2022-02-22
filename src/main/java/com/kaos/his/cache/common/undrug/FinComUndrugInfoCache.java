@@ -1,6 +1,5 @@
 package com.kaos.his.cache.common.undrug;
 
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
@@ -56,8 +55,12 @@ public class FinComUndrugInfoCache implements ICache<String, FinComUndrugInfo> {
     }
 
     @Override
-    public ConcurrentMap<String, FinComUndrugInfo> show() {
-        return this.cache.asMap();
+    public View<String, FinComUndrugInfo> show() {
+        View<String, FinComUndrugInfo> view = new View<>();
+        view.size = this.cache.size();
+        view.stats = this.cache.stats();
+        view.cache = this.cache.asMap();
+        return view;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.kaos.his.cache.common;
 
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
@@ -59,8 +58,12 @@ public class ComPatientInfoCache implements ICache<String, ComPatientInfo> {
     }
 
     @Override
-    public ConcurrentMap<String, ComPatientInfo> show() {
-        return this.cache.asMap();
+    public View<String, ComPatientInfo> show() {
+        View<String, ComPatientInfo> view = new View<>();
+        view.size = this.cache.size();
+        view.stats = this.cache.stats();
+        view.cache = this.cache.asMap();
+        return view;
     }
 
     @Override

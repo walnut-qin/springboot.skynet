@@ -1,6 +1,5 @@
 package com.kaos.his.cache.inpatient.surgery;
 
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
@@ -56,8 +55,12 @@ public class MetOpsRoomCache implements ICache<String, MetOpsRoom> {
     }
 
     @Override
-    public ConcurrentMap<String, MetOpsRoom> show() {
-        return this.cache.asMap();
+    public View<String, MetOpsRoom> show() {
+        View<String, MetOpsRoom> view = new View<>();
+        view.size = this.cache.size();
+        view.stats = this.cache.stats();
+        view.cache = this.cache.asMap();
+        return view;
     }
 
     @Override

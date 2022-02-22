@@ -1,11 +1,10 @@
 package com.kaos.his.controller.cache;
 
-import java.util.concurrent.ConcurrentMap;
-
 import javax.validation.constraints.NotBlank;
 
 import com.kaos.his.entity.common.config.ConfigSwitch;
 import com.kaos.inf.ICache;
+import com.kaos.inf.ICache.View;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +26,7 @@ public class ConfigSwitchCacheController {
      * 检索开关变量的值
      */
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public ConcurrentMap<String, ConfigSwitch> show() {
+    public View<String, ConfigSwitch> show() {
         return this.switchCache.show();
     }
 
