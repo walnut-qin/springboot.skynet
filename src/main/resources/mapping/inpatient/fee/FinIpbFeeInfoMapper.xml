@@ -95,10 +95,10 @@
                 AND EXECUTE_DEPTCODE = #{deptCode}
             </if>
             <if test = "true">
-                AND FEE_DATE &gt;= #{beginDate, jdbcType = DATE}
+                AND FEE_DATE &gt;= #{beginDate, jdbcType = TIMESTAMP}
             </if>
             <if test = "true">
-                AND FEE_DATE &lt;= #{endDate, jdbcType = DATE}
+                AND FEE_DATE &lt;= #{endDate, jdbcType = TIMESTAMP}
             </if>
         </where>
     </select>

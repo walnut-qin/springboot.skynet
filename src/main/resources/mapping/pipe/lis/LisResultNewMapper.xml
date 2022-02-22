@@ -30,10 +30,10 @@
                 AND ITEMCODE = #{itemCode}
             </if>
             <if test="beginDate != null">
-                AND TESTDATE &gt;= #{beginDate, jdbcType = DATE}
+                AND TESTDATE &gt;= #{beginDate, jdbcType = TIMESTAMP}
             </if>
             <if test="endDate != null">
-                AND TESTDATE &lt;= #{endDate, jdbcType = DATE}
+                AND TESTDATE &lt;= #{endDate, jdbcType = TIMESTAMP}
             </if>
         </where>
     </select>

@@ -37,10 +37,10 @@
                 AND CARD_NO = #{helperCardNo}
             </if>
             <if test="beginDate != null">
-                AND OPER_DATE &gt;= #{beginDate, jdbcType = DATE}
+                AND OPER_DATE &gt;= #{beginDate, jdbcType = TIMESTAMP}
             </if>
             <if test="endDate != null">
-                AND OPER_DATE &lt;= #{endDate, jdbcType = DATE}
+                AND OPER_DATE &lt;= #{endDate, jdbcType = TIMESTAMP}
             </if>
             <if test="checked != null">
                 <if test="checked == true">
