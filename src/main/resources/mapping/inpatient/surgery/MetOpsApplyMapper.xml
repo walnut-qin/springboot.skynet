@@ -100,10 +100,10 @@
             MET_OPS_APPLY
         <where>
             <if test="beginDate != null">
-                AND PRE_DATE &gt;= #{beginDate}
+                AND PRE_DATE &gt;= #{beginDate, jdbcType = DATE}
             </if>
             <if test="endDate != null">
-                AND PRE_DATE &lt;= #{endDate}
+                AND PRE_DATE &lt;= #{endDate, jdbcType = DATE}
             </if>
             <if test="status != null">
                 AND EXECSTATUS IN
@@ -127,10 +127,10 @@
                 AND PATIENT_NO = #{patientNo}
             </if>
             <if test="beginDate != null">
-                AND PRE_DATE &gt;= #{beginDate}
+                AND PRE_DATE &gt;= #{beginDate, jdbcType = DATE}
             </if>
             <if test="endDate != null">
-                AND PRE_DATE &lt;= #{endDate}
+                AND PRE_DATE &lt;= #{endDate, jdbcType = DATE}
             </if>
             <if test="valid != null">
                 AND YNVALID = #{valid}

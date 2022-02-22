@@ -45,10 +45,10 @@
             LEFT JOIN XYHIS.DAWN_ORG_DEPT T3 ON T3.DEPT_ID = T2.DEPT_ID AND T3.VALID_STATE = 1
         <where>
             <if test = "beginDate != null">
-                AND T1.OPER_DATE &gt;= #{beginDate}
+                AND T1.OPER_DATE &gt;= #{beginDate, jdbcType = DATE}
             </if>
             <if test = "endDate != null">
-                AND T1.OPER_DATE &lt;= #{endDate}
+                AND T1.OPER_DATE &lt;= #{endDate, jdbcType = DATE}
             </if>
         </where>
         ORDER BY

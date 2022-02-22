@@ -48,10 +48,10 @@
                 AND TERM_ID = #{termId}
             </if>
             <if test="beginDate != null">
-                AND MO_DATE &gt;= #{beginDate}
+                AND MO_DATE &gt;= #{beginDate, jdbcType = DATE}
             </if>
             <if test="endDate != null">
-                AND MO_DATE &lt;= #{endDate}
+                AND MO_DATE &lt;= #{endDate, jdbcType = DATE}
             </if>
         </where>
     </select>
