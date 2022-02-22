@@ -14,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 患者基本信息cache
+ * @param 类型 缓存
+ * @param 映射 患者卡号 -> 患者信息
+ * @param 容量 300
+ * @param 刷频 1次/1天
+ * @param 过期 永不
  */
 @Component
 public class ComPatientInfoCache implements ICache<String, ComPatientInfo> {

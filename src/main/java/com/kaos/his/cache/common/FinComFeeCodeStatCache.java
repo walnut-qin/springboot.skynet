@@ -16,6 +16,13 @@ import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @param 类型 缓存
+ * @param 映射 <报表类型, 最小费用编码> -> 费用编码
+ * @param 容量 100
+ * @param 刷频 1次/1天
+ * @param 过期 永不
+ */
 @Component
 public class FinComFeeCodeStatCache implements ICache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> {
     /**

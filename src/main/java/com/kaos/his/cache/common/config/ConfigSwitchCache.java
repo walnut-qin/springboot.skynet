@@ -13,6 +13,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @param 类型 缓存
+ * @param 映射 开关编码 -> 开关信息
+ * @param 容量 100
+ * @param 刷频 1次/1天
+ * @param 过期 永不
+ */
 @Component
 public class ConfigSwitchCache implements ICache<String, ConfigSwitch> {
     /**
@@ -30,7 +37,7 @@ public class ConfigSwitchCache implements ICache<String, ConfigSwitch> {
      * Loading cache
      */
     LoadingCache<String, ConfigSwitch> cache = CacheBuilder.newBuilder()
-            .maximumSize(50)
+            .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
             .build(new CacheLoader<String, ConfigSwitch>() {

@@ -14,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 住院主表cache，若需要实时数据，需要在刷新后再获取
+ * @param 类型 缓存
+ * @param 映射 住院流水号 -> 住院信息
+ * @param 容量 500
+ * @param 刷频 1次/1天
+ * @param 过期 永不
  */
 @Component
 public class FinIprInMainInfoCache implements ICache<String, FinIprInMainInfo> {
@@ -33,7 +37,7 @@ public class FinIprInMainInfoCache implements ICache<String, FinIprInMainInfo> {
      * Loading cache
      */
     LoadingCache<String, FinIprInMainInfo> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(500)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
             .build(new CacheLoader<String, FinIprInMainInfo>() {

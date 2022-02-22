@@ -13,6 +13,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @param 类型 缓存
+ * @param 映射 职工编码 -> 职工信息
+ * @param 容量 1000
+ * @param 刷频 1次/1天
+ * @param 过期 永不
+ */
 @Component
 public class DawnOrgEmplCache implements ICache<String, DawnOrgEmpl> {
     /**
@@ -30,7 +37,7 @@ public class DawnOrgEmplCache implements ICache<String, DawnOrgEmpl> {
      * Loading cache
      */
     LoadingCache<String, DawnOrgEmpl> cache = CacheBuilder.newBuilder()
-            .maximumSize(300)
+            .maximumSize(1000)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
             .build(new CacheLoader<String, DawnOrgEmpl>() {

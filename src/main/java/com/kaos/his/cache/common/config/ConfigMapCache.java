@@ -14,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 开关缓存，容量 = 20，不过期，刷新评率 = 1次/天
+ * @param 类型 缓存
+ * @param 映射 变量名 -> 变量信息
+ * @param 容量 100
+ * @param 刷频 1次/1天
+ * @param 过期 永不
  */
 @Component
 public class ConfigMapCache implements ICache<String, ConfigMap> {

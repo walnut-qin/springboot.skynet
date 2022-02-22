@@ -13,6 +13,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @param 类型 缓存
+ * @param 映射 床位编码 -> 床位信息
+ * @param 容量 500
+ * @param 刷频 1次/1天
+ * @param 过期 永不
+ */
 @Component
 public class ComBedInfoCache implements ICache<String, ComBedInfo> {
     /**
@@ -30,7 +37,7 @@ public class ComBedInfoCache implements ICache<String, ComBedInfo> {
      * Loading cache
      */
     LoadingCache<String, ComBedInfo> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(500)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
             .build(new CacheLoader<String, ComBedInfo>() {

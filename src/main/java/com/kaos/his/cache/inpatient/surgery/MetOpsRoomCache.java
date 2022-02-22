@@ -13,6 +13,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * @param 类型 缓存
+ * @param 映射 手术间编码 -> 手术间信息
+ * @param 容量 100
+ * @param 刷频 1次/1天
+ * @param 过期 永不
+ */
 @Component
 public class MetOpsRoomCache implements ICache<String, MetOpsRoom> {
     /**
