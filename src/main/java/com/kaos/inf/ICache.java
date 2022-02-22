@@ -2,6 +2,8 @@ package com.kaos.inf;
 
 import java.util.concurrent.ConcurrentMap;
 
+import com.google.common.cache.CacheStats;
+
 public interface ICache<K, V> {
     /**
      * 获取值
@@ -16,7 +18,7 @@ public interface ICache<K, V> {
      * 
      * @return
      */
-    ConcurrentMap<K, V> show();
+    View<K, V> show();
 
     /**
      * 显式刷新某一个元素
@@ -31,4 +33,24 @@ public interface ICache<K, V> {
      * @param key
      */
     void invalidateAll();
+
+    /**
+     * 缓存视图
+     */
+    public class View<K, V> {
+        /**
+         * 当前容量
+         */
+        public Long size = null;
+
+        /**
+         * 统计数据
+         */
+        public CacheStats stats = null;
+
+        /**
+         * 缓存内容
+         */
+        public ConcurrentMap<K, V> cache = null;
+    }
 }
