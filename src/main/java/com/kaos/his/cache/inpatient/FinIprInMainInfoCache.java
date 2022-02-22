@@ -35,6 +35,7 @@ public class FinIprInMainInfoCache implements ICache<String, FinIprInMainInfo> {
     LoadingCache<String, FinIprInMainInfo> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
+            .recordStats()
             .build(new CacheLoader<String, FinIprInMainInfo>() {
                 @Override
                 public FinIprInMainInfo load(String key) throws Exception {

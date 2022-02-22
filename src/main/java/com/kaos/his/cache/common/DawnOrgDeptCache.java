@@ -35,6 +35,7 @@ public class DawnOrgDeptCache implements ICache<String, DawnOrgDept> {
     LoadingCache<String, DawnOrgDept> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
+            .recordStats()
             .build(new CacheLoader<String, DawnOrgDept>() {
                 @Override
                 public DawnOrgDept load(String key) throws Exception {

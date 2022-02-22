@@ -35,6 +35,7 @@ public class ConfigMapCache implements ICache<String, ConfigMap> {
     LoadingCache<String, ConfigMap> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
+            .recordStats()
             .build(new CacheLoader<String, ConfigMap>() {
                 @Override
                 public ConfigMap load(String key) throws Exception {

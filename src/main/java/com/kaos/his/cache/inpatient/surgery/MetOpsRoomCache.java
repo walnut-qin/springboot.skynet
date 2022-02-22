@@ -32,6 +32,7 @@ public class MetOpsRoomCache implements ICache<String, MetOpsRoom> {
     LoadingCache<String, MetOpsRoom> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
+            .recordStats()
             .build(new CacheLoader<String, MetOpsRoom>() {
                 @Override
                 public MetOpsRoom load(String key) throws Exception {

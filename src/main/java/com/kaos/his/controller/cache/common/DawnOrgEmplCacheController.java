@@ -1,8 +1,8 @@
-package com.kaos.his.controller.cache;
+package com.kaos.his.controller.cache.common;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.entity.common.config.ConfigSwitch;
+import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.inf.ICache;
 import com.kaos.inf.ICache.View;
 
@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping("/ms/cache/ConfigSwitch")
-public class ConfigSwitchCacheController {
+@RequestMapping("/ms/cache/common/empl")
+public class DawnOrgEmplCacheController {
     /**
      * 实体信息服务
      */
     @Autowired
-    ICache<String, ConfigSwitch> switchCache;
+    ICache<String, DawnOrgEmpl> emplCache;
 
     /**
      * 检索开关变量的值
      */
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public View<String, ConfigSwitch> show() {
-        return this.switchCache.show();
+    public View<String, DawnOrgEmpl> show() {
+        return this.emplCache.show();
     }
 
     /**
@@ -35,7 +35,7 @@ public class ConfigSwitchCacheController {
      */
     @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String refresh(@NotBlank(message = "键值不能为空") String key) {
-        this.switchCache.refresh(key);
+        this.emplCache.refresh(key);
         return String.format("更新缓存%s成功", key);
     }
 
@@ -44,7 +44,7 @@ public class ConfigSwitchCacheController {
      */
     @RequestMapping(value = "clear", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String clear() {
-        this.switchCache.invalidateAll();
+        this.emplCache.invalidateAll();
         return "清空缓存成功";
     }
 }

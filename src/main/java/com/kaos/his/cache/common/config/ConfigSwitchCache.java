@@ -32,6 +32,7 @@ public class ConfigSwitchCache implements ICache<String, ConfigSwitch> {
     LoadingCache<String, ConfigSwitch> cache = CacheBuilder.newBuilder()
             .maximumSize(50)
             .refreshAfterWrite(1, TimeUnit.DAYS)
+            .recordStats()
             .build(new CacheLoader<String, ConfigSwitch>() {
                 @Override
                 public ConfigSwitch load(String key) throws Exception {

@@ -32,6 +32,7 @@ public class ComBedInfoCache implements ICache<String, ComBedInfo> {
     LoadingCache<String, ComBedInfo> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
+            .recordStats()
             .build(new CacheLoader<String, ComBedInfo>() {
                 @Override
                 public ComBedInfo load(String key) throws Exception {

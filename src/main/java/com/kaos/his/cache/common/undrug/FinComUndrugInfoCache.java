@@ -32,6 +32,7 @@ public class FinComUndrugInfoCache implements ICache<String, FinComUndrugInfo> {
     LoadingCache<String, FinComUndrugInfo> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
+            .recordStats()
             .build(new CacheLoader<String, FinComUndrugInfo>() {
                 @Override
                 public FinComUndrugInfo load(String key) throws Exception {

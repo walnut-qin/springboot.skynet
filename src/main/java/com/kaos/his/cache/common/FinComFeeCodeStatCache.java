@@ -35,6 +35,7 @@ public class FinComFeeCodeStatCache implements ICache<Pair<ReportTypeEnum, MinFe
     LoadingCache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
+            .recordStats()
             .build(new CacheLoader<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat>() {
                 @Override
                 public FinComFeeCodeStat load(Pair<ReportTypeEnum, MinFeeEnum> key) throws Exception {
