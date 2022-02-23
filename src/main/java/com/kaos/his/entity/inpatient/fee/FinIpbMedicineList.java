@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
 import com.kaos.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.enums.common.DeptOwnEnum;
@@ -12,8 +11,10 @@ import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.PayKindEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.inpatient.fee.balance.BalanceStateEnum;
+import com.kaos.his.enums.pharmacy.DrugQualityEnum;
+import com.kaos.his.enums.pharmacy.DrugTypeEnum;
 
-public class FinIpbItemList {
+public class FinIpbMedicineList {
     /**
      * 处方号
      */
@@ -30,7 +31,7 @@ public class FinIpbItemList {
     public TransTypeEnum transType = null;
 
     /**
-     * 住院号 {@link FinIpbItemList.AssociateEntity#inMainInfo}
+     * 住院号 {@link FinIpbMedicineList.AssociateEntity#inMainInfo}
      */
     public String inpatientNo = null;
 
@@ -50,44 +51,39 @@ public class FinIpbItemList {
     public String pactCode = null;
 
     /**
-     * 更新库存的流水号(物资)
-     */
-    public Integer updateSequenceNo = null;
-
-    /**
-     * 在院科室代码 {@link FinIpbItemList.AssociateEntity#inHosDept}
+     * 在院科室代码 {@link FinIpbMedicineList.AssociateEntity#inHosDept}
      */
     public String inHosDeptCode = null;
 
     /**
-     * 护士站代码 {@link FinIpbItemList.AssociateEntity#nurseCell}
+     * 护士站代码 {@link FinIpbMedicineList.AssociateEntity#nurseCell}
      */
     public String nurseCellCode = null;
 
     /**
-     * 开立医生所属科室代码 {@link FinIpbItemList.AssociateEntity#recipeDept}
+     * 开立医生所属科室代码 {@link FinIpbMedicineList.AssociateEntity#recipeDept}
      */
     public String recipeDeptCode = null;
 
     /**
-     * 执行科室代码 {@link FinIpbItemList.AssociateEntity#executeDept}
+     * 执行科室代码 {@link FinIpbMedicineList.AssociateEntity#executeDept}
      */
     public String executeDeptCode = null;
 
     /**
-     * 扣库科室代码 {@link FinIpbItemList.AssociateEntity#stockDept}
+     * 扣库科室代码 {@link FinIpbMedicineList.AssociateEntity#medicineDept}
      */
-    public String stockDeptCode = null;
+    public String medicineDeptCode = null;
 
     /**
-     * 开立医师代码 {@link FinIpbItemList.AssociateEntity#recipeDoc}
+     * 开立医师代码 {@link FinIpbMedicineList.AssociateEntity#recipeDoc}
      */
     public String recipeDocCode = null;
 
     /**
-     * 项目代码 {@link FinIpbItemList.AssociateEntity#undrugInfo}
+     * 药品代码
      */
-    public String itemCode = null;
+    public String drugCode = null;
 
     /**
      * 最小费用编码
@@ -100,9 +96,29 @@ public class FinIpbItemList {
     public String centerCode = null;
 
     /**
-     * 项目名称
+     * 药品名称
      */
-    public String itemName = null;
+    public String drugName = null;
+
+    /**
+     * 规格
+     */
+    public String specs = null;
+
+    /**
+     * 药品类型
+     */
+    public DrugTypeEnum drugType = null;
+
+    /**
+     * 药品质量
+     */
+    public DrugQualityEnum drugQuality = null;
+
+    /**
+     * 自制标识
+     */
+    public Boolean homeMadeFlag = null;
 
     /**
      * 单价
@@ -110,24 +126,24 @@ public class FinIpbItemList {
     public Double unitPrice = null;
 
     /**
-     * 数量
-     */
-    public Double qty = null;
-
-    /**
      * 当前单位
      */
     public String currentUnit = null;
 
     /**
-     * 组套代码
+     * 包装数
      */
-    public String packageCode = null;
+    public Double packQty = null;
 
     /**
-     * 组套名称
+     * 数量
      */
-    public String packageName = null;
+    public Double qty = null;
+
+    /**
+     * 付数
+     */
+    public Integer days = null;
 
     /**
      * 费用金额
@@ -155,12 +171,17 @@ public class FinIpbItemList {
     public Double ecoCost = null;
 
     /**
+     * 更新库存的流水号(物资)
+     */
+    public Integer updateSequenceNo = null;
+
+    /**
      * 出库单序列号
      */
     public String sendMatSequence = null;
 
     /**
-     * 发放状态（0 划价 2发放（执行） 1 批费）
+     * 发药状态（0 划价 2摆药 1批费）
      */
     public String sendFlag = null;
 
@@ -210,7 +231,7 @@ public class FinIpbItemList {
     public String extCode = null;
 
     /**
-     * 扩展操作员 {@link FinIpbItemList.AssociateEntity#extOperEmpl}
+     * 扩展操作员 {@link FinIpbMedicineList.AssociateEntity#extOperEmpl}
      */
     public String extOperCode = null;
 
@@ -225,7 +246,7 @@ public class FinIpbItemList {
     public String apprNo = null;
 
     /**
-     * 划价人 {@link FinIpbItemList.AssociateEntity#chargeOperEmpl}
+     * 划价人 {@link FinIpbMedicineList.AssociateEntity#chargeOperEmpl}
      */
     public String chargeOperCode = null;
 
@@ -235,32 +256,7 @@ public class FinIpbItemList {
     public Date chargeDate = null;
 
     /**
-     * 已确认数
-     */
-    public Double confirmNum = null;
-
-    /**
-     * 设备号
-     */
-    public String machineNo = null;
-
-    /**
-     * 执行人代码 {@link FinIpbItemList.AssociateEntity#execOperEmpl}
-     */
-    public String execOperCode = null;
-
-    /**
-     * 执行日期
-     */
-    public Date execDate = null;
-
-    /**
-     * 发放人 {@link FinIpbItemList.AssociateEntity#sendOperEmpl}
-     */
-    public String sendOperCode = null;
-
-    /**
-     * 计费人 {@link FinIpbItemList.AssociateEntity#feeOperEmpl}
+     * 计费人 {@link FinIpbMedicineList.AssociateEntity#feeOperEmpl}
      */
     public String feeOperCode = null;
 
@@ -270,12 +266,27 @@ public class FinIpbItemList {
     public Date feeDate = null;
 
     /**
-     * 发放日期
+     * 执行人代码 {@link FinIpbMedicineList.AssociateEntity#execOperEmpl}
      */
-    public Date sendDate = null;
+    public String execOperCode = null;
 
     /**
-     * 审核人 {@link FinIpbItemList.AssociateEntity#checkOperEmpl}
+     * 执行日期
+     */
+    public Date execDate = null;
+
+    /**
+     * 执行人代码 {@link FinIpbMedicineList.AssociateEntity#execOperEmpl}
+     */
+    public String sendDrugOperCode = null;
+
+    /**
+     * 发药日期
+     */
+    public Date sendDrugDate = null;
+
+    /**
+     * 审核人 {@link FinIpbMedicineList.AssociateEntity#checkOperEmpl}
      */
     public String checkOperCode = null;
 
@@ -300,7 +311,7 @@ public class FinIpbItemList {
     public Double feeRate = null;
 
     /**
-     * 收费员科室 {@link FinIpbItemList.AssociateEntity#feeOperDept}
+     * 收费员科室 {@link FinIpbMedicineList.AssociateEntity#feeOperDept}
      */
     public String feeOperDeptCode = null;
 
@@ -326,17 +337,12 @@ public class FinIpbItemList {
     public String extFlag3 = null;
 
     /**
-     * 0非药品 2物资
-     */
-    public String itemFlag = null;
-
-    /**
      * 医疗组
      */
     public String medicalTeamCode = null;
 
     /**
-     * 手术编码 {@link FinIpbItemList.AssociateEntity#surgery}
+     * 手术编码 {@link FinIpbMedicineList.AssociateEntity#surgery}
      */
     public String operationNo = null;
 
@@ -381,7 +387,7 @@ public class FinIpbItemList {
     public String extFlag5 = null;
 
     /**
-     * 主治医生 {@link FinIpbItemList.AssociateEntity#chargeDoc}
+     * 主治医生 {@link FinIpbMedicineList.AssociateEntity#chargeDoc}
      */
     public String chargeDocCode = null;
 
@@ -416,6 +422,11 @@ public class FinIpbItemList {
     public String hisCanCelRecipeSequenceNo = null;
 
     /**
+     * 药品批次号
+     */
+    public String groupCode = null;
+
+    /**
      * 直接收费长期记账标识
      */
     public Boolean longFlag = null;
@@ -436,22 +447,22 @@ public class FinIpbItemList {
     public String otInvoiceNo = null;
 
     /**
-     * 院外费用标志
+     * 静配中心标识是否允许退费标记0不允许1允许
      */
-    public String outFlag = null;
+    public Boolean jpFlag = null;
 
     /**
-     * 图特物质申请ID
+     * 日期
      */
-    public String wzApplyNo = null;
+    public Date jpDate = null;
 
     /**
-     * lis条码号
+     * 核对员 {@link FinIpbMedicineList.AssociateEntity#jpOperEmpl}
      */
-    public String lisBarCode = null;
+    public String jpOperCode = null;
 
     /**
-     * 上传操作员 {@link FinIpbItemList.AssociateEntity#uploadOperEmpl}
+     * 上传操作员 {@link FinIpbMedicineList.AssociateEntity#uploadOperEmpl}
      */
     public String uploadOperCode = null;
 
@@ -464,16 +475,6 @@ public class FinIpbItemList {
      * 上传IP
      */
     public String uploadIP = null;
-
-    /**
-     * 条形码
-     */
-    public String barCode = null;
-
-    /**
-     * 材料编码
-     */
-    public String ivnCode = null;
 
     /**
      * 自付比例（医保费用上传出参，用于计算甲乙类费用）liubinglin20210827
@@ -495,92 +496,92 @@ public class FinIpbItemList {
      */
     public class AssociateEntity {
         /**
-         * 住院实体 {@link FinIpbItemList#inpatientNo}
+         * 住院实体 {@link FinIpbMedicineList#inpatientNo}
          */
         public FinIprInMainInfo inMainInfo = null;
 
         /**
-         * 住院科室 {@link FinIpbItemList#inHosDeptCode}
+         * 住院科室 {@link FinIpbMedicineList#inHosDeptCode}
          */
         public DawnOrgDept inHosDept = null;
 
         /**
-         * 病区 {@link FinIpbItemList#nurseCellCode}
+         * 病区 {@link FinIpbMedicineList#nurseCellCode}
          */
         public DawnOrgDept nurseCell = null;
 
         /**
-         * 开立医师所属科室 {@link FinIpbItemList#recipeDeptCode}
+         * 开立医师所属科室 {@link FinIpbMedicineList#recipeDeptCode}
          */
         public DawnOrgDept recipeDept = null;
 
         /**
-         * 执行科室 {@link FinIpbItemList#executeDeptCode}
+         * 执行科室 {@link FinIpbMedicineList#executeDeptCode}
          */
         public DawnOrgDept executeDept = null;
 
         /**
-         * 扣库科室 {@link FinIpbItemList#stockDeptCode}
+         * 扣库科室 {@link FinIpbMedicineList#medicineDeptCode}
          */
-        public DawnOrgDept stockDept = null;
+        public DawnOrgDept medicineDept = null;
 
         /**
-         * 开立医师 {@link FinIpbItemList#recipeDocCode}
+         * 开立医师 {@link FinIpbMedicineList#recipeDocCode}
          */
         public DawnOrgEmpl recipeDoc = null;
 
         /**
-         * 非药品信息 {@link FinIpbItemList#itemCode}
-         */
-        public FinComUndrugInfo undrugInfo = null;
-
-        /**
-         * 扩展操作员 {@link FinIpbItemList#extOperCode}
+         * 扩展操作员 {@link FinIpbMedicineList#extOperCode}
          */
         public DawnOrgEmpl extOperEmpl = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#chargeOperCode}
+         * 划价人 {@link FinIpbMedicineList#chargeOperCode}
          */
         public DawnOrgEmpl chargeOperEmpl = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#execOperCode}
+         * 划价人 {@link FinIpbMedicineList#execOperCode}
          */
         public DawnOrgEmpl execOperEmpl = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#sendOperCode}
+         * 划价人 {@link FinIpbMedicineList#sendDrugOperCode}
          */
-        public DawnOrgEmpl sendOperEmpl = null;
+        public DawnOrgEmpl sendDrugOperEmpl = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#feeOperCode}
+         * 划价人 {@link FinIpbMedicineList#feeOperCode}
          */
         public DawnOrgEmpl feeOperEmpl = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#checkOperCode}
+         * 划价人 {@link FinIpbMedicineList#checkOperCode}
          */
         public DawnOrgEmpl checkOperEmpl = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#feeOperDeptCode}
+         * 划价人 {@link FinIpbMedicineList#feeOperDeptCode}
          */
         public DawnOrgDept feeOperDept = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#operationNo}
+         * 划价人 {@link FinIpbMedicineList#operationNo}
          */
         public MetOpsApply surgery = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#chargeDocCode}
+         * 划价人 {@link FinIpbMedicineList#chargeDocCode}
          */
         public DawnOrgEmpl chargeDoc = null;
 
         /**
-         * 划价人 {@link FinIpbItemList#uploadOperCode}
+         * 划价人 {@link FinIpbMedicineList#jpOperCode}
+         */
+        public DawnOrgEmpl jpOperEmpl = null;
+
+        /**
+         * 划价人 {@link FinIpbMedicineList#uploadOperCode}
          */
         public DawnOrgEmpl uploadOperEmpl = null;
     }

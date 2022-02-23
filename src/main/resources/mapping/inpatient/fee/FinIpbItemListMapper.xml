@@ -39,7 +39,7 @@
         <result column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
         <result column="BALANCE_NO" jdbcType="VARCHAR" property="balanceNo"/>
         <result column="BALANCE_STATE" jdbcType="VARCHAR" property="balanceState"/>
-        <result column="NOBACK_NUM" jdbcType="VARCHAR" property="noBackNumNOBACK_NUM"/>
+        <result column="NOBACK_NUM" jdbcType="VARCHAR" property="noBackNum"/>
         <result column="EXT_CODE" jdbcType="VARCHAR" property="extCode"/>
         <result column="EXT_OPERCODE" jdbcType="VARCHAR" property="extOperCode"/>
         <result column="EXT_DATE" jdbcType="VARCHAR" property="extDate"/>
@@ -74,7 +74,7 @@
         <result column="HIS_CANCEL_RECIPE_NO" jdbcType="VARCHAR" property="hisCancelRecipeNo"/>
         <result column="SI_CANCEL_RECIPE_NO" jdbcType="VARCHAR" property="siCancelRecipeNo"/>
         <result column="EXT_FLAG4" jdbcType="VARCHAR" property="extFlag4"/>
-        <result column="EXT_FLAG5" jdbcType="VARCHAR" property="EXT_FLAG5"/>
+        <result column="EXT_FLAG5" jdbcType="VARCHAR" property="extFlag5"/>
         <result column="CHARGE_DOCT" jdbcType="VARCHAR" property="chargeDocCode"/>
         <result column="CHARGE_MEDICALTEAM" jdbcType="VARCHAR" property="chargeMedicalTeam"/>
         <result column="LOCAL_EXT_FLAG1" jdbcType="VARCHAR" property="localExtFlag1"/>
