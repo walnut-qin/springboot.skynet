@@ -196,9 +196,9 @@ public class FinIpbMedicineList {
     public Boolean jzqjFlag = null;
 
     /**
-     * 出院带疗标记 0 否 1 是
+     * 出院带疗标记 0 否 1 是 ?
      */
-    public Boolean broughtFlag = null;
+    public String broughtFlag = null;
 
     /**
      * 扩展标志(公费患者是否使用了自费的项目0否,1是)
