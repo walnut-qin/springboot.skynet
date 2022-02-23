@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.kaos.helper.gson.GsonHelper;
 import com.kaos.helper.gson.impl.GsonHelperImpl;
 import com.kaos.helper.http.HttpHelper;
@@ -19,6 +20,7 @@ import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesReq;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesRsp;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesReq;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesRsp;
+import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesRsp.Data;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
@@ -70,9 +72,9 @@ public class SurgeryController {
      * @param item
      * @return
      */
-    private QueryAppliesRsp createQueryMetOpsAppliesInDeptRspBody(MetOpsApply apply) {
+    private Data createQueryMetOpsAppliesInDeptRspBody(MetOpsApply apply) {
         // 创建实体
-        var rspBody = new QueryAppliesRsp();
+        var rspBody = new QueryAppliesRsp.Data();
 
         // 手术间
         if (apply.associateEntity.room != null) {
@@ -231,7 +233,7 @@ public class SurgeryController {
 
     @ResponseBody
     @RequestMapping(value = "queryArrangedApplies", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public List<QueryAppliesRsp> queryArrangedApplies(@RequestBody QueryAppliesReq req) {
+    public QueryAppliesRsp queryArrangedApplies(@RequestBody QueryAppliesReq req) {
         // 记录日志
         this.logger.info("查询手术申请, 入参:");
         this.logger.info(this.gsonHelper.toJson(req));
@@ -250,13 +252,15 @@ public class SurgeryController {
         var stateMap = this.httpHelper.postForObject("/ms/operation/queryStates", reqBody, QueryStatesRsp.class).states;
 
         // 构造响应体
-        var rspBodies = new ArrayList<QueryAppliesRsp>();
+        var rspBodies = new QueryAppliesRsp();
+        rspBodies.size = rs.size();
+        rspBodies.data = Lists.newArrayList();
         for (var item : rs) {
             var rspItem = this.createQueryMetOpsAppliesInDeptRspBody(item);
             if (stateMap.containsKey(item.operationNo)) {
                 rspItem.surgeryState = stateMap.get(item.operationNo);
             }
-            rspBodies.add(rspItem);
+            rspBodies.data.add(rspItem);
         }
 
         return rspBodies;
