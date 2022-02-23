@@ -78,10 +78,10 @@
                 AND BALANCE_OPERCODE = #{balancer}
             </if>
             <if test="beginDate != null">
-                AND BALANCE_DATE &gt;= #{beginDate, jdbcType = TIMESTAMP} + 0
+                AND BALANCE_DATE &gt;= #{beginDate} + 0
             </if>
             <if test="endDate != null">
-                AND BALANCE_DATE &lt;= #{endDate, jdbcType = TIMESTAMP} + 0
+                AND BALANCE_DATE &lt;= #{endDate} + 0
             </if>
             <if test="pactCode != null">
                 AND PACT_CODE = #{pactCode}
