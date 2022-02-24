@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
-import com.kaos.his.service.inpatient.ReConciliateService;
+import com.kaos.his.service.inpatient.fee.report.ReConciliateService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -21,7 +21,7 @@ import com.kaos.his.controller.inpatient.escort.entity.QueryStateInfoRspBody;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
-import com.kaos.his.service.inpatient.EscortService;
+import com.kaos.his.service.inpatient.escort.EscortService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

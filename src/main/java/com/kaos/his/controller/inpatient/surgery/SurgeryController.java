@@ -24,7 +24,7 @@ import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesRsp.Data;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
-import com.kaos.his.service.inpatient.SurgeryService;
+import com.kaos.his.service.inpatient.surgery.SurgeryService;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.his.enums.common.DeptOwnEnum;
-import com.kaos.his.service.inpatient.DayReportService;
+import com.kaos.his.service.inpatient.fee.report.DayReportService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

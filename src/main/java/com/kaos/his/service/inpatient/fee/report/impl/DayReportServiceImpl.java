@@ -1,4 +1,4 @@
-package com.kaos.his.service.inpatient.impl;
+package com.kaos.his.service.inpatient.fee.report.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,7 +16,7 @@ import com.kaos.his.enums.common.DeptOwnEnum;
 import com.kaos.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
-import com.kaos.his.service.inpatient.DayReportService;
+import com.kaos.his.service.inpatient.fee.report.DayReportService;
 import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;

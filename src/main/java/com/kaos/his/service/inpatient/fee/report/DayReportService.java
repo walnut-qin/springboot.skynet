@@ -1,4 +1,4 @@
-package com.kaos.his.service.inpatient;
+package com.kaos.his.service.inpatient.fee.report;
 
 import java.util.Date;
 
