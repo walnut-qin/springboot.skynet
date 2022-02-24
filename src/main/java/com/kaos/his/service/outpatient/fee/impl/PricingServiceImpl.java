@@ -5,10 +5,8 @@ import java.util.List;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.entity.common.FinComFeeCodeStat;
 import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
 import com.kaos.his.enums.common.SysClassEnum;
-import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.outpatient.fee.FeeDetailCancelFlagEnum;
@@ -21,7 +19,6 @@ import com.kaos.his.service.outpatient.impl.GcpServiceImpl;
 import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
-import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,12 +59,6 @@ public class PricingServiceImpl implements PricingService {
      */
     @Autowired
     ICache<String, FinComUndrugInfo> undrugInfoCache;
-
-    /**
-     * 统计大小类对照cache
-     */
-    @Autowired
-    ICache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> feeCodeStatCache;
 
     @Transactional
     @Override

@@ -12,7 +12,6 @@ import com.kaos.his.mapper.common.FinComFeeCodeStatMapper;
 import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
-import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Component;
  * @param 过期 永不
  */
 @Component
-public class FinComFeeCodeStatCache implements ICache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> {
+public class FinComFeeCodeStatCache implements ICache<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> {
     /**
      * 数据库接口
      */
@@ -39,19 +38,65 @@ public class FinComFeeCodeStatCache implements ICache<Pair<ReportTypeEnum, MinFe
     /**
      * Loading cache
      */
-    LoadingCache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
-            .refreshAfterWrite(1, TimeUnit.DAYS)
+    LoadingCache<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> cache = CacheBuilder.newBuilder()
+            .maximumSize(20)
             .recordStats()
-            .build(new CacheLoader<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat>() {
+            .build(new CacheLoader<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>>() {
                 @Override
-                public FinComFeeCodeStat load(Pair<ReportTypeEnum, MinFeeEnum> key) throws Exception {
-                    return FinComFeeCodeStatCache.this.mapper.queryFeeCodeStat(key.getValue0(), key.getValue1());
+                public ICache<MinFeeEnum, FinComFeeCodeStat> load(ReportTypeEnum key1) throws Exception {
+                    return new ICache<MinFeeEnum, FinComFeeCodeStat>() {
+                        Logger logger = Logger.getLogger(this.getClass());
+
+                        LoadingCache<MinFeeEnum, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
+                                .maximumSize(100)
+                                .refreshAfterWrite(1, TimeUnit.DAYS)
+                                .build(new CacheLoader<MinFeeEnum, FinComFeeCodeStat>() {
+                                    @Override
+                                    public FinComFeeCodeStat load(MinFeeEnum key2) throws Exception {
+                                        return FinComFeeCodeStatCache.this.mapper.queryFeeCodeStat(key1, key2);
+                                    };
+                                });
+
+                        @Override
+                        public FinComFeeCodeStat getValue(MinFeeEnum key) {
+                            try {
+                                if (key == null) {
+                                    this.logger.warn("键值为空");
+                                    return null;
+                                } else {
+                                    return this.cache.get(key);
+                                }
+                            } catch (Exception e) {
+                                this.logger.warn(e.getMessage());
+                                return null;
+                            }
+                        }
+
+                        @Override
+                        public View<MinFeeEnum, FinComFeeCodeStat> show() {
+                            View<MinFeeEnum, FinComFeeCodeStat> view = new View<>();
+                            view.size = this.cache.size();
+                            view.stats = this.cache.stats();
+                            view.cache = this.cache.asMap();
+                            return view;
+                        }
+
+                        @Override
+                        public void refresh(MinFeeEnum key) {
+                            this.cache.refresh(key);
+                        }
+
+                        @Override
+                        public void invalidateAll() {
+                            this.cache.invalidateAll();
+
+                        }
+                    };
                 };
             });
 
     @Override
-    public FinComFeeCodeStat getValue(Pair<ReportTypeEnum, MinFeeEnum> key) {
+    public ICache<MinFeeEnum, FinComFeeCodeStat> getValue(ReportTypeEnum key) {
         try {
             if (key == null) {
                 this.logger.warn("键值为空");
@@ -66,17 +111,13 @@ public class FinComFeeCodeStatCache implements ICache<Pair<ReportTypeEnum, MinFe
     }
 
     @Override
-    public View<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> show() {
-        View<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> view = new View<>();
-        view.size = this.cache.size();
-        view.stats = this.cache.stats();
-        view.cache = this.cache.asMap();
-        return view;
+    public View<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> show() {
+        throw new RuntimeException("多级cache不支持展示");
     }
 
     @Override
-    public void refresh(Pair<ReportTypeEnum, MinFeeEnum> key) {
-        this.cache.refresh(key);
+    public void refresh(ReportTypeEnum key) {
+        throw new RuntimeException("多级cache不支持刷新");
     }
 
     @Override

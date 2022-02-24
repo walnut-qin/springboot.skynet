@@ -1,10 +1,11 @@
 package com.kaos.inf;
 
+import java.lang.constant.Constable;
 import java.util.concurrent.ConcurrentMap;
 
 import com.google.common.cache.CacheStats;
 
-public interface ICache<K, V> {
+public interface ICache<K extends Constable, V> {
     /**
      * 获取值
      * 

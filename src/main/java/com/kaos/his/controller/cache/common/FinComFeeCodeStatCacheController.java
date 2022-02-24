@@ -8,7 +8,6 @@ import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.inf.ICache;
 import com.kaos.inf.ICache.View;
 
-import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,14 +22,14 @@ public class FinComFeeCodeStatCacheController {
      * 实体信息服务
      */
     @Autowired
-    ICache<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> feeCodeStatCache;
+    ICache<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> feeCodeStatCache;
 
     /**
      * 检索开关变量的值
      */
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public View<Pair<ReportTypeEnum, MinFeeEnum>, FinComFeeCodeStat> show() {
-        return this.feeCodeStatCache.show();
+    public View<MinFeeEnum, FinComFeeCodeStat> show(@NotNull(message = "报表类型不能为空") ReportTypeEnum reportType) {
+        return this.feeCodeStatCache.getValue(reportType).show();
     }
 
     /**
@@ -39,7 +38,7 @@ public class FinComFeeCodeStatCacheController {
     @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String refresh(@NotNull(message = "报表类型不能为空") ReportTypeEnum reportType,
             @NotNull(message = "最小费用编码不能为空") MinFeeEnum minFee) {
-        this.feeCodeStatCache.refresh(new Pair<ReportTypeEnum, MinFeeEnum>(reportType, minFee));
+        this.feeCodeStatCache.getValue(reportType).refresh(minFee);
         return String.format("更新缓存<%s, %s>成功", reportType.getDescription(), minFee.getDescription());
     }
 
