@@ -10,6 +10,9 @@ import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.entity.Age;
 import com.kaos.his.enums.common.NoonEnum;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class TypeHelperImpl implements TypeHelper {
     @Override
     public String join(String separator, Collection<String> items) {
