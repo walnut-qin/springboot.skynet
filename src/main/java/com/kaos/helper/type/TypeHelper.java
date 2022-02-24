@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.kaos.helper.type.entity.Age;
+import com.kaos.his.enums.common.NoonEnum;
 
 public interface TypeHelper {
     /**
@@ -23,6 +24,14 @@ public interface TypeHelper {
      * @return
      */
     Age getAge(Date birthday);
+
+    /**
+     * 获取午别信息
+     * 
+     * @param date 目标日期
+     * @return
+     */
+    NoonEnum getNoon(Date date);
 
     /**
      * 获取列表最后一个元素
