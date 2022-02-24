@@ -1,15 +1,12 @@
-package com.kaos.his.service.outpatient.impl;
+package com.kaos.his.service.outpatient.fee.impl;
 
 import java.util.Date;
 import java.util.List;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.common.FinComFeeCodeStat;
 import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
-import com.kaos.his.entity.outpatient.fee.FinOpbFeeDetail;
 import com.kaos.his.enums.common.SysClassEnum;
 import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
@@ -19,7 +16,8 @@ import com.kaos.his.enums.outpatient.fee.FeeDetailCostSourceEnum;
 import com.kaos.his.enums.outpatient.fee.FeeDetailPayFlagEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
-import com.kaos.his.service.outpatient.FeeService;
+import com.kaos.his.service.outpatient.fee.PricingService;
+import com.kaos.his.service.outpatient.impl.GcpServiceImpl;
 import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
@@ -29,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class FeeServiceImpl implements FeeService {
+public class PricingServiceImpl implements PricingService {
     /**
      * 日志接口
      */
@@ -222,32 +220,6 @@ public class FeeServiceImpl implements FeeService {
 
             // 更新看诊标识
             this.registerMapper.updateSeeFlag(clinicCode, TransTypeEnum.Positive, true);
-        }
-    }
-
-    public void saveFee(String clinicCode) {
-        // 检索所有原始费用明细
-        var feeDetails = this.feeDetailMapper.queryFeeDetailsWithClinicCode(clinicCode, null, null, null);
-
-        // 加入过滤条件并按照统计大类分组
-        Multimap<String, FinOpbFeeDetail> feeDetailMap = ArrayListMultimap.create();
-        for (var feeDetail : feeDetails) {
-            if (feeDetail.payFlag != FeeDetailPayFlagEnum.划价) {
-                continue;
-            } else if (feeDetail.cancelFlag != FeeDetailCancelFlagEnum.正常) {
-                continue;
-            }
-            var feeCodeStat = this.feeCodeStatCache.getValue(new Pair<>(ReportTypeEnum.门诊发票, feeDetail.feeCode));
-            if (feeCodeStat == null) {
-                throw new RuntimeException(String.format("获取统计大类异常(recipeNo = %s)", feeDetail.recipeNo));
-            }
-            feeDetail.associateEntity.feeCodeStat = feeCodeStat;
-            feeDetailMap.put(feeCodeStat.feeStatCate, feeDetail);
-        }
-
-        // 轮训所有统计大类
-        for (var statCode : feeDetailMap.keySet()) {
-            feeDetailMap.get(statCode);
         }
     }
 }

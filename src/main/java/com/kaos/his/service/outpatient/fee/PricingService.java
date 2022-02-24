@@ -1,11 +1,11 @@
-package com.kaos.his.service.outpatient;
+package com.kaos.his.service.outpatient.fee;
 
 import java.util.List;
 
 /**
- * 划价收费类业务
+ * 划价业务
  */
-public interface FeeService {
+public interface PricingService {
     /**
      * 门诊非药品划价
      * 

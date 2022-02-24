@@ -5,7 +5,7 @@ import java.util.Date;
 import com.kaos.his.enums.common.NoonEnum;
 import com.kaos.his.enums.common.PayModeEnum;
 
-public interface RegService {
+public interface RegisterService {
     /**
      * 挂免费号
      * 
