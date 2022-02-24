@@ -21,6 +21,7 @@ import com.kaos.his.controller.inpatient.escort.entity.QueryStateInfoRspBody;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.his.service.inpatient.escort.AnnexService;
 import com.kaos.his.service.inpatient.escort.EscortService;
 
 import org.apache.log4j.Logger;
@@ -69,6 +70,12 @@ public class EscortController {
      */
     @Autowired
     EscortService escortService;
+
+    /**
+     * 陪护附件服务
+     */
+    @Autowired
+    AnnexService annexService;
 
     @RequestMapping(value = "register", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
@@ -309,7 +316,7 @@ public class EscortController {
         this.logger.info(String.format("上传附件(helperCardNo = %s, url = %s)", helperCardNo, url));
 
         // 执行服务
-        var rt = this.escortService.uploadAnnex(helperCardNo, url);
+        var rt = this.annexService.uploadAnnex(helperCardNo, url);
 
         return rt.annexNo;
     }
@@ -323,7 +330,7 @@ public class EscortController {
         this.logger.info(String.format("审核附件(annexNo = %s, checker = %s)", annexNo, checker));
 
         // 执行服务
-        this.escortService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
+        this.annexService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
     }
 
     @RequestMapping(value = "queryAnnexInDept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
@@ -334,7 +341,7 @@ public class EscortController {
 
         // 结果集
         var rspBody = new ArrayList<QueryAnnexInDeptRspBody>();
-        for (var annexInfo : this.escortService.queryAnnexInfoInDept(deptCode, checked)) {
+        for (var annexInfo : this.annexService.queryAnnexInfoInDept(deptCode, checked)) {
             var rspItem = new QueryAnnexInDeptRspBody();
             rspItem.annexNo = annexInfo.annexNo;
             rspItem.helperName = annexInfo.associateEntity.patient.name;
