@@ -1,6 +1,6 @@
-package com.kaos.his.service.common;
+package com.kaos.his.service.common.config;
 
-public interface ConfigService {
+public interface SwitchService {
     /**
      * 查询开关变量的值
      * 

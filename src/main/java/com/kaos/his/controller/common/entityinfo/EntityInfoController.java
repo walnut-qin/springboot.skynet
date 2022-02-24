@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
-import com.kaos.his.service.common.EntityInfoService;
+import com.kaos.his.service.common.PatientInfoService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class EntityInfoController {
      * 实体信息服务
      */
     @Autowired
-    EntityInfoService entityInfoService;
+    PatientInfoService entityInfoService;
 
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public QueryPatientInfoRspBody queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
@@ -40,7 +40,7 @@ public class EntityInfoController {
         this.logger.info(String.format("查询患者信息(cardNo = %s)", cardNo));
 
         // 调用服务
-        var patient = this.entityInfoService.queryPatient(cardNo);
+        var patient = this.entityInfoService.queryPatientInfo(cardNo);
 
         // 构造响应体
         var rspBody = new QueryPatientInfoRspBody();

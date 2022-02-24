@@ -2,7 +2,7 @@ package com.kaos.his.controller.common.config;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.service.common.ConfigService;
+import com.kaos.his.service.common.config.SwitchService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class ConfigController {
      * 实体信息服务
      */
     @Autowired
-    ConfigService configService;
+    SwitchService switchService;
 
     /**
      * 检索开关变量的值
@@ -35,6 +35,6 @@ public class ConfigController {
         this.logger.info(String.format("查询开关变量(key = %s)", key));
 
         // 调用服务
-        return this.configService.querySwitchValue(key).toString();
+        return this.switchService.querySwitchValue(key).toString();
     }
 }
