@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
 import com.kaos.his.service.inf.common.PatientInfoService;
+import com.kaos.util.DateHelpers;
 import com.kaos.util.helper.DateHelper;
 
 import org.apache.log4j.Logger;
@@ -25,8 +26,7 @@ public class EntityInfoController {
     /**
      * 基本类型助手
      */
-    @Autowired
-    DateHelper dateHelper;
+    DateHelper dateHelper = DateHelpers.newDateHelper();
 
     /**
      * 实体信息服务

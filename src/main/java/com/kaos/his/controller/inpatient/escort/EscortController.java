@@ -19,6 +19,8 @@ import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 import com.kaos.his.service.inf.inpatient.escort.AnnexService;
 import com.kaos.his.service.inf.inpatient.escort.EscortService;
+import com.kaos.util.DateHelpers;
+import com.kaos.util.ListHelpers;
 import com.kaos.util.helper.DateHelper;
 import com.kaos.util.helper.ListHelper;
 import com.kaos.util.helper.LockHelper;
@@ -43,14 +45,12 @@ public class EscortController {
     /**
      * 基本类型助手
      */
-    @Autowired
-    ListHelper listHelper;
+    ListHelper listHelper = ListHelpers.newListHelper();
 
     /**
      * 日期类型助手
      */
-    @Autowired
-    DateHelper dateHelper;
+    DateHelper dateHelper = DateHelpers.newDateHelper();
 
     /**
      * 20个陪护证状态锁

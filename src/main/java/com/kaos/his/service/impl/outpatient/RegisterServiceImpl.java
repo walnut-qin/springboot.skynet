@@ -12,6 +12,7 @@ import com.kaos.his.enums.impl.common.TransTypeEnum;
 import com.kaos.his.enums.impl.common.ValidStateEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.inf.outpatient.RegisterService;
+import com.kaos.util.DateHelpers;
 import com.kaos.util.helper.DateHelper;
 
 import org.apache.log4j.Logger;
@@ -48,8 +49,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Autowired
     Cache<String, DawnOrgDept> dawnOrgDeptCache;
 
-    @Autowired
-    DateHelper dateHelper;
+    DateHelper dateHelper = DateHelpers.newDateHelper();
 
     @Transactional
     @Override

@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.kaos.util.helper.ListHelper;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class ListHelperImpl implements ListHelper {
     @Override
     public <T> T getFirst(List<T> list) {

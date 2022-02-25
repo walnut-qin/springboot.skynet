@@ -7,9 +7,6 @@ import java.util.Date;
 import com.kaos.his.enums.impl.common.NoonEnum;
 import com.kaos.util.helper.DateHelper;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class DateHelperImpl implements DateHelper {
     @Override
     public Age getAge(Date birthday) {

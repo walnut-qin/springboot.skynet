@@ -36,6 +36,7 @@ import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.his.service.impl.inpatient.fee.report.DayReportServiceImpl;
 import com.kaos.his.service.inf.inpatient.escort.EscortService;
+import com.kaos.util.ListHelpers;
 import com.kaos.util.helper.ListHelper;
 
 import org.apache.log4j.Logger;
@@ -54,8 +55,7 @@ public class EscortServiceImpl implements EscortService {
     /**
      * 基本类型助手
      */
-    @Autowired
-    ListHelper listHelper;
+    ListHelper listHelper = ListHelpers.newListHelper();
 
     /**
      * 注解自身
