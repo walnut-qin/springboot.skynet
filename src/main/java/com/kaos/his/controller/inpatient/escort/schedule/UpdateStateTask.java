@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Stopwatch;
 import com.kaos.his.controller.inpatient.escort.EscortController;
-import com.kaos.his.service.inpatient.escort.EscortService;
+import com.kaos.his.service.inf.inpatient.escort.EscortService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

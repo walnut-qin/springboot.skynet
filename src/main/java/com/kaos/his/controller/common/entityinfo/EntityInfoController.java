@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
-import com.kaos.his.service.common.PatientInfoService;
+import com.kaos.his.service.inf.common.PatientInfoService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

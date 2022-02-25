@@ -2,7 +2,7 @@ package com.kaos.his.controller.outpatient.gcp;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.service.outpatient.GcpService;
+import com.kaos.his.service.inf.outpatient.GcpService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
