@@ -2,7 +2,7 @@ package com.kaos.his.service.inf.inpatient.fee.report;
 
 import java.util.Date;
 
-import com.kaos.his.enums.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
 
 /**
  * 日结服务

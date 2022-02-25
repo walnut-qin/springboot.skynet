@@ -2,7 +2,7 @@ package com.kaos.his.service.inf.outpatient;
 
 import java.util.Date;
 
-import com.kaos.his.enums.common.PayModeEnum;
+import com.kaos.his.enums.impl.common.PayModeEnum;
 
 public interface RegisterService {
     /**

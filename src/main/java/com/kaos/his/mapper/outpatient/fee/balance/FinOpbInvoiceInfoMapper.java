@@ -1,7 +1,7 @@
 package com.kaos.his.mapper.outpatient.fee.balance;
 
 import com.kaos.his.entity.outpatient.fee.balance.FinOpbInvoiceInfo;
-import com.kaos.his.enums.common.TransTypeEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
 
 public interface FinOpbInvoiceInfoMapper {
     /**

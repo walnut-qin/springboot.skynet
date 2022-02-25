@@ -4,10 +4,10 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.enums.common.SexEnum;
-import com.kaos.his.enums.common.ValidStateEnum;
-import com.kaos.his.enums.inpatient.BedGradeEnum;
-import com.kaos.his.enums.inpatient.BedStateEnum;
+import com.kaos.his.enums.impl.common.SexEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
+import com.kaos.his.enums.impl.inpatient.BedGradeEnum;
+import com.kaos.his.enums.impl.inpatient.BedStateEnum;
 
 /**
  * 床位信息（XYHIS.COM_BEDINFO）

@@ -1,11 +1,11 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 结算类别代码 {@code COM_DICTIONARY#TYPE = PAYKIND}
  */
-public enum PayKindEnum implements IEnum {
+public enum PayKindEnum implements Enum {
     自费("01", "自费"), 医保("02", "医保"), 公费("03", "公费"), 特约单位("04", "特约单位"), 本院职工("05", "本院职工");
 
     /**

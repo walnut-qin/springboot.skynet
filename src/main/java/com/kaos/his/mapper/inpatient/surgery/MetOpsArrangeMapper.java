@@ -3,7 +3,7 @@ package com.kaos.his.mapper.inpatient.surgery;
 import java.util.List;
 
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
-import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 
 public interface MetOpsArrangeMapper {
     /**

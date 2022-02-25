@@ -1,6 +1,6 @@
 package com.kaos.his.mapper.outpatient;
 
-import com.kaos.his.enums.common.TransTypeEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

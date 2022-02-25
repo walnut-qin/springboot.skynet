@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.entity.Age;
-import com.kaos.his.enums.common.NoonEnum;
+import com.kaos.his.enums.impl.common.NoonEnum;
 
 import org.springframework.stereotype.Component;
 

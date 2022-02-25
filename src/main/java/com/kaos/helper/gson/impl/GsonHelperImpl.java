@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kaos.helper.gson.GsonHelper;
 import com.kaos.helper.gson.adapter.EnumTypeAdapter;
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 public class GsonHelperImpl implements GsonHelper {
     /**
@@ -31,7 +31,7 @@ public class GsonHelperImpl implements GsonHelper {
         }
 
         // 注册转换器
-        builder.registerTypeHierarchyAdapter(IEnum.class, new EnumTypeAdapter<>());
+        builder.registerTypeHierarchyAdapter(Enum.class, new EnumTypeAdapter<>());
 
         this.gson = builder.create();
     }

@@ -1,8 +1,8 @@
-package com.kaos.his.enums.outpatient.fee;
+package com.kaos.his.enums.impl.outpatient.fee;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum FeeDetailCostSourceEnum implements IEnum {
+public enum FeeDetailCostSourceEnum implements Enum {
     操作员("0", "操作员"), 医嘱("1", "医嘱"), 终端("2", "终端"), 体检("3", "体检");
 
     /**

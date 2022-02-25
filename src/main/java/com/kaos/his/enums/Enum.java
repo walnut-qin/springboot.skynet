@@ -3,7 +3,7 @@ package com.kaos.his.enums;
 /**
  * 定制枚举接口
  */
-public interface IEnum {
+public interface Enum {
     /**
      * 写入数据库的值
      * 

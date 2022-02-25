@@ -1,11 +1,11 @@
-package com.kaos.his.enums.inpatient.fee.balance;
+package com.kaos.his.enums.impl.inpatient.fee.balance;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 结算标识
  */
-public enum BalanceStateEnum implements IEnum {
+public enum BalanceStateEnum implements Enum {
     未结算("0", "未结算"), 已结算("1", "已结算"), 已结转("2", "已结转");
 
     /**

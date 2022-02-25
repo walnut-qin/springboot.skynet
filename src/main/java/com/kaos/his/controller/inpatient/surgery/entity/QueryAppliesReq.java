@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
 import org.springframework.validation.annotation.Validated;
 

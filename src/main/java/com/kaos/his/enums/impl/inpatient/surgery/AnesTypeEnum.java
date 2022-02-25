@@ -1,8 +1,8 @@
-package com.kaos.his.enums.inpatient.surgery;
+package com.kaos.his.enums.impl.inpatient.surgery;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum AnesTypeEnum implements IEnum {
+public enum AnesTypeEnum implements Enum {
     全麻("1", "全麻"), 局麻("2", "局麻"), 硬膜外麻醉("3", "硬膜外麻醉"), 腰麻("4", "腰麻"), 氯胺酮("5", "氯胺酮"), 臂丛麻醉("6", "臂丛麻醉"),
     基础麻醉("7", "基础麻醉"),
     硬膜外封闭("8", "硬膜外封闭"), 气管内麻醉("9", "气管内麻醉"), 腰硬联合麻醉("10", "腰硬联合麻醉"), 静脉麻醉("11", "静脉麻醉"),

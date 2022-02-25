@@ -23,7 +23,7 @@ import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesRsp;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesRsp.Data;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
-import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.his.service.inf.inpatient.surgery.SurgeryService;
 
 import org.apache.log4j.Logger;

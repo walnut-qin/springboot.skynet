@@ -4,10 +4,10 @@ import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.enums.common.ItemGradeEnum;
-import com.kaos.his.enums.common.MinFeeEnum;
-import com.kaos.his.enums.common.SysClassEnum;
-import com.kaos.his.enums.common.ValidStateEnum;
+import com.kaos.his.enums.impl.common.ItemGradeEnum;
+import com.kaos.his.enums.impl.common.MinFeeEnum;
+import com.kaos.his.enums.impl.common.SysClassEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 /**
  * 非药品信息表

@@ -1,8 +1,8 @@
-package com.kaos.his.enums.inpatient.surgery;
+package com.kaos.his.enums.impl.inpatient.surgery;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum MetOpsInciTypeEnum implements IEnum {
+public enum MetOpsInciTypeEnum implements Enum {
     I类切口("1", "I类切口"), II类切口("2", "II类切口"), III类切口("3", "III类切口"), IV类切口("4", "IV类切口"), 零类切口("5", "零类切口");
 
     /**

@@ -3,7 +3,7 @@ package com.kaos.his.mapper.inpatient;
 import java.util.List;
 
 import com.kaos.his.entity.inpatient.Inpatient;
-import com.kaos.his.enums.inpatient.InStateEnum;
+import com.kaos.his.enums.impl.inpatient.InStateEnum;
 
 public interface InpatientMapper {
     /**

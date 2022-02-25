@@ -1,8 +1,8 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum ValidStateEnum implements IEnum {
+public enum ValidStateEnum implements Enum {
     无效("0", "无效"), 有效("1", "有效"), 作废("2", "作废");
 
     /**

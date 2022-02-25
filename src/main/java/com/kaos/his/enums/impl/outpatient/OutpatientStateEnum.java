@@ -1,11 +1,11 @@
-package com.kaos.his.enums.outpatient;
+package com.kaos.his.enums.impl.outpatient;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 门诊患者状态枚举
  */
-public enum OutpatientStateEnum implements IEnum {
+public enum OutpatientStateEnum implements Enum {
     正常挂号("N", "正常挂号"), 留观登记("R", "留观登记"), 正在留观("I", "正在留观"), 出观登记("P", "出观登记"), 留观出院完成("B", "留观出院完成"),
     留观转住院登记("E", "留观转住院登记"), 留观转住院完成("C", "留观转住院完成");
 

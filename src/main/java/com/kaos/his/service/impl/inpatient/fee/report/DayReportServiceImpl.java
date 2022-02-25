@@ -13,7 +13,7 @@ import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.his.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
-import com.kaos.his.enums.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
 import com.kaos.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;

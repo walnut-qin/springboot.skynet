@@ -1,13 +1,13 @@
 package com.kaos.his.config.converter;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 import org.springframework.core.convert.converter.Converter;
 
 /**
  * 枚举转换器，整个系统的枚举转换核心规则
  */
-public class EnumTypeConverter<E extends IEnum> implements Converter<String, E> {
+public class EnumTypeConverter<E extends Enum> implements Converter<String, E> {
     /**
      * E的类实体
      */

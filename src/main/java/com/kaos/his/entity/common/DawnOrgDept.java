@@ -1,7 +1,7 @@
 package com.kaos.his.entity.common;
 
-import com.kaos.his.enums.common.DeptOwnEnum;
-import com.kaos.his.enums.common.ValidStateEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 /**
  * 实体：科室信息（XYHIS.DAWN_ORG_DEPT）

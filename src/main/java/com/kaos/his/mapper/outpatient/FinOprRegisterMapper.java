@@ -1,7 +1,7 @@
 package com.kaos.his.mapper.outpatient;
 
 import com.kaos.his.entity.outpatient.FinOprRegister;
-import com.kaos.his.enums.common.TransTypeEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
 
 public interface FinOprRegisterMapper {
     /**

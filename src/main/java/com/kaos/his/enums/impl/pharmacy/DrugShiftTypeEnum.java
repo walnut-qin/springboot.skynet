@@ -1,8 +1,8 @@
-package com.kaos.his.enums.pharmacy;
+package com.kaos.his.enums.impl.pharmacy;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum DrugShiftTypeEnum implements IEnum {
+public enum DrugShiftTypeEnum implements Enum {
     更新("U", "更新"), 特殊修改("M", "特殊修改"), 新药("N", "新药"), 停用("S", "停用"), 调价("A", "调价");
 
     /**

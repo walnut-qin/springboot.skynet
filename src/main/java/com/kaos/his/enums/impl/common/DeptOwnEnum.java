@@ -1,8 +1,8 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum DeptOwnEnum implements IEnum {
+public enum DeptOwnEnum implements Enum {
     All("0", "全院区"), Sourth("1", "南院区"), North("2", "北院区"), East("3", "东津院区");
 
     /**

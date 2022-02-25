@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.kaos.his.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.his.entity.inpatient.escort.EscortAnnexInfo;
-import com.kaos.his.enums.inpatient.InStateEnum;
-import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.his.enums.impl.inpatient.InStateEnum;
+import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 import com.kaos.his.mapper.common.ComPatientInfoMapper;
 import com.kaos.his.mapper.inpatient.InpatientMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortAnnexChkMapper;

@@ -2,7 +2,7 @@ package com.kaos.his.mapper.inpatient.surgery;
 
 import java.util.ArrayList;
 
-import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

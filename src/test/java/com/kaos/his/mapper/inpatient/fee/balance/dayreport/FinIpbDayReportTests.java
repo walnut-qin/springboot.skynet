@@ -2,7 +2,8 @@ package com.kaos.his.mapper.inpatient.fee.balance.dayreport;
 
 import java.util.Date;
 
-import com.kaos.his.enums.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

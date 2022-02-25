@@ -6,14 +6,14 @@ import java.util.Map;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.inpatient.FinIprInMainInfo;
-import com.kaos.his.enums.common.ValidStateEnum;
-import com.kaos.his.enums.inpatient.surgery.AnesTypeEnum;
-import com.kaos.his.enums.inpatient.surgery.MetOpsInciTypeEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryDegreeEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryInspectResultEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryKindEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.AnesTypeEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.MetOpsInciTypeEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryDegreeEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryInspectResultEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryKindEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
 /**
  * 手术申请（XYHIS.MET_OPS_APPLY）

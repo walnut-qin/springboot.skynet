@@ -6,16 +6,16 @@ import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.entity.outpatient.FinOprRegister;
-import com.kaos.his.enums.common.DeptOwnEnum;
-import com.kaos.his.enums.common.ItemGradeEnum;
-import com.kaos.his.enums.common.SysClassEnum;
-import com.kaos.his.enums.common.MinFeeEnum;
-import com.kaos.his.enums.common.TransTypeEnum;
-import com.kaos.his.enums.outpatient.fee.FeeDetailCancelFlagEnum;
-import com.kaos.his.enums.outpatient.fee.FeeDetailCostSourceEnum;
-import com.kaos.his.enums.outpatient.fee.FeeDetailPayFlagEnum;
-import com.kaos.his.enums.outpatient.fee.FeeDetailSendFlagEnum;
-import com.kaos.his.enums.pharmacy.DrugQualityEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.ItemGradeEnum;
+import com.kaos.his.enums.impl.common.MinFeeEnum;
+import com.kaos.his.enums.impl.common.SysClassEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
+import com.kaos.his.enums.impl.outpatient.fee.FeeDetailCancelFlagEnum;
+import com.kaos.his.enums.impl.outpatient.fee.FeeDetailCostSourceEnum;
+import com.kaos.his.enums.impl.outpatient.fee.FeeDetailPayFlagEnum;
+import com.kaos.his.enums.impl.outpatient.fee.FeeDetailSendFlagEnum;
+import com.kaos.his.enums.impl.pharmacy.DrugQualityEnum;
 
 /**
  * 门诊费用明细（XYHIS.FIN_OPB_FEEDETAIL）

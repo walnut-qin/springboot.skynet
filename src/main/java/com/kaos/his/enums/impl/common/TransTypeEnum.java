@@ -1,8 +1,8 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum TransTypeEnum implements IEnum {
+public enum TransTypeEnum implements Enum {
     Positive("1", "正交易"), Negative("2", "负交易");
 
     /**

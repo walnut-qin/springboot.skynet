@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.kaos.his.enums.common.ValidStateEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

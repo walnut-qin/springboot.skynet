@@ -1,6 +1,6 @@
 package com.kaos.his.controller.common.entityinfo.entity;
 
-import com.kaos.his.enums.common.SexEnum;
+import com.kaos.his.enums.impl.common.SexEnum;
 
 public class QueryPatientInfoRspBody {
     /**

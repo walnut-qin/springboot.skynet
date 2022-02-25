@@ -2,10 +2,10 @@ package com.kaos.his.entity.common;
 
 import java.sql.Date;
 
-import com.kaos.his.enums.common.PositionEnum;
-import com.kaos.his.enums.common.RankEnum;
-import com.kaos.his.enums.common.SexEnum;
-import com.kaos.his.enums.common.ValidStateEnum;
+import com.kaos.his.enums.impl.common.PositionEnum;
+import com.kaos.his.enums.impl.common.RankEnum;
+import com.kaos.his.enums.impl.common.SexEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 /**
  * 实体：职员（DAWN_ORG_EMPL）

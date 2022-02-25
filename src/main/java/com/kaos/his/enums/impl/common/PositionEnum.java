@@ -1,11 +1,11 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 枚举：职务
  */
-public enum PositionEnum implements IEnum {
+public enum PositionEnum implements Enum {
     院长("1", "院长"), 主任("2", "主任"), 科长("3", "科长"), 科员("4", "科员");
 
     /**

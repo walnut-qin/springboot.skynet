@@ -6,12 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.kaos.his.config.converter.EnumTypeConverter;
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
-public class MybatisEnumTypeHandler<E extends IEnum> extends BaseTypeHandler<E> {
+public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
     /**
      * 枚举转换器
      */

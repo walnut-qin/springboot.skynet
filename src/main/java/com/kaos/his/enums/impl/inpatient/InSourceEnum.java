@@ -1,11 +1,11 @@
-package com.kaos.his.enums.inpatient;
+package com.kaos.his.enums.impl.inpatient;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 枚举：入院来源
  */
-public enum InSourceEnum implements IEnum {
+public enum InSourceEnum implements Enum {
     门诊("1", "门诊"), 急诊("2", "急诊"), 转科("3", "转科"), 转院("4", "转院");
 
     /**

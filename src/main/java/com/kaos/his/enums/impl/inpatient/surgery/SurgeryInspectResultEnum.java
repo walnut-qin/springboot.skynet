@@ -1,11 +1,11 @@
-package com.kaos.his.enums.inpatient.surgery;
+package com.kaos.his.enums.impl.inpatient.surgery;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 手术检验结果
  */
-public enum SurgeryInspectResultEnum implements IEnum {
+public enum SurgeryInspectResultEnum implements Enum {
     否("1", "否"), HAV("2", "HAV"), HBV("3", "HBV"), HCV("4", "HCV"), HIV("5", "HIV");
 
     /**

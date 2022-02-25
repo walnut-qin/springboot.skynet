@@ -2,10 +2,10 @@ package com.kaos.his.entity.common.fee;
 
 import java.util.Date;
 
-import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.entity.common.DawnOrgDept;
-import com.kaos.his.enums.common.MinFeeEnum;
-import com.kaos.his.enums.common.ValidStateEnum;
+import com.kaos.his.enums.impl.common.MinFeeEnum;
+import com.kaos.his.enums.impl.common.ReportTypeEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 /**
  * 统计小类到统计大类的对照关系

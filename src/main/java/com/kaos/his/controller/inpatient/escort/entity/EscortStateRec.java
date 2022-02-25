@@ -2,7 +2,7 @@ package com.kaos.his.controller.inpatient.escort.entity;
 
 import java.util.Date;
 
-import com.kaos.his.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 
 public class EscortStateRec {
     /**

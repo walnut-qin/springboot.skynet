@@ -2,7 +2,7 @@ package com.kaos.his.entity.inpatient.surgery;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.enums.common.ValidStateEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 /**
  * 手术间信息（XYHIS.MET_OPS_ROOM）

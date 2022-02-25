@@ -1,11 +1,11 @@
-package com.kaos.his.enums.inpatient;
+package com.kaos.his.enums.impl.inpatient;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 床位等级 {@code COM_DICTIONARY#TYPE = BEDGRADE}
  */
-public enum BedGradeEnum implements IEnum {
+public enum BedGradeEnum implements Enum {
     单人间普("01", "单人间(普)"), 单人间标("02", "单人间(标)"), 单人间传("03", "单人间(传)"), 单人间精("04", "单人间(精)"), 双人间普("05", "双人间(普)"),
     双人间标("06", "双人间(标)"), 双人间传("07", "双人间(传)"), 双人间精("08", "双人间(精)"), 三人间普("09", "三人间(普)"), 三人间标("10", "三人间(标)"),
     三人间传("11", "三人间(传)"), 三人间精("12", "三人间(精)"), 四人间标("13", "四人间(标)"), 四人以上普("14", "四人以上普"), 四人以上传("15", "四人以上传"),

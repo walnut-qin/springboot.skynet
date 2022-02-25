@@ -4,13 +4,13 @@ import java.lang.reflect.Type;
 
 import com.google.gson.*;
 import com.kaos.his.config.converter.EnumTypeConverter;
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public class EnumTypeAdapter<E extends IEnum> implements JsonSerializer<E>, JsonDeserializer<E> {
+public class EnumTypeAdapter<E extends Enum> implements JsonSerializer<E>, JsonDeserializer<E> {
     @Override
     public JsonElement serialize(E src, Type typeOfSrc, JsonSerializationContext context) {
         if (src != null) {
-            return new JsonPrimitive(((IEnum) src).getDescription());
+            return new JsonPrimitive(((Enum) src).getDescription());
         }
         return null;
     }

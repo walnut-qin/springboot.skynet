@@ -6,8 +6,8 @@ import com.kaos.his.cache.Cache;
 import com.kaos.his.cache.Cache.View;
 import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
-import com.kaos.his.enums.common.MinFeeEnum;
-import com.kaos.his.enums.common.ReportTypeEnum;
+import com.kaos.his.enums.impl.common.MinFeeEnum;
+import com.kaos.his.enums.impl.common.ReportTypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

@@ -3,10 +3,10 @@ package com.kaos.his.controller.inpatient.surgery.entity;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.his.enums.common.SexEnum;
-import com.kaos.his.enums.inpatient.surgery.AnesTypeEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryDegreeEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryInspectResultEnum;
+import com.kaos.his.enums.impl.common.SexEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.AnesTypeEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryDegreeEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryInspectResultEnum;
 
 /**
  * 接口 QueryMetOpsAppliesInDept 的响应体

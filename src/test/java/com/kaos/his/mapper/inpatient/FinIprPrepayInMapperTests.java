@@ -2,7 +2,8 @@ package com.kaos.his.mapper.inpatient;
 
 import java.util.ArrayList;
 
-import com.kaos.his.enums.inpatient.FinIprPrepayInStateEnum;
+import com.kaos.his.enums.impl.inpatient.FinIprPrepayInStateEnum;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

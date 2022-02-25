@@ -5,10 +5,10 @@ import java.util.Date;
 import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.outpatient.FinOprRegister;
-import com.kaos.his.enums.common.DeptOwnEnum;
-import com.kaos.his.enums.common.PayKindEnum;
-import com.kaos.his.enums.common.PayModeEnum;
-import com.kaos.his.enums.common.TransTypeEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.PayKindEnum;
+import com.kaos.his.enums.impl.common.PayModeEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
 
 /**
  * 发票信息表(结算信息表)

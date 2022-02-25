@@ -1,11 +1,11 @@
-package com.kaos.his.enums.inpatient;
+package com.kaos.his.enums.impl.inpatient;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 入院情况 {@code COM_DICTIONARY#TYPE = INCIRCS}
  */
-public enum InCircsEnum implements IEnum {
+public enum InCircsEnum implements Enum {
     一般("1", "一般"), 急("2", "急"), 危("3", "危");
 
     /**

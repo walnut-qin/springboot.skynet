@@ -1,11 +1,11 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 药品/非药品 类别 {@code COM_DICTIONARY#TYPE = ITEMGRADE}
  */
-public enum ItemGradeEnum implements IEnum {
+public enum ItemGradeEnum implements Enum {
     甲("1", "甲类"), 乙("2", "乙类"), 丙("3", "丙类");
 
     /**

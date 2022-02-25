@@ -1,8 +1,8 @@
-package com.kaos.his.enums.inpatient.escort;
+package com.kaos.his.enums.impl.inpatient.escort;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum EscortStateEnum implements IEnum {
+public enum EscortStateEnum implements Enum {
     无核酸检测结果("0", "无核酸检测结果"), 等待院内核酸检测结果("1", "等待院内核酸检测结果"), 等待院外核酸检测结果审核("2", "等待院外核酸检测结果审核"), 生效中("3", "生效中"),
     注销("4", "注销");
 

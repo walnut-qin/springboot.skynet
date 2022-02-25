@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.kaos.his.enums.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
 import com.kaos.his.service.inf.inpatient.fee.report.DayReportService;
 
 import org.apache.log4j.Logger;

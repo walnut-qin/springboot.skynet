@@ -3,9 +3,9 @@ package com.kaos.his.entity.common.drug.hedging;
 import java.util.Date;
 
 import com.kaos.his.entity.common.DawnOrgDept;
-import com.kaos.his.enums.common.ValidStateEnum;
-import com.kaos.his.enums.pharmacy.DrugQualityEnum;
-import com.kaos.his.enums.pharmacy.DrugTypeEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
+import com.kaos.his.enums.impl.pharmacy.DrugQualityEnum;
+import com.kaos.his.enums.impl.pharmacy.DrugTypeEnum;
 
 /**
  * 对冲明细表

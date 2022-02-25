@@ -6,10 +6,10 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
-import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
-import com.kaos.his.enums.common.MinFeeEnum;
+import com.kaos.his.enums.impl.common.MinFeeEnum;
+import com.kaos.his.enums.impl.common.ReportTypeEnum;
 import com.kaos.his.mapper.common.FinComFeeCodeStatMapper;
 
 import org.apache.log4j.Logger;

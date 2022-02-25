@@ -1,11 +1,11 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 最小费用编码，统计小类 {@code COM_DICTIONARY#TYPE = MINFEE}
  */
-public enum MinFeeEnum implements IEnum {
+public enum MinFeeEnum implements Enum {
     西药("001", "西药"), 中成药("002", "中成药"), 中草药("003", "中草药"), 诊查费("004", "诊查费"), 空调冷暖费("005", "空调冷暖费"), 会诊费("006", "会诊费"),
     护理费("007", "护理费"), 治疗费("008", "治疗费"), 氧气费("009", "氧气费"), 出诊费("010", "出诊费"), 换药费("011", "换药费"), 手术费("012", "手术费"),
     手术材料("013", "手术材料"), 麻醉监护("014", "麻醉监护"), 放射费("015", "放射费"), 磁共振("016", "磁共振"), CT("017", "CT"), 彩超("018", "彩超"),

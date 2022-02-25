@@ -2,7 +2,7 @@ package com.kaos.his.mapper.inpatient.fee.balance;
 
 import java.util.Date;
 
-import com.kaos.his.enums.common.TransTypeEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
-package com.kaos.his.enums.inpatient.surgery;
+package com.kaos.his.enums.impl.inpatient.surgery;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum SurgeryDegreeEnum implements IEnum {
+public enum SurgeryDegreeEnum implements Enum {
     一级("1级", "一级"), 二级("2级", "二级"), 三级("3级", "三级"), 四级("4级", "四级");
 
     /**

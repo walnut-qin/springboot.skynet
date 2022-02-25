@@ -1,11 +1,11 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 门诊系统类别，维护在COM_DICTIONARY的MZEXECBILL类型
  */
-public enum SysClassEnum implements IEnum {
+public enum SysClassEnum implements Enum {
     西药("P", "西药"), 中成药("PCZ", "中成药"), 中草药("PCC", "中草药"), 治疗("UZ", "治疗"), 检查("UC", "检查"), 手术("UO", "手术"), 检验("UL", "检验"),
     非药品("U", "非药品"), 其他("UT", "其他");
 

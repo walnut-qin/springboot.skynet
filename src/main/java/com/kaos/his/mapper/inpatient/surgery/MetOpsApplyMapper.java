@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
-import com.kaos.his.enums.common.ValidStateEnum;
-import com.kaos.his.enums.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
+import com.kaos.his.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
 public interface MetOpsApplyMapper {
     /**

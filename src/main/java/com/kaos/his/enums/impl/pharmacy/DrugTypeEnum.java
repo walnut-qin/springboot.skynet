@@ -1,8 +1,8 @@
-package com.kaos.his.enums.pharmacy;
+package com.kaos.his.enums.impl.pharmacy;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum DrugTypeEnum implements IEnum {
+public enum DrugTypeEnum implements Enum {
     中草药("C", "中草药"), 卫生材料("D", "卫生材料"), 自制药品("E", "自制药品"), 化验药品("F", "化验药品"), 制剂用品("G", "制剂用品"), 西药("P", "西药"),
     中成药("Z", "中成药");
 

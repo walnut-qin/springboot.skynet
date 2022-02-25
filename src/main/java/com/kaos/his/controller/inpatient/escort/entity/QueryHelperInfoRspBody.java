@@ -2,7 +2,7 @@ package com.kaos.his.controller.inpatient.escort.entity;
 
 import java.util.List;
 
-import com.kaos.his.enums.common.SexEnum;
+import com.kaos.his.enums.impl.common.SexEnum;
 
 public class QueryHelperInfoRspBody {
     /**

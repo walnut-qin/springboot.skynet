@@ -5,13 +5,13 @@ import java.util.Date;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.common.ComPatientInfo;
-import com.kaos.his.enums.common.DeptOwnEnum;
-import com.kaos.his.enums.common.NoonEnum;
-import com.kaos.his.enums.common.PayModeEnum;
-import com.kaos.his.enums.common.SexEnum;
-import com.kaos.his.enums.common.TransTypeEnum;
-import com.kaos.his.enums.common.ValidStateEnum;
-import com.kaos.his.enums.outpatient.OutpatientStateEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.NoonEnum;
+import com.kaos.his.enums.impl.common.PayModeEnum;
+import com.kaos.his.enums.impl.common.SexEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
+import com.kaos.his.enums.impl.outpatient.OutpatientStateEnum;
 
 /**
  * 门诊挂号实体

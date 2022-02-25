@@ -1,8 +1,8 @@
-package com.kaos.his.enums.outpatient.fee;
+package com.kaos.his.enums.impl.outpatient.fee;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum FeeDetailSendFlagEnum implements IEnum {
+public enum FeeDetailSendFlagEnum implements Enum {
     未转("0", "未转"), 已转("1", "已转"), 转失败("2", "转失败");
 
     /**

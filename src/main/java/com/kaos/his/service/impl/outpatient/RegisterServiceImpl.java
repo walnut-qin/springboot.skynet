@@ -8,9 +8,9 @@ import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.outpatient.FinOprRegister;
-import com.kaos.his.enums.common.PayModeEnum;
-import com.kaos.his.enums.common.TransTypeEnum;
-import com.kaos.his.enums.common.ValidStateEnum;
+import com.kaos.his.enums.impl.common.PayModeEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.inf.outpatient.RegisterService;
 

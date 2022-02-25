@@ -1,8 +1,8 @@
-package com.kaos.his.enums.outpatient.fee;
+package com.kaos.his.enums.impl.outpatient.fee;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum FeeDetailPayFlagEnum implements IEnum {
+public enum FeeDetailPayFlagEnum implements Enum {
     划价("0", "划价"), 收费("1", "收费"), 预收费团体体检("3", "预收费团体体检"), 药品预审核("4", "药品预审核");
 
     /**

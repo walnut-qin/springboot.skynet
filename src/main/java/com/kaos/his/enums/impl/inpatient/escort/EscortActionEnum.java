@@ -1,8 +1,8 @@
-package com.kaos.his.enums.inpatient.escort;
+package com.kaos.his.enums.impl.inpatient.escort;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
-public enum EscortActionEnum implements IEnum {
+public enum EscortActionEnum implements Enum {
     进入("I", "进入"), 外出("O", "外出");
 
     /**

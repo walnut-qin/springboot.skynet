@@ -6,14 +6,14 @@ import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.outpatient.FinOprRegister;
-import com.kaos.his.enums.common.BloodTypeEnum;
-import com.kaos.his.enums.common.DeptOwnEnum;
-import com.kaos.his.enums.common.PayKindEnum;
-import com.kaos.his.enums.common.SexEnum;
-import com.kaos.his.enums.inpatient.InAvenueEnum;
-import com.kaos.his.enums.inpatient.InCircsEnum;
-import com.kaos.his.enums.inpatient.InSourceEnum;
-import com.kaos.his.enums.inpatient.InStateEnum;
+import com.kaos.his.enums.impl.common.BloodTypeEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.PayKindEnum;
+import com.kaos.his.enums.impl.common.SexEnum;
+import com.kaos.his.enums.impl.inpatient.InAvenueEnum;
+import com.kaos.his.enums.impl.inpatient.InCircsEnum;
+import com.kaos.his.enums.impl.inpatient.InSourceEnum;
+import com.kaos.his.enums.impl.inpatient.InStateEnum;
 
 /**
  * 住院主表信息(XYHIS.FIN_IPR_INMAININFO)

@@ -1,11 +1,11 @@
-package com.kaos.his.enums.common;
+package com.kaos.his.enums.impl.common;
 
-import com.kaos.his.enums.IEnum;
+import com.kaos.his.enums.Enum;
 
 /**
  * 支付方式
  */
-public enum PayModeEnum implements IEnum {
+public enum PayModeEnum implements Enum {
     账户余额("1", "账户余额"), 工行银行卡("2", "工行银行卡"), 支付宝("3", "支付宝"), 微信("4", "微信"), 现金("5", "现金"), 老医保("6", "老医保"),
     新医保("7", "新医保"), 诊间银行卡("8", "诊间银行卡"), 建行银行卡("10", "建行银行卡"), 扫码挂号("11", "扫码挂号");
 

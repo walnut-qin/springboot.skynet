@@ -5,11 +5,11 @@ import java.util.Date;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.inpatient.FinIprInMainInfo;
-import com.kaos.his.enums.common.DeptOwnEnum;
-import com.kaos.his.enums.common.MinFeeEnum;
-import com.kaos.his.enums.common.PayKindEnum;
-import com.kaos.his.enums.common.TransTypeEnum;
-import com.kaos.his.enums.inpatient.fee.balance.BalanceStateEnum;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.MinFeeEnum;
+import com.kaos.his.enums.impl.common.PayKindEnum;
+import com.kaos.his.enums.impl.common.TransTypeEnum;
+import com.kaos.his.enums.impl.inpatient.fee.balance.BalanceStateEnum;
 
 public class FinIpbFeeInfo {
     /**
