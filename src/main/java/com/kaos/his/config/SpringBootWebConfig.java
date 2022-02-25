@@ -2,7 +2,7 @@ package com.kaos.his.config;
 
 import java.util.List;
 
-import com.kaos.helper.gson.impl.GsonHelperImpl;
+import com.kaos.helper.utils.Gsons;
 import com.kaos.his.config.converter.DateTypeConverter;
 import com.kaos.his.config.converter.factory.EnumTypeConverterFactory;
 import com.kaos.his.config.message.converter.BooleanMessageConverter;
@@ -40,7 +40,7 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 设置定制转换器，插入队列最前段，给予最高优先级
         converters.add(0, new BufferedImageHttpMessageConverter());
-        converters.add(0, new GsonHttpMessageConverter(new GsonHelperImpl("yyyy-MM-dd HH:mm:ss").getGson()));
+        converters.add(0, new GsonHttpMessageConverter(Gsons.newGson()));
         converters.add(0, new BooleanMessageConverter());
 
         WebMvcConfigurer.super.extendMessageConverters(converters);

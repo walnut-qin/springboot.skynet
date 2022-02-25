@@ -9,11 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.kaos.helper.gson.GsonHelper;
-import com.kaos.helper.gson.impl.GsonHelperImpl;
-import com.kaos.helper.http.HttpHelper;
-import com.kaos.helper.http.enums.ServerEnum;
-import com.kaos.helper.http.impl.HttpHelperImpl;
+import com.google.gson.Gson;
 import com.kaos.helper.type.TypeHelper;
 import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesReq;
@@ -25,6 +21,8 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.his.service.inf.inpatient.surgery.SurgeryService;
+import com.kaos.util.Gsons;
+import com.kaos.util.RestTemplates;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -35,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @Validated
 @RestController
@@ -48,7 +47,7 @@ public class SurgeryController {
     /**
      * gson处理器
      */
-    GsonHelper gsonHelper = new GsonHelperImpl("yyyy-MM-dd HH:mm:ss");
+    Gson gson = Gsons.newGson();
 
     /**
      * 基本类型助手
@@ -64,7 +63,7 @@ public class SurgeryController {
     /**
      * HttpHelper
      */
-    HttpHelper httpHelper = HttpHelperImpl.getHelper(ServerEnum.docare);
+    RestTemplate restTemplate = RestTemplates.newRestTemplate();
 
     /**
      * 构造响应体元素
@@ -236,7 +235,7 @@ public class SurgeryController {
     public QueryAppliesRsp queryArrangedApplies(@RequestBody QueryAppliesReq req) {
         // 记录日志
         this.logger.info("查询手术申请, 入参:");
-        this.logger.info(this.gsonHelper.toJson(req));
+        this.logger.info(this.gson.toJson(req));
 
         // 调用服务
         var rs = this.surgeryService.queryApplies(req.deptCode, req.roomNo, req.beginDate, req.endDate, req.states);
@@ -249,7 +248,9 @@ public class SurgeryController {
         reqBody.applyNos = rs.stream().map((x) -> {
             return x.operationNo;
         }).toList();
-        var stateMap = this.httpHelper.postForObject("/ms/operation/queryStates", reqBody, QueryStatesRsp.class).states;
+        var stateMap = this.restTemplate.postForObject(
+                String.format("%s%s", RestTemplates.DOCARE_SERVER, "/ms/operation/queryStates"), reqBody,
+                QueryStatesRsp.class).states;
 
         // 构造响应体
         var rspBodies = new QueryAppliesRsp();
