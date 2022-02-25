@@ -1,4 +1,4 @@
-package com.kaos.his.config.http.message.converter;
+package com.kaos.his.config.message.converter;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

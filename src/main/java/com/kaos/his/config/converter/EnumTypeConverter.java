@@ -1,4 +1,4 @@
-package com.kaos.helper.gson.converter;
+package com.kaos.his.config.converter;
 
 import com.kaos.inf.IEnum;
 

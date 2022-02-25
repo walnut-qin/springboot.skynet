@@ -1,17 +1,13 @@
 package com.kaos.his.config;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import com.kaos.helper.gson.converter.EnumTypeConverter;
 import com.kaos.helper.gson.impl.GsonHelperImpl;
-import com.kaos.his.config.http.message.converter.BooleanMessageConverter;
-import com.kaos.inf.IEnum;
+import com.kaos.his.config.converter.DateTypeConverter;
+import com.kaos.his.config.converter.factory.EnumTypeConverterFactory;
+import com.kaos.his.config.message.converter.BooleanMessageConverter;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -24,43 +20,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SpringBootWebConfig implements WebMvcConfigurer {
     /**
-     * 基于Gson枚举转换器的自定义转换器工厂
-     */
-    static class EnumTypeConverterFactory implements ConverterFactory<String, IEnum> {
-        @Override
-        public <T extends IEnum> Converter<String, T> getConverter(Class<T> targetType) {
-            return new EnumTypeConverter<>(targetType);
-        }
-    }
-
-    /**
      * 注册converter，用于解析Http请求参数
      */
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        // 添加自定义工厂实体
+        // 注册枚举解析器工厂
         registry.addConverterFactory(new EnumTypeConverterFactory());
 
-        // 注入时间解析
-        registry.addConverter(new Converter<String, Date>() {
-            @Override
-            public Date convert(String source) {
-                // 判空
-                if (source == null || source.isEmpty()) {
-                    return null;
-                }
-
-                // 创建格式化工具
-                var fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                // 格式化
-                try {
-                    return fmt.parse(source);
-                } catch (Exception e) {
-                    throw new RuntimeException(String.format("格式化Date参数失败(%s)", e.getMessage()));
-                }
-            }
-        });
+        // 注册时间解析
+        registry.addConverter(new DateTypeConverter());
 
         WebMvcConfigurer.super.addFormatters(registry);
     }
