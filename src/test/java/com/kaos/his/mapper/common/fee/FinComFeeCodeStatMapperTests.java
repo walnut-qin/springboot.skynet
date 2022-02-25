@@ -1,6 +1,7 @@
-package com.kaos.his.mapper.common;
+package com.kaos.his.mapper.common.fee;
 
 import com.kaos.his.enums.common.ReportTypeEnum;
+import com.kaos.his.mapper.common.FinComFeeCodeStatMapper;
 import com.kaos.his.enums.common.MinFeeEnum;
 
 import org.junit.jupiter.api.Test;

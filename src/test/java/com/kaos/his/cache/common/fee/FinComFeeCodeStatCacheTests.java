@@ -1,7 +1,7 @@
-package com.kaos.his.cache.common;
+package com.kaos.his.cache.common.fee;
 
-import com.kaos.his.entity.common.FinComFeeCodeStat;
 import com.kaos.his.enums.common.ReportTypeEnum;
+import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.inf.ICache;
 

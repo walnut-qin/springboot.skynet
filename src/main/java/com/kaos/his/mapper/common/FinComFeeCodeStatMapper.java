@@ -1,7 +1,7 @@
 package com.kaos.his.mapper.common;
 
-import com.kaos.his.entity.common.FinComFeeCodeStat;
 import com.kaos.his.enums.common.ReportTypeEnum;
+import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.enums.common.MinFeeEnum;
 
 public interface FinComFeeCodeStatMapper {

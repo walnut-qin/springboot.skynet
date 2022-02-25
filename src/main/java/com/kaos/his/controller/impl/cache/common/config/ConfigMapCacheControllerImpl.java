@@ -2,7 +2,7 @@ package com.kaos.his.controller.impl.cache.common.config;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.inf.cache.ICacheController;
+import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.common.config.ConfigMap;
 import com.kaos.inf.ICache;
 import com.kaos.inf.ICache.View;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/common/config/map")
-public class ConfigMapCacheController implements ICacheController<String, ConfigMap> {
+public class ConfigMapCacheController implements CacheController<String, ConfigMap> {
     /**
      * 实体信息服务
      */

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.his.mapper.common.FinComFeeCodeStatMapper">
-    <resultMap id="map" type="com.kaos.his.entity.common.FinComFeeCodeStat">
+<mapper namespace="com.kaos.his.mapper.common.fee.FinComFeeCodeStatMapper">
+    <resultMap id="map" type="com.kaos.his.entity.common.fee.FinComFeeCodeStat">
         <id column="REPORT_CODE" jdbcType="VARCHAR" property="reportCode"/>
         <id column="FEE_CODE" jdbcType="VARCHAR" property="feeCode"/>
         <result column="REPORT_TYPE" jdbcType="VARCHAR" property="reportType"/>

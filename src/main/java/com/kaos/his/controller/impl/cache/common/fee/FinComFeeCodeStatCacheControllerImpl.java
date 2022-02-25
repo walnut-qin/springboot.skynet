@@ -1,5 +1,7 @@
 package com.kaos.his.controller.impl.cache.common.fee;
 
+import javax.validation.constraints.NotBlank;
+
 import com.kaos.his.controller.inf.cache.ICacheController;
 import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.enums.common.MinFeeEnum;
@@ -32,13 +34,13 @@ public class FinComFeeCodeStatCacheController
 
     @Override
     @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-    public String refresh(ReportTypeEnum key) {
+    public String refresh(@NotBlank(message = "键值不能为空") ReportTypeEnum key) {
         this.feeCodeStatCache.refresh(key);
         return String.format("更新缓存%s成功", key);
     }
 
     @Override
-    @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "refreshAll", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String refreshAll() {
         this.feeCodeStatCache.refreshAll();
         return "更新缓存成功";
