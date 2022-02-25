@@ -36,8 +36,8 @@ import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.his.service.impl.inpatient.fee.report.DayReportServiceImpl;
 import com.kaos.his.service.inf.inpatient.escort.EscortService;
-import com.kaos.util.ListHelpers;
-import com.kaos.util.helper.ListHelper;
+import com.kaos.his.util.ListHelpers;
+import com.kaos.his.util.helper.ListHelper;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;

@@ -1,9 +1,12 @@
-package com.kaos.util.helper.impl;
+package com.kaos.his.util.helper.impl;
 
 import java.util.List;
 
-import com.kaos.util.helper.ListHelper;
+import com.kaos.his.util.helper.ListHelper;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ListHelperImpl implements ListHelper {
     @Override
     public <T> T getFirst(List<T> list) {

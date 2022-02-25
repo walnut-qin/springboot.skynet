@@ -1,12 +1,15 @@
-package com.kaos.util.helper.impl;
+package com.kaos.his.util.helper.impl;
 
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Date;
 
 import com.kaos.his.enums.impl.common.NoonEnum;
-import com.kaos.util.helper.DateHelper;
+import com.kaos.his.util.helper.DateHelper;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class DateHelperImpl implements DateHelper {
     @Override
     public Age getAge(Date birthday) {

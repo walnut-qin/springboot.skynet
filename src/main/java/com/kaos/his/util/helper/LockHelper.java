@@ -1,4 +1,4 @@
-package com.kaos.util.helper;
+package com.kaos.his.util.helper;
 
 public interface LockHelper {
     /**

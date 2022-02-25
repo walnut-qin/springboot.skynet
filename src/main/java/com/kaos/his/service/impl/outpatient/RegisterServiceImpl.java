@@ -12,8 +12,8 @@ import com.kaos.his.enums.impl.common.TransTypeEnum;
 import com.kaos.his.enums.impl.common.ValidStateEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.inf.outpatient.RegisterService;
-import com.kaos.util.DateHelpers;
-import com.kaos.util.helper.DateHelper;
+import com.kaos.his.util.DateHelpers;
+import com.kaos.his.util.helper.DateHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

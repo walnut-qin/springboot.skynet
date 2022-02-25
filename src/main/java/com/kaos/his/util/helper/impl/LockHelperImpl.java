@@ -1,10 +1,10 @@
-package com.kaos.util.helper.impl;
+package com.kaos.his.util.helper.impl;
 
 import java.util.List;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import com.kaos.util.helper.LockHelper;
+import com.kaos.his.util.helper.LockHelper;
 
 import org.apache.log4j.Logger;
 

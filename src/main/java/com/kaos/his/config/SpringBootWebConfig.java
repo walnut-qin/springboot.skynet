@@ -5,7 +5,7 @@ import java.util.List;
 import com.kaos.his.config.converter.DateTypeConverter;
 import com.kaos.his.config.converter.factory.EnumTypeConverterFactory;
 import com.kaos.his.config.message.converter.BooleanMessageConverter;
-import com.kaos.util.Gsons;
+import com.kaos.his.util.Gsons;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;

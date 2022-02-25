@@ -1,4 +1,4 @@
-package com.kaos.util;
+package com.kaos.his.util;
 
 import java.lang.reflect.Type;
 

@@ -1,8 +1,8 @@
-package com.kaos.util.helper.impl;
+package com.kaos.his.util.helper.impl;
 
 import com.google.common.collect.Lists;
-import com.kaos.util.Gsons;
-import com.kaos.util.helper.HttpHelper;
+import com.kaos.his.util.Gsons;
+import com.kaos.his.util.helper.HttpHelper;
 
 import org.javatuples.Pair;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;

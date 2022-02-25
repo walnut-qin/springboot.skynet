@@ -19,12 +19,12 @@ import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 import com.kaos.his.service.inf.inpatient.escort.AnnexService;
 import com.kaos.his.service.inf.inpatient.escort.EscortService;
-import com.kaos.util.DateHelpers;
-import com.kaos.util.ListHelpers;
-import com.kaos.util.helper.DateHelper;
-import com.kaos.util.helper.ListHelper;
-import com.kaos.util.helper.LockHelper;
-import com.kaos.util.helper.impl.LockHelperImpl;
+import com.kaos.his.util.DateHelpers;
+import com.kaos.his.util.ListHelpers;
+import com.kaos.his.util.helper.DateHelper;
+import com.kaos.his.util.helper.ListHelper;
+import com.kaos.his.util.helper.LockHelper;
+import com.kaos.his.util.helper.impl.LockHelperImpl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

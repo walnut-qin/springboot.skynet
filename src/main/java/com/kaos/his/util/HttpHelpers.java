@@ -1,7 +1,7 @@
-package com.kaos.util;
+package com.kaos.his.util;
 
-import com.kaos.util.helper.HttpHelper;
-import com.kaos.util.helper.impl.HttpHelperImpl;
+import com.kaos.his.util.helper.HttpHelper;
+import com.kaos.his.util.helper.impl.HttpHelperImpl;
 
 import org.javatuples.Pair;
 

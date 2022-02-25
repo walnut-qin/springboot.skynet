@@ -1,7 +1,7 @@
-package com.kaos.util;
+package com.kaos.his.util;
 
-import com.kaos.util.helper.LockHelper;
-import com.kaos.util.helper.impl.LockHelperImpl;
+import com.kaos.his.util.helper.LockHelper;
+import com.kaos.his.util.helper.impl.LockHelperImpl;
 
 public final class LockHelpers {
     /**

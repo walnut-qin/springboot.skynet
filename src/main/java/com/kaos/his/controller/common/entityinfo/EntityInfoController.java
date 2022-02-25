@@ -4,8 +4,8 @@ import javax.validation.constraints.NotBlank;
 
 import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
 import com.kaos.his.service.inf.common.PatientInfoService;
-import com.kaos.util.DateHelpers;
-import com.kaos.util.helper.DateHelper;
+import com.kaos.his.util.DateHelpers;
+import com.kaos.his.util.helper.DateHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
