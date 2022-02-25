@@ -63,17 +63,24 @@ public class ConfigMapCache implements ICache<String, ConfigMap> {
     }
 
     @Override
+    public void refresh(String key) {
+        this.cache.refresh(key);
+    }
+
+    @Override
+    public void refreshAll() {
+        for (var key : this.cache.asMap().keySet()) {
+            this.refresh(key);
+        }
+    }
+
+    @Override
     public View<String, ConfigMap> show() {
         View<String, ConfigMap> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();
         return view;
-    }
-
-    @Override
-    public void refresh(String key) {
-        this.cache.refresh(key);
     }
 
     @Override

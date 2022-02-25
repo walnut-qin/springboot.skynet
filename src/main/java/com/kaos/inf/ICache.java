@@ -1,11 +1,10 @@
 package com.kaos.inf;
 
-import java.lang.constant.Constable;
 import java.util.concurrent.ConcurrentMap;
 
 import com.google.common.cache.CacheStats;
 
-public interface ICache<K extends Constable, V> {
+public interface ICache<K, V> {
     /**
      * 获取值
      * 
@@ -15,18 +14,23 @@ public interface ICache<K extends Constable, V> {
     V getValue(K key);
 
     /**
-     * 展示cache内容
-     * 
-     * @return
-     */
-    View<K, V> show();
-
-    /**
      * 显式刷新某一个元素
      * 
      * @param key
      */
     void refresh(K key);
+
+    /**
+     * 刷新所有的值
+     */
+    void refreshAll();
+
+    /**
+     * 展示cache内容, 通配符用于适配递归
+     * 
+     * @return
+     */
+    View<K, ?> show();
 
     /**
      * 清除缓存

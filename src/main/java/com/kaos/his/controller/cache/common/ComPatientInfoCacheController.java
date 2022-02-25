@@ -26,7 +26,7 @@ public class ComPatientInfoCacheController {
      * 检索开关变量的值
      */
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public View<String, ComPatientInfo> show() {
+    public View<String, ?> show() {
         return this.patientInfoCache.show();
     }
 

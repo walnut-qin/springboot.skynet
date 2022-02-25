@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Maps;
 import com.kaos.his.entity.common.FinComFeeCodeStat;
 import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.his.enums.common.MinFeeEnum;
@@ -73,17 +74,24 @@ public class FinComFeeCodeStatCache implements ICache<ReportTypeEnum, ICache<Min
                         }
 
                         @Override
+                        public void refresh(MinFeeEnum key) {
+                            this.cache.refresh(key);
+                        }
+
+                        @Override
+                        public void refreshAll() {
+                            for (var key : this.cache.asMap().keySet()) {
+                                this.refresh(key);
+                            }
+                        }
+
+                        @Override
                         public View<MinFeeEnum, FinComFeeCodeStat> show() {
                             View<MinFeeEnum, FinComFeeCodeStat> view = new View<>();
                             view.size = this.cache.size();
                             view.stats = this.cache.stats();
                             view.cache = this.cache.asMap();
                             return view;
-                        }
-
-                        @Override
-                        public void refresh(MinFeeEnum key) {
-                            this.cache.refresh(key);
                         }
 
                         @Override
@@ -111,13 +119,36 @@ public class FinComFeeCodeStatCache implements ICache<ReportTypeEnum, ICache<Min
     }
 
     @Override
-    public View<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> show() {
-        throw new RuntimeException("多级cache不支持展示");
+    public void refresh(ReportTypeEnum key) {
+        try {
+            this.cache.get(key).refreshAll();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void refresh(ReportTypeEnum key) {
-        throw new RuntimeException("多级cache不支持刷新");
+    public void refreshAll() {
+        for (var key : this.cache.asMap().keySet()) {
+            this.refresh(key);
+        }
+    }
+
+    @Override
+    public View<ReportTypeEnum, View<MinFeeEnum, ?>> show() {
+        View<ReportTypeEnum, View<MinFeeEnum, ?>> view = new View<>();
+        view.size = this.cache.size();
+        view.stats = this.cache.stats();
+        view.cache = Maps.newConcurrentMap();
+        for (var key : this.cache.asMap().keySet()) {
+            try {
+                view.cache.put(key, this.cache.get(key).show());
+            } catch (Exception e) {
+                this.logger.warn(e.getMessage());
+                continue;
+            }
+        }
+        return view;
     }
 
     @Override

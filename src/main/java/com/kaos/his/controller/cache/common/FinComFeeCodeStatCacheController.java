@@ -28,7 +28,7 @@ public class FinComFeeCodeStatCacheController {
      * 检索开关变量的值
      */
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public View<MinFeeEnum, FinComFeeCodeStat> show(@NotNull(message = "报表类型不能为空") ReportTypeEnum reportType) {
+    public View<MinFeeEnum, ?> show(@NotNull(message = "报表类型不能为空") ReportTypeEnum reportType) {
         return this.feeCodeStatCache.getValue(reportType).show();
     }
 
