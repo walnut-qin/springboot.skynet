@@ -47,8 +47,8 @@ public class UpdateStateTask {
         /**
          * 线程池
          */
-        ThreadPoolExecutor missionTask = new ThreadPoolExecutor(EscortController.stateLockHelper.getLockSize(),
-                EscortController.stateLockHelper.getLockSize(),
+        ThreadPoolExecutor missionTask = new ThreadPoolExecutor(EscortController.stateLockHelper.getSize(),
+                EscortController.stateLockHelper.getSize(),
                 2, TimeUnit.HOURS,
                 new LinkedBlockingDeque<Runnable>());
 

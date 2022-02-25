@@ -1,4 +1,4 @@
-package com.kaos.helper.lock;
+package com.kaos.util.helper;
 
 public interface LockHelper {
     /**
@@ -6,7 +6,7 @@ public interface LockHelper {
      * 
      * @return
      */
-    Integer getLockSize();
+    Integer getSize();
 
     /**
      * 映射到锁对象

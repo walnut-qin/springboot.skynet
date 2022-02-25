@@ -22,7 +22,8 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.his.service.inf.inpatient.surgery.SurgeryService;
 import com.kaos.util.Gsons;
-import com.kaos.util.RestTemplates;
+import com.kaos.util.HttpClient;
+import com.kaos.util.HttpClients;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -33,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @Validated
 @RestController
@@ -63,7 +63,7 @@ public class SurgeryController {
     /**
      * HttpHelper
      */
-    RestTemplate restTemplate = RestTemplates.newRestTemplate();
+    HttpClient httpClient = HttpClients.newHttpClient(HttpClients.DOCARE_SERVER);
 
     /**
      * 构造响应体元素
@@ -248,9 +248,7 @@ public class SurgeryController {
         reqBody.applyNos = rs.stream().map((x) -> {
             return x.operationNo;
         }).toList();
-        var stateMap = this.restTemplate.postForObject(
-                String.format("http://%s%s", RestTemplates.DOCARE_SERVER, "/ms/operation/queryStates"), reqBody,
-                QueryStatesRsp.class).states;
+        var stateMap = this.httpClient.postForObject("ms/operation/queryStates", reqBody, QueryStatesRsp.class).states;
 
         // 构造响应体
         var rspBodies = new QueryAppliesRsp();
