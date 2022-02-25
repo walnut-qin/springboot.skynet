@@ -2,7 +2,7 @@ package com.kaos.his.controller.impl.cache.common.undrug;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.inf.cache.ICacheController;
+import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
 import com.kaos.inf.ICache;
 import com.kaos.inf.ICache.View;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/common/undrug/info")
-public class FinComUndrugInfoCacheController implements ICacheController<String, FinComUndrugInfo> {
+public class FinComUndrugInfoCacheControllerImpl implements CacheController<String, FinComUndrugInfo> {
     /**
      * 实体信息服务
      */

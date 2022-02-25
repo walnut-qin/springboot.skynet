@@ -2,7 +2,7 @@ package com.kaos.his.controller.impl.cache.inpatient;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.inf.cache.ICacheController;
+import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.inf.ICache;
 import com.kaos.inf.ICache.View;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/inpatient/main")
-public class FinIprInMainInfoCacheController implements ICacheController<String, FinIprInMainInfo> {
+public class FinIprInMainInfoCacheControllerImpl implements CacheController<String, FinIprInMainInfo> {
     /**
      * 实体信息服务
      */

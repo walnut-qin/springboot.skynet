@@ -2,7 +2,7 @@ package com.kaos.his.controller.impl.cache.inpatient;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.inf.cache.ICacheController;
+import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.inpatient.ComBedInfo;
 import com.kaos.inf.ICache;
 import com.kaos.inf.ICache.View;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/inpatient/bed")
-public class ComBedInfoCacheController implements ICacheController<String, ComBedInfo> {
+public class ComBedInfoCacheControllerImpl implements CacheController<String, ComBedInfo> {
     /**
      * 实体信息服务
      */

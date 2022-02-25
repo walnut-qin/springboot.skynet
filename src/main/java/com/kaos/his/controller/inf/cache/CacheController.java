@@ -7,7 +7,7 @@ import com.kaos.inf.ICache.View;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-public interface ICacheController<K, V> {
+public interface CacheController<K, V> {
     /**
      * 展示cache内容
      */

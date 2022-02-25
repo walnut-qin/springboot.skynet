@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/common/config/map")
-public class ConfigMapCacheController implements CacheController<String, ConfigMap> {
+public class ConfigMapCacheControllerImpl implements CacheController<String, ConfigMap> {
     /**
      * 实体信息服务
      */

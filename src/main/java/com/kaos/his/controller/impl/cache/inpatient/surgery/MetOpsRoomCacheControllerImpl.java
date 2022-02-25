@@ -2,7 +2,7 @@ package com.kaos.his.controller.impl.cache.inpatient.surgery;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.inf.cache.ICacheController;
+import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.inf.ICache;
 import com.kaos.inf.ICache.View;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/inpatient/surgery/room")
-public class MetOpsRoomCacheController implements ICacheController<String, MetOpsRoom> {
+public class MetOpsRoomCacheControllerImpl implements CacheController<String, MetOpsRoom> {
     /**
      * 实体信息服务
      */

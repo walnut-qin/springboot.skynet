@@ -9,7 +9,7 @@ public interface SwitchController {
     /**
      * 查询开关状态
      * 
-     * @param name
+     * @param switchName 开关名称
      * @return
      */
     Boolean queryState(@NotBlank(message = "开关名不能为空") String switchName);

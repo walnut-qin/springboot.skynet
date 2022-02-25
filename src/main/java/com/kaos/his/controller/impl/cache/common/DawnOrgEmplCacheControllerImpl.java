@@ -2,7 +2,7 @@ package com.kaos.his.controller.impl.cache.common;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.inf.cache.ICacheController;
+import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.inf.ICache;
 import com.kaos.inf.ICache.View;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/common/empl")
-public class DawnOrgEmplCacheController implements ICacheController<String, DawnOrgEmpl> {
+public class DawnOrgEmplCacheControllerImpl implements CacheController<String, DawnOrgEmpl> {
     /**
      * 实体信息服务
      */

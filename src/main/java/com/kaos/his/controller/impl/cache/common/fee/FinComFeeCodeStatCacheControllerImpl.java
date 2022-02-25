@@ -2,7 +2,7 @@ package com.kaos.his.controller.impl.cache.common.fee;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.inf.cache.ICacheController;
+import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.ReportTypeEnum;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/common/fee/code")
-public class FinComFeeCodeStatCacheController
-        implements ICacheController<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> {
+public class FinComFeeCodeStatCacheControllerImpl
+        implements CacheController<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> {
     /**
      * 实体信息服务
      */
