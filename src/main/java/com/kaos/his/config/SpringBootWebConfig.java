@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.kaos.helper.gson.converter.EnumTypeConverter;
 import com.kaos.helper.gson.impl.GsonHelperImpl;
+import com.kaos.his.config.http.message.converter.BooleanMessageConverter;
 import com.kaos.inf.IEnum;
 
 import org.springframework.context.annotation.Configuration;
@@ -72,6 +73,7 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
         // 设置定制转换器，插入队列最前段，给予最高优先级
         converters.add(0, new BufferedImageHttpMessageConverter());
         converters.add(0, new GsonHttpMessageConverter(new GsonHelperImpl("yyyy-MM-dd HH:mm:ss").getGson()));
+        converters.add(0, new BooleanMessageConverter());
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
     }
