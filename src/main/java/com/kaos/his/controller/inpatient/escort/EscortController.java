@@ -8,10 +8,6 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.kaos.helper.lock.LockHelper;
-import com.kaos.helper.lock.impl.LockHelperImpl;
-import com.kaos.helper.type.TypeHelper;
-import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.escort.entity.EscortActionRec;
 import com.kaos.his.controller.inpatient.escort.entity.EscortStateRec;
 import com.kaos.his.controller.inpatient.escort.entity.QueryAnnexInDeptRspBody;
@@ -23,6 +19,10 @@ import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 import com.kaos.his.service.inf.inpatient.escort.AnnexService;
 import com.kaos.his.service.inf.inpatient.escort.EscortService;
+import com.kaos.util.helper.DateHelper;
+import com.kaos.util.helper.ListHelper;
+import com.kaos.util.helper.LockHelper;
+import com.kaos.util.helper.impl.LockHelperImpl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,14 @@ public class EscortController {
     /**
      * 基本类型助手
      */
-    TypeHelper typeHelper = new TypeHelperImpl();
+    @Autowired
+    ListHelper listHelper;
+
+    /**
+     * 日期类型助手
+     */
+    @Autowired
+    DateHelper dateHelper;
 
     /**
      * 20个陪护证状态锁
@@ -162,8 +169,8 @@ public class EscortController {
         rspBody.patientCardNo = srvRt.patientCardNo;
         rspBody.escortCardNo = srvRt.helperCardNo;
         if (srvRt.associateEntity.stateRecs != null) {
-            rspBody.regDate = this.typeHelper.getFirst(srvRt.associateEntity.stateRecs).recDate;
-            rspBody.state = this.typeHelper.getLast(srvRt.associateEntity.stateRecs).state.getValue();
+            rspBody.regDate = this.listHelper.getFirst(srvRt.associateEntity.stateRecs).recDate;
+            rspBody.state = this.listHelper.getLast(srvRt.associateEntity.stateRecs).state.getValue();
         }
 
         return rspBody;
@@ -190,7 +197,7 @@ public class EscortController {
                 if (fip.associateEntity.patient != null) {
                     var patient = fip.associateEntity.patient;
                     // 年龄
-                    rspItem.age = this.typeHelper.getAge(patient.birthday).toString();
+                    rspItem.age = this.dateHelper.getAge(patient.birthday).toString();
                     if (patient instanceof Inpatient) {
                         var inpatient = (Inpatient) patient;
                         // 科室
@@ -273,7 +280,7 @@ public class EscortController {
                 // 性别
                 rspItem.sex = helper.sex;
                 // 年龄
-                rspItem.age = this.typeHelper.getAge(helper.birthday).toString();
+                rspItem.age = this.dateHelper.getAge(helper.birthday).toString();
             }
             if (rt.associateEntity.finIprPrepayIn != null) {
                 var fip = rt.associateEntity.finIprPrepayIn;

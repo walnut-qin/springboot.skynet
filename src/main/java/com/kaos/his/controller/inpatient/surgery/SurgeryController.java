@@ -10,8 +10,6 @@ import javax.validation.constraints.NotNull;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.kaos.helper.type.TypeHelper;
-import com.kaos.helper.type.impl.TypeHelperImpl;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesReq;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesRsp;
 import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesReq;
@@ -22,8 +20,10 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.his.service.inf.inpatient.surgery.SurgeryService;
 import com.kaos.util.Gsons;
-import com.kaos.util.HttpClient;
-import com.kaos.util.HttpClients;
+import com.kaos.util.HttpHelpers;
+import com.kaos.util.helper.DateHelper;
+import com.kaos.util.helper.HttpHelper;
+import com.kaos.util.helper.ListHelper;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -52,7 +52,14 @@ public class SurgeryController {
     /**
      * 基本类型助手
      */
-    TypeHelper typeHelper = new TypeHelperImpl();
+    @Autowired
+    ListHelper listHelper;
+
+    /**
+     * 时间类型助手
+     */
+    @Autowired
+    DateHelper dateHelper;
 
     /**
      * 接口：手术服务
@@ -63,7 +70,7 @@ public class SurgeryController {
     /**
      * HttpHelper
      */
-    HttpClient httpClient = HttpClients.newHttpClient(HttpClients.DOCARE_SERVER);
+    HttpHelper httpClient = HttpHelpers.newHttpClient(HttpHelpers.DOCARE_SERVER);
 
     /**
      * 构造响应体元素
@@ -109,7 +116,7 @@ public class SurgeryController {
             if (inMainInfo.associateEntity.patientInfo != null) {
                 rspBody.name = inMainInfo.associateEntity.patientInfo.name;
                 rspBody.sex = inMainInfo.associateEntity.patientInfo.sex;
-                rspBody.age = this.typeHelper.getAge(inMainInfo.associateEntity.patientInfo.birthday).toString();
+                rspBody.age = this.dateHelper.getAge(inMainInfo.associateEntity.patientInfo.birthday).toString();
             } else {
                 rspBody.name = inMainInfo.name;
             }
@@ -152,7 +159,7 @@ public class SurgeryController {
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper1));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper2));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper3));
-            rspBody.helperNames = this.typeHelper.join(";", reg.stream().map(new Function<MetOpsArrange, String>() {
+            rspBody.helperNames = this.listHelper.join(";", reg.stream().map(new Function<MetOpsArrange, String>() {
                 @Override
                 public @Nullable String apply(@Nullable MetOpsArrange input) {
                     if (input == null || input.associateEntity.employee == null) {
@@ -187,7 +194,7 @@ public class SurgeryController {
             reg.clear();
             reg.add(arranges.get(SurgeryArrangeRoleEnum.WashingHandNurse));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.WashingHandNurse1));
-            rspBody.washNurseNames = this.typeHelper.join(";", reg.stream().map(new Function<MetOpsArrange, String>() {
+            rspBody.washNurseNames = this.listHelper.join(";", reg.stream().map(new Function<MetOpsArrange, String>() {
                 @Override
                 public @Nullable String apply(@Nullable MetOpsArrange input) {
                     if (input == null || input.associateEntity.employee == null) {
@@ -202,7 +209,7 @@ public class SurgeryController {
             reg.clear();
             reg.add(arranges.get(SurgeryArrangeRoleEnum.ItinerantNurse));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.ItinerantNurse1));
-            rspBody.itinerantNurseNames = this.typeHelper.join(";",
+            rspBody.itinerantNurseNames = this.listHelper.join(";",
                     reg.stream().map(new Function<MetOpsArrange, String>() {
                         @Override
                         public @Nullable String apply(@Nullable MetOpsArrange input) {

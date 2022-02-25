@@ -1,34 +1,16 @@
-package com.kaos.helper.type.impl;
+package com.kaos.util.helper.impl;
 
 import java.security.InvalidParameterException;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
-import com.kaos.helper.type.TypeHelper;
-import com.kaos.helper.type.entity.Age;
 import com.kaos.his.enums.impl.common.NoonEnum;
+import com.kaos.util.helper.DateHelper;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class TypeHelperImpl implements TypeHelper {
-    @Override
-    public String join(String separator, Collection<String> items) {
-        String ret = null;
-        for (String item : items) {
-            if (item == null) {
-                continue;
-            } else if (ret == null) {
-                ret = item;
-            } else {
-                ret += String.format("%s%s", separator, item);
-            }
-        }
-        return ret;
-    }
-
+public class DateHelperImpl implements DateHelper {
     @Override
     public Age getAge(Date birthday) {
         // 合法性判断
@@ -124,24 +106,6 @@ public class TypeHelperImpl implements TypeHelper {
             return NoonEnum.下午;
         } else {
             return NoonEnum.夜班;
-        }
-    }
-
-    @Override
-    public <T> T getFirst(List<T> list) {
-        if (list == null || list.isEmpty()) {
-            return null;
-        } else {
-            return list.get(0);
-        }
-    }
-
-    @Override
-    public <T> T getLast(List<T> list) {
-        if (list == null || list.isEmpty()) {
-            return null;
-        } else {
-            return list.get(list.size() - 1);
         }
     }
 }
