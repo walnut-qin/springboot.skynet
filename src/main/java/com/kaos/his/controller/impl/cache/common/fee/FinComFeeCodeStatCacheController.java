@@ -1,8 +1,7 @@
-package com.kaos.his.controller.cache.common;
+package com.kaos.his.controller.impl.cache.common.fee;
 
-import javax.validation.constraints.NotNull;
-
-import com.kaos.his.entity.common.FinComFeeCodeStat;
+import com.kaos.his.controller.inf.cache.ICacheController;
+import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.ReportTypeEnum;
 import com.kaos.inf.ICache;
@@ -16,35 +15,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping("/ms/cache/common/feeCode")
-public class FinComFeeCodeStatCacheController {
+@RequestMapping("/ms/cache/common/fee/code")
+public class FinComFeeCodeStatCacheController
+        implements ICacheController<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> {
     /**
      * 实体信息服务
      */
     @Autowired
     ICache<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> feeCodeStatCache;
 
-    /**
-     * 检索开关变量的值
-     */
+    @Override
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public View<MinFeeEnum, ?> show(@NotNull(message = "报表类型不能为空") ReportTypeEnum reportType) {
-        return this.feeCodeStatCache.getValue(reportType).show();
+    public View<ReportTypeEnum, ?> show() {
+        return this.feeCodeStatCache.show();
     }
 
-    /**
-     * 刷新缓存
-     */
+    @Override
     @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-    public String refresh(@NotNull(message = "报表类型不能为空") ReportTypeEnum reportType,
-            @NotNull(message = "最小费用编码不能为空") MinFeeEnum minFee) {
-        this.feeCodeStatCache.getValue(reportType).refresh(minFee);
-        return String.format("更新缓存<%s, %s>成功", reportType.getDescription(), minFee.getDescription());
+    public String refresh(ReportTypeEnum key) {
+        this.feeCodeStatCache.refresh(key);
+        return String.format("更新缓存%s成功", key);
     }
 
-    /**
-     * 清空缓存
-     */
+    @Override
+    @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    public String refreshAll() {
+        this.feeCodeStatCache.refreshAll();
+        return "更新缓存成功";
+    }
+
+    @Override
     @RequestMapping(value = "clear", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String clear() {
         this.feeCodeStatCache.invalidateAll();

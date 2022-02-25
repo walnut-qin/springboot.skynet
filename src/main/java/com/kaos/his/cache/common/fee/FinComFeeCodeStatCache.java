@@ -1,4 +1,4 @@
-package com.kaos.his.cache.common;
+package com.kaos.his.cache.common.fee;
 
 import java.util.concurrent.TimeUnit;
 
