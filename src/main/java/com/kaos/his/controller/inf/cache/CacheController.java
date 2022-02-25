@@ -2,7 +2,7 @@ package com.kaos.his.controller.inf.cache;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.inf.ICache.View;
+import com.kaos.his.cache.Cache.View;
 
 import org.springframework.validation.annotation.Validated;
 

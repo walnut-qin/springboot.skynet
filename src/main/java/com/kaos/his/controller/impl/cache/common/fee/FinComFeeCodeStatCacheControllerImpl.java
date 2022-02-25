@@ -2,12 +2,12 @@ package com.kaos.his.controller.impl.cache.common.fee;
 
 import javax.validation.constraints.NotBlank;
 
+import com.kaos.his.cache.Cache;
+import com.kaos.his.cache.Cache.View;
 import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.enums.common.ReportTypeEnum;
-import com.kaos.inf.ICache;
-import com.kaos.inf.ICache.View;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/ms/cache/common/fee/code")
 public class FinComFeeCodeStatCacheControllerImpl
-        implements CacheController<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> {
+        implements CacheController<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>> {
     /**
      * 实体信息服务
      */
     @Autowired
-    ICache<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> feeCodeStatCache;
+    Cache<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>> feeCodeStatCache;
 
     @Override
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

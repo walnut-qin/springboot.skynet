@@ -1,13 +1,13 @@
-package com.kaos.his.cache.inpatient;
+package com.kaos.his.cache.impl.inpatient;
 
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.inpatient.ComBedInfo;
 import com.kaos.his.mapper.inpatient.ComBedInfoMapper;
-import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * @param 过期 永不
  */
 @Component
-public class ComBedInfoCache implements ICache<String, ComBedInfo> {
+public class ComBedInfoCache implements Cache<String, ComBedInfo> {
     /**
      * 数据库接口
      */

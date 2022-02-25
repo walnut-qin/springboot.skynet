@@ -2,10 +2,10 @@ package com.kaos.his.controller.impl.cache.common.undrug;
 
 import javax.validation.constraints.NotBlank;
 
+import com.kaos.his.cache.Cache;
+import com.kaos.his.cache.Cache.View;
 import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
-import com.kaos.inf.ICache;
-import com.kaos.inf.ICache.View;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,7 @@ public class FinComUndrugInfoCacheControllerImpl implements CacheController<Stri
      * 实体信息服务
      */
     @Autowired
-    ICache<String, FinComUndrugInfo> undrugInfoCache;
+    Cache<String, FinComUndrugInfo> undrugInfoCache;
 
     @Override
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

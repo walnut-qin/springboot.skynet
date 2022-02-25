@@ -8,6 +8,7 @@ import java.util.function.ToDoubleFunction;
 import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.TreeMultimap;
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
@@ -17,7 +18,6 @@ import com.kaos.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
 import com.kaos.his.service.inf.inpatient.fee.report.DayReportService;
-import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.javatuples.Pair;
@@ -61,13 +61,13 @@ public class DayReportServiceImpl implements DayReportService {
      * 职员cache
      */
     @Autowired
-    ICache<String, DawnOrgEmpl> emplCache;
+    Cache<String, DawnOrgEmpl> emplCache;
 
     /**
      * 科室cache
      */
     @Autowired
-    ICache<String, DawnOrgDept> deptCache;
+    Cache<String, DawnOrgDept> deptCache;
 
     /**
      * 以独立事务更新指定的日结

@@ -1,13 +1,13 @@
-package com.kaos.his.cache.inpatient;
+package com.kaos.his.cache.impl.inpatient;
 
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.his.mapper.inpatient.FinIprInMainInfoMapper;
-import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * @param 过期 永不
  */
 @Component
-public class FinIprInMainInfoCache implements ICache<String, FinIprInMainInfo> {
+public class FinIprInMainInfoCache implements Cache<String, FinIprInMainInfo> {
     /**
      * 数据库接口
      */

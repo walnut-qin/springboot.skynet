@@ -1,13 +1,13 @@
-package com.kaos.his.cache.inpatient.surgery;
+package com.kaos.his.cache.impl.common;
 
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.kaos.his.entity.inpatient.surgery.MetOpsRoom;
-import com.kaos.his.mapper.inpatient.surgery.MetOpsRoomMapper;
-import com.kaos.inf.ICache;
+import com.kaos.his.cache.Cache;
+import com.kaos.his.entity.common.ComPatientInfo;
+import com.kaos.his.mapper.common.ComPatientInfoMapper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,40 +15,40 @@ import org.springframework.stereotype.Component;
 
 /**
  * @param 类型 缓存
- * @param 映射 手术间编码 -> 手术间信息
- * @param 容量 100
+ * @param 映射 患者卡号 -> 患者信息
+ * @param 容量 300
  * @param 刷频 1次/1天
  * @param 过期 永不
  */
 @Component
-public class MetOpsRoomCache implements ICache<String, MetOpsRoom> {
+public class ComPatientInfoCache implements Cache<String, ComPatientInfo> {
     /**
      * 数据库接口
      */
     @Autowired
-    MetOpsRoomMapper metOpsRoomMapper;
+    ComPatientInfoMapper patientInfoMapper;
 
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(MetOpsRoomCache.class);
+    Logger logger = Logger.getLogger(ComPatientInfoCache.class);
 
     /**
      * Loading cache
      */
-    LoadingCache<String, MetOpsRoom> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
+    LoadingCache<String, ComPatientInfo> cache = CacheBuilder.newBuilder()
+            .maximumSize(300)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
-            .build(new CacheLoader<String, MetOpsRoom>() {
+            .build(new CacheLoader<String, ComPatientInfo>() {
                 @Override
-                public MetOpsRoom load(String key) throws Exception {
-                    return MetOpsRoomCache.this.metOpsRoomMapper.queryMetOpsRoom(key);
+                public ComPatientInfo load(String key) throws Exception {
+                    return ComPatientInfoCache.this.patientInfoMapper.queryPatientInfo(key);
                 };
             });
 
     @Override
-    public MetOpsRoom getValue(String key) {
+    public ComPatientInfo getValue(String key) {
         try {
             if (key == null) {
                 this.logger.warn("键值为空");
@@ -75,8 +75,8 @@ public class MetOpsRoomCache implements ICache<String, MetOpsRoom> {
     }
 
     @Override
-    public View<String, MetOpsRoom> show() {
-        View<String, MetOpsRoom> view = new View<>();
+    public View<String, ComPatientInfo> show() {
+        View<String, ComPatientInfo> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

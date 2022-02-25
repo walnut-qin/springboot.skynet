@@ -1,13 +1,13 @@
-package com.kaos.his.cache.common.config;
+package com.kaos.his.cache.impl.common.config;
 
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.kaos.his.entity.common.config.ConfigSwitch;
-import com.kaos.his.mapper.common.config.ConfigSwitchMapper;
-import com.kaos.inf.ICache;
+import com.kaos.his.cache.Cache;
+import com.kaos.his.entity.common.config.ConfigMap;
+import com.kaos.his.mapper.common.config.ConfigMapMapper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,40 +15,40 @@ import org.springframework.stereotype.Component;
 
 /**
  * @param 类型 缓存
- * @param 映射 开关编码 -> 开关信息
+ * @param 映射 变量名 -> 变量信息
  * @param 容量 100
  * @param 刷频 1次/1天
  * @param 过期 永不
  */
 @Component
-public class ConfigSwitchCache implements ICache<String, ConfigSwitch> {
+public class ConfigMapCache implements Cache<String, ConfigMap> {
     /**
      * 数据库接口
      */
     @Autowired
-    ConfigSwitchMapper switchMapper;
+    ConfigMapMapper configMapMapper;
 
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(ConfigSwitchCache.class);
+    Logger logger = Logger.getLogger(ConfigMapCache.class);
 
     /**
      * Loading cache
      */
-    LoadingCache<String, ConfigSwitch> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, ConfigMap> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
-            .build(new CacheLoader<String, ConfigSwitch>() {
+            .build(new CacheLoader<String, ConfigMap>() {
                 @Override
-                public ConfigSwitch load(String key) throws Exception {
-                    return ConfigSwitchCache.this.switchMapper.queryConfigSwitch(key);
+                public ConfigMap load(String key) throws Exception {
+                    return ConfigMapCache.this.configMapMapper.queryMapValue(key);
                 };
             });
 
     @Override
-    public ConfigSwitch getValue(String key) {
+    public ConfigMap getValue(String key) {
         try {
             if (key == null) {
                 this.logger.warn("键值为空");
@@ -75,8 +75,8 @@ public class ConfigSwitchCache implements ICache<String, ConfigSwitch> {
     }
 
     @Override
-    public View<String, ConfigSwitch> show() {
-        View<String, ConfigSwitch> view = new View<>();
+    public View<String, ConfigMap> show() {
+        View<String, ConfigMap> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

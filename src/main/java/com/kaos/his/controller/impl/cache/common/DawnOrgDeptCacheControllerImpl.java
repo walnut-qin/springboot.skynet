@@ -2,10 +2,10 @@ package com.kaos.his.controller.impl.cache.common;
 
 import javax.validation.constraints.NotBlank;
 
+import com.kaos.his.cache.Cache;
+import com.kaos.his.cache.Cache.View;
 import com.kaos.his.controller.inf.cache.CacheController;
 import com.kaos.his.entity.common.DawnOrgDept;
-import com.kaos.inf.ICache;
-import com.kaos.inf.ICache.View;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,7 @@ public class DawnOrgDeptCacheControllerImpl implements CacheController<String, D
      * 实体信息服务
      */
     @Autowired
-    ICache<String, DawnOrgDept> deptCache;
+    Cache<String, DawnOrgDept> deptCache;
 
     @Override
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

@@ -1,4 +1,4 @@
-package com.kaos.his.cache.common.fee;
+package com.kaos.his.cache.impl.common.fee;
 
 import java.util.concurrent.TimeUnit;
 
@@ -7,10 +7,10 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.kaos.his.enums.common.ReportTypeEnum;
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.enums.common.MinFeeEnum;
 import com.kaos.his.mapper.common.FinComFeeCodeStatMapper;
-import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * @param 过期 永不
  */
 @Component
-public class FinComFeeCodeStatCache implements ICache<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> {
+public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>> {
     /**
      * 数据库接口
      */
@@ -39,13 +39,13 @@ public class FinComFeeCodeStatCache implements ICache<ReportTypeEnum, ICache<Min
     /**
      * Loading cache
      */
-    LoadingCache<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>> cache = CacheBuilder.newBuilder()
+    LoadingCache<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>> cache = CacheBuilder.newBuilder()
             .maximumSize(20)
             .recordStats()
-            .build(new CacheLoader<ReportTypeEnum, ICache<MinFeeEnum, FinComFeeCodeStat>>() {
+            .build(new CacheLoader<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>>() {
                 @Override
-                public ICache<MinFeeEnum, FinComFeeCodeStat> load(ReportTypeEnum key1) throws Exception {
-                    return new ICache<MinFeeEnum, FinComFeeCodeStat>() {
+                public Cache<MinFeeEnum, FinComFeeCodeStat> load(ReportTypeEnum key1) throws Exception {
+                    return new Cache<MinFeeEnum, FinComFeeCodeStat>() {
                         Logger logger = Logger.getLogger(this.getClass());
 
                         LoadingCache<MinFeeEnum, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
@@ -104,7 +104,7 @@ public class FinComFeeCodeStatCache implements ICache<ReportTypeEnum, ICache<Min
             });
 
     @Override
-    public ICache<MinFeeEnum, FinComFeeCodeStat> getValue(ReportTypeEnum key) {
+    public Cache<MinFeeEnum, FinComFeeCodeStat> getValue(ReportTypeEnum key) {
         try {
             if (key == null) {
                 this.logger.warn("键值为空");

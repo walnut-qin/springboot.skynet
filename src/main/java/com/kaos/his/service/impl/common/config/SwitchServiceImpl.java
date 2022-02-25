@@ -1,9 +1,9 @@
 package com.kaos.his.service.impl.common.config;
 
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.config.ConfigSwitch;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.service.inf.common.config.SwitchService;
-import com.kaos.inf.ICache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class SwitchServiceImpl implements SwitchService {
      * 开关cache
      */
     @Autowired
-    ICache<String, ConfigSwitch> switchCache;
+    Cache<String, ConfigSwitch> switchCache;
 
     @Override
     public Boolean querySwitchValue(String key) {

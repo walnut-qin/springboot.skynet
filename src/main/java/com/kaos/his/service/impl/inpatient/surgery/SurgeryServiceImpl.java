@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import com.google.common.collect.Maps;
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
@@ -21,7 +22,6 @@ import com.kaos.his.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.his.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.his.service.inf.inpatient.surgery.SurgeryService;
-import com.kaos.inf.ICache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,43 +50,43 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 住院接口
      */
     @Autowired
-    ICache<String, FinIprInMainInfo> inMainInfoCache;
+    Cache<String, FinIprInMainInfo> inMainInfoCache;
 
     /**
      * 患者基本信息cache
      */
     @Autowired
-    ICache<String, ComPatientInfo> patientInfoCache;
+    Cache<String, ComPatientInfo> patientInfoCache;
 
     /**
      * 科室信息缓存
      */
     @Autowired
-    ICache<String, DawnOrgDept> deptCache;
+    Cache<String, DawnOrgDept> deptCache;
 
     /**
      * 职工接口
      */
     @Autowired
-    ICache<String, DawnOrgEmpl> emplCache;
+    Cache<String, DawnOrgEmpl> emplCache;
 
     /**
      * 手术间接口
      */
     @Autowired
-    ICache<String, MetOpsRoom> metOpsRoomCache;
+    Cache<String, MetOpsRoom> metOpsRoomCache;
 
     /**
      * 床位接口
      */
     @Autowired
-    ICache<String, ComBedInfo> bedInfoCache;
+    Cache<String, ComBedInfo> bedInfoCache;
 
     /**
      * 开关缓存
      */
     @Autowired
-    ICache<String, ConfigSwitch> switchCache;
+    Cache<String, ConfigSwitch> switchCache;
 
     static class DeptOwnPredicate implements Predicate<MetOpsApply> {
         /**

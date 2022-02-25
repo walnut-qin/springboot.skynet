@@ -3,6 +3,7 @@ package com.kaos.his.service.impl.outpatient;
 import java.util.Date;
 
 import com.kaos.helper.type.TypeHelper;
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
@@ -12,7 +13,6 @@ import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.inf.outpatient.RegisterService;
-import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +34,19 @@ public class RegisterServiceImpl implements RegisterService {
      * 患者基本信息cache
      */
     @Autowired
-    ICache<String, ComPatientInfo> patientInfoCache;
+    Cache<String, ComPatientInfo> patientInfoCache;
 
     /**
      * 职工信息cache
      */
     @Autowired
-    ICache<String, DawnOrgEmpl> dawnOrgEmplCache;
+    Cache<String, DawnOrgEmpl> dawnOrgEmplCache;
 
     /**
      * 科室信息cache
      */
     @Autowired
-    ICache<String, DawnOrgDept> dawnOrgDeptCache;
+    Cache<String, DawnOrgDept> dawnOrgDeptCache;
 
     @Autowired
     TypeHelper typeHelper;

@@ -3,6 +3,7 @@ package com.kaos.his.service.impl.outpatient.fee;
 import java.util.Date;
 import java.util.List;
 
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
 import com.kaos.his.entity.common.undrug.FinComUndrugInfo;
@@ -16,7 +17,6 @@ import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.service.impl.outpatient.GcpServiceImpl;
 import com.kaos.his.service.inf.outpatient.fee.PricingService;
-import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,19 +46,19 @@ public class PricingServiceImpl implements PricingService {
      * 职工cache
      */
     @Autowired
-    ICache<String, DawnOrgEmpl> dawnOrgEmplCache;
+    Cache<String, DawnOrgEmpl> dawnOrgEmplCache;
 
     /**
      * 科室cache
      */
     @Autowired
-    ICache<String, DawnOrgDept> dawnOrgDeptCache;
+    Cache<String, DawnOrgDept> dawnOrgDeptCache;
 
     /**
      * 非药品信息cache
      */
     @Autowired
-    ICache<String, FinComUndrugInfo> undrugInfoCache;
+    Cache<String, FinComUndrugInfo> undrugInfoCache;
 
     @Transactional
     @Override

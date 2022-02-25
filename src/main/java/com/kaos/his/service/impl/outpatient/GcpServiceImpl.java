@@ -1,13 +1,13 @@
 package com.kaos.his.service.impl.outpatient;
 
 import com.google.common.base.Optional;
+import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.enums.common.TransTypeEnum;
 import com.kaos.his.enums.common.ValidStateEnum;
 import com.kaos.his.mapper.common.config.ConfigMapMapper;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.inf.outpatient.GcpService;
-import com.kaos.inf.ICache;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class GcpServiceImpl implements GcpService {
      * 患者基本信息缓存
      */
     @Autowired
-    ICache<String, ComPatientInfo> patientInfoCache;
+    Cache<String, ComPatientInfo> patientInfoCache;
 
     @Override
     public Boolean checkGcpPrivilege(String deptCode, String clinicCode) {
