@@ -1,6 +1,6 @@
 package com.kaos.his.enums.inpatient.surgery;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 /**
  * 手术检验结果

@@ -1,6 +1,6 @@
 package com.kaos.his.enums.inpatient.surgery;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum SurgeryKindEnum implements IEnum {
     普通("1", "普通"), 急诊("2", "急诊"), 日间("3", "日间"), 痔瘘("4", "痔瘘"), 预约出院("5", "腔镜"), 择期("6", "择期");

@@ -1,6 +1,6 @@
 package com.kaos.his.enums.pharmacy;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum DrugQualityEnum implements IEnum {
     麻醉药("1", "麻醉药"), 保管药("2", "保管药"), 普药("3", "普药"), 输液("4", "输液"), 精神药品("5", "精神药品"), 毒药("6", "毒药"), 医保药("7", "医保药"),

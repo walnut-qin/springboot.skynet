@@ -1,6 +1,6 @@
 package com.kaos.his.enums.outpatient.fee;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum FeeDetailPayFlagEnum implements IEnum {
     划价("0", "划价"), 收费("1", "收费"), 预收费团体体检("3", "预收费团体体检"), 药品预审核("4", "药品预审核");

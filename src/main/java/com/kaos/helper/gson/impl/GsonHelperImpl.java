@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kaos.helper.gson.GsonHelper;
 import com.kaos.helper.gson.adapter.EnumTypeAdapter;
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public class GsonHelperImpl implements GsonHelper {
     /**

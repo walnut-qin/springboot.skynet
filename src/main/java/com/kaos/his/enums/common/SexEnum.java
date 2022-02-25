@@ -1,6 +1,6 @@
 package com.kaos.his.enums.common;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum SexEnum implements IEnum {
     Male("M", "男"), Female("F", "女");

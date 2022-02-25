@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 
 import com.google.gson.*;
 import com.kaos.his.config.converter.EnumTypeConverter;
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public class EnumTypeAdapter<E extends IEnum> implements JsonSerializer<E>, JsonDeserializer<E> {
     @Override

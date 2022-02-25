@@ -1,6 +1,6 @@
 package com.kaos.his.enums.outpatient.fee;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum FeeDetailCancelFlagEnum implements IEnum {
     退费("0", "退费"), 正常("1", "正常"), 重打("2", "重打"), 注销("3", "注销");

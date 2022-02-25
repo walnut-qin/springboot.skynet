@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.kaos.his.config.converter.EnumTypeConverter;
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

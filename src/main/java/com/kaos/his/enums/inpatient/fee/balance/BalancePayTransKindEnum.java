@@ -1,6 +1,6 @@
 package com.kaos.his.enums.inpatient.fee.balance;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum BalancePayTransKindEnum implements IEnum {
     预交款("0", "预交款"), 结算款("1", "结算款");

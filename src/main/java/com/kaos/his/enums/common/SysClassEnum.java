@@ -1,6 +1,6 @@
 package com.kaos.his.enums.common;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 /**
  * 门诊系统类别，维护在COM_DICTIONARY的MZEXECBILL类型

@@ -1,6 +1,6 @@
 package com.kaos.his.enums.inpatient.fee.balance;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 /**
  * 结算标识

@@ -1,6 +1,6 @@
 package com.kaos.his.enums.inpatient.surgery;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum SurgeryArrangeRoleEnum implements IEnum {
     AnaesthesiaHelper("AnaesthesiaHelper", "麻醉助手"), Anaesthetist("Anaesthetist", "麻醉医生"), Helper1("Helper1", "手术助手"),

@@ -1,6 +1,6 @@
 package com.kaos.his.enums.common;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 /**
  * 最小费用编码，统计小类 {@code COM_DICTIONARY#TYPE = MINFEE}

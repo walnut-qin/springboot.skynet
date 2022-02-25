@@ -1,6 +1,6 @@
 package com.kaos.his.enums.common;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 /**
  * 药品/非药品 类别 {@code COM_DICTIONARY#TYPE = ITEMGRADE}

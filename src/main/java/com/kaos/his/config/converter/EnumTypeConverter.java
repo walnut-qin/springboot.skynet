@@ -1,6 +1,6 @@
 package com.kaos.his.config.converter;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 import org.springframework.core.convert.converter.Converter;
 

@@ -1,6 +1,6 @@
 package com.kaos.his.enums.common;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum BloodTypeEnum implements IEnum {
     A("01", "A"), B("02", "B"), O("03", "O"), AB("04", "AB");

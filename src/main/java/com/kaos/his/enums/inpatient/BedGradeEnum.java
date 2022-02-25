@@ -1,6 +1,6 @@
 package com.kaos.his.enums.inpatient;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 /**
  * 床位等级 {@code COM_DICTIONARY#TYPE = BEDGRADE}

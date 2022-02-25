@@ -1,6 +1,6 @@
 package com.kaos.his.enums.outpatient;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 /**
  * 门诊患者状态枚举

@@ -1,6 +1,6 @@
 package com.kaos.helper.http.enums;
 
-import com.kaos.inf.IEnum;
+import com.kaos.his.enums.IEnum;
 
 public enum ServerEnum implements IEnum {
     his("172.16.100.252", "8025"), docare("172.16.100.252", "8002"), proxy("172.16.100.252", "8003");
