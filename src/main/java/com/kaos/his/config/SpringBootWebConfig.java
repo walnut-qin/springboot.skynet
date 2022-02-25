@@ -24,7 +24,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SpringBootWebConfig implements WebMvcConfigurer {
     /**
-     * 自定义转换器（入参转换）
+     * 基于Gson枚举转换器的自定义转换器工厂
+     */
+    static class EnumTypeConverterFactory implements ConverterFactory<String, IEnum> {
+        @Override
+        public <T extends IEnum> Converter<String, T> getConverter(Class<T> targetType) {
+            return new EnumTypeConverter<>(targetType);
+        }
+    }
+
+    /**
+     * 注册converter，用于解析Http请求参数
      */
     @Override
     public void addFormatters(FormatterRegistry registry) {
@@ -56,17 +66,7 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 基于Gson枚举转换器的自定义转换器工厂
-     */
-    static class EnumTypeConverterFactory implements ConverterFactory<String, IEnum> {
-        @Override
-        public <T extends IEnum> Converter<String, T> getConverter(Class<T> targetType) {
-            return new EnumTypeConverter<>(targetType);
-        }
-    }
-
-    /**
-     * body转换
+     * 注册HttpMessageConverter，用于读写Http消息的body
      */
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
