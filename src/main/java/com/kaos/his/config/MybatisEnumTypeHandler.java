@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.kaos.helper.gson.converter.EnumTypeConverter;
+import com.kaos.his.config.converter.EnumTypeConverter;
 import com.kaos.inf.IEnum;
 
 import org.apache.ibatis.type.BaseTypeHandler;

@@ -3,7 +3,7 @@ package com.kaos.helper.gson.adapter;
 import java.lang.reflect.Type;
 
 import com.google.gson.*;
-import com.kaos.helper.gson.converter.EnumTypeConverter;
+import com.kaos.his.config.converter.EnumTypeConverter;
 import com.kaos.inf.IEnum;
 
 public class EnumTypeAdapter<E extends IEnum> implements JsonSerializer<E>, JsonDeserializer<E> {
