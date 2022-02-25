@@ -1,4 +1,4 @@
-package com.kaos.helper.gson;
+package com.kaos.util;
 
 import java.lang.reflect.Type;
 

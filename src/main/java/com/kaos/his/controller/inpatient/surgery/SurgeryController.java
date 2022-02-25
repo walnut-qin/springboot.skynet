@@ -249,7 +249,7 @@ public class SurgeryController {
             return x.operationNo;
         }).toList();
         var stateMap = this.restTemplate.postForObject(
-                String.format("%s%s", RestTemplates.DOCARE_SERVER, "/ms/operation/queryStates"), reqBody,
+                String.format("http://%s%s", RestTemplates.DOCARE_SERVER, "/ms/operation/queryStates"), reqBody,
                 QueryStatesRsp.class).states;
 
         // 构造响应体

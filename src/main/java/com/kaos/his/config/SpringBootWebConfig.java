@@ -2,10 +2,10 @@ package com.kaos.his.config;
 
 import java.util.List;
 
-import com.kaos.helper.utils.Gsons;
 import com.kaos.his.config.converter.DateTypeConverter;
 import com.kaos.his.config.converter.factory.EnumTypeConverterFactory;
 import com.kaos.his.config.message.converter.BooleanMessageConverter;
+import com.kaos.util.Gsons;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
