@@ -3,6 +3,7 @@ package com.kaos.his.config;
 import java.util.List;
 
 import com.kaos.his.config.converter.DateTypeConverter;
+import com.kaos.his.config.converter.StringTypeConverter;
 import com.kaos.his.config.converter.factory.EnumTypeConverterFactory;
 import com.kaos.his.config.message.converter.BooleanMessageConverter;
 import com.kaos.his.util.Gsons;
@@ -29,6 +30,9 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
 
         // 注册时间解析
         registry.addConverter(new DateTypeConverter());
+
+        // 注册字符串转换器
+        registry.addConverter(new StringTypeConverter());
 
         WebMvcConfigurer.super.addFormatters(registry);
     }
