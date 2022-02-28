@@ -1,6 +1,6 @@
 package com.kaos.his.controller.impl.cache.common.fee;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.kaos.his.cache.Cache;
 import com.kaos.his.cache.Cache.View;
@@ -34,7 +34,7 @@ public class FinComFeeCodeStatCacheControllerImpl
 
     @Override
     @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-    public String refresh(@NotBlank(message = "键值不能为空") ReportTypeEnum key) {
+    public String refresh(@NotNull(message = "键值不能为空") ReportTypeEnum key) {
         this.feeCodeStatCache.refresh(key);
         return String.format("更新缓存%s成功", key);
     }

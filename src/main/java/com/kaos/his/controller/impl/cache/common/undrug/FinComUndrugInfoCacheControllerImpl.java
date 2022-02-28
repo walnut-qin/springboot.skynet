@@ -1,6 +1,6 @@
 package com.kaos.his.controller.impl.cache.common.undrug;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.kaos.his.cache.Cache;
 import com.kaos.his.cache.Cache.View;
@@ -31,7 +31,7 @@ public class FinComUndrugInfoCacheControllerImpl implements CacheController<Stri
 
     @Override
     @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-    public String refresh(@NotBlank(message = "键值不能为空") String key) {
+    public String refresh(@NotNull(message = "键值不能为空") String key) {
         this.undrugInfoCache.refresh(key);
         return String.format("更新缓存%s成功", key);
     }
