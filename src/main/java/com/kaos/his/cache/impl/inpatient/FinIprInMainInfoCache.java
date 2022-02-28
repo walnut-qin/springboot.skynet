@@ -2,6 +2,7 @@ package com.kaos.his.cache.impl.inpatient;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -36,14 +37,15 @@ public class FinIprInMainInfoCache implements Cache<String, FinIprInMainInfo> {
     /**
      * Loading cache
      */
-    LoadingCache<String, FinIprInMainInfo> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, Optional<FinIprInMainInfo>> cache = CacheBuilder.newBuilder()
             .maximumSize(500)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
-            .build(new CacheLoader<String, FinIprInMainInfo>() {
+            .build(new CacheLoader<String, Optional<FinIprInMainInfo>>() {
                 @Override
-                public FinIprInMainInfo load(String key) throws Exception {
-                    return FinIprInMainInfoCache.this.inMainInfoMapper.queryInMainInfo(key);
+                public Optional<FinIprInMainInfo> load(String key) throws Exception {
+                    var ref = FinIprInMainInfoCache.this.inMainInfoMapper.queryInMainInfo(key);
+                    return Optional.fromNullable(ref);
                 };
             });
 
@@ -54,7 +56,7 @@ public class FinIprInMainInfoCache implements Cache<String, FinIprInMainInfo> {
                 this.logger.warn("键值为空");
                 return null;
             } else {
-                return this.cache.get(key);
+                return this.cache.get(key).orNull();
             }
         } catch (Exception e) {
             this.logger.warn(e.getMessage());
@@ -75,8 +77,8 @@ public class FinIprInMainInfoCache implements Cache<String, FinIprInMainInfo> {
     }
 
     @Override
-    public View<String, FinIprInMainInfo> show() {
-        View<String, FinIprInMainInfo> view = new View<>();
+    public View<String, Optional<FinIprInMainInfo>> show() {
+        View<String, Optional<FinIprInMainInfo>> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

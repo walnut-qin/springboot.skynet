@@ -2,6 +2,7 @@ package com.kaos.his.cache.impl.common;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -36,18 +37,18 @@ public class DawnOrgEmplCache implements Cache<String, DawnOrgEmpl> {
     /**
      * Loading cache
      */
-    LoadingCache<String, DawnOrgEmpl> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, Optional<DawnOrgEmpl>> cache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
-            .build(new CacheLoader<String, DawnOrgEmpl>() {
+            .build(new CacheLoader<String, Optional<DawnOrgEmpl>>() {
                 @Override
-                public DawnOrgEmpl load(String key) throws Exception {
-                    var empl = DawnOrgEmplCache.this.dawnOrgEmplMapper.queryEmployee(key);
-                    if (empl == null) {
-                        empl = DawnOrgEmplCache.this.dawnOrgEmplMapper.queryOuterEmployee(key);
+                public Optional<DawnOrgEmpl> load(String key) throws Exception {
+                    var ref = DawnOrgEmplCache.this.dawnOrgEmplMapper.queryEmployee(key);
+                    if (ref == null) {
+                        ref = DawnOrgEmplCache.this.dawnOrgEmplMapper.queryOuterEmployee(key);
                     }
-                    return empl;
+                    return Optional.fromNullable(ref);
                 };
             });
 
@@ -58,7 +59,7 @@ public class DawnOrgEmplCache implements Cache<String, DawnOrgEmpl> {
                 this.logger.warn("键值为空");
                 return null;
             } else {
-                return this.cache.get(key);
+                return this.cache.get(key).orNull();
             }
         } catch (Exception e) {
             this.logger.warn(e.getMessage());
@@ -79,8 +80,8 @@ public class DawnOrgEmplCache implements Cache<String, DawnOrgEmpl> {
     }
 
     @Override
-    public View<String, DawnOrgEmpl> show() {
-        View<String, DawnOrgEmpl> view = new View<>();
+    public View<String, Optional<DawnOrgEmpl>> show() {
+        View<String, Optional<DawnOrgEmpl>> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

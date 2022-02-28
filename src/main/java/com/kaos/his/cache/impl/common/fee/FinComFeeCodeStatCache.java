@@ -2,6 +2,7 @@ package com.kaos.his.cache.impl.common.fee;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -39,23 +40,24 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
     /**
      * Loading cache
      */
-    LoadingCache<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>> cache = CacheBuilder.newBuilder()
+    LoadingCache<ReportTypeEnum, Optional<Cache<MinFeeEnum, FinComFeeCodeStat>>> cache = CacheBuilder.newBuilder()
             .maximumSize(20)
             .recordStats()
-            .build(new CacheLoader<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>>() {
+            .build(new CacheLoader<ReportTypeEnum, Optional<Cache<MinFeeEnum, FinComFeeCodeStat>>>() {
                 @Override
-                public Cache<MinFeeEnum, FinComFeeCodeStat> load(ReportTypeEnum key1) throws Exception {
-                    return new Cache<MinFeeEnum, FinComFeeCodeStat>() {
+                public Optional<Cache<MinFeeEnum, FinComFeeCodeStat>> load(ReportTypeEnum key1) throws Exception {
+                    return Optional.fromNullable(new Cache<MinFeeEnum, FinComFeeCodeStat>() {
                         Logger logger = Logger.getLogger(this.getClass());
 
-                        LoadingCache<MinFeeEnum, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
+                        LoadingCache<MinFeeEnum, Optional<FinComFeeCodeStat>> cache = CacheBuilder.newBuilder()
                                 .maximumSize(100)
                                 .refreshAfterWrite(1, TimeUnit.DAYS)
                                 .recordStats()
-                                .build(new CacheLoader<MinFeeEnum, FinComFeeCodeStat>() {
+                                .build(new CacheLoader<MinFeeEnum, Optional<FinComFeeCodeStat>>() {
                                     @Override
-                                    public FinComFeeCodeStat load(MinFeeEnum key2) throws Exception {
-                                        return FinComFeeCodeStatCache.this.mapper.queryFeeCodeStat(key1, key2);
+                                    public Optional<FinComFeeCodeStat> load(MinFeeEnum key2) throws Exception {
+                                        var ref = FinComFeeCodeStatCache.this.mapper.queryFeeCodeStat(key1, key2);
+                                        return Optional.fromNullable(ref);
                                     };
                                 });
 
@@ -66,7 +68,7 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
                                     this.logger.warn("键值为空");
                                     return null;
                                 } else {
-                                    return this.cache.get(key);
+                                    return this.cache.get(key).orNull();
                                 }
                             } catch (Exception e) {
                                 this.logger.warn(e.getMessage());
@@ -87,8 +89,8 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
                         }
 
                         @Override
-                        public View<MinFeeEnum, FinComFeeCodeStat> show() {
-                            View<MinFeeEnum, FinComFeeCodeStat> view = new View<>();
+                        public View<MinFeeEnum, Optional<FinComFeeCodeStat>> show() {
+                            View<MinFeeEnum, Optional<FinComFeeCodeStat>> view = new View<>();
                             view.size = this.cache.size();
                             view.stats = this.cache.stats();
                             view.cache = this.cache.asMap();
@@ -99,7 +101,7 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
                         public void invalidateAll() {
                             this.cache.invalidateAll();
                         }
-                    };
+                    });
                 };
             });
 
@@ -110,7 +112,7 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
                 this.logger.warn("键值为空");
                 return null;
             } else {
-                return this.cache.get(key);
+                return this.cache.get(key).orNull();
             }
         } catch (Exception e) {
             this.logger.warn(e.getMessage());
@@ -121,7 +123,10 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
     @Override
     public void refresh(ReportTypeEnum key) {
         try {
-            this.cache.get(key).refreshAll();
+            var subCache = this.cache.get(key).orNull();
+            if (subCache != null) {
+                subCache.refreshAll();
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -142,7 +147,10 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
         view.cache = Maps.newConcurrentMap();
         for (var key : this.cache.asMap().keySet()) {
             try {
-                view.cache.put(key, this.cache.get(key).show());
+                var subCache = this.cache.get(key).orNull();
+                if (subCache != null) {
+                    view.cache.put(key, subCache.show());
+                }
             } catch (Exception e) {
                 this.logger.warn(e.getMessage());
                 continue;

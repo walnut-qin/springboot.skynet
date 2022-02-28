@@ -54,7 +54,12 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
                                 .maximumSize(100)
                                 .refreshAfterWrite(1, TimeUnit.DAYS)
                                 .recordStats()
-                                .build(null);
+                                .build(new CacheLoader<String, Optional<ConfigMap>>() {
+                                    public Optional<ConfigMap> load(String key2) throws Exception {
+                                        var ref = configMapMapper.queryMultiMapItemValue(key1, key2);
+                                        return Optional.fromNullable(ref);
+                                    };
+                                });
 
                         @Override
                         public ConfigMap getValue(String key) {

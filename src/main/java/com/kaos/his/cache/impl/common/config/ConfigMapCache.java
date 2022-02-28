@@ -44,7 +44,8 @@ public class ConfigMapCache implements Cache<String, ConfigMap> {
             .build(new CacheLoader<String, Optional<ConfigMap>>() {
                 @Override
                 public Optional<ConfigMap> load(String key) throws Exception {
-                    return Optional.fromNullable(ConfigMapCache.this.configMapMapper.queryMapValue(key));
+                    var ref = configMapMapper.queryMapValue(key);
+                    return Optional.fromNullable(ref);
                 };
             });
 

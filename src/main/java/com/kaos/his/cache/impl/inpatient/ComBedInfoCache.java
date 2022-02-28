@@ -2,6 +2,7 @@ package com.kaos.his.cache.impl.inpatient;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -36,14 +37,15 @@ public class ComBedInfoCache implements Cache<String, ComBedInfo> {
     /**
      * Loading cache
      */
-    LoadingCache<String, ComBedInfo> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, Optional<ComBedInfo>> cache = CacheBuilder.newBuilder()
             .maximumSize(500)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
-            .build(new CacheLoader<String, ComBedInfo>() {
+            .build(new CacheLoader<String, Optional<ComBedInfo>>() {
                 @Override
-                public ComBedInfo load(String key) throws Exception {
-                    return ComBedInfoCache.this.bedInfoMapper.queryBedInfo(key);
+                public Optional<ComBedInfo> load(String key) throws Exception {
+                    var ref = ComBedInfoCache.this.bedInfoMapper.queryBedInfo(key);
+                    return Optional.fromNullable(ref);
                 };
             });
 
@@ -54,7 +56,7 @@ public class ComBedInfoCache implements Cache<String, ComBedInfo> {
                 this.logger.warn("键值为空");
                 return null;
             } else {
-                return this.cache.get(key);
+                return this.cache.get(key).orNull();
             }
         } catch (Exception e) {
             this.logger.warn(e.getMessage());
@@ -75,8 +77,8 @@ public class ComBedInfoCache implements Cache<String, ComBedInfo> {
     }
 
     @Override
-    public View<String, ComBedInfo> show() {
-        View<String, ComBedInfo> view = new View<>();
+    public View<String, Optional<ComBedInfo>> show() {
+        View<String, Optional<ComBedInfo>> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();
