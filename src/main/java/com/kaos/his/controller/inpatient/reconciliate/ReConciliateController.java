@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
-import com.kaos.his.service.inf.inpatient.fee.report.ReConciliateService;
+import com.kaos.his.service.inf.inpatient.fee.report.ReconcileService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ReConciliateController {
      * 陪护证服务
      */
     @Autowired
-    ReConciliateService reConciliateService;
+    ReconcileService reConciliateService;
 
     @RequestMapping(value = "checkInpatientIncome", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String checkInpatientIncome(@NotNull(message = "开始时间不能为空") Date beginDate,

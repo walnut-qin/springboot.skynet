@@ -1,6 +1,6 @@
 package com.kaos.his.controller.impl.inpatient.fee.balance.report;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 
 import com.google.common.collect.Maps;
 import com.kaos.his.controller.MediaType;
@@ -10,6 +10,7 @@ import com.kaos.his.service.inf.inpatient.fee.report.ReconcileService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,6 @@ public class ReconcileControllerImpl implements ReconcileController {
     /**
      * 日志接口
      */
-    @Autowired
     Logger logger = Logger.getLogger(ReconcileControllerImpl.class);
 
     /**
@@ -32,7 +32,7 @@ public class ReconcileControllerImpl implements ReconcileController {
 
     @Override
     @RequestMapping(value = "check", method = RequestMethod.POST, produces = MediaType.JSON)
-    public CheckRsp check(@NotNull(message = "body不能为空") CheckReq req) {
+    public CheckRsp check(@RequestBody @Valid CheckReq req) {
         // 调用业务
         var data = this.reconcileService.checkInpatientIncome(req.beginDate, req.endDate);
 

@@ -10,9 +10,6 @@ import com.kaos.his.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.his.entity.inpatient.fee.FinIpbItemList;
 import com.kaos.his.entity.inpatient.fee.FinIpbMedicineList;
 
-import org.springframework.validation.annotation.Validated;
-
-@Validated
 public interface ReconcileController {
     /**
      * 费用和药品/非药品对账
@@ -22,18 +19,17 @@ public interface ReconcileController {
      */
     CheckRsp check(@NotNull(message = "body不能为空") CheckReq req);
 
-    @Validated
     public static class CheckReq {
         /**
          * 开始时间
          */
-        @NotNull
+        @NotNull(message = "开始时间不能为空")
         public Date beginDate = null;
 
         /**
          * 结束时间
          */
-        @NotNull
+        @NotNull(message = "结束时间不能为空")
         public Date endDate = null;
     }
 
