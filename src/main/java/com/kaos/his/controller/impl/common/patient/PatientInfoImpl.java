@@ -1,10 +1,9 @@
-package com.kaos.his.controller.common.entityinfo;
+package com.kaos.his.controller.impl.common.patient;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.controller.common.entityinfo.entity.QueryPatientInfoRspBody;
-import com.kaos.his.service.inf.common.PatientInfoService;
-import com.kaos.his.util.DateHelpers;
+import com.kaos.his.cache.impl.common.ComPatientInfoCache;
+import com.kaos.his.controller.inf.common.patient.PatientInfo;
 import com.kaos.his.util.helper.DateHelper;
 
 import org.apache.log4j.Logger;
@@ -16,39 +15,43 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping("/ms/common/entityinfo")
-public class EntityInfoController {
+@RequestMapping({ "/ms/common/patient/info", "/ms/common/entityinfo" })
+public class PatientInfoImpl implements PatientInfo {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(EntityInfoController.class.getName());
+    Logger logger = Logger.getLogger(PatientInfoImpl.class);
 
     /**
      * 基本类型助手
      */
-    DateHelper dateHelper = DateHelpers.newDateHelper();
+    @Autowired
+    DateHelper dateHelper;
 
     /**
      * 实体信息服务
      */
     @Autowired
-    PatientInfoService entityInfoService;
+    ComPatientInfoCache patientInfoCache;
 
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public QueryPatientInfoRspBody queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
+    public QueryPatientInfoRsp queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
         // 记录日志
         this.logger.info(String.format("查询患者信息(cardNo = %s)", cardNo));
 
         // 调用服务
-        var patient = this.entityInfoService.queryPatientInfo(cardNo);
+        var patient = this.patientInfoCache.getValue(cardNo);
+        if (patient == null) {
+            throw new RuntimeException("就诊卡不存在!");
+        }
 
         // 构造响应体
-        var rspBody = new QueryPatientInfoRspBody();
+        var rspBody = new QueryPatientInfoRsp();
         rspBody.cardNo = patient.cardNo;
         rspBody.name = patient.name;
         rspBody.sex = patient.sex;
         rspBody.age = this.dateHelper.getAge(patient.birthday).toString();
-        rspBody.identityCardNo = patient.identityCardNo;
+        rspBody.idenNo = patient.identityCardNo;
         rspBody.tel = patient.homeTel;
 
         return rspBody;
