@@ -123,12 +123,9 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
     @Override
     public void refresh(ReportTypeEnum key) {
         try {
-            var opt = this.cache.getIfPresent(key);
-            if (opt != null) {
-                var subCache = opt.orNull();
-                if (subCache != null) {
-                    subCache.refreshAll();
-                }
+            var subCache = this.cache.get(key).orNull();
+            if (subCache != null) {
+                subCache.refreshAll();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
