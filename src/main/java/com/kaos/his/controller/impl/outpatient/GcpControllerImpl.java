@@ -47,7 +47,7 @@ public class GcpControllerImpl implements GcpController {
     Cache<String, Cache<String, ConfigMap>> multiMapCache;
 
     @Override
-    @RequestMapping(value = "test", method = RequestMethod.GET, produces = MediaType.TEXT)
+    @RequestMapping(value = "test", method = RequestMethod.POST, produces = MediaType.TEXT)
     public Boolean test(@NotNull(message = "body不能为空") TestReq req) {
         // 获取患者挂号信息
         var register = this.registerMapper.queryRegisterRec(req.clinicCode, TransTypeEnum.Positive);
