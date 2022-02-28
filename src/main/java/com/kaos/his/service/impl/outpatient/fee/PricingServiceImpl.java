@@ -15,7 +15,6 @@ import com.kaos.his.enums.impl.outpatient.fee.FeeDetailCostSourceEnum;
 import com.kaos.his.enums.impl.outpatient.fee.FeeDetailPayFlagEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
-import com.kaos.his.service.impl.outpatient.GcpServiceImpl;
 import com.kaos.his.service.inf.outpatient.fee.PricingService;
 
 import org.apache.log4j.Logger;
@@ -28,7 +27,7 @@ public class PricingServiceImpl implements PricingService {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(GcpServiceImpl.class.getName());
+    Logger logger = Logger.getLogger(PricingServiceImpl.class);
 
     /**
      * 挂号接口

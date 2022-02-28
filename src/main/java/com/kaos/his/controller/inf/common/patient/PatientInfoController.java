@@ -1,9 +1,21 @@
 package com.kaos.his.controller.inf.common.patient;
 
+import javax.validation.constraints.NotBlank;
+
 import com.google.gson.annotations.SerializedName;
 import com.kaos.his.enums.impl.common.SexEnum;
 
-public interface PatientInfo {
+import org.springframework.validation.annotation.Validated;
+
+@Validated
+public interface PatientInfoController {
+    /**
+     * 查询患者基本信息
+     * @param cardNo
+     * @return
+     */
+    QueryPatientInfoRsp queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo);
+
     public static class QueryPatientInfoRsp {
         /**
          * 就诊卡号

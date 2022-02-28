@@ -2,9 +2,10 @@ package com.kaos.his.controller.impl.common.patient;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.his.cache.impl.common.ComPatientInfoCache;
+import com.kaos.his.cache.Cache;
 import com.kaos.his.controller.MediaType;
-import com.kaos.his.controller.inf.common.patient.PatientInfo;
+import com.kaos.his.controller.inf.common.patient.PatientInfoController;
+import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.util.helper.DateHelper;
 
 import org.apache.log4j.Logger;
@@ -17,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping({ "/ms/common/patient/info", "/ms/common/entityinfo" })
-public class PatientInfoImpl implements PatientInfo {
+public class PatientInfoControllerImpl implements PatientInfoController {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(PatientInfoImpl.class);
+    Logger logger = Logger.getLogger(PatientInfoControllerImpl.class);
 
     /**
      * 基本类型助手
@@ -33,8 +34,9 @@ public class PatientInfoImpl implements PatientInfo {
      * 实体信息服务
      */
     @Autowired
-    ComPatientInfoCache patientInfoCache;
+    Cache<String, ComPatientInfo> patientInfoCache;
 
+    @Override
     @RequestMapping(value = { "query", "queryPatientInfo" }, method = RequestMethod.GET, produces = MediaType.JSON)
     public QueryPatientInfoRsp queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
         // 记录日志
