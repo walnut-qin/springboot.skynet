@@ -72,7 +72,7 @@ public final class Gsons {
         builder.registerTypeHierarchyAdapter(Enum.class, new EnumTypeAdapter<>());
 
         // 注册Optional适配器
-        builder.registerTypeHierarchyAdapter(Optional.class, new OptionalTypeAdapter<>());
+        // builder.registerTypeHierarchyAdapter(Optional.class, new OptionalTypeAdapter<>());
 
         builder.serializeNulls();
 
