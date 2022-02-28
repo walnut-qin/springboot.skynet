@@ -123,9 +123,12 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
     @Override
     public void refresh(String key) {
         try {
-            var subCache = this.cache.get(key).orNull();
-            if (subCache != null) {
-                subCache.refreshAll();
+            var opt = this.cache.getIfPresent(key);
+            if (opt != null) {
+                var subCache = opt.orNull();
+                if (subCache != null) {
+                    subCache.refreshAll();
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -1,6 +1,6 @@
 package com.kaos.his.controller.impl.cache.common.config.multi;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.kaos.his.cache.Cache;
 import com.kaos.his.cache.Cache.View;
@@ -32,7 +32,7 @@ public class ConfigMultiMapCacheControllerImpl implements CacheController<String
 
     @Override
     @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = MediaType.TEXT)
-    public String refresh(@NotBlank(message = "键值不能为空") String key) {
+    public String refresh(@NotNull(message = "键值不能为空") String key) {
         this.multiMapCache.refresh(key);
         return String.format("更新缓存%s成功", key);
     }
