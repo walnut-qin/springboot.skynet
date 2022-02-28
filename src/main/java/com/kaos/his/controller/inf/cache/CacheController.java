@@ -1,6 +1,6 @@
 package com.kaos.his.controller.inf.cache;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.kaos.his.cache.Cache.View;
 
@@ -16,7 +16,7 @@ public interface CacheController<K, V> {
     /**
      * 刷新cache的值
      */
-    String refresh(@NotBlank(message = "键值不能为空") K key);
+    String refresh(@NotNull(message = "键值不能为空") K key);
 
     /**
      * 刷新全部cache的值

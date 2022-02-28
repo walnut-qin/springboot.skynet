@@ -2,6 +2,7 @@ package com.kaos.his.cache.impl.common.config;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -36,14 +37,14 @@ public class ConfigMapCache implements Cache<String, ConfigMap> {
     /**
      * Loading cache
      */
-    LoadingCache<String, ConfigMap> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, Optional<ConfigMap>> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
-            .build(new CacheLoader<String, ConfigMap>() {
+            .build(new CacheLoader<String, Optional<ConfigMap>>() {
                 @Override
-                public ConfigMap load(String key) throws Exception {
-                    return ConfigMapCache.this.configMapMapper.queryMapValue(key);
+                public Optional<ConfigMap> load(String key) throws Exception {
+                    return Optional.fromNullable(ConfigMapCache.this.configMapMapper.queryMapValue(key));
                 };
             });
 
@@ -54,7 +55,7 @@ public class ConfigMapCache implements Cache<String, ConfigMap> {
                 this.logger.warn("键值为空");
                 return null;
             } else {
-                return this.cache.get(key);
+                return this.cache.get(key).orNull();
             }
         } catch (Exception e) {
             this.logger.warn(e.getMessage());
@@ -75,8 +76,8 @@ public class ConfigMapCache implements Cache<String, ConfigMap> {
     }
 
     @Override
-    public View<String, ConfigMap> show() {
-        View<String, ConfigMap> view = new View<>();
+    public View<String, Optional<ConfigMap>> show() {
+        View<String, Optional<ConfigMap>> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

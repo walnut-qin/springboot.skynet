@@ -2,6 +2,7 @@ package com.kaos.his.cache.impl.common.config.multi;
 
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -37,26 +38,23 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
     /**
      * Loading cache
      */
-    LoadingCache<String, Cache<String, ConfigMap>> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, Optional<Cache<String, ConfigMap>>> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .recordStats()
-            .build(new CacheLoader<String, Cache<String, ConfigMap>>() {
-                @Override
-                public Cache<String, ConfigMap> load(String key1) throws Exception {
-                    return new Cache<String, ConfigMap>() {
+            .build(new CacheLoader<String, Optional<Cache<String, ConfigMap>>>() {
+                public Optional<Cache<String, ConfigMap>> load(String key1)
+                        throws Exception {
+                    return Optional.fromNullable(new Cache<String, ConfigMap>() {
+                        /**
+                         * 日志接口
+                         */
                         Logger logger = Logger.getLogger(this.getClass());
 
-                        LoadingCache<String, ConfigMap> cache = CacheBuilder.newBuilder()
-                                .maximumSize(20)
+                        LoadingCache<String, Optional<ConfigMap>> cache = CacheBuilder.newBuilder()
+                                .maximumSize(100)
                                 .refreshAfterWrite(1, TimeUnit.DAYS)
                                 .recordStats()
-                                .build(new CacheLoader<String, ConfigMap>() {
-                                    @Override
-                                    public ConfigMap load(String key2) throws Exception {
-                                        return ConfigMultiMapCache.this.configMapMapper.queryMultiMapItemValue(key1,
-                                                key2);
-                                    }
-                                });
+                                .build(null);
 
                         @Override
                         public ConfigMap getValue(String key) {
@@ -65,7 +63,7 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
                                     this.logger.warn("键值为空");
                                     return null;
                                 } else {
-                                    return this.cache.get(key);
+                                    return this.cache.get(key).orNull();
                                 }
                             } catch (Exception e) {
                                 this.logger.warn(e.getMessage());
@@ -86,8 +84,8 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
                         }
 
                         @Override
-                        public View<String, ConfigMap> show() {
-                            View<String, ConfigMap> view = new View<>();
+                        public View<String, ?> show() {
+                            View<String, Optional<ConfigMap>> view = new View<>();
                             view.size = this.cache.size();
                             view.stats = this.cache.stats();
                             view.cache = this.cache.asMap();
@@ -97,9 +95,8 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
                         @Override
                         public void invalidateAll() {
                             this.cache.invalidateAll();
-
                         }
-                    };
+                    });
                 };
             });
 
@@ -110,7 +107,7 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
                 this.logger.warn("键值为空");
                 return null;
             } else {
-                return this.cache.get(key);
+                return this.cache.get(key).orNull();
             }
         } catch (Exception e) {
             this.logger.warn(e.getMessage());
@@ -121,7 +118,10 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
     @Override
     public void refresh(String key) {
         try {
-            this.cache.get(key).refreshAll();
+            var subCache = this.cache.get(key).orNull();
+            if (subCache != null) {
+                subCache.refreshAll();
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -135,14 +135,17 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
     }
 
     @Override
-    public View<String, View<String, ?>> show() {
+    public View<String, ?> show() {
         View<String, View<String, ?>> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = Maps.newConcurrentMap();
         for (var key : this.cache.asMap().keySet()) {
             try {
-                view.cache.put(key, this.cache.get(key).show());
+                var subCache = this.cache.get(key).orNull();
+                if (subCache != null) {
+                    view.cache.put(key, subCache.show());
+                }
             } catch (Exception e) {
                 this.logger.warn(e.getMessage());
                 continue;
