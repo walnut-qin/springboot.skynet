@@ -3,6 +3,7 @@ package com.kaos.his.controller.impl.common.patient;
 import javax.validation.constraints.NotBlank;
 
 import com.kaos.his.cache.impl.common.ComPatientInfoCache;
+import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.common.patient.PatientInfo;
 import com.kaos.his.util.helper.DateHelper;
 
@@ -34,7 +35,7 @@ public class PatientInfoImpl implements PatientInfo {
     @Autowired
     ComPatientInfoCache patientInfoCache;
 
-    @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = { "query", "queryPatientInfo" }, method = RequestMethod.GET, produces = MediaType.JSON)
     public QueryPatientInfoRsp queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
         // 记录日志
         this.logger.info(String.format("查询患者信息(cardNo = %s)", cardNo));

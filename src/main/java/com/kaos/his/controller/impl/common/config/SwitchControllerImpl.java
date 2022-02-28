@@ -2,6 +2,7 @@ package com.kaos.his.controller.impl.common.config;
 
 import javax.validation.constraints.NotBlank;
 
+import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.common.config.SwitchController;
 import com.kaos.his.service.inf.common.config.SwitchService;
 
@@ -31,7 +32,7 @@ public class SwitchControllerImpl implements SwitchController {
      * 检索开关变量的值
      */
     @Override
-    @RequestMapping(value = { "queryState", "querySwitchState" }, method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = { "queryState", "querySwitchState" }, method = RequestMethod.GET, produces = MediaType.TEXT)
     public Boolean queryState(@NotBlank(message = "开关名不能为空") String switchName) {
         // 记录日志
         this.logger.info(String.format("查询开关变量(key = %s)", switchName));
