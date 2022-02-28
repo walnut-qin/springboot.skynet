@@ -17,7 +17,7 @@ public interface ReconcileController {
      * @param req
      * @return
      */
-    CheckRsp check(@NotNull(message = "body不能为空") CheckReq req);
+    CheckRsp check(CheckReq req);
 
     public static class CheckReq {
         /**

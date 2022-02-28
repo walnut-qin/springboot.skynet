@@ -1,4 +1,4 @@
-package com.kaos.his.mapper.common;
+package com.kaos.his.mapper.common.fee;
 
 import com.kaos.his.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.his.enums.impl.common.MinFeeEnum;

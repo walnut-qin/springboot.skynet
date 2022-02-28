@@ -9,13 +9,11 @@ import com.kaos.his.service.inf.inpatient.fee.report.ReconcileService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@Validated
 @RestController
 @RequestMapping("/ms/inpatient/fee/balance/report/reconcile")
 public class ReconcileControllerImpl implements ReconcileController {

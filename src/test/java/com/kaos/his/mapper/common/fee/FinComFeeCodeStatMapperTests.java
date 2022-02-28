@@ -2,7 +2,6 @@ package com.kaos.his.mapper.common.fee;
 
 import com.kaos.his.enums.impl.common.MinFeeEnum;
 import com.kaos.his.enums.impl.common.ReportTypeEnum;
-import com.kaos.his.mapper.common.FinComFeeCodeStatMapper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
