@@ -53,14 +53,9 @@ public interface ReconcileController {
          */
         public static class Data {
             /**
-             * HIS收入
+             * 数量
              */
-            public Double his = null;
-
-            /**
-             * 拥有收入
-             */
-            public Double yongYou = null;
+            public Integer size = null;
 
             /**
              * 明细数据 recipeNo -> SubData
