@@ -51,6 +51,7 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
                         LoadingCache<MinFeeEnum, FinComFeeCodeStat> cache = CacheBuilder.newBuilder()
                                 .maximumSize(100)
                                 .refreshAfterWrite(1, TimeUnit.DAYS)
+                                .recordStats()
                                 .build(new CacheLoader<MinFeeEnum, FinComFeeCodeStat>() {
                                     @Override
                                     public FinComFeeCodeStat load(MinFeeEnum key2) throws Exception {

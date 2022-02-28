@@ -1,4 +1,4 @@
-package com.kaos.his.cache.impl.common.config;
+package com.kaos.his.cache.impl.common.config.multi;
 
 import java.util.concurrent.TimeUnit;
 
@@ -49,6 +49,7 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
                         LoadingCache<String, ConfigMap> cache = CacheBuilder.newBuilder()
                                 .maximumSize(20)
                                 .refreshAfterWrite(1, TimeUnit.DAYS)
+                                .recordStats()
                                 .build(new CacheLoader<String, ConfigMap>() {
                                     @Override
                                     public ConfigMap load(String key2) throws Exception {

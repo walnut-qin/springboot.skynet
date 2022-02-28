@@ -15,6 +15,7 @@ import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,31 +49,39 @@ public class GcpControllerImpl implements GcpController {
 
     @Override
     @RequestMapping(value = "test", method = RequestMethod.POST, produces = MediaType.TEXT)
-    public Boolean test(@NotNull(message = "body不能为空") TestReq req) {
+    public Boolean test(@RequestBody @NotNull(message = "body不能为空") TestReq req) {
+        // 记录日志
+        this.logger.info("执行GCP权限检测");
+
         // 获取患者挂号信息
         var register = this.registerMapper.queryRegisterRec(req.clinicCode, TransTypeEnum.Positive);
         if (register == null) {
-            throw new RuntimeException("未找到挂号信息!");
+            this.logger.info("未找到挂号信息!");
+            return false;
         }
 
         // 获取患者基本信息
         var patientInfo = this.patientInfoCache.getValue(register.cardNo);
         if (patientInfo == null) {
-            throw new RuntimeException("未找到患者!");
+            this.logger.info("未找到患者!");
+            return false;
         }
 
         // 判断GCP标识
         if (!Optional.fromNullable(patientInfo.gcpFlag).or(false)) {
+            this.logger.info("gcp标识为false!");
             return false;
         }
 
         // 获取配置的gcp科室列表
         var deptSubCache = this.multiMapCache.getValue("GcpDept");
         if (deptSubCache == null) {
+            this.logger.info("无GCP科室配置!");
             return false;
         }
         var deptConfig = deptSubCache.getValue(req.deptCode);
         if (deptConfig == null) {
+            this.logger.info("非GCP科室!");
             return false;
         }
 
