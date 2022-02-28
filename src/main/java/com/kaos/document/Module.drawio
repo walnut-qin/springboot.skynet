@@ -1,0 +1,64 @@
+<mxfile host="65bd71144e">
+    <diagram id="jn05L4ZvJ-fzFJHV7Xac" name="Page-1">
+        <mxGraphModel dx="1507" dy="780" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="7" value="Mapper层" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;shadow=0;strokeColor=#d79b00;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;glass=0;expand=0;resizable=1;rotatable=0;cloneable=0;pointerEvents=0;sketch=0;" vertex="1" parent="1">
+                    <mxGeometry x="841" y="768" width="477" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="映射数据库的各数据表" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="7">
+                    <mxGeometry y="26" width="477" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="执行数据库语句" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="7">
+                    <mxGeometry y="52" width="477" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="Cache层" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;shadow=0;strokeColor=#d79b00;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;glass=0;expand=0;resizable=1;rotatable=0;cloneable=0;pointerEvents=0;sketch=0;" vertex="1" parent="1">
+                    <mxGeometry x="743" y="615" width="280.26" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="缓存Mapper层查询到的数据" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="12">
+                    <mxGeometry y="26" width="280.26" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="根据策略动态更新" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="12">
+                    <mxGeometry y="52" width="280.26" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="Service层" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;shadow=0;strokeColor=#d79b00;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;glass=0;expand=0;resizable=1;rotatable=0;cloneable=0;pointerEvents=0;sketch=0;" vertex="1" parent="1">
+                    <mxGeometry x="898.13" y="458" width="300" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="数据库事务控制" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="16">
+                    <mxGeometry y="26" width="300" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="复杂业务逻辑" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="16">
+                    <mxGeometry y="52" width="300" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="Controller层" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;rounded=1;shadow=0;strokeColor=#d79b00;fillColor=#ffe6cc;swimlaneFillColor=#ffffff;glass=0;expand=0;resizable=1;rotatable=0;cloneable=0;pointerEvents=0;sketch=0;" vertex="1" parent="1">
+                    <mxGeometry x="743" y="301" width="610.26" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="定义Web服务" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="20">
+                    <mxGeometry y="26" width="610.26" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="系统对外接口" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;connectable=0;allowArrows=0;recursiveResize=0;expand=0;resizable=0;cloneable=0;deletable=1;pointerEvents=0;" vertex="1" parent="20">
+                    <mxGeometry y="52" width="610.26" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="" style="shape=singleArrow;direction=south;whiteSpace=wrap;html=1;rounded=0;shadow=0;glass=0;sketch=0;fillColor=#ffffff;gradientColor=#ffffff;arrowWidth=0.39999999999998864;arrowSize=0.2033333333333337;" vertex="1" parent="1">
+                    <mxGeometry x="948.26" y="694" width="20" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="" style="shape=singleArrow;direction=south;whiteSpace=wrap;html=1;rounded=0;shadow=0;glass=0;sketch=0;fillColor=#ffffff;gradientColor=#ffffff;arrowWidth=0.39999999999998864;arrowSize=0.2033333333333337;" vertex="1" parent="1">
+                    <mxGeometry x="1106" y="537" width="20" height="231" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="" style="shape=singleArrow;direction=south;whiteSpace=wrap;html=1;rounded=0;shadow=0;glass=0;sketch=0;fillColor=#ffffff;gradientColor=#ffffff;arrowWidth=0.39999999999998864;arrowSize=0.2033333333333337;" vertex="1" parent="1">
+                    <mxGeometry x="1249" y="379" width="20" height="389" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="" style="shape=singleArrow;direction=south;whiteSpace=wrap;html=1;rounded=0;shadow=0;glass=0;sketch=0;fillColor=#ffffff;gradientColor=#ffffff;arrowWidth=0.39999999999998864;arrowSize=0.2033333333333337;" vertex="1" parent="1">
+                    <mxGeometry x="1038.13" y="380" width="20" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="" style="shape=singleArrow;direction=south;whiteSpace=wrap;html=1;rounded=0;shadow=0;glass=0;sketch=0;fillColor=#ffffff;gradientColor=#ffffff;arrowWidth=0.39999999999998864;arrowSize=0.2033333333333337;" vertex="1" parent="1">
+                    <mxGeometry x="948.26" y="537" width="20" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" value="" style="shape=singleArrow;direction=south;whiteSpace=wrap;html=1;rounded=0;shadow=0;glass=0;sketch=0;fillColor=#ffffff;gradientColor=#ffffff;arrowWidth=0.39999999999998864;arrowSize=0.2033333333333337;" vertex="1" parent="1">
+                    <mxGeometry x="793" y="379" width="20" height="232" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
