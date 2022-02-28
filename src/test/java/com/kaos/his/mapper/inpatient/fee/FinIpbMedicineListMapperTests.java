@@ -12,7 +12,7 @@ public class FinIpbMedicineListMapperTests {
     FinIpbMedicineListMapper medicineListMapper;
 
     @Test
-    public void queryFeeInfos() {
+    public void queryMedicineLists() {
         Calendar begin = Calendar.getInstance();
         begin.set(Calendar.YEAR, 2022);
         begin.set(Calendar.MONTH, Calendar.FEBRUARY);
