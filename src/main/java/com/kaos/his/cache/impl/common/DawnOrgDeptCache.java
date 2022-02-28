@@ -38,7 +38,7 @@ public class DawnOrgDeptCache implements Cache<String, DawnOrgDept> {
      * Loading cache
      */
     LoadingCache<String, Optional<DawnOrgDept>> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(500)
             .refreshAfterWrite(1, TimeUnit.DAYS)
             .recordStats()
             .build(new CacheLoader<String, Optional<DawnOrgDept>>() {
