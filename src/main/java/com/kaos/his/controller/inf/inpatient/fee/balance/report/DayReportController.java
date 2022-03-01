@@ -1,11 +1,12 @@
 package com.kaos.his.controller.inf.inpatient.fee.balance.report;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.collect.Multimap;
 import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
 
@@ -18,7 +19,7 @@ public interface DayReportController {
      * @param endDate
      * @return
      */
-    String queryNewYbPubCost(@NotNull(message = "结算员不能为空") String balancer,
+    Double queryNewYbPubCost(@NotNull(message = "结算员不能为空") String balancer,
             @NotNull(message = "开始时间不能为空") Date beginDate,
             @NotNull(message = "结束时间不能为空") Date endDate);
 
@@ -30,7 +31,7 @@ public interface DayReportController {
      * @param endDate
      * @return
      */
-    String queryNewYbPayCost(@NotNull(message = "结算员不能为空") String balancer,
+    Double queryNewYbPayCost(@NotNull(message = "结算员不能为空") String balancer,
             @NotNull(message = "开始时间不能为空") Date beginDate,
             @NotNull(message = "结束时间不能为空") Date endDate);
 
@@ -142,6 +143,6 @@ public interface DayReportController {
         /**
          * 明细数据
          */
-        public Multimap<String, FinIpbBalanceHead> data = null;
+        public Map<String, Collection<FinIpbBalanceHead>> data = null;
     }
 }

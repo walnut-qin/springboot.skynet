@@ -34,26 +34,24 @@ public class DayReportControllerImpl implements DayReportController {
 
     @Override
     @RequestMapping(value = "queryNewYbPubCost", method = RequestMethod.GET, produces = MediaType.TEXT)
-    public String queryNewYbPubCost(@NotNull(message = "结算员不能为空") String balancer,
+    public Double queryNewYbPubCost(@NotNull(message = "结算员不能为空") String balancer,
             @NotNull(message = "开始时间不能为空") Date beginDate,
             @NotNull(message = "结束时间不能为空") Date endDate) {
         // 查询统筹
-        var pubCost = this.dayReportService.queryNewYbPubCost(balancer, beginDate, endDate);
-
-        return pubCost.toString();
+        return this.dayReportService.queryNewYbPubCost(balancer, beginDate, endDate);
     }
 
     @Override
-    public String queryNewYbPayCost(@NotNull(message = "结算员不能为空") String balancer,
+    @RequestMapping(value = "queryNewYbPayCost", method = RequestMethod.GET, produces = MediaType.TEXT)
+    public Double queryNewYbPayCost(@NotNull(message = "结算员不能为空") String balancer,
             @NotNull(message = "开始时间不能为空") Date beginDate,
             @NotNull(message = "结束时间不能为空") Date endDate) {
-        // 查询统筹
-        var payCost = this.dayReportService.queryNewYbPayCost(balancer, beginDate, endDate);
-
-        return payCost.toString();
+        // 查询账户
+        return this.dayReportService.queryNewYbPayCost(balancer, beginDate, endDate);
     }
 
     @Override
+    @RequestMapping(value = "fixNewYbData", method = RequestMethod.GET, produces = MediaType.TEXT)
     public String fixNewYbData(@NotNull(message = "日结编码不能为空") String statNo) {
         // 调用服务
         this.dayReportService.fixNewYbDayReportData(statNo);
@@ -62,6 +60,7 @@ public class DayReportControllerImpl implements DayReportController {
     }
 
     @Override
+    @RequestMapping(value = "fixNewYbDataInDeptOwn", method = RequestMethod.POST, produces = MediaType.TEXT)
     public String fixNewYbDataInDeptOwn(@RequestBody @Valid FixInDeptOwnReq req) {
         // 调用服务
         this.dayReportService.fixNewYbDayReportData(req.beginDate, req.endDate, req.deptOwn);
@@ -70,6 +69,7 @@ public class DayReportControllerImpl implements DayReportController {
     }
 
     @Override
+    @RequestMapping(value = "exportNewYbData", method = RequestMethod.POST, produces = MediaType.JSON)
     public ExportNewYbDataRsp exportNewYbData(@RequestBody @Valid ExportNewYbDataReq req) {
         // 调用服务
         var data = this.dayReportService.exportNewYbData(req.beginDate, req.endDate, req.deptOwn);
@@ -82,7 +82,7 @@ public class DayReportControllerImpl implements DayReportController {
         rsp.otherYb = new ExportNewYbDataRsp.OtherYb();
         rsp.otherYb.pubCost = data.getValue2().getValue0();
         rsp.otherYb.payCost = data.getValue2().getValue1();
-        rsp.data = data.getValue0();
+        rsp.data = data.getValue0().asMap();
 
         return rsp;
     }

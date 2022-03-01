@@ -220,7 +220,7 @@ public class DayReportServiceImpl implements DayReportService {
                     otherYbPubCost += Optional.fromNullable(balance.pubCost).or(0d);
                     otherYbPayCost += Optional.fromNullable(balance.payCost).or(0d);
                 }
-            }
+            } 
         }
 
         return new Triplet<>(balanceMap, new Pair<>(newYbPubCost, newYbPayCost),

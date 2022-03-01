@@ -6,6 +6,7 @@ import com.kaos.his.config.converter.DateTypeConverter;
 import com.kaos.his.config.converter.StringTypeConverter;
 import com.kaos.his.config.converter.factory.EnumTypeConverterFactory;
 import com.kaos.his.config.message.converter.BooleanMessageConverter;
+import com.kaos.his.config.message.converter.DoubleMessageConverter;
 import com.kaos.his.util.Gsons;
 
 import org.springframework.context.annotation.Configuration;
@@ -46,6 +47,7 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
         converters.add(0, new BufferedImageHttpMessageConverter());
         converters.add(0, new GsonHttpMessageConverter(Gsons.newGson()));
         converters.add(0, new BooleanMessageConverter());
+        converters.add(0, new DoubleMessageConverter());
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
     }
