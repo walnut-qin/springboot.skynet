@@ -88,7 +88,7 @@ public class EscortController {
     public String register(@NotBlank(message = "患者卡号不能为空") String patientCardNo,
             @NotBlank(message = "陪护人卡号不能为空") String helperCardNo,
             @NotBlank(message = "操作员编码不能为空") String emplCode,
-            @NotNull(message = "备注不能为空") String remark) {
+            String remark) {
         // 记录日志
         this.logger.info(String.format("登记陪护证(patientCardNo = %s, helperCardNo = %s)", patientCardNo, helperCardNo));
 
