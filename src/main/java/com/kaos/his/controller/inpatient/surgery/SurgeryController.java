@@ -19,10 +19,8 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.his.service.inf.inpatient.surgery.SurgeryService;
-import com.kaos.his.util.DateHelpers;
 import com.kaos.his.util.Gsons;
 import com.kaos.his.util.HttpHelpers;
-import com.kaos.his.util.ListHelpers;
 import com.kaos.his.util.helper.DateHelper;
 import com.kaos.his.util.helper.HttpHelper;
 import com.kaos.his.util.helper.ListHelper;
@@ -54,12 +52,14 @@ public class SurgeryController {
     /**
      * 基本类型助手
      */
-    ListHelper listHelper = ListHelpers.newListHelper();
+    @Autowired
+    ListHelper listHelper;
 
     /**
      * 时间类型助手
      */
-    DateHelper dateHelper = DateHelpers.newDateHelper();
+    @Autowired
+    DateHelper dateHelper;
 
     /**
      * 接口：手术服务

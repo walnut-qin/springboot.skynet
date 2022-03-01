@@ -18,7 +18,7 @@ public class ThreadPoolImpl implements ThreadPool {
      * @param 最大空闲期 0s（不影响核心线程）
      * @param 等待队列  无界阻塞队列
      */
-    ThreadPoolExecutor executor = new ThreadPoolExecutor(20, 20, 0, TimeUnit.SECONDS, Queues.newLinkedBlockingDeque());
+    ThreadPoolExecutor executor = new ThreadPoolExecutor(40, 40, 0, TimeUnit.SECONDS, Queues.newLinkedBlockingDeque());
 
     @Override
     public void execute(Runnable runnable) {
