@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.function.ToDoubleFunction;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.TreeMultimap;
 import com.kaos.his.cache.Cache;
@@ -21,6 +22,7 @@ import com.kaos.his.service.inf.inpatient.fee.report.DayReportService;
 
 import org.apache.log4j.Logger;
 import org.javatuples.Pair;
+import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -69,11 +71,39 @@ public class DayReportServiceImpl implements DayReportService {
     @Autowired
     Cache<String, DawnOrgDept> deptCache;
 
+    @Override
+    public Double queryNewYbPubCost(String balancer, Date beginDate, Date endDate) {
+        // 检索所有结算记录
+        var balances = this.balanceHeadMapper.queryBalancesInBalancer(balancer, beginDate, endDate, "18");
+
+        // 算和
+        return balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+            @Override
+            public double applyAsDouble(FinIpbBalanceHead arg0) {
+                return Optional.fromNullable(arg0.pubCost).or(0.0);
+            }
+        }).sum();
+    }
+
+    @Override
+    public Double queryNewYbPayCost(String balancer, Date beginDate, Date endDate) {
+        // 检索所有结算记录
+        var balances = this.balanceHeadMapper.queryBalancesInBalancer(balancer, beginDate, endDate, "18");
+
+        // 算和
+        return balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
+            @Override
+            public double applyAsDouble(FinIpbBalanceHead arg0) {
+                return Optional.fromNullable(arg0.payCost).or(0.0);
+            }
+        }).sum();
+    }
+
     /**
      * 以独立事务更新指定的日结
      */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void fixNewYbDayReportData(String statNo) {
         // 查询到结算实体
         var rpt = this.finIpbDayReportMapper.queryDayReport(statNo);
@@ -128,8 +158,8 @@ public class DayReportServiceImpl implements DayReportService {
     /**
      * 批量更新
      */
-    @Transactional
     @Override
+    @Transactional
     public void fixNewYbDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
         // 查询目标范围内的所有日结记录
         var rpts = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
@@ -149,36 +179,9 @@ public class DayReportServiceImpl implements DayReportService {
     }
 
     @Override
-    public Double queryNewYbPubCost(String balancer, Date beginDate, Date endDate) {
-        // 检索所有结算记录
-        var balances = this.balanceHeadMapper.queryBalancesInBalancer(balancer, beginDate, endDate, "18");
-
-        // 算和
-        return balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
-            @Override
-            public double applyAsDouble(FinIpbBalanceHead arg0) {
-                return Optional.fromNullable(arg0.pubCost).or(0.0);
-            }
-        }).sum();
-    }
-
-    @Override
-    public Double queryNewYbPayCost(String balancer, Date beginDate, Date endDate) {
-        // 检索所有结算记录
-        var balances = this.balanceHeadMapper.queryBalancesInBalancer(balancer, beginDate, endDate, "18");
-
-        // 算和
-        return balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
-            @Override
-            public double applyAsDouble(FinIpbBalanceHead arg0) {
-                return Optional.fromNullable(arg0.payCost).or(0.0);
-            }
-        }).sum();
-    }
-
-    @Override
-    public void exportNewYbData(Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
-        // 结果集
+    public Triplet<Multimap<String, FinIpbBalanceHead>, Pair<Double, Double>, Pair<Double, Double>> exportNewYbData(
+            Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
+        // 定义带有排序规则的MultiMap
         TreeMultimap<String, FinIpbBalanceHead> balanceMap = TreeMultimap.create(Ordering.natural(),
                 Ordering.from(new Comparator<FinIpbBalanceHead>() {
                     @Override
@@ -187,78 +190,40 @@ public class DayReportServiceImpl implements DayReportService {
                     }
                 }));
 
-        // 查询目标时段的所有日结记录
-        for (var t : this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn)) {
-            var balances = this.balanceHeadMapper.queryBalancesInBalancer(t.rptEmplCode, t.beginDate, t.endDate, null);
-            for (var balance : balances) {
-                balance.associateEntity.finIpbDayReport = t;
-                balance.associateEntity.balanceEmployee = this.emplCache.getValue(t.rptEmplCode);
-                balanceMap.put(t.statNo, balance);
-            }
-        }
+        // 声明统计变量
+        Double newYbPubCost = 0d;
+        Double newYbPayCost = 0d;
+        Double otherYbPubCost = 0d;
+        Double otherYbPayCost = 0d;
 
-        // 遍历
-        Double pubSum = 0d;
-        Double paySum = 0d;
-        for (var statNo : balanceMap.keySet()) {
-            var balances = balanceMap.get(statNo);
+        // 查询满足条件的日结数据
+        var rpts = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
+        if (rpts == null) {
+            return null;
+        }
+        for (var rpt : rpts) {
+            var balances = this.balanceHeadMapper.queryBalancesInBalancer(rpt.rptEmplCode, rpt.beginDate, rpt.endDate,
+                    null);
+            if (balances == null) {
+                continue;
+            }
             for (var balance : balances) {
-                this.logger.info(
-                        String.format("日结编号 = %s, 日结员 = <%s, %s>, 发票号 = %s, 住院号 = %s, 医保类型 = %s, 统筹 = %f, 账户 = %f",
-                                statNo,
-                                balance.associateEntity.balanceEmployee.emplCode,
-                                balance.associateEntity.balanceEmployee.emplName,
-                                balance.invoiceNo,
-                                balance.inpatientNo,
-                                balance.pactCode,
-                                balance.pubCost,
-                                balance.payCost));
+                balance.associateEntity.finIpbDayReport = rpt;
+                balance.associateEntity.balanceEmployee = this.emplCache.getValue(rpt.rptEmplCode);
+                balanceMap.put(rpt.statNo, balance);
+
+                // 计算统计
                 if (balance.pactCode.equals("18")) {
-                    pubSum += balance.pubCost;
-                    paySum += balance.payCost;
+                    newYbPubCost += Optional.fromNullable(balance.pubCost).or(0d);
+                    newYbPayCost += Optional.fromNullable(balance.payCost).or(0d);
+                } else {
+                    otherYbPubCost += Optional.fromNullable(balance.pubCost).or(0d);
+                    otherYbPayCost += Optional.fromNullable(balance.payCost).or(0d);
                 }
             }
         }
-        this.logger.info(String.format("新医保汇总 = <统筹 = %f, 账户 = %f>", pubSum, paySum));
-    }
 
-    @Override
-    public void checkDayReportData(String statNo) {
-        // 检索所有本次日结关联的结算记录
-        var Balances = this.balanceHeadMapper.queryBalancesInDayReport(statNo, null);
-
-        // 计算第四大项综合
-        this.logger.info(String.format("第四大项总额 = %f",
-                Balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
-                    @Override
-                    public double applyAsDouble(FinIpbBalanceHead arg0) {
-                        return arg0.totCost;
-                    }
-                }).sum()));
-
-        // 轮训输出
-        this.logger.info(String.format("总量 = %d", Balances.size()));
-        for (FinIpbBalanceHead balanceHead : Balances) {
-            this.logger.info(String.format("发票号 = %s, 住院号 = %s, 医保编码 = %s, 统筹 = %f, 账户 = %f", balanceHead.invoiceNo,
-                    balanceHead.inpatientNo, balanceHead.pactCode, balanceHead.pubCost, balanceHead.payCost));
-        }
-
-        // 统筹总额
-        this.logger.info(String.format("统筹总额 = %f",
-                Balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
-                    @Override
-                    public double applyAsDouble(FinIpbBalanceHead arg0) {
-                        return arg0.pubCost;
-                    }
-                }).sum()));
-
-        // 账户总额
-        this.logger.info(String.format("账户总额 = %f",
-                Balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
-                    @Override
-                    public double applyAsDouble(FinIpbBalanceHead arg0) {
-                        return arg0.payCost;
-                    }
-                }).sum()));
+        return new Triplet<>(balanceMap, new Pair<>(newYbPubCost, newYbPayCost),
+                new Pair<>(otherYbPubCost, otherYbPayCost));
     }
 }
