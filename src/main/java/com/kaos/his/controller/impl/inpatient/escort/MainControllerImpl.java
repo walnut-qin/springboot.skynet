@@ -94,6 +94,7 @@ public class MainControllerImpl implements MainController {
     }
 
     @Override
+    @RequestMapping(value = "updateState", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void updateState(@NotNull(message = "陪护证号不能为空") String escortNo,
             @NotNull(message = "新状态不能为空") EscortStateEnum state,
             @NotNull(message = "操作员编码不能为空") String emplCode) {
@@ -109,6 +110,7 @@ public class MainControllerImpl implements MainController {
     }
 
     @Override
+    @RequestMapping(value = "recordAction", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void recordAction(@NotNull(message = "陪护证号不能为空") String escortNo,
             @NotNull(message = "记录的动作不能为空") EscortActionEnum action) {
         // 入参日志
@@ -122,6 +124,7 @@ public class MainControllerImpl implements MainController {
     }
 
     @Override
+    @RequestMapping(value = "queryStateInfo", method = RequestMethod.GET, produces = MediaType.JSON)
     public QueryStateInfoRsp queryStateInfo(@NotNull(message = "陪护证号不能为空") String escortNo) {
         // 入参日志
         this.logger.info(String.format("查询陪护证状态<escortNo = %s>", escortNo));
@@ -145,6 +148,7 @@ public class MainControllerImpl implements MainController {
     }
 
     @Override
+    @RequestMapping(value = "queryPatients", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryPatientsRsp> queryPatients(@NotNull(message = "陪护人卡号不能为空") String helperCardNo) {
         // 入参日志
         this.logger.info(String.format("查询陪护患者信息<helperCardNo = %s>", helperCardNo));
@@ -224,6 +228,7 @@ public class MainControllerImpl implements MainController {
     }
 
     @Override
+    @RequestMapping(value = "queryHelpers", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryHelpersRsp> queryHelpers(@NotNull(message = "患者卡号不能为空") String patientCardNo) {
         // 入参日志
         this.logger.info(String.format("查询患者陪护人信息<patientCardNo = %s>", patientCardNo));
