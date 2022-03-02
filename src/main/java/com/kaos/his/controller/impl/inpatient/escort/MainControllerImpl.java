@@ -148,7 +148,7 @@ public class MainControllerImpl implements MainController {
     }
 
     @Override
-    @RequestMapping(value = "queryPatients", method = RequestMethod.GET, produces = MediaType.JSON)
+    @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryPatientInfoRsp> queryPatientInfo(@NotNull(message = "陪护人卡号不能为空") String helperCardNo) {
         // 入参日志
         this.logger.info(String.format("查询陪护患者信息<helperCardNo = %s>", helperCardNo));
@@ -228,7 +228,7 @@ public class MainControllerImpl implements MainController {
     }
 
     @Override
-    @RequestMapping(value = "queryHelpers", method = RequestMethod.GET, produces = MediaType.JSON)
+    @RequestMapping(value = "queryHelperInfo", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryHelperInfoRsp> queryHelperInfo(@NotNull(message = "患者卡号不能为空") String patientCardNo) {
         // 入参日志
         this.logger.info(String.format("查询患者陪护人信息<patientCardNo = %s>", patientCardNo));

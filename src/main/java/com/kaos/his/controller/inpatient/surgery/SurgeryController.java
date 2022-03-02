@@ -277,8 +277,8 @@ public class SurgeryController {
             @NotNull(message = "开始时间不能为空") Date beginDate,
             @NotNull(message = "结束时间不能为空") Date endDate) {
         // 日志
-        this.logger.info(String.format("查询手术申请号(patientNo = %s, beginDate = %s, endDate = %s)", patientNo,
-                beginDate.toString(), endDate.toString()));
+        // this.logger.info(String.format("查询手术申请号(patientNo = %s, beginDate = %s, endDate = %s)", patientNo,
+                // beginDate.toString(), endDate.toString()));
 
         // 调用业务
         return this.surgeryService.queryValidApplyNo(patientNo, beginDate, endDate);
