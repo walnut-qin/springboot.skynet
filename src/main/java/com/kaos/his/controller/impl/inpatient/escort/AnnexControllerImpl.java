@@ -96,6 +96,6 @@ public class AnnexControllerImpl implements AnnexController {
             rsps.add(rsp);
         }
 
-        return null;
+        return rsps;
     }
 }
