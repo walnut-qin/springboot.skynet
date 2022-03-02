@@ -306,4 +306,25 @@
             </if>
         </where>
     </select>
+
+    <select id="queryInpatients" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPR_INMAININFO
+        <where>
+            <if test="cardNo != null">
+                AND CARD_NO = #{cardNo}
+            </if>
+            <if test="deptCode != null">
+                AND DEPT_CODE = #{deptCode}
+            </if>
+            <if test="states != null">
+                AND IN_STATE IN
+                <foreach collection="states" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

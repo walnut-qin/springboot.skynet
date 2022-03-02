@@ -5,12 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kaos.his.cache.impl.common.ComPatientInfoCache;
 import com.kaos.his.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.his.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.his.enums.impl.inpatient.InStateEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
-import com.kaos.his.mapper.common.ComPatientInfoMapper;
-import com.kaos.his.mapper.inpatient.InpatientMapper;
+import com.kaos.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortAnnexChkMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortMainInfoMapper;
@@ -28,16 +28,10 @@ public class AnnexServiceImpl implements AnnexService {
     Logger logger = Logger.getLogger(AnnexServiceImpl.class);
 
     /**
-     * 患者接口
-     */
-    @Autowired
-    ComPatientInfoMapper patientMapper;
-
-    /**
      * 住院接口
      */
     @Autowired
-    InpatientMapper inpatientMapper;
+    FinIprInMainInfoMapper inMainInfoMapper;
 
     /**
      * 附件接口
@@ -56,6 +50,12 @@ public class AnnexServiceImpl implements AnnexService {
      */
     @Autowired
     EscortMainInfoMapper escortMainInfoMapper;
+
+    /**
+     * 患者接口
+     */
+    @Autowired
+    ComPatientInfoCache patientInfoCache;
 
     @Override
     public EscortAnnexInfo uploadAnnex(String helperCardNo, String url) {
@@ -97,7 +97,7 @@ public class AnnexServiceImpl implements AnnexService {
         HashMap<String, EscortAnnexInfo> rs = new HashMap<>();
 
         // 查询该科室的所有患者
-        var inpatients = this.inpatientMapper.queryInpatients(null, deptCode, new ArrayList<>() {
+        var inpatients = this.inMainInfoMapper.queryInpatients(null, deptCode, new ArrayList<>() {
             {
                 add(InStateEnum.住院登记);
                 add(InStateEnum.病房接诊);
@@ -120,13 +120,15 @@ public class AnnexServiceImpl implements AnnexService {
                 for (var annex : annexs) {
                     if (rs.keySet().contains(annex.annexNo)) {
                         if (annex.associateEntity.patient != null) {
-                            annex.associateEntity.patient.associateEntity.escortedPatients.add(inpatient);
+                            annex.associateEntity.patient.associateEntity.escortedPatients
+                                    .add(this.patientInfoCache.getValue(inpatient.cardNo));
                         }
                     } else {
-                        annex.associateEntity.patient = this.patientMapper.queryPatientInfo(escort.helperCardNo);
+                        annex.associateEntity.patient = this.patientInfoCache.getValue(escort.helperCardNo);
                         if (annex.associateEntity.patient != null) {
                             annex.associateEntity.patient.associateEntity.escortedPatients = new ArrayList<>();
-                            annex.associateEntity.patient.associateEntity.escortedPatients.add(inpatient);
+                            annex.associateEntity.patient.associateEntity.escortedPatients
+                                    .add(this.patientInfoCache.getValue(inpatient.cardNo));
                         }
                         annex.associateEntity.escortAnnexChk = this.escortAnnexChkMapper.queryAnnexChk(annex.annexNo);
                         rs.put(annex.annexNo, annex);
