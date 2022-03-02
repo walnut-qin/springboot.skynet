@@ -6,8 +6,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Stopwatch;
-import com.kaos.his.controller.inpatient.escort.EscortController;
-import com.kaos.his.service.inf.inpatient.escort.EscortService;
+import com.kaos.his.service.inf.inpatient.escort.MainService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class UpdateStateTask {
      * 陪护证主表服务
      */
     @Autowired
-    EscortService escortService;
+    MainService escortService;
 
     /**
      * 线程池
@@ -47,8 +46,8 @@ public class UpdateStateTask {
         /**
          * 线程池
          */
-        ThreadPoolExecutor missionTask = new ThreadPoolExecutor(EscortController.stateLockHelper.getSize(),
-                EscortController.stateLockHelper.getSize(),
+        ThreadPoolExecutor missionTask = new ThreadPoolExecutor(1,
+                1,
                 2, TimeUnit.HOURS,
                 new LinkedBlockingDeque<Runnable>());
 
@@ -112,7 +111,7 @@ public class UpdateStateTask {
             @Override
             public void run() {
                 try {
-                    synchronized (EscortController.stateLockHelper.mapToLock(this.escortNo)) {
+                    synchronized (this) {
                         // 执行业务
                         UpdateStateTask.this.escortService.updateEscortState(escortNo, null, "server", "定期任务");
                     }

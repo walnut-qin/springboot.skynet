@@ -84,12 +84,12 @@ public interface MainController {
      * @param helperCardNo 陪护人卡号
      * @return
      */
-    List<QueryPatientsRsp> queryPatients(@NotNull(message = "陪护人卡号不能为空") String helperCardNo);
+    List<QueryPatientInfoRsp> queryPatientInfo(@NotNull(message = "陪护人卡号不能为空") String helperCardNo);
 
     /**
      * 查询患者信息响应
      */
-    public static class QueryPatientsRsp {
+    public static class QueryPatientInfoRsp {
         /**
          * 就诊卡号
          */
@@ -152,12 +152,12 @@ public interface MainController {
      * @param patientCardNo 患者就诊卡号
      * @return
      */
-    List<QueryHelpersRsp> queryHelpers(@NotNull(message = "患者卡号不能为空") String patientCardNo);
+    List<QueryHelperInfoRsp> queryHelperInfo(@NotNull(message = "患者卡号不能为空") String patientCardNo);
 
     /**
      * 查询陪护人响应
      */
-    public static class QueryHelpersRsp {
+    public static class QueryHelperInfoRsp {
         /**
          * 就诊卡号
          */

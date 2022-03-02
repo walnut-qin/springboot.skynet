@@ -149,7 +149,7 @@ public class MainControllerImpl implements MainController {
 
     @Override
     @RequestMapping(value = "queryPatients", method = RequestMethod.GET, produces = MediaType.JSON)
-    public List<QueryPatientsRsp> queryPatients(@NotNull(message = "陪护人卡号不能为空") String helperCardNo) {
+    public List<QueryPatientInfoRsp> queryPatientInfo(@NotNull(message = "陪护人卡号不能为空") String helperCardNo) {
         // 入参日志
         this.logger.info(String.format("查询陪护患者信息<helperCardNo = %s>", helperCardNo));
 
@@ -160,10 +160,10 @@ public class MainControllerImpl implements MainController {
         }
 
         // 构造响应body
-        List<QueryPatientsRsp> rsps = Lists.newArrayList();
+        List<QueryPatientInfoRsp> rsps = Lists.newArrayList();
         for (var escortInfo : escortInfos) {
             // 构造列表元素
-            QueryPatientsRsp rsp = new QueryPatientsRsp();
+            QueryPatientInfoRsp rsp = new QueryPatientInfoRsp();
             rsp.cardNo = escortInfo.patientCardNo;
             var patient = this.patientInfoCache.getValue(rsp.cardNo);
             if (patient != null) {
@@ -229,7 +229,7 @@ public class MainControllerImpl implements MainController {
 
     @Override
     @RequestMapping(value = "queryHelpers", method = RequestMethod.GET, produces = MediaType.JSON)
-    public List<QueryHelpersRsp> queryHelpers(@NotNull(message = "患者卡号不能为空") String patientCardNo) {
+    public List<QueryHelperInfoRsp> queryHelperInfo(@NotNull(message = "患者卡号不能为空") String patientCardNo) {
         // 入参日志
         this.logger.info(String.format("查询患者陪护人信息<patientCardNo = %s>", patientCardNo));
 
@@ -240,10 +240,10 @@ public class MainControllerImpl implements MainController {
         }
 
         // 构造响应body
-        List<QueryHelpersRsp> rsps = Lists.newArrayList();
+        List<QueryHelperInfoRsp> rsps = Lists.newArrayList();
         for (var escortInfo : escortInfos) {
             // 构造列表元素
-            QueryHelpersRsp rsp = new QueryHelpersRsp();
+            QueryHelperInfoRsp rsp = new QueryHelperInfoRsp();
             rsp.cardNo = escortInfo.patientCardNo;
             var patient = this.patientInfoCache.getValue(rsp.cardNo);
             if (patient != null) {
