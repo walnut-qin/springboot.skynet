@@ -32,7 +32,7 @@ public class EscortAnnexInfo {
         /**
          * 实体：患者信息
          */
-        public ComPatientInfo patient = null;
+        public ComPatientInfo patientInfo = null;
 
         /**
          * 审核记录

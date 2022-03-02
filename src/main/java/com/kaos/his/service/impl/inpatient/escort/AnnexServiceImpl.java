@@ -2,9 +2,11 @@ package com.kaos.his.service.impl.inpatient.escort;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 import com.kaos.his.cache.impl.common.ComPatientInfoCache;
 import com.kaos.his.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.his.entity.inpatient.escort.EscortAnnexInfo;
@@ -93,19 +95,19 @@ public class AnnexServiceImpl implements AnnexService {
 
     @Override
     public List<EscortAnnexInfo> queryAnnexInfoInDept(String deptCode, Boolean checked) {
-        // 辅助结果集<附件Id，信息>
-        HashMap<String, EscortAnnexInfo> rs = new HashMap<>();
-
         // 查询该科室的所有患者
-        var inpatients = this.inMainInfoMapper.queryInpatients(null, deptCode, new ArrayList<>() {
+        var inMainInfos = this.inMainInfoMapper.queryInpatients(null, deptCode, new ArrayList<>() {
             {
                 add(InStateEnum.住院登记);
                 add(InStateEnum.病房接诊);
             }
         });
-        for (var inpatient : inpatients) {
+
+        // 检索患者关联的所有陪护人<陪护人卡号, 患者卡号>
+        Multimap<String, String> helperCardNos = HashMultimap.create();
+        for (var inMainInfo : inMainInfos) {
             // 患者关联的陪护证
-            var escorts = this.escortMainInfoMapper.queryEscortMainInfos(inpatient.cardNo, inpatient.happenNo, null,
+            var escorts = this.escortMainInfoMapper.queryEscortMainInfos(inMainInfo.cardNo, inMainInfo.happenNo, null,
                     new ArrayList<>() {
                         {
                             add(EscortStateEnum.无核酸检测结果);
@@ -115,28 +117,31 @@ public class AnnexServiceImpl implements AnnexService {
                         }
                     });
             for (var escort : escorts) {
-                // 附件内容
-                var annexs = this.escortAnnexInfoMapper.queryAnnexInfos(escort.helperCardNo, null, null, checked);
-                for (var annex : annexs) {
-                    if (rs.keySet().contains(annex.annexNo)) {
-                        if (annex.associateEntity.patient != null) {
-                            annex.associateEntity.patient.associateEntity.escortedPatients
-                                    .add(this.patientInfoCache.getValue(inpatient.cardNo));
-                        }
-                    } else {
-                        annex.associateEntity.patient = this.patientInfoCache.getValue(escort.helperCardNo);
-                        if (annex.associateEntity.patient != null) {
-                            annex.associateEntity.patient.associateEntity.escortedPatients = new ArrayList<>();
-                            annex.associateEntity.patient.associateEntity.escortedPatients
-                                    .add(this.patientInfoCache.getValue(inpatient.cardNo));
-                        }
-                        annex.associateEntity.escortAnnexChk = this.escortAnnexChkMapper.queryAnnexChk(annex.annexNo);
-                        rs.put(annex.annexNo, annex);
-                    }
-                }
+                helperCardNos.put(escort.helperCardNo, inMainInfo.cardNo);
             }
         }
 
-        return rs.values().stream().toList();
+        // 检索附件
+        List<EscortAnnexInfo> annexs = Lists.newArrayList();
+        for (var helperCardNo : helperCardNos.keySet()) {
+            // 检索所有附件
+            var subAnnexs = this.escortAnnexInfoMapper.queryAnnexInfos(helperCardNo, null, null, checked);
+            // 补全信息
+            for (var subAnnex : subAnnexs) {
+                subAnnex.associateEntity.patientInfo = this.patientInfoCache.getValue(helperCardNo);
+                if (subAnnex.associateEntity.patientInfo != null) {
+                    subAnnex.associateEntity.patientInfo.associateEntity.escortedPatients = helperCardNos
+                            .get(helperCardNo).stream().map(x -> {
+                                return patientInfoCache.getValue(x);
+                            }).toList();
+                }
+                if (checked) {
+                    subAnnex.associateEntity.escortAnnexChk = this.escortAnnexChkMapper.queryAnnexChk(subAnnex.annexNo);
+                }
+            }
+            annexs.addAll(subAnnexs);
+        }
+
+        return annexs;
     }
 }
