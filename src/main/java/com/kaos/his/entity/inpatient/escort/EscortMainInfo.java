@@ -41,7 +41,7 @@ public class EscortMainInfo {
         /**
          * 实体：住院证
          */
-        public FinIprPrepayIn finIprPrepayIn = null;
+        public FinIprPrepayIn prepayIn = null;
 
         /**
          * 实体：陪护人

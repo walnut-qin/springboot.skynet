@@ -35,7 +35,7 @@ import com.kaos.his.mapper.inpatient.order.MetOrdiOrderMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.his.service.impl.inpatient.fee.report.DayReportServiceImpl;
-import com.kaos.his.service.inf.inpatient.escort.EscortService;
+import com.kaos.his.service.inf.inpatient.escort.MainService;
 import com.kaos.his.util.helper.ListHelper;
 
 import org.apache.log4j.Logger;
@@ -45,7 +45,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class EscortServiceImpl implements EscortService {
+public class MainServiceImpl implements MainService {
     /**
      * 日志接口
      */
@@ -61,7 +61,7 @@ public class EscortServiceImpl implements EscortService {
      * 注解自身
      */
     @Autowired
-    EscortService selfService;
+    MainService selfService;
 
     /**
      * 陪护证主表接口
@@ -175,15 +175,15 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 获取关联住院证
-        if (ntt.finIprPrepayIn == null) {
-            ntt.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(context.patientCardNo, context.happenNo);
-            if (ntt.finIprPrepayIn == null) {
+        if (ntt.prepayIn == null) {
+            ntt.prepayIn = this.finIprPrepayInMapper.queryPrepayIn(context.patientCardNo, context.happenNo);
+            if (ntt.prepayIn == null) {
                 throw new RuntimeException(String.format("陪护证(%s)关联的住院证不存在，无法判断状态", context.escortNo));
             }
         }
 
         // 住院证有效？
-        var fip = ntt.finIprPrepayIn;
+        var fip = ntt.prepayIn;
         switch (fip.state) {
             case 作废:
                 return EscortStateEnum.注销;
@@ -221,8 +221,8 @@ public class EscortServiceImpl implements EscortService {
 
             case 1:
                 // 锚定住院证
-                fip.associateEntity.patient = inps.get(0);
-                var inp = (Inpatient) fip.associateEntity.patient;
+                fip.associateEntity.patientInfo = inps.get(0);
+                var inp = (Inpatient) fip.associateEntity.patientInfo;
                 switch (inp.inState) {
                     case 出院结算:
                     case 无费退院:
@@ -348,8 +348,8 @@ public class EscortServiceImpl implements EscortService {
                 break;
 
             case 1:
-                if (fip.associateEntity.patient != null && fip.associateEntity.patient instanceof Inpatient) {
-                    Inpatient inp = (Inpatient) fip.associateEntity.patient;
+                if (fip.associateEntity.patientInfo != null && fip.associateEntity.patientInfo instanceof Inpatient) {
+                    Inpatient inp = (Inpatient) fip.associateEntity.patientInfo;
                     var ords = this.metOrdiOrderMapper.queryInpatientOrders(inp.inpatientNo, "5070672", null, null);
                     if (ords != null && !ords.isEmpty()) {
                         break;
@@ -403,7 +403,7 @@ public class EscortServiceImpl implements EscortService {
             if (fip == null) {
                 throw new RuntimeException(String.format("患者(%s)住院记录(%s)未关联住院证, 无法判断关联数据", inp.cardNo, inp.patientNo));
             }
-            fip.associateEntity.patient = inp;
+            fip.associateEntity.patientInfo = inp;
         } else {
             throw new RuntimeException(String.format("患者(%s)存在多条住院记录, 无法判断关联数据", patientCardNo));
         }
@@ -543,8 +543,8 @@ public class EscortServiceImpl implements EscortService {
         // 填充实体
         for (var rt : rs) {
             // 住院证
-            rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
-            if (rt.associateEntity.finIprPrepayIn != null) {
+            rt.associateEntity.prepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
+            if (rt.associateEntity.prepayIn != null) {
                 // 若已入院，则存住院信息
                 var inpatients = this.inpatientMapper.queryInpatientsWithPrepayIn(rt.patientCardNo, rt.happenNo);
                 if (inpatients != null && inpatients.size() == 1) {
@@ -553,23 +553,23 @@ public class EscortServiceImpl implements EscortService {
                     if (ipt.bedNo != null) {
                         ipt.associateEntity.bed = this.comBedInfoMapper.queryBedInfo(ipt.bedNo);
                     }
-                    rt.associateEntity.finIprPrepayIn.associateEntity.patient = ipt;
+                    rt.associateEntity.prepayIn.associateEntity.patientInfo = ipt;
                 } else {
-                    rt.associateEntity.finIprPrepayIn.associateEntity.patient = this.patientMapper
+                    rt.associateEntity.prepayIn.associateEntity.patientInfo = this.patientMapper
                             .queryPatientInfo(rt.patientCardNo);
                 }
                 // 科室信息
-                if (rt.associateEntity.finIprPrepayIn.preDeptCode != null) {
-                    rt.associateEntity.finIprPrepayIn.associateEntity.preDept = this.departmentMapper
-                            .queryDepartment(rt.associateEntity.finIprPrepayIn.preDeptCode);
+                if (rt.associateEntity.prepayIn.preDeptCode != null) {
+                    rt.associateEntity.prepayIn.associateEntity.preDept = this.departmentMapper
+                            .queryDepartment(rt.associateEntity.prepayIn.preDeptCode);
                 }
                 // 床位信息
-                if (rt.associateEntity.finIprPrepayIn.bedNo != null) {
-                    rt.associateEntity.finIprPrepayIn.associateEntity.bedInfo = this.comBedInfoMapper
-                            .queryBedInfo(rt.associateEntity.finIprPrepayIn.bedNo);
+                if (rt.associateEntity.prepayIn.bedNo != null) {
+                    rt.associateEntity.prepayIn.associateEntity.bedInfo = this.comBedInfoMapper
+                            .queryBedInfo(rt.associateEntity.prepayIn.bedNo);
                 }
                 // vip
-                rt.associateEntity.finIprPrepayIn.associateEntity.escortVip = this.escortVipMapper
+                rt.associateEntity.prepayIn.associateEntity.escortVip = this.escortVipMapper
                         .queryEscortVip(rt.patientCardNo, rt.happenNo);
             }
             rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);
@@ -594,12 +594,12 @@ public class EscortServiceImpl implements EscortService {
         // 填充实体
         for (var rt : rs) {
             // 住院证
-            rt.associateEntity.finIprPrepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
+            rt.associateEntity.prepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
             // 助手实体
             rt.associateEntity.helper = this.patientMapper.queryPatientInfo(rt.helperCardNo);
-            if (rt.associateEntity.finIprPrepayIn != null) {
+            if (rt.associateEntity.prepayIn != null) {
                 // vip
-                rt.associateEntity.finIprPrepayIn.associateEntity.escortVip = this.escortVipMapper
+                rt.associateEntity.prepayIn.associateEntity.escortVip = this.escortVipMapper
                         .queryEscortVip(rt.patientCardNo, rt.happenNo);
             }
             rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);

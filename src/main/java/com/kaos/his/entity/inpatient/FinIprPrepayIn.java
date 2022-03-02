@@ -14,11 +14,13 @@ import com.kaos.his.enums.impl.inpatient.FinIprPrepayInStateEnum;
 public class FinIprPrepayIn {
     /**
      * 就诊卡号
+     * {@link FinIprPrepayIn.AssociateEntity#patientInfo}
+     * {@link FinIprPrepayIn.AssociateEntity#inMainInfo}
      */
     public String cardNo = null;
 
     /**
-     * 住院证编号
+     * 住院证编号 {@link FinIprPrepayIn.AssociateEntity#inMainInfo}
      */
     public Integer happenNo = null;
 
@@ -64,7 +66,12 @@ public class FinIprPrepayIn {
         /**
          * 实体：患者信息（入院后应当更新为住院实体）
          */
-        public ComPatientInfo patient = null;
+        public ComPatientInfo patientInfo = null;
+
+        /**
+         * 住院实体 {@link FinIprPrepayIn#cardNo} + {@link FinIprPrepayIn#happenNo}
+         */
+        public FinIprInMainInfo inMainInfo = null;
 
         /**
          * 实体：床位信息

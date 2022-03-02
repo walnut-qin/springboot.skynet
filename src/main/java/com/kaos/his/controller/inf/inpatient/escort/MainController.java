@@ -6,14 +6,11 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.google.gson.annotations.SerializedName;
-import com.kaos.his.controller.inf.common.patient.PatientInfoController.QueryPatientInfoRsp;
-import com.kaos.his.controller.inpatient.escort.entity.EscortActionRec;
-import com.kaos.his.controller.inpatient.escort.entity.EscortStateRec;
 import com.kaos.his.enums.impl.common.SexEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 
-public interface ManagerController {
+public interface MainController {
     /**
      * 登记陪护人
      * 
@@ -24,7 +21,8 @@ public interface ManagerController {
      */
     String register(@NotNull(message = "患者卡号不能为空") String patientCardNo,
             @NotNull(message = "陪护人卡号不能为空") String helperCardNo,
-            @NotNull(message = "操作员编码不能为空") String emplCode);
+            @NotNull(message = "操作员编码不能为空") String emplCode,
+            String remark);
 
     /**
      * 更新陪护证状态
@@ -52,7 +50,7 @@ public interface ManagerController {
      * @param escortNo 陪护证号
      * @return
      */
-    QueryPatientInfoRsp queryStateInfo(@NotNull(message = "陪护证号不能为空") String escortNo);
+    QueryStateInfoRsp queryStateInfo(@NotNull(message = "陪护证号不能为空") String escortNo);
 
     /**
      * 查询状态的响应
@@ -199,5 +197,50 @@ public interface ManagerController {
          * 行为列表
          */
         public List<EscortActionRec> actions = null;
+    }
+
+    /**
+     * 响应状态记录
+     */
+    public static class EscortStateRec {
+        /**
+         * 状态序号
+         */
+        public Integer recNo = null;
+
+        /**
+         * 状态
+         */
+        public EscortStateEnum state = null;
+
+        /**
+         * 记录员编码
+         */
+        public String recEmplCode = null;
+
+        /**
+         * 记录时间
+         */
+        public Date recDate = null;
+    }
+
+    /**
+     * 响应动作记录
+     */
+    public static class EscortActionRec {
+        /**
+         * 状态序号
+         */
+        public Integer recNo = null;
+
+        /**
+         * 状态
+         */
+        public EscortActionEnum action = null;
+
+        /**
+         * 记录时间
+         */
+        public Date recDate = null;
     }
 }
