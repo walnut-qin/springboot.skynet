@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.function.ToDoubleFunction;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -160,31 +159,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 
         // 日志
         if (Math.abs(drugFee + undrugFee - totFee) > 1e-6) {
-            List<FinIpbFeeInfo> val1 = Lists.newArrayList();
-            for (FinIpbFeeInfo feeInfo : feeInfos) {
-                FinIpbFeeInfo feeInfoCopy = new FinIpbFeeInfo();
-                feeInfoCopy.feeCode = feeInfo.feeCode;
-                feeInfoCopy.name = feeInfo.name;
-                feeInfoCopy.totCost = feeInfo.totCost;
-                val1.add(feeInfoCopy);
-            }
-            List<FinIpbItemList> val2 = Lists.newArrayList();
-            for (FinIpbItemList undrug : undrugInfos) {
-                FinIpbItemList undrugInfoCopy = new FinIpbItemList();
-                undrugInfoCopy.feeCode = undrug.feeCode;
-                undrugInfoCopy.name = undrug.name;
-                undrugInfoCopy.totCost = undrug.totCost;
-                val2.add(undrugInfoCopy);
-            }
-            List<FinIpbMedicineList> val3 = Lists.newArrayList();
-            for (FinIpbMedicineList drug : drugInfos) {
-                FinIpbMedicineList drugInfoCopy = new FinIpbMedicineList();
-                drugInfoCopy.feeCode = drug.feeCode;
-                drugInfoCopy.name = drug.name;
-                drugInfoCopy.totCost = drug.totCost;
-                val3.add(drugInfoCopy);
-            }
-            return new Triplet<List<FinIpbFeeInfo>, List<FinIpbItemList>, List<FinIpbMedicineList>>(val1, val2, val3);
+            return new Triplet<>(feeInfos, undrugInfos, drugInfos);
         }
         return null;
     }
