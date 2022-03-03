@@ -3,6 +3,7 @@ package com.kaos.his.controller.inf.inpatient;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.his.enums.impl.common.SexEnum;
@@ -18,7 +19,7 @@ public interface SurgeryController {
      * @param req
      * @return
      */
-    QueryAppliesRsp querySurgeries(QueryAppliesReq req);
+    QueryAppliesRsp querySurgeries(@Valid QueryAppliesReq req);
 
     /**
      * 请求体

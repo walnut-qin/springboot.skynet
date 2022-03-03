@@ -210,7 +210,7 @@ public class SurgeryControllerImpl implements SurgeryController {
     }
 
     @Override
-    @RequestMapping(value = "queryArrangedApplies", method = RequestMethod.POST, produces = MediaType.JSON)
+    @RequestMapping(value = "querySurgeries", method = RequestMethod.POST, produces = MediaType.JSON)
     public QueryAppliesRsp querySurgeries(@RequestBody @Valid QueryAppliesReq req) {
         // 记录日志
         this.logger.info("查询手术申请, 入参:");
@@ -264,6 +264,9 @@ public class SurgeryControllerImpl implements SurgeryController {
         public Map<String, String> states = null;
     }
 
+    /**
+     * 查询手术状态
+     */
     @RequestMapping(value = "queryApplyNo", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
     public String queryApplyNo(@NotNull(message = "住院号不能为空") String patientNo,
             @NotNull(message = "开始时间不能为空") Date beginDate,
