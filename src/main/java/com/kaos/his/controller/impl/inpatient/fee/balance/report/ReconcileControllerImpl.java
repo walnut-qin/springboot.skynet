@@ -65,6 +65,7 @@ public class ReconcileControllerImpl implements ReconcileController {
     }
 
     @Override
+    @RequestMapping(value = "exportNewYbData", method = RequestMethod.POST, produces = MediaType.JSON)
     public ExportNewYbDataRsp exportNewYbData(ExportNewYbDataReq req) {
         // 执行业务
         var data = this.reconcileService.exportNewYbData(req.beginDate, req.endDate, req.deptOwn);
