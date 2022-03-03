@@ -1,19 +1,17 @@
 package com.kaos.his.controller.inf.inpatient.fee.balance.report;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
-import com.google.common.collect.Multimap;
 import com.kaos.his.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.his.entity.inpatient.fee.FinIpbItemList;
 import com.kaos.his.entity.inpatient.fee.FinIpbMedicineList;
 import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
-
-import org.javatuples.Pair;
 
 public interface ReconcileController {
     /**
@@ -122,21 +120,33 @@ public interface ReconcileController {
         /**
          * 数据
          */
-        public Map<String, Pair<CostData, Multimap<String, FinIpbBalanceHead>>> data = null;
+        public Map<String, Data> data = null;
 
         /**
-         * 明细
+         * 数据
          */
-        public static class CostData {
+        public static class Data {
             /**
-             * 统筹
+             * 花费明细
              */
-            public Double pubCost = null;
+            public CostData costData = null;
 
             /**
-             * 账户
+             * 明细
              */
-            public Double payCost = null;
+            public static class CostData {
+                /**
+                 * 统筹
+                 */
+                public Double pubCost = null;
+
+                /**
+                 * 账户
+                 */
+                public Double payCost = null;
+            }
+
+            public Map<String, Collection<FinIpbBalanceHead>> detail = null;
         }
     }
 }

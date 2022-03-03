@@ -6,11 +6,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.inpatient.fee.balance.report.ReconcileController;
-import com.kaos.his.controller.inf.inpatient.fee.balance.report.ReconcileController.ExportNewYbDataRsp.CostData;
 import com.kaos.his.service.inf.inpatient.fee.report.ReconcileService;
 
 import org.apache.log4j.Logger;
-import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,9 +76,11 @@ public class ReconcileControllerImpl implements ReconcileController {
         rsp.size = data.size();
         rsp.data = Maps.newTreeMap(Ordering.natural());
         for (var key : data.keySet()) {
-            rsp.data.put(key, new Pair<>(new CostData(), data.get(key).getValue1()));
-            rsp.data.get(key).getValue0().pubCost = data.get(key).getValue0().getValue0();
-            rsp.data.get(key).getValue0().payCost = data.get(key).getValue0().getValue1();
+            rsp.data.put(key, new ExportNewYbDataRsp.Data());
+            rsp.data.get(key).costData = new ExportNewYbDataRsp.Data.CostData();
+            rsp.data.get(key).costData.pubCost = data.get(key).getValue0().getValue0();
+            rsp.data.get(key).costData.payCost = data.get(key).getValue0().getValue1();
+            rsp.data.get(key).detail = data.get(key).getValue1().asMap();
         }
 
         return rsp;
