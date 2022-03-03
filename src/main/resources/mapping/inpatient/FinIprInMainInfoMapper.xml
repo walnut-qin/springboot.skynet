@@ -316,6 +316,9 @@
             <if test="cardNo != null">
                 AND CARD_NO = #{cardNo}
             </if>
+            <if test="happenNo != null">
+                AND HAPPEN_NO = #{happenNo}
+            </if>
             <if test="deptCode != null">
                 AND DEPT_CODE = #{deptCode}
             </if>

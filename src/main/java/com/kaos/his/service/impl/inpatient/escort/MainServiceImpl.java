@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.kaos.his.entity.common.ComPatientInfo;
+import com.kaos.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.his.entity.inpatient.Inpatient;
 import com.kaos.his.entity.inpatient.escort.EscortActionRec;
@@ -19,12 +19,8 @@ import com.kaos.his.enums.impl.inpatient.FinIprPrepayInStateEnum;
 import com.kaos.his.enums.impl.inpatient.InStateEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
-import com.kaos.his.mapper.common.DawnOrgDeptMapper;
-import com.kaos.his.mapper.common.DawnOrgEmplMapper;
-import com.kaos.his.mapper.common.ComPatientInfoMapper;
-import com.kaos.his.mapper.inpatient.ComBedInfoMapper;
+import com.kaos.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.his.mapper.inpatient.FinIprPrepayInMapper;
-import com.kaos.his.mapper.inpatient.InpatientMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortActionRecMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortAnnexChkMapper;
 import com.kaos.his.mapper.inpatient.escort.EscortAnnexInfoMapper;
@@ -94,18 +90,6 @@ public class MainServiceImpl implements MainService {
     FinIprPrepayInMapper finIprPrepayInMapper;
 
     /**
-     * 住院接口
-     */
-    @Autowired
-    InpatientMapper inpatientMapper;
-
-    /**
-     * 患者接口
-     */
-    @Autowired
-    ComPatientInfoMapper patientMapper;
-
-    /**
      * 附件接口
      */
     @Autowired
@@ -136,22 +120,10 @@ public class MainServiceImpl implements MainService {
     MetOrdiOrderMapper metOrdiOrderMapper;
 
     /**
-     * 员工接口
+     * 住院实体接口
      */
     @Autowired
-    DawnOrgEmplMapper employeeMapper;
-
-    /**
-     * 科室接口
-     */
-    @Autowired
-    DawnOrgDeptMapper departmentMapper;
-
-    /**
-     * 床位接口
-     */
-    @Autowired
-    ComBedInfoMapper comBedInfoMapper;
+    FinIprInMainInfoMapper inMainInfoMapper;
 
     /**
      * 查询当前陪护证的实时状态
@@ -193,12 +165,12 @@ public class MainServiceImpl implements MainService {
         }
 
         // 获取住院实体/患者实体
-        var inps = this.inpatientMapper.queryInpatientsWithPrepayIn(context.patientCardNo, context.happenNo);
-        if (inps.size() >= 2) {
+        var inMainInfos = this.inMainInfoMapper.queryInpatients(context.patientCardNo, context.happenNo, null, null);
+        if (inMainInfos.size() >= 2) {
             // 过滤出院记录
-            inps = Collections2.filter(inps, new Predicate<Inpatient>() {
+            inMainInfos = Collections2.filter(inMainInfos, new Predicate<FinIprInMainInfo>() {
                 @Override
-                public boolean apply(@Nullable Inpatient input) {
+                public boolean apply(@Nullable FinIprInMainInfo input) {
                     switch (input.inState) {
                         case 出院结算:
                         case 无费退院:
@@ -210,7 +182,7 @@ public class MainServiceImpl implements MainService {
                 }
             }).stream().toList();
         }
-        switch (inps.size()) {
+        switch (inMainInfos.size()) {
             // 弱陪护
             case 0:
                 var lastFip = this.finIprPrepayInMapper.queryLastPrepayIn(fip.cardNo, null);
@@ -219,20 +191,19 @@ public class MainServiceImpl implements MainService {
                 }
                 break;
 
+            // 强陪护
             case 1:
-                // 锚定住院证
-                fip.associateEntity.patientInfo = inps.get(0);
-                var inp = (Inpatient) fip.associateEntity.patientInfo;
-                switch (inp.inState) {
+                var inMainInfo = inMainInfos.get(0);
+                switch (inMainInfo.inState) {
                     case 出院结算:
                     case 无费退院:
-                        if (new Date().getTime() - inp.outDate.getTime() >= 6 * 60 * 60 * 1000) {
+                        if (new Date().getTime() - inMainInfo.outDate.getTime() >= 6 * 60 * 60 * 1000) {
                             return EscortStateEnum.注销;
                         }
                         break;
 
                     case 出院登记:
-                        if (new Date().getTime() - inp.outDate.getTime() >= 12 * 60 * 60 * 1000) {
+                        if (new Date().getTime() - inMainInfo.outDate.getTime() >= 12 * 60 * 60 * 1000) {
                             return EscortStateEnum.注销;
                         }
                         break;
@@ -301,21 +272,19 @@ public class MainServiceImpl implements MainService {
      * @param patientCardNo
      * @param helperCardNo
      */
-    private void canRegister(FinIprPrepayIn fip, ComPatientInfo helper) throws RuntimeException {
+    private void canRegister(FinIprPrepayIn fip, String helperCardNo) throws RuntimeException {
         // 入参判断
         if (fip == null) {
             throw new RuntimeException("住院证不存在");
-        } else if (helper == null) {
-            throw new RuntimeException("陪护人不存在");
         }
 
         // 判断0：自陪护
-        if (fip.cardNo.equals(helper.cardNo)) {
+        if (fip.cardNo.equals(helperCardNo)) {
             throw new RuntimeException("不可以给自己陪护");
         }
 
         // 判断1：已陪护 || 刚注销
-        var lastEscort = this.escortMainInfoMapper.queryLastEscortMainInfo(fip.cardNo, null, helper.cardNo, null);
+        var lastEscort = this.escortMainInfoMapper.queryLastEscortMainInfo(fip.cardNo, null, helperCardNo, null);
         if (lastEscort != null) {
             var curState = this.escortStateRecMapper.queryCurState(lastEscort.escortNo);
             if (curState.state != EscortStateEnum.注销) {
@@ -362,7 +331,7 @@ public class MainServiceImpl implements MainService {
         }
 
         // 判断3：陪护人上限
-        var helperEscorts = this.escortMainInfoMapper.queryEscortMainInfos(null, null, helper.cardNo,
+        var helperEscorts = this.escortMainInfoMapper.queryEscortMainInfos(null, null, helperCardNo,
                 new ArrayList<>() {
                     {
                         add(EscortStateEnum.无核酸检测结果);
@@ -383,43 +352,39 @@ public class MainServiceImpl implements MainService {
     @Override
     public EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark) {
         // 判定住院证
-        var inps = this.inpatientMapper.queryInpatients(patientCardNo, null, new ArrayList<>() {
+        var inMainInfos = this.inMainInfoMapper.queryInpatients(patientCardNo, null, null, new ArrayList<>() {
             {
                 add(InStateEnum.住院登记);
                 add(InStateEnum.病房接诊);
             }
         });
-        FinIprPrepayIn fip = null;
-        if (inps == null || inps.size() == 0) {
+        FinIprPrepayIn prepayIn = null;
+        if (inMainInfos == null || inMainInfos.size() == 0) {
             // 弱陪护，直接取最后一张住院证
-            fip = this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, null);
-            if (fip == null || fip.state == FinIprPrepayInStateEnum.作废) {
+            prepayIn = this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, null);
+            if (prepayIn == null || prepayIn.state == FinIprPrepayInStateEnum.作废) {
                 throw new RuntimeException(String.format("患者(%s)无有效住院证, 无法关联陪护", patientCardNo));
             }
-        } else if (inps.size() == 1) {
+        } else if (inMainInfos.size() == 1) {
             // 强陪护，取住院证关联的陪护
-            var inp = inps.get(0);
-            fip = this.finIprPrepayInMapper.queryPrepayIn(inp.cardNo, inp.happenNo);
-            if (fip == null) {
-                throw new RuntimeException(String.format("患者(%s)住院记录(%s)未关联住院证, 无法判断关联数据", inp.cardNo, inp.patientNo));
+            var inMainInfo = inMainInfos.get(0);
+            prepayIn = this.finIprPrepayInMapper.queryPrepayIn(inMainInfo.cardNo, inMainInfo.happenNo);
+            if (prepayIn == null) {
+                throw new RuntimeException(String.format("患者(%s)住院号(%s)无住院证", inMainInfo.cardNo, inMainInfo.patientNo));
             }
-            fip.associateEntity.patientInfo = inp;
         } else {
             throw new RuntimeException(String.format("患者(%s)存在多条住院记录, 无法判断关联数据", patientCardNo));
         }
 
-        // 陪护人对象
-        var helper = this.patientMapper.queryPatientInfo(helperCardNo);
-
         // 权限判断
-        this.canRegister(fip, helper);
+        this.canRegister(prepayIn, helperCardNo);
 
         // 插入VIP记录
-        var vip = this.escortVipMapper.queryEscortVip(fip.cardNo, fip.happenNo);
+        var vip = this.escortVipMapper.queryEscortVip(prepayIn.cardNo, prepayIn.happenNo);
         if (vip == null) {
             vip = new EscortVip();
-            vip.patientCardNo = fip.cardNo;
-            vip.happenNo = fip.happenNo;
+            vip.patientCardNo = prepayIn.cardNo;
+            vip.happenNo = prepayIn.happenNo;
             vip.helperCardNo = helperCardNo;
             vip.recDate = new Date();
             vip.remark = "首次登记陪护人";
@@ -429,8 +394,8 @@ public class MainServiceImpl implements MainService {
         // 创建新陪护实体
         var escort = new EscortMainInfo();
         escort.escortNo = null;
-        escort.patientCardNo = fip.cardNo;
-        escort.happenNo = fip.happenNo;
+        escort.patientCardNo = prepayIn.cardNo;
+        escort.happenNo = prepayIn.happenNo;
         escort.helperCardNo = helperCardNo;
         escort.remark = "";
 
@@ -545,29 +510,6 @@ public class MainServiceImpl implements MainService {
             // 住院证
             rt.associateEntity.prepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
             if (rt.associateEntity.prepayIn != null) {
-                // 若已入院，则存住院信息
-                var inpatients = this.inpatientMapper.queryInpatientsWithPrepayIn(rt.patientCardNo, rt.happenNo);
-                if (inpatients != null && inpatients.size() == 1) {
-                    var ipt = inpatients.get(0);
-                    ipt.associateEntity.stayedDept = this.departmentMapper.queryDepartment(ipt.stayedDeptCode);
-                    if (ipt.bedNo != null) {
-                        ipt.associateEntity.bed = this.comBedInfoMapper.queryBedInfo(ipt.bedNo);
-                    }
-                    rt.associateEntity.prepayIn.associateEntity.patientInfo = ipt;
-                } else {
-                    rt.associateEntity.prepayIn.associateEntity.patientInfo = this.patientMapper
-                            .queryPatientInfo(rt.patientCardNo);
-                }
-                // 科室信息
-                if (rt.associateEntity.prepayIn.preDeptCode != null) {
-                    rt.associateEntity.prepayIn.associateEntity.preDept = this.departmentMapper
-                            .queryDepartment(rt.associateEntity.prepayIn.preDeptCode);
-                }
-                // 床位信息
-                if (rt.associateEntity.prepayIn.bedNo != null) {
-                    rt.associateEntity.prepayIn.associateEntity.bedInfo = this.comBedInfoMapper
-                            .queryBedInfo(rt.associateEntity.prepayIn.bedNo);
-                }
                 // vip
                 rt.associateEntity.prepayIn.associateEntity.escortVip = this.escortVipMapper
                         .queryEscortVip(rt.patientCardNo, rt.happenNo);
@@ -595,8 +537,6 @@ public class MainServiceImpl implements MainService {
         for (var rt : rs) {
             // 住院证
             rt.associateEntity.prepayIn = this.finIprPrepayInMapper.queryPrepayIn(rt.patientCardNo, rt.happenNo);
-            // 助手实体
-            rt.associateEntity.helper = this.patientMapper.queryPatientInfo(rt.helperCardNo);
             if (rt.associateEntity.prepayIn != null) {
                 // vip
                 rt.associateEntity.prepayIn.associateEntity.escortVip = this.escortVipMapper
@@ -621,6 +561,6 @@ public class MainServiceImpl implements MainService {
             }
         });
 
-        return escorts.stream().map((x) -> x.escortNo).toList();
+        return escorts.stream().map(x -> x.escortNo).toList();
     }
 }

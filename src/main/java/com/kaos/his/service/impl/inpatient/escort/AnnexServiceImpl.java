@@ -96,7 +96,7 @@ public class AnnexServiceImpl implements AnnexService {
     @Override
     public List<EscortAnnexInfo> queryAnnexInfoInDept(String deptCode, Boolean checked) {
         // 查询该科室的所有患者
-        var inMainInfos = this.inMainInfoMapper.queryInpatients(null, deptCode, new ArrayList<>() {
+        var inMainInfos = this.inMainInfoMapper.queryInpatients(null, null, deptCode, new ArrayList<>() {
             {
                 add(InStateEnum.住院登记);
                 add(InStateEnum.病房接诊);
