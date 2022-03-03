@@ -336,12 +336,13 @@ public class ReconcileServiceImpl implements ReconcileService {
                 if (rtMap.containsKey(balance.pactCode)) {
                     // 已存在该医保类型
                     var dataPair = rtMap.get(balance.pactCode);
-                    // 计算新的消费
+                    // 计算新的数据
                     var newPubCost = dataPair.getValue0().getValue0() + balance.pubCost;
                     var newPayCost = dataPair.getValue0().getValue1() + balance.payCost;
-                    dataPair.setAt0(new Pair<>(newPubCost, newPayCost));
-                    // 添加明细
-                    dataPair.getValue1().put(rpt.statNo, balance);
+                    var newDataPair = dataPair.setAt0(new Pair<>(newPubCost, newPayCost));
+                    newDataPair.getValue1().put(rpt.statNo, balance);
+                    // 替换数据
+                    rtMap.replace(balance.pactCode, newDataPair);
                 } else {
                     // 插入新值
                     rtMap.put(balance.pactCode, new Pair<>(new Pair<>(balance.pubCost, balance.payCost),
