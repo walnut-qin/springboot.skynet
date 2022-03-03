@@ -1,6 +1,7 @@
 package com.kaos.his.service.impl.inpatient.fee.report;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,19 +12,27 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
+import com.google.common.collect.TreeMultimap;
 import com.kaos.his.cache.impl.common.DawnOrgDeptCache;
+import com.kaos.his.cache.impl.common.DawnOrgEmplCache;
 import com.kaos.his.cache.impl.inpatient.FinIprInMainInfoCache;
 import com.kaos.his.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.his.entity.inpatient.fee.FinIpbItemList;
 import com.kaos.his.entity.inpatient.fee.FinIpbMedicineList;
+import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
 import com.kaos.his.mapper.inpatient.fee.FinIpbFeeInfoMapper;
 import com.kaos.his.mapper.inpatient.fee.FinIpbItemListMapper;
 import com.kaos.his.mapper.inpatient.fee.FinIpbMedicineListMapper;
+import com.kaos.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
+import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
 import com.kaos.his.service.inf.inpatient.fee.report.ReconcileService;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +61,24 @@ public class ReconcileServiceImpl implements ReconcileService {
      */
     @Autowired
     FinIpbMedicineListMapper medicineListMapper;
+
+    /**
+     * 日结头表接口
+     */
+    @Autowired
+    FinIpbBalanceHeadMapper balanceHeadMapper;
+
+    /**
+     * 日结接口
+     */
+    @Autowired
+    FinIpbDayReportMapper finIpbDayReportMapper;
+
+    /**
+     * 科室cache
+     */
+    @Autowired
+    DawnOrgEmplCache emplCache;
 
     /**
      * 科室cache
@@ -285,5 +312,51 @@ public class ReconcileServiceImpl implements ReconcileService {
             }
         }
         return data;
+    }
+
+    @Override
+    public Map<String, Pair<Pair<Double, Double>, Multimap<String, FinIpbBalanceHead>>> exportNewYbData(
+            Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
+        // 声明结果集
+        var cmp = Ordering.natural();
+        Map<String, Pair<Pair<Double, Double>, Multimap<String, FinIpbBalanceHead>>> rtMap = Maps.newTreeMap(cmp);
+
+        // 查询满足条件的日结数据
+        var rpts = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
+        if (rpts == null) {
+            return null;
+        }
+        for (var rpt : rpts) {
+            var balances = this.balanceHeadMapper.queryBalancesInBalancer(rpt.rptEmplCode, rpt.beginDate, rpt.endDate,
+                    null);
+            if (balances == null) {
+                continue;
+            }
+            for (var balance : balances) {
+                if (rtMap.containsKey(balance.pactCode)) {
+                    // 已存在该医保类型
+                    var dataPair = rtMap.get(balance.pactCode);
+                    // 计算新的消费
+                    var newPubCost = dataPair.getValue0().getValue0() + balance.pubCost;
+                    var newPayCost = dataPair.getValue0().getValue1() + balance.payCost;
+                    dataPair.setAt0(new Pair<>(newPubCost, newPayCost));
+                    // 添加明细
+                    dataPair.getValue1().put(rpt.statNo, balance);
+                } else {
+                    // 插入新值
+                    rtMap.put(balance.pactCode, new Pair<>(new Pair<>(balance.pubCost, balance.payCost),
+                            TreeMultimap.create(Ordering.natural(), new Comparator<FinIpbBalanceHead>() {
+                                @Override
+                                public int compare(FinIpbBalanceHead arg0, FinIpbBalanceHead arg1) {
+                                    return arg0.inpatientNo.compareTo(arg1.inpatientNo);
+                                };
+                            })));
+                    // 插入第一个明细
+                    rtMap.get(balance.pactCode).getValue1().put(rpt.statNo, balance);
+                }
+            }
+        }
+
+        return rtMap;
     }
 }

@@ -1,13 +1,10 @@
 package com.kaos.his.controller.inf.inpatient.fee.balance.report;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
 
 public interface DayReportController {
@@ -69,80 +66,5 @@ public interface DayReportController {
          */
         @NotNull(message = "院区不能为空")
         public DeptOwnEnum deptOwn = null;
-    }
-
-    /**
-     * 导出明细
-     * 
-     * @param req
-     * @return
-     */
-    ExportNewYbDataRsp exportNewYbData(@Valid ExportNewYbDataReq req);
-
-    public static class ExportNewYbDataReq {
-        /**
-         * 开始时间
-         */
-        @NotNull(message = "开始时间不能为空")
-        public Date beginDate = null;
-
-        /**
-         * 结束时间
-         */
-        @NotNull(message = "结束时间不能为空")
-        public Date endDate = null;
-
-        /**
-         * 院区不能为空
-         */
-        @NotNull(message = "院区不能为空")
-        public DeptOwnEnum deptOwn = null;
-    }
-
-    public static class ExportNewYbDataRsp {
-        /**
-         * 新医保数据
-         */
-        public NewYb newYb = null;
-
-        /**
-         * 新医保
-         */
-        public static class NewYb {
-            /**
-             * 统筹
-             */
-            public Double pubCost = null;
-
-            /**
-             * 账户
-             */
-            public Double payCost = null;
-        }
-
-        /**
-         * 其他医保数据
-         */
-        public OtherYb otherYb = null;
-
-        /**
-         * 其他医保
-         */
-        public static class OtherYb {
-            /**
-             * 统筹
-             */
-            public Double pubCost = null;
-
-            /**
-             * 账户
-             */
-            public Double payCost = null;
-        }
-
-        /**
-         * 明细数据
-         */
-        public Map<String, Collection<FinIpbBalanceHead>> data = null;
     }
 }

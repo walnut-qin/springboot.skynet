@@ -6,9 +6,14 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Multimap;
 import com.kaos.his.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.his.entity.inpatient.fee.FinIpbItemList;
 import com.kaos.his.entity.inpatient.fee.FinIpbMedicineList;
+import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+
+import org.javatuples.Pair;
 
 public interface ReconcileController {
     /**
@@ -77,6 +82,61 @@ public interface ReconcileController {
                  */
                 public List<FinIpbMedicineList> medList = null;
             }
+        }
+    }
+
+    /**
+     * 导出明细
+     * 
+     * @param req
+     * @return
+     */
+    ExportNewYbDataRsp exportNewYbData(ExportNewYbDataReq req);
+
+    public static class ExportNewYbDataReq {
+        /**
+         * 开始时间
+         */
+        @NotNull(message = "开始时间不能为空")
+        public Date beginDate = null;
+
+        /**
+         * 结束时间
+         */
+        @NotNull(message = "结束时间不能为空")
+        public Date endDate = null;
+
+        /**
+         * 院区不能为空
+         */
+        @NotNull(message = "院区不能为空")
+        public DeptOwnEnum deptOwn = null;
+    }
+
+    public static class ExportNewYbDataRsp {
+        /**
+         * 尺寸
+         */
+        public Integer size = null;
+
+        /**
+         * 数据
+         */
+        public Map<String, Pair<CostData, Multimap<String, FinIpbBalanceHead>>> data = null;
+
+        /**
+         * 明细
+         */
+        public static class CostData {
+            /**
+             * 统筹
+             */
+            public Double pubCost = null;
+
+            /**
+             * 账户
+             */
+            public Double payCost = null;
         }
     }
 }

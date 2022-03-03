@@ -1,14 +1,10 @@
 package com.kaos.his.service.impl.inpatient.fee.report;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.function.ToDoubleFunction;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.TreeMultimap;
 import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
@@ -22,7 +18,6 @@ import com.kaos.his.service.inf.inpatient.fee.report.DayReportService;
 
 import org.apache.log4j.Logger;
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -176,54 +171,5 @@ public class DayReportServiceImpl implements DayReportService {
                 this.logger.error(String.format("更新数据异常(statNo = %s)", rpt.statNo));
             }
         }
-    }
-
-    @Override
-    public Triplet<Multimap<String, FinIpbBalanceHead>, Pair<Double, Double>, Pair<Double, Double>> exportNewYbData(
-            Date beginDate, Date endDate, DeptOwnEnum deptOwn) {
-        // 定义带有排序规则的MultiMap
-        TreeMultimap<String, FinIpbBalanceHead> balanceMap = TreeMultimap.create(Ordering.natural(),
-                Ordering.from(new Comparator<FinIpbBalanceHead>() {
-                    @Override
-                    public int compare(FinIpbBalanceHead arg0, FinIpbBalanceHead arg1) {
-                        return arg0.inpatientNo.compareTo(arg1.inpatientNo);
-                    }
-                }));
-
-        // 声明统计变量
-        Double newYbPubCost = 0d;
-        Double newYbPayCost = 0d;
-        Double otherYbPubCost = 0d;
-        Double otherYbPayCost = 0d;
-
-        // 查询满足条件的日结数据
-        var rpts = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
-        if (rpts == null) {
-            return null;
-        }
-        for (var rpt : rpts) {
-            var balances = this.balanceHeadMapper.queryBalancesInBalancer(rpt.rptEmplCode, rpt.beginDate, rpt.endDate,
-                    null);
-            if (balances == null) {
-                continue;
-            }
-            for (var balance : balances) {
-                balance.associateEntity.finIpbDayReport = rpt;
-                balance.associateEntity.balanceEmployee = this.emplCache.getValue(rpt.rptEmplCode);
-                balanceMap.put(rpt.statNo, balance);
-
-                // 计算统计
-                if (balance.pactCode.equals("18")) {
-                    newYbPubCost += Optional.fromNullable(balance.pubCost).or(0d);
-                    newYbPayCost += Optional.fromNullable(balance.payCost).or(0d);
-                } else {
-                    otherYbPubCost += Optional.fromNullable(balance.pubCost).or(0d);
-                    otherYbPayCost += Optional.fromNullable(balance.payCost).or(0d);
-                }
-            } 
-        }
-
-        return new Triplet<>(balanceMap, new Pair<>(newYbPubCost, newYbPayCost),
-                new Pair<>(otherYbPubCost, otherYbPayCost));
     }
 }

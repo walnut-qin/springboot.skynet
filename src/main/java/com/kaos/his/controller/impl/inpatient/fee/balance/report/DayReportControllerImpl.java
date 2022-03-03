@@ -67,23 +67,4 @@ public class DayReportControllerImpl implements DayReportController {
 
         return "修改完毕";
     }
-
-    @Override
-    @RequestMapping(value = "exportNewYbData", method = RequestMethod.POST, produces = MediaType.JSON)
-    public ExportNewYbDataRsp exportNewYbData(@RequestBody @Valid ExportNewYbDataReq req) {
-        // 调用服务
-        var data = this.dayReportService.exportNewYbData(req.beginDate, req.endDate, req.deptOwn);
-
-        // 创建响应
-        ExportNewYbDataRsp rsp = new ExportNewYbDataRsp();
-        rsp.newYb = new ExportNewYbDataRsp.NewYb();
-        rsp.newYb.pubCost = data.getValue1().getValue0();
-        rsp.newYb.payCost = data.getValue1().getValue1();
-        rsp.otherYb = new ExportNewYbDataRsp.OtherYb();
-        rsp.otherYb.pubCost = data.getValue2().getValue0();
-        rsp.otherYb.payCost = data.getValue2().getValue1();
-        rsp.data = data.getValue0().asMap();
-
-        return rsp;
-    }
 }

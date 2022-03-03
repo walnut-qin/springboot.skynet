@@ -4,10 +4,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Multimap;
 import com.kaos.his.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.his.entity.inpatient.fee.FinIpbItemList;
 import com.kaos.his.entity.inpatient.fee.FinIpbMedicineList;
+import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
 
+import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 /**
@@ -23,4 +27,15 @@ public interface ReconcileService {
      */
     Map<String, Map<String, Triplet<List<FinIpbFeeInfo>, List<FinIpbItemList>, List<FinIpbMedicineList>>>> checkInpatientIncome(
             Date beginDate, Date endDate);
+
+    /**
+     * 导出汇总改数据
+     * 
+     * @param beginDate
+     * @param endDate
+     * @param deptOwn
+     * @return { 医保类型 -> < <统筹, 账户>, {结算序号 -> 结算实体} > }
+     */
+    Map<String, Pair<Pair<Double, Double>, Multimap<String, FinIpbBalanceHead>>> exportNewYbData(Date beginDate,
+            Date endDate, DeptOwnEnum deptOwn);
 }

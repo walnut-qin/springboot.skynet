@@ -2,12 +2,7 @@ package com.kaos.his.service.inf.inpatient.fee.report;
 
 import java.util.Date;
 
-import com.google.common.collect.Multimap;
-import com.kaos.his.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
-
-import org.javatuples.Pair;
-import org.javatuples.Triplet;
 
 /**
  * 日结服务
@@ -46,15 +41,4 @@ public interface DayReportService {
      * @param statNo
      */
     void fixNewYbDayReportData(Date beginDate, Date endDate, DeptOwnEnum deptOwn);
-
-    /**
-     * 导出汇总改数据
-     * 
-     * @param beginDate
-     * @param endDate
-     * @param deptOwn
-     * @return [{结算序号 -> 结算实体}, [新医保统筹, 新医保账户], [非新医保统筹, 非新医保账户]}]
-     */
-    Triplet<Multimap<String, FinIpbBalanceHead>, Pair<Double, Double>, Pair<Double, Double>> exportNewYbData(
-            Date beginDate, Date endDate, DeptOwnEnum deptOwn);
 }

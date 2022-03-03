@@ -3,11 +3,14 @@ package com.kaos.his.controller.impl.inpatient.fee.balance.report;
 import javax.validation.Valid;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.inpatient.fee.balance.report.ReconcileController;
+import com.kaos.his.controller.inf.inpatient.fee.balance.report.ReconcileController.ExportNewYbDataRsp.CostData;
 import com.kaos.his.service.inf.inpatient.fee.report.ReconcileService;
 
 import org.apache.log4j.Logger;
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +59,27 @@ public class ReconcileControllerImpl implements ReconcileController {
             }
 
             rsp.data.put(dept, innerData);
+        }
+
+        return rsp;
+    }
+
+    @Override
+    public ExportNewYbDataRsp exportNewYbData(ExportNewYbDataReq req) {
+        // 执行业务
+        var data = this.reconcileService.exportNewYbData(req.beginDate, req.endDate, req.deptOwn);
+        if (data == null) {
+            return null;
+        }
+
+        // 构造响应
+        ExportNewYbDataRsp rsp = new ExportNewYbDataRsp();
+        rsp.size = data.size();
+        rsp.data = Maps.newTreeMap(Ordering.natural());
+        for (var key : data.keySet()) {
+            rsp.data.put(key, new Pair<>(new CostData(), data.get(key).getValue1()));
+            rsp.data.get(key).getValue0().pubCost = data.get(key).getValue0().getValue0();
+            rsp.data.get(key).getValue0().payCost = data.get(key).getValue0().getValue1();
         }
 
         return rsp;
