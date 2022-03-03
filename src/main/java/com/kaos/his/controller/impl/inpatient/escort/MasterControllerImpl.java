@@ -9,7 +9,7 @@ import com.kaos.his.cache.impl.common.ComPatientInfoCache;
 import com.kaos.his.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.his.cache.impl.inpatient.ComBedInfoCache;
 import com.kaos.his.controller.MediaType;
-import com.kaos.his.controller.inf.inpatient.escort.MainController;
+import com.kaos.his.controller.inf.inpatient.escort.MasterController;
 import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 import com.kaos.his.service.inf.inpatient.escort.MainService;
@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping({ "/ms/inpatient/escort/main", "/ms/inpatient/escort" })
-public class MainControllerImpl implements MainController {
+@RequestMapping({ "/ms/inpatient/escort/master", "/ms/inpatient/escort" })
+public class MasterControllerImpl implements MasterController {
     /**
      * 日志模块
      */
-    Logger logger = Logger.getLogger(MainControllerImpl.class);
+    Logger logger = Logger.getLogger(MasterControllerImpl.class);
 
     /**
      * 业务模块

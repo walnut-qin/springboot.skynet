@@ -20,13 +20,4 @@ public interface ListHelper {
      * @return
      */
     <T> T getLast(List<T> list);
-
-    /**
-     * 拼接字符串列表
-     * 
-     * @param seperator
-     * @param list
-     * @return
-     */
-    String join(String separator, List<String> list);
 }

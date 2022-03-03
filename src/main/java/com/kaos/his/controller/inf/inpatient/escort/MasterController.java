@@ -10,7 +10,7 @@ import com.kaos.his.enums.impl.common.SexEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 
-public interface MainController {
+public interface MasterController {
     /**
      * 登记陪护人
      * 

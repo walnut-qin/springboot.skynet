@@ -25,19 +25,4 @@ public class ListHelperImpl implements ListHelper {
             return list.get(list.size() - 1);
         }
     }
-
-    @Override
-    public String join(String separator, List<String> list) {
-        String oStr = null;
-        for (String iStr : list) {
-            if (iStr == null || iStr.equals("")) {
-                continue;
-            } else if (oStr == null) {
-                oStr = iStr;
-            } else {
-                oStr += String.format("%s%s", separator, iStr);
-            }
-        }
-        return oStr;
-    }
 }

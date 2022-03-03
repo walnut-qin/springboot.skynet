@@ -1,20 +1,17 @@
-package com.kaos.his.controller.inpatient.surgery;
+package com.kaos.his.controller.impl.inpatient.surgery;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesReq;
-import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesRsp;
-import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesReq;
-import com.kaos.his.controller.inpatient.surgery.entity.QueryStatesRsp;
-import com.kaos.his.controller.inpatient.surgery.entity.QueryAppliesRsp.Data;
+import com.kaos.his.controller.MediaType;
+import com.kaos.his.controller.inf.inpatient.surgery.MasterController;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
@@ -26,28 +23,31 @@ import com.kaos.his.util.helper.HttpHelper;
 import com.kaos.his.util.helper.ListHelper;
 
 import org.apache.log4j.Logger;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping("/ms/inpatient/surgery")
-public class SurgeryController {
+@RequestMapping({ "/ms/inpatient/surgery/master", "/ms/inpatient/surgery" })
+public class MasterControllerImpl implements MasterController {
     /**
-     * 接口：日志服务
+     * 日志接口
      */
-    Logger logger = Logger.getLogger(SurgeryController.class.getName());
+    Logger logger = Logger.getLogger(MasterControllerImpl.class);
 
     /**
      * gson处理器
      */
     Gson gson = Gsons.newGson();
+
+    /**
+     * HttpHelper
+     */
+    HttpHelper httpClient = HttpHelpers.newHttpClient(HttpHelpers.DOCARE_SERVER);
 
     /**
      * 基本类型助手
@@ -68,17 +68,12 @@ public class SurgeryController {
     SurgeryService surgeryService;
 
     /**
-     * HttpHelper
-     */
-    HttpHelper httpClient = HttpHelpers.newHttpClient(HttpHelpers.DOCARE_SERVER);
-
-    /**
      * 构造响应体元素
      * 
      * @param item
      * @return
      */
-    private Data createQueryMetOpsAppliesInDeptRspBody(MetOpsApply apply) {
+    private QueryAppliesRsp.Data createQueryMetOpsAppliesInDeptRspBody(MetOpsApply apply) {
         // 创建实体
         var rspBody = new QueryAppliesRsp.Data();
 
@@ -155,20 +150,17 @@ public class SurgeryController {
             var arranges = apply.associateEntity.metOpsArranges;
 
             // 助手
-            List<MetOpsArrange> reg = new ArrayList<>();
+            List<MetOpsArrange> reg = Lists.newArrayList();
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper1));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper2));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper3));
-            rspBody.helperNames = this.listHelper.join(";", reg.stream().map(new Function<MetOpsArrange, String>() {
-                @Override
-                public @Nullable String apply(@Nullable MetOpsArrange input) {
-                    if (input == null || input.associateEntity.employee == null) {
-                        return null;
-                    } else {
-                        return input.associateEntity.employee.emplName;
-                    }
+            rspBody.helperNames = reg.stream().map(x -> {
+                if (x == null || x.associateEntity.employee == null) {
+                    return null;
+                } else {
+                    return x.associateEntity.employee.emplName;
                 }
-            }).toList());
+            }).collect(Collectors.joining(";"));
 
             // 麻醉医生1
             var arrange = arranges.get(SurgeryArrangeRoleEnum.Anaesthetist);
@@ -194,32 +186,25 @@ public class SurgeryController {
             reg.clear();
             reg.add(arranges.get(SurgeryArrangeRoleEnum.WashingHandNurse));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.WashingHandNurse1));
-            rspBody.washNurseNames = this.listHelper.join(";", reg.stream().map(new Function<MetOpsArrange, String>() {
-                @Override
-                public @Nullable String apply(@Nullable MetOpsArrange input) {
-                    if (input == null || input.associateEntity.employee == null) {
-                        return null;
-                    } else {
-                        return input.associateEntity.employee.emplName;
-                    }
+            rspBody.washNurseNames = reg.stream().map(x -> {
+                if (x == null || x.associateEntity.employee == null) {
+                    return null;
+                } else {
+                    return x.associateEntity.employee.emplName;
                 }
-            }).toList());
+            }).collect(Collectors.joining(";"));
 
             // 巡回护士
             reg.clear();
             reg.add(arranges.get(SurgeryArrangeRoleEnum.ItinerantNurse));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.ItinerantNurse1));
-            rspBody.itinerantNurseNames = this.listHelper.join(";",
-                    reg.stream().map(new Function<MetOpsArrange, String>() {
-                        @Override
-                        public @Nullable String apply(@Nullable MetOpsArrange input) {
-                            if (input == null || input.associateEntity.employee == null) {
-                                return null;
-                            } else {
-                                return input.associateEntity.employee.emplName;
-                            }
-                        }
-                    }).toList());
+            rspBody.itinerantNurseNames = reg.stream().map(x -> {
+                if (x == null || x.associateEntity.employee == null) {
+                    return null;
+                } else {
+                    return x.associateEntity.employee.emplName;
+                }
+            }).collect(Collectors.joining(";"));
         }
 
         // 麻醉种类
@@ -237,9 +222,9 @@ public class SurgeryController {
         return rspBody;
     }
 
-    @ResponseBody
-    @RequestMapping(value = "queryArrangedApplies", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public QueryAppliesRsp queryArrangedApplies(@RequestBody QueryAppliesReq req) {
+    @Override
+    @RequestMapping(value = "queryArrangedApplies", method = RequestMethod.POST, produces = MediaType.JSON)
+    public QueryAppliesRsp querySurgeries(@RequestBody @Valid QueryAppliesReq req) {
         // 记录日志
         this.logger.info("查询手术申请, 入参:");
         this.logger.info(this.gson.toJson(req));
@@ -272,14 +257,30 @@ public class SurgeryController {
         return rspBodies;
     }
 
+    /**
+     * Web请求Body
+     */
+    public class QueryStatesReq {
+        /**
+         * 手术申请号
+         */
+        public List<String> applyNos = null;
+    }
+
+    /**
+     * Web响应body
+     */
+    public class QueryStatesRsp {
+        /**
+         * 状态清单
+         */
+        public Map<String, String> states = null;
+    }
+
     @RequestMapping(value = "queryApplyNo", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-    public String queryApplyNo(@NotBlank(message = "住院号不能为空") String patientNo,
+    public String queryApplyNo(@NotNull(message = "住院号不能为空") String patientNo,
             @NotNull(message = "开始时间不能为空") Date beginDate,
             @NotNull(message = "结束时间不能为空") Date endDate) {
-        // 日志
-        // this.logger.info(String.format("查询手术申请号(patientNo = %s, beginDate = %s, endDate = %s)", patientNo,
-                // beginDate.toString(), endDate.toString()));
-
         // 调用业务
         return this.surgeryService.queryValidApplyNo(patientNo, beginDate, endDate);
     }
