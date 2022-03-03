@@ -13,8 +13,8 @@ import com.kaos.his.controller.inf.inpatient.escort.MasterController;
 import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 import com.kaos.his.service.inf.inpatient.escort.MainService;
-import com.kaos.his.util.helper.DateHelper;
-import com.kaos.his.util.helper.ListHelper;
+import com.kaos.his.util.DateHelpers;
+import com.kaos.his.util.ListHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,18 +37,6 @@ public class MasterControllerImpl implements MasterController {
      */
     @Autowired
     MainService escortMainService;
-
-    /**
-     * 列表操作助手
-     */
-    @Autowired
-    ListHelper listHelper;
-
-    /**
-     * 时间操作助手
-     */
-    @Autowired
-    DateHelper dateHelper;
 
     /**
      * 患者基本信息cache
@@ -140,8 +128,8 @@ public class MasterControllerImpl implements MasterController {
         rsp.patientCardNo = escortInfo.patientCardNo;
         rsp.helperCardNo = escortInfo.helperCardNo;
         if (escortInfo.associateEntity.stateRecs != null) {
-            rsp.regDate = this.listHelper.getFirst(escortInfo.associateEntity.stateRecs).recDate;
-            rsp.state = this.listHelper.getLast(escortInfo.associateEntity.stateRecs).state.getValue();
+            rsp.regDate = ListHelpers.getFirst(escortInfo.associateEntity.stateRecs).recDate;
+            rsp.state = ListHelpers.getLast(escortInfo.associateEntity.stateRecs).state.getValue();
         }
 
         return rsp;
@@ -169,7 +157,7 @@ public class MasterControllerImpl implements MasterController {
             if (patient != null) {
                 rsp.name = patient.name;
                 rsp.sex = patient.sex;
-                rsp.age = this.dateHelper.getAge(patient.birthday).toString();
+                rsp.age = DateHelpers.getAge(patient.birthday).toString();
             }
             if (escortInfo.associateEntity.prepayIn != null) {
                 // 若存在住院证，加载住院信息
@@ -249,7 +237,7 @@ public class MasterControllerImpl implements MasterController {
             if (patient != null) {
                 rsp.name = patient.name;
                 rsp.sex = patient.sex;
-                rsp.age = this.dateHelper.getAge(patient.birthday).toString();
+                rsp.age = DateHelpers.getAge(patient.birthday).toString();
             }
             if (escortInfo.associateEntity.prepayIn != null) {
                 // 若存在住院证，加载住院信息

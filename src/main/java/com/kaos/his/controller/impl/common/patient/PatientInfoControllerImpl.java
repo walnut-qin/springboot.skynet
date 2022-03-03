@@ -6,7 +6,7 @@ import com.kaos.his.cache.Cache;
 import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.common.patient.PatientInfoController;
 import com.kaos.his.entity.common.ComPatientInfo;
-import com.kaos.his.util.helper.DateHelper;
+import com.kaos.his.util.DateHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,6 @@ public class PatientInfoControllerImpl implements PatientInfoController {
      * 日志接口
      */
     Logger logger = Logger.getLogger(PatientInfoControllerImpl.class);
-
-    /**
-     * 基本类型助手
-     */
-    @Autowired
-    DateHelper dateHelper;
 
     /**
      * 实体信息服务
@@ -53,7 +47,7 @@ public class PatientInfoControllerImpl implements PatientInfoController {
         rspBody.cardNo = patient.cardNo;
         rspBody.name = patient.name;
         rspBody.sex = patient.sex;
-        rspBody.age = this.dateHelper.getAge(patient.birthday).toString();
+        rspBody.age = DateHelpers.getAge(patient.birthday).toString();
         rspBody.idenNo = patient.identityCardNo;
         rspBody.tel = patient.homeTel;
 

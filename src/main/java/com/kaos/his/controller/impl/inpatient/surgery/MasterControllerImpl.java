@@ -16,11 +16,10 @@ import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.his.service.inf.inpatient.surgery.SurgeryService;
+import com.kaos.his.util.DateHelpers;
 import com.kaos.his.util.Gsons;
 import com.kaos.his.util.HttpHelpers;
-import com.kaos.his.util.helper.DateHelper;
 import com.kaos.his.util.helper.HttpHelper;
-import com.kaos.his.util.helper.ListHelper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,18 +47,6 @@ public class MasterControllerImpl implements MasterController {
      * HttpHelper
      */
     HttpHelper httpClient = HttpHelpers.newHttpClient(HttpHelpers.DOCARE_SERVER);
-
-    /**
-     * 基本类型助手
-     */
-    @Autowired
-    ListHelper listHelper;
-
-    /**
-     * 时间类型助手
-     */
-    @Autowired
-    DateHelper dateHelper;
 
     /**
      * 接口：手术服务
@@ -111,7 +98,7 @@ public class MasterControllerImpl implements MasterController {
             if (inMainInfo.associateEntity.patientInfo != null) {
                 rspBody.name = inMainInfo.associateEntity.patientInfo.name;
                 rspBody.sex = inMainInfo.associateEntity.patientInfo.sex;
-                rspBody.age = this.dateHelper.getAge(inMainInfo.associateEntity.patientInfo.birthday).toString();
+                rspBody.age = DateHelpers.getAge(inMainInfo.associateEntity.patientInfo.birthday).toString();
             } else {
                 rspBody.name = inMainInfo.name;
             }

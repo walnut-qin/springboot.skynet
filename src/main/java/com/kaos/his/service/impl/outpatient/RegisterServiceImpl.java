@@ -12,7 +12,7 @@ import com.kaos.his.enums.impl.common.TransTypeEnum;
 import com.kaos.his.enums.impl.common.ValidStateEnum;
 import com.kaos.his.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.his.service.inf.outpatient.RegisterService;
-import com.kaos.his.util.helper.DateHelper;
+import com.kaos.his.util.DateHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +48,6 @@ public class RegisterServiceImpl implements RegisterService {
     @Autowired
     Cache<String, DawnOrgDept> dawnOrgDeptCache;
 
-    @Autowired
-    DateHelper dateHelper;
-
     @Transactional
     @Override
     public void freeRegister(String cardNo, String deptCode, String doctCode, Date seeDate, String opercode,
@@ -78,7 +75,7 @@ public class RegisterServiceImpl implements RegisterService {
         register.transType = TransTypeEnum.Positive;
         register.cardNo = cardNo;
         register.regDate = new Date();
-        register.noon = this.dateHelper.getNoon(seeDate);
+        register.noon = DateHelpers.getNoon(seeDate);
         register.name = patientInfo.name;
         register.idenNo = patientInfo.identityCardNo;
         register.sex = patientInfo.sex;

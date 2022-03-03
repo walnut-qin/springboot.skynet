@@ -32,7 +32,7 @@ import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.his.service.impl.inpatient.fee.report.DayReportServiceImpl;
 import com.kaos.his.service.inf.inpatient.escort.MainService;
-import com.kaos.his.util.helper.ListHelper;
+import com.kaos.his.util.ListHelpers;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -46,12 +46,6 @@ public class MainServiceImpl implements MainService {
      * 日志接口
      */
     Logger logger = Logger.getLogger(DayReportServiceImpl.class.getName());
-
-    /**
-     * 基本类型助手
-     */
-    @Autowired
-    ListHelper listHelper;
 
     /**
      * 注解自身
@@ -140,7 +134,7 @@ public class MainServiceImpl implements MainService {
             ntt.stateRecs = this.escortStateRecMapper.queryStates(context.escortNo);
         }
         if (ntt.stateRecs != null && !ntt.stateRecs.isEmpty()) {
-            var curState = this.listHelper.getLast(ntt.stateRecs).state;
+            var curState = ListHelpers.getLast(ntt.stateRecs).state;
             if (curState == EscortStateEnum.注销) {
                 return EscortStateEnum.注销;
             }

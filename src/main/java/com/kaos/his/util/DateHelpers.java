@@ -1,18 +1,22 @@
-package com.kaos.his.util.helper.impl;
+package com.kaos.his.util;
 
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.google.common.base.Optional;
 import com.kaos.his.enums.impl.common.NoonEnum;
-import com.kaos.his.util.helper.DateHelper;
 
-import org.springframework.stereotype.Component;
+import org.javatuples.Triplet;
 
-@Component
-public class DateHelperImpl implements DateHelper {
-    @Override
-    public Age getAge(Date birthday) {
+public final class DateHelpers {
+    /**
+     * 获取年龄
+     * 
+     * @param birthday
+     * @return
+     */
+    public static Age getAge(Date birthday) {
         // 合法性判断
         if (birthday == null || new Date().before(birthday)) {
             throw new InvalidParameterException("入参异常");
@@ -43,8 +47,56 @@ public class DateHelperImpl implements DateHelper {
         return new Age(year, month, day);
     }
 
-    @Override
-    public NoonEnum getNoon(Date date) {
+    /**
+     * 年龄实体
+     */
+    public static class Age {
+        /**
+         * 年龄数据
+         */
+        Triplet<Integer, Integer, Integer> data = null;
+
+        /**
+         * 构造函数
+         * 
+         * @param year  年
+         * @param month 月
+         * @param day   日
+         */
+        public Age(Integer year, Integer month, Integer day) {
+            this.data = new Triplet<Integer, Integer, Integer>(
+                    Optional.fromNullable(year).or(0),
+                    Optional.fromNullable(month).or(0),
+                    Optional.fromNullable(day).or(0));
+        }
+
+        /**
+         * 获取年龄的年份数
+         * 
+         * @return
+         */
+        public Integer getAge() {
+            return this.data.getValue0();
+        }
+
+        /**
+         * 转为字符串描述
+         */
+        public String toString() {
+            return String.format("%s%s%s",
+                    this.data.getValue0().equals(0) ? "" : this.data.getValue0() + "岁",
+                    this.data.getValue1().equals(0) ? "" : this.data.getValue1() + "月",
+                    this.data.getValue2().equals(0) ? "" : this.data.getValue2() + "天");
+        }
+    }
+
+    /**
+     * 获取午别信息
+     * 
+     * @param date
+     * @return
+     */
+    public static NoonEnum getNoon(Date date) {
         // 定位目标时间
         Calendar target = Calendar.getInstance();
         target.setTime(date);
