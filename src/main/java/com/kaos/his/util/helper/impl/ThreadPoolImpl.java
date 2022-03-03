@@ -6,19 +6,25 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.collect.Queues;
 import com.kaos.his.util.helper.ThreadPool;
 
-import org.springframework.stereotype.Component;
-
-@Component
+/**
+ * 线程池封装
+ */
 public class ThreadPoolImpl implements ThreadPool {
     /**
      * 线程池实体
-     * 
-     * @param 核心线程数 40
-     * @param 最大线程数 40（等于核心线程数是为了让所有线程成为核心线程，不受空闲时间影响）
-     * @param 最大空闲期 0s（不影响核心线程）
-     * @param 等待队列  无界阻塞队列
      */
-    ThreadPoolExecutor executor = new ThreadPoolExecutor(40, 40, 0, TimeUnit.SECONDS, Queues.newLinkedBlockingDeque());
+    ThreadPoolExecutor executor = null;
+
+    /**
+     * 构造如下特性的线程池：1. 最大线程数量 = 1.2 * 核心线程数量；2. 空闲期2小时；3. 无界阻塞队列
+     * 
+     * @param threadSize 核心线程数量
+     */
+    public ThreadPoolImpl(Integer threadSize) {
+        Integer coreSize = threadSize;
+        Integer maxSize = (int) (1.2 * coreSize);
+        this.executor = new ThreadPoolExecutor(coreSize, maxSize, 2, TimeUnit.HOURS, Queues.newLinkedBlockingDeque());
+    }
 
     @Override
     public void execute(Runnable runnable) {
