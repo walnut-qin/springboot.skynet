@@ -1,4 +1,4 @@
-package com.kaos.his.controller.impl.inpatient.surgery;
+package com.kaos.his.controller.impl.inpatient;
 
 import java.util.Date;
 import java.util.List;
@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kaos.his.controller.MediaType;
-import com.kaos.his.controller.inf.inpatient.surgery.MasterController;
+import com.kaos.his.controller.inf.inpatient.SurgeryController;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.his.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.his.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
-import com.kaos.his.service.inf.inpatient.surgery.SurgeryService;
+import com.kaos.his.service.inf.inpatient.SurgeryService;
 import com.kaos.his.util.DateHelpers;
 import com.kaos.his.util.Gsons;
 import com.kaos.his.util.HttpHelpers;
@@ -31,12 +31,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping({ "/ms/inpatient/surgery/master", "/ms/inpatient/surgery" })
-public class MasterControllerImpl implements MasterController {
+@RequestMapping("/ms/inpatient/surgery")
+public class SurgeryControllerImpl implements SurgeryController {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(MasterControllerImpl.class);
+    Logger logger = Logger.getLogger(SurgeryControllerImpl.class);
 
     /**
      * gson处理器

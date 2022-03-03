@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.inpatient.fee.balance.report.DayReportController;
-import com.kaos.his.service.inf.inpatient.fee.report.DayReportService;
+import com.kaos.his.service.inf.inpatient.fee.report.ReportService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping({ "/ms/inpatient/fee/balance/report/info", "/ms/inpatient/dayreport" })
-public class DayReportControllerImpl implements DayReportController {
+@RequestMapping({ "/ms/inpatient/fee/balance/report", "/ms/inpatient/dayreport" })
+public class ReportControllerImpl implements DayReportController {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(DayReportControllerImpl.class);
+    Logger logger = Logger.getLogger(ReportControllerImpl.class);
 
     /**
      * 业务接口
      */
     @Autowired
-    DayReportService dayReportService;
+    ReportService dayReportService;
 
     @Override
     @RequestMapping(value = "queryNewYbPubCost", method = RequestMethod.GET, produces = MediaType.TEXT)

@@ -1,4 +1,4 @@
-package com.kaos.his.controller.inf.common.patient;
+package com.kaos.his.controller.inf.common;
 
 import javax.validation.constraints.NotBlank;
 
@@ -8,7 +8,7 @@ import com.kaos.his.enums.impl.common.SexEnum;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-public interface PatientInfoController {
+public interface PatientController {
     /**
      * 查询患者基本信息
      * @param cardNo

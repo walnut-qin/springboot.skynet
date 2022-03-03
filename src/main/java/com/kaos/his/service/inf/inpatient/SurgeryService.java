@@ -1,4 +1,4 @@
-package com.kaos.his.service.inf.inpatient.surgery;
+package com.kaos.his.service.inf.inpatient;
 
 import java.util.Date;
 import java.util.List;

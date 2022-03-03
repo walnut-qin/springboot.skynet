@@ -30,8 +30,8 @@ import com.kaos.his.mapper.inpatient.escort.EscortVipMapper;
 import com.kaos.his.mapper.inpatient.order.MetOrdiOrderMapper;
 import com.kaos.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.his.mapper.pipe.lis.LisResultNewMapper;
-import com.kaos.his.service.impl.inpatient.fee.report.DayReportServiceImpl;
-import com.kaos.his.service.inf.inpatient.escort.MainService;
+import com.kaos.his.service.impl.inpatient.fee.report.ReportServiceImpl;
+import com.kaos.his.service.inf.inpatient.escort.EscortService;
 import com.kaos.his.util.ListHelpers;
 
 import org.apache.log4j.Logger;
@@ -41,17 +41,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class MainServiceImpl implements MainService {
+public class EscortServiceImpl implements EscortService {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(DayReportServiceImpl.class.getName());
+    Logger logger = Logger.getLogger(ReportServiceImpl.class.getName());
 
     /**
      * 注解自身
      */
     @Autowired
-    MainService selfService;
+    EscortService selfService;
 
     /**
      * 陪护证主表接口

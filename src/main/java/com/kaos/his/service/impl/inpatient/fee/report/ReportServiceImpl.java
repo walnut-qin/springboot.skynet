@@ -14,7 +14,7 @@ import com.kaos.his.enums.impl.common.DeptOwnEnum;
 import com.kaos.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
 import com.kaos.his.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
-import com.kaos.his.service.inf.inpatient.fee.report.DayReportService;
+import com.kaos.his.service.inf.inpatient.fee.report.ReportService;
 
 import org.apache.log4j.Logger;
 import org.javatuples.Pair;
@@ -24,17 +24,17 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class DayReportServiceImpl implements DayReportService {
+public class ReportServiceImpl implements ReportService {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(DayReportServiceImpl.class.getName());
+    Logger logger = Logger.getLogger(ReportServiceImpl.class.getName());
 
     /**
      * 注解自身，用于会话传递
      */
     @Autowired
-    DayReportService selfService;
+    ReportService selfService;
 
     /**
      * 日结头表接口

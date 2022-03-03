@@ -9,10 +9,10 @@ import com.kaos.his.cache.impl.common.ComPatientInfoCache;
 import com.kaos.his.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.his.cache.impl.inpatient.ComBedInfoCache;
 import com.kaos.his.controller.MediaType;
-import com.kaos.his.controller.inf.inpatient.escort.MasterController;
+import com.kaos.his.controller.inf.inpatient.escort.EscortController;
 import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
-import com.kaos.his.service.inf.inpatient.escort.MainService;
+import com.kaos.his.service.inf.inpatient.escort.EscortService;
 import com.kaos.his.util.DateHelpers;
 import com.kaos.his.util.ListHelpers;
 
@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping({ "/ms/inpatient/escort/master", "/ms/inpatient/escort" })
-public class MasterControllerImpl implements MasterController {
+@RequestMapping("/ms/inpatient/escort")
+public class EscortControllerImpl implements EscortController {
     /**
      * 日志模块
      */
-    Logger logger = Logger.getLogger(MasterControllerImpl.class);
+    Logger logger = Logger.getLogger(EscortControllerImpl.class);
 
     /**
      * 业务模块
      */
     @Autowired
-    MainService escortMainService;
+    EscortService escortMainService;
 
     /**
      * 患者基本信息cache
@@ -67,9 +67,9 @@ public class MasterControllerImpl implements MasterController {
                 helperCardNo, emplCode));
 
         // 加患者锁，防止同时对同一个患者添加陪护
-        synchronized (Lock.patientLock.mapToLock(patientCardNo)) {
+        synchronized (Locks.patientLock.mapToLock(patientCardNo)) {
             // 加陪护人锁，防止同时对同一个陪护人添加陪护
-            synchronized (Lock.helperLock.mapToLock(helperCardNo)) {
+            synchronized (Locks.helperLock.mapToLock(helperCardNo)) {
                 // 调用业务
                 var escort = this.escortMainService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
                 if (escort != null) {
@@ -91,7 +91,7 @@ public class MasterControllerImpl implements MasterController {
                 state.getDescription(), emplCode));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        synchronized (Lock.stateLock.mapToLock(escortNo)) {
+        synchronized (Locks.stateLock.mapToLock(escortNo)) {
             // 调用业务
             this.escortMainService.updateEscortState(escortNo, state, emplCode, "收到客户端请求");
         }
@@ -105,7 +105,7 @@ public class MasterControllerImpl implements MasterController {
         this.logger.info(String.format("记录陪护证行为<escortNo = %s, action = %s>", escortNo, action.getDescription()));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        synchronized (Lock.actionLock.mapToLock(escortNo)) {
+        synchronized (Locks.actionLock.mapToLock(escortNo)) {
             // 调用业务
             this.escortMainService.recordEscortAction(escortNo, action, "收到客户端请求");
         }

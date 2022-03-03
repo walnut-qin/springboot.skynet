@@ -1,10 +1,10 @@
-package com.kaos.his.controller.impl.common.patient;
+package com.kaos.his.controller.impl.common;
 
 import javax.validation.constraints.NotBlank;
 
 import com.kaos.his.cache.Cache;
 import com.kaos.his.controller.MediaType;
-import com.kaos.his.controller.inf.common.patient.PatientInfoController;
+import com.kaos.his.controller.inf.common.PatientController;
 import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.util.DateHelpers;
 
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping({ "/ms/common/patient/info", "/ms/common/entityinfo" })
-public class PatientInfoControllerImpl implements PatientInfoController {
+@RequestMapping({ "/ms/common/patient", "/ms/common/entityinfo" })
+public class PatientControllerImpl implements PatientController {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(PatientInfoControllerImpl.class);
+    Logger logger = Logger.getLogger(PatientControllerImpl.class);
 
     /**
      * 实体信息服务

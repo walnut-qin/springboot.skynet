@@ -7,7 +7,7 @@ import com.kaos.his.enums.impl.common.DeptOwnEnum;
 /**
  * 日结服务
  */
-public interface DayReportService {
+public interface ReportService {
     /**
      * 查询新医保统筹总额
      * 

@@ -3,7 +3,7 @@ package com.kaos.his.controller.impl.inpatient.escort;
 import com.kaos.his.util.LockHelpers;
 import com.kaos.his.util.helper.LockHelper;
 
-public final class Lock {
+public final class Locks {
     /**
      * 患者卡号锁
      */

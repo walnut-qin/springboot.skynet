@@ -8,7 +8,7 @@ import com.kaos.his.entity.inpatient.escort.EscortStateRec;
 import com.kaos.his.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.his.enums.impl.inpatient.escort.EscortStateEnum;
 
-public interface MainService {
+public interface EscortService {
     /**
      * 注册陪护人
      * 
