@@ -10,7 +10,6 @@ import com.kaos.his.cache.Cache;
 import com.kaos.his.entity.common.ComPatientInfo;
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.entity.common.DawnOrgEmpl;
-import com.kaos.his.entity.common.config.ConfigSwitch;
 import com.kaos.his.entity.inpatient.ComBedInfo;
 import com.kaos.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.his.entity.inpatient.surgery.MetOpsApply;
@@ -81,12 +80,6 @@ public class SurgeryServiceImpl implements SurgeryService {
      */
     @Autowired
     Cache<String, ComBedInfo> bedInfoCache;
-
-    /**
-     * 开关缓存
-     */
-    @Autowired
-    Cache<String, ConfigSwitch> switchCache;
 
     static class DeptOwnPredicate implements Predicate<MetOpsApply> {
         /**
@@ -224,17 +217,9 @@ public class SurgeryServiceImpl implements SurgeryService {
                 break;
 
             default:
-                var swt = this.switchCache.getValue("SurgArrPrivCtrl");
-                if (swt == null || !swt.valid.equals(ValidStateEnum.有效) || !swt.value) {
-                    // 若开关未开，查本院区
-                    var dept = this.deptCache.getValue(deptCode);
-                    applies = applies.stream().filter(new DeptOwnPredicate(dept.deptOwn, roomNo))
-                            .sorted(new MetComparator()).toList();
-                } else {
-                    // 若开关打开，查本科室
-                    applies = applies.stream().filter(new DeptCodePredicate(deptCode, roomNo))
-                            .sorted(new MetComparator()).toList();
-                }
+                // 查本科室
+                applies = applies.stream().filter(new DeptCodePredicate(deptCode, roomNo)).sorted(new MetComparator())
+                        .toList();
                 break;
         }
         return applies;
