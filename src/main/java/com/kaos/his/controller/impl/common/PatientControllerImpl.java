@@ -31,7 +31,7 @@ public class PatientControllerImpl implements PatientController {
     Cache<String, ComPatientInfo> patientInfoCache;
 
     @Override
-    @RequestMapping(value = { "query", "queryPatientInfo" }, method = RequestMethod.GET, produces = MediaType.JSON)
+    @RequestMapping(value = "queryPatientInfo", method = RequestMethod.GET, produces = MediaType.JSON)
     public QueryPatientInfoRsp queryPatientInfo(@NotBlank(message = "就诊卡号不能为空") String cardNo) {
         // 记录日志
         this.logger.info(String.format("查询患者信息(cardNo = %s)", cardNo));

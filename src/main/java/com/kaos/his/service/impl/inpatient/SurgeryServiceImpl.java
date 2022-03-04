@@ -110,12 +110,14 @@ public class SurgeryServiceImpl implements SurgeryService {
             }
 
             // 过滤科室
-            if (apply.associateEntity.surgeryDept == null) {
-                return false;
-            }
-            var dept = apply.associateEntity.surgeryDept;
-            if (!dept.deptOwn.equals(this.deptOwn)) {
-                return false;
+            if (deptOwn != null && deptOwn != DeptOwnEnum.All) {
+                if (apply.associateEntity.surgeryDept == null) {
+                    return false;
+                }
+                var dept = apply.associateEntity.surgeryDept;
+                if (!dept.deptOwn.equals(this.deptOwn)) {
+                    return false;
+                }
             }
 
             return true;
@@ -151,16 +153,18 @@ public class SurgeryServiceImpl implements SurgeryService {
             }
 
             // 过滤科室
-            if (apply.associateEntity.inMainInfo == null) {
-                return false;
-            }
-            var inMainInfo = apply.associateEntity.inMainInfo;
-            if (inMainInfo.associateEntity.dept == null) {
-                return false;
-            }
-            var dept = inMainInfo.associateEntity.dept;
-            if (!dept.deptCode.equals(this.deptCode)) {
-                return false;
+            if (deptCode != null && !deptCode.equals("ALL")) {
+                if (apply.associateEntity.inMainInfo == null) {
+                    return false;
+                }
+                var inMainInfo = apply.associateEntity.inMainInfo;
+                if (inMainInfo.associateEntity.dept == null) {
+                    return false;
+                }
+                var dept = inMainInfo.associateEntity.dept;
+                if (!dept.deptCode.equals(this.deptCode)) {
+                    return false;
+                }
             }
 
             return true;
