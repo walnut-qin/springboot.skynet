@@ -2,9 +2,13 @@ package com.kaos.his.controller.impl.common;
 
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Lists;
 import com.kaos.his.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.common.DeptController;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
+import com.kaos.his.mapper.common.DawnOrgDeptMapper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,12 @@ public class DeptControllerImpl implements DeptController {
     @Autowired
     DawnOrgDeptCache deptCache;
 
+    /**
+     * 科室接口
+     */
+    @Autowired
+    DawnOrgDeptMapper deptMapper;
+
     @Override
     @RequestMapping(value = "queryDeptInfo", method = RequestMethod.GET, produces = MediaType.JSON)
     public QueryDeptInfoRsp queryDeptInfo(@NotNull(message = "科室编码不能为空") String deptCode) {
@@ -42,6 +52,26 @@ public class DeptControllerImpl implements DeptController {
         rsp.deptCode = dept.deptCode;
         rsp.deptName = dept.deptName;
         rsp.deptOwn = dept.deptOwn;
+        return rsp;
+    }
+
+    @Override
+    @RequestMapping(value = "queryDeptList", method = RequestMethod.GET, produces = MediaType.JSON)
+    public QueryDeptListRsp queryDeptList(@NotNull(message = "院区不能为空") DeptOwnEnum deptOwn) {
+        // 查询科室信息
+        var depts = this.deptMapper.queryDepartments(deptOwn, Lists.newArrayList(ValidStateEnum.有效));
+
+        // 构造响应
+        QueryDeptListRsp rsp = new QueryDeptListRsp();
+        rsp.size = depts.size();
+        rsp.deptCodes = depts.stream().map(x -> {
+            QueryDeptInfoRsp rspItem = new QueryDeptInfoRsp();
+            rspItem.deptCode = x.deptCode;
+            rspItem.deptName = x.deptName;
+            rspItem.deptOwn = x.deptOwn;
+            return rspItem;
+        }).toList();
+
         return rsp;
     }
 }

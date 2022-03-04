@@ -1,5 +1,7 @@
 package com.kaos.his.controller.inf.common;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
@@ -30,5 +32,25 @@ public interface DeptController {
          * 院区
          */
         public DeptOwnEnum deptOwn = null;
+    }
+
+    /**
+     * 查询科室列表
+     * 
+     * @param deptOwn
+     * @return
+     */
+    QueryDeptListRsp queryDeptList(@NotNull(message = "院区不能为空") DeptOwnEnum deptOwn);
+
+    public static class QueryDeptListRsp {
+        /**
+         * 数量
+         */
+        public Integer size = null;
+
+        /**
+         * 明细
+         */
+        public List<QueryDeptInfoRsp> deptCodes = null;
     }
 }

@@ -26,4 +26,22 @@
             </if>
         </where>
     </select>
+
+    <select id="queryDepartments" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            DAWN_ORG_DEPT
+        <where>
+            <if test = "deptOwn != null and deptOwn != @com.kaos.his.enums.impl.common.DeptOwnEnum@All">
+                AND DEPTOWN = #{deptOwn}
+            </if>
+            <if test = "validStates != null">
+                AND VALID_STATE IN
+                <foreach collection="validStates" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -1,6 +1,10 @@
 package com.kaos.his.mapper.common;
 
+import java.util.List;
+
 import com.kaos.his.entity.common.DawnOrgDept;
+import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 public interface DawnOrgDeptMapper {
     /**
@@ -10,4 +14,13 @@ public interface DawnOrgDeptMapper {
      * @return
      */
     DawnOrgDept queryDepartment(String deptCode);
+
+    /**
+     * 查询科室列表
+     * 
+     * @param deptOwn
+     * @param validStates
+     * @return
+     */
+    List<DawnOrgDept> queryDepartments(DeptOwnEnum deptOwn, List<ValidStateEnum> validStates);
 }
