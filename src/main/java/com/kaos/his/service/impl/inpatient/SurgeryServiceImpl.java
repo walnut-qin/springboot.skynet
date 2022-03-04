@@ -100,7 +100,7 @@ public class SurgeryServiceImpl implements SurgeryService {
         @Override
         public boolean test(MetOpsApply apply) {
             // 过滤手术室
-            if (roomNo != null) {
+            if (roomNo != null && !roomNo.equals("ALL")) {
                 if (apply.associateEntity.room == null) {
                     return false;
                 }
@@ -141,7 +141,7 @@ public class SurgeryServiceImpl implements SurgeryService {
         @Override
         public boolean test(MetOpsApply apply) {
             // 过滤手术室
-            if (roomNo != null) {
+            if (roomNo != null && !roomNo.equals("ALL")) {
                 if (apply.associateEntity.room == null) {
                     return false;
                 }
