@@ -3,6 +3,7 @@ package com.kaos.his.controller.impl.inpatient;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -115,7 +116,7 @@ public class SurgeryControllerImpl implements SurgeryController {
 
         // 手术名称
         if (apply.associateEntity.metOpsItem != null) {
-            rspBody.surgeryDocName = apply.associateEntity.metOpsItem.itemName;
+            rspBody.surgeryName = apply.associateEntity.metOpsItem.itemName;
         }
 
         // 手术标识
@@ -141,6 +142,7 @@ public class SurgeryControllerImpl implements SurgeryController {
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper1));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper2));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper3));
+            reg.removeIf(Objects::isNull);
             rspBody.helperNames = reg.stream().map(x -> {
                 if (x == null || x.associateEntity.employee == null) {
                     return null;
@@ -173,6 +175,7 @@ public class SurgeryControllerImpl implements SurgeryController {
             reg.clear();
             reg.add(arranges.get(SurgeryArrangeRoleEnum.WashingHandNurse));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.WashingHandNurse1));
+            reg.removeIf(Objects::isNull);
             rspBody.washNurseNames = reg.stream().map(x -> {
                 if (x == null || x.associateEntity.employee == null) {
                     return null;
@@ -185,6 +188,7 @@ public class SurgeryControllerImpl implements SurgeryController {
             reg.clear();
             reg.add(arranges.get(SurgeryArrangeRoleEnum.ItinerantNurse));
             reg.add(arranges.get(SurgeryArrangeRoleEnum.ItinerantNurse1));
+            reg.removeIf(Objects::isNull);
             rspBody.itinerantNurseNames = reg.stream().map(x -> {
                 if (x == null || x.associateEntity.employee == null) {
                     return null;
