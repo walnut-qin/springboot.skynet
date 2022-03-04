@@ -1,6 +1,7 @@
 package com.kaos.his.entity.common;
 
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.DeptTypeEnum;
 import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 /**
@@ -16,6 +17,11 @@ public class DawnOrgDept {
      * 科室名称
      */
     public String deptName;
+
+    /**
+     * 科室类型
+     */
+    public DeptTypeEnum deptType;
 
     /**
      * 院区

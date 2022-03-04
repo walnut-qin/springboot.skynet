@@ -1,8 +1,6 @@
 package com.kaos.his.mapper.common;
 
-import com.google.common.collect.Lists;
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
-import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,6 @@ public class DawnOrgDeptMapperTests {
 
     @Test
     public void queryDepartments() {
-        this.departmentMapper.queryDepartments(DeptOwnEnum.Sourth, Lists.newArrayList(ValidStateEnum.有效));
+        this.departmentMapper.queryDepartments(DeptOwnEnum.North, null, null);
     }
 }

@@ -4,6 +4,7 @@
     <resultMap id="map" type="com.kaos.his.entity.common.DawnOrgDept">
         <id column="DEPT_ID" jdbcType="VARCHAR" property="deptCode"/>
         <result column="DEPT_NAME" jdbcType="VARCHAR" property="deptName"/>
+        <result column="DEPT_TYPE" jdbcType="VARCHAR" property="deptType"/>
         <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
         <result column="VALID_STATE" jdbcType="VARCHAR" property="valid"/>
     </resultMap>
@@ -11,6 +12,7 @@
     <sql id="item">
         DEPT_ID,
         DEPT_NAME,
+        DEPT_TYPE,
         DEPTOWN,
         VALID_STATE
     </sql>
@@ -35,6 +37,12 @@
         <where>
             <if test = "deptOwn != null and deptOwn != @com.kaos.his.enums.impl.common.DeptOwnEnum@All">
                 AND DEPTOWN = #{deptOwn}
+            </if>
+            <if test = "deptTypes != null">
+                AND DEPT_TYPE IN
+                <foreach collection="deptTypes" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
             <if test = "validStates != null">
                 AND VALID_STATE IN

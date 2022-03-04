@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.kaos.his.entity.common.DawnOrgDept;
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.DeptTypeEnum;
 import com.kaos.his.enums.impl.common.ValidStateEnum;
 
 public interface DawnOrgDeptMapper {
@@ -22,5 +23,6 @@ public interface DawnOrgDeptMapper {
      * @param validStates
      * @return
      */
-    List<DawnOrgDept> queryDepartments(DeptOwnEnum deptOwn, List<ValidStateEnum> validStates);
+    List<DawnOrgDept> queryDepartments(DeptOwnEnum deptOwn, List<DeptTypeEnum> deptTypes,
+            List<ValidStateEnum> validStates);
 }

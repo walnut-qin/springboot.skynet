@@ -59,7 +59,7 @@ public class DeptControllerImpl implements DeptController {
     @RequestMapping(value = "queryDeptList", method = RequestMethod.GET, produces = MediaType.JSON)
     public QueryDeptListRsp queryDeptList(@NotNull(message = "院区不能为空") DeptOwnEnum deptOwn) {
         // 查询科室信息
-        var depts = this.deptMapper.queryDepartments(deptOwn, Lists.newArrayList(ValidStateEnum.有效));
+        var depts = this.deptMapper.queryDepartments(deptOwn, null, Lists.newArrayList(ValidStateEnum.有效));
 
         // 构造响应
         QueryDeptListRsp rsp = new QueryDeptListRsp();
