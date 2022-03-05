@@ -1,18 +1,20 @@
 package com.kaos.his.controller.impl.common;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
 import com.kaos.his.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.common.DeptController;
-import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.DeptTypeEnum;
 import com.kaos.his.enums.impl.common.ValidStateEnum;
 import com.kaos.his.mapper.common.DawnOrgDeptMapper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,10 +58,11 @@ public class DeptControllerImpl implements DeptController {
     }
 
     @Override
-    @RequestMapping(value = "queryDeptList", method = RequestMethod.GET, produces = MediaType.JSON)
-    public QueryDeptListRsp queryDeptList(@NotNull(message = "院区不能为空") DeptOwnEnum deptOwn) {
+    @RequestMapping(value = "queryDeptList", method = RequestMethod.POST, produces = MediaType.JSON)
+    public QueryDeptListRsp queryDeptList(@RequestBody @Valid QueryDeptListReq req) {
         // 查询科室信息
-        var depts = this.deptMapper.queryDepartments(deptOwn, null, Lists.newArrayList(ValidStateEnum.有效));
+        var depts = this.deptMapper.queryDepartments(req.deptOwn, Lists.newArrayList(DeptTypeEnum.住院),
+                Lists.newArrayList(ValidStateEnum.有效));
 
         // 构造响应
         QueryDeptListRsp rsp = new QueryDeptListRsp();

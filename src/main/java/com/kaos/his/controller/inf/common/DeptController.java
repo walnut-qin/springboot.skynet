@@ -2,9 +2,11 @@ package com.kaos.his.controller.inf.common;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.his.enums.impl.common.DeptOwnEnum;
+import com.kaos.his.enums.impl.common.DeptTypeEnum;
 
 public interface DeptController {
     /**
@@ -40,7 +42,20 @@ public interface DeptController {
      * @param deptOwn
      * @return
      */
-    QueryDeptListRsp queryDeptList(@NotNull(message = "院区不能为空") DeptOwnEnum deptOwn);
+    QueryDeptListRsp queryDeptList(@Valid QueryDeptListReq req);
+
+    public static class QueryDeptListReq {
+        /**
+         * 数量
+         */
+        @NotNull(message = "院区不能为空")
+        public DeptOwnEnum deptOwn = null;
+
+        /**
+         * 明细
+         */
+        public List<DeptTypeEnum> deptTypes = null;
+    }
 
     public static class QueryDeptListRsp {
         /**
