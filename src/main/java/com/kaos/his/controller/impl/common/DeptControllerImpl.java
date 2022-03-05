@@ -65,7 +65,7 @@ public class DeptControllerImpl implements DeptController {
         // 构造响应
         QueryDeptListRsp rsp = new QueryDeptListRsp();
         rsp.size = depts.size();
-        rsp.deptCodes = depts.stream().map(x -> {
+        rsp.depts = depts.stream().map(x -> {
             QueryDeptInfoRsp rspItem = new QueryDeptInfoRsp();
             rspItem.deptCode = x.deptCode;
             rspItem.deptName = x.deptName;
