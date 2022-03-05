@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.kaos</groupId>
 	<artifactId>his-web</artifactId>
-	<version>7.1.0</version>
+	<version>7.1.1</version>
 	<name>his-web</name>
 	<description>HIS Server Based On Spring Boot</description>
 	<properties>
