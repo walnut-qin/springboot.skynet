@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import com.kaos.his.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.his.controller.MediaType;
 import com.kaos.his.controller.inf.common.DeptController;
-import com.kaos.his.enums.impl.common.DeptTypeEnum;
 import com.kaos.his.enums.impl.common.ValidStateEnum;
 import com.kaos.his.mapper.common.DawnOrgDeptMapper;
 
@@ -61,8 +60,7 @@ public class DeptControllerImpl implements DeptController {
     @RequestMapping(value = "queryDeptList", method = RequestMethod.POST, produces = MediaType.JSON)
     public QueryDeptListRsp queryDeptList(@RequestBody @Valid QueryDeptListReq req) {
         // 查询科室信息
-        var depts = this.deptMapper.queryDepartments(req.deptOwn, Lists.newArrayList(DeptTypeEnum.住院),
-                Lists.newArrayList(ValidStateEnum.有效));
+        var depts = this.deptMapper.queryDepartments(req.deptOwn, req.deptTypes, Lists.newArrayList(ValidStateEnum.有效));
 
         // 构造响应
         QueryDeptListRsp rsp = new QueryDeptListRsp();
