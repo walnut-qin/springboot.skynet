@@ -66,6 +66,6 @@ public interface DeptController {
         /**
          * 明细
          */
-        public List<QueryDeptInfoRsp> deptCodes = null;
+        public List<QueryDeptInfoRsp> depts = null;
     }
 }
