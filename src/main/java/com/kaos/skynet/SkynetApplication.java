@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @MapperScan("com.kaos.skynet.mapper")
 @SpringBootApplication
 @EnableScheduling
-public class HisApplication {
+public class SkynetApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HisApplication.class, args);
+		SpringApplication.run(SkynetApplication.class, args);
 	}
 
 }
