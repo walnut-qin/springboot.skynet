@@ -4,12 +4,12 @@ server:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:oracle:thin:@//192.168.10.89:1521/his
-    username: xyhis
-    password: zhmz13886256909
-    
     # druid配置
     druid:
+      # 连接地址
+      url: jdbc:oracle:thin:@//192.168.10.89:1521/his
+      username: xyhis
+      password: zhmz13886256909
       # 初始化时建立链接数量
       initial-size: 10 
       # 最小连接池数量
