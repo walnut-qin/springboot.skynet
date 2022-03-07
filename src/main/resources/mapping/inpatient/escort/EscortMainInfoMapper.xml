@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.mapper.inpatient.escort.EscortMainInfoMapper">
+<mapper namespace="com.kaos.skynet.api.mapper.inpatient.escort.EscortMainInfoMapper">
     <resultMap id="map" type="com.kaos.skynet.entity.inpatient.escort.EscortMainInfo">
         <id column="ESCORT_NO" jdbcType="VARCHAR" property="escortNo"/>
         <result column="PATIENT_CARD_NO" jdbcType="VARCHAR" property="patientCardNo"/>

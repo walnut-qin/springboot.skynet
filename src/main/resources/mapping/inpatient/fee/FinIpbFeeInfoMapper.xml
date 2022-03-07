@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.mapper.inpatient.fee.FinIpbFeeInfoMapper">
+<mapper namespace="com.kaos.skynet.api.mapper.inpatient.fee.FinIpbFeeInfoMapper">
     <resultMap id="map" type="com.kaos.skynet.entity.inpatient.fee.FinIpbFeeInfo">
         <id column="RECIPE_NO" jdbcType="VARCHAR" property="recipeNo"/>
         <id column="FEE_CODE" jdbcType="VARCHAR" property="feeCode"/>

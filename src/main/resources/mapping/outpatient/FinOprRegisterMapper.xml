@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.mapper.outpatient.FinOprRegisterMapper">
+<mapper namespace="com.kaos.skynet.api.mapper.outpatient.FinOprRegisterMapper">
     <resultMap id="map" type="com.kaos.skynet.entity.outpatient.FinOprRegister">
         <id column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
         <id column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
