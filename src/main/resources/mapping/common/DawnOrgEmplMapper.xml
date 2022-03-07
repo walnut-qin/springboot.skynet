@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.his.mapper.common.DawnOrgEmplMapper">
-    <resultMap id="map" type="com.kaos.his.entity.common.DawnOrgEmpl">
+<mapper namespace="com.kaos.skynet.mapper.common.DawnOrgEmplMapper">
+    <resultMap id="map" type="com.kaos.skynet.entity.common.DawnOrgEmpl">
         <id column="EMPL_ID" jdbcType="VARCHAR" property="emplCode"/>
         <result column="EMPL_NAME" jdbcType="VARCHAR" property="emplName"/>
         <result column="SPELL_CODE" jdbcType="VARCHAR" property="emplNameSpellCode"/>

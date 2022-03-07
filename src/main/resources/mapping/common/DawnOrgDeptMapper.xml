@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.his.mapper.common.DawnOrgDeptMapper">
-    <resultMap id="map" type="com.kaos.his.entity.common.DawnOrgDept">
+<mapper namespace="com.kaos.skynet.mapper.common.DawnOrgDeptMapper">
+    <resultMap id="map" type="com.kaos.skynet.entity.common.DawnOrgDept">
         <id column="DEPT_ID" jdbcType="VARCHAR" property="deptCode"/>
         <result column="DEPT_NAME" jdbcType="VARCHAR" property="deptName"/>
         <result column="DEPT_TYPE" jdbcType="VARCHAR" property="deptType"/>
@@ -35,7 +35,7 @@
         FROM
             DAWN_ORG_DEPT
         <where>
-            <if test = "deptOwn != null and deptOwn != @com.kaos.his.enums.impl.common.DeptOwnEnum@All">
+            <if test = "deptOwn != null and deptOwn != @com.kaos.skynet.enums.impl.common.DeptOwnEnum@All">
                 AND DEPTOWN = #{deptOwn}
             </if>
             <if test = "deptTypes != null">

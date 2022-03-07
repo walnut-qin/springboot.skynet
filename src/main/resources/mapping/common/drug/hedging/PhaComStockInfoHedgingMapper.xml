@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.his.mapper.common.drug.hedging.PhaComStockInfoHedgingMapper">
-    <resultMap id="map" type="com.kaos.his.entity.common.drug.hedging.PhaComStockInfoHedging">
+<mapper namespace="com.kaos.skynet.mapper.common.drug.hedging.PhaComStockInfoHedgingMapper">
+    <resultMap id="map" type="com.kaos.skynet.entity.common.drug.hedging.PhaComStockInfoHedging">
         <id column="DRUG_DEPT_CODE" jdbcType="VARCHAR" property="drugDeptCode"/>
         <id column="DRUG_CODE" jdbcType="VARCHAR" property="drugCode"/>
         <result column="DRUG_QUALITY" jdbcType="VARCHAR" property="drugQuality"/>
