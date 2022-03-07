@@ -10,7 +10,7 @@
 		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.kaos</groupId>
-	<artifactId>his-web</artifactId>
+	<artifactId>skynet-his</artifactId>
 	<version>1.0.0</version>
 	<name>skynet-his</name>
 	<description>HIS Server Based On Spring Boot</description>
