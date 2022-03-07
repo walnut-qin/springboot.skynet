@@ -410,8 +410,8 @@ public class EscortServiceImpl implements EscortService {
         return escort;
     }
 
-    @Transactional
     @Override
+    @Transactional(timeout = 10)
     public EscortStateRec updateEscortState(String escortNo, EscortStateEnum state, String emplCode,
             String remark) {
         // 查询陪护证

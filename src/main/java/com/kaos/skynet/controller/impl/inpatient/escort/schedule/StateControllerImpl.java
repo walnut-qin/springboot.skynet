@@ -73,10 +73,19 @@ public class StateControllerImpl implements RefreshStateController {
                 // 更新状态
                 for (String escortNo : escortNos) {
                     StateControllerImpl.this.slavePool.execute(new Runnable() {
+                        /**
+                         * 日志句柄
+                         */
+                        Logger logger = Logger.getLogger(this.getClass());
+
                         @Override
                         public void run() {
                             synchronized (Locks.stateLock.mapToLock(escortNo)) {
-                                escortMainService.updateEscortState(escortNo, null, "server", "定时任务");
+                                try {
+                                    escortMainService.updateEscortState(escortNo, null, "server", "定时任务");
+                                } catch (Exception e) {
+                                    logger.error(String.format("更新异常<escortNo=%s,cause=%s>", escortNo, e.getMessage()));
+                                }
                             }
                             // 发令枪倒计时
                             StateControllerImpl.this.counter.countDown();
