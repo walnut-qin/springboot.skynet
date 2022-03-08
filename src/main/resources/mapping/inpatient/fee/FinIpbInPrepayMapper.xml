@@ -90,4 +90,22 @@
             </if>
         </where>
     </select>
+
+    <update id="updatePrepayCost">
+        UPDATE
+            XYHIS.FIN_IPB_INPREPAY
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="true">
+                PREPAY_COST = #{cost},
+            </if>
+        </trim>
+        <where>
+            <if test="true">
+                AND INPATIENT_NO = #{inpatientNo}
+            </if>
+            <if test="true">
+                AND HAPPEN_NO = #{happenNo}
+            </if>
+        </where>
+    </update>
 </mapper>
