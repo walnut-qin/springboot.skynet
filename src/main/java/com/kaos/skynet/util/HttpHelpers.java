@@ -14,12 +14,12 @@ public final class HttpHelpers {
     /**
      * his服务器
      */
-    public final static Pair<String, Integer> DOCARE_SERVER = new Pair<>("172.16.100.252", 8002);
+    public final static Pair<String, Integer> DOCARE_SERVER = new Pair<>("172.16.100.253", 8025);
 
     /**
      * his服务器
      */
-    public final static Pair<String, Integer> PROXY_SERVER = new Pair<>("172.16.100.252", 8003);
+    public final static Pair<String, Integer> PROXY_SERVER = new Pair<>("172.16.100.50", 8025);
 
     /**
      * 创建一个网络接口实体

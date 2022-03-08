@@ -1,13 +1,11 @@
 package com.kaos.skynet.api.controller.impl.inpatient;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -165,9 +163,9 @@ public class SurgeryControllerImpl implements SurgeryController {
             arrange = arranges.get(SurgeryArrangeRoleEnum.AnaesthesiaHelper);
             if (arrange != null) {
                 if (arrange.associateEntity.employee != null) {
-                    rspBody.anesDoc1 = arrange.associateEntity.employee.emplName;
+                    rspBody.anesDoc2 = arrange.associateEntity.employee.emplName;
                 } else {
-                    rspBody.anesDoc1 = arrange.emplCode;
+                    rspBody.anesDoc2 = arrange.emplCode;
                 }
             }
 
@@ -266,16 +264,5 @@ public class SurgeryControllerImpl implements SurgeryController {
          * 状态清单
          */
         public Map<String, String> states = null;
-    }
-
-    /**
-     * 查询手术状态
-     */
-    @RequestMapping(value = "queryApplyNo", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-    public String queryApplyNo(@NotNull(message = "住院号不能为空") String patientNo,
-            @NotNull(message = "开始时间不能为空") Date beginDate,
-            @NotNull(message = "结束时间不能为空") Date endDate) {
-        // 调用业务
-        return this.surgeryService.queryValidApplyNo(patientNo, beginDate, endDate);
     }
 }
