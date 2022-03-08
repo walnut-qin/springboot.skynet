@@ -68,6 +68,18 @@
         </where>
     </select>
 
+    <select id="queryBalancesInPatient" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_BALANCEHEAD
+        <where>
+            <if test = "true">
+                AND INPATIENT_NO = #{inpatientNo}
+            </if>
+        </where>
+    </select>
+
     <select id="queryBalancesInBalancer" resultMap="map">
         SELECT
         <include refid="item"/>

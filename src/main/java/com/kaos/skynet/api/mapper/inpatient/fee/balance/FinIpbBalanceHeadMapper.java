@@ -17,6 +17,14 @@ public interface FinIpbBalanceHeadMapper {
     FinIpbBalanceHead queryBalance(String invoiceNo, TransTypeEnum transType);
 
     /**
+     * 查询患者某次住院的所有结算信息
+     * 
+     * @param patientNo 住院号, 等于 {@code null} 时，将 IS NULL 作为判断条件
+     * @return
+     */
+    List<FinIpbBalanceHead> queryBalancesInPatient(String inpatientNo);
+
+    /**
      * 以结算员的角度查询结算头表信息
      * 
      * @param balanceOperCode 结算员；等于 {@code null} 时，不作为判断条件

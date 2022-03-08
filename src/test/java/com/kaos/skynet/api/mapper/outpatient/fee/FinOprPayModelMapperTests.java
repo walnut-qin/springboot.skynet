@@ -11,7 +11,7 @@ public class FinOprPayModelMapperTests {
 
     @Test
     public void queryPayModels() {
-        this.mapper.queryPayModels(null);
-        this.mapper.queryPayModels("0001111841");
+        this.mapper.queryPayModels(null, null, null);
+        this.mapper.queryPayModels("0001111841", null, null);
     }
 }

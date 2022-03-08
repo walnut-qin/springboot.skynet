@@ -19,6 +19,12 @@ public class FinIpbBalancHeadMapperTests {
     }
 
     @Test
+    public void queryBalanceHeadsInPatient() {
+        this.finIpbBalanceHeadMapper.queryBalancesInPatient(null);
+        this.finIpbBalanceHeadMapper.queryBalancesInPatient("12345");
+    }
+
+    @Test
     public void queryBalanceHeadsInBalancer() {
         this.finIpbBalanceHeadMapper.queryBalancesInBalancer("006017", new Date(), new Date(), "18");
     }

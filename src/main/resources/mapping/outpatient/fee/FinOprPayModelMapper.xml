@@ -91,8 +91,14 @@
         FROM
             XYHIS.FIN_OPR_PAYMODEL
         <where>
-            <if test="true">
+            <if test = "true">
                 AND CARD_NO = #{cardNo}
+            </if>
+            <if test = "refNum != null">
+                AND REFERNUM = #{refNum}
+            </if>
+            <if test = "invoiceNo != null">
+                AND EXT1 = #{invoiceNo}
             </if>
         </where>
     </select>
