@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.service.inf.inpatient.fee;
 
-import com.google.common.collect.Multimap;
+import java.util.Map;
 
 import org.javatuples.Pair;
 
@@ -14,5 +14,5 @@ public interface PrepayService {
      * @param patientNo 住院号
      * @return {预交金序号, [修改前数值, 修改后数值]}
      */
-    Multimap<Integer, Pair<Double, Double>> fixPrepayCost(String patientNo);
+    Map<Integer, Pair<Double, Double>> fixPrepayCost(String patientNo);
 }

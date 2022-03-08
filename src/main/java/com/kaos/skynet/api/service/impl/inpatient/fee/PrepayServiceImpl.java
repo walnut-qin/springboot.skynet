@@ -1,10 +1,10 @@
 package com.kaos.skynet.api.service.impl.inpatient.fee;
 
 import java.util.Collections;
+import java.util.Map;
 
 import com.google.common.collect.Collections2;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Maps;
 import com.kaos.skynet.api.mapper.inpatient.fee.FinIpbInPrepayMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.mapper.outpatient.fee.FinOprPayModelMapper;
@@ -46,7 +46,7 @@ public class PrepayServiceImpl implements PrepayService {
 
     @Override
     @Transactional
-    public Multimap<Integer, Pair<Double, Double>> fixPrepayCost(String patientNo) {
+    public Map<Integer, Pair<Double, Double>> fixPrepayCost(String patientNo) {
         // 检索最近一次结算记录
         var balances = this.balanceHeadMapper.queryBalancesInPatient(String.format("ZY01%s", patientNo));
         Collections.sort(balances, (x, y) -> {
@@ -74,7 +74,7 @@ public class PrepayServiceImpl implements PrepayService {
         });
 
         // 构造响应
-        Multimap<Integer, Pair<Double, Double>> ret = HashMultimap.create();
+        Map<Integer, Pair<Double, Double>> ret = Maps.newHashMap();
 
         // 依次修改
         for (var unbalancedPrepay : unbalancedPrepays) {
