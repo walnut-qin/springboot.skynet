@@ -11,4 +11,15 @@ public interface HttpHelper {
      * @return
      */
     <T> T postForObject(String url, Object reqBody, Class<T> classOfT);
+
+    /**
+     * 发送GET请求
+     * 
+     * @param <T>
+     * @param url
+     * @param classOfT
+     * @param uriVariables
+     * @return
+     */
+    <T> T getForObject(String url, Class<T> classOfT, Object... uriVariables);
 }

@@ -35,4 +35,14 @@ public class HttpHelperImpl implements HttpHelper {
         url = String.format("http://%s:%d/%s", this.socketInfo.getValue0(), this.socketInfo.getValue1(), url);
         return this.restTemplate.postForObject(url, reqBody, classOfT);
     }
+
+    @Override
+    public <T> T getForObject(String url, Class<T> classOfT, Object... uriVariables) {
+        // 格式化url
+        if (url.startsWith("/")) {
+            url = url.replaceFirst("/", "");
+        }
+        url = String.format("http://%s:%d/%s", this.socketInfo.getValue0(), this.socketInfo.getValue1(), url);
+        return this.restTemplate.getForObject(url, classOfT, uriVariables);
+    }
 }
