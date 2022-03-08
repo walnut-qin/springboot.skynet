@@ -83,14 +83,19 @@ public class PrepayServiceImpl implements PrepayService {
             var payModels = this.payModelMapper.queryPayModels(patientNo, refNum, lastBalance.invoiceNo);
 
             // 计算新的预交金值
+            var oldCost = unbalancedPrepay.prepayCost;
             var newCost = unbalancedPrepay.prepayCost;
             for (var payModel : payModels) {
                 newCost += payModel.amt;
             }
 
-            // 修改预交金的值，并记录
+            // 修改预交金的值
             this.inPrepayMapper.updatePrepayCost(unbalancedPrepay.inpatientNo, unbalancedPrepay.happenNo, newCost);
-            ret.put(unbalancedPrepay.happenNo, new Pair<>(unbalancedPrepay.prepayCost, newCost));
+
+            // 记录
+            ret.put(unbalancedPrepay.happenNo, new Pair<>(oldCost, newCost));
+            this.logger.info(String.format("修改预交金: <住院号 = %s, 序号 = %s, 原预交金 = %s, 现预交金 = %s>", patientNo,
+                    unbalancedPrepay.happenNo, oldCost, newCost));
         }
 
         return ret;
