@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.pipe.pacs.ImageController;
