@@ -20,7 +20,8 @@ public interface ImageController {
         /**
          * 检查号
          */
-        public String testNo = null;
+        @NotNull(message = "检查号不能为空")
+        public String checkNo = null;
     }
 
     public static class GetRsp {

@@ -26,12 +26,42 @@
             KAOS.PACS_CROP_IMAGE_REC
         <where>
             <if test = "true">
+                AND URL = #{url}
+            </if>
+            <if test = "true">
+                AND X = #{x}
+            </if>
+            <if test = "true">
+                AND Y = #{y}
+            </if>
+            <if test = "true">
+                AND W = #{w}
+            </if>
+            <if test = "true">
+                AND H = #{h}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryRecWithRefer" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.PACS_CROP_IMAGE_REC
+        <where>
+            <if test = "true">
                 AND REFER = #{refer}
             </if>
         </where>
     </select>
 
     <insert id="insertRec">
+        <selectKey keyProperty="refer" order="BEFORE" resultType="java.lang.String">
+            SELECT
+                LPAD(KAOS.SEQ_PACS_CROP_IMAGE_REC_REFER.NEXTVAL, 20, '0')
+            FROM
+                DUAL
+        </selectKey>
         INSERT INTO
             KAOS.PACS_CROP_IMAGE_REC(URL, X, Y, W, H, REFER)
         VALUES
