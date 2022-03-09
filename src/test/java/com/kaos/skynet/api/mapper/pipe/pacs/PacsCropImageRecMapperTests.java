@@ -10,8 +10,13 @@ public class PacsCropImageRecMapperTests {
     PacsCropImageRecMapper cropImageRecMapper;
 
     @Test
-    public void queryImage() {
-        this.cropImageRecMapper.queryRec(null);
-        this.cropImageRecMapper.queryRec("123");
+    public void queryRec() {
+        this.cropImageRecMapper.queryRec("url", 0, 0, 10, 10);
+    }
+
+    @Test
+    public void queryRecWithRefer() {
+        this.cropImageRecMapper.queryRecWithRefer(null);
+        this.cropImageRecMapper.queryRecWithRefer("123");
     }
 }
