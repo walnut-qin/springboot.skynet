@@ -31,7 +31,7 @@ public class PacsImageCache implements Cache<String, BufferedImage> {
      * Loading cache
      */
     LoadingCache<String, Optional<BufferedImage>> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(20)
             .recordStats()
             .build(new CacheLoader<String, Optional<BufferedImage>>() {
                 @Override
