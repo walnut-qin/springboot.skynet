@@ -5,50 +5,45 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.mapper.pipe.pacs.PacsCropImageRecMapper;
-import com.kaos.skynet.entity.pipe.pacs.PacsCropImageRec;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import net.coobird.thumbnailator.Thumbnails;
+
+import java.awt.image.BufferedImage;
 
 /**
  * @param 类型 缓存
- * @param 映射 映射号 -> 缓存图片
+ * @param 映射 图片路径 -> 缓存图片
  * @param 容量 100
  * @param 刷频 无刷
  * @param 过期 永不
  */
-@Component
-public class PacsCropImageRecCache implements Cache<String, PacsCropImageRec> {
-    /**
-     * 数据库接口
-     */
-    @Autowired
-    PacsCropImageRecMapper cropImageRecMapper;
-
+@Component(value = "pacsImageCache")
+public class PacsImageCache implements Cache<String, BufferedImage> {
     /**
      * 日志接口
      */
-    Logger logger = Logger.getLogger(PacsCropImageRecCache.class);
+    Logger logger = Logger.getLogger(PacsImageCache.class);
 
     /**
      * Loading cache
      */
-    LoadingCache<String, Optional<PacsCropImageRec>> cache = CacheBuilder.newBuilder()
+    LoadingCache<String, Optional<BufferedImage>> cache = CacheBuilder.newBuilder()
             .maximumSize(100)
             .recordStats()
-            .build(new CacheLoader<String, Optional<PacsCropImageRec>>() {
+            .build(new CacheLoader<String, Optional<BufferedImage>>() {
                 @Override
-                public Optional<PacsCropImageRec> load(String key) throws Exception {
-                    // 检索记录
-                    var ref = PacsCropImageRecCache.this.cropImageRecMapper.queryRecWithRefer(key);
+                public Optional<BufferedImage> load(String key) throws Exception {
+                    // 构造缓存内容
+                    var ref = Thumbnails.of(key).scale(1f).asBufferedImage();
                     return Optional.fromNullable(ref);
                 };
             });
 
     @Override
-    public PacsCropImageRec getValue(String key) {
+    public BufferedImage getValue(String key) {
         try {
             if (key == null) {
                 this.logger.warn("键值为空");
@@ -75,8 +70,8 @@ public class PacsCropImageRecCache implements Cache<String, PacsCropImageRec> {
     }
 
     @Override
-    public View<String, Optional<PacsCropImageRec>> show() {
-        View<String, Optional<PacsCropImageRec>> view = new View<>();
+    public View<String, Optional<BufferedImage>> show() {
+        View<String, Optional<BufferedImage>> view = new View<>();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

@@ -1,19 +1,20 @@
 package com.kaos.skynet.api.cache.pipe.pacs;
 
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.entity.pipe.pacs.PacsCropImageRec;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.awt.image.BufferedImage;
+
 @SpringBootTest
-public class PacsCropImageRecCacheTests {
+public class PacsImageCacheTests {
     @Autowired
-    Cache<String, PacsCropImageRec> pacsCropImageRecCache;
+    Cache<String, BufferedImage> pacsImageCache;
 
     @Test
     public void getValue() {
-        this.pacsCropImageRecCache.getValue("122222");
+        this.pacsImageCache.getValue("122222");
     }
 }

@@ -3,6 +3,7 @@ package com.kaos.skynet.api.service.impl.pipe.pacs;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.mapper.pipe.pacs.PacsCropImageRecMapper;
 import com.kaos.skynet.api.service.inf.pipe.pacs.ImageService;
 import com.kaos.skynet.entity.pipe.pacs.PacsCropImageRec;
@@ -11,7 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.coobird.thumbnailator.Thumbnails;
+import java.awt.image.BufferedImage;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -26,6 +27,12 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     PacsCropImageRecMapper cropImageRecMapper;
 
+    /**
+     * 原始图像缓存
+     */
+    @Autowired
+    Cache<String, BufferedImage> pacsImageCache;
+
     @Override
     public List<String> crop(String checkNo) {
         // 获取原始路径与切割数量
@@ -39,7 +46,7 @@ public class ImageServiceImpl implements ImageService {
         // 切割图片
         try {
             // 截取原图尺寸
-            var img = Thumbnails.of(url).scale(1f).asBufferedImage();
+            var img = this.pacsImageCache.getValue(url);
             var w = img.getWidth() / wCnt;
             var h = img.getHeight() / hCnt;
 
