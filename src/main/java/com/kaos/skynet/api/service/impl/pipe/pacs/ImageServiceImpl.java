@@ -54,13 +54,16 @@ public class ImageServiceImpl implements ImageService {
             for (int i = 0; i < wCnt; i++) {
                 for (int j = 0; j < hCnt; j++) {
                     // 插入记录映射表
-                    PacsCropImageRec rec = new PacsCropImageRec();
-                    rec.url = url;
-                    rec.x = i * w;
-                    rec.y = j * h;
-                    rec.w = w;
-                    rec.h = h;
-                    this.cropImageRecMapper.insertRec(rec);
+                    PacsCropImageRec rec = this.cropImageRecMapper.queryRec(url, i * w, j * h, w, h);
+                    if (rec == null) {
+                        rec = new PacsCropImageRec();
+                        rec.url = url;
+                        rec.x = i * w;
+                        rec.y = j * h;
+                        rec.w = w;
+                        rec.h = h;
+                        this.cropImageRecMapper.insertRec(rec);
+                    }
                     // 插入结果集
                     ret.add(rec.refer);
                 }
