@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @param 类型 缓存
- * @param 映射 映射号 -> 缓存图片
+ * @param 映射 映射号 -> 切割记录
  * @param 容量 100
  * @param 刷频 无刷
  * @param 过期 永不
