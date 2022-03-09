@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.google.gson.Gson;
+import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.pipe.pacs.ImageController;
 import com.kaos.skynet.api.service.inf.pipe.pacs.ImageService;
@@ -34,8 +35,17 @@ public class ImageControllerImpl implements ImageController {
      */
     Gson gson = Gsons.newGson();
 
+    /**
+     * 图片业务
+     */
     @Autowired
     ImageService imageService;
+
+    /**
+     * 图片缓存
+     */
+    @Autowired
+    Cache<String, BufferedImage> imageRecCache;
 
     @Override
     @RequestMapping(value = "get", method = RequestMethod.POST, produces = MediaType.JSON)
@@ -55,8 +65,6 @@ public class ImageControllerImpl implements ImageController {
 
     @Override
     public BufferedImage show(@PathVariable @NotNull(message = "图片索引不能为空") String key) {
-        // 获取明文
-
-        return null;
+        return this.imageRecCache.getValue(key);
     }
 }
