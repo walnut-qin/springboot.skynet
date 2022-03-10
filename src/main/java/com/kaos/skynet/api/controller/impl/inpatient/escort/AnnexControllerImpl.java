@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.coobird.thumbnailator.Thumbnails;
 
 import java.awt.image.BufferedImage;
+import java.net.URL;
 
 @Validated
 @RestController
@@ -121,7 +122,7 @@ public class AnnexControllerImpl implements AnnexController {
 
         // 读取图片并返回
         try {
-            return Thumbnails.of(rec.annexUrl).scale(1.0f).asBufferedImage();
+            return Thumbnails.of(new URL(rec.annexUrl)).scale(1.0f).asBufferedImage();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
