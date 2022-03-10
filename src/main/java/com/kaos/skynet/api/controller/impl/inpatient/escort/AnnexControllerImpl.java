@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.cache.impl.common.ComPatientInfoCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.AnnexController;
+import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.AnnexService;
 
 import org.apache.log4j.Logger;
@@ -17,6 +18,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import net.coobird.thumbnailator.Thumbnails;
+
+import java.awt.image.BufferedImage;
 
 @Validated
 @RestController
@@ -32,6 +37,12 @@ public class AnnexControllerImpl implements AnnexController {
      */
     @Autowired
     AnnexService escortAnnexService;
+
+    /**
+     * 附件mapper
+     */
+    @Autowired
+    EscortAnnexInfoMapper escortAnnexInfoMapper;
 
     /**
      * 患者基本信息cache
@@ -82,7 +93,8 @@ public class AnnexControllerImpl implements AnnexController {
             QueryAnnexInDeptRsp rsp = new QueryAnnexInDeptRsp();
             rsp.annexNo = annexInfo.annexNo;
             rsp.helperName = annexInfo.associateEntity.patientInfo.name;
-            rsp.picUrl = annexInfo.annexUrl;
+            rsp.picUrl = String.format("http://172.16.100.252:8025/ms/inpatient/escort/annex/getPic?refer=%s",
+                    annexInfo.annexNo);
             if (annexInfo.associateEntity.patientInfo != null) {
                 if (annexInfo.associateEntity.patientInfo.associateEntity.escortedPatients != null) {
                     rsp.patientNames = annexInfo.associateEntity.patientInfo.associateEntity.escortedPatients.stream()
@@ -97,5 +109,21 @@ public class AnnexControllerImpl implements AnnexController {
         }
 
         return rsps;
+    }
+
+    @RequestMapping(value = "getPic", method = RequestMethod.GET, produces = MediaType.JPEG)
+    public BufferedImage getPic(@NotNull(message = "键值不能为空") String refer) {
+        // 根据refer号获取annexUrl
+        var rec = this.escortAnnexInfoMapper.queryAnnexInfo(refer);
+        if (rec == null) {
+            throw new RuntimeException("未查询到附件记录");
+        }
+
+        // 读取图片并返回
+        try {
+            return Thumbnails.of(rec.annexUrl).scale(1.0f).asBufferedImage();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
