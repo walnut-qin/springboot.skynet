@@ -94,13 +94,21 @@ public final class DateHelpers {
 
     /**
      * 分割时段，分段之间无重叠，最小识别间隔1s
+     * eg.
+     * 原段:
+     * [2000-01-01 00:10:00, 2000-01-01 03:10:59]
+     * 拆分:
+     * [2000-01-01 00:10:00, 2000-01-01 00:59:59],
+     * [2000-01-01 01:00:00, 2000-01-01 01:59:59],
+     * [2000-01-01 02:00:00, 2000-01-01 02:59:59],
+     * [2000-01-01 03:00:00, 2000-01-01 03:10:59]
      * 
      * @param beginDate 开始时间
      * @param endDate   结束时间
      * @param interval  时间间隔, 单位秒
      * @return
      */
-    public static List<Pair<Date, Date>> splitInHours(Date beginDate, Date endDate, Boolean removeHeader) {
+    public static List<Pair<Date, Date>> splitInHours(Date beginDate, Date endDate) {
         // 合法性判断
         if (beginDate == null || endDate == null) {
             throw new RuntimeException("开始时间和结束时间不能为空");
