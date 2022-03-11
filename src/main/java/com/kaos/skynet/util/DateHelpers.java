@@ -3,9 +3,12 @@ package com.kaos.skynet.util;
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 
+import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 public final class DateHelpers {
@@ -87,5 +90,52 @@ public final class DateHelpers {
                     this.data.getValue1().equals(0) ? "" : this.data.getValue1() + "月",
                     this.data.getValue2().equals(0) ? "" : this.data.getValue2() + "天");
         }
+    }
+
+    /**
+     * 分割时段，分段之间无重叠，最小识别间隔1s
+     * 
+     * @param beginDate 开始时间
+     * @param endDate   结束时间
+     * @param interval  时间间隔, 单位秒
+     * @return
+     */
+    public static List<Pair<Date, Date>> splitInHours(Date beginDate, Date endDate, Boolean removeHeader) {
+        // 合法性判断
+        if (beginDate == null || endDate == null) {
+            throw new RuntimeException("开始时间和结束时间不能为空");
+        } else if (endDate.before(beginDate)) {
+            throw new RuntimeException("结束时间不能早于开始时间");
+        }
+
+        // 创建结果集
+        List<Pair<Date, Date>> ret = Lists.newArrayList();
+
+        // 创建遍历指针
+        Calendar ptr = Calendar.getInstance();
+        ptr.setTime(beginDate);
+
+        // 分段
+        while (true) {
+            // 记录分段起点
+            Calendar segBegin = (Calendar) ptr.clone();
+
+            // 计算分段终点
+            ptr.add(Calendar.HOUR, 1);
+            ptr.set(Calendar.MINUTE, 0);
+            ptr.set(Calendar.SECOND, 0);
+
+            // 记录分段终点
+            Calendar segEnd = (Calendar) ptr.clone();
+            if (segEnd.getTime().before(endDate)) {
+                segEnd.add(Calendar.SECOND, -1);
+                ret.add(new Pair<Date, Date>(segBegin.getTime(), segEnd.getTime()));
+            } else {
+                ret.add(new Pair<Date, Date>(segBegin.getTime(), endDate));
+                break;
+            }
+        }
+
+        return ret;
     }
 }
