@@ -9,10 +9,10 @@ import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.entity.outpatient.FinOprRegister;
+import com.kaos.skynet.enums.impl.common.NoonEnum;
 import com.kaos.skynet.enums.impl.common.PayModeEnum;
 import com.kaos.skynet.enums.impl.common.TransTypeEnum;
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
-import com.kaos.skynet.util.DateHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +75,7 @@ public class RegisterServiceImpl implements RegisterService {
         register.transType = TransTypeEnum.Positive;
         register.cardNo = cardNo;
         register.regDate = new Date();
-        register.noon = DateHelpers.getNoon(seeDate);
+        register.noon = NoonEnum.parse(seeDate);
         register.name = patientInfo.name;
         register.idenNo = patientInfo.identityCardNo;
         register.sex = patientInfo.sex;
