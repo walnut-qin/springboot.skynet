@@ -438,6 +438,36 @@ public class ComPatientInfo {
     public String road = null;
 
     /**
+     * 村
+     */
+    public String village = null;
+
+    /**
+     * 乡镇
+     */
+    public String townShip = null;
+
+    /**
+     * 健康码
+     */
+    public String healthCode = null;
+
+    /**
+     * 行程码
+     */
+    public String travelCode = null;
+
+    /**
+     * 是否到过高风险地区标识
+     */
+    public Boolean highRiskFlag = null;
+
+    /**
+     * 高风险地区列表
+     */
+    public Boolean highRiskArea = null;
+
+    /**
      * 关联实体
      */
     public class AssociateEntity {

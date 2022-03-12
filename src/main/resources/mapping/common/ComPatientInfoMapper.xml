@@ -87,6 +87,12 @@
         <result column="EMPL_CODE" jdbcType="VARCHAR" property="emplCode"/>
         <result column="GCPOUTPATIENT" jdbcType="VARCHAR" property="gcpFlag"/>
         <result column="ROAD" jdbcType="VARCHAR" property="road"/>
+        <result column="COUNTRY" jdbcType="VARCHAR" property="village"/>
+        <result column="COUNTRYCITY" jdbcType="VARCHAR" property="townShip"/>
+        <result column="HEALTH_CODE" jdbcType="VARCHAR" property="healthCode"/>
+        <result column="TRAVEL_CODE" jdbcType="VARCHAR" property="travelCode"/>
+        <result column="HIGH_RISK_FLAG" jdbcType="VARCHAR" property="highRiskFlag"/>
+        <result column="HIGH_RISK_AREA" jdbcType="VARCHAR" property="highRiskArea"/>
     </resultMap>
 
     <sql id="item">
@@ -174,7 +180,13 @@
         EMPI,
         EMPL_CODE,
         GCPOUTPATIENT,
-        ROAD
+        ROAD,
+        COUNTRY,
+        COUNTRYCITY,
+        HEALTH_CODE,
+        TRAVEL_CODE,
+        HIGH_RISK_FLAG,
+        HIGH_RISK_AREA
     </sql>
 
     <select id="queryPatientInfo" resultMap="map">
