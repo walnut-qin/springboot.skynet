@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.kaos.skynet.enums.impl.common.BloodTypeEnum;
 import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
+import com.kaos.skynet.enums.impl.common.HealthCodeEnum;
 import com.kaos.skynet.enums.impl.common.SexEnum;
+import com.kaos.skynet.enums.impl.common.TravelCodeEnum;
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
 
 /**
@@ -450,12 +452,12 @@ public class ComPatientInfo {
     /**
      * 健康码
      */
-    public String healthCode = null;
+    public HealthCodeEnum healthCode = null;
 
     /**
      * 行程码
      */
-    public String travelCode = null;
+    public TravelCodeEnum travelCode = null;
 
     /**
      * 是否到过高风险地区标识
@@ -465,7 +467,7 @@ public class ComPatientInfo {
     /**
      * 高风险地区列表
      */
-    public Boolean highRiskArea = null;
+    public String highRiskArea = null;
 
     /**
      * 关联实体
