@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.kaos.skynet.enums.impl.common.HealthCodeEnum;
+import com.kaos.skynet.enums.impl.common.TravelCodeEnum;
+
 public interface StatisticController {
     /**
      * 查询指定科室的患者信息，包括陪护
@@ -43,12 +46,12 @@ public interface StatisticController {
         /**
          * 健康码
          */
-        public String healthCode = null;
+        public HealthCodeEnum healthCode = null;
 
         /**
          * 行程码
          */
-        public String travelCode = null;
+        public TravelCodeEnum travelCode = null;
 
         /**
          * 14天内是否去过高风险地区
@@ -88,17 +91,17 @@ public interface StatisticController {
         /**
          * 陪护1健康码
          */
-        public String escort1HealthCode = null;
+        public HealthCodeEnum escort1HealthCode = null;
 
         /**
          * 陪护1行程码
          */
-        public String escort1TravelCode = null;
+        public TravelCodeEnum escort1TravelCode = null;
 
         /**
          * 陪护1高风险标识
          */
-        public String escort1HighRiskFlag = null;
+        public Boolean escort1HighRiskFlag = null;
 
         /**
          * 陪护1高风险地区
