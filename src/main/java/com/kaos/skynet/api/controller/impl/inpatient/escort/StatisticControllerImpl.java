@@ -64,8 +64,8 @@ public class StatisticControllerImpl implements StatisticController {
     Cache<String, LisResultNew> covidCache;
 
     @Override
-    @RequestMapping(value = "queryEscortRsp", method = RequestMethod.GET, produces = MediaType.JSON)
-    public List<QueryEscortRsp> queryEscortRsp(@NotNull(message = "科室编码不能为空") String deptCode) {
+    @RequestMapping(value = "queryEscortData", method = RequestMethod.GET, produces = MediaType.JSON)
+    public List<QueryEscortRsp> queryEscortData(@NotNull(message = "科室编码不能为空") String deptCode) {
         // 查询指定科室的在院患者
         var pats = this.inMainInfoMapper.queryInpatients(null, null, deptCode, Lists.newArrayList(InStateEnum.病房接诊));
 

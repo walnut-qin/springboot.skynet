@@ -15,7 +15,7 @@ public interface StatisticController {
      * @param deptCode 科室编码
      * @return
      */
-    List<QueryEscortRsp> queryEscortRsp(@NotNull(message = "科室编码不能为空") String deptCode);
+    List<QueryEscortRsp> queryEscortData(@NotNull(message = "科室编码不能为空") String deptCode);
 
     public static class QueryEscortRsp {
         /**
