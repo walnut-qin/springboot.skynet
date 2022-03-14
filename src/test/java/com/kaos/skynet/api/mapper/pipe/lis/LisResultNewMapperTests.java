@@ -2,6 +2,8 @@ package com.kaos.skynet.api.mapper.pipe.lis;
 
 import java.util.Date;
 
+import com.google.common.collect.Lists;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +15,6 @@ public class LisResultNewMapperTests {
 
     @Test
     public void queryInspectResult() {
-        this.lisResultNewMapper.queryInspectResult("0001545200", "LYMPH#", new Date(), new Date());
+        this.lisResultNewMapper.queryInspectResult("0001545200", Lists.newArrayList("LYMPH#"), new Date(), new Date());
     }
 }

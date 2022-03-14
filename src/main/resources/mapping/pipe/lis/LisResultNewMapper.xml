@@ -26,8 +26,11 @@
             <if test="true">
                 AND PATIENTID = #{patientId}
             </if>
-            <if test="itemCode != null">
-                AND ITEMCODE = #{itemCode}
+            <if test = "itemCodes != null">
+                AND ITEMCODE IN
+                <foreach collection="itemCodes" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
             <if test="beginDate != null">
                 AND TESTDATE &gt;= #{beginDate} + 0

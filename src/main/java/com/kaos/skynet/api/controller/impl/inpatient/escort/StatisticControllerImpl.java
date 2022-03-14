@@ -93,7 +93,8 @@ public class StatisticControllerImpl implements StatisticController {
                 item.highRiskFlag = patient.highRiskFlag;
                 item.highRiskArea = patient.highRiskArea;
             }
-            var lisResult = this.lisResultMapper.queryInspectResult(inMainInfo.patientNo, "SARS-CoV-2-RNA", null, null);
+            var lisResult = this.lisResultMapper.queryInspectResult(inMainInfo.patientNo,
+                    Lists.newArrayList("SARS-CoV-2-RNA"), null, null);
             if (lisResult != null && !lisResult.isEmpty()) {
                 Collections.sort(lisResult, (x, y) -> {
                     return y.inspectDate.compareTo(x.inspectDate);
@@ -110,7 +111,8 @@ public class StatisticControllerImpl implements StatisticController {
                 item.escort1Name = helper.name;
                 item.escort1CardNo = helper.cardNo;
                 item.escort1IdenNo = helper.identityCardNo;
-                var helperRets = this.lisResultMapper.queryInspectResult(helper.cardNo, "SARS-CoV-2-RNA", null, null);
+                var helperRets = this.lisResultMapper.queryInspectResult(helper.cardNo,
+                        Lists.newArrayList("SARS-CoV-2-RNA"), null, null);
                 if (helperRets != null && !helperRets.isEmpty()) {
                     Collections.sort(helperRets, (x, y) -> {
                         return y.inspectDate.compareTo(x.inspectDate);
@@ -131,7 +133,8 @@ public class StatisticControllerImpl implements StatisticController {
                 item.escort2Name = helper.name;
                 item.escort2CardNo = helper.cardNo;
                 item.escort2IdenNo = helper.identityCardNo;
-                var helperRets = this.lisResultMapper.queryInspectResult(helper.cardNo, "SARS-CoV-2-RNA", null, null);
+                var helperRets = this.lisResultMapper.queryInspectResult(helper.cardNo,
+                        Lists.newArrayList("SARS-CoV-2-RNA"), null, null);
                 if (helperRets != null && !helperRets.isEmpty()) {
                     Collections.sort(helperRets, (x, y) -> {
                         return y.inspectDate.compareTo(x.inspectDate);

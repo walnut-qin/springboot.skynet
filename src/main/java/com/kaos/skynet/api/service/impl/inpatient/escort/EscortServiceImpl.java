@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortActionRecMapper;
@@ -218,7 +219,8 @@ public class EscortServiceImpl implements EscortService {
         var beginDate = calender.getTime();
 
         // 查询7日内本院核酸记录
-        var lisRs = this.lisResultNewMapper.queryInspectResult(context.helperCardNo, "SARS-CoV-2-RNA", beginDate, null);
+        var lisRs = this.lisResultNewMapper.queryInspectResult(context.helperCardNo,
+                Lists.newArrayList("SARS-CoV-2-RNA"), beginDate, null);
         if (lisRs != null && !lisRs.isEmpty()) {
             var lastLisRt = lisRs.get(0);
             if (lastLisRt.result.equals("阴性(-)")) {
