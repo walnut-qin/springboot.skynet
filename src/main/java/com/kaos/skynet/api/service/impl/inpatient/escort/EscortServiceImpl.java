@@ -23,7 +23,6 @@ import com.kaos.skynet.api.service.impl.inpatient.fee.report.ReportServiceImpl;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.FinIprPrepayIn;
-import com.kaos.skynet.entity.inpatient.Inpatient;
 import com.kaos.skynet.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.skynet.entity.inpatient.escort.EscortMainInfo;
@@ -313,9 +312,9 @@ public class EscortServiceImpl implements EscortService {
                 break;
 
             case 1:
-                if (fip.associateEntity.patientInfo != null && fip.associateEntity.patientInfo instanceof Inpatient) {
-                    Inpatient inp = (Inpatient) fip.associateEntity.patientInfo;
-                    var ords = this.metOrdiOrderMapper.queryInpatientOrders(inp.inpatientNo, "5070672", null, null);
+                if (fip.associateEntity.inMainInfo != null) {
+                    FinIprInMainInfo inPat = fip.associateEntity.inMainInfo;
+                    var ords = this.metOrdiOrderMapper.queryInpatientOrders(inPat.inpatientNo, "5070672", null, null);
                     if (ords != null && !ords.isEmpty()) {
                         break;
                     }
@@ -368,6 +367,7 @@ public class EscortServiceImpl implements EscortService {
             if (prepayIn == null) {
                 throw new RuntimeException(String.format("患者(%s)住院号(%s)无住院证", inMainInfo.cardNo, inMainInfo.patientNo));
             }
+            prepayIn.associateEntity.inMainInfo = inMainInfo;
         } else {
             throw new RuntimeException(String.format("患者(%s)存在多条住院记录, 无法判断关联数据", patientCardNo));
         }
