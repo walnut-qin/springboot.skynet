@@ -1,20 +1,20 @@
 package com.kaos.skynet.api.controller.impl.inpatient.escort;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
-import com.kaos.skynet.api.cache.impl.common.ComPatientInfoCache;
-import com.kaos.skynet.api.cache.impl.inpatient.ComBedInfoCache;
+import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.StatisticController;
 import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
-import com.kaos.skynet.api.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
+import com.kaos.skynet.entity.common.ComPatientInfo;
+import com.kaos.skynet.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.entity.pipe.lis.LisResultNew;
 import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
 
 import org.apache.log4j.Logger;
@@ -49,19 +49,19 @@ public class StatisticControllerImpl implements StatisticController {
      * 床位cache
      */
     @Autowired
-    ComBedInfoCache bedInfoCache;
+    Cache<String, ComBedInfo> bedInfoCache;
 
     /**
      * 患者基本信息cache
      */
     @Autowired
-    ComPatientInfoCache patientInfoCache;
+    Cache<String, ComPatientInfo> patientInfoCache;
 
     /**
      * LIS数据接口
      */
     @Autowired
-    LisResultNewMapper lisResultMapper;
+    Cache<String, LisResultNew> covidCache;
 
     @Override
     @RequestMapping(value = "queryEscortRsp", method = RequestMethod.GET, produces = MediaType.JSON)
@@ -93,14 +93,10 @@ public class StatisticControllerImpl implements StatisticController {
                 item.highRiskFlag = patient.highRiskFlag;
                 item.highRiskArea = patient.highRiskArea;
             }
-            var lisResult = this.lisResultMapper.queryInspectResult(inMainInfo.patientNo,
-                    Lists.newArrayList("SARS-CoV-2-RNA"), null, null);
-            if (lisResult != null && !lisResult.isEmpty()) {
-                Collections.sort(lisResult, (x, y) -> {
-                    return y.inspectDate.compareTo(x.inspectDate);
-                });
-                var test = lisResult.get(0);
-                item.nucleicAcidResult = String.format("%s(%s)", test.result, formater.format(test.inspectDate));
+            var lisResult = this.covidCache.getValue(inMainInfo.patientNo);
+            if (lisResult != null) {
+                item.nucleicAcidResult = String.format("%s(%s)", lisResult.result,
+                        formater.format(lisResult.inspectDate));
             }
             ret.add(item);
             // 检索陪护
@@ -111,15 +107,10 @@ public class StatisticControllerImpl implements StatisticController {
                 item.escort1Name = helper.name;
                 item.escort1CardNo = helper.cardNo;
                 item.escort1IdenNo = helper.identityCardNo;
-                var helperRets = this.lisResultMapper.queryInspectResult(helper.cardNo,
-                        Lists.newArrayList("SARS-CoV-2-RNA"), null, null);
-                if (helperRets != null && !helperRets.isEmpty()) {
-                    Collections.sort(helperRets, (x, y) -> {
-                        return y.inspectDate.compareTo(x.inspectDate);
-                    });
-                    var test = helperRets.get(0);
-                    item.escort1NucleicAcidResult = String.format("%s(%s)", test.result,
-                            formater.format(test.inspectDate));
+                var helperRet = this.covidCache.getValue(helper.cardNo);
+                if (helperRet != null) {
+                    item.escort1NucleicAcidResult = String.format("%s(%s)", helperRet.result,
+                            formater.format(helperRet.inspectDate));
                 }
                 item.escort1Tel = helper.linkmanTel;
                 item.escort1HealthCode = helper.healthCode;
@@ -133,15 +124,10 @@ public class StatisticControllerImpl implements StatisticController {
                 item.escort2Name = helper.name;
                 item.escort2CardNo = helper.cardNo;
                 item.escort2IdenNo = helper.identityCardNo;
-                var helperRets = this.lisResultMapper.queryInspectResult(helper.cardNo,
-                        Lists.newArrayList("SARS-CoV-2-RNA"), null, null);
-                if (helperRets != null && !helperRets.isEmpty()) {
-                    Collections.sort(helperRets, (x, y) -> {
-                        return y.inspectDate.compareTo(x.inspectDate);
-                    });
-                    var test = helperRets.get(0);
-                    item.escort2NucleicAcidResult = String.format("%s(%s)", test.result,
-                            formater.format(test.inspectDate));
+                var helperRet = this.covidCache.getValue(helper.cardNo);
+                if (helperRet != null) {
+                    item.escort2NucleicAcidResult = String.format("%s(%s)", helperRet.result,
+                            formater.format(helperRet.inspectDate));
                 }
                 item.escort2Tel = helper.linkmanTel;
             }
