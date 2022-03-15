@@ -15,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * 患者信息中包含登记的内容，存在时效性，该时效设置为1分钟
+ * 
  * @param 类型 缓存
  * @param 映射 患者卡号 -> 患者信息
  * @param 容量 300
- * @param 刷频 1次/1天
- * @param 过期 永不
+ * @param 刷频 无刷
+ * @param 过期 1min
  */
 @Component
 public class ComPatientInfoCache implements Cache<String, ComPatientInfo> {
@@ -39,7 +41,7 @@ public class ComPatientInfoCache implements Cache<String, ComPatientInfo> {
      */
     LoadingCache<String, Optional<ComPatientInfo>> cache = CacheBuilder.newBuilder()
             .maximumSize(300)
-            .refreshAfterWrite(1, TimeUnit.DAYS)
+            .expireAfterWrite(1, TimeUnit.MINUTES)
             .recordStats()
             .build(new CacheLoader<String, Optional<ComPatientInfo>>() {
                 @Override

@@ -18,9 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * 最小费用编码一般不会发生变化，设置为不过期，定期刷新
+ * 
  * @param 类型 缓存
- * @param 映射 <报表类型, 最小费用编码> -> 费用编码
- * @param 容量 100
+ * @param 映射 报表类型 -> {最小费用编码 -> 费用编码}
+ * @param 容量 20 x 100
  * @param 刷频 1次/1天
  * @param 过期 永不
  */
