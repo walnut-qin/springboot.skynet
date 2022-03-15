@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * @param 映射 就诊卡号/住院号 -> 最近一次LIS核酸检测结果纪录
  * @param 容量 300
  * @param 刷频 无刷
- * @param 过期 1minute
+ * @param 过期 5sec
  */
 @Component(value = "covidCache")
 public class LisResultNewCovidCache implements Cache<String, LisResultNew> {
@@ -41,7 +41,7 @@ public class LisResultNewCovidCache implements Cache<String, LisResultNew> {
      */
     LoadingCache<String, Optional<LisResultNew>> cache = CacheBuilder.newBuilder()
             .maximumSize(300)
-            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .expireAfterWrite(5, TimeUnit.SECONDS)
             .recordStats()
             .build(new CacheLoader<String, Optional<LisResultNew>>() {
                 @Override

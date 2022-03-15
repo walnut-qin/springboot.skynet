@@ -12,7 +12,6 @@ import com.kaos.skynet.api.controller.inf.inpatient.escort.StatisticController;
 import com.kaos.skynet.api.mapper.common.ComPatientInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
-import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.pipe.lis.LisResultNew;
@@ -53,12 +52,6 @@ public class StatisticControllerImpl implements StatisticController {
     Cache<String, ComBedInfo> bedInfoCache;
 
     /**
-     * 患者基本信息cache
-     */
-    @Autowired
-    Cache<String, ComPatientInfo> patientInfoCache;
-
-    /**
      * 患者信息接口
      */
     @Autowired
@@ -91,7 +84,6 @@ public class StatisticControllerImpl implements StatisticController {
             if (bed != null) {
                 item.bedNo = bed.getBriefBedNo();
             }
-            this.patientInfoCache.refresh(inMainInfo.cardNo);
             var patient = this.patientInfoMapper.queryPatientInfo(inMainInfo.cardNo);
             if (patient != null) {
                 item.name = patient.name;
