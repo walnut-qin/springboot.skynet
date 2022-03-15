@@ -11,6 +11,7 @@ import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.AnnexController;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.AnnexService;
+import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,13 @@ public class AnnexControllerImpl implements AnnexController {
      * 业务模块
      */
     @Autowired
-    AnnexService escortAnnexService;
+    AnnexService annexService;
+
+    /**
+     * 业务模块
+     */
+    @Autowired
+    EscortService escortService;
 
     /**
      * 附件mapper
@@ -59,7 +66,18 @@ public class AnnexControllerImpl implements AnnexController {
         this.logger.info(String.format("上传附件<helperCardNo = %s, url = %s>", helperCardNo, url));
 
         // 调用服务
-        var annexInfo = this.escortAnnexService.uploadAnnex(helperCardNo, url);
+        var annexInfo = this.annexService.uploadAnnex(helperCardNo, url);
+
+        // 查询所有关联陪护证
+        var escorts = this.escortService.queryPatientInfos(helperCardNo);
+        if (escorts != null && !escorts.isEmpty()) {
+            for (var escort : escorts) {
+                // 更新关联陪护状态
+                synchronized (Locks.stateLock.mapToLock(escort.escortNo)) {
+                    this.escortService.updateEscortState(escort.escortNo, null, "WebService", "患者上传外院报告");
+                }
+            }
+        }
 
         return annexInfo.annexNo;
     }
@@ -77,7 +95,21 @@ public class AnnexControllerImpl implements AnnexController {
         // 加状态操作锁，防止同时操作同一个陪护证
         synchronized (Locks.annexLock.mapToLock(annexNo)) {
             // 调用业务
-            this.escortAnnexService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
+            this.annexService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
+        }
+
+        // 检索附件信息
+        var annex = this.escortAnnexInfoMapper.queryAnnexInfo(annexNo);
+
+        // 查询所有关联陪护证
+        var escorts = this.escortService.queryPatientInfos(annex.cardNo);
+        if (escorts != null && !escorts.isEmpty()) {
+            for (var escort : escorts) {
+                // 更新关联陪护状态
+                synchronized (Locks.stateLock.mapToLock(escort.escortNo)) {
+                    this.escortService.updateEscortState(escort.escortNo, null, "WebService", "患者上传外院报告");
+                }
+            }
         }
     }
 
@@ -89,7 +121,7 @@ public class AnnexControllerImpl implements AnnexController {
         this.logger.info(String.format("查询科室信息<deptCode = %s, checked = %s>", deptCode, checked.toString()));
 
         // 调用服务
-        var annexInfos = this.escortAnnexService.queryAnnexInfoInDept(deptCode, checked);
+        var annexInfos = this.annexService.queryAnnexInfoInDept(deptCode, checked);
 
         // 构造响应
         List<QueryAnnexInDeptRsp> rsps = Lists.newArrayList();

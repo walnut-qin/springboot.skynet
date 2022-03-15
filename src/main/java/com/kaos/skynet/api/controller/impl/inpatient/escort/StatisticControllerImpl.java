@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.StatisticController;
+import com.kaos.skynet.api.mapper.common.ComPatientInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.entity.common.ComPatientInfo;
@@ -58,6 +59,12 @@ public class StatisticControllerImpl implements StatisticController {
     Cache<String, ComPatientInfo> patientInfoCache;
 
     /**
+     * 患者信息接口
+     */
+    @Autowired
+    ComPatientInfoMapper patientInfoMapper;
+
+    /**
      * LIS数据接口
      */
     @Autowired
@@ -85,7 +92,7 @@ public class StatisticControllerImpl implements StatisticController {
                 item.bedNo = bed.getBriefBedNo();
             }
             this.patientInfoCache.refresh(inMainInfo.cardNo);
-            var patient = this.patientInfoCache.getValue(inMainInfo.cardNo);
+            var patient = this.patientInfoMapper.queryPatientInfo(inMainInfo.cardNo);
             if (patient != null) {
                 item.name = patient.name;
                 item.cardNo = patient.cardNo;
@@ -109,8 +116,7 @@ public class StatisticControllerImpl implements StatisticController {
             var escorts = this.escortService.queryHelperInfos(patient.cardNo);
             if (escorts.size() >= 1) {
                 var escort = escorts.get(0);
-                this.patientInfoCache.refresh(escort.helperCardNo);
-                var helper = this.patientInfoCache.getValue(escort.helperCardNo);
+                var helper = this.patientInfoMapper.queryPatientInfo(escort.helperCardNo);
                 item.escort1Name = helper.name;
                 item.escort1CardNo = helper.cardNo;
                 item.escort1IdenNo = helper.identityCardNo;
@@ -129,8 +135,7 @@ public class StatisticControllerImpl implements StatisticController {
             }
             if (escorts.size() >= 2) {
                 var escort = escorts.get(1);
-                this.patientInfoCache.refresh(escort.helperCardNo);
-                var helper = this.patientInfoCache.getValue(escort.helperCardNo);
+                var helper = this.patientInfoMapper.queryPatientInfo(escort.helperCardNo);
                 item.escort2Name = helper.name;
                 item.escort2CardNo = helper.cardNo;
                 item.escort2IdenNo = helper.identityCardNo;
