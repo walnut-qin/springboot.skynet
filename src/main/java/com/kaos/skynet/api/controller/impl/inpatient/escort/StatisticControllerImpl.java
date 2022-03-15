@@ -91,7 +91,9 @@ public class StatisticControllerImpl implements StatisticController {
                 item.cardNo = patient.cardNo;
                 item.healthCode = patient.healthCode;
                 item.travelCode = patient.travelCode;
-                item.highRiskFlag = patient.highRiskFlag;
+                if (patient.highRiskFlag != null) {
+                    item.highRiskFlag = patient.highRiskFlag ? "是" : "否";
+                }
                 item.highRiskArea = patient.highRiskArea;
             }
             var lisResult = this.covidCache.getValue(inMainInfo.cardNo);
@@ -120,7 +122,9 @@ public class StatisticControllerImpl implements StatisticController {
                 item.escort1Tel = helper.linkmanTel;
                 item.escort1HealthCode = helper.healthCode;
                 item.escort1TravelCode = helper.travelCode;
-                item.escort1HighRiskFlag = helper.highRiskFlag;
+                if (helper.highRiskFlag != null) {
+                    item.escort1HighRiskFlag = helper.highRiskFlag ? "是" : "否";
+                }
                 item.escort1HighRiskArea = helper.highRiskArea;
             }
             if (escorts.size() >= 2) {

@@ -56,7 +56,7 @@ public interface StatisticController {
         /**
          * 14天内是否去过高风险地区
          */
-        public Boolean highRiskFlag = null;
+        public String highRiskFlag = null;
 
         /**
          * 到过高风险地区清单
@@ -101,7 +101,7 @@ public interface StatisticController {
         /**
          * 陪护1高风险标识
          */
-        public Boolean escort1HighRiskFlag = null;
+        public String escort1HighRiskFlag = null;
 
         /**
          * 陪护1高风险地区
