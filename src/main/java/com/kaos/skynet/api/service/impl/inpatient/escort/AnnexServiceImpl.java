@@ -21,6 +21,7 @@ import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AnnexServiceImpl implements AnnexService {
@@ -60,6 +61,7 @@ public class AnnexServiceImpl implements AnnexService {
     ComPatientInfoCache patientInfoCache;
 
     @Override
+    @Transactional
     public EscortAnnexInfo uploadAnnex(String helperCardNo, String url) {
         // 创建实体
         var annexInfo = new EscortAnnexInfo() {
@@ -78,7 +80,14 @@ public class AnnexServiceImpl implements AnnexService {
     }
 
     @Override
+    @Transactional
     public EscortAnnexChk checkAnnex(String annexNo, String checker, Boolean negativeFlag, Date inspectDate) {
+        // 检索审核记录
+        var chk = this.escortAnnexChkMapper.queryAnnexChk(annexNo);
+        if (chk != null) {
+            throw new RuntimeException("附件已被审核");
+        }
+
         // 创建实体
         var annexChk = new EscortAnnexChk();
         annexChk.annexNo = annexNo;

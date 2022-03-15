@@ -17,10 +17,15 @@ public final class Locks {
     /**
      * 患者卡号锁
      */
-    public static LockHelper stateLock = LockHelpers.newLockHelper("escortHelperLock", 20);
+    public static LockHelper stateLock = LockHelpers.newLockHelper("escortStateLock", 20);
 
     /**
      * 患者卡号锁
      */
-    public static LockHelper actionLock = LockHelpers.newLockHelper("escortHelperLock", 20);
+    public static LockHelper actionLock = LockHelpers.newLockHelper("escortActionLock", 20);
+
+    /**
+     * 附件号锁
+     */
+    public static LockHelper annexLock = LockHelpers.newLockHelper("escortAnnexLock", 20);
 }

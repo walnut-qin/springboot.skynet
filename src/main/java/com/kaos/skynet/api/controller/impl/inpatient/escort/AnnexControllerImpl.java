@@ -74,8 +74,11 @@ public class AnnexControllerImpl implements AnnexController {
         this.logger.info(String.format("审核附件<annexNo = %s, checker = %s, negativeFlag = %s, inspectDate = %s>", annexNo,
                 checker, negativeFlag.toString(), inspectDate.toString()));
 
-        // 调用服务
-        this.escortAnnexService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
+        // 加状态操作锁，防止同时操作同一个陪护证
+        synchronized (Locks.annexLock.mapToLock(annexNo)) {
+            // 调用业务
+            this.escortAnnexService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
+        }
     }
 
     @Override
