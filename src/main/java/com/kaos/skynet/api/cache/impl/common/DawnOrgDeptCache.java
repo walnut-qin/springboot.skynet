@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * @param 映射 科室编码 -> 科室信息
  * @param 容量 500
  * @param 刷频 无刷
- * @param 过期 1min
+ * @param 过期 5sec
  */
 @Component
 public class DawnOrgDeptCache implements Cache<String, DawnOrgDept> {
@@ -39,7 +39,7 @@ public class DawnOrgDeptCache implements Cache<String, DawnOrgDept> {
      */
     LoadingCache<String, Optional<DawnOrgDept>> cache = CacheBuilder.newBuilder()
             .maximumSize(500)
-            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .expireAfterWrite(5, TimeUnit.SECONDS)
             .recordStats()
             .build(new CacheLoader<String, Optional<DawnOrgDept>>() {
                 @Override

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * @param 映射 变量名 -> 变量信息
  * @param 容量 100 x 100
  * @param 刷频 无刷
- * @param 过期 1min
+ * @param 过期 5sec
  */
 @Component
 public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMap>> {
@@ -52,7 +52,7 @@ public class ConfigMultiMapCache implements Cache<String, Cache<String, ConfigMa
 
                         LoadingCache<String, Optional<ConfigMap>> cache = CacheBuilder.newBuilder()
                                 .maximumSize(100)
-                                .expireAfterWrite(1, TimeUnit.MINUTES)
+                                .expireAfterWrite(5, TimeUnit.SECONDS)
                                 .recordStats()
                                 .build(new CacheLoader<String, Optional<ConfigMap>>() {
                                     public Optional<ConfigMap> load(String key2) throws Exception {

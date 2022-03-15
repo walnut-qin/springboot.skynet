@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * @param 映射 床位编码 -> 床位信息
  * @param 容量 500
  * @param 刷频 无刷
- * @param 过期 1min
+ * @param 过期 5sec
  */
 @Component
 public class ComBedInfoCache implements Cache<String, ComBedInfo> {
@@ -39,7 +39,7 @@ public class ComBedInfoCache implements Cache<String, ComBedInfo> {
      */
     LoadingCache<String, Optional<ComBedInfo>> cache = CacheBuilder.newBuilder()
             .maximumSize(500)
-            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .expireAfterWrite(5, TimeUnit.SECONDS)
             .recordStats()
             .build(new CacheLoader<String, Optional<ComBedInfo>>() {
                 @Override

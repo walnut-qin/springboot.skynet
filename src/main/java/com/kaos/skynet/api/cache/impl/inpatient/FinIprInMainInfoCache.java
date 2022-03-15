@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * @param 映射 住院流水号 -> 住院信息
  * @param 容量 500
  * @param 刷频 无刷
- * @param 过期 1min
+ * @param 过期 5sec
  */
 @Component
 public class FinIprInMainInfoCache implements Cache<String, FinIprInMainInfo> {
@@ -39,7 +39,7 @@ public class FinIprInMainInfoCache implements Cache<String, FinIprInMainInfo> {
      */
     LoadingCache<String, Optional<FinIprInMainInfo>> cache = CacheBuilder.newBuilder()
             .maximumSize(500)
-            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .expireAfterWrite(5, TimeUnit.SECONDS)
             .recordStats()
             .build(new CacheLoader<String, Optional<FinIprInMainInfo>>() {
                 @Override

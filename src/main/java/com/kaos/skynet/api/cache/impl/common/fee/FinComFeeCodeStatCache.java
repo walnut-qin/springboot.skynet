@@ -23,8 +23,8 @@ import org.springframework.stereotype.Component;
  * @param 类型 缓存
  * @param 映射 报表类型 -> {最小费用编码 -> 费用编码}
  * @param 容量 20 x 100
- * @param 刷频 1次/1天
- * @param 过期 永不
+ * @param 刷频 无刷
+ * @param 过期 5sec
  */
 @Component
 public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>> {
@@ -53,7 +53,7 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
 
                         LoadingCache<MinFeeEnum, Optional<FinComFeeCodeStat>> cache = CacheBuilder.newBuilder()
                                 .maximumSize(100)
-                                .refreshAfterWrite(1, TimeUnit.DAYS)
+                                .refreshAfterWrite(5, TimeUnit.SECONDS)
                                 .recordStats()
                                 .build(new CacheLoader<MinFeeEnum, Optional<FinComFeeCodeStat>>() {
                                     @Override
