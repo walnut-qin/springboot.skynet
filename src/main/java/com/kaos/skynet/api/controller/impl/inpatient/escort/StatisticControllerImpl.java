@@ -84,6 +84,7 @@ public class StatisticControllerImpl implements StatisticController {
             if (bed != null) {
                 item.bedNo = bed.getBriefBedNo();
             }
+            this.patientInfoCache.refresh(inMainInfo.cardNo);
             var patient = this.patientInfoCache.getValue(inMainInfo.cardNo);
             if (patient != null) {
                 item.name = patient.name;
@@ -93,7 +94,10 @@ public class StatisticControllerImpl implements StatisticController {
                 item.highRiskFlag = patient.highRiskFlag;
                 item.highRiskArea = patient.highRiskArea;
             }
-            var lisResult = this.covidCache.getValue(inMainInfo.patientNo);
+            var lisResult = this.covidCache.getValue(inMainInfo.cardNo);
+            if (lisResult == null) {
+                lisResult = this.covidCache.getValue(inMainInfo.patientNo);
+            }
             if (lisResult != null) {
                 item.nucleicAcidResult = String.format("%s(%s)", lisResult.result,
                         formater.format(lisResult.inspectDate));
@@ -103,6 +107,7 @@ public class StatisticControllerImpl implements StatisticController {
             var escorts = this.escortService.queryHelperInfos(patient.cardNo);
             if (escorts.size() >= 1) {
                 var escort = escorts.get(0);
+                this.patientInfoCache.refresh(escort.helperCardNo);
                 var helper = this.patientInfoCache.getValue(escort.helperCardNo);
                 item.escort1Name = helper.name;
                 item.escort1CardNo = helper.cardNo;
@@ -120,6 +125,7 @@ public class StatisticControllerImpl implements StatisticController {
             }
             if (escorts.size() >= 2) {
                 var escort = escorts.get(1);
+                this.patientInfoCache.refresh(escort.helperCardNo);
                 var helper = this.patientInfoCache.getValue(escort.helperCardNo);
                 item.escort2Name = helper.name;
                 item.escort2CardNo = helper.cardNo;
