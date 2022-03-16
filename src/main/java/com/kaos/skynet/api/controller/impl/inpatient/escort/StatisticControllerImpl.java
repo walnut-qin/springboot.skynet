@@ -84,10 +84,10 @@ public class StatisticControllerImpl implements StatisticController {
             if (bed != null) {
                 item.bedNo = bed.getBriefBedNo();
             }
+            item.name = inMainInfo.name;
+            item.cardNo = inMainInfo.cardNo;
             var patient = this.patientInfoMapper.queryPatientInfo(inMainInfo.cardNo);
             if (patient != null) {
-                item.name = patient.name;
-                item.cardNo = patient.cardNo;
                 item.healthCode = patient.healthCode;
                 item.travelCode = patient.travelCode;
                 if (patient.highRiskFlag != null) {
@@ -105,7 +105,7 @@ public class StatisticControllerImpl implements StatisticController {
             }
             ret.add(item);
             // 检索陪护
-            var escorts = this.escortService.queryHelperInfos(patient.cardNo);
+            var escorts = this.escortService.queryHelperInfos(inMainInfo.cardNo);
             if (escorts.size() >= 1) {
                 var escort = escorts.get(0);
                 var helper = this.patientInfoMapper.queryPatientInfo(escort.helperCardNo);
