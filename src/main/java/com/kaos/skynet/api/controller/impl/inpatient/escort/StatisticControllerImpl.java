@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
@@ -78,6 +79,21 @@ public class StatisticControllerImpl implements StatisticController {
 
         // 过滤部分患者
         var filteredPats = pats.stream().filter((x) -> {
+            // 检索特殊标识
+            var specialFlag = this.specialCityPatientCache.getValue(x.inpatientNo);
+            if (specialFlag != null) {
+                switch (Optional.fromNullable(specialFlag.isSpecial).or("0")) {
+                    case "0":
+                        break;
+
+                    default:
+                        return false;
+                }
+            }
+            // 门诊医保
+            if (x.extFlag2 != null && x.extFlag2.equals("4")) {
+                return false;
+            }
             return true;
         }).toList();
 
