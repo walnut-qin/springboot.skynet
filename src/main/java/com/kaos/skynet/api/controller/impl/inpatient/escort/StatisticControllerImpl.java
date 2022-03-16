@@ -14,6 +14,7 @@ import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.entity.inpatient.FinSpecialCityPatient;
 import com.kaos.skynet.entity.pipe.lis.LisResultNew;
 import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
 
@@ -46,6 +47,12 @@ public class StatisticControllerImpl implements StatisticController {
     FinIprInMainInfoMapper inMainInfoMapper;
 
     /**
+     * 住院患者特殊标识信息cache
+     */
+    @Autowired
+    Cache<String, FinSpecialCityPatient> specialCityPatientCache;
+
+    /**
      * 床位cache
      */
     @Autowired
@@ -69,6 +76,11 @@ public class StatisticControllerImpl implements StatisticController {
         // 查询指定科室的在院患者
         var pats = this.inMainInfoMapper.queryInpatients(null, null, deptCode, Lists.newArrayList(InStateEnum.病房接诊));
 
+        // 过滤部分患者
+        var filteredPats = pats.stream().filter((x) -> {
+            return true;
+        }).toList();
+
         // 声明结果集
         List<QueryEscortRsp> ret = Lists.newArrayList();
 
@@ -76,7 +88,7 @@ public class StatisticControllerImpl implements StatisticController {
         var formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         // 构造结果集
-        for (FinIprInMainInfo inMainInfo : pats) {
+        for (FinIprInMainInfo inMainInfo : filteredPats) {
             // 构造结果元素
             QueryEscortRsp item = new QueryEscortRsp();
             item.inDate = inMainInfo.inDate;

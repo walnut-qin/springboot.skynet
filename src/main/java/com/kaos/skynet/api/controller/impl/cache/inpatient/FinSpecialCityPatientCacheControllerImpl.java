@@ -4,8 +4,9 @@ import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.cache.Cache.View;
+import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.cache.CacheController;
-import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.entity.inpatient.FinSpecialCityPatient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -15,38 +16,38 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping({ "/ms/cache/inpatient", "/ms/cache/inpatient/main" })
-public class FinIprInMainInfoCacheControllerImpl implements CacheController<String, FinIprInMainInfo> {
+@RequestMapping("/ms/cache/inpatient/special")
+public class FinSpecialCityPatientCacheControllerImpl implements CacheController<String, FinSpecialCityPatient> {
     /**
      * 实体信息服务
      */
     @Autowired
-    Cache<String, FinIprInMainInfo> inMainInfoCache;
+    Cache<String, FinSpecialCityPatient> specialCityPatientCache;
 
     @Override
-    @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "show", method = RequestMethod.GET, produces = MediaType.JSON)
     public View<String, ?> show() {
-        return this.inMainInfoCache.show();
+        return this.specialCityPatientCache.show();
     }
 
     @Override
-    @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = MediaType.TEXT)
     public String refresh(@NotNull(message = "键值不能为空") String key) {
-        this.inMainInfoCache.refresh(key);
+        this.specialCityPatientCache.refresh(key);
         return String.format("更新缓存%s成功", key);
     }
 
     @Override
-    @RequestMapping(value = "refreshAll", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "refreshAll", method = RequestMethod.GET, produces = MediaType.TEXT)
     public String refreshAll() {
-        this.inMainInfoCache.refreshAll();
+        this.specialCityPatientCache.refreshAll();
         return "更新缓存成功";
     }
 
     @Override
-    @RequestMapping(value = "clear", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "clear", method = RequestMethod.GET, produces = MediaType.TEXT)
     public String clear() {
-        this.inMainInfoCache.invalidateAll();
+        this.specialCityPatientCache.invalidateAll();
         return "清空缓存成功";
     }
 }
