@@ -2,23 +2,29 @@ package com.kaos.skynet.api.controller.impl.inpatient.escort;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.cache.impl.common.ComPatientInfoCache;
 import com.kaos.skynet.api.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.cache.impl.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.EscortController;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
+import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.util.DateHelpers;
+import com.kaos.skynet.util.Gsons;
 import com.kaos.skynet.util.ListHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +37,11 @@ public class EscortControllerImpl implements EscortController {
      * 日志模块
      */
     Logger logger = Logger.getLogger(EscortControllerImpl.class);
+
+    /**
+     * Gson工具
+     */
+    Gson gson = Gsons.newGson();
 
     /**
      * 业务模块
@@ -56,6 +67,12 @@ public class EscortControllerImpl implements EscortController {
     @Autowired
     DawnOrgDeptCache deptCache;
 
+    /**
+     * 住院实体cache
+     */
+    @Autowired
+    Cache<String, FinIprInMainInfo> inMainInfoCache;
+
     @Override
     @RequestMapping(value = "register", method = RequestMethod.GET, produces = MediaType.TEXT)
     public String register(@NotNull(message = "患者卡号不能为空") String patientCardNo,
@@ -72,6 +89,32 @@ public class EscortControllerImpl implements EscortController {
             synchronized (Locks.helperLock.mapToLock(helperCardNo)) {
                 // 调用业务
                 var escort = this.escortMainService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
+                if (escort != null) {
+                    return escort.escortNo;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    @RequestMapping(value = "register", method = RequestMethod.POST, produces = MediaType.TEXT)
+    public String register(@RequestBody @Valid RegisterReq req) {
+        // 记录日志
+        this.logger.info(String.format("登记陪护证, 入参%s", this.gson.toJson(req)));
+
+        // 优先视作用住院号登记
+        var inPat = this.inMainInfoCache.getValue(req.patientIdx);
+        var patientLock = Locks.patientLock.mapToLock(inPat == null ? req.patientIdx : inPat.cardNo);
+
+        // 加患者锁，防止同时对同一个患者添加陪护
+        synchronized (patientLock) {
+            // 加陪护人锁，防止同时对同一个陪护人添加陪护
+            synchronized (Locks.helperLock.mapToLock(req.helperCardNo)) {
+                // 调用业务
+                var escort = this.escortMainService.registerEscort(req.patientIdx, req.helperCardNo, req.emplCode,
+                        req.remark);
                 if (escort != null) {
                     return escort.escortNo;
                 }

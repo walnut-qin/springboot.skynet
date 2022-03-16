@@ -3,7 +3,9 @@ package com.kaos.skynet.api.controller.inf.inpatient.escort;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.google.gson.annotations.SerializedName;
 import com.kaos.skynet.enums.impl.common.SexEnum;
@@ -23,6 +25,41 @@ public interface EscortController {
             @NotNull(message = "陪护人卡号不能为空") String helperCardNo,
             @NotNull(message = "操作员编码不能为空") String emplCode,
             String remark);
+
+    /**
+     * 使用住院号登记陪护证
+     * 
+     * @param req
+     * @return
+     */
+    String register(@Valid RegisterReq req);
+
+    public static class RegisterReq {
+        /**
+         * 住院号
+         */
+        @NotNull(message = "患者索引<住院号or就诊卡号>不能为空")
+        @Size(message = "患者索引<住院号or就诊卡号>长度异常", min = 10, max = 10)
+        public String patientIdx = null;
+
+        /**
+         * 陪护人卡号
+         */
+        @NotNull(message = "陪护人卡号不能为空")
+        @Size(message = "陪护人卡号长度异常", min = 10, max = 10)
+        public String helperCardNo = null;
+
+        /**
+         * 操作员编码
+         */
+        @NotNull(message = "操作员编码不能为空")
+        public String emplCode = null;
+
+        /**
+         * 备注
+         */
+        public String remark = null;
+    }
 
     /**
      * 更新陪护证状态

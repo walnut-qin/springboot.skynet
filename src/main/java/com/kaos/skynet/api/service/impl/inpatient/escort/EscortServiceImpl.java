@@ -5,9 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortActionRecMapper;
@@ -118,6 +120,12 @@ public class EscortServiceImpl implements EscortService {
      */
     @Autowired
     FinIprInMainInfoMapper inMainInfoMapper;
+
+    /**
+     * 住院主表缓存
+     */
+    @Autowired
+    Cache<String, FinIprInMainInfo> inMainInfoCache;
 
     /**
      * 查询当前陪护证的实时状态
@@ -341,36 +349,75 @@ public class EscortServiceImpl implements EscortService {
     }
 
     /**
-     * 登记陪护证
+     * 根据患者索引定位唯一有效的住院证
+     * 
+     * @param patientIdx 住院证号或就诊卡号
+     * @return
      */
+    private FinIprPrepayIn queryUniqueValidPrepayIn(String patientIdx) {
+        // 优先认为patientIdx是住院号，检索住院实体
+        var inPat = this.inMainInfoCache.getValue(String.format("ZY01%s", patientIdx));
+        if (inPat != null) {
+            // 判断状态
+            switch (inPat.inState) {
+                case 住院登记:
+                case 病房接诊:
+                    break;
+
+                default:
+                    throw new RuntimeException("此住院号非在院状态");
+            }
+            // 核查住院证是否关联唯一的住院实体
+            var relaInPats = this.inMainInfoMapper.queryInpatients(inPat.cardNo, null, null,
+                    Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+            if (relaInPats.size() != 1) {
+                throw new RuntimeException("患者存在多条在院记录");
+            }
+            // 检索住院证
+            var fip = this.finIprPrepayInMapper.queryPrepayIn(inPat.cardNo, inPat.happenNo);
+            if (fip == null) {
+                throw new RuntimeException("未检索到住院证");
+            } else {
+                fip.associateEntity.inMainInfo = inPat;
+            }
+            return fip;
+        } else {
+            // 尝试获取住院证
+            var inMainInfos = this.inMainInfoMapper.queryInpatients(patientIdx, null, null,
+                    Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+            switch (Optional.fromNullable(inMainInfos).or(Lists.newArrayList()).size()) {
+                case 0: {
+                    // 弱陪护，直接取最后一张住院证
+                    var fip = this.finIprPrepayInMapper.queryLastPrepayIn(patientIdx, null);
+                    if (fip == null || fip.state == FinIprPrepayInStateEnum.作废) {
+                        throw new RuntimeException(String.format("未检索到有效住院证", patientIdx));
+                    }
+                    return fip;
+                }
+
+                case 1: {
+                    // 强陪护，取住院证关联的陪护
+                    var inMainInfo = inMainInfos.get(0);
+                    var fip = this.finIprPrepayInMapper.queryPrepayIn(inMainInfo.cardNo, inMainInfo.happenNo);
+                    if (fip == null) {
+                        throw new RuntimeException(String.format("未检索到住院证", inMainInfo.cardNo, inMainInfo.patientNo));
+                    } else {
+                        fip.associateEntity.inMainInfo = inMainInfo;
+                    }
+                    return fip;
+                }
+
+                default:
+                    throw new RuntimeException(String.format("检索到多条在院记录", patientIdx));
+            }
+        }
+    }
+
     @Transactional
     @Override
-    public EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark) {
-        // 判定住院证
-        var inMainInfos = this.inMainInfoMapper.queryInpatients(patientCardNo, null, null, new ArrayList<>() {
-            {
-                add(InStateEnum.住院登记);
-                add(InStateEnum.病房接诊);
-            }
-        });
-        FinIprPrepayIn prepayIn = null;
-        if (inMainInfos == null || inMainInfos.size() == 0) {
-            // 弱陪护，直接取最后一张住院证
-            prepayIn = this.finIprPrepayInMapper.queryLastPrepayIn(patientCardNo, null);
-            if (prepayIn == null || prepayIn.state == FinIprPrepayInStateEnum.作废) {
-                throw new RuntimeException(String.format("患者(%s)无有效住院证, 无法关联陪护", patientCardNo));
-            }
-        } else if (inMainInfos.size() == 1) {
-            // 强陪护，取住院证关联的陪护
-            var inMainInfo = inMainInfos.get(0);
-            prepayIn = this.finIprPrepayInMapper.queryPrepayIn(inMainInfo.cardNo, inMainInfo.happenNo);
-            if (prepayIn == null) {
-                throw new RuntimeException(String.format("患者(%s)住院号(%s)无住院证", inMainInfo.cardNo, inMainInfo.patientNo));
-            }
-            prepayIn.associateEntity.inMainInfo = inMainInfo;
-        } else {
-            throw new RuntimeException(String.format("患者(%s)存在多条住院记录, 无法判断关联数据", patientCardNo));
-        }
+    public EscortMainInfo registerEscort(String patientIdx, String helperCardNo, String emplCode, String remark) {
+        // 判定唯一有效的住院证
+        var prepayIn = this.queryUniqueValidPrepayIn(patientIdx);
 
         // 权限判断
         this.canRegister(prepayIn, helperCardNo);
