@@ -292,7 +292,7 @@ public class EscortServiceImpl implements EscortService {
             var curState = this.escortStateRecMapper.queryCurState(lastEscort.escortNo);
             if (curState.state != EscortStateEnum.注销) {
                 throw new RuntimeException("陪护关系已绑定，请勿重复绑定");
-            } else {
+            } else if (lastEscort.happenNo.equals(fip.happenNo)) {
                 var offset = new Date().getTime() - curState.recDate.getTime();
                 if (offset <= 12 * 60 * 60 * 1000) {
                     var rest = 12 * 60 * 60 * 1000 - offset;
