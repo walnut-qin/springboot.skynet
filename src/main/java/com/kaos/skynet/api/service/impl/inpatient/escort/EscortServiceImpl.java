@@ -222,7 +222,7 @@ public class EscortServiceImpl implements EscortService {
 
         // 锚定7天前的当前时间
         var calender = Calendar.getInstance();
-        calender.add(Calendar.DATE, -7);
+        calender.add(Calendar.DATE, -14);
         var beginDate = calender.getTime();
 
         // 查询7日内本院核酸记录
