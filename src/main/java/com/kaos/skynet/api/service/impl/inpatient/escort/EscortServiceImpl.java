@@ -23,6 +23,7 @@ import com.kaos.skynet.api.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.skynet.api.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.skynet.api.service.impl.inpatient.fee.report.ReportServiceImpl;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
+import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.entity.inpatient.escort.EscortActionRec;
@@ -120,6 +121,12 @@ public class EscortServiceImpl implements EscortService {
      */
     @Autowired
     FinIprInMainInfoMapper inMainInfoMapper;
+
+    /**
+     * 基本信息缓存
+     */
+    @Autowired
+    Cache<String, ComPatientInfo> patientCache;
 
     /**
      * 住院主表缓存
@@ -556,6 +563,18 @@ public class EscortServiceImpl implements EscortService {
                 // vip
                 rt.associateEntity.prepayIn.associateEntity.escortVip = this.escortVipMapper
                         .queryEscortVip(rt.patientCardNo, rt.happenNo);
+                // 基本信息
+                rt.associateEntity.prepayIn.associateEntity.patientInfo = this.patientCache.getValue(rt.patientCardNo);
+                // 住院实体
+                var inMainInfos = this.inMainInfoMapper.queryInpatients(rt.patientCardNo, rt.happenNo, null,
+                        Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+                switch (Optional.fromNullable(inMainInfos).or(Lists.newArrayList()).size()) {
+                    case 1:
+                        rt.associateEntity.prepayIn.associateEntity.inMainInfo = inMainInfos.get(0);
+                        break;
+                    default:
+                        break;
+                }
             }
             rt.associateEntity.stateRecs = this.escortStateRecMapper.queryStates(rt.escortNo);
             rt.associateEntity.actionRecs = this.escortActionRecMapper.queryActions(rt.escortNo);
