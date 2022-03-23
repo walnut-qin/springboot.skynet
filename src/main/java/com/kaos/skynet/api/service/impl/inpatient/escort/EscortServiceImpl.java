@@ -254,7 +254,7 @@ public class EscortServiceImpl implements EscortService {
                 }
             }
             // 如果最近一次结果为阴性，则生效
-            if (lastRecord.negativeFlag) {
+            if (lastRecord.inspectDate.after(beginDate) && lastRecord.negativeFlag) {
                 return EscortStateEnum.生效中;
             }
         }
