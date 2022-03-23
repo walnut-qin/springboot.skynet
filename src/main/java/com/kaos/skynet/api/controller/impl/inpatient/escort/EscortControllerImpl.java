@@ -127,11 +127,11 @@ public class EscortControllerImpl implements EscortController {
     @Override
     @RequestMapping(value = "updateState", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void updateState(@NotNull(message = "陪护证号不能为空") String escortNo,
-            @NotNull(message = "新状态不能为空") EscortStateEnum state,
+            EscortStateEnum state,
             @NotNull(message = "操作员编码不能为空") String emplCode) {
         // 入参日志
         this.logger.info(String.format("修改陪护证状态<escortNo = %s, state = %s, emplCode = %s>", escortNo,
-                state.getDescription(), emplCode));
+                state == null ? "null" : state.getDescription(), emplCode));
 
         // 加状态操作锁，防止同时操作同一个陪护证
         synchronized (Locks.stateLock.mapToLock(escortNo)) {
@@ -275,7 +275,7 @@ public class EscortControllerImpl implements EscortController {
         for (var escortInfo : escortInfos) {
             // 构造列表元素
             QueryHelperInfoRsp rsp = new QueryHelperInfoRsp();
-            rsp.cardNo = escortInfo.patientCardNo;
+            rsp.cardNo = escortInfo.helperCardNo;
             var patient = this.patientInfoCache.getValue(rsp.cardNo);
             if (patient != null) {
                 rsp.name = patient.name;
