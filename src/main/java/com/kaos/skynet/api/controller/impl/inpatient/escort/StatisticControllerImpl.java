@@ -137,34 +137,38 @@ public class StatisticControllerImpl implements StatisticController {
             if (escorts.size() >= 1) {
                 var escort = escorts.get(0);
                 var helper = this.patientInfoMapper.queryPatientInfo(escort.helperCardNo);
-                item.escort1Name = helper.name;
-                item.escort1CardNo = helper.cardNo;
-                item.escort1IdenNo = helper.identityCardNo;
-                var helperRet = this.covidCache.getValue(helper.cardNo);
-                if (helperRet != null) {
-                    item.escort1NucleicAcidResult = String.format("%s(%s)", helperRet.result,
-                            formater.format(helperRet.inspectDate));
+                if (helper != null) {
+                    item.escort1Name = helper.name;
+                    item.escort1CardNo = helper.cardNo;
+                    item.escort1IdenNo = helper.identityCardNo;
+                    var helperRet = this.covidCache.getValue(helper.cardNo);
+                    if (helperRet != null) {
+                        item.escort1NucleicAcidResult = String.format("%s(%s)", helperRet.result,
+                                formater.format(helperRet.inspectDate));
+                    }
+                    item.escort1Tel = helper.linkmanTel;
+                    item.escort1HealthCode = helper.healthCode;
+                    item.escort1TravelCode = helper.travelCode;
+                    if (helper.highRiskFlag != null) {
+                        item.escort1HighRiskFlag = helper.highRiskFlag ? "是" : "否";
+                    }
+                    item.escort1HighRiskArea = helper.highRiskArea;
                 }
-                item.escort1Tel = helper.linkmanTel;
-                item.escort1HealthCode = helper.healthCode;
-                item.escort1TravelCode = helper.travelCode;
-                if (helper.highRiskFlag != null) {
-                    item.escort1HighRiskFlag = helper.highRiskFlag ? "是" : "否";
-                }
-                item.escort1HighRiskArea = helper.highRiskArea;
             }
             if (escorts.size() >= 2) {
                 var escort = escorts.get(1);
                 var helper = this.patientInfoMapper.queryPatientInfo(escort.helperCardNo);
-                item.escort2Name = helper.name;
-                item.escort2CardNo = helper.cardNo;
-                item.escort2IdenNo = helper.identityCardNo;
-                var helperRet = this.covidCache.getValue(helper.cardNo);
-                if (helperRet != null) {
-                    item.escort2NucleicAcidResult = String.format("%s(%s)", helperRet.result,
-                            formater.format(helperRet.inspectDate));
+                if (helper != null) {
+                    item.escort2Name = helper.name;
+                    item.escort2CardNo = helper.cardNo;
+                    item.escort2IdenNo = helper.identityCardNo;
+                    var helperRet = this.covidCache.getValue(helper.cardNo);
+                    if (helperRet != null) {
+                        item.escort2NucleicAcidResult = String.format("%s(%s)", helperRet.result,
+                                formater.format(helperRet.inspectDate));
+                    }
+                    item.escort2Tel = helper.linkmanTel;
                 }
-                item.escort2Tel = helper.linkmanTel;
             }
         }
 
