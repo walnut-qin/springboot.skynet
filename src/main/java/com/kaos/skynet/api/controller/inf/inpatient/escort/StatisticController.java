@@ -132,5 +132,25 @@ public interface StatisticController {
          * 陪护1联系电话
          */
         public String escort2Tel = null;
+
+        /**
+         * 陪护2健康码
+         */
+        public HealthCodeEnum escort2HealthCode = null;
+
+        /**
+         * 陪护2行程码
+         */
+        public TravelCodeEnum escort2TravelCode = null;
+
+        /**
+         * 陪护2高风险标识
+         */
+        public String escort2HighRiskFlag = null;
+
+        /**
+         * 陪护2高风险地区
+         */
+        public String escort2HighRiskArea = null;
     }
 }

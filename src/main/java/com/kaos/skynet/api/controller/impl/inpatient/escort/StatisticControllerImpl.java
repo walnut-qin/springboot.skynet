@@ -168,6 +168,12 @@ public class StatisticControllerImpl implements StatisticController {
                                 formater.format(helperRet.inspectDate));
                     }
                     item.escort2Tel = helper.linkmanTel;
+                    item.escort2HealthCode = helper.healthCode;
+                    item.escort2TravelCode = helper.travelCode;
+                    if (helper.highRiskFlag != null) {
+                        item.escort2HighRiskFlag = helper.highRiskFlag ? "是" : "否";
+                    }
+                    item.escort2HighRiskArea = helper.highRiskArea;
                 }
             }
         }
