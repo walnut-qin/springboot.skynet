@@ -128,10 +128,10 @@ public class AnnexControllerImpl implements AnnexController {
         for (var annexInfo : annexInfos) {
             QueryAnnexInDeptRsp rsp = new QueryAnnexInDeptRsp();
             rsp.annexNo = annexInfo.annexNo;
-            rsp.helperName = annexInfo.associateEntity.patientInfo.name;
             rsp.picUrl = String.format("http://172.16.100.252:8025/ms/inpatient/escort/annex/getPic?refer=%s",
                     annexInfo.annexNo);
             if (annexInfo.associateEntity.patientInfo != null) {
+                rsp.helperName = annexInfo.associateEntity.patientInfo.name;
                 if (annexInfo.associateEntity.patientInfo.associateEntity.escortedPatients != null) {
                     rsp.patientNames = annexInfo.associateEntity.patientInfo.associateEntity.escortedPatients.stream()
                             .map(x -> x.name).toList();
