@@ -16,6 +16,7 @@ import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.FinSpecialCityPatient;
+import com.kaos.skynet.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.skynet.entity.pipe.lis.LisResultNew;
 import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
 
@@ -70,6 +71,12 @@ public class StatisticControllerImpl implements StatisticController {
      */
     @Autowired
     Cache<String, LisResultNew> covidCache;
+
+    /**
+     * 院外核酸接口
+     */
+    @Autowired
+    Cache<String, EscortAnnexInfo> escortAnnexCheckedCache;
 
     @Override
     @RequestMapping(value = "queryEscortData", method = RequestMethod.GET, produces = MediaType.JSON)
@@ -145,6 +152,13 @@ public class StatisticControllerImpl implements StatisticController {
                     if (helperRet != null) {
                         item.escort1NucleicAcidResult = String.format("%s(%s)", helperRet.result,
                                 formater.format(helperRet.inspectDate));
+                    } else {
+                        var helperAnnexRet = this.escortAnnexCheckedCache.getValue(helper.cardNo);
+                        if (helperAnnexRet != null) {
+                            item.escort1NucleicAcidResult = String.format("%s(%s)",
+                                    helperAnnexRet.associateEntity.escortAnnexChk.negativeFlag ? "阴性" : "阳性",
+                                    formater.format(helperAnnexRet.associateEntity.escortAnnexChk.inspectDate));
+                        }
                     }
                     item.escort1Tel = helper.linkmanTel;
                     item.escort1HealthCode = helper.healthCode;
@@ -166,6 +180,13 @@ public class StatisticControllerImpl implements StatisticController {
                     if (helperRet != null) {
                         item.escort2NucleicAcidResult = String.format("%s(%s)", helperRet.result,
                                 formater.format(helperRet.inspectDate));
+                    } else {
+                        var helperAnnexRet = this.escortAnnexCheckedCache.getValue(helper.cardNo);
+                        if (helperAnnexRet != null) {
+                            item.escort1NucleicAcidResult = String.format("%s(%s)",
+                                    helperAnnexRet.associateEntity.escortAnnexChk.negativeFlag ? "阴性" : "阳性",
+                                    formater.format(helperAnnexRet.associateEntity.escortAnnexChk.inspectDate));
+                        }
                     }
                     item.escort2Tel = helper.linkmanTel;
                     item.escort2HealthCode = helper.healthCode;
