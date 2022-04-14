@@ -135,6 +135,59 @@ public class EscortServiceImpl implements EscortService {
     Cache<String, FinIprInMainInfo> inMainInfoCache;
 
     /**
+     * 判断陪护人的信息合法性
+     * 
+     * @param helperCardNo 陪护人卡号
+     * @return 若可以判断状态，则返回状态值，否则返回null
+     */
+    private EscortStateEnum queryRealState_helper(String helperCardNo) {
+        // 获取陪护人实体
+        var patientInfo = this.patientCache.getValue(helperCardNo);
+        if (patientInfo == null) {
+            // 无法查询到陪护人实体，无法判断状态
+            return null;
+        }
+
+        // 健康码判断
+        if (patientInfo.healthCode != null) {
+            switch (patientInfo.healthCode) {
+                case 绿码:
+                    break;
+
+                case 黄码:
+                case 红码:
+                    return EscortStateEnum.无核酸检测结果;
+
+                default:
+                    break;
+            }
+        }
+
+        // 行程码判断
+        if (patientInfo.travelCode != null) {
+            switch (patientInfo.travelCode) {
+                case 正常:
+                    break;
+
+                case 带星号:
+                case 黄码:
+                case 红码:
+                    return EscortStateEnum.无核酸检测结果;
+
+                default:
+                    break;
+            }
+        }
+
+        // 高风险地区标识判断
+        if (Optional.fromNullable(patientInfo.highRiskFlag).or(false)) {
+            return EscortStateEnum.无核酸检测结果;
+        }
+
+        return null;
+    }
+
+    /**
      * 查询当前陪护证的实时状态
      * 
      * @param context 业务上下文（陪护证实体）
@@ -226,6 +279,12 @@ public class EscortServiceImpl implements EscortService {
             default:
                 throw new RuntimeException(String.format("住院证(cardNo = %s, happenNo = %s)存在多张关联的有效住院实体，无法判断状态",
                         context.patientCardNo, context.happenNo));
+        }
+
+        // 增加对陪护人健康码的判断
+        var tmpResult = this.queryRealState_helper(context.helperCardNo);
+        if (tmpResult != null) {
+            return tmpResult;
         }
 
         // 若当前无效，则锚定2天前，否则锚定14天前
