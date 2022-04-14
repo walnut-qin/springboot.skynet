@@ -145,12 +145,13 @@ public class EscortServiceImpl implements EscortService {
         var ntt = context.associateEntity;
 
         // 当前状态是否存在
+        EscortStateEnum orgState = null;
         if (ntt.stateRecs == null) {
             ntt.stateRecs = this.escortStateRecMapper.queryStates(context.escortNo);
         }
         if (ntt.stateRecs != null && !ntt.stateRecs.isEmpty()) {
-            var curState = ListHelpers.getLast(ntt.stateRecs).state;
-            if (curState == EscortStateEnum.注销) {
+            orgState = ListHelpers.getLast(ntt.stateRecs).state;
+            if (orgState == EscortStateEnum.注销) {
                 return EscortStateEnum.注销;
             }
         }
@@ -227,9 +228,13 @@ public class EscortServiceImpl implements EscortService {
                         context.patientCardNo, context.happenNo));
         }
 
-        // 锚定7天前的当前时间
+        // 若当前无效，则锚定2天前，否则锚定14天前
         var calender = Calendar.getInstance();
-        calender.add(Calendar.DATE, -14);
+        if (orgState != null && orgState == EscortStateEnum.生效中) {
+            calender.add(Calendar.DATE, -14);
+        } else {
+            calender.add(Calendar.DATE, -2);
+        }
         var beginDate = calender.getTime();
 
         // 查询7日内本院核酸记录
