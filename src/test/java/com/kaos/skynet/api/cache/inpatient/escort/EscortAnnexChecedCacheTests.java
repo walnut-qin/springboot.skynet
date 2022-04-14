@@ -14,10 +14,6 @@ public class EscortAnnexChecedCacheTests {
 
     @Test
     public void getCacheValue() {
-        var ret = this.cache.getValue("2551917678");
-
-        if (ret == null) {
-            return;
-        }
+        this.cache.getValue("2551917678");
     }
 }
