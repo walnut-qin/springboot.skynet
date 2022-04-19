@@ -183,7 +183,7 @@ public class StatisticControllerImpl implements StatisticController {
                     } else {
                         var helperAnnexRet = this.escortAnnexCheckedCache.getValue(helper.cardNo);
                         if (helperAnnexRet != null) {
-                            item.escort1NucleicAcidResult = String.format("%s(%s)",
+                            item.escort2NucleicAcidResult = String.format("%s(%s)",
                                     helperAnnexRet.associateEntity.escortAnnexChk.negativeFlag ? "阴性" : "阳性",
                                     formater.format(helperAnnexRet.associateEntity.escortAnnexChk.inspectDate));
                         }
