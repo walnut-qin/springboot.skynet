@@ -3,6 +3,8 @@ package com.kaos.skynet.config;
 import java.util.List;
 
 import com.kaos.skynet.config.converter.DateTypeConverter;
+import com.kaos.skynet.config.converter.LocalDateTimeTypeConverter;
+import com.kaos.skynet.config.converter.LocalDateTypeConverter;
 import com.kaos.skynet.config.converter.StringTypeConverter;
 import com.kaos.skynet.config.converter.factory.EnumTypeConverterFactory;
 import com.kaos.skynet.config.message.converter.BooleanMessageConverter;
@@ -31,6 +33,8 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
 
         // 注册时间解析
         registry.addConverter(new DateTypeConverter());
+        registry.addConverter(new LocalDateTypeConverter());
+        registry.addConverter(new LocalDateTimeTypeConverter());
 
         // 注册字符串转换器
         registry.addConverter(new StringTypeConverter());
