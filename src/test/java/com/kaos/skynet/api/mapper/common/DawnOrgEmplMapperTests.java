@@ -20,4 +20,9 @@ public class DawnOrgEmplMapperTests {
         this.employeeMapper.queryOuterEmployee(null);
         this.employeeMapper.queryOuterEmployee("W00801");
     }
+
+    @Test
+    public void queryValidEmployees() throws Exception {
+        this.employeeMapper.queryValidEmployees();
+    }
 }

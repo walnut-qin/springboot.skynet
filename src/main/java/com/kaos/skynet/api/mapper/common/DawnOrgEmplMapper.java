@@ -1,5 +1,7 @@
 package com.kaos.skynet.api.mapper.common;
 
+import java.util.List;
+
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 
 public interface DawnOrgEmplMapper {
@@ -18,4 +20,11 @@ public interface DawnOrgEmplMapper {
      * @return
      */
     DawnOrgEmpl queryOuterEmployee(String emplCode);
+
+    /**
+     * 查询所有有效员工
+     * 
+     * @return
+     */
+    List<DawnOrgEmpl> queryValidEmployees();
 }

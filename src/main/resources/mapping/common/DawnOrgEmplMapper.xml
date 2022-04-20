@@ -64,4 +64,16 @@
             </if>
         </where>
     </select>
+
+    <select id="queryValidEmployees" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            DAWN_ORG_EMPL
+        <where>
+            <if test="true">
+                AND VALID_STATE = '1'
+            </if>
+        </where>
+    </select>
 </mapper>

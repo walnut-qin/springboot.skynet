@@ -2,6 +2,7 @@ package com.kaos.skynet.entity.common;
 
 import java.sql.Date;
 
+import com.kaos.skynet.enums.impl.common.EmplTypeEnum;
 import com.kaos.skynet.enums.impl.common.PositionEnum;
 import com.kaos.skynet.enums.impl.common.RankEnum;
 import com.kaos.skynet.enums.impl.common.SexEnum;
@@ -49,7 +50,7 @@ public class DawnOrgEmpl {
     /**
      * 人员类型
      */
-    public String emplType = null;
+    public EmplTypeEnum emplType = null;
 
     /**
      * 身份证号
