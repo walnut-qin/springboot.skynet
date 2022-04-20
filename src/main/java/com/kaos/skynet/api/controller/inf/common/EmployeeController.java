@@ -11,7 +11,7 @@ public interface EmployeeController {
      * 
      * @return
      */
-    public List<EmployeeInfo> queryAllValidEmployees();
+    public List<EmployeeInfo> queryValidEmployees();
 
     /**
      * 员工信息实体

@@ -27,8 +27,8 @@ public class EmployeeControllerImpl implements EmployeeController {
     DawnOrgEmplMapper emplMapper;
 
     @Override
-    @RequestMapping(value = "queryAllValidEmployees", method = RequestMethod.GET, produces = MediaType.JSON)
-    public List<EmployeeInfo> queryAllValidEmployees() {
+    @RequestMapping(value = "queryValidEmployees", method = RequestMethod.GET, produces = MediaType.JSON)
+    public List<EmployeeInfo> queryValidEmployees() {
         // 检索原始有效数据
         var rets = this.emplMapper.queryValidEmployees();
 
@@ -37,6 +37,7 @@ public class EmployeeControllerImpl implements EmployeeController {
             info.emplCode = x.emplCode;
             info.emplName = x.emplName;
             info.inputCode = x.emplNameSpellCode;
+            info.emplType = x.emplType;
             info.deptCode = x.deptCode;
             info.createDate = LocalDateTime.now();
             return info;
