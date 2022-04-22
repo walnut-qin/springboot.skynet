@@ -23,7 +23,6 @@ import com.kaos.skynet.util.Gsons;
 import com.kaos.skynet.util.HttpHelpers;
 import com.kaos.skynet.util.helper.HttpHelper;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,11 +37,6 @@ import lombok.extern.log4j.Log4j;
 @RestController
 @RequestMapping("/ms/inpatient/surgery")
 public class SurgeryControllerImpl implements SurgeryController {
-    /**
-     * 日志接口
-     */
-    Logger logger = Logger.getLogger(SurgeryControllerImpl.class);
-
     /**
      * gson处理器
      */
@@ -233,14 +227,14 @@ public class SurgeryControllerImpl implements SurgeryController {
     @RequestMapping(value = "querySurgeries", method = RequestMethod.POST, produces = MediaType.JSON)
     public QueryAppliesRsp querySurgeries(@RequestBody @Valid QueryAppliesReq req) {
         // 记录日志
-        this.logger.info("查询手术申请, 入参:");
-        this.logger.info(this.gson.toJson(req));
+        log.info("查询手术申请, 入参:");
+        log.info(this.gson.toJson(req));
 
         // 调用服务
         var rs = this.surgeryService.queryApplies(req.deptCode, req.roomNo, req.beginDate, req.endDate, req.states);
 
         // 记录日志
-        this.logger.info(String.format("查询科室手术(count = %d)", rs.size()));
+        log.info(String.format("查询科室手术(count = %d)", rs.size()));
 
         // 获取手麻系统中的状态
         var reqBody = new QueryStatesReq();
@@ -287,6 +281,9 @@ public class SurgeryControllerImpl implements SurgeryController {
     @Override
     @RequestMapping(value = "querySurgeryApplie", method = RequestMethod.POST, produces = MediaType.JSON)
     public QuerySurgeryApplies.Response querySurgeryApplies(@RequestBody @Valid QuerySurgeryApplies.Request req) {
+        // 入参记录
+        log.info(String.format("查询手术申请记录: %s", this.gson.toJson(req)));
+
         // 检索原始结果
         var resultSet = this.metOpsApplyMapper.queryApplies(req.getLoginDeptCode(), req.getBeginPreDate(),
                 req.getEndPreDate(), req.getExecStatus(), req.getAnesFlag(), req.getValid());
