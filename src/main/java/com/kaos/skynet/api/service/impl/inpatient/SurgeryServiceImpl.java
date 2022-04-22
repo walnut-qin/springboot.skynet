@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.service.impl.inpatient;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -230,10 +230,10 @@ public class SurgeryServiceImpl implements SurgeryService {
     }
 
     @Override
-    public List<MetOpsApply> queryApplies(String deptCode, String roomNo, Date beginDate, Date endDate,
-            List<SurgeryStatusEnum> status) {
+    public List<MetOpsApply> queryApplies(String deptCode, String roomNo, LocalDateTime beginDate,
+            LocalDateTime endDate, List<SurgeryStatusEnum> status) {
         // 初步查询目标手术
-        var applies = this.metOpsApplyMapper.queryApplies(beginDate, endDate, status, ValidStateEnum.有效);
+        var applies = this.metOpsApplyMapper.queryApplies(null, beginDate, endDate, status, null, ValidStateEnum.有效);
         for (var apply : applies) {
             // 实体：项目
             apply.associateEntity.metOpsItem = this.metOpsItemMapper.queryMetOpsItem(apply.operationNo, "S991");

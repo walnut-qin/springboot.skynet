@@ -1,11 +1,10 @@
 package com.kaos.skynet.api.mapper.inpatient.surgery;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
-import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +23,11 @@ public class MetOpsApplyTests {
 
     @Test
     public void queryApplies() {
-        Calendar now = Calendar.getInstance();
-        Date endDate = now.getTime();
-        now.add(Calendar.DATE, -1);
-        Date beginDate = now.getTime();
-
-        this.metOpsApplyMapper.queryApplies(beginDate, endDate, null, null);
-        this.metOpsApplyMapper.queryApplies(beginDate, endDate, new ArrayList<>() {
-            {
-                add(SurgeryStatusEnum.手术安排);
-            }
-        }, null);
+        var ret = this.metOpsApplyMapper.queryApplies("1290", LocalDateTime.parse("2022-04-22T00:00:00"),
+                LocalDateTime.parse("2022-04-22T23:59:59"), null, false, ValidStateEnum.有效);
+        if (ret != null) {
+            ret.clear();
+        }
     }
 
     @Test

@@ -99,17 +99,23 @@
         FROM
             MET_OPS_APPLY
         <where>
-            <if test="beginDate != null">
-                AND PRE_DATE &gt;= #{beginDate, jdbcType=TIMESTAMP}
+            <if test="surgeryDeptCode != null">
+                AND EXEC_DEPT = #{surgeryDeptCode}
             </if>
-            <if test="endDate != null">
-                AND PRE_DATE &lt;= #{endDate, jdbcType=TIMESTAMP}
+            <if test="beginPreDate != null">
+                AND PRE_DATE &gt;= #{beginPreDate}
             </if>
-            <if test="status != null">
+            <if test="endPreDate != null">
+                AND PRE_DATE &lt;= #{endPreDate}
+            </if>
+            <if test="execStatus != null">
                 AND EXECSTATUS IN
-                <foreach collection="status" item="item" open="(" separator="," close=")">
+                <foreach collection="execStatus" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
+            </if>
+            <if test="finishFlag != null">
+                AND YNFINISHED = #{finishFlag}
             </if>
             <if test="valid != null">
                 AND YNVALID = #{valid}

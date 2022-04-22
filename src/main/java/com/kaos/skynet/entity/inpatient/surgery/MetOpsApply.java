@@ -1,6 +1,6 @@
 package com.kaos.skynet.entity.inpatient.surgery;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import com.kaos.skynet.entity.common.DawnOrgDept;
@@ -58,7 +58,7 @@ public class MetOpsApply {
     /**
      * 预约时间（计划手术时间）
      */
-    public Date preDate = null;
+    public LocalDateTime preDate = null;
 
     /**
      * 麻醉类型
@@ -78,7 +78,7 @@ public class MetOpsApply {
     /**
      * 申请时间
      */
-    public Date applyDate = null;
+    public LocalDateTime applyDate = null;
 
     /**
      * 申请备注
@@ -93,7 +93,7 @@ public class MetOpsApply {
     /**
      * 审批时间
      */
-    public Date apprDate = null;
+    public LocalDateTime apprDate = null;
 
     /**
      * 审批备注
@@ -153,7 +153,7 @@ public class MetOpsApply {
     /**
      * 申请时间
      */
-    public Date operDate = null;
+    public LocalDateTime operDate = null;
 
     /**
      * 有效标识
@@ -198,12 +198,12 @@ public class MetOpsApply {
     /**
      * 术中冰冻开始时间
      */
-    public Date frozenBeginDate = null;
+    public LocalDateTime frozenBeginDate = null;
 
     /**
      * 术中冰冻结束时间
      */
-    public Date frozenEndDate = null;
+    public LocalDateTime frozenEndDate = null;
 
     /**
      * 关联实体

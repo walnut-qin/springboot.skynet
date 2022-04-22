@@ -1,5 +1,6 @@
 package com.kaos.skynet.api.mapper.inpatient.surgery;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,15 +18,18 @@ public interface MetOpsApplyMapper {
     MetOpsApply queryMetOpsApply(String operationNo);
 
     /**
-     * 查询符合条件的手术
+     * 查询满足条件的手术申请记录
      * 
-     * @param lDate  开始时间；等于 {@code null} 时，不作为判断条件
-     * @param rDate  结束时间；等于 {@code null} 时，不作为判断条件
-     * @param status 状态清单；等于 {@code null} 时，不作为判断条件
-     * @param valid  有效标识；等于 {@code null} 时，不作为判断条件
+     * @param surgeryDeptCode 手术科室编码()
+     * @param beginPreDate
+     * @param endPreDate
+     * @param execStatus
+     * @param finishFlag
+     * @param valid
      * @return
      */
-    List<MetOpsApply> queryApplies(Date beginDate, Date endDate, List<SurgeryStatusEnum> status, ValidStateEnum valid);
+    List<MetOpsApply> queryApplies(String surgeryDeptCode, LocalDateTime beginPreDate, LocalDateTime endPreDate,
+            List<SurgeryStatusEnum> execStatus, Boolean finishFlag, ValidStateEnum valid);
 
     /**
      * 查询患者手术

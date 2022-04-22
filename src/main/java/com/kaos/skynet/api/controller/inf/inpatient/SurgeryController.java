@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.controller.inf.inpatient;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -39,13 +39,13 @@ public interface SurgeryController {
          * 开始时间
          */
         @NotNull(message = "开始时间不能为空")
-        public Date beginDate = null;
+        public LocalDateTime beginDate = null;
 
         /**
          * 结束时间
          */
         @NotNull(message = "结束时间不能为空")
-        public Date endDate = null;
+        public LocalDateTime endDate = null;
 
         /**
          * 状态清单
@@ -79,7 +79,7 @@ public interface SurgeryController {
             /**
              * 预约时间
              */
-            public Date apprDate = null;
+            public LocalDateTime apprDate = null;
 
             /**
              * 住院号
