@@ -24,12 +24,12 @@ public interface MetOpsApplyMapper {
      * @param beginPreDate
      * @param endPreDate
      * @param execStatus
-     * @param finishFlag
+     * @param anesFlag
      * @param valid
      * @return
      */
     List<MetOpsApply> queryApplies(String surgeryDeptCode, LocalDateTime beginPreDate, LocalDateTime endPreDate,
-            List<SurgeryStatusEnum> execStatus, Boolean finishFlag, ValidStateEnum valid);
+            List<SurgeryStatusEnum> execStatus, Boolean anesFlag, ValidStateEnum valid);
 
     /**
      * 查询患者手术

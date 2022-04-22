@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.kaos.skynet.api.controller.entity.inpatient.surgery.QuerySurgeryApplies;
 import com.kaos.skynet.enums.impl.common.SexEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.AnesTypeEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryDegreeEnum;
@@ -197,4 +198,12 @@ public interface SurgeryController {
             public String surgeryState = null;
         }
     }
+
+    /**
+     * 查询手术申请记录
+     * 
+     * @param req 查询条件
+     * @return 满足条件的手术申请记录
+     */
+    public QuerySurgeryApplies.Response querySurgeryApplies(@Valid QuerySurgeryApplies.Request req);
 }

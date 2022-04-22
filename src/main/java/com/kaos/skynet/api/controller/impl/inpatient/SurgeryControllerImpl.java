@@ -10,7 +10,10 @@ import javax.validation.Valid;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.controller.MediaType;
+import com.kaos.skynet.api.controller.entity.inpatient.surgery.QuerySurgeryApplies;
 import com.kaos.skynet.api.controller.inf.inpatient.SurgeryController;
+import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
+import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.skynet.api.service.inf.inpatient.SurgeryService;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
@@ -28,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.log4j.Log4j;
+
+@Log4j
 @Validated
 @RestController
 @RequestMapping("/ms/inpatient/surgery")
@@ -52,6 +58,18 @@ public class SurgeryControllerImpl implements SurgeryController {
      */
     @Autowired
     SurgeryService surgeryService;
+
+    /**
+     * 手术申请记录表查询接口
+     */
+    @Autowired
+    MetOpsApplyMapper metOpsApplyMapper;
+
+    /**
+     * 手术项目表查询接口
+     */
+    @Autowired
+    MetOpsItemMapper metOpsItemMapper;
 
     /**
      * 构造响应体元素
@@ -264,5 +282,34 @@ public class SurgeryControllerImpl implements SurgeryController {
          * 状态清单
          */
         public Map<String, String> states = null;
+    }
+
+    @Override
+    @RequestMapping(value = "querySurgeryApplies", method = RequestMethod.POST, produces = MediaType.JSON)
+    public QuerySurgeryApplies.Response querySurgeryApplies(@Valid QuerySurgeryApplies.Request req) {
+        // 检索原始结果
+        var resultSet = this.metOpsApplyMapper.queryApplies(req.getLoginDeptCode(), req.getBeginPreDate(),
+                req.getEndPreDate(), req.getExecStatus(), req.getAnesFlag(), req.getValid());
+
+        // 数据集转换
+        List<QuerySurgeryApplies.Response.DataItem> data = resultSet.stream().map((x) -> {
+            // 声明结果元素变量
+            var dataItem = new QuerySurgeryApplies.Response.DataItem();
+
+            // 查询手术名称
+            var opsItem = this.metOpsItemMapper.queryMetOpsItem(x.operationNo, "S991");
+            if (opsItem != null) {
+                dataItem.setOperationName(opsItem.itemName);
+            }
+
+            return dataItem;
+        }).toList();
+
+        // 构造响应body
+        QuerySurgeryApplies.Response body = new QuerySurgeryApplies.Response();
+        body.setSize(data.size());
+        body.setData(data);
+
+        return body;
     }
 }

@@ -114,8 +114,8 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="finishFlag != null">
-                AND YNFINISHED = #{finishFlag}
+            <if test="anesFlag != null">
+                AND YNANESTH = #{anesFlag}
             </if>
             <if test="valid != null">
                 AND YNVALID = #{valid}
