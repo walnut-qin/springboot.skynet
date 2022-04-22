@@ -285,8 +285,8 @@ public class SurgeryControllerImpl implements SurgeryController {
     }
 
     @Override
-    @RequestMapping(value = "querySurgeryApplies", method = RequestMethod.POST, produces = MediaType.JSON)
-    public QuerySurgeryApplies.Response querySurgeryApplies(@Valid QuerySurgeryApplies.Request req) {
+    @RequestMapping(value = "querySurgeryApplie", method = RequestMethod.POST, produces = MediaType.JSON)
+    public QuerySurgeryApplies.Response querySurgeryApplies(@RequestBody @Valid QuerySurgeryApplies.Request req) {
         // 检索原始结果
         var resultSet = this.metOpsApplyMapper.queryApplies(req.getLoginDeptCode(), req.getBeginPreDate(),
                 req.getEndPreDate(), req.getExecStatus(), req.getAnesFlag(), req.getValid());

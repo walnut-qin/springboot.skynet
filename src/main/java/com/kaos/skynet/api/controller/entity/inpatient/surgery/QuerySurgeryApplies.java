@@ -3,6 +3,8 @@ package com.kaos.skynet.api.controller.entity.inpatient.surgery;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
@@ -24,12 +26,14 @@ public class QuerySurgeryApplies {
          * 申请时间左值
          */
         @Getter
+        @NotNull(message = "申请时间左值不能为空")
         private LocalDateTime beginPreDate = null;
 
         /**
          * 申请时间右值
          */
         @Getter
+        @NotNull(message = "申请时间右值不能为空")
         private LocalDateTime endPreDate = null;
 
         /**
