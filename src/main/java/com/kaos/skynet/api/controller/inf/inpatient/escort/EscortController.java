@@ -12,6 +12,8 @@ import com.kaos.skynet.enums.impl.common.SexEnum;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
 
+import lombok.Getter;
+
 public interface EscortController {
     /**
      * 登记陪护人
@@ -59,6 +61,12 @@ public interface EscortController {
          * 备注
          */
         public String remark = null;
+
+        /**
+         * 是否为窗口操作
+         */
+        @Getter
+        private Boolean regbyWindow = null;
     }
 
     /**

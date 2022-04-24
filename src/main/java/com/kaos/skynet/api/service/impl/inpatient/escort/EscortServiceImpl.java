@@ -343,10 +343,12 @@ public class EscortServiceImpl implements EscortService {
     /**
      * 判断能否注册陪护
      * 
-     * @param patientCardNo
-     * @param helperCardNo
+     * @param fip          住院证
+     * @param helperCardNo 陪护人卡号
+     * @param regByWindow  是否为窗口操作，若是，则逃逸掉12小时反复横跳判断
+     * @throws RuntimeException
      */
-    private void canRegister(FinIprPrepayIn fip, String helperCardNo) throws RuntimeException {
+    private void canRegister(FinIprPrepayIn fip, String helperCardNo, Boolean regByWindow) throws RuntimeException {
         // 入参判断
         if (fip == null) {
             throw new RuntimeException("住院证不存在");
@@ -363,7 +365,7 @@ public class EscortServiceImpl implements EscortService {
             var curState = this.escortStateRecMapper.queryCurState(lastEscort.escortNo);
             if (curState.state != EscortStateEnum.注销) {
                 throw new RuntimeException("陪护关系已绑定，请勿重复绑定");
-            } else if (lastEscort.happenNo.equals(fip.happenNo)) {
+            } else if (!regByWindow && lastEscort.happenNo.equals(fip.happenNo)) {
                 var offset = new Date().getTime() - curState.recDate.getTime();
                 if (offset <= 12 * 60 * 60 * 1000) {
                     var rest = 12 * 60 * 60 * 1000 - offset;
@@ -486,12 +488,13 @@ public class EscortServiceImpl implements EscortService {
 
     @Transactional
     @Override
-    public EscortMainInfo registerEscort(String patientIdx, String helperCardNo, String emplCode, String remark) {
+    public EscortMainInfo registerEscort(String patientIdx, String helperCardNo, String emplCode, String remark,
+            Boolean regByWindow) {
         // 判定唯一有效的住院证
         var prepayIn = this.queryUniqueValidPrepayIn(patientIdx);
 
         // 权限判断
-        this.canRegister(prepayIn, helperCardNo);
+        this.canRegister(prepayIn, helperCardNo, regByWindow);
 
         // 插入VIP记录
         var vip = this.escortVipMapper.queryEscortVip(prepayIn.cardNo, prepayIn.happenNo);

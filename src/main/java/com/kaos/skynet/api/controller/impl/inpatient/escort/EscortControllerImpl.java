@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
@@ -88,7 +89,8 @@ public class EscortControllerImpl implements EscortController {
             // 加陪护人锁，防止同时对同一个陪护人添加陪护
             synchronized (Locks.helperLock.mapToLock(helperCardNo)) {
                 // 调用业务
-                var escort = this.escortMainService.registerEscort(patientCardNo, helperCardNo, emplCode, remark);
+                var escort = this.escortMainService.registerEscort(patientCardNo, helperCardNo, emplCode, remark,
+                        false);
                 if (escort != null) {
                     return escort.escortNo;
                 }
@@ -114,7 +116,7 @@ public class EscortControllerImpl implements EscortController {
             synchronized (Locks.helperLock.mapToLock(req.helperCardNo)) {
                 // 调用业务
                 var escort = this.escortMainService.registerEscort(req.patientIdx, req.helperCardNo, req.emplCode,
-                        req.remark);
+                        req.remark, Optional.fromNullable(req.getRegbyWindow()).or(false));
                 if (escort != null) {
                     return escort.escortNo;
                 }

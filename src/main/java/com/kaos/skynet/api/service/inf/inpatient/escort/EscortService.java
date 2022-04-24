@@ -18,7 +18,8 @@ public interface EscortService {
      * @param remark
      * @return
      */
-    EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark);
+    EscortMainInfo registerEscort(String patientCardNo, String helperCardNo, String emplCode, String remark,
+            Boolean regByWindow);
 
     /**
      * 修改陪护证状态
