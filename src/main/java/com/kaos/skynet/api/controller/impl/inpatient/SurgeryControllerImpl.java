@@ -308,7 +308,7 @@ public class SurgeryControllerImpl implements SurgeryController {
             }
 
             // 手术时间
-            dataItem.setSurgeryDate(x.apprDate);
+            dataItem.setApprDate(x.apprDate);
 
             // 查询手术名称
             var opsItem = this.metOpsItemMapper.queryMetOpsItem(x.operationNo, "S991");
@@ -318,8 +318,21 @@ public class SurgeryControllerImpl implements SurgeryController {
 
             return dataItem;
         }).sorted((x, y) -> {
-            // 优先
-            return x.getRoomNo().compareTo(y.getRoomNo());
+            Integer cmpRt = 0;
+
+            // 优先按照手术室排序
+            cmpRt = x.getRoomNo().compareTo(y.getRoomNo());
+            if (!cmpRt.equals(0)) {
+                return cmpRt;
+            }
+
+            // 再按照手术时间排序
+            cmpRt = x.getRoomNo().compareTo(y.getRoomNo());
+            if (!cmpRt.equals(0)) {
+                return cmpRt;
+            }
+
+            return 0;
         }).toList();
 
         // 构造响应body
