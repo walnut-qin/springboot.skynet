@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
+import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryKindEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
 import lombok.Getter;
@@ -75,6 +76,25 @@ public class QuerySurgeryApplies {
          * 数据项
          */
         public static class DataItem {
+            /**
+             * 手术间
+             */
+            @Getter
+            @Setter
+            private String roomNo = null;
+
+            /**
+             * 手术时间
+             */
+            @Setter
+            private LocalDateTime surgeryDate = null;
+
+            /**
+             * 手术类型
+             */
+            @Setter
+            private SurgeryKindEnum surgeryKind = null;
+
             /**
              * 手术名
              */

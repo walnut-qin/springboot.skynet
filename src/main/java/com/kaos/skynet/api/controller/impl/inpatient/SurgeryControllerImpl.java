@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
+import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.entity.inpatient.surgery.QuerySurgeryApplies;
 import com.kaos.skynet.api.controller.inf.inpatient.SurgeryController;
@@ -17,6 +18,7 @@ import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.skynet.api.service.inf.inpatient.SurgeryService;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
+import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.skynet.util.DateHelpers;
 import com.kaos.skynet.util.Gsons;
@@ -64,6 +66,12 @@ public class SurgeryControllerImpl implements SurgeryController {
      */
     @Autowired
     MetOpsItemMapper metOpsItemMapper;
+
+    /**
+     * 手术间缓存
+     */
+    @Autowired
+    Cache<String, MetOpsRoom> roomCache;
 
     /**
      * 构造响应体元素
@@ -293,6 +301,15 @@ public class SurgeryControllerImpl implements SurgeryController {
             // 声明结果元素变量
             var dataItem = new QuerySurgeryApplies.Response.DataItem();
 
+            // 查询手术间
+            var room = this.roomCache.getValue(x.roomId);
+            if (room != null) {
+                dataItem.setRoomNo(room.roomName);
+            }
+
+            // 手术时间
+            dataItem.setSurgeryDate(x.apprDate);
+
             // 查询手术名称
             var opsItem = this.metOpsItemMapper.queryMetOpsItem(x.operationNo, "S991");
             if (opsItem != null) {
@@ -300,6 +317,9 @@ public class SurgeryControllerImpl implements SurgeryController {
             }
 
             return dataItem;
+        }).sorted((x, y) -> {
+            // 优先
+            return x.getRoomNo().compareTo(y.getRoomNo());
         }).toList();
 
         // 构造响应body
