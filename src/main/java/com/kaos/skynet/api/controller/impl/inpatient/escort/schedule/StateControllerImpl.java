@@ -47,8 +47,9 @@ public class StateControllerImpl implements RefreshStateController {
     EscortService escortMainService;
 
     @Override
-    @Scheduled(cron = "0 0 0,4,12,13,18,19,22 * * ?")
-    @Scheduled(cron = "0 0/15 8-11,14-17 * * ?")
+    // @Scheduled(cron = "0 0 0,4,12,13,18,19,22 * * ?")
+    // @Scheduled(cron = "0 0/15 8-11,14-17 * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void run() {
         this.masterPool.execute(new Runnable() {
             /**
