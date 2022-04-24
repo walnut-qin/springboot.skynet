@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.mapper.outpatient.fee;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,6 @@ public class FinOpbFeeDetailMapperTests {
 
     @Test
     public void queryFeeDetailsWithCardNo() {
-        this.finOpbFeeDetailMapper.queryFeeDetailsWithCardNo("cardNo", "itemCode", new Date(), new Date());
+        this.finOpbFeeDetailMapper.queryFeeDetailsWithCardNo("cardNo", "itemCode", LocalDateTime.now(), LocalDateTime.now());
     }
 }

@@ -1,6 +1,6 @@
 package com.kaos.skynet.entity.inpatient.escort;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 
@@ -21,7 +21,7 @@ public class EscortAnnexChk {
     /**
      * 审核日期
      */
-    public Date chkDate = null;
+    public LocalDateTime chkDate = null;
 
     /**
      * 阴性标识
@@ -31,7 +31,7 @@ public class EscortAnnexChk {
     /**
      * 检验日期
      */
-    public Date inspectDate = null;
+    public LocalDateTime inspectDate = null;
 
     /**
      * 关联实体

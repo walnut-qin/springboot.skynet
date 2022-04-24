@@ -1,5 +1,6 @@
 package com.kaos.skynet.api.mapper.outpatient.fee;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,8 @@ public interface FinOpbFeeDetailMapper {
      * @param endDate   结束时间；等于 {@code null} 时，不作为判断条件
      * @return
      */
-    List<FinOpbFeeDetail> queryFeeDetailsWithCardNo(String cardNo, String itemCode, Date beginDate, Date endDate);
+    List<FinOpbFeeDetail> queryFeeDetailsWithCardNo(String cardNo, String itemCode, LocalDateTime beginDate,
+            LocalDateTime endDate);
 
     /**
      * 获取插入前实体，填充一些序列的值

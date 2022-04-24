@@ -1,6 +1,5 @@
 package com.kaos.skynet.api.controller.impl.inpatient.escort;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -24,6 +23,7 @@ import net.coobird.thumbnailator.Thumbnails;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.time.LocalDateTime;
 
 @Validated
 @RestController
@@ -87,7 +87,7 @@ public class AnnexControllerImpl implements AnnexController {
     public void checkAnnex(@NotNull(message = "附件号不能为空") String annexNo,
             @NotNull(message = "审核人不能为空") String checker,
             @NotNull(message = "审核结果不能为空") Boolean negativeFlag,
-            @NotNull(message = "检验时间不能为空") Date inspectDate) {
+            @NotNull(message = "检验时间不能为空") LocalDateTime inspectDate) {
         // 入参记录
         this.logger.info(String.format("审核附件<annexNo = %s, checker = %s, negativeFlag = %s, inspectDate = %s>", annexNo,
                 checker, negativeFlag.toString(), inspectDate.toString()));

@@ -1,6 +1,6 @@
 package com.kaos.skynet.entity.pipe.lis;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * LIS检验结果（LISNEW.LIS_RESULT_NEW）
@@ -29,5 +29,5 @@ public class LisResultNew {
     /**
      * 检验时间
      */
-    public Date inspectDate = null;
+    public LocalDateTime inspectDate = null;
 }

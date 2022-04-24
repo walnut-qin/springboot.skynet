@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.service.impl.inpatient.escort;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -288,13 +288,12 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 若当前无效，则锚定2天前，否则锚定14天前
-        var calender = Calendar.getInstance();
+        LocalDateTime beginDate = LocalDateTime.now();
         if (orgState != null && orgState == EscortStateEnum.生效中) {
-            calender.add(Calendar.DATE, -14);
+            beginDate = beginDate.plusDays(-14);
         } else {
-            calender.add(Calendar.DATE, -2);
+            beginDate = beginDate.plusDays(-2);
         }
-        var beginDate = calender.getTime();
 
         // 查询7日内本院核酸记录
         var lisRs = this.lisResultNewMapper.queryInspectResult(context.helperCardNo,
@@ -313,12 +312,12 @@ public class EscortServiceImpl implements EscortService {
             EscortAnnexChk lastRecord = null;
             for (var annexInfo : checkedAnnexInfos) {
                 var curRec = this.escortAnnexChkMapper.queryAnnexChk(annexInfo.annexNo);
-                if (lastRecord == null || lastRecord.inspectDate.before(curRec.inspectDate)) {
+                if (lastRecord == null || lastRecord.inspectDate.isBefore(curRec.inspectDate)) {
                     lastRecord = curRec;
                 }
             }
             // 如果最近一次结果为阴性，则生效
-            if (lastRecord.inspectDate.after(beginDate) && lastRecord.negativeFlag) {
+            if (lastRecord.inspectDate.isAfter(beginDate) && lastRecord.negativeFlag) {
                 return EscortStateEnum.生效中;
             }
         }

@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.pipe.lis;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kaos.skynet.entity.pipe.lis.LisResultNew;
@@ -15,5 +15,6 @@ public interface LisResultNewMapper {
      * @param endDate   结束时间；等于 {@code null} 时，不作为判断条件
      * @return
      */
-    List<LisResultNew> queryInspectResult(String patientId, List<String> itemCodes, Date beginDate, Date endDate);
+    List<LisResultNew> queryInspectResult(String patientId, List<String> itemCodes, LocalDateTime beginDate,
+            LocalDateTime endDate);
 }

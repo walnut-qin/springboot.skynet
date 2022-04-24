@@ -1,6 +1,7 @@
 package com.kaos.skynet.api.controller.impl.inpatient.escort;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -26,6 +27,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.Data;
 
 @Validated
 @RestController
@@ -78,6 +81,65 @@ public class StatisticControllerImpl implements StatisticController {
     @Autowired
     Cache<String, EscortAnnexInfo> escortAnnexCheckedCache;
 
+    /**
+     * 检索核酸结果
+     * 
+     * @param key 卡号或住院号
+     * @return
+     */
+    private String queryNucleicAcidResult(String key) {
+        // 检索院内LIS系统核酸数据
+        LisResultNew lisResult = this.covidCache.getValue(key);
+
+        // 检索院外上传的报告
+        EscortAnnexInfo annexInfo = this.escortAnnexCheckedCache.getValue(key);
+
+        /**
+         * 定义结果集结构
+         */
+        @Data
+        class Result {
+            /**
+             * 核酸结果内容
+             */
+            private String resultString = null;
+
+            /**
+             * 结果时间
+             */
+            private LocalDateTime operDate = null;
+        }
+
+        List<Result> rs = Lists.newArrayList();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if (lisResult != null) {
+            rs.add(new Result() {
+                {
+                    setResultString(String.format("%s(%s)", lisResult.result, formatter.format(lisResult.inspectDate)));
+                    setOperDate(lisResult.inspectDate);
+                }
+            });
+        }
+        if (annexInfo != null) {
+            rs.add(new Result() {
+                {
+                    var chk = annexInfo.associateEntity.escortAnnexChk;
+                    setResultString(
+                            String.format("%s(%s)", chk.negativeFlag ? "阴性" : "阳性", formatter.format(chk.inspectDate)));
+                    setOperDate(chk.inspectDate);
+                }
+            });
+        }
+
+        if (rs.isEmpty()) {
+            return null;
+        } else {
+            return rs.stream().sorted((x, y) -> {
+                return y.getOperDate().compareTo(x.getOperDate());
+            }).toList().get(0).resultString;
+        }
+    }
+
     @Override
     @RequestMapping(value = "queryEscortData", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryEscortRsp> queryEscortData(@NotNull(message = "科室编码不能为空") String deptCode) {
@@ -107,9 +169,6 @@ public class StatisticControllerImpl implements StatisticController {
         // 声明结果集
         List<QueryEscortRsp> ret = Lists.newArrayList();
 
-        // 时间格式工具
-        var formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         // 构造结果集
         for (FinIprInMainInfo inMainInfo : filteredPats) {
             // 构造结果元素
@@ -130,15 +189,10 @@ public class StatisticControllerImpl implements StatisticController {
                 }
                 item.highRiskArea = patient.highRiskArea;
             }
-            var lisResult = this.covidCache.getValue(inMainInfo.cardNo);
-            if (lisResult == null) {
-                lisResult = this.covidCache.getValue(inMainInfo.patientNo);
+            item.nucleicAcidResult = this.queryNucleicAcidResult(inMainInfo.cardNo);
+            if (item.nucleicAcidResult == null) {
+                item.nucleicAcidResult = this.queryNucleicAcidResult(inMainInfo.patientNo);
             }
-            if (lisResult != null) {
-                item.nucleicAcidResult = String.format("%s(%s)", lisResult.result,
-                        formater.format(lisResult.inspectDate));
-            }
-            ret.add(item);
             // 检索陪护
             var escorts = this.escortService.queryHelperInfos(inMainInfo.cardNo);
             if (escorts.size() >= 1) {
@@ -148,18 +202,7 @@ public class StatisticControllerImpl implements StatisticController {
                     item.escort1Name = helper.name;
                     item.escort1CardNo = helper.cardNo;
                     item.escort1IdenNo = helper.identityCardNo;
-                    var helperRet = this.covidCache.getValue(helper.cardNo);
-                    if (helperRet != null) {
-                        item.escort1NucleicAcidResult = String.format("%s(%s)", helperRet.result,
-                                formater.format(helperRet.inspectDate));
-                    } else {
-                        var helperAnnexRet = this.escortAnnexCheckedCache.getValue(helper.cardNo);
-                        if (helperAnnexRet != null) {
-                            item.escort1NucleicAcidResult = String.format("%s(%s)",
-                                    helperAnnexRet.associateEntity.escortAnnexChk.negativeFlag ? "阴性" : "阳性",
-                                    formater.format(helperAnnexRet.associateEntity.escortAnnexChk.inspectDate));
-                        }
-                    }
+                    item.escort1NucleicAcidResult = this.queryNucleicAcidResult(helper.cardNo);
                     item.escort1Tel = helper.linkmanTel;
                     item.escort1HealthCode = helper.healthCode;
                     item.escort1TravelCode = helper.travelCode;
@@ -176,18 +219,7 @@ public class StatisticControllerImpl implements StatisticController {
                     item.escort2Name = helper.name;
                     item.escort2CardNo = helper.cardNo;
                     item.escort2IdenNo = helper.identityCardNo;
-                    var helperRet = this.covidCache.getValue(helper.cardNo);
-                    if (helperRet != null) {
-                        item.escort2NucleicAcidResult = String.format("%s(%s)", helperRet.result,
-                                formater.format(helperRet.inspectDate));
-                    } else {
-                        var helperAnnexRet = this.escortAnnexCheckedCache.getValue(helper.cardNo);
-                        if (helperAnnexRet != null) {
-                            item.escort2NucleicAcidResult = String.format("%s(%s)",
-                                    helperAnnexRet.associateEntity.escortAnnexChk.negativeFlag ? "阴性" : "阳性",
-                                    formater.format(helperAnnexRet.associateEntity.escortAnnexChk.inspectDate));
-                        }
-                    }
+                    item.escort2NucleicAcidResult = this.queryNucleicAcidResult(helper.cardNo);
                     item.escort2Tel = helper.linkmanTel;
                     item.escort2HealthCode = helper.healthCode;
                     item.escort2TravelCode = helper.travelCode;
@@ -197,6 +229,7 @@ public class StatisticControllerImpl implements StatisticController {
                     item.escort2HighRiskArea = helper.highRiskArea;
                 }
             }
+            ret.add(item);
         }
 
         return ret;

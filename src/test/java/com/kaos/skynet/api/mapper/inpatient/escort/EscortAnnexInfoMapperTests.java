@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.inpatient.escort;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ public class EscortAnnexInfoMapperTests {
 
     @Test
     public void queryAnnexInfos() {
-        this.escortAnnexInfoMapper.queryAnnexInfos("cardNo", new Date(), new Date(), null);
-        this.escortAnnexInfoMapper.queryAnnexInfos("cardNo", new Date(), new Date(), true);
-        this.escortAnnexInfoMapper.queryAnnexInfos("cardNo", new Date(), new Date(), false);
+        this.escortAnnexInfoMapper.queryAnnexInfos("cardNo", LocalDateTime.now(), LocalDateTime.now(), null);
+        this.escortAnnexInfoMapper.queryAnnexInfos("cardNo", LocalDateTime.now(), LocalDateTime.now(), true);
+        this.escortAnnexInfoMapper.queryAnnexInfos("cardNo", LocalDateTime.now(), LocalDateTime.now(), false);
     }
 }

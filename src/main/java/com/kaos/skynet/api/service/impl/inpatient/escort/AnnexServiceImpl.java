@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.service.impl.inpatient.escort;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.common.collect.HashMultimap;
@@ -69,7 +69,7 @@ public class AnnexServiceImpl implements AnnexService {
                 annexNo = null;
                 cardNo = helperCardNo;
                 annexUrl = url;
-                recDate = new Date();
+                recDate = LocalDateTime.now();
             }
         };
 
@@ -81,7 +81,7 @@ public class AnnexServiceImpl implements AnnexService {
 
     @Override
     @Transactional
-    public EscortAnnexChk checkAnnex(String annexNo, String checker, Boolean negativeFlag, Date inspectDate) {
+    public EscortAnnexChk checkAnnex(String annexNo, String checker, Boolean negativeFlag, LocalDateTime inspectDate) {
         // 检索审核记录
         var chk = this.escortAnnexChkMapper.queryAnnexChk(annexNo);
         if (chk != null) {
@@ -92,7 +92,7 @@ public class AnnexServiceImpl implements AnnexService {
         var annexChk = new EscortAnnexChk();
         annexChk.annexNo = annexNo;
         annexChk.chkEmplCode = checker;
-        annexChk.chkDate = new Date();
+        annexChk.chkDate = LocalDateTime.now();
         annexChk.negativeFlag = negativeFlag;
         annexChk.inspectDate = inspectDate;
 

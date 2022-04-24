@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.pipe.lis;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.google.common.collect.Lists;
 
@@ -15,6 +15,7 @@ public class LisResultNewMapperTests {
 
     @Test
     public void queryInspectResult() {
-        this.lisResultNewMapper.queryInspectResult("0001545200", Lists.newArrayList("LYMPH#"), new Date(), new Date());
+        this.lisResultNewMapper.queryInspectResult("0001545200", Lists.newArrayList("LYMPH#"), LocalDateTime.now(),
+                LocalDateTime.now());
     }
 }

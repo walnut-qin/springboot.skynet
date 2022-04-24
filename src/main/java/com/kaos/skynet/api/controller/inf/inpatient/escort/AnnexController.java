@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.controller.inf.inpatient.escort;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -27,7 +27,7 @@ public interface AnnexController {
     void checkAnnex(@NotNull(message = "附件号不能为空") String annexNo,
             @NotNull(message = "审核人不能为空") String checker,
             @NotNull(message = "审核结果不能为空") Boolean negativeFlag,
-            @NotNull(message = "检验时间不能为空") Date inspectDate);
+            @NotNull(message = "检验时间不能为空") LocalDateTime inspectDate);
 
     /**
      * 查询指定科室的附件信息
@@ -71,6 +71,6 @@ public interface AnnexController {
         /**
          * 检验日期
          */
-        public Date inspectDate = null;
+        public LocalDateTime inspectDate = null;
     }
 }

@@ -1,6 +1,6 @@
 package com.kaos.skynet.entity.inpatient.escort;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.kaos.skynet.entity.common.ComPatientInfo;
 
@@ -23,7 +23,7 @@ public class EscortAnnexInfo {
     /**
      * 记录日期
      */
-    public Date recDate = null;
+    public LocalDateTime recDate = null;
 
     /**
      * 关联实体

@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.service.inf.inpatient.escort;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kaos.skynet.entity.inpatient.escort.EscortAnnexChk;
@@ -24,7 +24,7 @@ public interface AnnexService {
      * @param inspectDate
      * @return
      */
-    EscortAnnexChk checkAnnex(String annexNo, String checker, Boolean negativeFlag, Date inspectDate);
+    EscortAnnexChk checkAnnex(String annexNo, String checker, Boolean negativeFlag, LocalDateTime inspectDate);
 
     /**
      * 查询指定科室的附件

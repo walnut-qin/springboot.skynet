@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.inpatient.escort;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kaos.skynet.entity.inpatient.escort.EscortAnnexInfo;
@@ -23,7 +23,8 @@ public interface EscortAnnexInfoMapper {
      * @param checked      审核标识；等于 {@code null} 时，不作为判断条件
      * @return 符合条件的附件记录（按照上传时间排序）
      */
-    List<EscortAnnexInfo> queryAnnexInfos(String helperCardNo, Date beginDate, Date endDate, Boolean checked);
+    List<EscortAnnexInfo> queryAnnexInfos(String helperCardNo, LocalDateTime beginDate, LocalDateTime endDate,
+            Boolean checked);
 
     /**
      * 插入一条附件记录
