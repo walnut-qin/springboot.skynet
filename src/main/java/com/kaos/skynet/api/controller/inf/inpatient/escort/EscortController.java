@@ -66,7 +66,7 @@ public interface EscortController {
          * 是否为窗口操作
          */
         @Getter
-        private Boolean regbyWindow = null;
+        private Boolean regByWindow = null;
     }
 
     /**

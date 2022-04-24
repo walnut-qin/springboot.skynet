@@ -116,7 +116,7 @@ public class EscortControllerImpl implements EscortController {
             synchronized (Locks.helperLock.mapToLock(req.helperCardNo)) {
                 // 调用业务
                 var escort = this.escortMainService.registerEscort(req.patientIdx, req.helperCardNo, req.emplCode,
-                        req.remark, Optional.fromNullable(req.getRegbyWindow()).or(false));
+                        req.remark, Optional.fromNullable(req.getRegByWindow()).or(false));
                 if (escort != null) {
                     return escort.escortNo;
                 }
