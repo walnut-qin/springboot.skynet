@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.kaos.skynet.enums.impl.common.SexEnum;
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryKindEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
@@ -94,6 +95,54 @@ public class QuerySurgeryApplies {
              */
             @Setter
             private SurgeryKindEnum surgeryKind = null;
+
+            /**
+             * 是否为首台
+             */
+            @Setter
+            private Boolean firstFlag = null;
+
+            /**
+             * 患者住院科室
+             */
+            @Setter
+            private String deptName = null;
+
+            /**
+             * 住院号
+             */
+            @Setter
+            private String patientNo = null;
+
+            /**
+             * 患者姓名
+             */
+            @Setter
+            private String name = null;
+
+            /**
+             * 性别
+             */
+            @Setter
+            private SexEnum sex = null;
+
+            /**
+             * 年龄
+             */
+            @Setter
+            private String age = null;
+
+            /**
+             * 台次
+             */
+            @Setter
+            private String order = null;
+
+            /**
+             * 术前诊断
+             */
+            @Setter
+            private String preDiagnosis = null;
 
             /**
              * 手术名

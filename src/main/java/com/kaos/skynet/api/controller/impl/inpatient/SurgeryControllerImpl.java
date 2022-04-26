@@ -1,5 +1,6 @@
 package com.kaos.skynet.api.controller.impl.inpatient;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,6 +17,9 @@ import com.kaos.skynet.api.controller.inf.inpatient.SurgeryController;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.skynet.api.service.inf.inpatient.SurgeryService;
+import com.kaos.skynet.entity.common.ComPatientInfo;
+import com.kaos.skynet.entity.common.DawnOrgDept;
+import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
@@ -72,6 +76,24 @@ public class SurgeryControllerImpl implements SurgeryController {
      */
     @Autowired
     Cache<String, MetOpsRoom> roomCache;
+
+    /**
+     * 科室信息缓存
+     */
+    @Autowired
+    Cache<String, DawnOrgDept> deptCache;
+
+    /**
+     * 住院主表缓存
+     */
+    @Autowired
+    Cache<String, FinIprInMainInfo> inMainInfoCache;
+
+    /**
+     * 患者基本信息缓存
+     */
+    @Autowired
+    Cache<String, ComPatientInfo> comPatientInfoCache;
 
     /**
      * 构造响应体元素
@@ -286,6 +308,71 @@ public class SurgeryControllerImpl implements SurgeryController {
         public Map<String, String> states = null;
     }
 
+    /**
+     * 手术实体映射
+     * 
+     * @param apply
+     * @return
+     */
+    private QuerySurgeryApplies.Response.DataItem mapToDataItem(MetOpsApply apply) {
+        // 声明结果实体
+        QuerySurgeryApplies.Response.DataItem result = new QuerySurgeryApplies.Response.DataItem();
+
+        // 查询手术间
+        var room = this.roomCache.getValue(apply.roomId);
+        if (room != null) {
+            result.setRoomNo(room.roomName);
+        }
+
+        // 手术时间
+        result.setApprDate(apply.apprDate);
+
+        // 手术类型
+        result.setSurgeryKind(apply.surgeryKind);
+
+        // 首台
+        result.setFirstFlag(apply.getFirstFlag());
+
+        // 病区
+        if (apply.getInDeptCode() != null) {
+            var dept = this.deptCache.getValue(apply.getInDeptCode());
+            if (dept != null) {
+                result.setDeptName(dept.deptName);
+            }
+        }
+
+        // 住院号
+        result.setPatientNo(apply.patientNo);
+        if (apply.patientNo != null) {
+            // 获取住院实体
+            var inMainInfo = this.inMainInfoCache.getValue(apply.patientNo);
+            if (inMainInfo != null) {
+                // 姓名
+                result.setName(inMainInfo.name);
+
+                // 性别
+                result.setSex(inMainInfo.sex);
+
+                // 年龄
+                result.setAge(String.valueOf(inMainInfo.birthday.toLocalDate().until(LocalDate.now()).getYears()));
+            }
+        }
+
+        // 台次
+        result.setOrder(apply.getOrder());
+
+        // 术前诊断
+        result.setPreDiagnosis(apply.diagnosis);
+
+        // 查询手术名称
+        var opsItem = this.metOpsItemMapper.queryMetOpsItem(apply.operationNo, "S991");
+        if (opsItem != null) {
+            result.setOperationName(opsItem.itemName);
+        }
+
+        return result;
+    }
+
     @Override
     @RequestMapping(value = "querySurgeryApplie", method = RequestMethod.POST, produces = MediaType.JSON)
     public QuerySurgeryApplies.Response querySurgeryApplies(@RequestBody @Valid QuerySurgeryApplies.Request req) {
@@ -298,25 +385,7 @@ public class SurgeryControllerImpl implements SurgeryController {
 
         // 数据集转换
         List<QuerySurgeryApplies.Response.DataItem> data = resultSet.stream().map((x) -> {
-            // 声明结果元素变量
-            var dataItem = new QuerySurgeryApplies.Response.DataItem();
-
-            // 查询手术间
-            var room = this.roomCache.getValue(x.roomId);
-            if (room != null) {
-                dataItem.setRoomNo(room.roomName);
-            }
-
-            // 手术时间
-            dataItem.setApprDate(x.apprDate);
-
-            // 查询手术名称
-            var opsItem = this.metOpsItemMapper.queryMetOpsItem(x.operationNo, "S991");
-            if (opsItem != null) {
-                dataItem.setOperationName(opsItem.itemName);
-            }
-
-            return dataItem;
+            return this.mapToDataItem(x);
         }).sorted((x, y) -> {
             Integer cmpRt = 0;
 

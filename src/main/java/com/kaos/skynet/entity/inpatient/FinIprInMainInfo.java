@@ -1,5 +1,6 @@
 package com.kaos.skynet.entity.inpatient;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.kaos.skynet.entity.common.ComPatientInfo;
@@ -67,7 +68,7 @@ public class FinIprInMainInfo {
     /**
      * 生日
      */
-    public Date birthday = null;
+    public LocalDateTime birthday = null;
 
     /**
      * 职业代码

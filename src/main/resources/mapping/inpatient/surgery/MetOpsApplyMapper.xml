@@ -5,6 +5,7 @@
         <id column="OPERATIONNO" jdbcType="VARCHAR" property="operationNo"/>
         <result column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
         <result column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
+        <result column="DEPT_CODE" jdbcType="VARCHAR" property="inDeptCode"/>
         <result column="DIAGNOSE" jdbcType="VARCHAR" property="diagnosis"/>
         <result column="OPS_KIND" jdbcType="VARCHAR" property="surgeryKind"/>
         <result column="OPS_DOCD" jdbcType="VARCHAR" property="opsDocCode"/>
@@ -21,7 +22,9 @@
         <result column="ANES_DOCD" jdbcType="VARCHAR" property="anesDocCode"/>
         <result column="DEGREE" jdbcType="VARCHAR" property="degree"/>
         <result column="INCI_TYPE" jdbcType="VARCHAR" property="inciType"/>
+        <result column="SCREENUP" jdbcType="VARCHAR" property="firstFlag"/>
         <result column="BLOOD_NUM" jdbcType="VARCHAR" property="inspectResult"/>
+        <result column="BLOOD_UNIT" jdbcType="VARCHAR" property="order"/>
         <result column="EXECSTATUS" jdbcType="VARCHAR" property="surgeryStatus"/>
         <result column="YNFINISHED" jdbcType="VARCHAR" property="finishFlag"/>
         <result column="YNCHANGE" jdbcType="VARCHAR" property="chargeFlag"/>
@@ -45,6 +48,7 @@
         OPERATIONNO,
         CLINIC_CODE,
         PATIENT_NO,
+        DEPT_CODE,
         DIAGNOSE,
         OPS_KIND,
         OPS_DOCD,
@@ -61,7 +65,9 @@
         ANES_DOCD,
         DEGREE,
         INCI_TYPE,
+        SCREENUP,
         BLOOD_NUM,
+        BLOOD_UNIT,
         EXECSTATUS,
         YNFINISHED,
         YNCHANGE,

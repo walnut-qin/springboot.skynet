@@ -15,6 +15,8 @@ import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryInspectResultEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryKindEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
+import lombok.Getter;
+
 /**
  * 手术申请（XYHIS.MET_OPS_APPLY）
  */
@@ -34,6 +36,12 @@ public class MetOpsApply {
      * 住院号 {@link MetOpsApply.AssociateEntity#inMainInfo}
      */
     public String patientNo = null;
+
+    /**
+     * 住院科室, 由于患者可能存在转科, 由该字段记录申请手术的时候所在的科室
+     */
+    @Getter
+    private String inDeptCode = null;
 
     /**
      * 手术诊断
@@ -116,9 +124,21 @@ public class MetOpsApply {
     public MetOpsInciTypeEnum inciType = null;
 
     /**
-     * 检验结果
+     * 是否首台
+     */
+    @Getter
+    private Boolean firstFlag = null;
+
+    /**
+     * 检验结果 [BLOOD_NUM]
      */
     public SurgeryInspectResultEnum inspectResult = null;
+
+    /**
+     * 台次
+     */
+    @Getter
+    private String order = null;
 
     /**
      * 手术状态
