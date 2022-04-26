@@ -87,6 +87,7 @@ public class QuerySurgeryApplies {
             /**
              * 手术时间
              */
+            @Getter
             @Setter
             private LocalDateTime apprDate = null;
 

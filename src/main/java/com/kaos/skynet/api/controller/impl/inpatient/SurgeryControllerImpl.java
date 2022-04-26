@@ -1,6 +1,7 @@
 package com.kaos.skynet.api.controller.impl.inpatient;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
@@ -345,7 +347,7 @@ public class SurgeryControllerImpl implements SurgeryController {
         result.setPatientNo(apply.patientNo);
         if (apply.patientNo != null) {
             // 获取住院实体
-            var inMainInfo = this.inMainInfoCache.getValue(apply.patientNo);
+            var inMainInfo = this.inMainInfoCache.getValue("ZY01".concat(apply.patientNo));
             if (inMainInfo != null) {
                 // 姓名
                 result.setName(inMainInfo.name);
@@ -390,13 +392,14 @@ public class SurgeryControllerImpl implements SurgeryController {
             Integer cmpRt = 0;
 
             // 优先按照手术室排序
-            cmpRt = x.getRoomNo().compareTo(y.getRoomNo());
+            cmpRt = Optional.fromNullable(x.getRoomNo()).or("Z").compareTo(Optional.fromNullable(y.getRoomNo()).or("Z"));
             if (!cmpRt.equals(0)) {
                 return cmpRt;
             }
 
             // 再按照手术时间排序
-            cmpRt = x.getRoomNo().compareTo(y.getRoomNo());
+            cmpRt = Optional.fromNullable(x.getApprDate()).or(LocalDateTime.MAX)
+                    .compareTo(Optional.fromNullable(y.getApprDate()).or(LocalDateTime.MAX));
             if (!cmpRt.equals(0)) {
                 return cmpRt;
             }
