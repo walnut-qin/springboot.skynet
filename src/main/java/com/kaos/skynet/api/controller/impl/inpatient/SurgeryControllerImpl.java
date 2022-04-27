@@ -1,6 +1,7 @@
 package com.kaos.skynet.api.controller.impl.inpatient;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 import java.util.List;
@@ -372,7 +373,7 @@ public class SurgeryControllerImpl implements SurgeryController {
             public String getName(SurgeryArrangeRoleEnum role) {
                 var entity = arrangeMap.get(role);
                 if (entity != null) {
-                    this.getName(entity.emplCode);
+                    return this.getName(entity.emplCode);
                 }
                 return null;
             }
@@ -385,7 +386,11 @@ public class SurgeryControllerImpl implements SurgeryController {
         }
 
         // 手术时间
-        result.setPreDate(apply.preDate.toLocalTime());
+        if (apply.apprDate == null || apply.apprDate.equals(LocalDateTime.of(1, 1, 1, 0, 0, 0))) {
+            result.setPreDate(apply.preDate.toLocalTime());
+        } else {
+            result.setPreDate(apply.apprDate.toLocalTime());
+        }
 
         // 手术类型
         result.setSurgeryKind(apply.surgeryKind);
@@ -461,7 +466,7 @@ public class SurgeryControllerImpl implements SurgeryController {
         result.setMasterItinerantNurse(emplHelper.getName(SurgeryArrangeRoleEnum.ItinerantNurse));
 
         // 巡二
-        result.setMasterItinerantNurse(emplHelper.getName(SurgeryArrangeRoleEnum.ItinerantNurse1));
+        result.setSlaveItinerantNurse(emplHelper.getName(SurgeryArrangeRoleEnum.ItinerantNurse1));
 
         // 特殊要求
         result.setSpecialNote(apply.applyNote);
