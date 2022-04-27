@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.controller.impl.inpatient;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -327,7 +327,7 @@ public class SurgeryControllerImpl implements SurgeryController {
         }
 
         // 手术时间
-        result.setApprDate(apply.apprDate);
+        result.setApprDate(apply.apprDate.toLocalTime());
 
         // 手术类型
         result.setSurgeryKind(apply.surgeryKind);
@@ -376,7 +376,7 @@ public class SurgeryControllerImpl implements SurgeryController {
     }
 
     @Override
-    @RequestMapping(value = "querySurgeryApplie", method = RequestMethod.POST, produces = MediaType.JSON)
+    @RequestMapping(value = "querySurgeryApplies", method = RequestMethod.POST, produces = MediaType.JSON)
     public QuerySurgeryApplies.Response querySurgeryApplies(@RequestBody @Valid QuerySurgeryApplies.Request req) {
         // 入参记录
         log.info(String.format("查询手术申请记录: %s", this.gson.toJson(req)));
@@ -398,8 +398,8 @@ public class SurgeryControllerImpl implements SurgeryController {
             }
 
             // 再按照手术时间排序
-            cmpRt = Optional.fromNullable(x.getApprDate()).or(LocalDateTime.MAX)
-                    .compareTo(Optional.fromNullable(y.getApprDate()).or(LocalDateTime.MAX));
+            cmpRt = Optional.fromNullable(x.getApprDate()).or(LocalTime.MAX)
+                    .compareTo(Optional.fromNullable(y.getApprDate()).or(LocalTime.MAX));
             if (!cmpRt.equals(0)) {
                 return cmpRt;
             }

@@ -1,6 +1,7 @@
 package com.kaos.skynet.api.controller.entity.inpatient.surgery;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -89,7 +90,7 @@ public class QuerySurgeryApplies {
              */
             @Getter
             @Setter
-            private LocalDateTime apprDate = null;
+            private LocalTime apprDate = null;
 
             /**
              * 手术类型
