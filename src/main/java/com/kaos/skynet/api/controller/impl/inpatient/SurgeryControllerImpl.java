@@ -31,6 +31,7 @@ import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryKindEnum;
 import com.kaos.skynet.util.DateHelpers;
 import com.kaos.skynet.util.Gsons;
 import com.kaos.skynet.util.HttpHelpers;
@@ -552,6 +553,9 @@ public class SurgeryControllerImpl implements SurgeryController {
         QuerySurgeryApplies.Response body = new QuerySurgeryApplies.Response();
         body.setSize(data.size());
         body.setData(data);
+        body.setSurgeryKindDict(Lists.newArrayList(SurgeryKindEnum.values()).stream().map((x) -> {
+            return x.getDescription();
+        }).toList());
 
         return body;
     }

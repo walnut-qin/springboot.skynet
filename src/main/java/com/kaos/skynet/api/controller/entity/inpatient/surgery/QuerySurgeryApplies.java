@@ -300,5 +300,11 @@ public class QuerySurgeryApplies {
             @Setter
             private String vte = null;
         }
+
+        /**
+         * 手术类型字典
+         */
+        @Setter
+        private List<String> surgeryKindDict = null;
     }
 }
