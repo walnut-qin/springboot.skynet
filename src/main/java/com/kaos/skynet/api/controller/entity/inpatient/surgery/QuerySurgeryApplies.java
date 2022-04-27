@@ -8,6 +8,10 @@ import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.enums.impl.common.SexEnum;
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
+import com.kaos.skynet.enums.impl.inpatient.surgery.AnesTypeEnum;
+import com.kaos.skynet.enums.impl.inpatient.surgery.MetOpsInciTypeEnum;
+import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryDegreeEnum;
+import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryInspectResultEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryKindEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
@@ -79,6 +83,12 @@ public class QuerySurgeryApplies {
          */
         public static class DataItem {
             /**
+             * 序号
+             */
+            @Setter
+            private Integer No = null;
+
+            /**
              * 手术间
              */
             @Getter
@@ -86,11 +96,11 @@ public class QuerySurgeryApplies {
             private String roomNo = null;
 
             /**
-             * 手术时间
+             * 预约时间
              */
             @Getter
             @Setter
-            private LocalTime apprDate = null;
+            private LocalTime preDate = null;
 
             /**
              * 手术类型
@@ -150,7 +160,145 @@ public class QuerySurgeryApplies {
              * 手术名
              */
             @Setter
-            private String operationName = null;
+            private String surgeryName = null;
+
+            /**
+             * 非计划手术标识
+             */
+            @Setter
+            private Boolean unplannedFlag = null;
+
+            /**
+             * 已申请标识
+             */
+            @Setter
+            private Boolean signedFlag = null;
+
+            /**
+             * 麻醉方式
+             */
+            @Setter
+            private AnesTypeEnum anesType = null;
+
+            /**
+             * 手术医生姓名
+             */
+            @Setter
+            private String surgeryDoctor = null;
+
+            /**
+             * 主麻
+             */
+            @Setter
+            private String masterAnesDoctor = null;
+
+            /**
+             * 副麻
+             */
+            @Setter
+            private String slaveAnesDoctor = null;
+
+            /**
+             * 主洗手护士
+             */
+            @Setter
+            private String masterWashNurse = null;
+
+            /**
+             * 副洗手护士
+             */
+            @Setter
+            private String slaveWashNurse = null;
+
+            /**
+             * 主巡回护士
+             */
+            @Setter
+            private String masterItinerantNurse = null;
+
+            /**
+             * 副巡回护士
+             */
+            @Setter
+            private String slaveItinerantNurse = null;
+
+            /**
+             * 特殊需求
+             */
+            @Setter
+            private String specialNote = null;
+
+            /**
+             * 检验结果
+             */
+            @Setter
+            private SurgeryInspectResultEnum inspectResult = null;
+
+            /**
+             * 手术等级
+             */
+            @Setter
+            private SurgeryDegreeEnum surgeryDegree = null;
+
+            /**
+             * 切口类型
+             */
+            @Setter
+            private MetOpsInciTypeEnum incisionType = null;
+
+            /**
+             * 一助
+             */
+            @Setter
+            private String helper1 = null;
+
+            /**
+             * 二助
+             */
+            @Setter
+            private String helper2 = null;
+
+            /**
+             * 三助
+             */
+            @Setter
+            private String helper3 = null;
+
+            /**
+             * 审批人
+             */
+            @Setter
+            private String apprEmpl = null;
+
+            /**
+             * 审批时间
+             */
+            @Setter
+            private LocalDateTime apprDate = null;
+
+            /**
+             * 审批意见
+             */
+            @Setter
+            private String apprNote = null;
+
+            /**
+             * 手术二
+             */
+            @Setter
+            private String surgeryNameNote = null;
+
+            /**
+             * ERAS标识
+             */
+            @Setter
+            private Boolean eras = null;
+
+            /**
+             * VTE等级
+             */
+            @Setter
+            private String vte = null;
         }
     }
 }

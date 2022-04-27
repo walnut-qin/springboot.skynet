@@ -27,6 +27,9 @@
         <result column="BLOOD_UNIT" jdbcType="VARCHAR" property="order"/>
         <result column="EXECSTATUS" jdbcType="VARCHAR" property="surgeryStatus"/>
         <result column="YNFINISHED" jdbcType="VARCHAR" property="finishFlag"/>
+        <result column="YNANESTH" jdbcType="VARCHAR" property="anesFlag"/>
+        <result column="FOLK" jdbcType="VARCHAR" property="unplannedFlag"/>
+        <result column="RELA_CODE" jdbcType="VARCHAR" property="signedFlag"/>
         <result column="YNCHANGE" jdbcType="VARCHAR" property="chargeFlag"/>
         <result column="YNHEAVY" jdbcType="VARCHAR" property="heavyFlag"/>
         <result column="YNSPECIAL" jdbcType="VARCHAR" property="specialFlag"/>
@@ -37,6 +40,7 @@
         <result column="POSITION" jdbcType="VARCHAR" property="position"/>
         <result column="ISCANCEL" jdbcType="VARCHAR" property="cancelFlag"/>
         <result column="SEEFLAG" jdbcType="VARCHAR" property="publishFlag"/>
+        <result column="AGAINPLAN" jdbcType="VARCHAR" property="surgeryNameNote"/>
         <result column="OPERMARK" jdbcType="VARCHAR" property="operRemark"/>
         <result column="CLINICCODE" jdbcType="VARCHAR" property="daySurgeryClinicCode"/>
         <result column="FROZEN_FLAG" jdbcType="VARCHAR" property="frozenFlag"/>
@@ -70,6 +74,9 @@
         BLOOD_UNIT,
         EXECSTATUS,
         YNFINISHED,
+        YNANESTH,
+        FOLK,
+        RELA_CODE,
         YNCHANGE,
         YNHEAVY,
         YNSPECIAL,
@@ -80,6 +87,7 @@
         POSITION,
         ISCANCEL,
         SEEFLAG,
+        AGAINPLAN,
         OPERMARK,
         CLINICCODE,
         FROZEN_FLAG,

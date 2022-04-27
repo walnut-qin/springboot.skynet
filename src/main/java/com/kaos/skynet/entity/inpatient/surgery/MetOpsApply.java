@@ -151,6 +151,21 @@ public class MetOpsApply {
     public Boolean finishFlag = null;
 
     /**
+     * 麻醉标识
+     */
+    public Boolean anesFlag = null;
+
+    /**
+     * 非计划标识
+     */
+    public Boolean unplannedFlag = null;
+
+    /**
+     * 非计划手术家属签字
+     */
+    public Boolean signedFlag = null;
+
+    /**
      * 是否已计费
      */
     public Boolean chargeFlag = null;
@@ -199,6 +214,11 @@ public class MetOpsApply {
      * 发布标识，发布后医生可见
      */
     public Boolean publishFlag = null;
+
+    /**
+     * 手术名称备注
+     */
+    public String surgeryNameNote = null;
 
     /**
      * 手术标识
