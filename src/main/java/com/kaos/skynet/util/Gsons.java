@@ -3,6 +3,7 @@ package com.kaos.skynet.util;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import com.google.gson.Gson;
@@ -70,6 +71,28 @@ public final class Gsons {
     /**
      * LocalDate解析器
      */
+    static class LocalTimeTypeAdapter implements JsonSerializer<LocalTime>, JsonDeserializer<LocalTime> {
+        @Override
+        public JsonElement serialize(LocalTime src, Type typeOfSrc, JsonSerializationContext context) {
+            if (src != null) {
+                return new JsonPrimitive(src.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            }
+            return null;
+        }
+
+        @Override
+        public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            if (json != null) {
+                return LocalTime.parse(json.getAsString(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+            }
+            return null;
+        }
+    }
+
+    /**
+     * LocalDate解析器
+     */
     static class LocalDateTimeTypeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
         @Override
         public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
@@ -103,6 +126,9 @@ public final class Gsons {
 
         // 注册LocalDate解析器
         builder.registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter());
+
+        // 注册LocalTime解析器
+        builder.registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter());
 
         // 注册LocalDateTime解析器
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter());

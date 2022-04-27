@@ -5,6 +5,7 @@ import java.util.List;
 import com.kaos.skynet.config.converter.DateTypeConverter;
 import com.kaos.skynet.config.converter.LocalDateTimeTypeConverter;
 import com.kaos.skynet.config.converter.LocalDateTypeConverter;
+import com.kaos.skynet.config.converter.LocalTimeTypeConverter;
 import com.kaos.skynet.config.converter.StringTypeConverter;
 import com.kaos.skynet.config.converter.factory.EnumTypeConverterFactory;
 import com.kaos.skynet.config.message.converter.BooleanMessageConverter;
@@ -34,6 +35,7 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
         // 注册时间解析
         registry.addConverter(new DateTypeConverter());
         registry.addConverter(new LocalDateTypeConverter());
+        registry.addConverter(new LocalTimeTypeConverter());
         registry.addConverter(new LocalDateTimeTypeConverter());
 
         // 注册字符串转换器
