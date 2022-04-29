@@ -134,7 +134,7 @@ public final class Gsons {
         builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter());
 
         // 序列化空值
-        builder.serializeNulls();
+        // builder.serializeNulls();
 
         return builder.create();
     }
