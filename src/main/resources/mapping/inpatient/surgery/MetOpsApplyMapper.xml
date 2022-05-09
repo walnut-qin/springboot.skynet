@@ -46,6 +46,7 @@
         <result column="FROZEN_FLAG" jdbcType="VARCHAR" property="frozenFlag"/>
         <result column="FROZEN_BEGIN_DATE" jdbcType="VARCHAR" property="frozenBeginDate"/>
         <result column="FROZEN_END_DATE" jdbcType="VARCHAR" property="frozenEndDate"/>
+        <result column="ICU_FLAG" jdbcType="VARCHAR" property="icuFlag"/>
     </resultMap>
 
     <sql id="item">
@@ -92,7 +93,8 @@
         CLINICCODE,
         FROZEN_FLAG,
         FROZEN_BEGIN_DATE,
-        FROZEN_END_DATE
+        FROZEN_END_DATE,
+        ICU_FLAG
     </sql>
 
     <select id="queryMetOpsApply" resultMap="map">

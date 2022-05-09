@@ -246,6 +246,12 @@ public class MetOpsApply {
     public LocalDateTime frozenEndDate = null;
 
     /**
+     * 术后是否转入ICU
+     */
+    @Getter
+    private Boolean icuFlag = null;
+
+    /**
      * 关联实体
      */
     public class AssociateEntity {
