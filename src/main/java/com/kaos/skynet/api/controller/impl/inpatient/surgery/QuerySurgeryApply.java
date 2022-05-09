@@ -3,7 +3,6 @@ package com.kaos.skynet.api.controller.impl.inpatient.surgery;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.base.Optional;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.impl.AbstractController;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
@@ -49,7 +48,7 @@ public class QuerySurgeryApply extends AbstractController {
             return null;
         }
 
-        return new Response(Optional.fromNullable(surgeryInfo.getIcuFlag()).or(false));
+        return new Response(surgeryInfo.getIcuFlag());
     }
 
     /**
