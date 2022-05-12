@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.controller.impl.inpatient.surgery;
+package com.kaos.skynet.api.controller.inpatient.surgery;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ import com.google.common.collect.Maps;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.impl.AbstractController;
-import com.kaos.skynet.api.controller.impl.inpatient.surgery.QuerySurgeryApplies.Response.DataItem;
+import com.kaos.skynet.api.controller.inpatient.surgery.QuerySurgeryApplies.Response.DataItem;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
@@ -142,9 +142,6 @@ public class QuerySurgeryApplies extends AbstractController {
         QuerySurgeryApplies.Response body = new QuerySurgeryApplies.Response();
         body.setSize(data.size());
         body.setData(data);
-        body.setSurgeryKindDict(Lists.newArrayList(SurgeryKindEnum.values()).stream().map((x) -> {
-            return x.getDescription();
-        }).toList());
 
         return body;
     }
@@ -619,11 +616,5 @@ public class QuerySurgeryApplies extends AbstractController {
             @Setter
             private String vte = null;
         }
-
-        /**
-         * 手术类型字典
-         */
-        @Setter
-        private List<String> surgeryKindDict = null;
     }
 }

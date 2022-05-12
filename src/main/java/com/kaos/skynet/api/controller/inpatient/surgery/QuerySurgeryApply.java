@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.controller.impl.inpatient.surgery;
+package com.kaos.skynet.api.controller.inpatient.surgery;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
