@@ -24,7 +24,7 @@ public class MetOpsApplyTests {
     @Test
     public void queryApplies() {
         var ret = this.metOpsApplyMapper.queryApplies("1290", LocalDateTime.parse("2022-04-22T00:00:00"),
-                LocalDateTime.parse("2022-04-22T23:59:59"), null, false, ValidStateEnum.有效);
+                LocalDateTime.parse("2022-04-22T23:59:59"), null, false, ValidStateEnum.有效, null);
         if (ret != null) {
             ret.clear();
         }
