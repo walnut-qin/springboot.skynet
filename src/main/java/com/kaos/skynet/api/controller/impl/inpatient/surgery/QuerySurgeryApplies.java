@@ -26,6 +26,7 @@ import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
+import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
 import com.kaos.skynet.enums.impl.common.SexEnum;
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.AnesTypeEnum;
@@ -107,7 +108,7 @@ public class QuerySurgeryApplies extends AbstractController {
 
         // 检索原始结果
         var resultSet = this.metOpsApplyMapper.queryApplies(req.getLoginDeptCode(), req.getBeginPreDate(),
-                req.getEndPreDate(), req.getExecStatus(), req.getAnesFlag(), req.getValid());
+                req.getEndPreDate(), req.getExecStatus(), req.getAnesFlag(), req.getValid(), req.getDeptOwn());
 
         // 数据集转换
         List<DataItem> data = resultSet.stream().map((x) -> {
@@ -372,6 +373,12 @@ public class QuerySurgeryApplies extends AbstractController {
          */
         @Getter
         private ValidStateEnum valid = null;
+
+        /**
+         * 院区标识
+         */
+        @Getter
+        private DeptOwnEnum deptOwn = null;
     }
 
     /**

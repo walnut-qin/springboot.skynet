@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
+import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
 import com.kaos.skynet.enums.impl.common.ValidStateEnum;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
 
@@ -26,10 +27,11 @@ public interface MetOpsApplyMapper {
      * @param execStatus      审核状态; 等于 {@code null} 时，不作为判断条件
      * @param anesFlag        麻醉标识; 等于 {@code null} 时，不作为判断条件
      * @param valid           有效性标识; 等于 {@code null} 时，不作为判断条件
+     * @param deptOwn         院区标识; 等于 {@code null} 时，不作为判断条件
      * @return
      */
     List<MetOpsApply> queryApplies(String surgeryDeptCode, LocalDateTime beginPreDate, LocalDateTime endPreDate,
-            List<SurgeryStatusEnum> execStatus, Boolean anesFlag, ValidStateEnum valid);
+            List<SurgeryStatusEnum> execStatus, Boolean anesFlag, ValidStateEnum valid, DeptOwnEnum deptOwn);
 
     /**
      * 查询患者手术

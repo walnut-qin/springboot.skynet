@@ -233,7 +233,8 @@ public class SurgeryServiceImpl implements SurgeryService {
     public List<MetOpsApply> queryApplies(String deptCode, String roomNo, LocalDateTime beginDate,
             LocalDateTime endDate, List<SurgeryStatusEnum> status) {
         // 初步查询目标手术
-        var applies = this.metOpsApplyMapper.queryApplies(null, beginDate, endDate, status, null, ValidStateEnum.有效);
+        var applies = this.metOpsApplyMapper.queryApplies(null, beginDate, endDate, status, null, ValidStateEnum.有效,
+                null);
         for (var apply : applies) {
             // 实体：项目
             apply.associateEntity.metOpsItem = this.metOpsItemMapper.queryMetOpsItem(apply.operationNo, "S991");

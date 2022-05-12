@@ -136,6 +136,9 @@
             <if test="valid != null">
                 AND YNVALID = #{valid}
             </if>
+            <if test="deptOwn != null">
+                AND DEPTOWN = #{deptOwn}
+            </if>
         </where>
     </select>
 
