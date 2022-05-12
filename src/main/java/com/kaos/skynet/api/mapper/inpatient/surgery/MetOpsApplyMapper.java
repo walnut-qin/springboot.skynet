@@ -20,12 +20,12 @@ public interface MetOpsApplyMapper {
     /**
      * 查询满足条件的手术申请记录
      * 
-     * @param surgeryDeptCode 手术科室编码()
-     * @param beginPreDate
-     * @param endPreDate
-     * @param execStatus
-     * @param anesFlag
-     * @param valid
+     * @param surgeryDeptCode 手术科室编码; 等于 {@code null} 时，不作为判断条件
+     * @param beginPreDate    预约起始时间; 等于 {@code null} 时，不作为判断条件
+     * @param endPreDate      预约结束时间; 等于 {@code null} 时，不作为判断条件
+     * @param execStatus      审核状态; 等于 {@code null} 时，不作为判断条件
+     * @param anesFlag        麻醉标识; 等于 {@code null} 时，不作为判断条件
+     * @param valid           有效性标识; 等于 {@code null} 时，不作为判断条件
      * @return
      */
     List<MetOpsApply> queryApplies(String surgeryDeptCode, LocalDateTime beginPreDate, LocalDateTime endPreDate,
