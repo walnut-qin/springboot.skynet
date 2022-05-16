@@ -1,4 +1,4 @@
-package com.kaos.skynet.entity.inpatient.fee.balance.invoice;
+package com.kaos.skynet.entity.inpatient.fee.balance.invoice.electronic;
 
 import java.time.LocalDateTime;
 
@@ -109,4 +109,10 @@ public class FinComElectronicInvoice {
      */
     @Getter
     private String writeOffReason = null;
+
+    /**
+     * 创建时间
+     */
+    @Getter
+    private LocalDateTime createDate = null;
 }
