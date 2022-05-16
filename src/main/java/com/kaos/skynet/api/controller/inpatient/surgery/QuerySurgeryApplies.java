@@ -326,6 +326,9 @@ public class QuerySurgeryApplies extends AbstractController {
         // VTE
         result.setVte(inMainInfo.vte);
 
+        // ICU flag
+        result.setIcuFlag(apply.getIcuFlag());
+
         return result;
     }
 
@@ -615,6 +618,12 @@ public class QuerySurgeryApplies extends AbstractController {
              */
             @Setter
             private String vte = null;
+
+            /**
+             * 是否计划术后转入ICU
+             */
+            @Setter
+            private Boolean icuFlag = null;
         }
     }
 }
