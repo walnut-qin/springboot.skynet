@@ -15,6 +15,8 @@ import com.kaos.skynet.util.Gsons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
@@ -106,6 +108,8 @@ public class ConfigMultiMapCache implements Cache<ConfigMultiMapCache.Key, Confi
     /**
      * 键
      */
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Key {
         /**
          * 主键

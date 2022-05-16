@@ -2,6 +2,7 @@ package com.kaos.skynet.api.controller.impl.cache.common.config.multi;
 
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.cache.Cache.View;
+import com.kaos.skynet.api.cache.impl.common.config.multi.ConfigMultiMapCache.Key;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.cache.CacheController;
 import com.kaos.skynet.entity.common.config.ConfigMap;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/ms/cache/common/config/multi/map")
-public class ConfigMultiMapCacheControllerImpl implements CacheController<String, Cache<String, ConfigMap>> {
+public class ConfigMultiMapCacheControllerImpl implements CacheController<Key, ConfigMap> {
     /**
      * 实体信息服务
      */
     @Autowired
-    Cache<String, Cache<String, ConfigMap>> multiMapCache;
+    Cache<Key, ConfigMap> multiMapCache;
 
     @Override
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = MediaType.JSON)

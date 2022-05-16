@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Optional;
 import com.kaos.skynet.api.cache.Cache;
+import com.kaos.skynet.api.cache.impl.common.config.multi.ConfigMultiMapCache.Key;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.outpatient.GcpController;
 import com.kaos.skynet.api.mapper.outpatient.FinOprRegisterMapper;
@@ -45,7 +46,7 @@ public class GcpControllerImpl implements GcpController {
      * 开关cache
      */
     @Autowired
-    Cache<String, Cache<String, ConfigMap>> multiMapCache;
+    Cache<Key, ConfigMap> multiMapCache;
 
     @Override
     @RequestMapping(value = "test", method = RequestMethod.POST, produces = MediaType.TEXT)
@@ -74,12 +75,7 @@ public class GcpControllerImpl implements GcpController {
         }
 
         // 获取配置的gcp科室列表
-        var deptSubCache = this.multiMapCache.getValue("GcpDept");
-        if (deptSubCache == null) {
-            this.logger.info("无GCP科室配置!");
-            return false;
-        }
-        var deptConfig = deptSubCache.getValue(req.deptCode);
+        var deptConfig = multiMapCache.getValue(new Key("GcpDept", req.deptCode));
         if (deptConfig == null) {
             this.logger.info("非GCP科室!");
             return false;

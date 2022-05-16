@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper">
-    <resultMap id="map" type="com.kaos.skynet.entity.inpatient.fee.balance.FinIpbBalanceHead">
+<mapper namespace="com.kaos.skynet.api.mapper.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoiceMapper">
+    <resultMap id="map" type="com.kaos.skynet.entity.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoice">
         <id column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
         <id column="TRANTYPE" jdbcType="VARCHAR" property="transType"/>
         <result column="BILLBATCHCODE" jdbcType="VARCHAR" property="billBatchCode"/>
@@ -51,7 +51,7 @@
                 AND INVOICE_NO = #{invoiceNo}
             </if>
             <if test = "true">
-                AND TRANS_TYPE = #{transType}
+                AND TRANTYPE = #{transType}
             </if>
         </where>
     </select>
@@ -83,9 +83,9 @@
             )
     </insert>
 
-    <update id="updateStockInfo">
+    <update id="updateInvoice">
         UPDATE
-            XYHIS.PHA_COM_STOCKINFO_HEDGING
+            XYHIS.FIN_COM_ELECTRONICINVOICE
         <trim prefix="SET" suffixOverrides=",">
             <if test = "true">
                 BILLBATCHCODE = #{billBatchCode},
@@ -138,7 +138,7 @@
                 AND INVOICE_NO = #{invoiceNo}
             </if>
             <if test = "true">
-                AND TRANS_TYPE = #{transType}
+                AND TRANTYPE = #{transType}
             </if>
         </where>
     </update>

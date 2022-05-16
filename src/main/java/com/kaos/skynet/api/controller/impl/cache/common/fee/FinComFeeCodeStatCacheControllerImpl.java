@@ -5,8 +5,6 @@ import com.kaos.skynet.api.cache.Cache.View;
 import com.kaos.skynet.api.cache.impl.common.fee.FinComFeeCodeStatCache.Key;
 import com.kaos.skynet.api.controller.inf.cache.CacheController;
 import com.kaos.skynet.entity.common.fee.FinComFeeCodeStat;
-import com.kaos.skynet.enums.impl.common.MinFeeEnum;
-import com.kaos.skynet.enums.impl.common.ReportTypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +20,7 @@ public class FinComFeeCodeStatCacheControllerImpl implements CacheController<Key
      * 实体信息服务
      */
     @Autowired
-    Cache<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>> feeCodeStatCache;
+    Cache<Key, FinComFeeCodeStat> feeCodeStatCache;
 
     @Override
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
