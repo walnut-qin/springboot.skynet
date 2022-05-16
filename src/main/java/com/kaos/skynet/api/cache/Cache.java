@@ -1,7 +1,5 @@
 package com.kaos.skynet.api.cache;
 
-import java.util.concurrent.ConcurrentMap;
-
 import com.google.common.cache.CacheStats;
 
 public interface Cache<K, V> {
@@ -30,7 +28,7 @@ public interface Cache<K, V> {
      * 
      * @return
      */
-    View<K, ?> show();
+    View show();
 
     /**
      * 清除缓存
@@ -42,7 +40,7 @@ public interface Cache<K, V> {
     /**
      * 缓存视图
      */
-    public class View<K, V> {
+    public class View {
         /**
          * 当前容量
          */
@@ -56,6 +54,6 @@ public interface Cache<K, V> {
         /**
          * 缓存内容
          */
-        public ConcurrentMap<K, V> cache = null;
+        public Object cache = null;
     }
 }

@@ -86,8 +86,8 @@ public class LisResultNewCovidCache implements Cache<String, LisResultNew> {
     }
 
     @Override
-    public View<String, Optional<LisResultNew>> show() {
-        View<String, Optional<LisResultNew>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

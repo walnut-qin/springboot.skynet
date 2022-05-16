@@ -1,7 +1,5 @@
 package com.kaos.skynet.api.controller.impl.cache.inpatient;
 
-import javax.validation.constraints.NotNull;
-
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.cache.Cache.View;
 import com.kaos.skynet.api.controller.MediaType;
@@ -26,22 +24,8 @@ public class FinSpecialCityPatientCacheControllerImpl implements CacheController
 
     @Override
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = MediaType.JSON)
-    public View<String, ?> show() {
+    public View show() {
         return this.specialCityPatientCache.show();
-    }
-
-    @Override
-    @RequestMapping(value = "refresh", method = RequestMethod.GET, produces = MediaType.TEXT)
-    public String refresh(@NotNull(message = "键值不能为空") String key) {
-        this.specialCityPatientCache.refresh(key);
-        return String.format("更新缓存%s成功", key);
-    }
-
-    @Override
-    @RequestMapping(value = "refreshAll", method = RequestMethod.GET, produces = MediaType.TEXT)
-    public String refreshAll() {
-        this.specialCityPatientCache.refreshAll();
-        return "更新缓存成功";
     }
 
     @Override

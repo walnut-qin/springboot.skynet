@@ -77,8 +77,8 @@ public class MetOpsRoomCache implements Cache<String, MetOpsRoom> {
     }
 
     @Override
-    public View<String, Optional<MetOpsRoom>> show() {
-        View<String, Optional<MetOpsRoom>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

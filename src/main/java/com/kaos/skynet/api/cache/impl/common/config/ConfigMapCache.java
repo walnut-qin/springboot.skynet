@@ -77,8 +77,8 @@ public class ConfigMapCache implements Cache<String, ConfigMap> {
     }
 
     @Override
-    public View<String, Optional<ConfigMap>> show() {
-        View<String, Optional<ConfigMap>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

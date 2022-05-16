@@ -77,8 +77,8 @@ public class DawnOrgDeptCache implements Cache<String, DawnOrgDept> {
     }
 
     @Override
-    public View<String, Optional<DawnOrgDept>> show() {
-        View<String, Optional<DawnOrgDept>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

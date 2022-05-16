@@ -80,8 +80,8 @@ public class DawnOrgEmplCache implements Cache<String, DawnOrgEmpl> {
     }
 
     @Override
-    public View<String, Optional<DawnOrgEmpl>> show() {
-        View<String, Optional<DawnOrgEmpl>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

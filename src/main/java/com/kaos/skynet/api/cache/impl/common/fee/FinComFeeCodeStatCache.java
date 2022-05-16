@@ -6,16 +6,19 @@ import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.Maps;
+import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.mapper.common.fee.FinComFeeCodeStatMapper;
 import com.kaos.skynet.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.skynet.enums.impl.common.MinFeeEnum;
 import com.kaos.skynet.enums.impl.common.ReportTypeEnum;
+import com.kaos.skynet.util.Gsons;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 /**
  * 最小费用编码一般不会发生变化，设置为不过期，定期刷新
@@ -26,8 +29,9 @@ import org.springframework.stereotype.Component;
  * @param 刷频 无刷
  * @param 过期 5sec
  */
+@Log4j
 @Component
-public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFeeEnum, FinComFeeCodeStat>> {
+public class FinComFeeCodeStatCache implements Cache<FinComFeeCodeStatCache.Key, FinComFeeCodeStat> {
     /**
      * 数据库接口
      */
@@ -35,134 +39,86 @@ public class FinComFeeCodeStatCache implements Cache<ReportTypeEnum, Cache<MinFe
     FinComFeeCodeStatMapper mapper;
 
     /**
-     * 日志接口
+     * 序列化工具
      */
-    Logger logger = Logger.getLogger(FinComFeeCodeStatCache.class);
+    Gson gson = Gsons.newGson();
 
     /**
      * Loading cache
      */
-    LoadingCache<ReportTypeEnum, Optional<Cache<MinFeeEnum, FinComFeeCodeStat>>> cache = CacheBuilder.newBuilder()
-            .maximumSize(20)
+    LoadingCache<String, Optional<FinComFeeCodeStat>> cache = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .expireAfterWrite(5, TimeUnit.SECONDS)
             .recordStats()
-            .build(new CacheLoader<ReportTypeEnum, Optional<Cache<MinFeeEnum, FinComFeeCodeStat>>>() {
+            .build(new CacheLoader<String, Optional<FinComFeeCodeStat>>() {
                 @Override
-                public Optional<Cache<MinFeeEnum, FinComFeeCodeStat>> load(ReportTypeEnum key1) throws Exception {
-                    return Optional.fromNullable(new Cache<MinFeeEnum, FinComFeeCodeStat>() {
-                        Logger logger = Logger.getLogger(this.getClass());
+                public Optional<FinComFeeCodeStat> load(String key) throws Exception {
+                    // 反序列化key
+                    Key realKey = null;
+                    try {
+                        realKey = gson.fromJson(key, Key.class);
+                    } catch (Exception e) {
+                        log.error(String.format("反序列化缓存的key失败(%s)", e.getMessage()));
+                    }
 
-                        LoadingCache<MinFeeEnum, Optional<FinComFeeCodeStat>> cache = CacheBuilder.newBuilder()
-                                .maximumSize(100)
-                                .refreshAfterWrite(5, TimeUnit.SECONDS)
-                                .recordStats()
-                                .build(new CacheLoader<MinFeeEnum, Optional<FinComFeeCodeStat>>() {
-                                    @Override
-                                    public Optional<FinComFeeCodeStat> load(MinFeeEnum key2) throws Exception {
-                                        var ref = FinComFeeCodeStatCache.this.mapper.queryFeeCodeStat(key1, key2);
-                                        return Optional.fromNullable(ref);
-                                    };
-                                });
-
-                        @Override
-                        public FinComFeeCodeStat getValue(MinFeeEnum key) {
-                            try {
-                                if (key == null) {
-                                    this.logger.warn("键值为空");
-                                    return null;
-                                } else {
-                                    return this.cache.get(key).orNull();
-                                }
-                            } catch (Exception e) {
-                                this.logger.warn(e.getMessage());
-                                return null;
-                            }
-                        }
-
-                        @Override
-                        public void refresh(MinFeeEnum key) {
-                            this.cache.refresh(key);
-                        }
-
-                        @Override
-                        public void refreshAll() {
-                            for (var key : this.cache.asMap().keySet()) {
-                                this.refresh(key);
-                            }
-                        }
-
-                        @Override
-                        public View<MinFeeEnum, Optional<FinComFeeCodeStat>> show() {
-                            View<MinFeeEnum, Optional<FinComFeeCodeStat>> view = new View<>();
-                            view.size = this.cache.size();
-                            view.stats = this.cache.stats();
-                            view.cache = this.cache.asMap();
-                            return view;
-                        }
-
-                        @Override
-                        public void invalidateAll() {
-                            this.cache.invalidateAll();
-                        }
-                    });
+                    // 查询响应
+                    var refData = mapper.queryFeeCodeStat(realKey.reportType, realKey.minFee);
+                    return Optional.fromNullable(refData);
                 };
             });
 
     @Override
-    public Cache<MinFeeEnum, FinComFeeCodeStat> getValue(ReportTypeEnum key) {
+    public FinComFeeCodeStat getValue(Key key) {
         try {
             if (key == null) {
-                this.logger.warn("键值为空");
+                log.warn("键值为空");
                 return null;
             } else {
-                return this.cache.get(key).orNull();
+                return this.cache.get(gson.toJson(key)).orNull();
             }
         } catch (Exception e) {
-            this.logger.warn(e.getMessage());
+            log.warn(e.getMessage());
             return null;
         }
     }
 
     @Override
-    public void refresh(ReportTypeEnum key) {
-        try {
-            var subCache = this.cache.get(key).orNull();
-            if (subCache != null) {
-                subCache.refreshAll();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void refresh(Key key) {
+        this.cache.refresh(gson.toJson(key));
     }
 
     @Override
     public void refreshAll() {
         for (var key : this.cache.asMap().keySet()) {
-            this.refresh(key);
+            this.cache.refresh(key);
         }
     }
 
     @Override
-    public View<ReportTypeEnum, View<MinFeeEnum, ?>> show() {
-        View<ReportTypeEnum, View<MinFeeEnum, ?>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
-        view.cache = Maps.newConcurrentMap();
-        for (var key : this.cache.asMap().keySet()) {
-            try {
-                var subCache = this.cache.get(key).orNull();
-                if (subCache != null) {
-                    view.cache.put(key, subCache.show());
-                }
-            } catch (Exception e) {
-                this.logger.warn(e.getMessage());
-                continue;
-            }
-        }
+        view.cache = this.cache.asMap();
         return view;
     }
 
     @Override
     public void invalidateAll() {
         this.cache.invalidateAll();
+    }
+
+    public static class Key {
+        /**
+         * 报告类型
+         */
+        @Setter
+        private ReportTypeEnum reportType = null;
+
+        /**
+         * 最小费用编码
+         */
+        @Setter
+        private MinFeeEnum minFee = null;
     }
 }

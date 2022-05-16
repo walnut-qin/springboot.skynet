@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.cache.impl.common.config.multi;
+package com.kaos.skynet.api.cache.impl.inpatient.fee.balance;
 
 import java.util.concurrent.TimeUnit;
 
@@ -8,8 +8,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.mapper.common.config.ConfigMapMapper;
-import com.kaos.skynet.entity.common.config.ConfigMap;
+import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
+import com.kaos.skynet.entity.inpatient.fee.balance.FinIpbBalanceHead;
+import com.kaos.skynet.enums.impl.common.TransTypeEnum;
 import com.kaos.skynet.util.Gsons;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +21,19 @@ import lombok.extern.log4j.Log4j;
 
 /**
  * @param 类型 缓存
- * @param 映射 变量名 -> 变量信息
- * @param 容量 100 x 100
+ * @param 映射 <发票号, 交易类型> -> 手术间信息
+ * @param 容量 100
  * @param 刷频 无刷
  * @param 过期 5sec
  */
 @Log4j
 @Component
-public class ConfigMultiMapCache implements Cache<ConfigMultiMapCache.Key, ConfigMap> {
+public class FinIpbBalanceHeadCache implements Cache<FinIpbBalanceHeadCache.Key, FinIpbBalanceHead> {
     /**
      * 数据库接口
      */
     @Autowired
-    ConfigMapMapper configMapMapper;
+    FinIpbBalanceHeadMapper balanceHeadMapper;
 
     /**
      * 序列化工具
@@ -42,28 +43,29 @@ public class ConfigMultiMapCache implements Cache<ConfigMultiMapCache.Key, Confi
     /**
      * Loading cache
      */
-    LoadingCache<String, Optional<ConfigMap>> cache = CacheBuilder.newBuilder()
-            .maximumSize(100)
+    LoadingCache<String, Optional<FinIpbBalanceHead>> cache = CacheBuilder.newBuilder()
+            .maximumSize(500)
             .expireAfterWrite(5, TimeUnit.SECONDS)
             .recordStats()
-            .build(new CacheLoader<String, Optional<ConfigMap>>() {
-                public Optional<ConfigMap> load(String key) throws Exception {
+            .build(new CacheLoader<String, Optional<FinIpbBalanceHead>>() {
+                @Override
+                public Optional<FinIpbBalanceHead> load(String key) throws Exception {
                     // 反序列化key
                     Key realKey = null;
                     try {
                         realKey = gson.fromJson(key, Key.class);
                     } catch (Exception e) {
-                        log.error(String.format("反序列化缓存的key失败(%s)", e.getMessage()));
+                        log.error(String.format("反序列化缓存索引失败(%s)", key));
                     }
 
-                    // 查询响应
-                    var refData = configMapMapper.queryMultiMapItemValue(realKey.masterKey, realKey.slaveKey);
-                    return Optional.fromNullable(refData);
+                    // 检索数据库
+                    var ref = balanceHeadMapper.queryBalance(realKey.invoiceNo, realKey.transType);
+                    return Optional.fromNullable(ref);
                 };
             });
 
     @Override
-    public ConfigMap getValue(Key key) {
+    public FinIpbBalanceHead getValue(Key key) {
         try {
             if (key == null) {
                 log.warn("键值为空");
@@ -108,15 +110,15 @@ public class ConfigMultiMapCache implements Cache<ConfigMultiMapCache.Key, Confi
      */
     public static class Key {
         /**
-         * 主键
+         * 发票号
          */
         @Setter
-        public String masterKey = null;
+        private String invoiceNo = null;
 
         /**
-         * 从键
+         * 交易类型
          */
         @Setter
-        private String slaveKey = null;
+        private TransTypeEnum transType = null;
     }
 }

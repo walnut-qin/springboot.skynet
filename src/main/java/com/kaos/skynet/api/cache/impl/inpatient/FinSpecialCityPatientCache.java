@@ -70,8 +70,8 @@ public class FinSpecialCityPatientCache implements Cache<String, FinSpecialCityP
     }
 
     @Override
-    public View<String, Optional<FinSpecialCityPatient>> show() {
-        View<String, Optional<FinSpecialCityPatient>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

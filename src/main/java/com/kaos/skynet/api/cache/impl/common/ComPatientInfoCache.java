@@ -79,8 +79,8 @@ public class ComPatientInfoCache implements Cache<String, ComPatientInfo> {
     }
 
     @Override
-    public View<String, Optional<ComPatientInfo>> show() {
-        View<String, Optional<ComPatientInfo>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();

@@ -100,8 +100,8 @@ public class EscortAnnexCheckedCache implements Cache<String, EscortAnnexInfo> {
     }
 
     @Override
-    public View<String, Optional<EscortAnnexInfo>> show() {
-        View<String, Optional<EscortAnnexInfo>> view = new View<>();
+    public View show() {
+        View view = new View();
         view.size = this.cache.size();
         view.stats = this.cache.stats();
         view.cache = this.cache.asMap();
