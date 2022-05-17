@@ -17,6 +17,8 @@ import com.kaos.skynet.util.Gsons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
@@ -108,6 +110,8 @@ public class FinComFeeCodeStatCache implements Cache<FinComFeeCodeStatCache.Key,
         this.cache.invalidateAll();
     }
 
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Key {
         /**
          * 报告类型
