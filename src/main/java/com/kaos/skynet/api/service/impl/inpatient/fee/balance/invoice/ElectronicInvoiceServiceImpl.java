@@ -9,8 +9,11 @@ import com.kaos.skynet.enums.impl.common.SourceTypeEnum;
 import com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic.BusinessTypeEnum;
 import com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic.PlaceCodeEnum;
 
+import org.springframework.stereotype.Service;
+
 import lombok.Data;
 
+@Service
 public class ElectronicInvoiceServiceImpl implements ElectronicInvoiceService {
     @Override
     public FinComElectronicInvoice register(String invoiceNo, SourceTypeEnum sourceType, String alipayCode,
