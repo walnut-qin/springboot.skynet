@@ -19,7 +19,7 @@ public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
 
     public MybatisEnumTypeHandler(Class<E> typeOfE) {
         // 构造转换器实体
-        this.enumTypeConverter = new EnumTypeConverter<>(typeOfE);
+        this.enumTypeConverter = new EnumTypeConverter<>(typeOfE, true);
     }
 
     @Override

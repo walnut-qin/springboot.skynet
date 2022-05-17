@@ -14,34 +14,24 @@ public class EnumTypeConverter<E extends Enum> implements Converter<String, E> {
     Class<E> classOfE;
 
     /**
-     * 映射反转
+     * 使用value映射，反之使用description映射
      */
-    Boolean inverse;
+    Boolean useValue;
 
     /**
      * 构造函数
      * 
      * @param classOfE
      */
-    public EnumTypeConverter(Class<E> classOfE) {
+    public EnumTypeConverter(Class<E> classOfE, Boolean useValue) {
         this.classOfE = classOfE;
-        this.inverse = false;
-    }
-
-    /**
-     * 构造函数
-     * 
-     * @param classOfE
-     */
-    public EnumTypeConverter(Class<E> classOfE, Boolean inverse) {
-        this.classOfE = classOfE;
-        this.inverse = inverse;
+        this.useValue = useValue;
     }
 
     @Override
     public E convert(String source) {
         for (E e : classOfE.getEnumConstants()) {
-            if (this.inverse && e.getValue().equals(source)) {
+            if (this.useValue && e.getValue().equals(source)) {
                 return e;
             } else if (e.getDescription().equals(source)) {
                 return e;
