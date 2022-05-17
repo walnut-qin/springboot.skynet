@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.fee.balance;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum BalancePayTransKindEnum implements Enum {
     预交款("0", "预交款"), 结算款("1", "结算款");

@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.surgery;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 /**
  * 手术检验结果

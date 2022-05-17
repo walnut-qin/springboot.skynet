@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.common;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum HealthCodeEnum implements Enum {
     绿码("0", "绿码"), 黄码("1", "黄码"), 红码("2", "红码");

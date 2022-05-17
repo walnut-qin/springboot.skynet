@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.surgery;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum AnesTypeEnum implements Enum {
     全麻("1", "全麻"), 局麻("2", "局麻"), 硬膜外麻醉("3", "硬膜外麻醉"), 腰麻("4", "腰麻"), 氯胺酮("5", "氯胺酮"), 臂丛麻醉("6", "臂丛麻醉"),

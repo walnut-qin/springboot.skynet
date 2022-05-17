@@ -1,4 +1,4 @@
-package com.kaos.skynet.enums;
+package com.kaos.skynet.core.type;
 
 /**
  * 定制枚举接口

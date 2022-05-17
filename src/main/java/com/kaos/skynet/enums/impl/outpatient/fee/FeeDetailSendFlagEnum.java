@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.outpatient.fee;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum FeeDetailSendFlagEnum implements Enum {
     未转("0", "未转"), 已转("1", "已转"), 转失败("2", "转失败");

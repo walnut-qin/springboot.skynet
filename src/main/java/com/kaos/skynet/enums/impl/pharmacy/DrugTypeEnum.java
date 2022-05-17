@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.pharmacy;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum DrugTypeEnum implements Enum {
     中草药("C", "中草药"), 卫生材料("D", "卫生材料"), 自制药品("E", "自制药品"), 化验药品("F", "化验药品"), 制剂用品("G", "制剂用品"), 西药("P", "西药"),

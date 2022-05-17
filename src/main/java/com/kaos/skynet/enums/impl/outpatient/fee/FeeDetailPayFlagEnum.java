@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.outpatient.fee;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum FeeDetailPayFlagEnum implements Enum {
     划价("0", "划价"), 收费("1", "收费"), 预收费团体体检("3", "预收费团体体检"), 药品预审核("4", "药品预审核");

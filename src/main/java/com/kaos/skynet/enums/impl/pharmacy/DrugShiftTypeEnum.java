@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.pharmacy;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum DrugShiftTypeEnum implements Enum {
     更新("U", "更新"), 特殊修改("M", "特殊修改"), 新药("N", "新药"), 停用("S", "停用"), 调价("A", "调价");

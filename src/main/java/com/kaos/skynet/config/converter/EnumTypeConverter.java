@@ -1,6 +1,6 @@
 package com.kaos.skynet.config.converter;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 import org.springframework.core.convert.converter.Converter;
 

@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.surgery;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum SurgeryStatusEnum implements Enum {
     手术申请("1", "手术申请"), 手术审批("2", "手术审批"), 手术安排("3", "手术安排"), 手术完成("4", "手术完成"), 取消手术登记("5", "取消手术登记"), 手术审批未通过("6", "手术审批未通过");

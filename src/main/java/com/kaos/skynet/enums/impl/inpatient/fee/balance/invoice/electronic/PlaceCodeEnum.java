@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum PlaceCodeEnum implements Enum {
     南院区("001", "南院区"),

@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum InStateEnum implements Enum {
     住院登记("R", "住院登记"), 病房接诊("I", "病房接诊"), 出院登记("B", "出院登记"), 出院结算("O", "出院结算"), 预约出院("P", "预约出院"), 无费退院("N", "无费退院");

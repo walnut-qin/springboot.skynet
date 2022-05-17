@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.surgery;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum SurgeryDegreeEnum implements Enum {
     一级("1级", "一级"), 二级("2级", "二级"), 三级("3级", "三级"), 四级("4级", "四级");

@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 /**
  * 入院情况 {@code COM_DICTIONARY#TYPE = INCIRCS}

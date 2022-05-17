@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.fee;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum PrepayStateEnum implements Enum {
     收取("0", "收取"),

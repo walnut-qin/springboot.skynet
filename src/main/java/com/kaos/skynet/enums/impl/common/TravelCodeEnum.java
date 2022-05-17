@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.common;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum TravelCodeEnum implements Enum {
     正常("0", "正常"), 带星号("1", "带星号"), 黄码("2", "黄码"), 红码("3", "红码");

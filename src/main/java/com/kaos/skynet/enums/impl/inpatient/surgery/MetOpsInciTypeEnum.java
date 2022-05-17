@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.surgery;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum MetOpsInciTypeEnum implements Enum {
     I类切口("1", "I类切口"), II类切口("2", "II类切口"), III类切口("3", "III类切口"), IV类切口("4", "IV类切口"), 零类切口("5", "零类切口");

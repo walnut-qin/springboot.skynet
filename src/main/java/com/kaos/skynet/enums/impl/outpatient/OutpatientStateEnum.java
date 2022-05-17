@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.outpatient;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 /**
  * 门诊患者状态枚举

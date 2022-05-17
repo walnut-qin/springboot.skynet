@@ -3,7 +3,7 @@ package com.kaos.skynet.enums.impl.common;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 /**
  * 午别

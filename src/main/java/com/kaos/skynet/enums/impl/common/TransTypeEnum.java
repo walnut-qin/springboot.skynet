@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.common;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum TransTypeEnum implements Enum {
     Positive("1", "正交易"), Negative("2", "负交易");

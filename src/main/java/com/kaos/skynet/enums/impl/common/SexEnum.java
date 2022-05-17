@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.common;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum SexEnum implements Enum {
     Male("M", "男"), Female("F", "女");

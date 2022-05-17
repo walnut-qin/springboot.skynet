@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.common;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 /**
  * 报表类别 {@code COM_DICTIONARY#TYPE = FEECODESTAT}

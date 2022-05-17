@@ -16,7 +16,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.kaos.skynet.config.converter.EnumTypeConverter;
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 import lombok.AllArgsConstructor;
 
@@ -73,7 +73,7 @@ public final class Gsons {
      * 枚举适配器
      */
     @AllArgsConstructor
-    static class EnumTypeAdapter<E extends Enum> implements JsonSerializer<E>, JsonDeserializer<E> {
+    public static class EnumTypeAdapter<E extends Enum> implements JsonSerializer<E>, JsonDeserializer<E> {
         /**
          * 正反序列化字段反转
          */
@@ -110,7 +110,7 @@ public final class Gsons {
      * LocalDate解析器
      */
     @AllArgsConstructor
-    static class LocalDateTypeAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+    public static class LocalDateTypeAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
         /**
          * 格式串
          */
@@ -138,7 +138,7 @@ public final class Gsons {
      * LocalDate解析器
      */
     @AllArgsConstructor
-    static class LocalTimeTypeAdapter implements JsonSerializer<LocalTime>, JsonDeserializer<LocalTime> {
+    public static class LocalTimeTypeAdapter implements JsonSerializer<LocalTime>, JsonDeserializer<LocalTime> {
         /**
          * 格式串
          */
@@ -166,7 +166,7 @@ public final class Gsons {
      * LocalDate解析器
      */
     @AllArgsConstructor
-    static class LocalDateTimeTypeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
+    public static class LocalDateTimeTypeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
         /**
          * 格式串
          */

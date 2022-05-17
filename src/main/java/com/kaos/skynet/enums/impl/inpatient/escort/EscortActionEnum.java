@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.escort;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum EscortActionEnum implements Enum {
     进入("I", "进入"), 外出("O", "外出");

@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.surgery;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum SurgeryArrangeRoleEnum implements Enum {
     AnaesthesiaHelper("AnaesthesiaHelper", "麻醉助手"), Anaesthetist("Anaesthetist", "麻醉医生"), Helper1("Helper1", "手术助手"),

@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.common;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum ValidStateEnum implements Enum {
     无效("0", "无效"), 有效("1", "有效"), 作废("2", "作废");

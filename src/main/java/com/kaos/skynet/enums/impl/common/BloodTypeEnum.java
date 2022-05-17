@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.common;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum BloodTypeEnum implements Enum {
     A("01", "A"), B("02", "B"), O("03", "O"), AB("04", "AB");

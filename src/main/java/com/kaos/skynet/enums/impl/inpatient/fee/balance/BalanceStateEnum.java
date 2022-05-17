@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.fee.balance;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 /**
  * 结算标识

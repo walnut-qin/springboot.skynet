@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum InAvenueEnum implements Enum {
     本市("1", "本市"), 市郊("2", "市郊"), 市外("3", "市外"), 省内("4", "省内"), 省外("5", "省外"), 境外("6", "境外");

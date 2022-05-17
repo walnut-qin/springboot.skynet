@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.outpatient.fee;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum FeeDetailCancelFlagEnum implements Enum {
     退费("0", "退费"), 正常("1", "正常"), 重打("2", "重打"), 注销("3", "注销");

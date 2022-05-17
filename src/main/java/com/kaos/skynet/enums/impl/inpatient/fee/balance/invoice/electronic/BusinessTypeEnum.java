@@ -1,6 +1,6 @@
 package com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic;
 
-import com.kaos.skynet.enums.Enum;
+import com.kaos.skynet.core.type.Enum;
 
 public enum BusinessTypeEnum implements Enum {
     住院("01", "住院"),
