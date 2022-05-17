@@ -1,12 +1,14 @@
-package com.kaos.skynet.api.controller.inpatient.fee.balance.invoice;
+package com.kaos.skynet.api.controller.inpatient.fee.balance.invoice.electronic;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.impl.AbstractController;
+import com.kaos.skynet.api.service.inf.inpatient.fee.balance.invoice.ElectronicInvoiceService;
 import com.kaos.skynet.enums.impl.common.SourceTypeEnum;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +21,14 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Validated
 @RestController
-@RequestMapping("/ms/inpatient/fee/balance/invoice")
+@RequestMapping("/ms/inpatient/fee/balance/invoice/electronic")
 public class Register extends AbstractController {
+    /**
+     * 电子发票事务
+     */
+    @Autowired
+    ElectronicInvoiceService electronicInvoiceService;
+
     /**
      * 查询手术申请记录
      * 
@@ -31,6 +39,10 @@ public class Register extends AbstractController {
     public RspBody register(@RequestBody @Valid ReqBody req) {
         // 入参记录
         log.info(String.format("开具结算电子发票: %s", this.gson.toJson(req)));
+
+        // 调用开票事务
+        this.electronicInvoiceService.register(req.invoiceNo, req.sourceType, req.alipayCode, req.weChatOrderNo,
+                req.openId);
 
         return null;
     }

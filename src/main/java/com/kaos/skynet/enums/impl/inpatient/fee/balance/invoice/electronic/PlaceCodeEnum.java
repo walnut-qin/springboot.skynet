@@ -2,19 +2,10 @@ package com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic;
 
 import com.kaos.skynet.enums.Enum;
 
-public enum BusinessTypeEnum implements Enum {
-    住院("01", "住院"),
-    门诊("02", "门诊"),
-    急诊("03", "急诊"),
-    门特("04", "门特"),
-    体检("05", "体检"),
-    挂号("06", "挂号"),
-    住院预交金("07", "住院预交金"),
-    体检预交金("08", "体检预交金"),
-    往来票("09", "体检预交金"),
-    捐赠票("10", "体检预交金"),
-    非税通用票("11", "体检预交金"),
-    门诊预交金("12", "体检预交金");
+public enum PlaceCodeEnum implements Enum {
+    南院区("001", "南院区"),
+    北院区("002", "北院区"),
+    东津院区("003", "东津院区");
 
     /**
      * 数据库存值
@@ -32,7 +23,7 @@ public enum BusinessTypeEnum implements Enum {
      * @param index
      * @param description
      */
-    BusinessTypeEnum(String index, String description) {
+    PlaceCodeEnum(String index, String description) {
         this.value = index;
         this.description = description;
     }

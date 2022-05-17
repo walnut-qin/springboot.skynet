@@ -1,6 +1,7 @@
 package com.kaos.skynet.util.helper.impl;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.kaos.skynet.util.Gsons;
 import com.kaos.skynet.util.helper.HttpHelper;
 
@@ -12,7 +13,7 @@ public class HttpHelperImpl implements HttpHelper {
     /**
      * HTTP接口
      */
-    RestTemplate restTemplate = new RestTemplate(Lists.newArrayList(new GsonHttpMessageConverter(Gsons.newGson())));
+    RestTemplate restTemplate = null;
 
     /**
      * 套接字
@@ -21,9 +22,23 @@ public class HttpHelperImpl implements HttpHelper {
 
     /**
      * 构造函数
+     * 
+     * @param socketInfo 服务器地址
      */
     public HttpHelperImpl(Pair<String, Integer> socketInfo) {
         this.socketInfo = socketInfo;
+        this.restTemplate = new RestTemplate(Lists.newArrayList(new GsonHttpMessageConverter(Gsons.newGson())));
+    }
+
+    /**
+     * 指定gson工具的构造
+     * 
+     * @param socketInfo 服务器地址
+     * @param gson       序列化工具
+     */
+    public HttpHelperImpl(Pair<String, Integer> socketInfo, Gson gson) {
+        this.socketInfo = socketInfo;
+        this.restTemplate = new RestTemplate(Lists.newArrayList(new GsonHttpMessageConverter(gson)));
     }
 
     @Override
