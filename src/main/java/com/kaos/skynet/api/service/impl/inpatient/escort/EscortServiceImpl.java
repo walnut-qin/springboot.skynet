@@ -35,7 +35,6 @@ import com.kaos.skynet.enums.impl.inpatient.FinIprPrepayInStateEnum;
 import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
-import com.kaos.skynet.util.ListHelpers;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -203,7 +202,7 @@ public class EscortServiceImpl implements EscortService {
             ntt.stateRecs = this.escortStateRecMapper.queryStates(context.escortNo);
         }
         if (ntt.stateRecs != null && !ntt.stateRecs.isEmpty()) {
-            orgState = ListHelpers.getLast(ntt.stateRecs).state;
+            orgState = ntt.stateRecs.get(ntt.stateRecs.size() - 1).state;
             if (orgState == EscortStateEnum.注销) {
                 return EscortStateEnum.注销;
             }

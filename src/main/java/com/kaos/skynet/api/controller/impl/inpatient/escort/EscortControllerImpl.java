@@ -20,7 +20,6 @@ import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.util.DateHelpers;
-import com.kaos.skynet.util.ListHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,8 +172,9 @@ public class EscortControllerImpl implements EscortController {
         rsp.patientCardNo = escortInfo.patientCardNo;
         rsp.helperCardNo = escortInfo.helperCardNo;
         if (escortInfo.associateEntity.stateRecs != null) {
-            rsp.regDate = ListHelpers.getFirst(escortInfo.associateEntity.stateRecs).recDate;
-            rsp.state = ListHelpers.getLast(escortInfo.associateEntity.stateRecs).state.getValue();
+            var recs = escortInfo.associateEntity.stateRecs;
+            rsp.regDate = recs.get(0).recDate;
+            rsp.state = recs.get(recs.size() - 1).state.getValue();
         }
 
         return rsp;

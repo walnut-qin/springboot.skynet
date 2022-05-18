@@ -11,7 +11,6 @@ import com.kaos.skynet.api.mapper.outpatient.fee.FinOprPayModelMapper;
 import com.kaos.skynet.api.service.inf.inpatient.fee.PrepayService;
 import com.kaos.skynet.enums.impl.common.TransTypeEnum;
 import com.kaos.skynet.enums.impl.inpatient.fee.balance.BalanceStateEnum;
-import com.kaos.skynet.util.ListHelpers;
 
 import org.apache.log4j.Logger;
 import org.javatuples.Pair;
@@ -52,7 +51,7 @@ public class PrepayServiceImpl implements PrepayService {
         Collections.sort(balances, (x, y) -> {
             return x.balanceNo.compareTo(y.balanceNo);
         });
-        var lastBalance = ListHelpers.getLast(balances);
+        var lastBalance = balances.get(balances.size() - 1);
         if (lastBalance.transType != TransTypeEnum.Negative) {
             throw new RuntimeException("患者当前不是召回状态");
         }
