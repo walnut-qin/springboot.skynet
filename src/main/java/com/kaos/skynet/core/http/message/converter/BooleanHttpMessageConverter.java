@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.type.http.message.converter;
+package com.kaos.skynet.core.http.message.converter;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
