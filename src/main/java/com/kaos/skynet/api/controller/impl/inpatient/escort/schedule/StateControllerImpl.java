@@ -23,12 +23,12 @@ public class StateControllerImpl implements RefreshStateController {
     /**
      * 主线程池，容量 = 1，逻辑外壳
      */
-    ThreadPool masterPool = ThreadPools.newThreadPool(1);
+    ThreadPool masterPool = ThreadPools.newGuardThreadPool("状态监控-管理员");
 
     /**
      * 从线程池，容量 = 锁数量，逻辑实体
      */
-    ThreadPool slavePool = ThreadPools.newThreadPool(Locks.stateLock.getSize());
+    ThreadPool slavePool = ThreadPools.newThreadPool("状态监控-操作员", Locks.stateLock.getSize());
 
     /**
      * 发令枪
