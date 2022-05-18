@@ -5,26 +5,42 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.kaos.skynet.config.converter.EnumTypeConverter;
 import com.kaos.skynet.core.type.Enum;
+import com.kaos.skynet.core.type.converter.enums.string.ValueEnumToStringConverter;
+import com.kaos.skynet.core.type.converter.string.enums.factory.ValueStringToEnumConverterFactory;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.converter.ConverterFactory;
 
 public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
     /**
-     * 枚举转换器
+     * 字符串转枚举的转换器工厂
      */
-    EnumTypeConverter<E> enumTypeConverter = null;
+    final ConverterFactory<String, Enum> stringToEnumConverterFactory = new ValueStringToEnumConverterFactory();
 
-    public MybatisEnumTypeHandler(Class<E> typeOfE) {
-        // 构造转换器实体
-        this.enumTypeConverter = new EnumTypeConverter<>(typeOfE, true);
+    /**
+     * 字符串转枚举的转换器
+     */
+    Converter<String, E> stringToEnumConverter = null;
+
+    /**
+     * 枚举转字符串的转换器
+     */
+    final Converter<E, String> enumToStringConverter = new ValueEnumToStringConverter<>();
+
+    /**
+     * 构造函数
+     * @param typeOfE
+     */
+    public MybatisEnumTypeHandler(Class<E> classOfE) {
+        stringToEnumConverter = stringToEnumConverterFactory.getConverter(classOfE);
     }
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType) throws SQLException {
-        ps.setString(i, parameter.getValue());
+        ps.setString(i, enumToStringConverter.convert(parameter));
     }
 
     @Override
@@ -32,8 +48,7 @@ public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
         if (rs.getObject(columnName) == null) {
             return null;
         }
-        String index = rs.getString(columnName);
-        return this.enumTypeConverter.convert(index);
+        return stringToEnumConverter.convert(rs.getString(columnName));
     }
 
     @Override
@@ -41,8 +56,7 @@ public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
         if (rs.getObject(columnIndex) == null) {
             return null;
         }
-        String index = rs.getString(columnIndex);
-        return this.enumTypeConverter.convert(index);
+        return stringToEnumConverter.convert(rs.getString(columnIndex));
     }
 
     @Override
@@ -50,7 +64,6 @@ public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
         if (cs.getObject(columnIndex) == null) {
             return null;
         }
-        String index = cs.getString(columnIndex);
-        return this.enumTypeConverter.convert(index);
+        return stringToEnumConverter.convert(cs.getString(columnIndex));
     }
 }

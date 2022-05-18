@@ -9,8 +9,8 @@ import com.google.common.cache.LoadingCache;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.mapper.common.config.ConfigMapMapper;
+import com.kaos.skynet.core.gson.Gsons;
 import com.kaos.skynet.entity.common.config.ConfigMap;
-import com.kaos.skynet.util.Gsons;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.controller.impl;
 
 import com.google.gson.Gson;
-import com.kaos.skynet.util.Gsons;
+import com.kaos.skynet.core.gson.Gsons;
 
 /**
  * 基础接口，封装一些基本对象

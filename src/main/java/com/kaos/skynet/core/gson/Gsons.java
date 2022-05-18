@@ -10,8 +10,9 @@ import com.kaos.skynet.core.gson.adapter.date.StandardLocalDateTypeAdapter;
 import com.kaos.skynet.core.gson.adapter.datime.StandardLocalDateTimeTypeAdapter;
 import com.kaos.skynet.core.gson.adapter.enums.DescriptionEnumTypeAdapter;
 import com.kaos.skynet.core.gson.adapter.time.StandardLocalTimeTypeAdapter;
+import com.kaos.skynet.core.type.Enum;
 
-public class Gsons {
+public final class Gsons {
     /**
      * 创建通用格式的gson对象
      */

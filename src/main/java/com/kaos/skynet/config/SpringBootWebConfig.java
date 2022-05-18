@@ -2,15 +2,13 @@ package com.kaos.skynet.config;
 
 import java.util.List;
 
-import com.kaos.skynet.config.converter.DateTypeConverter;
-import com.kaos.skynet.config.converter.LocalDateTimeTypeConverter;
-import com.kaos.skynet.config.converter.LocalDateTypeConverter;
-import com.kaos.skynet.config.converter.LocalTimeTypeConverter;
-import com.kaos.skynet.config.converter.StringTypeConverter;
-import com.kaos.skynet.config.converter.factory.EnumTypeConverterFactory;
-import com.kaos.skynet.config.message.converter.BooleanMessageConverter;
-import com.kaos.skynet.config.message.converter.DoubleMessageConverter;
-import com.kaos.skynet.util.Gsons;
+import com.kaos.skynet.core.gson.Gsons;
+import com.kaos.skynet.core.type.converter.string.date.StandardStringToLocalDateConverter;
+import com.kaos.skynet.core.type.converter.string.datime.StandardStringToLocalDateTimeConverter;
+import com.kaos.skynet.core.type.converter.string.enums.factory.DescriptionStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.string.time.StandardStringToLocalTimeConverter;
+import com.kaos.skynet.core.type.http.message.converter.BooleanHttpMessageConverter;
+import com.kaos.skynet.core.type.http.message.converter.DoubleHttpMessageConverter;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -30,16 +28,12 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         // 注册枚举解析器工厂
-        registry.addConverterFactory(new EnumTypeConverterFactory());
+        registry.addConverterFactory(new DescriptionStringToEnumConverterFactory());
 
         // 注册时间解析
-        registry.addConverter(new DateTypeConverter());
-        registry.addConverter(new LocalDateTypeConverter());
-        registry.addConverter(new LocalTimeTypeConverter());
-        registry.addConverter(new LocalDateTimeTypeConverter());
-
-        // 注册字符串转换器
-        registry.addConverter(new StringTypeConverter());
+        registry.addConverter(new StandardStringToLocalDateConverter());
+        registry.addConverter(new StandardStringToLocalTimeConverter());
+        registry.addConverter(new StandardStringToLocalDateTimeConverter());
 
         WebMvcConfigurer.super.addFormatters(registry);
     }
@@ -52,8 +46,8 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
         // 设置定制转换器，插入队列最前段，给予最高优先级
         converters.add(0, new BufferedImageHttpMessageConverter());
         converters.add(0, new GsonHttpMessageConverter(Gsons.newGson()));
-        converters.add(0, new BooleanMessageConverter());
-        converters.add(0, new DoubleMessageConverter());
+        converters.add(0, new BooleanHttpMessageConverter());
+        converters.add(0, new DoubleHttpMessageConverter());
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
     }

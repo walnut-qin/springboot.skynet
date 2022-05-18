@@ -2,7 +2,7 @@ package com.kaos.skynet.util.helper.impl;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.kaos.skynet.util.Gsons;
+import com.kaos.skynet.core.gson.Gsons;
 import com.kaos.skynet.util.helper.HttpHelper;
 
 import org.javatuples.Pair;
