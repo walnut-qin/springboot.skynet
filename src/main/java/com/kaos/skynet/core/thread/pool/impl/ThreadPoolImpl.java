@@ -6,10 +6,18 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.collect.Queues;
 import com.kaos.skynet.core.thread.pool.ThreadPool;
 
+import lombok.AllArgsConstructor;
+
 /**
  * 线程池封装
  */
+@AllArgsConstructor
 public class ThreadPoolImpl implements ThreadPool {
+    /**
+     * 线程池名称
+     */
+    String name = null;
+
     /**
      * 线程池实体
      */
@@ -20,7 +28,8 @@ public class ThreadPoolImpl implements ThreadPool {
      * 
      * @param coreThreadSize 核心线程数量
      */
-    public ThreadPoolImpl(Integer coreThreadSize) {
+    public ThreadPoolImpl(String name, Integer coreThreadSize) {
+        this.name = name;
         Integer coreSize = coreThreadSize;
         Integer maxSize = Double.valueOf(Math.floor(1.2d * coreThreadSize)).intValue();
         this.executor = new ThreadPoolExecutor(coreSize, maxSize, 2, TimeUnit.HOURS, Queues.newLinkedBlockingDeque());

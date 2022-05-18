@@ -22,6 +22,12 @@ public interface ThreadPool {
      */
     static class PoolState {
         /**
+         * 线程池名称
+         */
+        @Setter
+        private String name = null;
+
+        /**
          * 核心线程池数量
          */
         @Setter
