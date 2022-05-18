@@ -1,4 +1,6 @@
-package com.kaos.skynet.util.helper;
+package com.kaos.skynet.core.thread.pool;
+
+import lombok.Setter;
 
 public interface ThreadPool {
     /**
@@ -13,40 +15,46 @@ public interface ThreadPool {
      * 
      * @return
      */
-    View show();
+    PoolState show();
 
     /**
      * 线程池视图
      */
-    public static class View {
+    static class PoolState {
         /**
          * 核心线程池数量
          */
-        public Integer coreSize = null;
+        @Setter
+        private Integer coreSize = null;
 
         /**
          * 最大线程池数量
          */
-        public Integer maxSize = null;
+        @Setter
+        private Integer maxSize = null;
 
         /**
          * 活跃线程池数量
          */
-        public Integer activeSize = null;
+        @Setter
+        private Integer activeSize = null;
 
         /**
          * 等待队列容量
          */
-        public Integer queueSize = null;
+        @Setter
+        private Integer queueSize = null;
 
         /**
          * 任务数量
          */
-        public Long taskCount = null;
+        @Setter
+        private Long taskCount = null;
 
         /**
          * 已完成的任务数量
          */
-        public Long completeTaskCount = null;
+        @Setter
+        private Long completeTaskCount = null;
     }
 }

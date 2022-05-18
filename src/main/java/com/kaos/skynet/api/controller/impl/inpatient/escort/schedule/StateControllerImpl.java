@@ -7,8 +7,8 @@ import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.impl.inpatient.escort.Locks;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.schedule.RefreshStateController;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
-import com.kaos.skynet.util.ThreadPools;
-import com.kaos.skynet.util.helper.ThreadPool;
+import com.kaos.skynet.core.thread.pool.ThreadPool;
+import com.kaos.skynet.core.thread.pool.ThreadPools;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,11 +124,11 @@ public class StateControllerImpl implements RefreshStateController {
         /**
          * 主线程池
          */
-        ThreadPool.View master = null;
+        ThreadPool.PoolState master = null;
 
         /**
          * 从线程池
          */
-        ThreadPool.View slave = null;
+        ThreadPool.PoolState slave = null;
     }
 }
