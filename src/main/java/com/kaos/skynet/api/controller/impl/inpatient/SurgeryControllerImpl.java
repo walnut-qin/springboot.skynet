@@ -17,6 +17,8 @@ import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.skynet.api.service.inf.inpatient.SurgeryService;
 import com.kaos.skynet.core.gson.Gsons;
+import com.kaos.skynet.core.http.helper.HttpHelper;
+import com.kaos.skynet.core.http.helper.HttpHelpers;
 import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
@@ -26,8 +28,6 @@ import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
 import com.kaos.skynet.util.DateHelpers;
-import com.kaos.skynet.util.HttpHelpers;
-import com.kaos.skynet.util.helper.HttpHelper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -51,7 +51,7 @@ public class SurgeryControllerImpl implements SurgeryController {
     /**
      * HttpHelper
      */
-    HttpHelper httpClient = HttpHelpers.newHttpClient(HttpHelpers.DOCARE_SERVER);
+    HttpHelper httpClient = HttpHelpers.newHttpClient(HttpHelpers.docareNode);
 
     /**
      * 接口：手术服务
