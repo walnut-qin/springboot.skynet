@@ -73,7 +73,7 @@ public class AnnexControllerImpl implements AnnexController {
         if (escorts != null && !escorts.isEmpty()) {
             for (var escort : escorts) {
                 // 更新关联陪护状态
-                synchronized (Locks.stateLock.mapToLock(escort.escortNo)) {
+                synchronized (LockMgr.stateLock.get(escort.escortNo)) {
                     this.escortService.updateEscortState(escort.escortNo, null, "WebService", "患者上传外院报告");
                 }
             }
@@ -93,7 +93,7 @@ public class AnnexControllerImpl implements AnnexController {
                 checker, negativeFlag.toString(), inspectDate.toString()));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        synchronized (Locks.annexLock.mapToLock(annexNo)) {
+        synchronized (LockMgr.annexLock.get(annexNo)) {
             // 调用业务
             this.annexService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
         }
@@ -106,7 +106,7 @@ public class AnnexControllerImpl implements AnnexController {
         if (escorts != null && !escorts.isEmpty()) {
             for (var escort : escorts) {
                 // 更新关联陪护状态
-                synchronized (Locks.stateLock.mapToLock(escort.escortNo)) {
+                synchronized (LockMgr.stateLock.get(escort.escortNo)) {
                     this.escortService.updateEscortState(escort.escortNo, null, "WebService", "患者上传外院报告");
                 }
             }

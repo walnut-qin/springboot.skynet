@@ -84,9 +84,9 @@ public class EscortControllerImpl implements EscortController {
                 helperCardNo, emplCode));
 
         // 加患者锁，防止同时对同一个患者添加陪护
-        synchronized (Locks.patientLock.mapToLock(patientCardNo)) {
+        synchronized (LockMgr.patientLock.get(patientCardNo)) {
             // 加陪护人锁，防止同时对同一个陪护人添加陪护
-            synchronized (Locks.helperLock.mapToLock(helperCardNo)) {
+            synchronized (LockMgr.helperLock.get(helperCardNo)) {
                 // 调用业务
                 var escort = this.escortMainService.registerEscort(patientCardNo, helperCardNo, emplCode, remark,
                         false);
@@ -107,12 +107,12 @@ public class EscortControllerImpl implements EscortController {
 
         // 优先视作用住院号登记
         var inPat = this.inMainInfoCache.getValue(req.patientIdx);
-        var patientLock = Locks.patientLock.mapToLock(inPat == null ? req.patientIdx : inPat.cardNo);
+        var patientLock = LockMgr.patientLock.get(inPat == null ? req.patientIdx : inPat.cardNo);
 
         // 加患者锁，防止同时对同一个患者添加陪护
         synchronized (patientLock) {
             // 加陪护人锁，防止同时对同一个陪护人添加陪护
-            synchronized (Locks.helperLock.mapToLock(req.helperCardNo)) {
+            synchronized (LockMgr.helperLock.get(req.helperCardNo)) {
                 // 调用业务
                 var escort = this.escortMainService.registerEscort(req.patientIdx, req.helperCardNo, req.emplCode,
                         req.remark, Optional.fromNullable(req.getRegByWindow()).or(false));
@@ -135,7 +135,7 @@ public class EscortControllerImpl implements EscortController {
                 state == null ? "null" : state.getDescription(), emplCode));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        synchronized (Locks.stateLock.mapToLock(escortNo)) {
+        synchronized (LockMgr.stateLock.get(escortNo)) {
             // 调用业务
             this.escortMainService.updateEscortState(escortNo, state, emplCode, "收到客户端请求");
         }
@@ -149,7 +149,7 @@ public class EscortControllerImpl implements EscortController {
         this.logger.info(String.format("记录陪护证行为<escortNo = %s, action = %s>", escortNo, action.getDescription()));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        synchronized (Locks.actionLock.mapToLock(escortNo)) {
+        synchronized (LockMgr.actionLock.get(escortNo)) {
             // 调用业务
             this.escortMainService.recordEscortAction(escortNo, action, "收到客户端请求");
         }

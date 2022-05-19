@@ -4,7 +4,7 @@ import java.util.concurrent.CountDownLatch;
 
 import com.google.common.base.Stopwatch;
 import com.kaos.skynet.api.controller.MediaType;
-import com.kaos.skynet.api.controller.impl.inpatient.escort.Locks;
+import com.kaos.skynet.api.controller.impl.inpatient.escort.LockMgr;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.schedule.RefreshStateController;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.core.thread.pool.ThreadPool;
@@ -28,7 +28,7 @@ public class StateControllerImpl implements RefreshStateController {
     /**
      * 从线程池，容量 = 锁数量，逻辑实体
      */
-    ThreadPool slavePool = ThreadPools.newThreadPool("状态监控-操作员", Locks.stateLock.getSize());
+    ThreadPool slavePool = ThreadPools.newThreadPool("状态监控-操作员", LockMgr.stateLock.size());
 
     /**
      * 发令枪
@@ -81,7 +81,7 @@ public class StateControllerImpl implements RefreshStateController {
 
                         @Override
                         public void run() {
-                            synchronized (Locks.stateLock.mapToLock(escortNo)) {
+                            synchronized (LockMgr.stateLock.get(escortNo)) {
                                 try {
                                     escortMainService.updateEscortState(escortNo, null, "server", "定时任务");
                                 } catch (Exception e) {
