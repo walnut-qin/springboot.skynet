@@ -1,4 +1,4 @@
-package com.kaos.skynet.util.helper;
+package com.kaos.skynet.core.http.helper;
 
 public interface HttpHelper {
     /**
