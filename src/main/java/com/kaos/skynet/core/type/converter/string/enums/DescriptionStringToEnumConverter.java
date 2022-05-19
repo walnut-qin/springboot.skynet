@@ -23,7 +23,7 @@ public class DescriptionStringToEnumConverter<E extends Enum> implements Convert
                 return e;
             }
         }
-        log.error(String.format("类型转换 String -> %s : { source = %s } 异常, err = 无有效枚举值", classOfE.getName(), source));
-        throw new RuntimeException("无有效枚举值");
+        log.warn(String.format("类型转换 String -> %s : { source = %s } 异常, err = 无有效枚举值", classOfE.getName(), source));
+        return null;
     }
 }
