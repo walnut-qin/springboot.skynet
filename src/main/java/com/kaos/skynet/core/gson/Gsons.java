@@ -3,6 +3,7 @@ package com.kaos.skynet.core.gson;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.Date;
 
 import com.google.gson.Gson;
@@ -12,6 +13,7 @@ import com.kaos.skynet.core.gson.adapter.enums.DescriptionEnumTypeAdapter;
 import com.kaos.skynet.core.gson.adapter.local.date.StandardLocalDateTypeAdapter;
 import com.kaos.skynet.core.gson.adapter.local.datime.StandardLocalDateTimeTypeAdapter;
 import com.kaos.skynet.core.gson.adapter.local.time.StandardLocalTimeTypeAdapter;
+import com.kaos.skynet.core.gson.adapter.period.AgePeriodTypeAdapter;
 import com.kaos.skynet.core.type.Enum;
 
 public final class Gsons {
@@ -39,6 +41,9 @@ public final class Gsons {
 
         // 注册LocalDateTime解析器
         builder.registerTypeAdapter(LocalDateTime.class, new StandardLocalDateTimeTypeAdapter());
+
+        // 注解Period解析器 - 默认为年龄解析
+        builder.registerTypeAdapter(Period.class, new AgePeriodTypeAdapter());
 
         // 创建gson对象
         return builder.create();

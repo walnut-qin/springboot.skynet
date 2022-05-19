@@ -1,6 +1,7 @@
 package com.kaos.skynet.api.controller.inf.inpatient;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -109,7 +110,7 @@ public interface SurgeryController {
             /**
              * 年龄
              */
-            public String age = null;
+            public Period age = null;
 
             /**
              * 诊断

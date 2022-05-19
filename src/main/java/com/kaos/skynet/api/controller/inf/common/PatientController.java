@@ -1,5 +1,7 @@
 package com.kaos.skynet.api.controller.inf.common;
 
+import java.time.Period;
+
 import javax.validation.constraints.NotBlank;
 
 import com.google.gson.annotations.SerializedName;
@@ -35,7 +37,7 @@ public interface PatientController {
         /**
          * 年龄
          */
-        public String age = null;
+        public Period age = null;
 
         /**
          * 身份证号

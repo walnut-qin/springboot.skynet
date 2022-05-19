@@ -1,5 +1,6 @@
 package com.kaos.skynet.api.controller.inf.inpatient.escort;
 
+import java.time.Period;
 import java.util.Date;
 import java.util.List;
 
@@ -153,7 +154,7 @@ public interface EscortController {
         /**
          * 年龄
          */
-        public String age = null;
+        public Period age = null;
 
         /**
          * 科室

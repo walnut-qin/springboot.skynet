@@ -49,11 +49,7 @@ public class PatientControllerImpl implements PatientController {
         rspBody.cardNo = patient.cardNo;
         rspBody.name = patient.name;
         rspBody.sex = patient.sex;
-        var period = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
-        rspBody.age = String.format("%s%s%s",
-                period.getYears() == 0 ? "" : period.getYears() + "岁",
-                period.getMonths() == 0 ? "" : period.getMonths() + "月",
-                period.getDays() == 0 ? "" : period.getDays() + "天");
+        rspBody.age = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
         rspBody.idenNo = patient.identityCardNo;
         rspBody.tel = patient.homeTel;
 

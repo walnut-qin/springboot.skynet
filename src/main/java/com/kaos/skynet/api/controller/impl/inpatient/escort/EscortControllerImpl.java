@@ -213,11 +213,7 @@ public class EscortControllerImpl implements EscortController {
             if (patient != null) {
                 rsp.name = patient.name;
                 rsp.sex = patient.sex;
-                var period = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
-                rsp.age = String.format("%s%s%s",
-                        period.getYears() == 0 ? "" : period.getYears() + "岁",
-                        period.getMonths() == 0 ? "" : period.getMonths() + "月",
-                        period.getDays() == 0 ? "" : period.getDays() + "天");
+                rsp.age = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
             }
             if (escortInfo.associateEntity.prepayIn != null) {
                 // 若存在住院证，加载住院信息

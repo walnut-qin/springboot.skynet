@@ -150,14 +150,10 @@ public class SurgeryControllerImpl implements SurgeryController {
 
             // 患者姓名、性别、年龄
             if (inMainInfo.associateEntity.patientInfo != null) {
-                rspBody.name = inMainInfo.associateEntity.patientInfo.name;
-                rspBody.sex = inMainInfo.associateEntity.patientInfo.sex;
-                var period = Period.between(inMainInfo.associateEntity.patientInfo.birthday.toLocalDate(),
-                        LocalDate.now());
-                rspBody.age = String.format("%s%s%s",
-                        period.getYears() == 0 ? "" : period.getYears() + "岁",
-                        period.getMonths() == 0 ? "" : period.getMonths() + "月",
-                        period.getDays() == 0 ? "" : period.getDays() + "天");
+                var patientInfo = inMainInfo.associateEntity.patientInfo;
+                rspBody.name = patientInfo.name;
+                rspBody.sex = patientInfo.sex;
+                rspBody.age = Period.between(patientInfo.birthday.toLocalDate(), LocalDate.now());
             } else {
                 rspBody.name = inMainInfo.name;
             }
