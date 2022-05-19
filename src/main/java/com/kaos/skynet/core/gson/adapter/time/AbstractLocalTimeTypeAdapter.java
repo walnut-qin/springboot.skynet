@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.kaos.skynet.core.type.converter.string.time.AbstractStringToLocalTimeConverter;
+import com.kaos.skynet.core.type.converter.string.local.time.AbstractStringToLocalTimeConverter;
 import com.kaos.skynet.core.type.converter.time.AbstractLocalTimeToStringConverter;
 
 import lombok.AllArgsConstructor;

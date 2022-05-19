@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.type.converter.string.time;
+package com.kaos.skynet.core.type.converter.string.local.time;
 
 import org.springframework.stereotype.Component;
 
