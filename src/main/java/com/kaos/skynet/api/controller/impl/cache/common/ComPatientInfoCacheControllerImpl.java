@@ -3,7 +3,7 @@ package com.kaos.skynet.api.controller.impl.cache.common;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.cache.Cache.View;
 import com.kaos.skynet.api.controller.inf.cache.CacheController;
-import com.kaos.skynet.entity.common.ComPatientInfo;
+import com.kaos.skynet.api.entity.common.ComPatientInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

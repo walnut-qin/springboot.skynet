@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.cache.pipe.pacs;
 
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.entity.pipe.pacs.PacsCropImageRec;
+import com.kaos.skynet.api.entity.pipe.pacs.PacsCropImageRec;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,9 +2,9 @@ package com.kaos.skynet.api.service.inf.inpatient.escort;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.escort.EscortActionRec;
-import com.kaos.skynet.entity.inpatient.escort.EscortMainInfo;
-import com.kaos.skynet.entity.inpatient.escort.EscortStateRec;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortActionRec;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortMainInfo;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortStateRec;
 import com.kaos.skynet.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 

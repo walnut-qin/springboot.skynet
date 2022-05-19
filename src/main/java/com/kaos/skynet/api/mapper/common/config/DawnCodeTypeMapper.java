@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.common.config;
 
-import com.kaos.skynet.entity.common.config.DawnCodeType;
+import com.kaos.skynet.api.entity.common.config.DawnCodeType;
 
 public interface DawnCodeTypeMapper {
     /**

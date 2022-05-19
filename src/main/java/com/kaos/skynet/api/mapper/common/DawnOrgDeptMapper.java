@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.common;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.common.DawnOrgDept;
+import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.enums.common.DeptOwnEnum;
 import com.kaos.skynet.enums.common.DeptTypeEnum;
 import com.kaos.skynet.enums.common.ValidStateEnum;

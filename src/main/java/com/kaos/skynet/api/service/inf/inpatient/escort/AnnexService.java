@@ -3,8 +3,8 @@ package com.kaos.skynet.api.service.inf.inpatient.escort;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.escort.EscortAnnexChk;
-import com.kaos.skynet.entity.inpatient.escort.EscortAnnexInfo;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexChk;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexInfo;
 
 public interface AnnexService {
     /**

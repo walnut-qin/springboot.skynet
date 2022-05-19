@@ -7,8 +7,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.kaos.skynet.api.cache.Cache;
+import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.mapper.common.DawnOrgDeptMapper;
-import com.kaos.skynet.entity.common.DawnOrgDept;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

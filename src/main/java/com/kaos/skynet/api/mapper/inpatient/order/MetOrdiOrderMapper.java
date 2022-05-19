@@ -3,7 +3,7 @@ package com.kaos.skynet.api.mapper.inpatient.order;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.order.MetOrdiOrder;
+import com.kaos.skynet.api.entity.inpatient.order.MetOrdiOrder;
 
 public interface MetOrdiOrderMapper {
     /**

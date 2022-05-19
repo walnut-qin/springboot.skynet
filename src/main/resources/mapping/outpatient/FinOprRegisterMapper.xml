@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.skynet.api.mapper.outpatient.FinOprRegisterMapper">
-    <resultMap id="map" type="com.kaos.skynet.entity.outpatient.FinOprRegister">
+    <resultMap id="map" type="com.kaos.skynet.api.entity.outpatient.FinOprRegister">
         <id column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
         <id column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
         <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
@@ -223,7 +223,7 @@
     </update>
 
     <insert id="insertRegisterRec">
-        <selectKey keyProperty="invoiceNo,clinicCode,emrRegId" order="BEFORE" resultType="com.kaos.skynet.entity.outpatient.FinOprRegister">
+        <selectKey keyProperty="invoiceNo,clinicCode,emrRegId" order="BEFORE" resultType="com.kaos.skynet.api.entity.outpatient.FinOprRegister">
             SELECT
                 SEQ_FIN_CLINICNO.NEXTVAL AS CLINIC_CODE,
                 TO_CHAR(SYSDATE,'YYMMDD') || LPAD(SEQ_FIN_OPB_PAYINVOICE.NEXTVAL, 6, '0') AS INVOICE_NO,

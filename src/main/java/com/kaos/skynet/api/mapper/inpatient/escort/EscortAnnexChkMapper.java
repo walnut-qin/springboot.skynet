@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.inpatient.escort;
 
-import com.kaos.skynet.entity.inpatient.escort.EscortAnnexChk;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexChk;
 
 public interface EscortAnnexChkMapper {
     /**

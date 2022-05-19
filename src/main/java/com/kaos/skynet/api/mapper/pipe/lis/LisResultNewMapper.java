@@ -3,7 +3,7 @@ package com.kaos.skynet.api.mapper.pipe.lis;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kaos.skynet.entity.pipe.lis.LisResultNew;
+import com.kaos.skynet.api.entity.pipe.lis.LisResultNew;
 
 public interface LisResultNewMapper {
     /**

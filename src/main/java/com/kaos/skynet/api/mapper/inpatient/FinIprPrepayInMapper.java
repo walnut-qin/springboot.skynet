@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.inpatient;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.FinIprPrepayIn;
+import com.kaos.skynet.api.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.enums.inpatient.FinIprPrepayInStateEnum;
 
 public interface FinIprPrepayInMapper {

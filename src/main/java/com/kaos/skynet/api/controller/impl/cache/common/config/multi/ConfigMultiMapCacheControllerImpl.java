@@ -5,7 +5,7 @@ import com.kaos.skynet.api.cache.Cache.View;
 import com.kaos.skynet.api.cache.impl.common.config.multi.ConfigMultiMapCache.Key;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.cache.CacheController;
-import com.kaos.skynet.entity.common.config.ConfigMap;
+import com.kaos.skynet.api.entity.common.config.ConfigMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

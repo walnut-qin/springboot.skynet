@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.cache.inpatient;
 
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.entity.inpatient.ComBedInfo;
+import com.kaos.skynet.api.entity.inpatient.ComBedInfo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

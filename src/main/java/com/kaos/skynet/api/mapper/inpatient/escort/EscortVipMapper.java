@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.inpatient.escort;
 
-import com.kaos.skynet.entity.inpatient.escort.EscortVip;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortVip;
 
 public interface EscortVipMapper {
     /**

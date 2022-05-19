@@ -3,7 +3,7 @@ package com.kaos.skynet.api.mapper.inpatient.fee;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.fee.FinIpbFeeInfo;
+import com.kaos.skynet.api.entity.inpatient.fee.FinIpbFeeInfo;
 
 public interface FinIpbFeeInfoMapper {
     /**

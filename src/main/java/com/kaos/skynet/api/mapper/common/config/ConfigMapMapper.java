@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.common.config;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.common.config.ConfigMap;
+import com.kaos.skynet.api.entity.common.config.ConfigMap;
 
 import org.springframework.stereotype.Repository;
 

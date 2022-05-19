@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.common;
 
-import com.kaos.skynet.entity.common.ComPatientInfo;
+import com.kaos.skynet.api.entity.common.ComPatientInfo;
 
 public interface ComPatientInfoMapper {
     /**

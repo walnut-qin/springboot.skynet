@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.pipe.pacs;
 
-import com.kaos.skynet.entity.pipe.pacs.PacsCropImageRec;
+import com.kaos.skynet.api.entity.pipe.pacs.PacsCropImageRec;
 
 public interface PacsCropImageRecMapper {
     /**

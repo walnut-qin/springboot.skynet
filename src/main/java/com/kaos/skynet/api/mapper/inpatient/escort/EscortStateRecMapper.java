@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.inpatient.escort;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.escort.EscortStateRec;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortStateRec;
 
 public interface EscortStateRecMapper {
     /**

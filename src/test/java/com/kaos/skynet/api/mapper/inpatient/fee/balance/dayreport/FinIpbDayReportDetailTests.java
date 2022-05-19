@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport;
 
-import com.kaos.skynet.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
+import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

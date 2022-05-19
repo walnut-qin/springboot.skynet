@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.common;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
 
 public interface DawnOrgEmplMapper {
     /**

@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.inpatient.surgery;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.surgery.MetOpsItem;
+import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsItem;
 
 public interface MetOpsItemMapper {
     /**

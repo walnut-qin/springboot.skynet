@@ -3,7 +3,7 @@ package com.kaos.skynet.api.service.inf.inpatient;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
+import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.enums.inpatient.surgery.SurgeryStatusEnum;
 
 public interface SurgeryService {

@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.kaos.skynet.api.entity.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoice;
 import com.kaos.skynet.api.service.inf.inpatient.fee.balance.invoice.ElectronicInvoiceService;
-import com.kaos.skynet.entity.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoice;
 import com.kaos.skynet.enums.common.HospitalTypeEnum;
 import com.kaos.skynet.enums.common.SexEnum;
 import com.kaos.skynet.enums.common.SourceTypeEnum;

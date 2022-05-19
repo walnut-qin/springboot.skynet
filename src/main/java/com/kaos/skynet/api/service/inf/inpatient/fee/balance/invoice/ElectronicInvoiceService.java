@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.service.inf.inpatient.fee.balance.invoice;
 
-import com.kaos.skynet.entity.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoice;
+import com.kaos.skynet.api.entity.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoice;
 import com.kaos.skynet.enums.common.SourceTypeEnum;
 
 public interface ElectronicInvoiceService {

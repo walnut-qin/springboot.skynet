@@ -8,9 +8,9 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.kaos.skynet.api.cache.Cache;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexChkMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexInfoMapper;
-import com.kaos.skynet.entity.inpatient.escort.EscortAnnexInfo;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

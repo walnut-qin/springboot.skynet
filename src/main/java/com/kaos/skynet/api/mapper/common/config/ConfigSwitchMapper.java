@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.common.config;
 
-import com.kaos.skynet.entity.common.config.ConfigSwitch;
+import com.kaos.skynet.api.entity.common.config.ConfigSwitch;
 
 public interface ConfigSwitchMapper {
     /**

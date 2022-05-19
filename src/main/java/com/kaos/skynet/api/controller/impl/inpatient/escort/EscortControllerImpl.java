@@ -16,10 +16,10 @@ import com.kaos.skynet.api.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.cache.impl.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.EscortController;
+import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.core.gson.Gsons;
 import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverter;
-import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 

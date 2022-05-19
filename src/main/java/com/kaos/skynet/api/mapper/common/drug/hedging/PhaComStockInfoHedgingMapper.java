@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.common.drug.hedging;
 
-import com.kaos.skynet.entity.common.drug.hedging.PhaComStockInfoHedging;
+import com.kaos.skynet.api.entity.common.drug.hedging.PhaComStockInfoHedging;
 
 public interface PhaComStockInfoHedgingMapper {
     /**

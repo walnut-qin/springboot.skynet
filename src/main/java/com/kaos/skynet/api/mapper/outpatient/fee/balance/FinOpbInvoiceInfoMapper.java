@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.outpatient.fee.balance;
 
-import com.kaos.skynet.entity.outpatient.fee.balance.FinOpbInvoiceInfo;
+import com.kaos.skynet.api.entity.outpatient.fee.balance.FinOpbInvoiceInfo;
 import com.kaos.skynet.enums.common.TransTypeEnum;
 
 public interface FinOpbInvoiceInfoMapper {

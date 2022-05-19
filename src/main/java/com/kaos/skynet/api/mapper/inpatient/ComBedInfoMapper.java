@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.inpatient;
 
-import com.kaos.skynet.entity.inpatient.ComBedInfo;
+import com.kaos.skynet.api.entity.inpatient.ComBedInfo;
 
 public interface ComBedInfoMapper {
     /**

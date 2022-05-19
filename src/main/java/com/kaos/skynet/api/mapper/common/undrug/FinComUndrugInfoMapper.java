@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.common.undrug;
 
-import com.kaos.skynet.entity.common.undrug.FinComUndrugInfo;
+import com.kaos.skynet.api.entity.common.undrug.FinComUndrugInfo;
 
 public interface FinComUndrugInfoMapper {
     /**

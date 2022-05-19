@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.skynet.api.mapper.pipe.lis.LisResultNewMapper">
-    <resultMap id="map" type="com.kaos.skynet.entity.pipe.lis.LisResultNew">
+    <resultMap id="map" type="com.kaos.skynet.api.entity.pipe.lis.LisResultNew">
         <result column="PATIENTID" jdbcType="VARCHAR" property="patientId"/>
         <result column="ITEMCODE" jdbcType="VARCHAR" property="itemCode"/>
         <result column="ITEMNAME" jdbcType="VARCHAR" property="itemName"/>

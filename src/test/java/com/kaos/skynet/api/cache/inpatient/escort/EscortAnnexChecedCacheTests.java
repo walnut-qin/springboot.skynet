@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.cache.inpatient.escort;
 
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.entity.inpatient.escort.EscortAnnexInfo;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexInfo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

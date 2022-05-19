@@ -9,8 +9,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.cache.Cache;
+import com.kaos.skynet.api.entity.pipe.lis.LisResultNew;
 import com.kaos.skynet.api.mapper.pipe.lis.LisResultNewMapper;
-import com.kaos.skynet.entity.pipe.lis.LisResultNew;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

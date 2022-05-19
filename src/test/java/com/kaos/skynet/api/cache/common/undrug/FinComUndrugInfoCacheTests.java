@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.cache.common.undrug;
 
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.entity.common.undrug.FinComUndrugInfo;
+import com.kaos.skynet.api.entity.common.undrug.FinComUndrugInfo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

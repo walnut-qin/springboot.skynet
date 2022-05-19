@@ -7,8 +7,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.kaos.skynet.api.cache.Cache;
+import com.kaos.skynet.api.entity.inpatient.FinSpecialCityPatient;
 import com.kaos.skynet.api.mapper.inpatient.FinSpecialCityPatientMapper;
-import com.kaos.skynet.entity.inpatient.FinSpecialCityPatient;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

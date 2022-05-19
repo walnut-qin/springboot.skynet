@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
+import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
 
 public interface FinIpbDayReportDetailMapper {
     /**

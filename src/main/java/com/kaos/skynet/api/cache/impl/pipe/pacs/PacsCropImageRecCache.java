@@ -5,8 +5,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.kaos.skynet.api.cache.Cache;
+import com.kaos.skynet.api.entity.pipe.pacs.PacsCropImageRec;
 import com.kaos.skynet.api.mapper.pipe.pacs.PacsCropImageRecMapper;
-import com.kaos.skynet.entity.pipe.pacs.PacsCropImageRec;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

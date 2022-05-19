@@ -8,9 +8,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
+import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.core.gson.Gsons;
-import com.kaos.skynet.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.skynet.enums.common.TransTypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;

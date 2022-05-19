@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.outpatient.fee;
 
 import java.util.List;
 
-import com.kaos.skynet.entity.outpatient.fee.FinOprPayModel;
+import com.kaos.skynet.api.entity.outpatient.fee.FinOprPayModel;
 
 public interface FinOprPayModelMapper {
     /**

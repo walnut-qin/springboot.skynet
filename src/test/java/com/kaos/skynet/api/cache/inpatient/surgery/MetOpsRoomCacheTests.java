@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.cache.inpatient.surgery;
 
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
+import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsRoom;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

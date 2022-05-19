@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.skynet.entity.outpatient.fee.FinOpbFeeDetail;
+import com.kaos.skynet.api.entity.outpatient.fee.FinOpbFeeDetail;
 
 public interface FinOpbFeeDetailMapper {
     /**

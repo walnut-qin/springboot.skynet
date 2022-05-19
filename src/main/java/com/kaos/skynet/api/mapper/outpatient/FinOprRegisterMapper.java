@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.outpatient;
 
-import com.kaos.skynet.entity.outpatient.FinOprRegister;
+import com.kaos.skynet.api.entity.outpatient.FinOprRegister;
 import com.kaos.skynet.enums.common.TransTypeEnum;
 
 public interface FinOprRegisterMapper {

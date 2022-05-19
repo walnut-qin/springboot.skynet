@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.common.PatientController;
-import com.kaos.skynet.entity.common.ComPatientInfo;
+import com.kaos.skynet.api.entity.common.ComPatientInfo;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

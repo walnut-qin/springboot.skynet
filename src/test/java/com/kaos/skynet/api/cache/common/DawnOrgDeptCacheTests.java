@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.cache.common;
 
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.entity.common.DawnOrgDept;
+import com.kaos.skynet.api.entity.common.DawnOrgDept;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

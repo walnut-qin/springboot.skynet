@@ -2,7 +2,7 @@ package com.kaos.skynet.api.cache.common.fee;
 
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.cache.impl.common.fee.FinComFeeCodeStatCache.Key;
-import com.kaos.skynet.entity.common.fee.FinComFeeCodeStat;
+import com.kaos.skynet.api.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.skynet.enums.common.MinFeeEnum;
 import com.kaos.skynet.enums.common.ReportTypeEnum;
 
