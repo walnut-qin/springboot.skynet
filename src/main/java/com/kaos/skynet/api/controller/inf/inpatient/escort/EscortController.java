@@ -77,7 +77,7 @@ public interface EscortController {
      * @param emplCode 操作员
      */
     void updateState(@NotNull(message = "陪护证号不能为空") String escortNo,
-            EscortStateEnum state,
+            String stateEnumValue,
             @NotNull(message = "操作员编码不能为空") String emplCode);
 
     /**

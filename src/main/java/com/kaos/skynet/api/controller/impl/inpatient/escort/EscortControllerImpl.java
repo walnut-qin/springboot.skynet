@@ -16,6 +16,7 @@ import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.EscortController;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.core.gson.Gsons;
+import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverter;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
@@ -23,6 +24,7 @@ import com.kaos.skynet.util.DateHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +39,11 @@ public class EscortControllerImpl implements EscortController {
      * 日志模块
      */
     Logger logger = Logger.getLogger(EscortControllerImpl.class);
+
+    /**
+     * 枚举值转换器
+     */
+    Converter<String, EscortStateEnum> stringToEnumConverter = new ValueStringToEnumConverter<>(EscortStateEnum.class);
 
     /**
      * Gson工具
@@ -128,8 +135,11 @@ public class EscortControllerImpl implements EscortController {
     @Override
     @RequestMapping(value = "updateState", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void updateState(@NotNull(message = "陪护证号不能为空") String escortNo,
-            EscortStateEnum state,
+            String stateEnumValue,
             @NotNull(message = "操作员编码不能为空") String emplCode) {
+        // 解析状态参数
+        EscortStateEnum state = stringToEnumConverter.convert(stateEnumValue);
+
         // 入参日志
         this.logger.info(String.format("修改陪护证状态<escortNo = %s, state = %s, emplCode = %s>", escortNo,
                 state == null ? "null" : state.getDescription(), emplCode));
