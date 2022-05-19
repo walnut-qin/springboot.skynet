@@ -4,8 +4,8 @@ import java.util.Date;
 
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
-import com.kaos.skynet.enums.impl.pharmacy.DrugTypeEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.enums.pharmacy.DrugTypeEnum;
 
 /**
  * 对冲库库存实体

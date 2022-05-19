@@ -6,13 +6,13 @@ import java.time.format.DateTimeFormatter;
 
 import com.kaos.skynet.api.service.inf.inpatient.fee.balance.invoice.ElectronicInvoiceService;
 import com.kaos.skynet.entity.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoice;
-import com.kaos.skynet.enums.impl.common.HospitalTypeEnum;
-import com.kaos.skynet.enums.impl.common.SexEnum;
-import com.kaos.skynet.enums.impl.common.SourceTypeEnum;
-import com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic.BusinessTypeEnum;
-import com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic.CardTypeEnum;
-import com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic.PayerTypeEnum;
-import com.kaos.skynet.enums.impl.inpatient.fee.balance.invoice.electronic.PlaceCodeEnum;
+import com.kaos.skynet.enums.common.HospitalTypeEnum;
+import com.kaos.skynet.enums.common.SexEnum;
+import com.kaos.skynet.enums.common.SourceTypeEnum;
+import com.kaos.skynet.enums.inpatient.fee.balance.invoice.electronic.BusinessTypeEnum;
+import com.kaos.skynet.enums.inpatient.fee.balance.invoice.electronic.CardTypeEnum;
+import com.kaos.skynet.enums.inpatient.fee.balance.invoice.electronic.PayerTypeEnum;
+import com.kaos.skynet.enums.inpatient.fee.balance.invoice.electronic.PlaceCodeEnum;
 
 import org.springframework.stereotype.Service;
 

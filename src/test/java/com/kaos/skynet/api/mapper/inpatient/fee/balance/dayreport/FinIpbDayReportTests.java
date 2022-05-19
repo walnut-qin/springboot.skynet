@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport;
 
 import java.util.Date;
 
-import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
+import com.kaos.skynet.enums.common.DeptOwnEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

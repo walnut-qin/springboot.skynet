@@ -5,7 +5,7 @@ import java.util.Date;
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.entity.inpatient.Inpatient;
-import com.kaos.skynet.enums.impl.inpatient.order.MetOrdiOrderStateEnum;
+import com.kaos.skynet.enums.inpatient.order.MetOrdiOrderStateEnum;
 
 public class MetOrdiOrder {
     /**

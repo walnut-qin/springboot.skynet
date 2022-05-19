@@ -18,9 +18,9 @@ import com.kaos.skynet.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
-import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
-import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.skynet.enums.common.DeptOwnEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.enums.inpatient.surgery.SurgeryStatusEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

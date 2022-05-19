@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.impl.AbstractController;
 import com.kaos.skynet.api.service.inf.inpatient.fee.balance.invoice.ElectronicInvoiceService;
-import com.kaos.skynet.enums.impl.common.SourceTypeEnum;
+import com.kaos.skynet.enums.common.SourceTypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

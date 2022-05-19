@@ -14,7 +14,7 @@ import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.skynet.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
-import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
+import com.kaos.skynet.enums.common.DeptOwnEnum;
 
 import org.apache.log4j.Logger;
 import org.javatuples.Pair;

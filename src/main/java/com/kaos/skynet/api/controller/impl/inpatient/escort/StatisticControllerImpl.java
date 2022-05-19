@@ -19,7 +19,7 @@ import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.FinSpecialCityPatient;
 import com.kaos.skynet.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.skynet.entity.pipe.lis.LisResultNew;
-import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
+import com.kaos.skynet.enums.inpatient.InStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

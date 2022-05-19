@@ -1,6 +1,6 @@
 package com.kaos.skynet.entity.common.config;
 
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
 
 /**
  * 开关控制器（KAOS.CONFIG_SWITCH）

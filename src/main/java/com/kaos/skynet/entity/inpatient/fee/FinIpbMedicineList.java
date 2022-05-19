@@ -6,13 +6,13 @@ import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
-import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
-import com.kaos.skynet.enums.impl.common.MinFeeEnum;
-import com.kaos.skynet.enums.impl.common.PayKindEnum;
-import com.kaos.skynet.enums.impl.common.TransTypeEnum;
-import com.kaos.skynet.enums.impl.inpatient.fee.balance.BalanceStateEnum;
-import com.kaos.skynet.enums.impl.pharmacy.DrugQualityEnum;
-import com.kaos.skynet.enums.impl.pharmacy.DrugTypeEnum;
+import com.kaos.skynet.enums.common.DeptOwnEnum;
+import com.kaos.skynet.enums.common.MinFeeEnum;
+import com.kaos.skynet.enums.common.PayKindEnum;
+import com.kaos.skynet.enums.common.TransTypeEnum;
+import com.kaos.skynet.enums.inpatient.fee.balance.BalanceStateEnum;
+import com.kaos.skynet.enums.pharmacy.DrugQualityEnum;
+import com.kaos.skynet.enums.pharmacy.DrugTypeEnum;
 
 public class FinIpbMedicineList {
     /**

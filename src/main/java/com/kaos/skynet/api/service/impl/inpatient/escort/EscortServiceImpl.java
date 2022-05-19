@@ -31,10 +31,10 @@ import com.kaos.skynet.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.skynet.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.entity.inpatient.escort.EscortStateRec;
 import com.kaos.skynet.entity.inpatient.escort.EscortVip;
-import com.kaos.skynet.enums.impl.inpatient.FinIprPrepayInStateEnum;
-import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.enums.inpatient.FinIprPrepayInStateEnum;
+import com.kaos.skynet.enums.inpatient.InStateEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortActionEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 import org.apache.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;

@@ -7,11 +7,11 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.kaos.skynet.enums.impl.common.SexEnum;
-import com.kaos.skynet.enums.impl.inpatient.surgery.AnesTypeEnum;
-import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryDegreeEnum;
-import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryInspectResultEnum;
-import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.skynet.enums.common.SexEnum;
+import com.kaos.skynet.enums.inpatient.surgery.AnesTypeEnum;
+import com.kaos.skynet.enums.inpatient.surgery.SurgeryDegreeEnum;
+import com.kaos.skynet.enums.inpatient.surgery.SurgeryInspectResultEnum;
+import com.kaos.skynet.enums.inpatient.surgery.SurgeryStatusEnum;
 
 public interface SurgeryController {
     /**

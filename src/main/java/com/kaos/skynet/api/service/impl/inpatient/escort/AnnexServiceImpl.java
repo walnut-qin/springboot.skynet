@@ -15,8 +15,8 @@ import com.kaos.skynet.api.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.AnnexService;
 import com.kaos.skynet.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.skynet.entity.inpatient.escort.EscortAnnexInfo;
-import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.enums.inpatient.InStateEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -10,8 +10,8 @@ import com.kaos.skynet.api.controller.inf.outpatient.GcpController;
 import com.kaos.skynet.api.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.common.config.ConfigMap;
-import com.kaos.skynet.enums.impl.common.TransTypeEnum;
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
+import com.kaos.skynet.enums.common.TransTypeEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

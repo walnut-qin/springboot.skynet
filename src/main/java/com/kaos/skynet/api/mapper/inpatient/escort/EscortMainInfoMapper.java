@@ -3,7 +3,7 @@ package com.kaos.skynet.api.mapper.inpatient.escort;
 import java.util.List;
 
 import com.kaos.skynet.entity.inpatient.escort.EscortMainInfo;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 public interface EscortMainInfoMapper {
     /**

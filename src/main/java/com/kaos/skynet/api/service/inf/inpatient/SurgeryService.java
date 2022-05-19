@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
-import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.skynet.enums.inpatient.surgery.SurgeryStatusEnum;
 
 public interface SurgeryService {
     /**

@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.inpatient.fee.balance.invoice.electronic;
 
-import com.kaos.skynet.enums.impl.common.TransTypeEnum;
+import com.kaos.skynet.enums.common.TransTypeEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

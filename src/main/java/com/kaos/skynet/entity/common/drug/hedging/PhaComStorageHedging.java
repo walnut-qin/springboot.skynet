@@ -3,9 +3,9 @@ package com.kaos.skynet.entity.common.drug.hedging;
 import java.util.Date;
 
 import com.kaos.skynet.entity.common.DawnOrgDept;
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
-import com.kaos.skynet.enums.impl.pharmacy.DrugQualityEnum;
-import com.kaos.skynet.enums.impl.pharmacy.DrugTypeEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.enums.pharmacy.DrugQualityEnum;
+import com.kaos.skynet.enums.pharmacy.DrugTypeEnum;
 
 /**
  * 对冲明细表

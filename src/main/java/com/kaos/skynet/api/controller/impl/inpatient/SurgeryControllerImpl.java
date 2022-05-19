@@ -28,7 +28,7 @@ import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
-import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.skynet.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

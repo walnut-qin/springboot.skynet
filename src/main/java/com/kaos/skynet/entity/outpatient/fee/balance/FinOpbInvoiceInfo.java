@@ -5,10 +5,10 @@ import java.util.Date;
 import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.entity.outpatient.FinOprRegister;
-import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
-import com.kaos.skynet.enums.impl.common.PayKindEnum;
-import com.kaos.skynet.enums.impl.common.PayModeEnum;
-import com.kaos.skynet.enums.impl.common.TransTypeEnum;
+import com.kaos.skynet.enums.common.DeptOwnEnum;
+import com.kaos.skynet.enums.common.PayKindEnum;
+import com.kaos.skynet.enums.common.PayModeEnum;
+import com.kaos.skynet.enums.common.TransTypeEnum;
 
 /**
  * 发票信息表(结算信息表)

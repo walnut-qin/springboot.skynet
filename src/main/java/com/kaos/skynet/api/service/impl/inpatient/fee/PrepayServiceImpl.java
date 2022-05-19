@@ -9,8 +9,8 @@ import com.kaos.skynet.api.mapper.inpatient.fee.FinIpbInPrepayMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.mapper.outpatient.fee.FinOprPayModelMapper;
 import com.kaos.skynet.api.service.inf.inpatient.fee.PrepayService;
-import com.kaos.skynet.enums.impl.common.TransTypeEnum;
-import com.kaos.skynet.enums.impl.inpatient.fee.balance.BalanceStateEnum;
+import com.kaos.skynet.enums.common.TransTypeEnum;
+import com.kaos.skynet.enums.inpatient.fee.balance.BalanceStateEnum;
 
 import org.apache.log4j.Logger;
 import org.javatuples.Pair;

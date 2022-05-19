@@ -5,8 +5,8 @@ import java.util.List;
 import com.kaos.skynet.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.entity.inpatient.escort.EscortStateRec;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortActionEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 public interface EscortService {
     /**

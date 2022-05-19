@@ -6,7 +6,7 @@ import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.common.config.SwitchController;
 import com.kaos.skynet.entity.common.config.ConfigSwitch;
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

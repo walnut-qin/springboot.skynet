@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.common;
 
-import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
+import com.kaos.skynet.enums.common.DeptOwnEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +20,6 @@ public class DawnOrgDeptMapperTests {
     @Test
     public void queryDepartments() {
         this.departmentMapper.queryDepartments(DeptOwnEnum.North, null, null);
+        this.departmentMapper.queryDepartments(DeptOwnEnum.All, null, null);
     }
 }

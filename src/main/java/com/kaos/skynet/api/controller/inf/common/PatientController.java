@@ -5,7 +5,7 @@ import java.time.Period;
 import javax.validation.constraints.NotBlank;
 
 import com.google.gson.annotations.SerializedName;
-import com.kaos.skynet.enums.impl.common.SexEnum;
+import com.kaos.skynet.enums.common.SexEnum;
 
 import org.springframework.validation.annotation.Validated;
 

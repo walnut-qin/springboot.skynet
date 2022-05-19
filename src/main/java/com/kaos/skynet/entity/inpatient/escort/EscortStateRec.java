@@ -3,7 +3,7 @@ package com.kaos.skynet.entity.inpatient.escort;
 import java.util.Date;
 
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 /**
  * 实体：陪护证状态（KAOS.ESCORT_STATE_REC）

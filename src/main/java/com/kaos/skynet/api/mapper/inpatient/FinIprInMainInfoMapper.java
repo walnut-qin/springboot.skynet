@@ -3,7 +3,7 @@ package com.kaos.skynet.api.mapper.inpatient;
 import java.util.List;
 
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
-import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
+import com.kaos.skynet.enums.inpatient.InStateEnum;
 
 public interface FinIprInMainInfoMapper {
     /**

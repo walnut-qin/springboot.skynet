@@ -10,12 +10,12 @@ import com.kaos.skynet.api.service.inf.outpatient.fee.PricingService;
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.entity.common.undrug.FinComUndrugInfo;
-import com.kaos.skynet.enums.impl.common.MinFeeEnum;
-import com.kaos.skynet.enums.impl.common.SysClassEnum;
-import com.kaos.skynet.enums.impl.common.TransTypeEnum;
-import com.kaos.skynet.enums.impl.outpatient.fee.FeeDetailCancelFlagEnum;
-import com.kaos.skynet.enums.impl.outpatient.fee.FeeDetailCostSourceEnum;
-import com.kaos.skynet.enums.impl.outpatient.fee.FeeDetailPayFlagEnum;
+import com.kaos.skynet.enums.common.MinFeeEnum;
+import com.kaos.skynet.enums.common.SysClassEnum;
+import com.kaos.skynet.enums.common.TransTypeEnum;
+import com.kaos.skynet.enums.outpatient.fee.FeeDetailCancelFlagEnum;
+import com.kaos.skynet.enums.outpatient.fee.FeeDetailCostSourceEnum;
+import com.kaos.skynet.enums.outpatient.fee.FeeDetailPayFlagEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

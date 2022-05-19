@@ -4,10 +4,10 @@ import java.util.Date;
 
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.impl.common.SexEnum;
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
-import com.kaos.skynet.enums.impl.inpatient.BedGradeEnum;
-import com.kaos.skynet.enums.impl.inpatient.BedStateEnum;
+import com.kaos.skynet.enums.common.SexEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.enums.inpatient.BedGradeEnum;
+import com.kaos.skynet.enums.inpatient.BedStateEnum;
 
 /**
  * 床位信息（XYHIS.COM_BEDINFO）

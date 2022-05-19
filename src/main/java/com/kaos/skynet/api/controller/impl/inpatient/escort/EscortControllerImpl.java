@@ -20,8 +20,8 @@ import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.core.gson.Gsons;
 import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverter;
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortActionEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

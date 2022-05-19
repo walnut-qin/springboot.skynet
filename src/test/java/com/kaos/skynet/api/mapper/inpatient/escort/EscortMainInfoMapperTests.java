@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.inpatient.escort;
 
 import java.util.ArrayList;
 
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

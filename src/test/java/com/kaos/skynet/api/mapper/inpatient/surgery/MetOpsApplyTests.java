@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,8 +5,8 @@ import java.util.Date;
 import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.impl.inpatient.InSourceEnum;
-import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
+import com.kaos.skynet.enums.inpatient.InSourceEnum;
+import com.kaos.skynet.enums.inpatient.InStateEnum;
 
 /**
  * 实体：住院患者（FIN_IPR_INMAININFO）

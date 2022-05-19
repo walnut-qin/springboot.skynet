@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.mapper.common.fee;
 
-import com.kaos.skynet.enums.impl.common.MinFeeEnum;
-import com.kaos.skynet.enums.impl.common.ReportTypeEnum;
+import com.kaos.skynet.enums.common.MinFeeEnum;
+import com.kaos.skynet.enums.common.ReportTypeEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

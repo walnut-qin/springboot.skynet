@@ -2,11 +2,11 @@ package com.kaos.skynet.entity.common;
 
 import java.sql.Date;
 
-import com.kaos.skynet.enums.impl.common.EmplTypeEnum;
-import com.kaos.skynet.enums.impl.common.PositionEnum;
-import com.kaos.skynet.enums.impl.common.RankEnum;
-import com.kaos.skynet.enums.impl.common.SexEnum;
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
+import com.kaos.skynet.enums.common.EmplTypeEnum;
+import com.kaos.skynet.enums.common.PositionEnum;
+import com.kaos.skynet.enums.common.RankEnum;
+import com.kaos.skynet.enums.common.SexEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
 
 /**
  * 实体：职员（DAWN_ORG_EMPL）

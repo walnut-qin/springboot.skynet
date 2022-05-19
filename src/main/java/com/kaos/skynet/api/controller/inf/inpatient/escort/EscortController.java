@@ -9,9 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.google.gson.annotations.SerializedName;
-import com.kaos.skynet.enums.impl.common.SexEnum;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.enums.common.SexEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortActionEnum;
+import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 import lombok.Getter;
 

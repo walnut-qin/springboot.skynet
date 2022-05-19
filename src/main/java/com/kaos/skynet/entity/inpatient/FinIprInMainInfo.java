@@ -7,14 +7,14 @@ import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.entity.outpatient.FinOprRegister;
-import com.kaos.skynet.enums.impl.common.BloodTypeEnum;
-import com.kaos.skynet.enums.impl.common.DeptOwnEnum;
-import com.kaos.skynet.enums.impl.common.PayKindEnum;
-import com.kaos.skynet.enums.impl.common.SexEnum;
-import com.kaos.skynet.enums.impl.inpatient.InAvenueEnum;
-import com.kaos.skynet.enums.impl.inpatient.InCircsEnum;
-import com.kaos.skynet.enums.impl.inpatient.InSourceEnum;
-import com.kaos.skynet.enums.impl.inpatient.InStateEnum;
+import com.kaos.skynet.enums.common.BloodTypeEnum;
+import com.kaos.skynet.enums.common.DeptOwnEnum;
+import com.kaos.skynet.enums.common.PayKindEnum;
+import com.kaos.skynet.enums.common.SexEnum;
+import com.kaos.skynet.enums.inpatient.InAvenueEnum;
+import com.kaos.skynet.enums.inpatient.InCircsEnum;
+import com.kaos.skynet.enums.inpatient.InSourceEnum;
+import com.kaos.skynet.enums.inpatient.InStateEnum;
 
 /**
  * 住院主表信息(XYHIS.FIN_IPR_INMAININFO)

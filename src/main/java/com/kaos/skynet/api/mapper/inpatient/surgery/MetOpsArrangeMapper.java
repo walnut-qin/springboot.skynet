@@ -3,7 +3,7 @@ package com.kaos.skynet.api.mapper.inpatient.surgery;
 import java.util.List;
 
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
-import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.skynet.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
 
 public interface MetOpsArrangeMapper {
     /**

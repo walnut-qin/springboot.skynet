@@ -9,10 +9,10 @@ import com.kaos.skynet.entity.common.ComPatientInfo;
 import com.kaos.skynet.entity.common.DawnOrgDept;
 import com.kaos.skynet.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.entity.outpatient.FinOprRegister;
-import com.kaos.skynet.enums.impl.common.NoonEnum;
-import com.kaos.skynet.enums.impl.common.PayModeEnum;
-import com.kaos.skynet.enums.impl.common.TransTypeEnum;
-import com.kaos.skynet.enums.impl.common.ValidStateEnum;
+import com.kaos.skynet.enums.common.NoonEnum;
+import com.kaos.skynet.enums.common.PayModeEnum;
+import com.kaos.skynet.enums.common.TransTypeEnum;
+import com.kaos.skynet.enums.common.ValidStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
