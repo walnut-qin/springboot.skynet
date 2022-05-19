@@ -7,12 +7,12 @@ import com.kaos.skynet.api.entity.common.ComPatientInfo;
 import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.entity.outpatient.FinOprRegister;
+import com.kaos.skynet.api.enums.common.NoonEnum;
+import com.kaos.skynet.api.enums.common.PayModeEnum;
+import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.mapper.outpatient.FinOprRegisterMapper;
 import com.kaos.skynet.api.service.inf.outpatient.RegisterService;
-import com.kaos.skynet.enums.common.NoonEnum;
-import com.kaos.skynet.enums.common.PayModeEnum;
-import com.kaos.skynet.enums.common.TransTypeEnum;
-import com.kaos.skynet.enums.common.ValidStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

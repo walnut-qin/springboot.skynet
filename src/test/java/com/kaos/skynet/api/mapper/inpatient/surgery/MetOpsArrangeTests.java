@@ -2,7 +2,7 @@ package com.kaos.skynet.api.mapper.inpatient.surgery;
 
 import java.util.ArrayList;
 
-import com.kaos.skynet.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.entity.common.config;
 
-import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
 
 /**
  * 控制变量（KAOS.CONFIG_VARIABLE || KAOS.CONFIG_LIST）

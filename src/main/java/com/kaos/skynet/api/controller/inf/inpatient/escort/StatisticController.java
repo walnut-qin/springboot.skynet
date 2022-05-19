@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import com.kaos.skynet.enums.common.HealthCodeEnum;
-import com.kaos.skynet.enums.common.TravelCodeEnum;
+import com.kaos.skynet.api.enums.common.HealthCodeEnum;
+import com.kaos.skynet.api.enums.common.TravelCodeEnum;
 
 public interface StatisticController {
     /**

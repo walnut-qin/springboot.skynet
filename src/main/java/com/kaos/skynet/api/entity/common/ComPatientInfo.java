@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.skynet.enums.common.BloodTypeEnum;
-import com.kaos.skynet.enums.common.DeptOwnEnum;
-import com.kaos.skynet.enums.common.HealthCodeEnum;
-import com.kaos.skynet.enums.common.SexEnum;
-import com.kaos.skynet.enums.common.TravelCodeEnum;
-import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.enums.common.BloodTypeEnum;
+import com.kaos.skynet.api.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.enums.common.HealthCodeEnum;
+import com.kaos.skynet.api.enums.common.SexEnum;
+import com.kaos.skynet.api.enums.common.TravelCodeEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
 
 /**
  * 实体：患者信息（XYHIS.COM_PATIENTINFO）

@@ -35,7 +35,7 @@
         FROM
             DAWN_ORG_DEPT
         <where>
-            <if test = "deptOwn != null and deptOwn != @com.kaos.skynet.enums.common.DeptOwnEnum@All">
+            <if test = "deptOwn != null and deptOwn != @com.kaos.skynet.api.enums.common.DeptOwnEnum@All">
                 AND DEPTOWN = #{deptOwn}
             </if>
             <if test = "deptTypes != null">

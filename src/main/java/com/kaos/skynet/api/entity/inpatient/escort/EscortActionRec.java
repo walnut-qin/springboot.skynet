@@ -2,7 +2,7 @@ package com.kaos.skynet.api.entity.inpatient.escort;
 
 import java.util.Date;
 
-import com.kaos.skynet.enums.inpatient.escort.EscortActionEnum;
+import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 
 public class EscortActionRec {
     /**

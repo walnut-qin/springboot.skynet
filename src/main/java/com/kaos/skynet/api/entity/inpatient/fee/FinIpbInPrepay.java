@@ -3,10 +3,10 @@ package com.kaos.skynet.api.entity.inpatient.fee;
 import java.util.Date;
 
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
-import com.kaos.skynet.enums.common.DeptOwnEnum;
-import com.kaos.skynet.enums.common.PayWayEnum;
-import com.kaos.skynet.enums.inpatient.fee.PrepayStateEnum;
-import com.kaos.skynet.enums.inpatient.fee.balance.BalanceStateEnum;
+import com.kaos.skynet.api.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.enums.common.PayWayEnum;
+import com.kaos.skynet.api.enums.inpatient.fee.PrepayStateEnum;
+import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
 
 public class FinIpbInPrepay {
     /**

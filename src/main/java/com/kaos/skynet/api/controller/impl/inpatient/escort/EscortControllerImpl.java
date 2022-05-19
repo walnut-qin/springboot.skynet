@@ -17,11 +17,11 @@ import com.kaos.skynet.api.cache.impl.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.EscortController;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
+import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 import com.kaos.skynet.core.gson.Gsons;
 import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverter;
-import com.kaos.skynet.enums.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.enums.inpatient.escort.EscortStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

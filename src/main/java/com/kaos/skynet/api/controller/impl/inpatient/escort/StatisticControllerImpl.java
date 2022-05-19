@@ -16,10 +16,10 @@ import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.FinSpecialCityPatient;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.skynet.api.entity.pipe.lis.LisResultNew;
+import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.mapper.common.ComPatientInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
-import com.kaos.skynet.enums.inpatient.InStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

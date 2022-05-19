@@ -7,8 +7,8 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.common.DeptController;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.mapper.common.DawnOrgDeptMapper;
-import com.kaos.skynet.enums.common.ValidStateEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

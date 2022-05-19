@@ -6,16 +6,16 @@ import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.entity.common.fee.FinComFeeCodeStat;
 import com.kaos.skynet.api.entity.outpatient.FinOprRegister;
-import com.kaos.skynet.enums.common.DeptOwnEnum;
-import com.kaos.skynet.enums.common.ItemGradeEnum;
-import com.kaos.skynet.enums.common.MinFeeEnum;
-import com.kaos.skynet.enums.common.SysClassEnum;
-import com.kaos.skynet.enums.common.TransTypeEnum;
-import com.kaos.skynet.enums.outpatient.fee.FeeDetailCancelFlagEnum;
-import com.kaos.skynet.enums.outpatient.fee.FeeDetailCostSourceEnum;
-import com.kaos.skynet.enums.outpatient.fee.FeeDetailPayFlagEnum;
-import com.kaos.skynet.enums.outpatient.fee.FeeDetailSendFlagEnum;
-import com.kaos.skynet.enums.pharmacy.DrugQualityEnum;
+import com.kaos.skynet.api.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.enums.common.ItemGradeEnum;
+import com.kaos.skynet.api.enums.common.MinFeeEnum;
+import com.kaos.skynet.api.enums.common.SysClassEnum;
+import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailCancelFlagEnum;
+import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailCostSourceEnum;
+import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailPayFlagEnum;
+import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailSendFlagEnum;
+import com.kaos.skynet.api.enums.pharmacy.DrugQualityEnum;
 
 /**
  * 门诊费用明细（XYHIS.FIN_OPB_FEEDETAIL）

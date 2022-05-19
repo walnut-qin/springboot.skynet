@@ -6,7 +6,7 @@ import com.kaos.skynet.api.entity.common.ComPatientInfo;
 import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortVip;
-import com.kaos.skynet.enums.inpatient.FinIprPrepayInStateEnum;
+import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
 
 /**
  * 实体：住院证（XYHIS.FIN_IPR_PREPAYIN）

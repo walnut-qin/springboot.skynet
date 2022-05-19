@@ -9,10 +9,10 @@ import com.google.common.cache.LoadingCache;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.entity.common.fee.FinComFeeCodeStat;
+import com.kaos.skynet.api.enums.common.MinFeeEnum;
+import com.kaos.skynet.api.enums.common.ReportTypeEnum;
 import com.kaos.skynet.api.mapper.common.fee.FinComFeeCodeStatMapper;
 import com.kaos.skynet.core.gson.Gsons;
-import com.kaos.skynet.enums.common.MinFeeEnum;
-import com.kaos.skynet.enums.common.ReportTypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -6,7 +6,7 @@ import com.google.common.base.Optional;
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.entity.inpatient.Inpatient;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReport;
-import com.kaos.skynet.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.enums.common.TransTypeEnum;
 
 /**
  * 实体：结算头表（XYHIS.FIN_IPB_BALANCEHEAD）

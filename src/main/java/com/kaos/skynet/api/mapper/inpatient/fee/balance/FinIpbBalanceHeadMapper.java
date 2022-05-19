@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
-import com.kaos.skynet.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.enums.common.TransTypeEnum;
 
 public interface FinIpbBalanceHeadMapper {
     /**

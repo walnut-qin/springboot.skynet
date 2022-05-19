@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.entity.inpatient.surgery;
 
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
 
 /**
  * 手术人员安排（XYHIS.MET_OPS_ARRANGE）

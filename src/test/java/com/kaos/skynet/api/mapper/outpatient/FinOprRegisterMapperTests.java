@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.outpatient;
 
-import com.kaos.skynet.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.enums.common.TransTypeEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

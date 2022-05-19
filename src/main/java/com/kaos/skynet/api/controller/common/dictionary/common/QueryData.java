@@ -31,7 +31,7 @@ public class QueryData extends AbstractController {
 
         try {
             // 反射得到类型
-            var targetClass = Class.forName("com.kaos.skynet.enums.common.".concat(classType));
+            var targetClass = Class.forName("com.kaos.skynet.api.enums.common.".concat(classType));
 
             // 获取枚举项列表
             var enumList = Lists.newArrayList(targetClass.getEnumConstants());

@@ -136,7 +136,7 @@
             <if test="valid != null">
                 AND YNVALID = #{valid}
             </if>
-            <if test="deptOwn != null and deptOwn != @com.kaos.skynet.enums.common.DeptOwnEnum@All">
+            <if test="deptOwn != null and deptOwn != @com.kaos.skynet.api.enums.common.DeptOwnEnum@All">
                 AND DEPTOWN = #{deptOwn}
             </if>
         </where>

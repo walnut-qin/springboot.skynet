@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.mapper.common;
 
-import com.kaos.skynet.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.enums.common.DeptOwnEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,11 +2,11 @@ package com.kaos.skynet.api.entity.inpatient.fee.balance.invoice.electronic;
 
 import java.time.LocalDateTime;
 
-import com.kaos.skynet.enums.common.SourceTypeEnum;
-import com.kaos.skynet.enums.common.TransTypeEnum;
-import com.kaos.skynet.enums.inpatient.fee.balance.invoice.electronic.BusinessTypeEnum;
-import com.kaos.skynet.enums.inpatient.fee.balance.invoice.electronic.StateEnum;
-import com.kaos.skynet.enums.inpatient.fee.balance.invoice.electronic.SuccessStateEnum;
+import com.kaos.skynet.api.enums.common.SourceTypeEnum;
+import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.BusinessTypeEnum;
+import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.StateEnum;
+import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.SuccessStateEnum;
 
 import lombok.Data;
 

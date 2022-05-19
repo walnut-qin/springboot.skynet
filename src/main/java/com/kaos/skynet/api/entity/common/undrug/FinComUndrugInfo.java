@@ -4,10 +4,10 @@ import java.util.Date;
 
 import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.common.ItemGradeEnum;
-import com.kaos.skynet.enums.common.MinFeeEnum;
-import com.kaos.skynet.enums.common.SysClassEnum;
-import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.enums.common.ItemGradeEnum;
+import com.kaos.skynet.api.enums.common.MinFeeEnum;
+import com.kaos.skynet.api.enums.common.SysClassEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
 
 /**
  * 非药品信息表

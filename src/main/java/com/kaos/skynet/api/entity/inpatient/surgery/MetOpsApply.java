@@ -6,14 +6,14 @@ import java.util.Map;
 import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
-import com.kaos.skynet.enums.common.ValidStateEnum;
-import com.kaos.skynet.enums.inpatient.surgery.AnesTypeEnum;
-import com.kaos.skynet.enums.inpatient.surgery.MetOpsInciTypeEnum;
-import com.kaos.skynet.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
-import com.kaos.skynet.enums.inpatient.surgery.SurgeryDegreeEnum;
-import com.kaos.skynet.enums.inpatient.surgery.SurgeryInspectResultEnum;
-import com.kaos.skynet.enums.inpatient.surgery.SurgeryKindEnum;
-import com.kaos.skynet.enums.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.AnesTypeEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.MetOpsInciTypeEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryDegreeEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryInspectResultEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryKindEnum;
+import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
 
 import lombok.Getter;
 

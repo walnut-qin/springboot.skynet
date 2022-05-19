@@ -1,8 +1,8 @@
 package com.kaos.skynet.api.entity.common;
 
-import com.kaos.skynet.enums.common.DeptOwnEnum;
-import com.kaos.skynet.enums.common.DeptTypeEnum;
-import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.enums.common.DeptTypeEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
 
 /**
  * 实体：科室信息（XYHIS.DAWN_ORG_DEPT）

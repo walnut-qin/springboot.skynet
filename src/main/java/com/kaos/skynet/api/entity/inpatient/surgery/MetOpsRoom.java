@@ -2,7 +2,7 @@ package com.kaos.skynet.api.entity.inpatient.surgery;
 
 import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
 
 /**
  * 手术间信息（XYHIS.MET_OPS_ROOM）

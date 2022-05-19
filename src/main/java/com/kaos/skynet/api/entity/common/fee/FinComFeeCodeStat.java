@@ -3,9 +3,9 @@ package com.kaos.skynet.api.entity.common.fee;
 import java.util.Date;
 
 import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.enums.common.MinFeeEnum;
-import com.kaos.skynet.enums.common.ReportTypeEnum;
-import com.kaos.skynet.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.enums.common.MinFeeEnum;
+import com.kaos.skynet.api.enums.common.ReportTypeEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
 
 /**
  * 统计小类到统计大类的对照关系

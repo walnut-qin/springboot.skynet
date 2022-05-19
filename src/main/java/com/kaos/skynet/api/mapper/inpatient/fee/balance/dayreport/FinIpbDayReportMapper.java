@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReport;
-import com.kaos.skynet.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.enums.common.DeptOwnEnum;
 
 public interface FinIpbDayReportMapper {
     /**

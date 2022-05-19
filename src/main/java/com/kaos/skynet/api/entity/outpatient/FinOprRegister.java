@@ -6,13 +6,13 @@ import java.util.Date;
 import com.kaos.skynet.api.entity.common.ComPatientInfo;
 import com.kaos.skynet.api.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.common.DeptOwnEnum;
-import com.kaos.skynet.enums.common.NoonEnum;
-import com.kaos.skynet.enums.common.PayModeEnum;
-import com.kaos.skynet.enums.common.SexEnum;
-import com.kaos.skynet.enums.common.TransTypeEnum;
-import com.kaos.skynet.enums.common.ValidStateEnum;
-import com.kaos.skynet.enums.outpatient.OutpatientStateEnum;
+import com.kaos.skynet.api.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.enums.common.NoonEnum;
+import com.kaos.skynet.api.enums.common.PayModeEnum;
+import com.kaos.skynet.api.enums.common.SexEnum;
+import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.enums.outpatient.OutpatientStateEnum;
 
 /**
  * 门诊挂号实体

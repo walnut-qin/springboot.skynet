@@ -1,8 +1,8 @@
 package com.kaos.skynet.api.mapper.common.fee;
 
 import com.kaos.skynet.api.entity.common.fee.FinComFeeCodeStat;
-import com.kaos.skynet.enums.common.MinFeeEnum;
-import com.kaos.skynet.enums.common.ReportTypeEnum;
+import com.kaos.skynet.api.enums.common.MinFeeEnum;
+import com.kaos.skynet.api.enums.common.ReportTypeEnum;
 
 public interface FinComFeeCodeStatMapper {
     /**

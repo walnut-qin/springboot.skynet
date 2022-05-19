@@ -3,8 +3,8 @@ package com.kaos.skynet.api.entity.outpatient.fee;
 import java.util.Date;
 
 import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.enums.common.PayTypeEnum;
-import com.kaos.skynet.enums.common.TradeCodeEnum;
+import com.kaos.skynet.api.enums.common.PayTypeEnum;
+import com.kaos.skynet.api.enums.common.TradeCodeEnum;
 
 /**
  * 支付方式表（XYHIS.FIN_OPR_PAYMODEL）

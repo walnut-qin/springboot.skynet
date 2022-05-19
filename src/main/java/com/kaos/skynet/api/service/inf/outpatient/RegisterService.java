@@ -2,7 +2,7 @@ package com.kaos.skynet.api.service.inf.outpatient;
 
 import java.util.Date;
 
-import com.kaos.skynet.enums.common.PayModeEnum;
+import com.kaos.skynet.api.enums.common.PayModeEnum;
 
 public interface RegisterService {
     /**
