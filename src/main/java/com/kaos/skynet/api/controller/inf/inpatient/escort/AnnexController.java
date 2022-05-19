@@ -26,7 +26,7 @@ public interface AnnexController {
      */
     void checkAnnex(@NotNull(message = "附件号不能为空") String annexNo,
             @NotNull(message = "审核人不能为空") String checker,
-            @NotNull(message = "审核结果不能为空") Boolean negativeFlag,
+            @NotNull(message = "审核结果不能为空") String negativeFlag,
             @NotNull(message = "检验时间不能为空") LocalDateTime inspectDate);
 
     /**
@@ -37,7 +37,7 @@ public interface AnnexController {
      * @return
      */
     List<QueryAnnexInDeptRsp> queryAnnexInDept(@NotNull(message = "科室编码不能为空") String deptCode,
-            @NotNull(message = "审核标识不能为空") Boolean checked);
+            @NotNull(message = "审核标识不能为空") String checked);
 
     /**
      * 查询指定科室的附件信息body

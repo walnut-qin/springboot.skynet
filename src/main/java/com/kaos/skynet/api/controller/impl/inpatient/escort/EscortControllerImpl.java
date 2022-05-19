@@ -135,19 +135,19 @@ public class EscortControllerImpl implements EscortController {
     @Override
     @RequestMapping(value = "updateState", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void updateState(@NotNull(message = "陪护证号不能为空") String escortNo,
-            String stateEnumValue,
+            String state,
             @NotNull(message = "操作员编码不能为空") String emplCode) {
         // 解析状态参数
-        EscortStateEnum state = stringToEnumConverter.convert(stateEnumValue);
+        EscortStateEnum stateEnum = stringToEnumConverter.convert(state);
 
         // 入参日志
         this.logger.info(String.format("修改陪护证状态<escortNo = %s, state = %s, emplCode = %s>", escortNo,
-                state == null ? "null" : state.getDescription(), emplCode));
+                state == null ? "null" : stateEnum.getDescription(), emplCode));
 
         // 加状态操作锁，防止同时操作同一个陪护证
         synchronized (LockMgr.stateLock.get(escortNo)) {
             // 调用业务
-            this.escortMainService.updateEscortState(escortNo, state, emplCode, "收到客户端请求");
+            this.escortMainService.updateEscortState(escortNo, stateEnum, emplCode, "收到客户端请求");
         }
     }
 

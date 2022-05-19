@@ -11,9 +11,11 @@ import com.kaos.skynet.api.controller.inf.inpatient.escort.AnnexController;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
+import com.kaos.skynet.core.type.converter.string.bool.NumericStringToBooleanConverter;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +35,11 @@ public class AnnexControllerImpl implements AnnexController {
      * 日志模块
      */
     Logger logger = Logger.getLogger(AnnexControllerImpl.class);
+
+    /**
+     * 转换器
+     */
+    Converter<String, Boolean> stringToBooleanConverter = new NumericStringToBooleanConverter();
 
     /**
      * 业务模块
@@ -86,8 +93,11 @@ public class AnnexControllerImpl implements AnnexController {
     @RequestMapping(value = "checkAnnex", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void checkAnnex(@NotNull(message = "附件号不能为空") String annexNo,
             @NotNull(message = "审核人不能为空") String checker,
-            @NotNull(message = "审核结果不能为空") Boolean negativeFlag,
+            @NotNull(message = "审核结果不能为空") String negativeFlag,
             @NotNull(message = "检验时间不能为空") LocalDateTime inspectDate) {
+        // 转换适配
+        Boolean negativeFlagBoolean = stringToBooleanConverter.convert(negativeFlag);
+
         // 入参记录
         this.logger.info(String.format("审核附件<annexNo = %s, checker = %s, negativeFlag = %s, inspectDate = %s>", annexNo,
                 checker, negativeFlag.toString(), inspectDate.toString()));
@@ -95,7 +105,7 @@ public class AnnexControllerImpl implements AnnexController {
         // 加状态操作锁，防止同时操作同一个陪护证
         synchronized (LockMgr.annexLock.get(annexNo)) {
             // 调用业务
-            this.annexService.checkAnnex(annexNo, checker, negativeFlag, inspectDate);
+            this.annexService.checkAnnex(annexNo, checker, negativeFlagBoolean, inspectDate);
         }
 
         // 检索附件信息
@@ -116,12 +126,15 @@ public class AnnexControllerImpl implements AnnexController {
     @Override
     @RequestMapping(value = "queryAnnexInDept", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryAnnexInDeptRsp> queryAnnexInDept(@NotNull(message = "科室编码不能为空") String deptCode,
-            @NotNull(message = "审核标识不能为空") Boolean checked) {
+            @NotNull(message = "审核标识不能为空") String checked) {
+        // 转换适配
+        Boolean checkedBoolean = stringToBooleanConverter.convert(checked);
+
         // 入参记录
         this.logger.info(String.format("查询科室信息<deptCode = %s, checked = %s>", deptCode, checked.toString()));
 
         // 调用服务
-        var annexInfos = this.annexService.queryAnnexInfoInDept(deptCode, checked);
+        var annexInfos = this.annexService.queryAnnexInfoInDept(deptCode, checkedBoolean);
 
         // 构造响应
         List<QueryAnnexInDeptRsp> rsps = Lists.newArrayList();
