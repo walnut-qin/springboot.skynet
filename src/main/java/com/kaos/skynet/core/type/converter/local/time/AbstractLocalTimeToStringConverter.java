@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.type.converter.time;
+package com.kaos.skynet.core.type.converter.local.time;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

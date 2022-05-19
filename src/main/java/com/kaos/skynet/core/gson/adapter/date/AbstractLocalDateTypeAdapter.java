@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.kaos.skynet.core.type.converter.date.string.AbstractLocalDateToStringConverter;
+import com.kaos.skynet.core.type.converter.local.date.string.AbstractLocalDateToStringConverter;
 import com.kaos.skynet.core.type.converter.string.local.date.AbstractStringToLocalDateConverter;
 
 import lombok.AllArgsConstructor;

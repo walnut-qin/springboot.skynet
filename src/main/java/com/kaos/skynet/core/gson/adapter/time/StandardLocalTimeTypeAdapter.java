@@ -1,7 +1,7 @@
 package com.kaos.skynet.core.gson.adapter.time;
 
+import com.kaos.skynet.core.type.converter.local.time.StandardLocalTimeToStringConverter;
 import com.kaos.skynet.core.type.converter.string.local.time.StandardStringToLocalTimeConverter;
-import com.kaos.skynet.core.type.converter.time.StandardLocalTimeToStringConverter;
 
 public class StandardLocalTimeTypeAdapter extends AbstractLocalTimeTypeAdapter {
     public StandardLocalTimeTypeAdapter() {
