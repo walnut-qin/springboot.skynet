@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.gson.adapter.date;
+package com.kaos.skynet.core.gson.adapter.local.date;
 
 import com.kaos.skynet.core.type.converter.local.date.string.StandardLocalDateToStringConverter;
 import com.kaos.skynet.core.type.converter.string.local.date.StandardStringToLocalDateConverter;

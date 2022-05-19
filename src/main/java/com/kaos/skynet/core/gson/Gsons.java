@@ -3,13 +3,15 @@ package com.kaos.skynet.core.gson;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.kaos.skynet.core.gson.adapter.date.StandardLocalDateTypeAdapter;
-import com.kaos.skynet.core.gson.adapter.datime.StandardLocalDateTimeTypeAdapter;
+import com.kaos.skynet.core.gson.adapter.date.StandardDateTypeAdapter;
 import com.kaos.skynet.core.gson.adapter.enums.DescriptionEnumTypeAdapter;
-import com.kaos.skynet.core.gson.adapter.time.StandardLocalTimeTypeAdapter;
+import com.kaos.skynet.core.gson.adapter.local.date.StandardLocalDateTypeAdapter;
+import com.kaos.skynet.core.gson.adapter.local.datime.StandardLocalDateTimeTypeAdapter;
+import com.kaos.skynet.core.gson.adapter.local.time.StandardLocalTimeTypeAdapter;
 import com.kaos.skynet.core.type.Enum;
 
 public final class Gsons {
@@ -25,6 +27,9 @@ public final class Gsons {
 
         // 注册枚举适配器
         builder.registerTypeHierarchyAdapter(Enum.class, new DescriptionEnumTypeAdapter<>());
+
+        // 注册Date解析器
+        builder.registerTypeAdapter(Date.class, new StandardDateTypeAdapter());
 
         // 注册LocalDate解析器
         builder.registerTypeAdapter(LocalDate.class, new StandardLocalDateTypeAdapter());

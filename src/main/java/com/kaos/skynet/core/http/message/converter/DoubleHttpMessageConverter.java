@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import com.kaos.skynet.core.type.converter.decimal.DoubleToStringConverter;
 import com.kaos.skynet.core.type.converter.string.decimal.StringToDoubleConverter;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -19,14 +19,12 @@ public class DoubleHttpMessageConverter extends AbstractHttpMessageConverter<Dou
     /**
      * Double -> String 转换器
      */
-    @Autowired
-    DoubleToStringConverter doubleToStringConverter;
+    Converter<Double, String> doubleToStringConverter = new DoubleToStringConverter();
 
     /**
      * String -> Double 转换器
      */
-    @Autowired
-    StringToDoubleConverter stringToDoubleConverter;
+    Converter<String, Double> stringToDoubleConverter = new StringToDoubleConverter();
 
     /**
      * Boolean型的消息处理器

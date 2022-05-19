@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.gson.adapter.time;
+package com.kaos.skynet.core.gson.adapter.local.time;
 
 import java.io.IOException;
 import java.time.LocalTime;

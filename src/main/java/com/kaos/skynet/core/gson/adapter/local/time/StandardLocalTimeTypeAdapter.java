@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.gson.adapter.time;
+package com.kaos.skynet.core.gson.adapter.local.time;
 
 import com.kaos.skynet.core.type.converter.local.time.StandardLocalTimeToStringConverter;
 import com.kaos.skynet.core.type.converter.string.local.time.StandardStringToLocalTimeConverter;

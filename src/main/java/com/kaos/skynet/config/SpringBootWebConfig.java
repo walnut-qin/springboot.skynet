@@ -5,6 +5,7 @@ import java.util.List;
 import com.kaos.skynet.core.gson.Gsons;
 import com.kaos.skynet.core.http.message.converter.BooleanHttpMessageConverter;
 import com.kaos.skynet.core.http.message.converter.DoubleHttpMessageConverter;
+import com.kaos.skynet.core.type.converter.string.date.StandardStringToDateConverter;
 import com.kaos.skynet.core.type.converter.string.enums.factory.DescriptionStringToEnumConverterFactory;
 import com.kaos.skynet.core.type.converter.string.local.date.StandardStringToLocalDateConverter;
 import com.kaos.skynet.core.type.converter.string.local.datime.StandardStringToLocalDateTimeConverter;
@@ -31,6 +32,7 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
         registry.addConverterFactory(new DescriptionStringToEnumConverterFactory());
 
         // 注册时间解析
+        registry.addConverter(new StandardStringToDateConverter());
         registry.addConverter(new StandardStringToLocalDateConverter());
         registry.addConverter(new StandardStringToLocalTimeConverter());
         registry.addConverter(new StandardStringToLocalDateTimeConverter());

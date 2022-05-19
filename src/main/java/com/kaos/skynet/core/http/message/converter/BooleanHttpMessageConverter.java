@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import com.kaos.skynet.core.type.converter.bool.string.StandardBooleanToStringConverter;
 import com.kaos.skynet.core.type.converter.string.bool.StandardStringToBooleanConverter;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -19,14 +19,12 @@ public class BooleanHttpMessageConverter extends AbstractHttpMessageConverter<Bo
     /**
      * Boolean -> String 转换器
      */
-    @Autowired
-    StandardBooleanToStringConverter standardBooleanToStringConverter;
+    Converter<Boolean, String> standardBooleanToStringConverter = new StandardBooleanToStringConverter();
 
     /**
      * String -> Boolean 转换器
      */
-    @Autowired
-    StandardStringToBooleanConverter standardStringToBooleanConverter;
+    Converter<String, Boolean> standardStringToBooleanConverter = new StandardStringToBooleanConverter();
 
     /**
      * Boolean型的消息处理器
