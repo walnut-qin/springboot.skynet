@@ -1,5 +1,7 @@
 package com.kaos.skynet.api.controller.impl.inpatient;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,7 +29,6 @@ import com.kaos.skynet.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.skynet.enums.impl.inpatient.surgery.SurgeryArrangeRoleEnum;
-import com.kaos.skynet.util.DateHelpers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -151,7 +152,12 @@ public class SurgeryControllerImpl implements SurgeryController {
             if (inMainInfo.associateEntity.patientInfo != null) {
                 rspBody.name = inMainInfo.associateEntity.patientInfo.name;
                 rspBody.sex = inMainInfo.associateEntity.patientInfo.sex;
-                rspBody.age = DateHelpers.getAge(inMainInfo.associateEntity.patientInfo.birthday).toString();
+                var period = Period.between(inMainInfo.associateEntity.patientInfo.birthday.toLocalDate(),
+                        LocalDate.now());
+                rspBody.age = String.format("%s%s%s",
+                        period.getYears() == 0 ? "" : period.getYears() + "岁",
+                        period.getMonths() == 0 ? "" : period.getMonths() + "月",
+                        period.getDays() == 0 ? "" : period.getDays() + "天");
             } else {
                 rspBody.name = inMainInfo.name;
             }

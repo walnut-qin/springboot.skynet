@@ -1,5 +1,6 @@
 package com.kaos.skynet.entity.common;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ComPatientInfo {
     /**
      * 生日
      */
-    public Date birthday = null;
+    public LocalDateTime birthday = null;
 
     /**
      * 性别

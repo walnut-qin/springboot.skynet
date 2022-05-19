@@ -1,5 +1,7 @@
 package com.kaos.skynet.api.controller.impl.inpatient.escort;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,7 +22,6 @@ import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConvert
 import com.kaos.skynet.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.enums.impl.inpatient.escort.EscortStateEnum;
-import com.kaos.skynet.util.DateHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -212,7 +213,11 @@ public class EscortControllerImpl implements EscortController {
             if (patient != null) {
                 rsp.name = patient.name;
                 rsp.sex = patient.sex;
-                rsp.age = DateHelpers.getAge(patient.birthday).toString();
+                var period = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
+                rsp.age = String.format("%s%s%s",
+                        period.getYears() == 0 ? "" : period.getYears() + "岁",
+                        period.getMonths() == 0 ? "" : period.getMonths() + "月",
+                        period.getDays() == 0 ? "" : period.getDays() + "天");
             }
             if (escortInfo.associateEntity.prepayIn != null) {
                 // 若存在住院证，加载住院信息
@@ -292,7 +297,11 @@ public class EscortControllerImpl implements EscortController {
             if (patient != null) {
                 rsp.name = patient.name;
                 rsp.sex = patient.sex;
-                rsp.age = DateHelpers.getAge(patient.birthday).toString();
+                var period = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
+                rsp.age = String.format("%s%s%s",
+                        period.getYears() == 0 ? "" : period.getYears() + "岁",
+                        period.getMonths() == 0 ? "" : period.getMonths() + "月",
+                        period.getDays() == 0 ? "" : period.getDays() + "天");
             }
             if (escortInfo.associateEntity.prepayIn != null) {
                 // 若存在住院证，加载住院信息

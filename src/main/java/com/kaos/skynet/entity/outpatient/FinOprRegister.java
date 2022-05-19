@@ -1,5 +1,6 @@
 package com.kaos.skynet.entity.outpatient;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.kaos.skynet.entity.common.ComPatientInfo;
@@ -60,7 +61,7 @@ public class FinOprRegister {
     /**
      * 生日
      */
-    public Date birthday = null;
+    public LocalDateTime birthday = null;
 
     /**
      * 联系电话

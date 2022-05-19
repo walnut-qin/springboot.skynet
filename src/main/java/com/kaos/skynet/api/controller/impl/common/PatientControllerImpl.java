@@ -1,12 +1,14 @@
 package com.kaos.skynet.api.controller.impl.common;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 import javax.validation.constraints.NotBlank;
 
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.common.PatientController;
 import com.kaos.skynet.entity.common.ComPatientInfo;
-import com.kaos.skynet.util.DateHelpers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,11 @@ public class PatientControllerImpl implements PatientController {
         rspBody.cardNo = patient.cardNo;
         rspBody.name = patient.name;
         rspBody.sex = patient.sex;
-        rspBody.age = DateHelpers.getAge(patient.birthday).toString();
+        var period = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
+        rspBody.age = String.format("%s%s%s",
+                period.getYears() == 0 ? "" : period.getYears() + "岁",
+                period.getMonths() == 0 ? "" : period.getMonths() + "月",
+                period.getDays() == 0 ? "" : period.getDays() + "天");
         rspBody.idenNo = patient.identityCardNo;
         rspBody.tel = patient.homeTel;
 
