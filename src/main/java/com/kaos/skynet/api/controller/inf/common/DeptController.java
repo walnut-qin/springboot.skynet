@@ -5,8 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
-import com.kaos.skynet.api.enums.common.DeptTypeEnum;
+import com.kaos.skynet.api.data.entity.common.DawnOrgDept.DeptTypeEnum;
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 
 public interface DeptController {
     /**

@@ -2,7 +2,7 @@ package com.kaos.skynet.api.entity.inpatient.escort;
 
 import java.util.Date;
 
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 
 /**

@@ -30,13 +30,18 @@ public abstract class Cache<K extends Object, V extends Object> {
     LoadingCache<String, Optional<V>> loadingCache = null;
 
     /**
-     * 完全构造函数
-     * 
-     * @param gson
-     * @param size
-     * @param cacheLoader
+     * 必须调用后构造函数构造成员变量
      */
-    public Cache(Class<K> classOfK, Integer size, Gson gson, Converter<K, V> converter) {
+    protected abstract void postConstruct();
+
+    /**
+     * 
+     * @param classOfK
+     * @param size
+     * @param gson
+     * @param converter
+     */
+    protected void postConstruct(Class<K> classOfK, Integer size, Gson gson, Converter<K, V> converter) {
         // 记录序列化工具
         this.gson = gson;
 
@@ -58,14 +63,10 @@ public abstract class Cache<K extends Object, V extends Object> {
     }
 
     /**
-     * 缺省构造函数
-     * 
-     * @param gson
-     * @param size
-     * @param cacheLoader
+     * 必须使用该函数载入转换器
      */
-    public Cache(Class<K> classOfK, Integer size, Converter<K, V> converter) {
-        this(classOfK, size, Gsons.newGson(), converter);
+    protected void postConstruct(Class<K> classOfK, Integer size, Converter<K, V> converter) {
+        this.postConstruct(classOfK, size, Gsons.newGson(), converter);
     }
 
     /**

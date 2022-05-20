@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 
 public interface DayReportController {
     /**

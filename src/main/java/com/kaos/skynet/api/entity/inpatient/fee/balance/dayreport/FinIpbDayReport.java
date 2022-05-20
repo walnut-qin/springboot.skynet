@@ -2,7 +2,7 @@ package com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport;
 
 import java.util.Date;
 
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 
 /**
  * 实体：日结主表（XYHIS.FIN_IPB_DAYREPORT）

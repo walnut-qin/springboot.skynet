@@ -7,7 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.kaos.skynet.api.enums.common.SexEnum;
+import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.AnesTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryDegreeEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryInspectResultEnum;

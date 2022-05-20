@@ -3,7 +3,7 @@ package com.kaos.skynet.api.controller.inf.common;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kaos.skynet.api.enums.common.EmplTypeEnum;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl.EmplTypeEnum;
 
 public interface EmployeeController {
     /**

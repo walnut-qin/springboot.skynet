@@ -3,8 +3,7 @@ package com.kaos.skynet.api.entity.inpatient.fee.balance;
 import java.util.Date;
 
 import com.google.common.base.Optional;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.api.entity.inpatient.Inpatient;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReport;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
 
@@ -131,11 +130,6 @@ public class FinIpbBalanceHead {
      * 关联实体
      */
     public class AssociateEntity {
-        /**
-         * 实体：住院患者
-         */
-        public Inpatient inpatient = null;
-
         /**
          * 实体：结算员
          */

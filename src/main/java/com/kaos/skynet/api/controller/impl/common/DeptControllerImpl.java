@@ -4,11 +4,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
-import com.kaos.skynet.api.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.common.DeptController;
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
-import com.kaos.skynet.api.mapper.common.DawnOrgDeptMapper;
+import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
+import com.kaos.skynet.api.data.enums.ValidEnum;
+import com.kaos.skynet.api.data.mapper.common.DawnOrgDeptMapper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,16 +43,16 @@ public class DeptControllerImpl implements DeptController {
     @RequestMapping(value = "queryDeptInfo", method = RequestMethod.GET, produces = MediaType.JSON)
     public QueryDeptInfoRsp queryDeptInfo(@NotNull(message = "科室编码不能为空") String deptCode) {
         // 调用业务
-        var dept = this.deptCache.getValue(deptCode);
+        var dept = this.deptCache.get(deptCode);
         if (dept == null) {
             return null;
         }
 
         // 构造响应
         QueryDeptInfoRsp rsp = new QueryDeptInfoRsp();
-        rsp.deptCode = dept.deptCode;
-        rsp.deptName = dept.deptName;
-        rsp.deptOwn = dept.deptOwn;
+        rsp.deptCode = dept.getDeptCode();
+        rsp.deptName = dept.getDeptName();
+        rsp.deptOwn = dept.getDeptOwn();
         return rsp;
     }
 
@@ -60,16 +60,16 @@ public class DeptControllerImpl implements DeptController {
     @RequestMapping(value = "queryDeptList", method = RequestMethod.POST, produces = MediaType.JSON)
     public QueryDeptListRsp queryDeptList(@RequestBody @Valid QueryDeptListReq req) {
         // 查询科室信息
-        var depts = this.deptMapper.queryDepartments(req.deptOwn, req.deptTypes, Lists.newArrayList(ValidStateEnum.有效));
+        var depts = this.deptMapper.queryDepts(req.deptOwn, req.deptTypes, Lists.newArrayList(ValidEnum.VALID));
 
         // 构造响应
         QueryDeptListRsp rsp = new QueryDeptListRsp();
         rsp.size = depts.size();
         rsp.depts = depts.stream().map(x -> {
             QueryDeptInfoRsp rspItem = new QueryDeptInfoRsp();
-            rspItem.deptCode = x.deptCode;
-            rspItem.deptName = x.deptName;
-            rspItem.deptOwn = x.deptOwn;
+            rspItem.deptCode = x.getDeptCode();
+            rspItem.deptName = x.getDeptName();
+            rspItem.deptOwn = x.getDeptOwn();
             return rspItem;
         }).toList();
 

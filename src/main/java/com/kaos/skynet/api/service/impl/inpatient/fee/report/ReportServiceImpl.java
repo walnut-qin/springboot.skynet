@@ -5,12 +5,11 @@ import java.util.Date;
 import java.util.function.ToDoubleFunction;
 
 import com.google.common.base.Optional;
-import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
@@ -58,13 +57,13 @@ public class ReportServiceImpl implements ReportService {
      * 职员cache
      */
     @Autowired
-    Cache<String, DawnOrgEmpl> emplCache;
+    DawnOrgEmplCache emplCache;
 
     /**
      * 科室cache
      */
     @Autowired
-    Cache<String, DawnOrgDept> deptCache;
+    DawnOrgDeptCache deptCache;
 
     @Override
     public Double queryNewYbPubCost(String balancer, Date beginDate, Date endDate) {

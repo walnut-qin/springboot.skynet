@@ -3,8 +3,8 @@ package com.kaos.skynet.api.entity.inpatient.surgery;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.AnesTypeEnum;

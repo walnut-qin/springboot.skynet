@@ -2,11 +2,10 @@ package com.kaos.skynet.api.controller.impl.common.config;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.common.config.SwitchController;
-import com.kaos.skynet.api.entity.common.config.ConfigSwitch;
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.data.cache.common.config.ConfigSwitchCache;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class SwitchControllerImpl implements SwitchController {
     Logger logger = Logger.getLogger(SwitchControllerImpl.class);
 
     @Autowired
-    Cache<String, ConfigSwitch> switchCache;
+    ConfigSwitchCache configSwitchCache;
 
     /**
      * 检索开关变量的值
@@ -37,11 +36,11 @@ public class SwitchControllerImpl implements SwitchController {
         this.logger.info(String.format("查询开关变量(key = %s)", switchName));
 
         // 获取开关的值
-        var swt = this.switchCache.getValue(switchName);
-        if (swt == null || swt.valid != ValidStateEnum.有效) {
+        var swt = this.configSwitchCache.get(switchName);
+        if (swt == null || swt.getValid() != ValidEnum.VALID) {
             return false;
         }
 
-        return swt.value;
+        return swt.getValue();
     }
 }

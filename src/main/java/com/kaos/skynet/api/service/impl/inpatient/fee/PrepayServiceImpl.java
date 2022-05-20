@@ -5,11 +5,11 @@ import java.util.Map;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
+import com.kaos.skynet.api.data.mapper.outpatient.fee.FinOprPayModelMapper;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
 import com.kaos.skynet.api.mapper.inpatient.fee.FinIpbInPrepayMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
-import com.kaos.skynet.api.mapper.outpatient.fee.FinOprPayModelMapper;
 import com.kaos.skynet.api.service.inf.inpatient.fee.PrepayService;
 
 import org.apache.log4j.Logger;
@@ -79,13 +79,19 @@ public class PrepayServiceImpl implements PrepayService {
         for (var unbalancedPrepay : unbalancedPrepays) {
             // 查询对应的跑批中间表
             var refNum = unbalancedPrepay.referNum;
-            var payModels = this.payModelMapper.queryPayModels(patientNo, refNum, lastBalance.invoiceNo);
+            var payModels = payModelMapper.queryPayModels(new FinOprPayModelMapper.Key() {
+                {
+                    setPatientId(patientNo);
+                    setReferNo(refNum);
+                    setInvoiceNo(lastBalance.invoiceNo);
+                }
+            });
 
             // 计算新的预交金值
             var oldCost = unbalancedPrepay.prepayCost;
             var newCost = unbalancedPrepay.prepayCost;
             for (var payModel : payModels) {
-                newCost += payModel.amt;
+                newCost += payModel.getAmt();
             }
 
             // 修改预交金的值

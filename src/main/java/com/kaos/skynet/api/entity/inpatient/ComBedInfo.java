@@ -2,9 +2,9 @@ package com.kaos.skynet.api.entity.inpatient;
 
 import java.util.Date;
 
-import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.api.enums.common.SexEnum;
+import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.enums.inpatient.BedGradeEnum;
 import com.kaos.skynet.api.enums.inpatient.BedStateEnum;

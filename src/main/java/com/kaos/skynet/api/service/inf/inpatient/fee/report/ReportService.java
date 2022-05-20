@@ -2,7 +2,7 @@ package com.kaos.skynet.api.service.inf.inpatient.fee.report;
 
 import java.util.Date;
 
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 
 /**
  * 日结服务

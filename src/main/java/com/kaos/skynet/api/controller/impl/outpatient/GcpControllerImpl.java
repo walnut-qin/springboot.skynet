@@ -3,17 +3,15 @@ package com.kaos.skynet.api.controller.impl.outpatient;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Optional;
-import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.cache.impl.common.config.multi.ConfigMultiMapCache.Key;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.outpatient.GcpController;
-import com.kaos.skynet.api.entity.common.ComPatientInfo;
-import com.kaos.skynet.api.entity.common.config.ConfigMap;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.common.config.ConfigMultiMapCache;
+import com.kaos.skynet.api.data.cache.common.config.ConfigMultiMapCache.Key;
+import com.kaos.skynet.api.data.cache.outpatient.FinOprRegisterCache;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
-import com.kaos.skynet.api.mapper.outpatient.FinOprRegisterMapper;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,66 +19,70 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.log4j.Log4j;
+
+@Log4j
 @Validated
 @RestController
 @RequestMapping("/ms/outpatient/gcp")
 public class GcpControllerImpl implements GcpController {
-    /**
-     * 日志接口
-     */
-    Logger logger = Logger.getLogger(GcpControllerImpl.class);
 
     /**
      * 挂号信息接口
      */
     @Autowired
-    FinOprRegisterMapper registerMapper;
+    FinOprRegisterCache registerCache;
 
     /**
      * 患者信息缓存
      */
     @Autowired
-    Cache<String, ComPatientInfo> patientInfoCache;
+    ComPatientInfoCache patientInfoCache;
 
     /**
-     * 开关cache
+     * 复数键
      */
     @Autowired
-    Cache<Key, ConfigMap> multiMapCache;
+    ConfigMultiMapCache.MasterCache configMultiMapMasterCache;
 
     @Override
     @RequestMapping(value = "test", method = RequestMethod.POST, produces = MediaType.TEXT)
     public Boolean test(@RequestBody @NotNull(message = "body不能为空") TestReq req) {
         // 记录日志
-        this.logger.info("执行GCP权限检测");
+        log.info("执行GCP权限检测");
 
         // 获取患者挂号信息
-        var register = this.registerMapper.queryRegisterRec(req.clinicCode, TransTypeEnum.Positive);
+        var register = this.registerCache.get(new FinOprRegisterCache.Key() {
+            {
+                setClinicCode(req.clinicCode);
+                setTransType(TransTypeEnum.Positive);
+            }
+        });
         if (register == null) {
-            this.logger.info("未找到挂号信息!");
+            log.info("未找到挂号信息!");
             return false;
         }
 
         // 获取患者基本信息
-        var patientInfo = this.patientInfoCache.getValue(register.cardNo);
+        var patientInfo = this.patientInfoCache.get(register.getCardNo());
         if (patientInfo == null) {
-            this.logger.info("未找到患者!");
+            log.info("未找到患者!");
             return false;
         }
 
         // 判断GCP标识
-        if (!Optional.fromNullable(patientInfo.gcpFlag).or(false)) {
-            this.logger.info("gcp标识为false!");
+        if (!Optional.fromNullable(patientInfo.getGcpFlag()).or(false)) {
+            log.info("gcp标识为false!");
             return false;
         }
 
         // 获取配置的gcp科室列表
-        var deptConfig = multiMapCache.getValue(new Key("GcpDept", req.deptCode));
+        var deptConfig = configMultiMapMasterCache.get(new Key("GcpDept", req.deptCode));
         if (deptConfig == null) {
-            this.logger.info("非GCP科室!");
+            log.info("非GCP科室!");
             return false;
         }
 
-        return deptConfig.valid == ValidStateEnum.有效;
+        return deptConfig.getValid() == ValidEnum.VALID;
     }
 }

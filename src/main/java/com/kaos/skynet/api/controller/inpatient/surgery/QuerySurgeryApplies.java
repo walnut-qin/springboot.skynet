@@ -17,14 +17,14 @@ import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.impl.AbstractController;
 import com.kaos.skynet.api.controller.inpatient.surgery.QuerySurgeryApplies.Response.DataItem;
-import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
+import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsRoom;
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
-import com.kaos.skynet.api.enums.common.SexEnum;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.AnesTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.MetOpsInciTypeEnum;
@@ -75,13 +75,13 @@ public class QuerySurgeryApplies extends AbstractController {
      * 员工信息缓存
      */
     @Autowired
-    Cache<String, DawnOrgEmpl> emplCache;
+    DawnOrgEmplCache emplCache;
 
     /**
      * 科室信息缓存
      */
     @Autowired
-    Cache<String, DawnOrgDept> deptCache;
+    DawnOrgDeptCache deptCache;
 
     /**
      * 手术室信息缓存
@@ -180,9 +180,9 @@ public class QuerySurgeryApplies extends AbstractController {
 
             @Override
             public String getName(String code) {
-                var employee = emplCache.getValue(code);
+                var employee = emplCache.get(code);
                 if (employee != null) {
-                    return employee.emplName;
+                    return employee.getEmplName();
                 } else {
                     return code;
                 }
@@ -219,9 +219,9 @@ public class QuerySurgeryApplies extends AbstractController {
 
         // 病区
         if (apply.getInDeptCode() != null) {
-            var dept = this.deptCache.getValue(apply.getInDeptCode());
+            var dept = this.deptCache.get(apply.getInDeptCode());
             if (dept != null) {
-                result.setDeptName(dept.deptName);
+                result.setDeptName(dept.getDeptName());
             }
         }
 

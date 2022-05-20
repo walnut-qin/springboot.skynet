@@ -7,7 +7,7 @@ import java.util.List;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.kaos.skynet.api.cache.impl.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
@@ -135,19 +135,7 @@ public class AnnexServiceImpl implements AnnexService {
         for (var helperCardNo : helperCardNos.keySet()) {
             // 检索所有附件
             var subAnnexs = this.escortAnnexInfoMapper.queryAnnexInfos(helperCardNo, null, null, checked);
-            // 补全信息
-            for (var subAnnex : subAnnexs) {
-                subAnnex.associateEntity.patientInfo = this.patientInfoCache.getValue(helperCardNo);
-                if (subAnnex.associateEntity.patientInfo != null) {
-                    subAnnex.associateEntity.patientInfo.associateEntity.escortedPatients = helperCardNos
-                            .get(helperCardNo).stream().map(x -> {
-                                return patientInfoCache.getValue(x);
-                            }).toList();
-                }
-                if (checked) {
-                    subAnnex.associateEntity.escortAnnexChk = this.escortAnnexChkMapper.queryAnnexChk(subAnnex.annexNo);
-                }
-            }
+            // 添加到结果集
             annexs.addAll(subAnnexs);
         }
 

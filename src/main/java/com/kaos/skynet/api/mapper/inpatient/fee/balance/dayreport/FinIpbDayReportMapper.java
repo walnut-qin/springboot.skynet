@@ -3,8 +3,8 @@ package com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport;
 import java.util.Date;
 import java.util.List;
 
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReport;
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
 
 public interface FinIpbDayReportMapper {
     /**

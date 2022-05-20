@@ -2,13 +2,12 @@ package com.kaos.skynet.api.entity.inpatient.fee;
 
 import java.util.Date;
 
-import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.api.entity.common.undrug.FinComUndrugInfo;
+import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
+import com.kaos.skynet.api.data.enums.MinFeeEnum;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
-import com.kaos.skynet.api.enums.common.MinFeeEnum;
 import com.kaos.skynet.api.enums.common.PayKindEnum;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
@@ -528,11 +527,6 @@ public class FinIpbItemList {
          * 开立医师 {@link FinIpbItemList#recipeDocCode}
          */
         public DawnOrgEmpl recipeDoc = null;
-
-        /**
-         * 非药品信息 {@link FinIpbItemList#itemCode}
-         */
-        public FinComUndrugInfo undrugInfo = null;
 
         /**
          * 扩展操作员 {@link FinIpbItemList#extOperCode}

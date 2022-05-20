@@ -2,7 +2,7 @@ package com.kaos.skynet.api.entity.inpatient.escort;
 
 import java.time.LocalDateTime;
 
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 
 /**
  * 实体：附件审核（KAOS.ESCORT_ANNEX_CHK）

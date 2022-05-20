@@ -2,9 +2,8 @@ package com.kaos.skynet.api.entity.inpatient.order;
 
 import java.util.Date;
 
-import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.api.entity.inpatient.Inpatient;
+import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
+import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.enums.inpatient.order.MetOrdiOrderStateEnum;
 
 public class MetOrdiOrder {
@@ -52,11 +51,6 @@ public class MetOrdiOrder {
      * 关联实体
      */
     public class AssociateEntity {
-        /**
-         * 实体：住院患者
-         */
-        public Inpatient inpatient = null;
-
         /**
          * 开立医生
          */

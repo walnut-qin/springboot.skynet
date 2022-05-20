@@ -7,14 +7,14 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.Maps;
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.entity.common.ComPatientInfo;
-import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsRoom;
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
@@ -55,19 +55,19 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 患者基本信息cache
      */
     @Autowired
-    Cache<String, ComPatientInfo> patientInfoCache;
+    ComPatientInfoCache patientInfoCache;
 
     /**
      * 科室信息缓存
      */
     @Autowired
-    Cache<String, DawnOrgDept> deptCache;
+    DawnOrgDeptCache deptCache;
 
     /**
      * 职工接口
      */
     @Autowired
-    Cache<String, DawnOrgEmpl> emplCache;
+    DawnOrgEmplCache emplCache;
 
     /**
      * 手术间接口
@@ -115,7 +115,7 @@ public class SurgeryServiceImpl implements SurgeryService {
                     return false;
                 }
                 var dept = apply.associateEntity.surgeryDept;
-                if (!dept.deptOwn.equals(this.deptOwn)) {
+                if (!dept.getDeptOwn().equals(this.deptOwn)) {
                     return false;
                 }
             }
@@ -162,7 +162,7 @@ public class SurgeryServiceImpl implements SurgeryService {
                     return false;
                 }
                 var dept = inMainInfo.associateEntity.dept;
-                if (!dept.deptCode.equals(this.deptCode)) {
+                if (!dept.getDeptCode().equals(this.deptCode)) {
                     return false;
                 }
             }
@@ -240,10 +240,10 @@ public class SurgeryServiceImpl implements SurgeryService {
             apply.associateEntity.metOpsItem = this.metOpsItemMapper.queryMetOpsItem(apply.operationNo, "S991");
 
             // 主刀医师
-            apply.associateEntity.opsDoc = this.emplCache.getValue(apply.opsDocCode);
+            apply.associateEntity.opsDoc = this.emplCache.get(apply.opsDocCode);
 
             // 手术科室
-            apply.associateEntity.surgeryDept = this.deptCache.getValue(apply.surgeryDeptCode);
+            apply.associateEntity.surgeryDept = this.deptCache.get(apply.surgeryDeptCode);
 
             // 实体：手术安排
             var arranges = this.metOpsArrangeMapper.queryMetOpsArranges(apply.operationNo, null);
@@ -253,7 +253,7 @@ public class SurgeryServiceImpl implements SurgeryService {
             for (var role : apply.associateEntity.metOpsArranges.keySet()) {
                 var arrange = apply.associateEntity.metOpsArranges.get(role);
                 arrange.associateEntity.metOpsApply = apply;
-                arrange.associateEntity.employee = this.emplCache.getValue(arrange.emplCode);
+                arrange.associateEntity.employee = this.emplCache.get(arrange.emplCode);
             }
 
             // 实体：住院患者(只需要科室信息，不需要实时数据，允许取cache)
@@ -263,10 +263,10 @@ public class SurgeryServiceImpl implements SurgeryService {
                 var inMainInfo = apply.associateEntity.inMainInfo;
 
                 // 患者基本信息
-                inMainInfo.associateEntity.patientInfo = this.patientInfoCache.getValue(inMainInfo.cardNo);
+                inMainInfo.associateEntity.patientInfo = this.patientInfoCache.get(inMainInfo.cardNo);
 
                 // 住院科室
-                inMainInfo.associateEntity.dept = this.deptCache.getValue(inMainInfo.deptCode);
+                inMainInfo.associateEntity.dept = this.deptCache.get(inMainInfo.deptCode);
 
                 // 床位
                 inMainInfo.associateEntity.bedInfo = this.bedInfoCache.getValue(inMainInfo.bedNo);

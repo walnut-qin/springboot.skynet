@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
 

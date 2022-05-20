@@ -15,14 +15,14 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import com.google.common.collect.TreeMultimap;
-import com.kaos.skynet.api.cache.impl.common.DawnOrgDeptCache;
-import com.kaos.skynet.api.cache.impl.common.DawnOrgEmplCache;
 import com.kaos.skynet.api.cache.impl.inpatient.FinIprInMainInfoCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.skynet.api.entity.inpatient.fee.FinIpbItemList;
 import com.kaos.skynet.api.entity.inpatient.fee.FinIpbMedicineList;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
-import com.kaos.skynet.api.enums.common.DeptOwnEnum;
 import com.kaos.skynet.api.mapper.inpatient.fee.FinIpbFeeInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.FinIpbItemListMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.FinIpbMedicineListMapper;
@@ -205,7 +205,7 @@ public class ReconcileServiceImpl implements ReconcileService {
             Collection<FinIpbItemList> undrugInfos,
             Collection<FinIpbMedicineList> drugInfos) {
         // 记录科室信息
-        var dept = this.deptCache.getValue(deptCode);
+        var dept = this.deptCache.get(deptCode);
         if (dept == null) {
             this.logger.warn(String.format("获取科室<%s>信息失败, 跳过核对", deptCode));
             return null;

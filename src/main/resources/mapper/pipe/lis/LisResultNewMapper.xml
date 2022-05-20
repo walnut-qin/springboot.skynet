@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.pipe.lis.LisResultNew">
+        <result column="PATIENTID" jdbcType="VARCHAR" property="patientId"/>
+        <result column="ITEMCODE" jdbcType="VARCHAR" property="itemCode"/>
+        <result column="ITEMNAME" jdbcType="VARCHAR" property="itemName"/>
+        <result column="RESULT" jdbcType="VARCHAR" property="result"/>
+        <result column="TESTDATE" jdbcType="VARCHAR" property="inspectDate"/>
+    </resultMap>
+
+    <sql id="item">
+        PATIENTID,
+        ITEMCODE,
+        ITEMNAME,
+        RESULT,
+        TESTDATE
+    </sql>
+
+    <select id="queryInspectResults" parameterType="com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper$Key" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            LISNEW.LIS_RESULT_NEW
+        <where>
+            <if test="true">
+                AND PATIENTID = #{patientId}
+            </if>
+            <if test = "itemCodes != null">
+                AND ITEMCODE IN
+                <foreach collection="itemCodes" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="beginDate != null">
+                AND TESTDATE &gt;= #{beginDate} + 0
+            </if>
+            <if test="endDate != null">
+                AND TESTDATE &lt;= #{endDate} + 0
+            </if>
+        </where>
+    </select>
+</mapper>

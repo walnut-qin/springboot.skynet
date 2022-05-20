@@ -11,11 +11,11 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.cache.impl.common.ComPatientInfoCache;
-import com.kaos.skynet.api.cache.impl.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.cache.impl.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.EscortController;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
@@ -221,11 +221,11 @@ public class EscortControllerImpl implements EscortController {
             // 构造列表元素
             QueryPatientInfoRsp rsp = new QueryPatientInfoRsp();
             rsp.cardNo = escortInfo.patientCardNo;
-            var patient = this.patientInfoCache.getValue(rsp.cardNo);
+            var patient = this.patientInfoCache.get(rsp.cardNo);
             if (patient != null) {
-                rsp.name = patient.name;
-                rsp.sex = patient.sex;
-                rsp.age = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
+                rsp.name = patient.getName();
+                rsp.sex = patient.getSex();
+                rsp.age = Period.between(patient.getBirthday().toLocalDate(), LocalDate.now());
             }
             if (escortInfo.associateEntity.prepayIn != null) {
                 // 若存在住院证，加载住院信息
@@ -240,8 +240,8 @@ public class EscortControllerImpl implements EscortController {
                     rsp.patientNo = inMainInfo.patientNo;
                 } else {
                     // 若未入院，加载住院证信息
-                    if (this.deptCache.getValue(prepayIn.preDeptCode) != null) {
-                        rsp.deptName = this.deptCache.getValue(prepayIn.preDeptCode).deptName;
+                    if (this.deptCache.get(prepayIn.preDeptCode) != null) {
+                        rsp.deptName = this.deptCache.get(prepayIn.preDeptCode).getDeptName();
                     }
                     if (this.bedInfoCache.getValue(prepayIn.bedNo) != null) {
                         rsp.bedNo = this.bedInfoCache.getValue(prepayIn.bedNo).getBriefBedNo();
@@ -301,15 +301,11 @@ public class EscortControllerImpl implements EscortController {
             // 构造列表元素
             QueryHelperInfoRsp rsp = new QueryHelperInfoRsp();
             rsp.cardNo = escortInfo.helperCardNo;
-            var patient = this.patientInfoCache.getValue(rsp.cardNo);
+            var patient = this.patientInfoCache.get(rsp.cardNo);
             if (patient != null) {
-                rsp.name = patient.name;
-                rsp.sex = patient.sex;
-                var period = Period.between(patient.birthday.toLocalDate(), LocalDate.now());
-                rsp.age = String.format("%s%s%s",
-                        period.getYears() == 0 ? "" : period.getYears() + "岁",
-                        period.getMonths() == 0 ? "" : period.getMonths() + "月",
-                        period.getDays() == 0 ? "" : period.getDays() + "天");
+                rsp.name = patient.getName();
+                rsp.sex = patient.getSex();
+                rsp.age = Period.between(patient.getBirthday().toLocalDate(), LocalDate.now());
             }
             if (escortInfo.associateEntity.prepayIn != null) {
                 // 若存在住院证，加载住院信息

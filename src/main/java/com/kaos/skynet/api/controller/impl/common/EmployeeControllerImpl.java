@@ -3,9 +3,11 @@ package com.kaos.skynet.api.controller.impl.common;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.common.EmployeeController;
-import com.kaos.skynet.api.mapper.common.DawnOrgEmplMapper;
+import com.kaos.skynet.api.data.enums.ValidEnum;
+import com.kaos.skynet.api.data.mapper.common.DawnOrgEmplMapper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +32,15 @@ public class EmployeeControllerImpl implements EmployeeController {
     @RequestMapping(value = "queryValidEmployees", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<EmployeeInfo> queryValidEmployees() {
         // 检索原始有效数据
-        var rets = this.emplMapper.queryValidEmployees();
+        var rets = this.emplMapper.queryEmpls(null, Lists.newArrayList(ValidEnum.VALID));
 
         return rets.stream().map((x) -> {
             EmployeeInfo info = new EmployeeInfo();
-            info.emplCode = x.emplCode;
-            info.emplName = x.emplName;
-            info.inputCode = x.emplNameSpellCode;
-            info.emplType = x.emplType;
-            info.deptCode = x.deptCode;
+            info.emplCode = x.getEmplCode();
+            info.emplName = x.getEmplName();
+            info.inputCode = x.getEmplNameSpellCode();
+            info.emplType = x.getEmplType();
+            info.deptCode = x.getDeptCode();
             info.createDate = LocalDateTime.now();
             return info;
         }).toList();

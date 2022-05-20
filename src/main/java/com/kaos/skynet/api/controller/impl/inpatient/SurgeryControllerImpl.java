@@ -14,9 +14,9 @@ import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.SurgeryController;
-import com.kaos.skynet.api.entity.common.ComPatientInfo;
-import com.kaos.skynet.api.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
+import com.kaos.skynet.api.data.cache.common.MetOpsnWyDocCache;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsArrange;
@@ -88,13 +88,13 @@ public class SurgeryControllerImpl implements SurgeryController {
      * 职工信息缓存
      */
     @Autowired
-    Cache<String, DawnOrgEmpl> emplCache;
+    DawnOrgEmplCache emplCache;
 
     /**
-     * 科室信息缓存
+     * 外院医生缓存
      */
     @Autowired
-    Cache<String, DawnOrgDept> deptCache;
+    MetOpsnWyDocCache wyDocCache;
 
     /**
      * 住院主表缓存
@@ -106,7 +106,7 @@ public class SurgeryControllerImpl implements SurgeryController {
      * 患者基本信息缓存
      */
     @Autowired
-    Cache<String, ComPatientInfo> comPatientInfoCache;
+    ComPatientInfoCache patientInfoCache;
 
     /**
      * 构造响应体元素
@@ -136,7 +136,7 @@ public class SurgeryControllerImpl implements SurgeryController {
 
             // 患者科室
             if (inMainInfo.associateEntity.dept != null) {
-                rspBody.deptName = inMainInfo.associateEntity.dept.deptName;
+                rspBody.deptName = inMainInfo.associateEntity.dept.getDeptName();
             } else {
                 rspBody.deptName = inMainInfo.deptCode;
             }
@@ -151,9 +151,9 @@ public class SurgeryControllerImpl implements SurgeryController {
             // 患者姓名、性别、年龄
             if (inMainInfo.associateEntity.patientInfo != null) {
                 var patientInfo = inMainInfo.associateEntity.patientInfo;
-                rspBody.name = patientInfo.name;
-                rspBody.sex = patientInfo.sex;
-                rspBody.age = Period.between(patientInfo.birthday.toLocalDate(), LocalDate.now());
+                rspBody.name = patientInfo.getName();
+                rspBody.sex = patientInfo.getSex();
+                rspBody.age = Period.between(patientInfo.getBirthday().toLocalDate(), LocalDate.now());
             } else {
                 rspBody.name = inMainInfo.name;
             }
@@ -181,7 +181,7 @@ public class SurgeryControllerImpl implements SurgeryController {
 
         // 术者
         if (apply.associateEntity.opsDoc != null) {
-            rspBody.surgeryDocName = apply.associateEntity.opsDoc.emplName;
+            rspBody.surgeryDocName = apply.associateEntity.opsDoc.getEmplName();
         } else {
             rspBody.surgeryDocName = apply.opsDocCode;
         }
@@ -198,18 +198,24 @@ public class SurgeryControllerImpl implements SurgeryController {
             reg.add(arranges.get(SurgeryArrangeRoleEnum.Helper3));
             reg.removeIf(Objects::isNull);
             rspBody.helperNames = reg.stream().map(x -> {
-                if (x == null || x.associateEntity.employee == null) {
-                    return null;
-                } else {
-                    return x.associateEntity.employee.emplName;
+                // 检索院内医生实体
+                var empl = emplCache.get(x.emplCode);
+                if (empl != null) {
+                    return empl.getEmplName();
                 }
+                // 检索院外医生
+                var wyDoc = wyDocCache.get(x.emplCode);
+                if (wyDoc != null) {
+                    return wyDoc.getEmplName();
+                }
+                return x.emplCode;
             }).collect(Collectors.joining(";"));
 
             // 麻醉医生1
             var arrange = arranges.get(SurgeryArrangeRoleEnum.Anaesthetist);
             if (arrange != null) {
                 if (arrange.associateEntity.employee != null) {
-                    rspBody.anesDoc1 = arrange.associateEntity.employee.emplName;
+                    rspBody.anesDoc1 = arrange.associateEntity.employee.getEmplName();
                 } else {
                     rspBody.anesDoc1 = arrange.emplCode;
                 }
@@ -219,7 +225,7 @@ public class SurgeryControllerImpl implements SurgeryController {
             arrange = arranges.get(SurgeryArrangeRoleEnum.AnaesthesiaHelper);
             if (arrange != null) {
                 if (arrange.associateEntity.employee != null) {
-                    rspBody.anesDoc2 = arrange.associateEntity.employee.emplName;
+                    rspBody.anesDoc2 = arrange.associateEntity.employee.getEmplName();
                 } else {
                     rspBody.anesDoc2 = arrange.emplCode;
                 }
@@ -231,11 +237,13 @@ public class SurgeryControllerImpl implements SurgeryController {
             reg.add(arranges.get(SurgeryArrangeRoleEnum.WashingHandNurse1));
             reg.removeIf(Objects::isNull);
             rspBody.washNurseNames = reg.stream().map(x -> {
-                if (x == null || x.associateEntity.employee == null) {
-                    return null;
-                } else {
-                    return x.associateEntity.employee.emplName;
+                // 检索院内医生实体
+                var empl = emplCache.get(x.emplCode);
+                if (empl != null) {
+                    return empl.getEmplName();
                 }
+
+                return x.emplCode;
             }).collect(Collectors.joining(";"));
 
             // 巡回护士
@@ -244,11 +252,13 @@ public class SurgeryControllerImpl implements SurgeryController {
             reg.add(arranges.get(SurgeryArrangeRoleEnum.ItinerantNurse1));
             reg.removeIf(Objects::isNull);
             rspBody.itinerantNurseNames = reg.stream().map(x -> {
-                if (x == null || x.associateEntity.employee == null) {
-                    return null;
-                } else {
-                    return x.associateEntity.employee.emplName;
+                // 检索院内医生实体
+                var empl = emplCache.get(x.emplCode);
+                if (empl != null) {
+                    return empl.getEmplName();
                 }
+
+                return x.emplCode;
             }).collect(Collectors.joining(";"));
         }
 

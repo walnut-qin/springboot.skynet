@@ -2,7 +2,7 @@ package com.kaos.skynet.api.entity.inpatient.escort;
 
 import java.util.List;
 
-import com.kaos.skynet.api.entity.common.ComPatientInfo;
+import com.kaos.skynet.api.data.entity.common.ComPatientInfo;
 import com.kaos.skynet.api.entity.inpatient.FinIprPrepayIn;
 
 /**

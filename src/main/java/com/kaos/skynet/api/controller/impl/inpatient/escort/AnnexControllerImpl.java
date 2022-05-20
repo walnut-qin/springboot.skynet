@@ -5,9 +5,13 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
-import com.kaos.skynet.api.cache.impl.common.ComPatientInfoCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.AnnexController;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.entity.common.ComPatientInfo;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexChk;
+import com.kaos.skynet.api.entity.inpatient.escort.EscortMainInfo;
+import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexChkMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
@@ -58,6 +62,12 @@ public class AnnexControllerImpl implements AnnexController {
      */
     @Autowired
     EscortAnnexInfoMapper escortAnnexInfoMapper;
+
+    /**
+     * 审核
+     */
+    @Autowired
+    EscortAnnexChkMapper escortAnnexChkMapper;
 
     /**
      * 患者基本信息cache
@@ -141,18 +151,29 @@ public class AnnexControllerImpl implements AnnexController {
         for (var annexInfo : annexInfos) {
             QueryAnnexInDeptRsp rsp = new QueryAnnexInDeptRsp();
             rsp.annexNo = annexInfo.annexNo;
-            rsp.picUrl = String.format("http://172.16.100.252:8025/ms/inpatient/escort/annex/getPic?refer=%s",
-                    annexInfo.annexNo);
-            if (annexInfo.associateEntity.patientInfo != null) {
-                rsp.helperName = annexInfo.associateEntity.patientInfo.name;
-                if (annexInfo.associateEntity.patientInfo.associateEntity.escortedPatients != null) {
-                    rsp.patientNames = annexInfo.associateEntity.patientInfo.associateEntity.escortedPatients.stream()
-                            .map(x -> x.name).toList();
-                }
+            rsp.picUrl = "http://172.16.100.252:8025/ms/inpatient/escort/annex/getPic?refer=".concat(annexInfo.annexNo);
+            // 患者基本信息
+            ComPatientInfo helper = patientInfoCache.get(annexInfo.cardNo);
+            if (helper != null) {
+                rsp.helperName = helper.getName();
             }
-            if (annexInfo.associateEntity.escortAnnexChk != null) {
-                rsp.negative = annexInfo.associateEntity.escortAnnexChk.negativeFlag;
-                rsp.inspectDate = annexInfo.associateEntity.escortAnnexChk.inspectDate;
+            // 检索陪护的患者
+            List<EscortMainInfo> escortInfos = escortService.queryPatientInfos(annexInfo.cardNo);
+            if (escortInfos != null) {
+                rsp.patientNames = escortInfos.stream().map((x) -> {
+                    // 检索患者实体
+                    ComPatientInfo patient = patientInfoCache.get(x.patientCardNo);
+                    if (patient != null) {
+                        return patient.getName();
+                    }
+                    return null;
+                }).toList();
+            }
+            // 审核结果
+            EscortAnnexChk check = escortAnnexChkMapper.queryAnnexChk(annexInfo.annexNo);
+            if (check != null) {
+                rsp.negative = check.negativeFlag;
+                rsp.inspectDate = check.inspectDate;
             }
             rsps.add(rsp);
         }

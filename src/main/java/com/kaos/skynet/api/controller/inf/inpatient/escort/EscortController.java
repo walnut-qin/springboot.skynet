@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.google.gson.annotations.SerializedName;
-import com.kaos.skynet.api.enums.common.SexEnum;
+import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 
@@ -222,7 +222,7 @@ public interface EscortController {
         /**
          * 年龄
          */
-        public String age = null;
+        public Period age = null;
 
         /**
          * 免费标识： 0 - 不免费 1 - 免费

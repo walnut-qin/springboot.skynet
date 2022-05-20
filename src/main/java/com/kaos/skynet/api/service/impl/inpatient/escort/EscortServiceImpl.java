@@ -10,7 +10,10 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.entity.common.ComPatientInfo;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.mapper.outpatient.fee.FinOpbFeeDetailMapper;
+import com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper;
+import com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper.Key;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortActionRec;
@@ -31,8 +34,6 @@ import com.kaos.skynet.api.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortStateRecMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortVipMapper;
 import com.kaos.skynet.api.mapper.inpatient.order.MetOrdiOrderMapper;
-import com.kaos.skynet.api.mapper.outpatient.fee.FinOpbFeeDetailMapper;
-import com.kaos.skynet.api.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.skynet.api.service.impl.inpatient.fee.report.ReportServiceImpl;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 
@@ -125,7 +126,7 @@ public class EscortServiceImpl implements EscortService {
      * 基本信息缓存
      */
     @Autowired
-    Cache<String, ComPatientInfo> patientCache;
+    ComPatientInfoCache patientInfoCache;
 
     /**
      * 住院主表缓存
@@ -141,15 +142,15 @@ public class EscortServiceImpl implements EscortService {
      */
     private EscortStateEnum queryRealState_helper(String helperCardNo) {
         // 获取陪护人实体
-        var patientInfo = this.patientCache.getValue(helperCardNo);
+        var patientInfo = this.patientInfoCache.get(helperCardNo);
         if (patientInfo == null) {
             // 无法查询到陪护人实体，无法判断状态
             return null;
         }
 
         // 健康码判断
-        if (patientInfo.healthCode != null) {
-            switch (patientInfo.healthCode) {
+        if (patientInfo.getHealthCode() != null) {
+            switch (patientInfo.getHealthCode()) {
                 case 绿码:
                     break;
 
@@ -163,8 +164,8 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 行程码判断
-        if (patientInfo.travelCode != null) {
-            switch (patientInfo.travelCode) {
+        if (patientInfo.getTravelCode() != null) {
+            switch (patientInfo.getTravelCode()) {
                 case 正常:
                     break;
 
@@ -179,7 +180,7 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 高风险地区标识判断
-        if (Optional.fromNullable(patientInfo.highRiskFlag).or(false)) {
+        if (Optional.fromNullable(patientInfo.getHighRiskFlag()).or(false)) {
             return EscortStateEnum.无核酸检测结果;
         }
 
@@ -287,19 +288,26 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 若当前无效，则锚定2天前，否则锚定14天前
-        LocalDateTime beginDate = LocalDateTime.now();
+        var ptr = LocalDateTime.now();
         if (orgState != null && orgState == EscortStateEnum.生效中) {
-            beginDate = beginDate.plusDays(-14);
+            ptr = ptr.plusDays(-14);
         } else {
-            beginDate = beginDate.plusDays(-2);
+            ptr = ptr.plusDays(-2);
         }
+        final LocalDateTime beginDate = ptr;
 
         // 查询7日内本院核酸记录
-        var lisRs = this.lisResultNewMapper.queryInspectResult(context.helperCardNo,
-                Lists.newArrayList("SARS-CoV-2-RNA"), beginDate, null);
+        var lisRs = this.lisResultNewMapper.queryInspectResults(new Key() {
+            {
+                setPatientId(context.helperCardNo);
+                setItemCodes(Lists.newArrayList("SARS-CoV-2-RNA"));
+                setBeginDate(beginDate);
+                setEndDate(null);
+            }
+        });
         if (lisRs != null && !lisRs.isEmpty()) {
             var lastLisRt = lisRs.get(0);
-            if (lastLisRt.result.equals("阴性(-)")) {
+            if (lastLisRt.getResult().equals("阴性(-)")) {
                 return EscortStateEnum.生效中;
             }
         }
@@ -322,8 +330,13 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 查询7日内划价记录
-        var fees = this.finOpbFeeDetailMapper.queryFeeDetailsWithCardNo(context.helperCardNo, "F00000068231", beginDate,
-                null);
+        var fees = finOpbFeeDetailMapper.queryFeeDetails(new FinOpbFeeDetailMapper.Key() {
+            {
+                setCardNo(context.helperCardNo);
+                setItemCode("F00000068231");
+                setOperBeginDate(beginDate);
+            }
+        });
         if (fees != null && !fees.isEmpty()) {
             return EscortStateEnum.等待院内核酸检测结果;
         }
@@ -629,7 +642,7 @@ public class EscortServiceImpl implements EscortService {
                 rt.associateEntity.prepayIn.associateEntity.escortVip = this.escortVipMapper
                         .queryEscortVip(rt.patientCardNo, rt.happenNo);
                 // 基本信息
-                rt.associateEntity.prepayIn.associateEntity.patientInfo = this.patientCache.getValue(rt.patientCardNo);
+                rt.associateEntity.prepayIn.associateEntity.patientInfo = this.patientInfoCache.get(rt.patientCardNo);
                 // 住院实体
                 var inMainInfos = this.inMainInfoMapper.queryInpatients(rt.patientCardNo, rt.happenNo, null,
                         Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
