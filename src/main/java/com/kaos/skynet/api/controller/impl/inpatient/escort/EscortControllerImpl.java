@@ -20,7 +20,8 @@ import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
-import com.kaos.skynet.core.gson.Gsons;
+import com.kaos.skynet.core.Gsons;
+import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverter;
 import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverter;
 
 import org.apache.log4j.Logger;
@@ -44,7 +45,12 @@ public class EscortControllerImpl implements EscortController {
     /**
      * 枚举值转换器
      */
-    Converter<String, EscortStateEnum> stringToEnumConverter = new ValueStringToEnumConverter<>(EscortStateEnum.class);
+    Converter<String, EscortStateEnum> vEnumConverter = new ValueStringToEnumConverter<>(EscortStateEnum.class);
+
+    /**
+     * 枚举值转换器
+     */
+    Converter<String, EscortStateEnum> dEnumConverter = new DescriptionStringToEnumConverter<>(EscortStateEnum.class);
 
     /**
      * Gson工具
@@ -139,7 +145,13 @@ public class EscortControllerImpl implements EscortController {
             String state,
             @NotNull(message = "操作员编码不能为空") String emplCode) {
         // 解析状态参数
-        EscortStateEnum stateEnum = stringToEnumConverter.convert(state);
+        EscortStateEnum stateEnum = null;
+        if (stateEnum == null) {
+            stateEnum = vEnumConverter.convert(state);
+        }
+        if (stateEnum == null) {
+            stateEnum = dEnumConverter.convert(state);
+        }
 
         // 入参日志
         this.logger.info(String.format("修改陪护证状态<escortNo = %s, state = %s, emplCode = %s>", escortNo,

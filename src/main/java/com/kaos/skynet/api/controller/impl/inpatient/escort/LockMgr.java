@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.controller.impl.inpatient.escort;
 
-import com.kaos.skynet.core.lock.Lock;
-import com.kaos.skynet.core.lock.Locks;
+import com.kaos.skynet.core.Locks;
+import com.kaos.skynet.core.type.thread.lock.Lock;
 
 import org.springframework.core.convert.converter.Converter;
 
@@ -9,7 +9,7 @@ public final class LockMgr {
     /**
      * 患者卡号锁
      */
-    public static Lock<String> patientLock = Locks.newLockHelper("escortPatientLock", 20,
+    public static Lock<String> patientLock = Locks.newLock("escortPatientLock", 20,
             new Converter<String, Integer>() {
                 @Override
                 public Integer convert(String source) {
@@ -24,7 +24,7 @@ public final class LockMgr {
     /**
      * 患者卡号锁
      */
-    public static Lock<String> helperLock = Locks.newLockHelper("escortHelperLock", 20,
+    public static Lock<String> helperLock = Locks.newLock("escortHelperLock", 20,
             new Converter<String, Integer>() {
                 @Override
                 public Integer convert(String source) {
@@ -39,7 +39,7 @@ public final class LockMgr {
     /**
      * 患者卡号锁
      */
-    public static Lock<String> stateLock = Locks.newLockHelper("escortStateLock", 20,
+    public static Lock<String> stateLock = Locks.newLock("escortStateLock", 20,
             new Converter<String, Integer>() {
                 @Override
                 public Integer convert(String source) {
@@ -54,7 +54,7 @@ public final class LockMgr {
     /**
      * 患者卡号锁
      */
-    public static Lock<String> actionLock = Locks.newLockHelper("escortActionLock", 20,
+    public static Lock<String> actionLock = Locks.newLock("escortActionLock", 20,
             new Converter<String, Integer>() {
                 @Override
                 public Integer convert(String source) {
@@ -69,7 +69,7 @@ public final class LockMgr {
     /**
      * 附件号锁
      */
-    public static Lock<String> annexLock = Locks.newLockHelper("escortAnnexLock", 20,
+    public static Lock<String> annexLock = Locks.newLock("escortAnnexLock", 20,
             new Converter<String, Integer>() {
                 @Override
                 public Integer convert(String source) {

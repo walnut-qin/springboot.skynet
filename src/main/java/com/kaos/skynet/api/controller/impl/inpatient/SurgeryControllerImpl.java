@@ -26,9 +26,9 @@ import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.skynet.api.service.inf.inpatient.SurgeryService;
-import com.kaos.skynet.core.gson.Gsons;
-import com.kaos.skynet.core.http.helper.HttpHelper;
-import com.kaos.skynet.core.http.helper.HttpHelpers;
+import com.kaos.skynet.core.Gsons;
+import com.kaos.skynet.core.HttpClients;
+import com.kaos.skynet.core.type.http.client.HttpClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -52,7 +52,7 @@ public class SurgeryControllerImpl implements SurgeryController {
     /**
      * HttpHelper
      */
-    HttpHelper httpClient = HttpHelpers.newHttpClient(HttpHelpers.docareNode);
+    HttpClient httpClient = HttpClients.newHttpClient(HttpClients.docareNode);
 
     /**
      * 接口：手术服务

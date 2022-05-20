@@ -11,7 +11,7 @@ import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
-import com.kaos.skynet.core.gson.Gsons;
+import com.kaos.skynet.core.Gsons;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

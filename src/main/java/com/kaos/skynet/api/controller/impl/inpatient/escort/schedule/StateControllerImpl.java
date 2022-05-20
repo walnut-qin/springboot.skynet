@@ -7,8 +7,8 @@ import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.impl.inpatient.escort.LockMgr;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.schedule.RefreshStateController;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
-import com.kaos.skynet.core.thread.pool.ThreadPool;
-import com.kaos.skynet.core.thread.pool.ThreadPools;
+import com.kaos.skynet.core.ThreadPools;
+import com.kaos.skynet.core.type.thread.pool.ThreadPool;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

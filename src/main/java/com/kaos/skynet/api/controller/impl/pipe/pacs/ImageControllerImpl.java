@@ -11,7 +11,7 @@ import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.pipe.pacs.ImageController;
 import com.kaos.skynet.api.entity.pipe.pacs.PacsCropImageRec;
 import com.kaos.skynet.api.service.inf.pipe.pacs.ImageService;
-import com.kaos.skynet.core.gson.Gsons;
+import com.kaos.skynet.core.Gsons;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

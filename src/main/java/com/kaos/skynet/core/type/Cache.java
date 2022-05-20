@@ -10,13 +10,15 @@ import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
-import com.kaos.skynet.core.gson.Gsons;
+import com.kaos.skynet.core.Gsons;
+
+import org.springframework.core.convert.converter.Converter;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public abstract class Cache<K extends Object, V> {
+public abstract class Cache<K extends Object, V extends Object> {
     /**
      * 序列化工具
      */
@@ -34,7 +36,7 @@ public abstract class Cache<K extends Object, V> {
      * @param size
      * @param cacheLoader
      */
-    public Cache(Class<K> classOfK, Integer size, Gson gson, CacheLoader<K, Optional<V>> cacheLoader) {
+    public Cache(Class<K> classOfK, Integer size, Gson gson, Converter<K, V> converter) {
         // 记录序列化工具
         this.gson = gson;
 
@@ -50,7 +52,7 @@ public abstract class Cache<K extends Object, V> {
                         K realKey = gson.fromJson(key, classOfK);
 
                         // 使用传入的loader加载对象
-                        return cacheLoader.load(realKey);
+                        return Optional.fromNullable(converter.convert(realKey));
                     }
                 });
     }
@@ -62,8 +64,8 @@ public abstract class Cache<K extends Object, V> {
      * @param size
      * @param cacheLoader
      */
-    public Cache(Class<K> classOfK, Integer size, CacheLoader<K, Optional<V>> cacheLoader) {
-        this(classOfK, size, Gsons.newGson(), cacheLoader);
+    public Cache(Class<K> classOfK, Integer size, Converter<K, V> converter) {
+        this(classOfK, size, Gsons.newGson(), converter);
     }
 
     /**
