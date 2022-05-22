@@ -66,12 +66,12 @@ public class ThreadPoolImpl implements ThreadPool {
             throw new RuntimeException("线程池逻辑错误");
         } else {
             // 重置计数器
-            this.counter = new CountDownLatch(cnt);
+            counter = new CountDownLatch(cnt);
             // 启动计时器
-            this.timer.reset();
-            this.timer.start();
+            timer.reset();
+            timer.start();
             // 记录日志
-            log.info(String.format("启动线程池监控器, 任务数量 %d", cnt));
+            log.info(String.format("启动线程池(%s)监控器, 任务数量 %d", name, cnt));
         }
     }
 
@@ -102,7 +102,7 @@ public class ThreadPoolImpl implements ThreadPool {
                 log.error(e.getMessage());
             } finally {
                 timer.stop();
-                log.info(String.format("所有任务均已完成, 耗时 %s", timer.toString()));
+                log.info(String.format("线程池(%s)已完成所有任务, 耗时 %s", name, timer.toString()));
             }
         } else {
             log.error("试图等待尚未启动的监控器, 存在逻辑错误");

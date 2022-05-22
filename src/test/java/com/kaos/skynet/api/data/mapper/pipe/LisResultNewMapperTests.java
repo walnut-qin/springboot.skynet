@@ -16,7 +16,7 @@ public class LisResultNewMapperTests {
     LisResultNewMapper lisResultNewMapper;
 
     @Test
-    public void queryInspectResult() {
+    void queryInspectResult() {
         this.lisResultNewMapper.queryInspectResults(new Key() {
             {
                 setPatientId("0001545200");
