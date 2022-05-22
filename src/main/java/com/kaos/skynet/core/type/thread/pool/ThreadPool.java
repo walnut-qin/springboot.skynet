@@ -4,11 +4,23 @@ import lombok.Setter;
 
 public interface ThreadPool {
     /**
+     * 设置监控器
+     * 
+     * @param cnt 需等待完成的任务数量
+     */
+    void monitor(Integer cnt);
+
+    /**
      * 提交任务
      * 
      * @param runnable 可执行任务实体
      */
     void execute(Runnable runnable);
+
+    /**
+     * 等待任务完成
+     */
+    void await();
 
     /**
      * 展示线程池当前状态

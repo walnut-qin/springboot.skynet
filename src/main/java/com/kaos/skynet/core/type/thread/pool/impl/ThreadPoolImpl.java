@@ -1,17 +1,19 @@
 package com.kaos.skynet.core.type.thread.pool.impl;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Queues;
 import com.kaos.skynet.core.type.thread.pool.ThreadPool;
 
-import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
 
 /**
  * 线程池封装
  */
-@AllArgsConstructor
+@Log4j
 public class ThreadPoolImpl implements ThreadPool {
     /**
      * 线程池名称
@@ -24,8 +26,19 @@ public class ThreadPoolImpl implements ThreadPool {
     ThreadPoolExecutor executor = null;
 
     /**
+     * 计数器
+     */
+    CountDownLatch counter = null;
+
+    /**
+     * 计时器
+     */
+    final Stopwatch timer = Stopwatch.createUnstarted();
+
+    /**
      * 构造如下特性的线程池：1. 最大线程数量 = 1.2 * 核心线程数量 .. 下取整；2. 空闲期2小时；3. 无界阻塞队列
      * 
+     * @param name           线程池名称
      * @param coreThreadSize 核心线程数量
      */
     public ThreadPoolImpl(String name, Integer coreThreadSize) {
@@ -35,9 +48,66 @@ public class ThreadPoolImpl implements ThreadPool {
         this.executor = new ThreadPoolExecutor(coreSize, maxSize, 2, TimeUnit.HOURS, Queues.newLinkedBlockingDeque());
     }
 
+    /**
+     * 构造线程池
+     * 
+     * @param name     线程池名
+     * @param executor 线程池处理器
+     */
+    public ThreadPoolImpl(String name, ThreadPoolExecutor executor) {
+        this.name = name;
+        this.executor = executor;
+    }
+
+    @Override
+    public void monitor(Integer cnt) {
+        if (timer.isRunning()) {
+            log.error("试图在监控期间再次启动监控器, 存在逻辑错误");
+            throw new RuntimeException("线程池逻辑错误");
+        } else {
+            // 重置计数器
+            this.counter = new CountDownLatch(cnt);
+            // 启动计时器
+            this.timer.reset();
+            this.timer.start();
+            // 记录日志
+            log.info(String.format("启动线程池监控器, 任务数量 %d", cnt));
+        }
+    }
+
     @Override
     public void execute(Runnable runnable) {
-        this.executor.execute(runnable);
+        if (counter == null) {
+            this.executor.execute(runnable);
+        } else {
+            this.executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        runnable.run();
+                    } finally {
+                        counter.countDown();
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void await() {
+        if (timer.isRunning()) {
+            try {
+                counter.await();
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            } finally {
+                timer.stop();
+                log.info(String.format("所有任务均已完成, 耗时 %s", timer.toString()));
+            }
+        } else {
+            log.error("试图等待尚未启动的监控器, 存在逻辑错误");
+            throw new RuntimeException("线程池逻辑错误");
+        }
     }
 
     @Override
