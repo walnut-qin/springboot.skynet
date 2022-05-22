@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.FinIprPrepayInMapper">
-    <resultMap id="map" type="com.kaos.skynet.api.entity.inpatient.FinIprPrepayIn">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn">
         <id column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
         <id column="HAPPEN_NO" jdbcType="VARCHAR" property="happenNo"/>
         <result column="BED_NO" jdbcType="VARCHAR" property="bedNo"/>
@@ -40,7 +40,7 @@
         </where>
     </select>
 
-    <select id="queryPrepayIns" resultMap="map">
+    <select id="queryPrepayIns" parameterType="com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper$Key" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
@@ -54,42 +54,6 @@
                 <foreach collection="states" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
-            </if>
-        </where>
-        ORDER BY
-            HAPPEN_NO
-    </select>
-
-    <sql id = "rank1">
-        SELECT
-            *
-        FROM
-            FIN_IPR_PREPAYIN
-        <where>
-            <if test="true">
-                AND CARD_NO = #{cardNo}
-            </if>
-            <if test="states != null">
-                AND PRE_STATE IN
-                <foreach collection="states" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
-        </where>
-        ORDER BY
-            HAPPEN_NO DESC
-    </sql>
-
-    <select id="queryLastPrepayIn" resultMap="map">
-        SELECT
-        <include refid="item"/>
-        FROM
-        (
-        <include refid = "rank1"/>
-        )
-        <where>
-            <if test="true">
-                AND ROWNUM = 1
             </if>
         </where>
     </select>

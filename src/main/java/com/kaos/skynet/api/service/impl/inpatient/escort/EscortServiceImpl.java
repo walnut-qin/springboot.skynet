@@ -13,11 +13,12 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.data.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper.Key;
-import com.kaos.skynet.api.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortMainInfo;
@@ -27,7 +28,6 @@ import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
-import com.kaos.skynet.api.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortActionRecMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexChkMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexInfoMapper;
@@ -254,7 +254,15 @@ public class EscortServiceImpl implements EscortService {
         switch (inMainInfos.size()) {
             // 弱陪护
             case 0:
-                var lastFip = this.finIprPrepayInMapper.queryLastPrepayIn(fip.cardNo, null);
+                var fips = finIprPrepayInMapper.queryPrepayIns(new FinIprPrepayInMapper.Key() {
+                    {
+                        setCardNo(fip.cardNo);
+                    }
+                });
+                fips.sort((x, y) -> {
+                    return y.happenNo.compareTo(x.happenNo);
+                });
+                var lastFip = fips.get(0);
                 if (!lastFip.happenNo.equals(fip.happenNo)) {
                     return EscortStateEnum.注销;
                 }
@@ -411,8 +419,14 @@ public class EscortServiceImpl implements EscortService {
                 break;
 
             case 1:
-                if (fip.associateEntity.inMainInfo != null) {
-                    FinIprInMainInfo inPat = fip.associateEntity.inMainInfo;
+                var inMainInfos = inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
+                    {
+                        setCardNo(fip.cardNo);
+                        setHappenNo(fip.happenNo);
+                    }
+                });
+                if (inMainInfos != null && !inMainInfos.isEmpty()) {
+                    FinIprInMainInfo inPat = inMainInfos.get(0);
                     var ords = this.metOrdiOrderMapper.queryInpatientOrders(inPat.getInpatientNo(), "5070672", null,
                             null);
                     if (ords != null && !ords.isEmpty()) {
@@ -470,13 +484,7 @@ public class EscortServiceImpl implements EscortService {
                 throw new RuntimeException("患者存在多条在院记录");
             }
             // 检索住院证
-            var fip = this.finIprPrepayInMapper.queryPrepayIn(inPat.getCardNo(), inPat.getHappenNo());
-            if (fip == null) {
-                throw new RuntimeException("未检索到住院证");
-            } else {
-                fip.associateEntity.inMainInfo = inPat;
-            }
-            return fip;
+            return this.finIprPrepayInMapper.queryPrepayIn(inPat.getCardNo(), inPat.getHappenNo());
         } else {
             // 尝试获取住院证
             var inMainInfos = this.inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
