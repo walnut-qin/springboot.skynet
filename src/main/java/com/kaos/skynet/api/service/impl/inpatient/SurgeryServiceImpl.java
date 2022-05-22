@@ -10,7 +10,7 @@ import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
-import com.kaos.skynet.api.data.entity.inpatient.ComBedInfo;
+import com.kaos.skynet.api.data.cache.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
@@ -79,7 +79,7 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 床位接口
      */
     @Autowired
-    Cache<String, ComBedInfo> bedInfoCache;
+    ComBedInfoCache bedInfoCache;
 
     static class DeptOwnPredicate implements Predicate<MetOpsApply> {
         /**
@@ -269,7 +269,7 @@ public class SurgeryServiceImpl implements SurgeryService {
                 inMainInfo.associateEntity.dept = this.deptCache.get(inMainInfo.deptCode);
 
                 // 床位
-                inMainInfo.associateEntity.bedInfo = this.bedInfoCache.getValue(inMainInfo.bedNo);
+                inMainInfo.associateEntity.bedInfo = this.bedInfoCache.get(inMainInfo.bedNo);
             }
 
             // 实体：房间

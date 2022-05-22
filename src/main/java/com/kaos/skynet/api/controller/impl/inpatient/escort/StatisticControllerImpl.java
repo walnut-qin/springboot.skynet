@@ -11,8 +11,8 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.StatisticController;
+import com.kaos.skynet.api.data.cache.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.data.cache.pipe.lis.LisResultNewCache;
-import com.kaos.skynet.api.data.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.api.data.entity.pipe.lis.LisResultNew;
 import com.kaos.skynet.api.data.mapper.common.ComPatientInfoMapper;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
@@ -62,7 +62,7 @@ public class StatisticControllerImpl implements StatisticController {
      * 床位cache
      */
     @Autowired
-    Cache<String, ComBedInfo> bedInfoCache;
+    ComBedInfoCache bedInfoCache;
 
     /**
      * 患者信息接口
@@ -183,7 +183,7 @@ public class StatisticControllerImpl implements StatisticController {
             // 构造结果元素
             QueryEscortRsp item = new QueryEscortRsp();
             item.inDate = inMainInfo.inDate;
-            var bed = this.bedInfoCache.getValue(inMainInfo.bedNo);
+            var bed = this.bedInfoCache.get(inMainInfo.bedNo);
             if (bed != null) {
                 item.bedNo = bed.getBriefBedNo();
             }

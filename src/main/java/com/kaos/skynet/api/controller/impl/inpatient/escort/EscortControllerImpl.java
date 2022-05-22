@@ -11,11 +11,11 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.cache.impl.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.EscortController;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
+import com.kaos.skynet.api.data.cache.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
@@ -234,8 +234,8 @@ public class EscortControllerImpl implements EscortController {
                     // 若已入院，加载在院信息
                     var inMainInfo = prepayIn.associateEntity.inMainInfo;
                     rsp.deptName = inMainInfo.deptName;
-                    if (this.bedInfoCache.getValue(inMainInfo.bedNo) != null) {
-                        rsp.bedNo = this.bedInfoCache.getValue(inMainInfo.bedNo).getBriefBedNo();
+                    if (this.bedInfoCache.get(inMainInfo.bedNo) != null) {
+                        rsp.bedNo = this.bedInfoCache.get(inMainInfo.bedNo).getBriefBedNo();
                     }
                     rsp.patientNo = inMainInfo.patientNo;
                 } else {
@@ -243,8 +243,8 @@ public class EscortControllerImpl implements EscortController {
                     if (this.deptCache.get(prepayIn.preDeptCode) != null) {
                         rsp.deptName = this.deptCache.get(prepayIn.preDeptCode).getDeptName();
                     }
-                    if (this.bedInfoCache.getValue(prepayIn.bedNo) != null) {
-                        rsp.bedNo = this.bedInfoCache.getValue(prepayIn.bedNo).getBriefBedNo();
+                    if (this.bedInfoCache.get(prepayIn.bedNo) != null) {
+                        rsp.bedNo = this.bedInfoCache.get(prepayIn.bedNo).getBriefBedNo();
                     }
                 }
                 if (prepayIn.associateEntity.escortVip != null) {
