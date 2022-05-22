@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.mapper.inpatient;
+package com.kaos.skynet.api.data.mapper.inpatient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ public class BedMapperTests {
     ComBedInfoMapper bedMapper;
 
     @Test
-    public void queryBed() {
+    void queryBedInfo() {
         this.bedMapper.queryBedInfo("901985");
     }
 }

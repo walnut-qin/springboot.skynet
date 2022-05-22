@@ -5,6 +5,7 @@ import java.util.Date;
 import com.kaos.skynet.api.data.entity.common.ComPatientInfo;
 import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
+import com.kaos.skynet.api.data.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortVip;
 import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
 

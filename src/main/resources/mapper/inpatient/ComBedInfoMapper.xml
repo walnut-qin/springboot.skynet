@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.ComBedInfoMapper">
-    <resultMap id="map" type="com.kaos.skynet.api.entity.inpatient.ComBedInfo">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.ComBedInfoMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.ComBedInfo">
         <id column="BED_NO" jdbcType="VARCHAR" property="bedNo"/>
         <result column="NURSE_CELL_CODE" jdbcType="VARCHAR" property="nurseCellCode"/>
         <result column="FEE_GRADE_CODE" jdbcType="VARCHAR" property="feeGradeCode"/>
