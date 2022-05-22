@@ -51,11 +51,15 @@ public class LockFactoryImpl implements LockFactory {
         /**
          * 实际的锁实体
          */
-        @Getter
         Object lock;
 
         @Override
-        public String getName() {
+        public Object get() {
+            return lock;
+        }
+
+        @Override
+        public String name() {
             return lockName;
         }
     }

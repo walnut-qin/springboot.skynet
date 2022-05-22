@@ -31,10 +31,10 @@ public class LockExecutorImpl implements LockExecutor {
             // 执行
             synchronized (lock) {
                 try {
-                    log.debug(String.format("加锁(name = %s, hash = %d)", lock.getName(), lock.hashCode()));
+                    log.debug(String.format("加锁(name = %s, hash = %d)", lock.name(), lock.hashCode()));
                     execute(it, runnable);
                 } finally {
-                    log.debug(String.format("解锁(name = %s, hash = %d)", lock.getName(), lock.hashCode()));
+                    log.debug(String.format("解锁(name = %s, hash = %d)", lock.name(), lock.hashCode()));
                 }
             }
         } else {

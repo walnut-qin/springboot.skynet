@@ -98,9 +98,9 @@ public class EscortControllerImpl implements EscortController {
                 helperCardNo, emplCode));
 
         // 加患者锁，防止同时对同一个患者添加陪护
-        synchronized (LockMgr.patientLock.get(patientCardNo)) {
+        synchronized (LockMgr.patientLock.getLock(patientCardNo).get()) {
             // 加陪护人锁，防止同时对同一个陪护人添加陪护
-            synchronized (LockMgr.helperLock.get(helperCardNo)) {
+            synchronized (LockMgr.helperLock.getLock(helperCardNo).get()) {
                 // 调用业务
                 var escort = this.escortMainService.registerEscort(patientCardNo, helperCardNo, emplCode, remark,
                         false);
@@ -121,12 +121,12 @@ public class EscortControllerImpl implements EscortController {
 
         // 优先视作用住院号登记
         var inPat = this.inMainInfoCache.getValue(req.patientIdx);
-        var patientLock = LockMgr.patientLock.get(inPat == null ? req.patientIdx : inPat.cardNo);
+        var patientLock = LockMgr.patientLock.getLock(inPat == null ? req.patientIdx : inPat.cardNo).get();
 
         // 加患者锁，防止同时对同一个患者添加陪护
         synchronized (patientLock) {
             // 加陪护人锁，防止同时对同一个陪护人添加陪护
-            synchronized (LockMgr.helperLock.get(req.helperCardNo)) {
+            synchronized (LockMgr.helperLock.getLock(req.helperCardNo).get()) {
                 // 调用业务
                 var escort = this.escortMainService.registerEscort(req.patientIdx, req.helperCardNo, req.emplCode,
                         req.remark, Optional.fromNullable(req.getRegByWindow()).or(false));
@@ -158,7 +158,7 @@ public class EscortControllerImpl implements EscortController {
                 state == null ? "null" : stateEnum.getDescription(), emplCode));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        synchronized (LockMgr.stateLock.get(escortNo)) {
+        synchronized (LockMgr.stateLock.getLock(escortNo).get()) {
             // 调用业务
             this.escortMainService.updateEscortState(escortNo, stateEnum, emplCode, "收到客户端请求");
         }
@@ -172,7 +172,7 @@ public class EscortControllerImpl implements EscortController {
         this.logger.info(String.format("记录陪护证行为<escortNo = %s, action = %s>", escortNo, action.getDescription()));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        synchronized (LockMgr.actionLock.get(escortNo)) {
+        synchronized (LockMgr.actionLock.getLock(escortNo).get()) {
             // 调用业务
             this.escortMainService.recordEscortAction(escortNo, action, "收到客户端请求");
         }

@@ -81,7 +81,7 @@ public class StateControllerImpl implements RefreshStateController {
 
                         @Override
                         public void run() {
-                            synchronized (LockMgr.stateLock.get(escortNo)) {
+                            synchronized (LockMgr.stateLock.getLock(escortNo).get()) {
                                 try {
                                     escortMainService.updateEscortState(escortNo, null, "server", "定时任务");
                                 } catch (Exception e) {
