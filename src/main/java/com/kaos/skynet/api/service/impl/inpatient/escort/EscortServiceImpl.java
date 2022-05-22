@@ -1,5 +1,6 @@
 package com.kaos.skynet.api.service.impl.inpatient.escort;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,12 +10,13 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
+import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper.Key;
-import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexChk;
@@ -25,7 +27,6 @@ import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
-import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortActionRecMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexChkMapper;
@@ -132,7 +133,7 @@ public class EscortServiceImpl implements EscortService {
      * 住院主表缓存
      */
     @Autowired
-    Cache<String, FinIprInMainInfo> inMainInfoCache;
+    FinIprInMainInfoCache inMainInfoCache;
 
     /**
      * 判断陪护人的信息合法性
@@ -228,13 +229,18 @@ public class EscortServiceImpl implements EscortService {
         }
 
         // 获取住院实体/患者实体
-        var inMainInfos = this.inMainInfoMapper.queryInpatients(context.patientCardNo, context.happenNo, null, null);
+        var inMainInfos = inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
+            {
+                setCardNo(context.patientCardNo);
+                setHappenNo(context.happenNo);
+            }
+        });
         if (inMainInfos.size() >= 2) {
             // 过滤出院记录
             inMainInfos = Collections2.filter(inMainInfos, new Predicate<FinIprInMainInfo>() {
                 @Override
                 public boolean apply(@Nullable FinIprInMainInfo input) {
-                    switch (input.inState) {
+                    switch (input.getInState()) {
                         case 出院结算:
                         case 无费退院:
                             return false;
@@ -257,16 +263,17 @@ public class EscortServiceImpl implements EscortService {
             // 强陪护
             case 1:
                 var inMainInfo = inMainInfos.get(0);
-                switch (inMainInfo.inState) {
+                Duration duration = Duration.between(inMainInfo.getOutDate(), LocalDateTime.now());
+                switch (inMainInfo.getInState()) {
                     case 出院结算:
                     case 无费退院:
-                        if (new Date().getTime() - inMainInfo.outDate.getTime() >= 6 * 60 * 60 * 1000) {
+                        if (duration.toSeconds() >= 6 * 60 * 60) {
                             return EscortStateEnum.注销;
                         }
                         break;
 
                     case 出院登记:
-                        if (new Date().getTime() - inMainInfo.outDate.getTime() >= 12 * 60 * 60 * 1000) {
+                        if (duration.toSeconds() >= 12 * 60 * 60) {
                             return EscortStateEnum.注销;
                         }
                         break;
@@ -406,7 +413,8 @@ public class EscortServiceImpl implements EscortService {
             case 1:
                 if (fip.associateEntity.inMainInfo != null) {
                     FinIprInMainInfo inPat = fip.associateEntity.inMainInfo;
-                    var ords = this.metOrdiOrderMapper.queryInpatientOrders(inPat.inpatientNo, "5070672", null, null);
+                    var ords = this.metOrdiOrderMapper.queryInpatientOrders(inPat.getInpatientNo(), "5070672", null,
+                            null);
                     if (ords != null && !ords.isEmpty()) {
                         break;
                     }
@@ -440,10 +448,10 @@ public class EscortServiceImpl implements EscortService {
      */
     private FinIprPrepayIn queryUniqueValidPrepayIn(String patientIdx) {
         // 优先认为patientIdx是住院号，检索住院实体
-        var inPat = this.inMainInfoCache.getValue(String.format("ZY01%s", patientIdx));
+        var inPat = this.inMainInfoCache.get(String.format("ZY01%s", patientIdx));
         if (inPat != null) {
             // 判断状态
-            switch (inPat.inState) {
+            switch (inPat.getInState()) {
                 case 住院登记:
                 case 病房接诊:
                     break;
@@ -452,13 +460,17 @@ public class EscortServiceImpl implements EscortService {
                     throw new RuntimeException("此住院号非在院状态");
             }
             // 核查住院证是否关联唯一的住院实体
-            var relaInPats = this.inMainInfoMapper.queryInpatients(inPat.cardNo, null, null,
-                    Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+            var relaInPats = this.inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
+                {
+                    setCardNo(inPat.getCardNo());
+                    setStates(Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+                }
+            });
             if (relaInPats.size() != 1) {
                 throw new RuntimeException("患者存在多条在院记录");
             }
             // 检索住院证
-            var fip = this.finIprPrepayInMapper.queryPrepayIn(inPat.cardNo, inPat.happenNo);
+            var fip = this.finIprPrepayInMapper.queryPrepayIn(inPat.getCardNo(), inPat.getHappenNo());
             if (fip == null) {
                 throw new RuntimeException("未检索到住院证");
             } else {
@@ -467,8 +479,12 @@ public class EscortServiceImpl implements EscortService {
             return fip;
         } else {
             // 尝试获取住院证
-            var inMainInfos = this.inMainInfoMapper.queryInpatients(patientIdx, null, null,
-                    Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+            var inMainInfos = this.inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
+                {
+                    setCardNo(patientIdx);
+                    setStates(Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+                }
+            });
             switch (Optional.fromNullable(inMainInfos).or(Lists.newArrayList()).size()) {
                 case 0: {
                     // 弱陪护，直接取最后一张住院证
@@ -482,9 +498,10 @@ public class EscortServiceImpl implements EscortService {
                 case 1: {
                     // 强陪护，取住院证关联的陪护
                     var inMainInfo = inMainInfos.get(0);
-                    var fip = this.finIprPrepayInMapper.queryPrepayIn(inMainInfo.cardNo, inMainInfo.happenNo);
+                    var fip = this.finIprPrepayInMapper.queryPrepayIn(inMainInfo.getCardNo(), inMainInfo.getHappenNo());
                     if (fip == null) {
-                        throw new RuntimeException(String.format("未检索到住院证", inMainInfo.cardNo, inMainInfo.patientNo));
+                        throw new RuntimeException(
+                                String.format("未检索到住院证", inMainInfo.getCardNo(), inMainInfo.getHappenNo()));
                     } else {
                         fip.associateEntity.inMainInfo = inMainInfo;
                     }
@@ -644,8 +661,13 @@ public class EscortServiceImpl implements EscortService {
                 // 基本信息
                 rt.associateEntity.prepayIn.associateEntity.patientInfo = this.patientInfoCache.get(rt.patientCardNo);
                 // 住院实体
-                var inMainInfos = this.inMainInfoMapper.queryInpatients(rt.patientCardNo, rt.happenNo, null,
-                        Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+                var inMainInfos = inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
+                    {
+                        setCardNo(rt.patientCardNo);
+                        setHappenNo(rt.happenNo);
+                        setStates(Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
+                    }
+                });
                 switch (Optional.fromNullable(inMainInfos).or(Lists.newArrayList()).size()) {
                     case 1:
                         rt.associateEntity.prepayIn.associateEntity.inMainInfo = inMainInfos.get(0);

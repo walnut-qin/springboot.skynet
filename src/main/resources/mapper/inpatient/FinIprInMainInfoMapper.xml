@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper">
-    <resultMap id="map" type="com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo">
         <id column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
         <result column="MEDICAL_TYPE" jdbcType="VARCHAR" property="medicalType"/>
         <result column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
@@ -307,7 +307,7 @@
         </where>
     </select>
 
-    <select id="queryInpatients" resultMap="map">
+    <select id="queryInpatients" parameterType="com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper$Key" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM

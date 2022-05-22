@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.controller.inf.inpatient.escort;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -21,7 +21,7 @@ public interface StatisticController {
         /**
          * 入院时间
          */
-        public Date inDate = null;
+        public LocalDateTime inDate = null;
 
         /**
          * 床号

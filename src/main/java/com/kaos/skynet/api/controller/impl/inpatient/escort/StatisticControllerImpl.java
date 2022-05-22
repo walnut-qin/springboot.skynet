@@ -13,13 +13,13 @@ import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.StatisticController;
 import com.kaos.skynet.api.data.cache.inpatient.ComBedInfoCache;
 import com.kaos.skynet.api.data.cache.pipe.lis.LisResultNewCache;
+import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.entity.pipe.lis.LisResultNew;
 import com.kaos.skynet.api.data.mapper.common.ComPatientInfoMapper;
-import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.entity.inpatient.FinSpecialCityPatient;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
-import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
 
 import org.apache.log4j.Logger;
@@ -153,12 +153,17 @@ public class StatisticControllerImpl implements StatisticController {
     @RequestMapping(value = "queryEscortData", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryEscortRsp> queryEscortData(@NotNull(message = "科室编码不能为空") String deptCode) {
         // 查询指定科室的在院患者
-        var pats = this.inMainInfoMapper.queryInpatients(null, null, deptCode, Lists.newArrayList(InStateEnum.病房接诊));
+        var pats = inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
+            {
+                setDeptCode(deptCode);
+                setStates(Lists.newArrayList(InStateEnum.病房接诊));
+            }
+        });
 
         // 过滤部分患者
         var filteredPats = pats.stream().filter((x) -> {
             // 检索特殊标识
-            var specialFlag = this.specialCityPatientCache.getValue(x.inpatientNo);
+            var specialFlag = this.specialCityPatientCache.getValue(x.getInpatientNo());
             if (specialFlag != null) {
                 switch (Optional.fromNullable(specialFlag.isSpecial).or("0")) {
                     case "0":
@@ -169,7 +174,7 @@ public class StatisticControllerImpl implements StatisticController {
                 }
             }
             // 门诊医保
-            if (x.extFlag2 != null && x.extFlag2.equals("4")) {
+            if (x.getExtFlag2() != null && x.getExtFlag2().equals("4")) {
                 return false;
             }
             return true;
@@ -182,14 +187,14 @@ public class StatisticControllerImpl implements StatisticController {
         for (FinIprInMainInfo inMainInfo : filteredPats) {
             // 构造结果元素
             QueryEscortRsp item = new QueryEscortRsp();
-            item.inDate = inMainInfo.inDate;
-            var bed = this.bedInfoCache.get(inMainInfo.bedNo);
+            item.inDate = inMainInfo.getInDate();
+            var bed = this.bedInfoCache.get(inMainInfo.getBedNo());
             if (bed != null) {
                 item.bedNo = bed.getBriefBedNo();
             }
-            item.name = inMainInfo.name;
-            item.cardNo = inMainInfo.cardNo;
-            var patient = this.patientInfoMapper.queryPatientInfo(inMainInfo.cardNo);
+            item.name = inMainInfo.getName();
+            item.cardNo = inMainInfo.getCardNo();
+            var patient = this.patientInfoMapper.queryPatientInfo(inMainInfo.getCardNo());
             if (patient != null) {
                 item.healthCode = patient.getHealthCode();
                 item.travelCode = patient.getTravelCode();
@@ -198,12 +203,12 @@ public class StatisticControllerImpl implements StatisticController {
                 }
                 item.highRiskArea = patient.getHighRiskArea();
             }
-            item.nucleicAcidResult = this.queryNucleicAcidResult(inMainInfo.cardNo);
+            item.nucleicAcidResult = this.queryNucleicAcidResult(inMainInfo.getCardNo());
             if (item.nucleicAcidResult == null) {
-                item.nucleicAcidResult = this.queryNucleicAcidResult(inMainInfo.patientNo);
+                item.nucleicAcidResult = this.queryNucleicAcidResult(inMainInfo.getPatientNo());
             }
             // 检索陪护
-            var escorts = this.escortService.queryHelperInfos(inMainInfo.cardNo);
+            var escorts = this.escortService.queryHelperInfos(inMainInfo.getCardNo());
             if (escorts.size() >= 1) {
                 var escort = escorts.get(0);
                 var helper = this.patientInfoMapper.queryPatientInfo(escort.helperCardNo);

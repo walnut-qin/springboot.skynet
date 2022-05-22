@@ -19,9 +19,9 @@ import com.kaos.skynet.api.controller.impl.AbstractController;
 import com.kaos.skynet.api.controller.inpatient.surgery.QuerySurgeryApplies.Response.DataItem;
 import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
+import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsRoom;
@@ -93,7 +93,7 @@ public class QuerySurgeryApplies extends AbstractController {
      * 住院主表接口
      */
     @Autowired
-    Cache<String, FinIprInMainInfo> inMainInfoCache;
+    FinIprInMainInfoCache inMainInfoCache;
 
     /**
      * 查询手术申请记录
@@ -228,21 +228,16 @@ public class QuerySurgeryApplies extends AbstractController {
         // 住院号
         result.setPatientNo(apply.patientNo);
         // 获取住院实体
-        var inMainInfo = this.inMainInfoCache.getValue("ZY01".concat(apply.patientNo));
+        var inMainInfo = this.inMainInfoCache.get("ZY01".concat(apply.patientNo));
         if (inMainInfo != null) {
             // 姓名
-            result.setName(inMainInfo.name);
+            result.setName(inMainInfo.getName());
 
             // 性别
-            result.setSex(inMainInfo.sex);
+            result.setSex(inMainInfo.getSex());
 
             // 年龄
-            Period period = inMainInfo.birthday.toLocalDate().until(LocalDate.now());
-            Integer y = period.getYears();
-            Integer m = period.getMonths();
-            Integer d = period.getDays();
-            result.setAge(
-                    String.format("%s%s%s%s%s%s", y, y == 0 ? "" : "岁", m, m == 0 ? "" : "月", d, d == 0 ? "" : "天"));
+            result.setAge(Period.between(inMainInfo.getBirthday().toLocalDate(), LocalDate.now()));
         }
 
         // 台次
@@ -321,10 +316,10 @@ public class QuerySurgeryApplies extends AbstractController {
         result.setSurgeryNameNote(apply.surgeryNameNote);
 
         // ERAS
-        result.setEras(Optional.fromNullable(inMainInfo.erasInpatient).or(false));
+        result.setEras(Optional.fromNullable(inMainInfo.getErasInpatient()).or(false));
 
         // VTE
-        result.setVte(inMainInfo.vte);
+        result.setVte(inMainInfo.getVte());
 
         // ICU flag
         result.setIcuFlag(apply.getIcuFlag());
@@ -461,7 +456,7 @@ public class QuerySurgeryApplies extends AbstractController {
              * 年龄
              */
             @Setter
-            private String age = null;
+            private Period age = null;
 
             /**
              * 台次

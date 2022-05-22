@@ -11,8 +11,8 @@ import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
 import com.kaos.skynet.api.data.cache.inpatient.ComBedInfoCache;
+import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
-import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsRoom;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
@@ -49,7 +49,7 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 住院接口
      */
     @Autowired
-    Cache<String, FinIprInMainInfo> inMainInfoCache;
+    FinIprInMainInfoCache inMainInfoCache;
 
     /**
      * 患者基本信息cache
@@ -124,7 +124,7 @@ public class SurgeryServiceImpl implements SurgeryService {
         }
     }
 
-    static class DeptCodePredicate implements Predicate<MetOpsApply> {
+    class DeptCodePredicate implements Predicate<MetOpsApply> {
         /**
          * 院区
          */
@@ -154,14 +154,18 @@ public class SurgeryServiceImpl implements SurgeryService {
 
             // 过滤科室
             if (deptCode != null && !deptCode.equals("ALL")) {
-                if (apply.associateEntity.inMainInfo == null) {
+                // 检索住院记录
+                var inMainInfo = inMainInfoCache.get("ZY01".concat(apply.patientNo));
+                if (inMainInfo == null) {
                     return false;
                 }
-                var inMainInfo = apply.associateEntity.inMainInfo;
-                if (inMainInfo.associateEntity.dept == null) {
+
+                // 检索科室信息
+                var dept = deptCache.get(inMainInfo.getDeptCode());
+                if (dept == null) {
                     return false;
                 }
-                var dept = inMainInfo.associateEntity.dept;
+
                 if (!dept.getDeptCode().equals(this.deptCode)) {
                     return false;
                 }
@@ -255,25 +259,6 @@ public class SurgeryServiceImpl implements SurgeryService {
                 arrange.associateEntity.metOpsApply = apply;
                 arrange.associateEntity.employee = this.emplCache.get(arrange.emplCode);
             }
-
-            // 实体：住院患者(只需要科室信息，不需要实时数据，允许取cache)
-            apply.associateEntity.inMainInfo = this.inMainInfoCache.getValue("ZY01" + apply.patientNo);
-            if (apply.associateEntity.inMainInfo != null) {
-                // 定位住院实体
-                var inMainInfo = apply.associateEntity.inMainInfo;
-
-                // 患者基本信息
-                inMainInfo.associateEntity.patientInfo = this.patientInfoCache.get(inMainInfo.cardNo);
-
-                // 住院科室
-                inMainInfo.associateEntity.dept = this.deptCache.get(inMainInfo.deptCode);
-
-                // 床位
-                inMainInfo.associateEntity.bedInfo = this.bedInfoCache.get(inMainInfo.bedNo);
-            }
-
-            // 实体：房间
-            apply.associateEntity.room = this.metOpsRoomCache.getValue(apply.roomId);
         }
 
         // 过滤

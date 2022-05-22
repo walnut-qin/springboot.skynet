@@ -10,13 +10,12 @@ import javax.validation.constraints.NotNull;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.escort.EscortController;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.cache.inpatient.ComBedInfoCache;
-import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.service.inf.inpatient.escort.EscortService;
@@ -85,7 +84,7 @@ public class EscortControllerImpl implements EscortController {
      * 住院实体cache
      */
     @Autowired
-    Cache<String, FinIprInMainInfo> inMainInfoCache;
+    FinIprInMainInfoCache inMainInfoCache;
 
     @Override
     @RequestMapping(value = "register", method = RequestMethod.GET, produces = MediaType.TEXT)
@@ -120,8 +119,8 @@ public class EscortControllerImpl implements EscortController {
         this.logger.info(String.format("登记陪护证, 入参%s", this.gson.toJson(req)));
 
         // 优先视作用住院号登记
-        var inPat = this.inMainInfoCache.getValue(req.patientIdx);
-        var patientLock = LockMgr.patientLock.getLock(inPat == null ? req.patientIdx : inPat.cardNo).get();
+        var inPat = this.inMainInfoCache.get(req.patientIdx);
+        var patientLock = LockMgr.patientLock.getLock(inPat == null ? req.patientIdx : inPat.getCardNo()).get();
 
         // 加患者锁，防止同时对同一个患者添加陪护
         synchronized (patientLock) {
@@ -233,11 +232,11 @@ public class EscortControllerImpl implements EscortController {
                 if (prepayIn.associateEntity.inMainInfo != null) {
                     // 若已入院，加载在院信息
                     var inMainInfo = prepayIn.associateEntity.inMainInfo;
-                    rsp.deptName = inMainInfo.deptName;
-                    if (this.bedInfoCache.get(inMainInfo.bedNo) != null) {
-                        rsp.bedNo = this.bedInfoCache.get(inMainInfo.bedNo).getBriefBedNo();
+                    rsp.deptName = inMainInfo.getDeptName();
+                    if (this.bedInfoCache.get(inMainInfo.getBedNo()) != null) {
+                        rsp.bedNo = this.bedInfoCache.get(inMainInfo.getBedNo()).getBriefBedNo();
                     }
-                    rsp.patientNo = inMainInfo.patientNo;
+                    rsp.patientNo = inMainInfo.getPatientNo();
                 } else {
                     // 若未入院，加载住院证信息
                     if (this.deptCache.get(prepayIn.preDeptCode) != null) {

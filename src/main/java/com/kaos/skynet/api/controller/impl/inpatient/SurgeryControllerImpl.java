@@ -15,9 +15,11 @@ import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.SurgeryController;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
 import com.kaos.skynet.api.data.cache.common.MetOpsnWyDocCache;
-import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.api.data.cache.inpatient.ComBedInfoCache;
+import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsArrange;
 import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsRoom;
@@ -100,7 +102,19 @@ public class SurgeryControllerImpl implements SurgeryController {
      * 住院主表缓存
      */
     @Autowired
-    Cache<String, FinIprInMainInfo> inMainInfoCache;
+    FinIprInMainInfoCache inMainInfoCache;
+
+    /**
+     * 科室缓存
+     */
+    @Autowired
+    DawnOrgDeptCache deptCache;
+
+    /**
+     * 床位缓存
+     */
+    @Autowired
+    ComBedInfoCache bedInfoCache;
 
     /**
      * 患者基本信息缓存
@@ -135,34 +149,36 @@ public class SurgeryControllerImpl implements SurgeryController {
             var inMainInfo = apply.associateEntity.inMainInfo;
 
             // 患者科室
-            if (inMainInfo.associateEntity.dept != null) {
-                rspBody.deptName = inMainInfo.associateEntity.dept.getDeptName();
+            var dept = deptCache.get(inMainInfo.getDeptCode());
+            if (dept != null) {
+                rspBody.deptName = dept.getDeptName();
             } else {
-                rspBody.deptName = inMainInfo.deptCode;
+                rspBody.deptName = inMainInfo.getDeptCode();
             }
 
             // 床号
-            if (inMainInfo.associateEntity.bedInfo != null) {
-                rspBody.bedNo = inMainInfo.associateEntity.bedInfo.getBriefBedNo();
+            var bed = bedInfoCache.get(inMainInfo.getBedNo());
+            if (bed != null) {
+                rspBody.bedNo = bed.getBriefBedNo();
             } else {
-                rspBody.bedNo = inMainInfo.bedNo;
+                rspBody.bedNo = inMainInfo.getBedNo();
             }
 
             // 患者姓名、性别、年龄
-            if (inMainInfo.associateEntity.patientInfo != null) {
-                var patientInfo = inMainInfo.associateEntity.patientInfo;
+            var patientInfo = patientInfoCache.get(inMainInfo.getCardNo());
+            if (patientInfo != null) {
                 rspBody.name = patientInfo.getName();
                 rspBody.sex = patientInfo.getSex();
                 rspBody.age = Period.between(patientInfo.getBirthday().toLocalDate(), LocalDate.now());
             } else {
-                rspBody.name = inMainInfo.name;
+                rspBody.name = inMainInfo.getName();
             }
 
             // ERAS
-            rspBody.eras = inMainInfo.erasInpatient != null && inMainInfo.erasInpatient ? "是" : "否";
+            rspBody.eras = inMainInfo.getErasInpatient() != null && inMainInfo.getErasInpatient() ? "是" : "否";
 
             // VTE
-            rspBody.vte = inMainInfo.vte;
+            rspBody.vte = inMainInfo.getVte();
         }
 
         // 诊断

@@ -1,7 +1,4 @@
-package com.kaos.skynet.api.cache.inpatient;
-
-import com.kaos.skynet.api.cache.Cache;
-import com.kaos.skynet.api.entity.inpatient.FinIprInMainInfo;
+package com.kaos.skynet.api.data.cache.inpatient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class FinIprInMainInfoCacheTests {
     @Autowired
-    Cache<String, FinIprInMainInfo> cache;
+    FinIprInMainInfoCache inMainInfoCache;
 
     @Test
     public void getCacheValue() {
-        this.cache.getValue("ZY010000705856");
+        inMainInfoCache.get("ZY010000705856");
     }    
 }

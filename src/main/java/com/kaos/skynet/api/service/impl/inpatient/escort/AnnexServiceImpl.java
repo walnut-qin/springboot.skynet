@@ -8,11 +8,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexChk;
 import com.kaos.skynet.api.entity.inpatient.escort.EscortAnnexInfo;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
-import com.kaos.skynet.api.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexChkMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.mapper.inpatient.escort.EscortMainInfoMapper;
@@ -105,10 +105,10 @@ public class AnnexServiceImpl implements AnnexService {
     @Override
     public List<EscortAnnexInfo> queryAnnexInfoInDept(String deptCode, Boolean checked) {
         // 查询该科室的所有患者
-        var inMainInfos = this.inMainInfoMapper.queryInpatients(null, null, deptCode, new ArrayList<>() {
+        var inMainInfos = inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
             {
-                add(InStateEnum.住院登记);
-                add(InStateEnum.病房接诊);
+                setDeptCode(deptCode);
+                setStates(Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊));
             }
         });
 
@@ -116,7 +116,8 @@ public class AnnexServiceImpl implements AnnexService {
         Multimap<String, String> helperCardNos = HashMultimap.create();
         for (var inMainInfo : inMainInfos) {
             // 患者关联的陪护证
-            var escorts = this.escortMainInfoMapper.queryEscortMainInfos(inMainInfo.cardNo, inMainInfo.happenNo, null,
+            var escorts = this.escortMainInfoMapper.queryEscortMainInfos(inMainInfo.getCardNo(),
+                    inMainInfo.getHappenNo(), null,
                     new ArrayList<>() {
                         {
                             add(EscortStateEnum.无核酸检测结果);
@@ -126,7 +127,7 @@ public class AnnexServiceImpl implements AnnexService {
                         }
                     });
             for (var escort : escorts) {
-                helperCardNos.put(escort.helperCardNo, inMainInfo.cardNo);
+                helperCardNos.put(escort.helperCardNo, inMainInfo.getCardNo());
             }
         }
 
