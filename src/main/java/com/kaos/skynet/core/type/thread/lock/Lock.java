@@ -1,25 +1,17 @@
 package com.kaos.skynet.core.type.thread.lock;
 
-public interface Lock<K> {
-    /**
-     * 获取锁实体
-     * 
-     * @param key
-     * @return
-     */
-    Object get(K key);
-
-    /**
-     * 获取锁总量
-     * 
-     * @return
-     */
-    Integer size();
-
+public interface Lock {
     /**
      * 获取锁名
      * 
      * @return
      */
-    String name();
+    String getName();
+
+    /**
+     * 获取原始锁对象
+     * 
+     * @return
+     */
+    Object getLock();
 }

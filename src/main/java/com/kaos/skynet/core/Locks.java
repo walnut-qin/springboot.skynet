@@ -1,9 +1,7 @@
 package com.kaos.skynet.core;
 
-import com.kaos.skynet.core.type.thread.lock.Lock;
-import com.kaos.skynet.core.type.thread.lock.impl.LockImpl;
-
-import org.springframework.core.convert.converter.Converter;
+import com.kaos.skynet.core.type.thread.lock.LockFactory;
+import com.kaos.skynet.core.type.thread.lock.impl.LockFactoryImpl;
 
 public final class Locks {
     /**
@@ -12,8 +10,8 @@ public final class Locks {
      * @param size
      * @return
      */
-    public static <K> Lock<K> newLock(String name, Integer size, Converter<K, Integer> converter) {
-        return new LockImpl<>(name, size, converter);
+    public static LockFactory newLockFactory(String name, Integer size) {
+        return new LockFactoryImpl(name, size);
     }
 
     /**
@@ -22,7 +20,7 @@ public final class Locks {
      * @param size
      * @return
      */
-    public static <K> Lock<K> newLock(Integer size, Converter<K, Integer> converter) {
-        return new LockImpl<>("匿名锁", size, converter);
+    public static LockFactory newLockFactory(Integer size) {
+        return newLockFactory("匿名锁", size);
     }
 }
