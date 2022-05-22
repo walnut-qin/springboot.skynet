@@ -1,6 +1,8 @@
 package com.kaos.skynet.core;
 
+import com.kaos.skynet.core.type.thread.lock.LockExecutor;
 import com.kaos.skynet.core.type.thread.lock.LockFactory;
+import com.kaos.skynet.core.type.thread.lock.impl.LockExecutorImpl;
 import com.kaos.skynet.core.type.thread.lock.impl.LockFactoryImpl;
 
 public final class Locks {
@@ -22,5 +24,12 @@ public final class Locks {
      */
     public static LockFactory newLockFactory(Integer size) {
         return newLockFactory("匿名锁", size);
+    }
+
+    /**
+     * 构造运行器
+     */
+    public static LockExecutor newLockExecutor() {
+        return new LockExecutorImpl();
     }
 }
