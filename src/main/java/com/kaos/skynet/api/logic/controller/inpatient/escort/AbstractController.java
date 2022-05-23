@@ -3,7 +3,7 @@ package com.kaos.skynet.api.logic.controller.inpatient.escort;
 import com.kaos.skynet.core.Locks;
 import com.kaos.skynet.core.type.thread.lock.LockFactory;
 
-public abstract class AbstractEscortController {
+public abstract class AbstractController {
     /**
      * 患者卡号锁
      */

@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.logic.controller.inpatient.escort;
+package com.kaos.skynet.api.logic.controller.inpatient.escort.annex;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.api.logic.controller.inpatient.escort.AbstractController;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.annex.AnnexService;
 import com.kaos.skynet.core.Locks;
@@ -40,7 +41,7 @@ import net.coobird.thumbnailator.Thumbnails;
 @Validated
 @RestController
 @RequestMapping({ "/ms/inpatient/escort/annex", "/ms/inpatient/escort" })
-public class AnnexController extends AbstractEscortController {
+public class AnnexController extends AbstractController {
     @Autowired
     AnnexService annexService;
 
