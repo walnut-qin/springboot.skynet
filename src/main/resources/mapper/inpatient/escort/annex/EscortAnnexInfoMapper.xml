@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexInfo">
+        <id column="ANNEX_NO" jdbcType="VARCHAR" property="annexNo"/>
+        <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo"/>
+        <result column="ANNEX_URL" jdbcType="VARCHAR" property="annexUrl"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+    </resultMap>
+
+    <sql id="item">
+        ANNEX_NO,
+        CARD_NO,
+        ANNEX_URL,
+        OPER_DATE
+    </sql>
+
+    <select id="queryAnnexInfo" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.ESCORT_ANNEX_INFO
+        <where>
+            <if test="true">
+                AND ANNEX_NO = #{annexNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAnnexInfos" parameterType="com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper$Key" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.ESCORT_ANNEX_INFO
+        <where>
+            <if test="helperCardNo != null">
+                AND CARD_NO = #{cardNo}
+            </if>
+            <if test="uploadBeginDate != null">
+                AND OPER_DATE &gt;= #{uploadBeginDate} + 0
+            </if>
+            <if test="uploadEndDate != null">
+                AND OPER_DATE &lt;= #{uploadEndDate} + 0
+            </if>
+            <if test="checked != null">
+                <if test="checked == true">
+                    AND EXISTS (
+                        SELECT
+                            1
+                        FROM
+                            KAOS.ESCORT_ANNEX_CHK
+                        WHERE
+                            ANNEX_NO = ESCORT_ANNEX_INFO.ANNEX_NO
+                    )
+                </if>
+                <if test="checked == false">
+                    AND NOT EXISTS (
+                        SELECT
+                            1
+                        FROM
+                            KAOS.ESCORT_ANNEX_CHK
+                        WHERE
+                            ANNEX_NO = ESCORT_ANNEX_INFO.ANNEX_NO
+                    )
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertAnnexInfo">
+        INSERT INTO
+            KAOS.ESCORT_ANNEX_INFO(ANNEX_NO, CARD_NO, ANNEX_URL, OPER_DATE)
+        VALUES
+            (#{annexNo}, #{cardNo}, #{annexUrl}, #{operDate})
+    </insert>
+</mapper>

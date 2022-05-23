@@ -25,7 +25,7 @@ public interface FinIprInMainInfoMapper {
      * @param states   在院状态; 等于 {@code null} 时，不作为判断条件
      * @return
      */
-    List<FinIprInMainInfo> queryInpatients(Key key);
+    List<FinIprInMainInfo> queryInMainInfos(Key key);
 
     /**
      * 检索Key值

@@ -16,12 +16,12 @@ public class FinIprInMainInfoMapperTests {
 
     @Test
     public void queryInMainInfos() {
-        this.inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
+        this.inMainInfoMapper.queryInMainInfos(new FinIprInMainInfoMapper.Key() {
             {
                 setCardNo("2000003605");
             }
         });
-        this.inMainInfoMapper.queryInpatients(new FinIprInMainInfoMapper.Key() {
+        this.inMainInfoMapper.queryInMainInfos(new FinIprInMainInfoMapper.Key() {
             {
                 setCardNo("2000003605");
                 setHappenNo(10);

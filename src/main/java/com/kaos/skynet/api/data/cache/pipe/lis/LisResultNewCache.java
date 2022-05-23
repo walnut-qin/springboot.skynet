@@ -34,8 +34,10 @@ public class LisResultNewCache extends Cache<LisResultNewCache.Key, List<LisResu
                     {
                         setPatientId(source.patientId);
                         setItemCodes(source.itemCodes);
-                        setBeginDate(LocalDateTime.now().plusDays(-source.offset));
-                        setEndDate(LocalDateTime.now());
+                        if (source.offset != null) {
+                            setBeginDate(LocalDateTime.now().plusDays(-source.offset));
+                            setEndDate(LocalDateTime.now());
+                        }
                     }
                 });
                 // 排序 - 时间逆序

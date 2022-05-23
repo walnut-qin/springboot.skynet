@@ -307,7 +307,7 @@
         </where>
     </select>
 
-    <select id="queryInpatients" parameterType="com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper$Key" resultMap="map">
+    <select id="queryInMainInfos" parameterType="com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper$Key" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM

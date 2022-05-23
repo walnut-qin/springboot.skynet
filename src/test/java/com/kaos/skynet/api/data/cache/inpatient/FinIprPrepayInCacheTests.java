@@ -5,17 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class FinIprInMainInfoCacheTests {
+public class FinIprPrepayInCacheTests {
     @Autowired
-    FinIprInMainInfoCache.MasterCache inMainInfoMasterCache;
-
-    @Autowired
-    FinIprInMainInfoCache.SlaveCache inMainInfoSlaveCache;
+    FinIprPrepayInCache prepayInCache;
 
     @Test
-    public void getCacheValue() {
-        inMainInfoMasterCache.get("ZY010000705856");
-        inMainInfoSlaveCache.get(new FinIprInMainInfoCache.SlaveCache.Key() {
+    void get() {
+        prepayInCache.get(new FinIprPrepayInCache.Key() {
             {
                 setCardNo("2000003605");
                 setHappenNo(10);

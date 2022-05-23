@@ -93,7 +93,7 @@ public class QuerySurgeryApplies extends AbstractController {
      * 住院主表接口
      */
     @Autowired
-    FinIprInMainInfoCache inMainInfoCache;
+    FinIprInMainInfoCache.MasterCache inMainInfoCache;
 
     /**
      * 查询手术申请记录

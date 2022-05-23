@@ -1,6 +1,6 @@
 package com.kaos.skynet.core.type.thread.lock;
 
-import com.kaos.skynet.core.type.Returnable;
+import java.util.concurrent.Callable;
 
 public interface LockExecutor {
     /**
@@ -17,7 +17,7 @@ public interface LockExecutor {
      * @param runnable
      * @return
      */
-    void execute(Runnable runnable);
+    <T> T execute(Callable<T> returnable);
 
     /**
      * 执行内容
@@ -26,5 +26,5 @@ public interface LockExecutor {
      * @param runnable
      * @return
      */
-    <T> T execute(Returnable<T> returnable);
+    void execute(Runnable runnable);
 }

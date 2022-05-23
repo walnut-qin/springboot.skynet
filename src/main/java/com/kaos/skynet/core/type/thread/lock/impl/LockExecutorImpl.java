@@ -2,9 +2,9 @@ package com.kaos.skynet.core.type.thread.lock.impl;
 
 import java.util.Iterator;
 import java.util.Queue;
+import java.util.concurrent.Callable;
 
 import com.google.common.collect.Queues;
-import com.kaos.skynet.core.type.Returnable;
 import com.kaos.skynet.core.type.thread.lock.Lock;
 import com.kaos.skynet.core.type.thread.lock.LockExecutor;
 
@@ -23,31 +23,7 @@ public class LockExecutorImpl implements LockExecutor {
         return this;
     }
 
-    private void execute(Iterator<Lock> it, Runnable runnable) {
-        if (it.hasNext()) {
-            // 获取锁
-            var lock = it.next();
-
-            // 执行
-            synchronized (lock) {
-                try {
-                    log.debug(String.format("加锁(name = %s, hash = %d)", lock.name(), lock.hashCode()));
-                    execute(it, runnable);
-                } finally {
-                    log.debug(String.format("解锁(name = %s, hash = %d)", lock.name(), lock.hashCode()));
-                }
-            }
-        } else {
-            runnable.run();
-        }
-    }
-
-    @Override
-    public void execute(Runnable runnable) {
-        execute(locks.iterator(), runnable);
-    }
-
-    private <T> T execute(Iterator<Lock> it, Returnable<T> returnable) {
+    private <T> T execute(Iterator<Lock> it, Callable<T> Callable) {
         if (it.hasNext()) {
             // 获取锁
             var lock = it.next();
@@ -56,18 +32,34 @@ public class LockExecutorImpl implements LockExecutor {
             synchronized (lock) {
                 try {
                     log.debug(String.format("加锁(hash = %d)", lock.hashCode()));
-                    return execute(it, returnable);
+                    return execute(it, Callable);
                 } finally {
                     log.debug(String.format("解锁(hash = %d)", lock.hashCode()));
                 }
             }
         } else {
-            return returnable.run();
+            try {
+                return Callable.call();
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                throw new RuntimeException(e);
+            }
         }
     }
 
     @Override
-    public <T> T execute(Returnable<T> returnable) {
-        return execute(locks.iterator(), returnable);
+    public <T> T execute(Callable<T> Callable) {
+        return execute(locks.iterator(), Callable);
+    }
+
+    @Override
+    public void execute(Runnable runnable) {
+        execute(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                runnable.run();
+                return null;
+            }
+        });
     }
 }

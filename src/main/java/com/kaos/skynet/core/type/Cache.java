@@ -93,6 +93,22 @@ public abstract class Cache<K extends Object, V extends Object> {
     }
 
     /**
+     * 刷新缓存的值
+     * 
+     * @param key
+     */
+    public void refresh(K key) {
+        // 序列化出真实的Key
+        String keyStr = gson.toJson(key);
+        if (keyStr == null) {
+            log.warn("缓存不支持null键");
+        }
+
+        // 检索缓存
+        loadingCache.refresh(keyStr);
+    }
+
+    /**
      * 展示缓存内容
      * 
      * @return
