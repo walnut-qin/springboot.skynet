@@ -9,6 +9,7 @@ import com.kaos.skynet.api.data.mapper.common.SequenceMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexCheckMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +61,7 @@ public class AnnexService {
         // 生成待插入对象
         EscortAnnexInfo annexInfo = new EscortAnnexInfo() {
             {
-                setAnnexNo(sequenceMapper.query("KAOS.SEQ_ANNEX_NO"));
+                setAnnexNo(StringUtils.leftPad(sequenceMapper.query("KAOS.SEQ_ANNEX_NO"), 10, '0'));
                 setCardNo(cardNo);
                 setAnnexUrl(url);
                 setOperDate(LocalDateTime.now());
@@ -90,7 +91,7 @@ public class AnnexService {
     public void checkAnnex(String annexNo, String checker, Boolean negativeFlag, LocalDateTime inspectDate) {
         // 检索审核记录
         EscortAnnexCheck annexCheck = annexCheckMasterCache.get(annexNo);
-        
+
         // 更新数据库
         if (annexCheck == null) {
             // 构造待插入对象
