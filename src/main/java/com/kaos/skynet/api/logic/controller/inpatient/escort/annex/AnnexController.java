@@ -175,12 +175,12 @@ public class AnnexController extends AbstractController {
         }
         Set<String> helperCardNos = Sets.newConcurrentHashSet();
         Multimap<String, String> helperToPatients = ArrayListMultimap.create();
-        for (String patientCardNo : patientCardNos) {
-            var escortMainInfos = escortMainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
-                {
-                    setPatientCardNo(patientCardNo);
-                }
-            });
+        var escortMainInfos = escortMainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
+            {
+                setPatientCardNos(patientCardNos.stream().toList());
+            }
+        });
+        if (escortMainInfos != null & !escortMainInfos.isEmpty()) {
             for (var escortMainInfo : escortMainInfos) {
                 helperCardNos.add(escortMainInfo.getHelperCardNo());
                 helperToPatients.put(escortMainInfo.getHelperCardNo(), escortMainInfo.getPatientCardNo());
@@ -194,8 +194,10 @@ public class AnnexController extends AbstractController {
                     setChecked(checkedBoolean);
                 }
             });
-            for (var annexInfo : orgAnnexInfos) {
-                annexInfos.add(annexInfo);
+            if (orgAnnexInfos != null && !orgAnnexInfos.isEmpty()) {
+                for (var annexInfo : orgAnnexInfos) {
+                    annexInfos.add(annexInfo);
+                }
             }
         }
 

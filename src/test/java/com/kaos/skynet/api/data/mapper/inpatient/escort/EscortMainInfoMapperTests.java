@@ -21,7 +21,7 @@ public class EscortMainInfoMapperTests {
     void queryEscortMainInfos() {
         mainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
             {
-                setPatientCardNo("2000003605");
+                setPatientCardNos(Lists.newArrayList("2000003605"));
                 setHappenNo(10);
                 setHelperCardNo("0123456789");
                 setStates(Lists.newArrayList(EscortStateEnum.注销));

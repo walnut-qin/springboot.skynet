@@ -457,7 +457,7 @@ class CoreService {
         // 已陪护检查
         List<EscortMainInfo> escortInfos = mainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
             {
-                setPatientCardNo(patientCardNo);
+                setPatientCardNos(Lists.newArrayList(patientCardNo));
                 setHelperCardNo(helperCardNo);
             }
         });
@@ -510,7 +510,7 @@ class CoreService {
         // 患者陪护上限检查
         List<EscortMainInfo> patientEscorts = mainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
             {
-                setPatientCardNo(patientCardNo);
+                setPatientCardNos(Lists.newArrayList(patientCardNo));
                 setStates(new ArrayList<>() {
                     {
                         add(EscortStateEnum.无核酸检测结果);

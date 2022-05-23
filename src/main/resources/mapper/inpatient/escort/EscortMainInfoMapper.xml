@@ -46,8 +46,11 @@
             <if test = "true">
                 AND IDX = 1
             </if>
-            <if test="patientCardNo != null">
-                AND PATIENT_CARD_NO = #{patientCardNo}
+            <if test="patientCardNos != null">
+                AND PATIENT_CARD_NO IN
+                <foreach collection="patientCardNos" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
             <if test="happenNo != null">
                 AND HAPPEN_NO = #{happenNo}

@@ -29,7 +29,7 @@ public interface EscortMainInfoMapper {
         /**
          * 患者卡号, 等于 {@code null} 时，不作为判断条件
          */
-        private String patientCardNo = null;
+        private List<String> patientCardNos = null;
 
         /**
          * 住院证序号, 等于 {@code null} 时，不作为判断条件
