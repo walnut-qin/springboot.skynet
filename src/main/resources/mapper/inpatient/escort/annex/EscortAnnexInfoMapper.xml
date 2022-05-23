@@ -33,7 +33,7 @@
         FROM
             KAOS.ESCORT_ANNEX_INFO
         <where>
-            <if test="helperCardNo != null">
+            <if test="cardNo != null">
                 AND CARD_NO = #{cardNo}
             </if>
             <if test="uploadBeginDate != null">

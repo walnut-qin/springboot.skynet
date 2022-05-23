@@ -8,9 +8,11 @@ import com.kaos.skynet.core.type.Cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
+@Component
 public class FinIprPrepayInCache extends Cache<FinIprPrepayInCache.Key, FinIprPrepayIn> {
     @Autowired
     FinIprPrepayInMapper prepayInMapper;

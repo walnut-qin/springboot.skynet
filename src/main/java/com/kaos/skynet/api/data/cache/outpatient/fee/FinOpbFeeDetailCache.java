@@ -11,9 +11,11 @@ import com.kaos.skynet.core.type.Cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
+@Component
 public class FinOpbFeeDetailCache extends Cache<FinOpbFeeDetailCache.Key, List<FinOpbFeeDetail>> {
     @Autowired
     FinOpbFeeDetailMapper feeDetailMapper;

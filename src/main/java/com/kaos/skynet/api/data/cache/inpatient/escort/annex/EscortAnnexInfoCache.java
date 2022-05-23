@@ -2,6 +2,8 @@ package com.kaos.skynet.api.data.cache.inpatient.escort.annex;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexInfo;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
 import com.kaos.skynet.core.type.Cache;
@@ -20,6 +22,7 @@ public class EscortAnnexInfoCache {
     @Component
     public class MasterCache extends Cache<String, EscortAnnexInfo> {
         @Override
+        @PostConstruct
         protected void postConstruct() {
             super.postConstruct(String.class, 100, new Converter<String, EscortAnnexInfo>() {
                 @Override
@@ -33,6 +36,7 @@ public class EscortAnnexInfoCache {
     @Component
     public class SlaveCache extends Cache<SlaveCache.Key, List<EscortAnnexInfo>> {
         @Override
+        @PostConstruct
         protected void postConstruct() {
             super.postConstruct(Key.class, 100, new Converter<Key, List<EscortAnnexInfo>>() {
                 @Override
