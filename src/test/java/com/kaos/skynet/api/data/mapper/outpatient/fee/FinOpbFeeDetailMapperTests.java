@@ -18,13 +18,11 @@ public class FinOpbFeeDetailMapperTests {
 
     @Test
     public void queryFinOpbFeeDetails() {
-        finOpbFeeDetailMapper.queryFeeDetails(new FinOpbFeeDetailMapper.Key() {
-            {
-                setClinicCode("160670");
-                setItemCode("F00000005341");
-                setOperBeginDate(LocalDateTime.of(2013, 9, 1, 0, 0, 0));
-                setOperEndDate(LocalDateTime.of(2013, 9, 1, 23, 59, 59));
-            }
-        });
+        finOpbFeeDetailMapper.queryFeeDetails(FinOpbFeeDetailMapper.Key.builder()
+                .clinicCode("160670")
+                .itemCode("F00000005341")
+                .operBeginDate(LocalDateTime.of(2013, 9, 1, 0, 0, 0))
+                .operEndDate(LocalDateTime.of(2013, 9, 1, 23, 59, 59))
+                .build());
     }
 }

@@ -19,13 +19,10 @@ public class EscortMainInfoMapperTests {
 
     @Test
     void queryEscortMainInfos() {
-        mainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
-            {
-                setPatientCardNos(Lists.newArrayList("2000003605"));
-                setHappenNo(10);
-                setHelperCardNo("0123456789");
-                setStates(Lists.newArrayList(EscortStateEnum.注销));
-            }
-        });
+        mainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
+                .patientCardNos(Lists.newArrayList("2000003605"))
+                .happenNo(10)
+                .helperCardNo("0123456789")
+                .states(Lists.newArrayList(EscortStateEnum.注销)).build());
     }
 }

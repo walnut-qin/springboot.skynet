@@ -5,6 +5,7 @@ import java.util.List;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 
+import lombok.Builder;
 import lombok.Data;
 
 public interface EscortMainInfoMapper {
@@ -25,26 +26,27 @@ public interface EscortMainInfoMapper {
     List<EscortMainInfo> queryEscortMainInfos(Key key);
 
     @Data
+    @Builder
     public static class Key {
         /**
          * 患者卡号, 等于 {@code null} 时，不作为判断条件
          */
-        private List<String> patientCardNos = null;
+        private List<String> patientCardNos;
 
         /**
          * 住院证序号, 等于 {@code null} 时，不作为判断条件
          */
-        private Integer happenNo = null;
+        private Integer happenNo;
 
         /**
          * 陪护人卡号, 等于 {@code null} 时，不作为判断条件
          */
-        private String helperCardNo = null;
+        private String helperCardNo;
 
         /**
          * 陪护证状态, 等于 {@code null} 时，不作为判断条件
          */
-        private List<EscortStateEnum> states = null;
+        private List<EscortStateEnum> states;
     }
 
     /**

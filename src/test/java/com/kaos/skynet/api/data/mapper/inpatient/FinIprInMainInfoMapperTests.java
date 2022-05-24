@@ -16,16 +16,9 @@ public class FinIprInMainInfoMapperTests {
 
     @Test
     public void queryInMainInfos() {
-        this.inMainInfoMapper.queryInMainInfos(new FinIprInMainInfoMapper.Key() {
-            {
-                setCardNo("2000003605");
-            }
-        });
-        this.inMainInfoMapper.queryInMainInfos(new FinIprInMainInfoMapper.Key() {
-            {
-                setCardNo("2000003605");
-                setHappenNo(10);
-            }
-        });
+        this.inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder().cardNo("2000003605").build());
+        this.inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                .cardNo("2000003605")
+                .happenNo(10).build());
     }
 }

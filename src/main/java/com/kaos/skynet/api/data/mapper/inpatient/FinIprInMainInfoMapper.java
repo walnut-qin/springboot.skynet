@@ -5,6 +5,7 @@ import java.util.List;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 
+import lombok.Builder;
 import lombok.Data;
 
 public interface FinIprInMainInfoMapper {
@@ -31,25 +32,26 @@ public interface FinIprInMainInfoMapper {
      * 检索Key值
      */
     @Data
+    @Builder
     public static class Key {
         /**
          * 患者卡号; 等于 {@code null} 时，不作为判断条件
          */
-        private String cardNo = null;
+        private String cardNo;
 
         /**
          * 住院证序号; 等于 {@code null} 时，不作为判断条件
          */
-        private Integer happenNo = null;
+        private Integer happenNo;
 
         /**
          * 科室编码; 等于 {@code null} 时，不作为判断条件
          */
-        private String deptCode = null;
+        private String deptCode;
 
         /**
          * 在院状态; 等于 {@code null} 时，不作为判断条件
          */
-        private List<InStateEnum> states = null;
+        private List<InStateEnum> states;
     }
 }

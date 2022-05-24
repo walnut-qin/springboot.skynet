@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -45,40 +46,36 @@ public class FinIprInMainInfoCache {
     }
 
     @Component
-    public class SlaveCache extends Cache<SlaveCache.Key, List<FinIprInMainInfo>> {
+    public class SlaveCache extends Cache<SlaveCacheKey, List<FinIprInMainInfo>> {
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(Key.class, 500, new Converter<Key, List<FinIprInMainInfo>>() {
+            super.postConstruct(SlaveCacheKey.class, 500, new Converter<SlaveCacheKey, List<FinIprInMainInfo>>() {
                 @Override
-                public List<FinIprInMainInfo> convert(Key source) {
-                    return inMainInfoMapper.queryInMainInfos(new FinIprInMainInfoMapper.Key() {
-                        {
-                            setCardNo(source.cardNo);
-                            setHappenNo(source.happenNo);
-                            setStates(source.states);
-                        }
-                    });
+                public List<FinIprInMainInfo> convert(SlaveCacheKey source) {
+                    return inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                            .cardNo(source.cardNo).happenNo(source.happenNo).states(source.states).build());
                 }
             });
         }
+    }
 
-        @Data
-        public static class Key {
-            /**
-             * 卡号
-             */
-            private String cardNo = null;
+    @Data
+    @Builder
+    public static class SlaveCacheKey {
+        /**
+         * 卡号
+         */
+        private String cardNo;
 
-            /**
-             * 住院证序号
-             */
-            private Integer happenNo = null;
+        /**
+         * 住院证序号
+         */
+        private Integer happenNo;
 
-            /**
-             * 在院状态
-             */
-            private List<InStateEnum> states = null;
-        }
+        /**
+         * 在院状态
+         */
+        private List<InStateEnum> states;
     }
 }

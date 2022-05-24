@@ -15,11 +15,8 @@ public class EscortAnnexChecedCacheTests {
     @Test
     public void getCacheValue() {
         this.annexCheckedMasterCache.get("0000000565");
-        this.annexCheckedSlaveCache.get(new EscortAnnexCheckCache.Key() {
-            {
-                setCardNo("0123456789");
-                setOffset(14);
-            }
-        });
+        this.annexCheckedSlaveCache.get(EscortAnnexCheckCache.Key.builder()
+                .cardNo("0123456789")
+                .offset(14).build());
     }
 }

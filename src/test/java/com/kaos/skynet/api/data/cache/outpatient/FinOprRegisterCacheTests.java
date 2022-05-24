@@ -13,11 +13,9 @@ public class FinOprRegisterCacheTests {
 
     @Test
     void get() {
-        registerCache.get(new FinOprRegisterCache.Key() {
-            {
-                setClinicCode("clinicCode");
-                setTransType(TransTypeEnum.Positive);
-            }
-        });
+        registerCache.get(FinOprRegisterCache.Key.builder()
+                .clinicCode("clinicCode")
+                .transType(TransTypeEnum.Positive)
+                .build());
     }
 }

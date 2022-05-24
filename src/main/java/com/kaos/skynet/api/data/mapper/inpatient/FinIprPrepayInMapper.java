@@ -5,6 +5,7 @@ import java.util.List;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
 
+import lombok.Builder;
 import lombok.Data;
 
 public interface FinIprPrepayInMapper {
@@ -29,15 +30,16 @@ public interface FinIprPrepayInMapper {
      * 多查询索引
      */
     @Data
+    @Builder
     public static class Key{
         /**
          * 就诊卡号, 等于 {@code null} 时，不作为判断条件
          */
-        private String cardNo = null;
+        private String cardNo;
 
         /**
          * 状态清单, 等于 {@code null} 时，不作为判断条件
          */
-        private List<FinIprPrepayInStateEnum> states = null;
+        private List<FinIprPrepayInStateEnum> states;
     }
 }

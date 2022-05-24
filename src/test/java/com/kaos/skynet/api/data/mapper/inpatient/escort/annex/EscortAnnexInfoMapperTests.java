@@ -16,11 +16,8 @@ public class EscortAnnexInfoMapperTests {
 
     @Test
     void queryAnnexInfos() {
-        annexInfoMapper.queryAnnexInfos(new EscortAnnexInfoMapper.Key() {
-            {
-                setCardNo("2000003605");
-                setChecked(true);
-            }
-        });
+        annexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
+                .cardNo("2552076744")
+                .checked(true).build());
     }
 }

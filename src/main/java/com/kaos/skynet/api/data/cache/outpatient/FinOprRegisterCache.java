@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Component
@@ -30,15 +31,16 @@ public class FinOprRegisterCache extends Cache<FinOprRegisterCache.Key, FinOprRe
     }
 
     @Data
+    @Builder
     public static class Key {
         /**
          * 门诊号
          */
-        private String clinicCode = null;
+        private String clinicCode;
 
         /**
          * 交易类型
          */
-        private TransTypeEnum transType = null;
+        private TransTypeEnum transType;
     }
 }

@@ -17,13 +17,11 @@ public class LisResultNewMapperTests {
 
     @Test
     void queryInspectResult() {
-        this.lisResultNewMapper.queryInspectResults(new Key() {
-            {
-                setPatientId("0001545200");
-                setItemCodes(Lists.newArrayList("LYMPH#"));
-                setBeginDate(LocalDateTime.of(2021, 6, 28, 0, 0, 0));
-                setEndDate(LocalDateTime.of(2021, 6, 28, 23, 59, 59));
-            }
-        });
+        this.lisResultNewMapper.queryInspectResults(Key.builder()
+            .patientId("0001545200")
+            .itemCodes(Lists.newArrayList("LYMPH#"))
+            .beginDate(LocalDateTime.of(2021, 6, 28, 0, 0, 0))
+            .endDate(LocalDateTime.of(2021, 6, 28, 23, 59, 59))
+            .build());
     }
 }

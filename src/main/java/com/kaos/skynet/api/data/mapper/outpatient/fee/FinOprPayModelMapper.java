@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.kaos.skynet.api.data.entity.outpatient.fee.FinOprPayModel;
 
+import lombok.Builder;
 import lombok.Data;
 
 public interface FinOprPayModelMapper {
@@ -19,20 +20,21 @@ public interface FinOprPayModelMapper {
      * 检索Key值
      */
     @Data
+    @Builder
     public static class Key {
         /**
          * 就诊卡号或住院号; 等于 {@code null} 时，将IS NULL作为条件
          */
-        private String patientId = null;
+        private String patientId;
 
         /**
          * 平台结算号; 等于 {@code null} 时，不作为条件
          */
-        private String referNo = null;
+        private String referNo;
 
         /**
          * 发票号; 等于 {@code null} 时，不作为条件
          */
-        private String invoiceNo = null;
+        private String invoiceNo;
     }
 }

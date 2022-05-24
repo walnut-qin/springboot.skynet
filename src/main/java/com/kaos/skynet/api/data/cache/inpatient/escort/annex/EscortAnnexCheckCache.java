@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -53,15 +54,13 @@ public class EscortAnnexCheckCache {
                 @Override
                 public List<EscortAnnexCheck> convert(Key source) {
                     // 查询原始数据
-                    var annexChecks = annexCheckMapper.queryAnnexChecks(new EscortAnnexCheckMapper.Key() {
-                        {
-                            setCardNo(source.cardNo);
-                            if (source.offset != null) {
-                                setInspectBeginDate(LocalDateTime.now().plusDays(-source.offset));
-                                setInspectEndDate(LocalDateTime.now());
-                            }
-                        }
-                    });
+                    var builder = EscortAnnexCheckMapper.Key.builder();
+                    builder.cardNo(source.cardNo);
+                    if (source.offset != null) {
+                        builder.inspectBeginDate(LocalDateTime.now().plusDays(-source.offset))
+                                .inspectEndDate(LocalDateTime.now());
+                    }
+                    var annexChecks = annexCheckMapper.queryAnnexChecks(builder.build());
                     // 时间逆序
                     annexChecks.sort((x, y) -> {
                         return y.getInspectDate().compareTo(x.getInspectDate());
@@ -73,15 +72,16 @@ public class EscortAnnexCheckCache {
     }
 
     @Data
+    @Builder
     public static class Key {
         /**
          * 就诊卡号
          */
-        private String cardNo = null;
+        private String cardNo;
 
         /**
          * 有效期
          */
-        private Integer offset = null;
+        private Integer offset;
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Component
@@ -49,16 +49,16 @@ public class ConfigMultiMapCache {
     }
 
     @Data
-    @AllArgsConstructor
+    @Builder
     public static class Key {
         /**
          * 变量名
          */
-        private String name = null;
+        private String name;
 
         /**
          * 变量值
          */
-        private String value = null;
+        private String value;
     }
 }

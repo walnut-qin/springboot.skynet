@@ -79,13 +79,10 @@ public class PrepayServiceImpl implements PrepayService {
         for (var unbalancedPrepay : unbalancedPrepays) {
             // 查询对应的跑批中间表
             var refNum = unbalancedPrepay.referNum;
-            var payModels = payModelMapper.queryPayModels(new FinOprPayModelMapper.Key() {
-                {
-                    setPatientId(patientNo);
-                    setReferNo(refNum);
-                    setInvoiceNo(lastBalance.invoiceNo);
-                }
-            });
+            var payModels = payModelMapper.queryPayModels(FinOprPayModelMapper.Key.builder()
+                .patientId(patientNo)
+                .referNo(refNum)
+                .invoiceNo(lastBalance.invoiceNo).build());
 
             // 计算新的预交金值
             var oldCost = unbalancedPrepay.prepayCost;

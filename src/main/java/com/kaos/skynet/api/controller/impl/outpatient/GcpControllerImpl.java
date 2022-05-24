@@ -52,12 +52,8 @@ public class GcpControllerImpl implements GcpController {
         log.info("执行GCP权限检测");
 
         // 获取患者挂号信息
-        var register = this.registerCache.get(new FinOprRegisterCache.Key() {
-            {
-                setClinicCode(req.clinicCode);
-                setTransType(TransTypeEnum.Positive);
-            }
-        });
+        var register = this.registerCache.get(FinOprRegisterCache.Key.builder()
+                .clinicCode(req.clinicCode).transType(TransTypeEnum.Positive).build());
         if (register == null) {
             log.info("未找到挂号信息!");
             return false;
@@ -77,7 +73,7 @@ public class GcpControllerImpl implements GcpController {
         }
 
         // 获取配置的gcp科室列表
-        var deptConfig = configMultiMapMasterCache.get(new Key("GcpDept", req.deptCode));
+        var deptConfig = configMultiMapMasterCache.get(Key.builder().name("GcpDept").value(req.deptCode).build());
         if (deptConfig == null) {
             log.info("非GCP科室!");
             return false;

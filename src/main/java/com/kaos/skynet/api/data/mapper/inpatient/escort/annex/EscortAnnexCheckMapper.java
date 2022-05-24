@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexCheck;
 
+import lombok.Builder;
 import lombok.Data;
 
 public interface EscortAnnexCheckMapper {
@@ -25,21 +26,22 @@ public interface EscortAnnexCheckMapper {
     List<EscortAnnexCheck> queryAnnexChecks(Key key);
 
     @Data
+    @Builder
     public static class Key {
         /**
          * 就诊卡号
          */
-        private String cardNo = null;
+        private String cardNo;
 
         /**
          * 检测开始时间
          */
-        private LocalDateTime inspectBeginDate = null;
+        private LocalDateTime inspectBeginDate;
 
         /**
          * 检测结束时间
          */
-        private LocalDateTime inspectEndDate = null;
+        private LocalDateTime inspectEndDate;
     }
 
     /**

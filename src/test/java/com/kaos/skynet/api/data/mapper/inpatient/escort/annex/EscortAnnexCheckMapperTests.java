@@ -18,12 +18,9 @@ public class EscortAnnexCheckMapperTests {
 
     @Test
     void queryAnnexChecks() {
-        annexCheckMapper.queryAnnexChecks(new EscortAnnexCheckMapper.Key() {
-            {
-                setCardNo("0123456789");
-                setInspectBeginDate(LocalDateTime.now().plusDays(-2));
-                setInspectEndDate(LocalDateTime.now());
-            }
-        });
+        annexCheckMapper.queryAnnexChecks(EscortAnnexCheckMapper.Key.builder()
+                .cardNo("0123456789")
+                .inspectBeginDate(LocalDateTime.now().plusDays(-2))
+                .inspectEndDate(LocalDateTime.now()).build());
     }
 }

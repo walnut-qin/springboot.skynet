@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Component
@@ -26,35 +27,33 @@ public class FinOpbFeeDetailCache extends Cache<FinOpbFeeDetailCache.Key, List<F
         super.postConstruct(Key.class, 100, new Converter<Key, List<FinOpbFeeDetail>>() {
             @Override
             public List<FinOpbFeeDetail> convert(Key source) {
-                return feeDetailMapper.queryFeeDetails(new FinOpbFeeDetailMapper.Key() {
-                    {
-                        setCardNo(source.getCardNo());
-                        setItemCode(source.getItemCode());
-                        if (source.offset != null) {
-                            setOperBeginDate(LocalDateTime.now().plusDays(-source.offset));
-                            setOperEndDate(LocalDateTime.now());
-                        }
-                    }
-                });
+                var builder = FinOpbFeeDetailMapper.Key.builder();
+                builder.cardNo(source.cardNo).itemCode(source.itemCode);
+                if (source.offset != null) {
+                    builder.operBeginDate(LocalDateTime.now().plusDays(-source.offset))
+                            .operEndDate(LocalDateTime.now());
+                }
+                return feeDetailMapper.queryFeeDetails(builder.build());
             }
         });
     }
 
     @Data
+    @Builder
     public static class Key {
         /**
          * 就诊卡号
          */
-        private String cardNo = null;
+        private String cardNo;
 
         /**
          * 收费项目
          */
-        private String itemCode = null;
+        private String itemCode;
 
         /**
          * 有效期
          */
-        private Integer offset = null;
+        private Integer offset;
     }
 }

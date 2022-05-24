@@ -11,11 +11,6 @@ public class FinOprPayModelMapperTests {
 
     @Test
     public void queryPayModels() {
-        this.mapper.queryPayModels(new FinOprPayModelMapper.Key());
-        this.mapper.queryPayModels(new FinOprPayModelMapper.Key() {
-            {
-                setPatientId("0001111841");
-            }
-        });
+        this.mapper.queryPayModels(FinOprPayModelMapper.Key.builder().patientId("0001111841").build());
     }
 }

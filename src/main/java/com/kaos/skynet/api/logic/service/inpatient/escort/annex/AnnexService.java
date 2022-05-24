@@ -107,15 +107,12 @@ public class AnnexService {
         EscortAnnexCheck annexCheck = annexCheckMasterCache.get(annexNo);
         if (annexCheck == null) {
             // 构造待插入对象
-            annexCheck = new EscortAnnexCheck() {
-                {
-                    setAnnexNo(annexNo);
-                    setOperCode(checker);
-                    setOperDate(LocalDateTime.now());
-                    setNegative(negativeFlag);
-                    setInspectDate(inspectDate);
-                }
-            };
+            annexCheck = EscortAnnexCheck.builder()
+                    .annexNo(annexNo)
+                    .operCode(checker)
+                    .operDate(LocalDateTime.now())
+                    .negative(negativeFlag)
+                    .inspectDate(inspectDate).build();
 
             // 插入对象
             annexCheckMapper.insertAnnexCheck(annexCheck);

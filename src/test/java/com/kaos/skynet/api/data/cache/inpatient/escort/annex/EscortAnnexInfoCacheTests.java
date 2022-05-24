@@ -15,11 +15,8 @@ public class EscortAnnexInfoCacheTests {
     @Test
     void get() {
         annexInfoMasterCache.get("0000000001");
-        annexInfoSlaveCache.get(new EscortAnnexInfoCache.SlaveCache.Key() {
-            {
-                setCardNo("0123456789");
-                setChecked(false);
-            }
-        });
+        var a = EscortAnnexInfoCache.SlaveCacheKey.builder()
+                .cardNo("2552076744").build();
+        annexInfoSlaveCache.get(a);
     }
 }

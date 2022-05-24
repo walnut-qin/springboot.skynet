@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Component
@@ -34,34 +35,31 @@ public class EscortAnnexInfoCache {
     }
 
     @Component
-    public class SlaveCache extends Cache<SlaveCache.Key, List<EscortAnnexInfo>> {
+    public class SlaveCache extends Cache<SlaveCacheKey, List<EscortAnnexInfo>> {
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(Key.class, 100, new Converter<Key, List<EscortAnnexInfo>>() {
+            super.postConstruct(SlaveCacheKey.class, 100, new Converter<SlaveCacheKey, List<EscortAnnexInfo>>() {
                 @Override
-                public List<EscortAnnexInfo> convert(Key source) {
-                    return annexInfoMapper.queryAnnexInfos(new EscortAnnexInfoMapper.Key() {
-                        {
-                            setCardNo(source.getCardNo());
-                            setChecked(source.getChecked());
-                        }
-                    });
+                public List<EscortAnnexInfo> convert(SlaveCacheKey source) {
+                    return annexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
+                            .cardNo(source.getCardNo()).checked(source.getChecked()).build());
                 }
             });
         }
+    }
 
-        @Data
-        public static class Key {
-            /**
-             * 就诊卡号
-             */
-            private String cardNo = null;
+    @Data
+    @Builder
+    public static class SlaveCacheKey {
+        /**
+         * 就诊卡号
+         */
+        private String cardNo;
 
-            /**
-             * 是否已审核
-             */
-            private Boolean checked = null;
-        }
+        /**
+         * 是否已审核
+         */
+        private Boolean checked;
     }
 }

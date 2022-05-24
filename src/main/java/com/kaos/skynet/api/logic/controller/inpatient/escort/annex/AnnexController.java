@@ -1,13 +1,13 @@
 package com.kaos.skynet.api.logic.controller.inpatient.escort.annex;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.kaos.skynet.api.controller.MediaType;
@@ -75,20 +75,15 @@ public class AnnexController extends AbstractController {
         var annexNo = annexService.uploadAnnex(helperCardNo, url);
 
         // 查询所有关联陪护证
-        var escorts = escortMainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
-            {
-                setHelperCardNo(helperCardNo);
-                setStates(new ArrayList<>() {
-                    {
-                        add(EscortStateEnum.无核酸检测结果);
-                        add(EscortStateEnum.等待院内核酸检测结果);
-                        add(EscortStateEnum.等待院外核酸检测结果审核);
-                        add(EscortStateEnum.生效中);
-                        add(EscortStateEnum.其他);
-                    }
-                });
-            }
-        });
+        var escorts = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
+                .helperCardNo(helperCardNo)
+                .states(Lists.newArrayList(
+                        EscortStateEnum.无核酸检测结果,
+                        EscortStateEnum.等待院内核酸检测结果,
+                        EscortStateEnum.等待院外核酸检测结果审核,
+                        EscortStateEnum.生效中,
+                        EscortStateEnum.其他))
+                .build());
         if (escorts != null && !escorts.isEmpty()) {
             for (var escort : escorts) {
                 // 更新关联陪护状态
@@ -122,20 +117,15 @@ public class AnnexController extends AbstractController {
         var annex = annexInfoCache.get(annexNo);
 
         // 查询所有关联陪护证
-        var escorts = escortMainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
-            {
-                setHelperCardNo(annex.getCardNo());
-                setStates(new ArrayList<>() {
-                    {
-                        add(EscortStateEnum.无核酸检测结果);
-                        add(EscortStateEnum.等待院内核酸检测结果);
-                        add(EscortStateEnum.等待院外核酸检测结果审核);
-                        add(EscortStateEnum.生效中);
-                        add(EscortStateEnum.其他);
-                    }
-                });
-            }
-        });
+        var escorts = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
+                .helperCardNo(annex.getCardNo())
+                .states(Lists.newArrayList(
+                        EscortStateEnum.无核酸检测结果,
+                        EscortStateEnum.等待院内核酸检测结果,
+                        EscortStateEnum.等待院外核酸检测结果审核,
+                        EscortStateEnum.生效中,
+                        EscortStateEnum.其他))
+                .build());
         if (escorts != null && !escorts.isEmpty()) {
             for (var escort : escorts) {
                 // 更新关联陪护状态
@@ -156,16 +146,10 @@ public class AnnexController extends AbstractController {
         log.info(String.format("查询科室信息<deptCode = %s, checked = %s>", deptCode, checked.toString()));
 
         // 检索该科室所有患者
-        var inMainInfos = inMainInfoMapper.queryInMainInfos(new FinIprInMainInfoMapper.Key() {
-            {
-                setDeptCode(deptCode);
-                setStates(new ArrayList<>() {
-                    {
-                        add(InStateEnum.病房接诊);
-                    }
-                });
-            }
-        });
+        var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                .deptCode(deptCode)
+                .states(Lists.newArrayList(InStateEnum.病房接诊))
+                .build());
 
         // 映射
         Set<String> patientCardNos = Sets.newConcurrentHashSet();
@@ -175,11 +159,14 @@ public class AnnexController extends AbstractController {
         }
         Set<String> helperCardNos = Sets.newConcurrentHashSet();
         Multimap<String, String> helperToPatients = ArrayListMultimap.create();
-        var escortMainInfos = escortMainInfoMapper.queryEscortMainInfos(new EscortMainInfoMapper.Key() {
-            {
-                setPatientCardNos(patientCardNos.stream().toList());
-            }
-        });
+        var escortMainInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
+                .patientCardNos(patientCardNos.stream().toList())
+                .states(Lists.newArrayList(EscortStateEnum.无核酸检测结果,
+                        EscortStateEnum.等待院内核酸检测结果,
+                        EscortStateEnum.等待院外核酸检测结果审核,
+                        EscortStateEnum.生效中,
+                        EscortStateEnum.其他))
+                .build());
         if (escortMainInfos != null & !escortMainInfos.isEmpty()) {
             for (var escortMainInfo : escortMainInfos) {
                 helperCardNos.add(escortMainInfo.getHelperCardNo());
@@ -188,12 +175,8 @@ public class AnnexController extends AbstractController {
         }
         Set<EscortAnnexInfo> annexInfos = Sets.newConcurrentHashSet();
         for (var helperCardNo : helperCardNos) {
-            var orgAnnexInfos = annexInfoSlaveCache.get(new EscortAnnexInfoCache.SlaveCache.Key() {
-                {
-                    setCardNo(helperCardNo);
-                    setChecked(checkedBoolean);
-                }
-            });
+            var orgAnnexInfos = annexInfoSlaveCache.get(
+                    EscortAnnexInfoCache.SlaveCacheKey.builder().cardNo(helperCardNo).checked(checkedBoolean).build());
             if (orgAnnexInfos != null && !orgAnnexInfos.isEmpty()) {
                 for (var annexInfo : orgAnnexInfos) {
                     annexInfos.add(annexInfo);

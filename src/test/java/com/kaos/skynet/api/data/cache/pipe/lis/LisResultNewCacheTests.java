@@ -13,12 +13,9 @@ public class LisResultNewCacheTests {
 
     @Test
     void get() {
-        lisResultNewCache.get(new LisResultNewCache.Key() {
-            {
-                setPatientId("0001545200");
-                setItemCodes(Lists.newArrayList("LYMPH#"));
-                setOffset(-14);
-            }
-        });
+        lisResultNewCache.get(LisResultNewCache.Key.builder()
+            .patientId("0001545200")
+            .itemCodes(Lists.newArrayList("LYMPH#"))
+            .offset(14).build());
     }
 }

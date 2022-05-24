@@ -11,12 +11,9 @@ public class FinOpbFeeDetailCacheTests {
 
     @Test
     void get() {
-        feeDetailCache.get(new FinOpbFeeDetailCache.Key() {
-            {
-                setCardNo("2000003605");
-                setItemCode("F00015");
-                setOffset(14);
-            }
-        });
+        feeDetailCache.get(FinOpbFeeDetailCache.Key.builder()
+                .cardNo("2000003605")
+                .itemCode("F00015")
+                .offset(14).build());
     }
 }
