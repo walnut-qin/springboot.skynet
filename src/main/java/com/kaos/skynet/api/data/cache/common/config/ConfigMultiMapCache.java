@@ -18,10 +18,16 @@ import lombok.Data;
 @Component
 public class ConfigMultiMapCache {
     @Autowired
-    ConfigMultiMapMapper configMultiMapMapper;
+    MasterCache masterCache;
+
+    @Autowired
+    SlaveCache slaveCache;
 
     @Component
-    public class MasterCache extends Cache<Key, ConfigMultiMap> {
+    public static class MasterCache extends Cache<MasterCache.Key, ConfigMultiMap> {
+        @Autowired
+        ConfigMultiMapMapper configMultiMapMapper;
+
         @Override
         @PostConstruct
         protected void postConstruct() {
@@ -32,10 +38,27 @@ public class ConfigMultiMapCache {
                 }
             });
         }
+
+        @Data
+        @Builder
+        public static class Key {
+            /**
+             * 变量名
+             */
+            private String name;
+
+            /**
+             * 变量值
+             */
+            private String value;
+        }
     }
 
     @Component
-    public class SlaveCache extends Cache<String, List<ConfigMultiMap>> {
+    public static class SlaveCache extends Cache<String, List<ConfigMultiMap>> {
+        @Autowired
+        ConfigMultiMapMapper configMultiMapMapper;
+
         @Override
         @PostConstruct
         protected void postConstruct() {
@@ -46,19 +69,5 @@ public class ConfigMultiMapCache {
                 }
             });
         }
-    }
-
-    @Data
-    @Builder
-    public static class Key {
-        /**
-         * 变量名
-         */
-        private String name;
-
-        /**
-         * 变量值
-         */
-        private String value;
     }
 }

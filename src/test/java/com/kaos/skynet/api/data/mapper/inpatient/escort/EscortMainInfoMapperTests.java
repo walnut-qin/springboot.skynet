@@ -20,7 +20,7 @@ public class EscortMainInfoMapperTests {
     @Test
     void queryEscortMainInfos() {
         mainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
-                .patientCardNo("2000003605")
+                .patientCardNo("test")
                 .happenNo(10)
                 .helperCardNo("0123456789")
                 .states(Lists.newArrayList(EscortStateEnum.注销)).build());
