@@ -80,14 +80,10 @@ public class EscortService {
         // 模拟成功后正式更新数据库
         var vip = vipMapper.queryEscortVip(mainInfo.getPatientCardNo(), mainInfo.getHappenNo());
         if (vip == null) {
-            vipMapper.insertEscortVip(new EscortVip() {
-                {
-                    setPatientCardNo(patientCardNo);
-                    setHappenNo(mainInfo.getHappenNo());
-                    setHelperCardNo(helperCardNo);
-                    setRecDate(LocalDateTime.now());
-                }
-            });
+            vipMapper.insertEscortVip(EscortVip.builder()
+                    .patientCardNo(patientCardNo)
+                    .happenNo(mainInfo.getHappenNo())
+                    .recDate(LocalDateTime.now()).build());
         }
 
         // 插入主表
@@ -95,16 +91,13 @@ public class EscortService {
         mainInfoMapper.insertEscortMainInfo(mainInfo);
 
         // 插入状态表
-        stateRecMapper.insertEscortStateRec(new EscortStateRec() {
-            {
-                setEscortNo(simulateResult.getMainInfo().getEscortNo());
-                setRecNo(1);
-                setState(simulateResult.getState());
-                setRecEmplCode(operCode);
-                setRecDate(LocalDateTime.now());
-                setRemark("登记陪护证");
-            }
-        });
+        stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
+                .escortNo(simulateResult.getMainInfo().getEscortNo())
+                .recNo(1)
+                .state(simulateResult.getState())
+                .recEmplCode(operCode)
+                .recDate(LocalDateTime.now())
+                .remark("登记陪护证").build());
 
         return simulateResult.getMainInfo().getEscortNo();
     }
@@ -134,27 +127,21 @@ public class EscortService {
         // 读取状态列表
         var stateRecs = stateRecCache.get(escortNo);
         if (stateRecs == null || stateRecs.isEmpty()) {
-            stateRecMapper.insertEscortStateRec(new EscortStateRec() {
-                {
-                    setEscortNo(escortNo);
-                    setRecNo(1);
-                    setState(newState);
-                    setRecEmplCode(operCode);
-                    setRecDate(LocalDateTime.now());
-                    setRemark(remark);
-                }
-            });
+            stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
+                    .escortNo(escortNo)
+                    .recNo(1)
+                    .state(newState)
+                    .recEmplCode(operCode)
+                    .recDate(LocalDateTime.now())
+                    .remark(remark).build());
         } else if (stateRecs.get(0).getState() != state) {
-            stateRecMapper.insertEscortStateRec(new EscortStateRec() {
-                {
-                    setEscortNo(escortNo);
-                    setRecNo(stateRecs.get(0).getRecNo() + 1);
-                    setState(newState);
-                    setRecEmplCode(operCode);
-                    setRecDate(LocalDateTime.now());
-                    setRemark(remark);
-                }
-            });
+            stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
+                    .escortNo(escortNo)
+                    .recNo(stateRecs.get(0).getRecNo() + 1)
+                    .state(newState)
+                    .recEmplCode(operCode)
+                    .recDate(LocalDateTime.now())
+                    .remark(remark).build());
         }
 
         // 更新缓存
@@ -179,25 +166,19 @@ public class EscortService {
         // 检索最后一个行为
         var actionRecs = actionRecMapper.queryActions(escortNo);
         if (actionRecs == null || actionRecs.isEmpty()) {
-            actionRecMapper.insertAction(new EscortActionRec() {
-                {
-                    setEscortNo(escortNo);
-                    setRecNo(1);
-                    setAction(action);
-                    setRecDate(LocalDateTime.now());
-                    setRemark(remark);
-                }
-            });
+            actionRecMapper.insertAction(EscortActionRec.builder()
+                    .escortNo(escortNo)
+                    .recNo(1)
+                    .action(action)
+                    .recDate(LocalDateTime.now())
+                    .remark(remark).build());
         } else {
-            actionRecMapper.insertAction(new EscortActionRec() {
-                {
-                    setEscortNo(escortNo);
-                    setRecNo(actionRecs.get(0).getRecNo() + 1);
-                    setAction(action);
-                    setRecDate(LocalDateTime.now());
-                    setRemark(remark);
-                }
-            });
+            actionRecMapper.insertAction(EscortActionRec.builder()
+                    .escortNo(escortNo)
+                    .recNo(actionRecs.get(0).getRecNo() + 1)
+                    .action(action)
+                    .recDate(LocalDateTime.now())
+                    .remark(remark).build());
         }
     }
 }

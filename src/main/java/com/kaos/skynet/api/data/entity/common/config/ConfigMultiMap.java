@@ -1,6 +1,9 @@
 package com.kaos.skynet.api.data.entity.common.config;
 
+import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.ValidEnum;
+
+import org.apache.commons.lang3.StringUtils;
 
 import lombok.Data;
 
@@ -25,4 +28,18 @@ public class ConfigMultiMap {
      * 备注
      */
     private String remark = null;
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof ConfigMultiMap) {
+            var that = (ConfigMultiMap) arg0;
+            return StringUtils.equals(this.name, that.name) && StringUtils.equals(this.value, that.value);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name, value);
+    }
 }

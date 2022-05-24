@@ -3,6 +3,7 @@ package com.kaos.skynet.api.data.entity.outpatient;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.enums.common.NoonEnum;
@@ -11,465 +12,484 @@ import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.enums.outpatient.OutpatientStateEnum;
 
+import org.apache.commons.lang3.StringUtils;
+
+import lombok.Builder;
 import lombok.Data;
 
 /**
  * 门诊挂号实体
  */
 @Data
+@Builder
 public class FinOprRegister {
     /**
      * 门诊号
      */
-    private String clinicCode = null;
+    private String clinicCode;
 
     /**
      * 交易类型
      */
-    private TransTypeEnum transType = null;
+    private TransTypeEnum transType;
 
     /**
      * 就诊卡号
      */
-    private String cardNo = null;
+    private String cardNo;
 
     /**
      * 挂号日期
      */
-    private Date regDate = null;
+    private Date regDate;
 
     /**
      * 午别
      */
-    private NoonEnum noon = null;
+    private NoonEnum noon;
 
     /**
      * 姓名
      */
-    private String name = null;
+    private String name;
 
     /**
      * 身份证号
      */
-    private String idenNo = null;
+    private String idenNo;
 
     /**
      * 性别
      */
-    private SexEnum sex = null;
+    private SexEnum sex;
 
     /**
      * 生日
      */
-    private LocalDateTime birthday = null;
+    private LocalDateTime birthday;
 
     /**
      * 联系电话
      */
-    private String relaPhone = null;
+    private String relaPhone;
 
     /**
      * 家庭住址
      */
-    private String address = null;
+    private String address;
 
     /**
      * 证件类型
      */
-    private String cardType = null;
+    private String cardType;
 
     /**
      * 结算类别号
      */
-    private String payKindCode = null;
+    private String payKindCode;
 
     /**
      * 结算类别名
      */
-    private String payKindName = null;
+    private String payKindName;
 
     /**
      * 合同号
      */
-    private String pactCode = null;
+    private String pactCode;
 
     /**
      * 合同单位名
      */
-    private String pactName = null;
+    private String pactName;
 
     /**
      * 医疗证号
      */
-    private String medCardNo = null;
+    private String medCardNo;
 
     /**
      * 挂号级别编码
      */
-    private String regLevlCode = null;
+    private String regLevlCode;
 
     /**
      * 挂号级别名称
      */
-    private String regLevlName = null;
+    private String regLevlName;
 
     /**
      * 科室编码 ->
      */
-    private String deptCode = null;
+    private String deptCode;
 
     /**
      * 科室名称
      */
-    private String deptName = null;
+    private String deptName;
 
     /**
      * 排班序号
      */
-    private String schemaNo = null;
+    private String schemaNo;
 
     /**
      * 每日顺序号
      */
-    private String orderNo = null;
+    private String orderNo;
 
     /**
      * 看诊序号
      */
-    private String seeNo = null;
+    private String seeNo;
 
     /**
      * 看诊开始时间
      */
-    private Date beginTime = null;
+    private Date beginTime;
 
     /**
      * 看诊结束时间
      */
-    private Date endTime = null;
+    private Date endTime;
 
     /**
      * 医师编码
      */
-    private String doctCode = null;
+    private String doctCode;
 
     /**
      * 医师姓名
      */
-    private String doctName = null;
+    private String doctName;
 
     /**
      * 挂号是否收费标志
      */
-    private Boolean ynRegCharge = null;
+    private Boolean ynRegCharge;
 
     /**
      * 发票号
      */
-    private String invoiceNo = null;
+    private String invoiceNo;
 
     /**
      * 处方号
      */
-    private String recipeNo = null;
+    private String recipeNo;
 
     /**
      * 0 现场挂号，1 预约挂号，2 特诊挂号
      */
-    private String ynBook = null;
+    private String ynBook;
 
     /**
      * 0 复诊，1 出诊，2 住院复诊
      */
-    private String ynFr = null;
+    private String ynFr;
 
     /**
      * 是否为加号
      */
-    private Boolean appenFlag = null;
+    private Boolean appenFlag;
 
     /**
      * 挂号费
      */
-    private Double regFee = null;
+    private Double regFee;
 
     /**
      * 检查费
      */
-    private Double checkFee = null;
+    private Double checkFee;
 
     /**
      * 诊察费
      */
-    private Double diagFee = null;
+    private Double diagFee;
 
     /**
      * 附加费
      */
-    private Double otherFee = null;
+    private Double otherFee;
 
     /**
      * 自费金额
      */
-    private Double ownCost = null;
+    private Double ownCost;
 
     /**
      * 统筹金额
      */
-    private Double pubCost = null;
+    private Double pubCost;
 
     /**
      * 自付金额
      */
-    private Double payCost = null;
+    private Double payCost;
 
     /**
      * 有效标识
      */
-    private ValidStateEnum validFlag = null;
+    private ValidStateEnum validFlag;
 
     /**
      * 操作员编码
      */
-    private String operCode = null;
+    private String operCode;
 
     /**
      * 操作日期
      */
-    private Date operDate = null;
+    private Date operDate;
 
     /**
      * 作废人
      */
-    private String cancelOperCode = null;
+    private String cancelOperCode;
 
     /**
      * 作废时间
      */
-    private String cancelDate = null;
+    private String cancelDate;
 
     /**
      * 医疗类别
      */
-    private String medType = null;
+    private String medType;
 
     /**
      * ICD编码
      */
-    private String icdCode = null;
+    private String icdCode;
 
     /**
      * 审批人
      */
-    private String examCode = null;
+    private String examCode;
 
     /**
      * 审批时间
      */
-    private String examDate = null;
+    private String examDate;
 
     /**
      * 核查标志
      */
-    private Boolean checkFlag = null;
+    private Boolean checkFlag;
 
     /**
      * 核查人
      */
-    private String checkOperCode = null;
+    private String checkOperCode;
 
     /**
      * 核查时间
      */
-    private String checkOperDate = null;
+    private String checkOperDate;
 
     /**
      * 日结标志
      */
-    private Boolean balanceFlag = null;
+    private Boolean balanceFlag;
 
     /**
      * 日结标识号
      */
-    private String balanceNo = null;
+    private String balanceNo;
 
     /**
      * 日结员
      */
-    private String balanceOperCode = null;
+    private String balanceOperCode;
 
     /**
      * 日结时间
      */
-    private Date balanceDate = null;
+    private Date balanceDate;
 
     /**
      * 是否已看诊
      */
-    private Boolean ynSee = null;
+    private Boolean ynSee;
 
     /**
      * 看诊日期
      */
-    private Date seeDate = null;
+    private Date seeDate;
 
     /**
      * 分诊标识
      */
-    private Boolean triageFlag = null;
+    private Boolean triageFlag;
 
     /**
      * 分诊护士编码
      */
-    private String triageOperCode = null;
+    private String triageOperCode;
 
     /**
      * 分诊日期
      */
-    private Date triageDate = null;
+    private Date triageDate;
 
     /**
      * 发票打印次数
      */
-    private Integer invoicePrintCnt = null;
+    private Integer invoicePrintCnt;
 
     /**
      * 看诊科室代码
      */
-    private String seeDeptCode = null;
+    private String seeDeptCode;
 
     /**
      * 看诊医生编码
      */
-    private String seeDocCode = null;
+    private String seeDocCode;
 
     /**
      * 患者来源，4为互联网门诊患者
      */
-    private String inSource = null;
+    private String inSource;
 
     /**
      * 是否需要提取病案
      */
-    private Boolean sendInHosCaseFlag = null;
+    private Boolean sendInHosCaseFlag;
 
     /**
      * 是否加密姓名
      */
-    private Boolean encryptNameFlag = null;
+    private Boolean encryptNameFlag;
 
     /**
      * 密文
      */
-    private String normalName = null;
+    private String normalName;
 
     /**
      * 留观开始时间
      */
-    private Date inDate = null;
+    private Date inDate;
 
     /**
      * 留观结束时间
      */
-    private Date outDate = null;
+    private Date outDate;
 
     /**
      * 转归代号
      */
-    private String zg = null;
+    private String zg;
 
     /**
      * 状态
      */
-    private OutpatientStateEnum inState = null;
+    private OutpatientStateEnum inState;
 
     /**
      * 优惠金额
      */
-    private Double ecoCost = null;
+    private Double ecoCost;
 
     /**
      * 账户挂号标识
      */
-    private Boolean isAccount = null;
+    private Boolean isAccount;
 
     /**
      * 急诊号
      */
-    private Boolean emergencyFlag = null;
+    private Boolean emergencyFlag;
 
     /**
      * 系统自助挂号标志
      */
-    private String mark1 = null;
+    private String mark1;
 
     /**
      * 接诊医生编码
      */
-    private String receiptDoctCode = null;
+    private String receiptDoctCode;
 
     /**
      * 接诊时间
      */
-    private Date receiptDate = null;
+    private Date receiptDate;
 
     /**
      * 接诊状态
      */
-    private Boolean receiptFlag = null;
+    private Boolean receiptFlag;
 
     /**
      * 门诊一卡通账号
      */
-    private String accountNo = null;
+    private String accountNo;
 
     /**
      * EMR挂号流水号
      */
-    private Integer emrRegId = null;
+    private Integer emrRegId;
 
     /**
      * 健康之路订单号
      */
-    private String netCardNo = null;
+    private String netCardNo;
 
     /**
      * 院区标识
      */
-    private DeptOwnEnum deptOwn = null;
+    private DeptOwnEnum deptOwn;
 
     /**
      * 职工院区标识
      */
-    private DeptOwnEnum emplOwn = null;
+    private DeptOwnEnum emplOwn;
 
     /**
      * 号源顺序，分时段挂号
      */
-    private Integer schemaQueue = null;
+    private Integer schemaQueue;
 
     /**
      * 支付方式
      */
-    private PayModeEnum payMode = null;
+    private PayModeEnum payMode;
 
     /**
      * 预约ID
      */
-    private String recId = null;
+    private String recId;
 
     /**
      * 支付成功订单号
      */
-    private String payOrderNo = null;
+    private String payOrderNo;
 
     /**
      * 客户端订单号
      */
-    private String clinicOrderId = null;
+    private String clinicOrderId;
 
     /**
      * 标识已打印
      */
-    private Boolean isModifyPrint = null;
+    private Boolean isModifyPrint;
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof FinOprRegister) {
+            var that = (FinOprRegister) arg0;
+            return StringUtils.equals(this.clinicCode, that.clinicCode)
+                    && this.transType == that.transType;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(clinicCode, transType);
+    }
 }

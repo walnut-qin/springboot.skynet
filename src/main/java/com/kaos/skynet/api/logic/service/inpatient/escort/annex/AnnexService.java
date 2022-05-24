@@ -66,14 +66,11 @@ public class AnnexService {
     @Transactional
     public String uploadAnnex(String cardNo, String url) {
         // 生成待插入对象
-        EscortAnnexInfo annexInfo = new EscortAnnexInfo() {
-            {
-                setAnnexNo(StringUtils.leftPad(sequenceMapper.query("KAOS.SEQ_ANNEX_NO"), 10, '0'));
-                setCardNo(cardNo);
-                setAnnexUrl(url);
-                setOperDate(LocalDateTime.now());
-            }
-        };
+        EscortAnnexInfo annexInfo = EscortAnnexInfo.builder()
+                .annexNo(StringUtils.leftPad(sequenceMapper.query("KAOS.SEQ_ANNEX_NO"), 10, '0'))
+                .cardNo(cardNo)
+                .annexUrl(url)
+                .operDate(LocalDateTime.now()).build();
 
         try {
             // 插入数据库

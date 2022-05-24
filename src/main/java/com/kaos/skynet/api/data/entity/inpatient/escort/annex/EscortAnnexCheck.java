@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import com.google.common.base.Objects;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -41,9 +43,10 @@ public class EscortAnnexCheck {
     @Override
     public boolean equals(Object arg0) {
         if (arg0 instanceof EscortAnnexCheck) {
-            return annexNo.equals(((EscortAnnexCheck) arg0).annexNo);
+            var that = (EscortAnnexCheck) arg0;
+            return StringUtils.equals(this.annexNo, that.annexNo);
         }
-        return super.equals(arg0);
+        return false;
     }
 
     @Override

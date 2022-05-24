@@ -1,34 +1,54 @@
 package com.kaos.skynet.api.data.entity.inpatient.escort;
 
+import com.google.common.base.Objects;
+
+import org.apache.commons.lang3.StringUtils;
+
+import lombok.Builder;
 import lombok.Data;
 
 /**
  * 实体：陪护证主表（KAOS.ESCORT_MAIN_INFO）
  */
 @Data
+@Builder
 public class EscortMainInfo {
     /**
      * 陪护证编号
      */
-    private String escortNo = null;
+    private String escortNo;
 
     /**
      * 患者卡号
      */
-    private String patientCardNo = null;
+    private String patientCardNo;
 
     /**
      * 
      */
-    private Integer happenNo = null;
+    private Integer happenNo;
 
     /**
      * 陪护人卡号
      */
-    private String helperCardNo = null;
+    private String helperCardNo;
 
     /**
      * 备注
      */
-    private String remark = null;
+    private String remark;
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof EscortMainInfo) {
+            var that = (EscortMainInfo) arg0;
+            return StringUtils.equals(this.escortNo, that.escortNo);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(escortNo);
+    }
 }

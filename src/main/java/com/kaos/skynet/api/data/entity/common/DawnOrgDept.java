@@ -1,10 +1,14 @@
 package com.kaos.skynet.api.data.entity.common;
 
+import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.core.type.Enum;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -12,6 +16,7 @@ import lombok.Getter;
  * 实体：科室信息（XYHIS.DAWN_ORG_DEPT）
  */
 @Data
+@Builder
 public class DawnOrgDept {
     /**
      * 科室编码
@@ -37,6 +42,20 @@ public class DawnOrgDept {
      * 有效标识
      */
     private ValidEnum valid;
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof DawnOrgDept) {
+            var that = (DawnOrgDept) arg0;
+            return StringUtils.equals(this.deptCode, that.deptCode);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(deptCode);
+    }
 
     /**
      * 科室类型

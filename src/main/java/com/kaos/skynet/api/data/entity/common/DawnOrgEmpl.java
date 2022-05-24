@@ -2,11 +2,15 @@ package com.kaos.skynet.api.data.entity.common;
 
 import java.time.LocalDateTime;
 
+import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.core.type.Enum;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -14,81 +18,96 @@ import lombok.Getter;
  * 实体：职员（DAWN_ORG_EMPL）
  */
 @Data
+@Builder
 public class DawnOrgEmpl {
     /**
      * 工号
      */
-    private String emplCode = null;
+    private String emplCode;
 
     /**
      * 职工姓名
      */
-    private String emplName = null;
+    private String emplName;
 
     /**
      * 姓名拼音码
      */
-    private String emplNameSpellCode = null;
+    private String emplNameSpellCode;
 
     /**
      * 性别
      */
-    private SexEnum sex = null;
+    private SexEnum sex;
 
     /**
      * 生日
      */
-    private LocalDateTime birthday = null;
+    private LocalDateTime birthday;
 
     /**
      * 职务
      */
-    private PositionEnum position = null;
+    private PositionEnum position;
 
     /**
      * 职级
      */
-    private RankEnum rank = null;
+    private RankEnum rank;
 
     /**
      * 人员类型
      */
-    private EmplTypeEnum emplType = null;
+    private EmplTypeEnum emplType;
 
     /**
      * 身份证号
      */
-    private String identityCardNo = null;
+    private String identityCardNo;
 
     /**
      * 归属科室编码
      */
-    private String deptCode = null;
+    private String deptCode;
 
     /**
      * 归属护士站编码
      */
-    private String nurseCellCode = null;
+    private String nurseCellCode;
 
     /**
      * 电子邮件
      */
-    private String email = null;
+    private String email;
 
     /**
      * 电话号码
      */
-    private String tel = null;
+    private String tel;
 
     /**
      * 备注
      */
-    private String remark = null;
+    private String remark;
 
     /**
      * 有效标识
      */
-    private ValidEnum valid = null;
+    private ValidEnum valid;
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof DawnOrgEmpl) {
+            var that = (DawnOrgEmpl) arg0;
+            return StringUtils.equals(this.emplCode, that.emplCode);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(emplCode);
+    }
 
     /**
      * 职务

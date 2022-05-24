@@ -541,14 +541,11 @@ class CoreService {
         }
 
         // 构造模拟插入的陪护证
-        EscortMainInfo mainInfo = new EscortMainInfo() {
-            {
-                setEscortNo(null);
-                setPatientCardNo(patientCardNo);
-                setHappenNo(happenNo);
-                setHelperCardNo(helperCardNo);
-            }
-        };
+        EscortMainInfo mainInfo = EscortMainInfo.builder()
+                .escortNo(null)
+                .patientCardNo(patientCardNo)
+                .happenNo(happenNo)
+                .helperCardNo(helperCardNo).build();
 
         // 获取状态
         var state = getState(mainInfo);
