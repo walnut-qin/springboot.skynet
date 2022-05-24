@@ -3,6 +3,7 @@ package com.kaos.skynet.api.data.mapper.common;
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
+import com.kaos.skynet.api.data.mapper.common.DawnOrgEmplMapper.Key;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ public class DawnOrgEmplMapperTests {
 
     @Test
     public void queryEmpls() throws Exception {
-        this.employeeMapper.queryEmpls(null, null);
-        this.employeeMapper.queryEmpls(SexEnum.Female, Lists.newArrayList(ValidEnum.VALID));
+        employeeMapper.queryEmpls(Key.builder().sex(SexEnum.Male).valids(Lists.newArrayList(ValidEnum.VALID)).build());
     }
 }

@@ -1,25 +1,17 @@
 package com.kaos.skynet.api.controller.impl.common;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import com.google.common.collect.Lists;
-import com.kaos.skynet.api.controller.MediaType;
-import com.kaos.skynet.api.controller.inf.common.EmployeeController;
-import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.api.data.mapper.common.DawnOrgEmplMapper;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
 @RequestMapping("/ms/common/employee")
-public class EmployeeControllerImpl implements EmployeeController {
+public class EmployeeControllerImpl {
     /**
      * 日志
      */
@@ -28,21 +20,21 @@ public class EmployeeControllerImpl implements EmployeeController {
     @Autowired
     DawnOrgEmplMapper emplMapper;
 
-    @Override
-    @RequestMapping(value = "queryValidEmployees", method = RequestMethod.GET, produces = MediaType.JSON)
-    public List<EmployeeInfo> queryValidEmployees() {
-        // 检索原始有效数据
-        var rets = this.emplMapper.queryEmpls(null, Lists.newArrayList(ValidEnum.VALID));
+    // @Override
+    // @RequestMapping(value = "queryValidEmployees", method = RequestMethod.GET, produces = MediaType.JSON)
+    // public List<EmployeeInfo> queryValidEmployees() {
+    //     // 检索原始有效数据
+    //     var rets = this.emplMapper.queryEmpls(null, Lists.newArrayList(ValidEnum.VALID));
 
-        return rets.stream().map((x) -> {
-            EmployeeInfo info = new EmployeeInfo();
-            info.emplCode = x.getEmplCode();
-            info.emplName = x.getEmplName();
-            info.inputCode = x.getEmplNameSpellCode();
-            info.emplType = x.getEmplType();
-            info.deptCode = x.getDeptCode();
-            info.createDate = LocalDateTime.now();
-            return info;
-        }).toList();
-    }
+    //     return rets.stream().map((x) -> {
+    //         EmployeeInfo info = new EmployeeInfo();
+    //         info.emplCode = x.getEmplCode();
+    //         info.emplName = x.getEmplName();
+    //         info.inputCode = x.getEmplNameSpellCode();
+    //         info.emplType = x.getEmplType();
+    //         info.deptCode = x.getDeptCode();
+    //         info.createDate = LocalDateTime.now();
+    //         return info;
+    //     }).toList();
+    // }
 }

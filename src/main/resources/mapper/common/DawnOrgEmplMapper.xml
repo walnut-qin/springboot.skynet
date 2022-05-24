@@ -49,7 +49,7 @@
         </where>
     </select>
 
-    <select id="queryEmpls" resultMap="map">
+    <select id="queryEmpls" parameterType="com.kaos.skynet.api.data.mapper.common.DawnOrgEmplMapper$Key" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM

@@ -6,6 +6,9 @@ import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
 
+import lombok.Builder;
+import lombok.Data;
+
 public interface DawnOrgEmplMapper {
     /**
      * 查询本院职工实体
@@ -21,5 +24,19 @@ public interface DawnOrgEmplMapper {
      * @param valids 有效性；值为 {@code null} 时，不作为判断条件
      * @return
      */
-    List<DawnOrgEmpl> queryEmpls(SexEnum sex, List<ValidEnum> valids);
+    List<DawnOrgEmpl> queryEmpls(Key key);
+
+    @Data
+    @Builder
+    public static class Key {
+        /**
+         * 性别
+         */
+        private SexEnum sex;
+
+        /**
+         * 有效性列表
+         */
+        private List<ValidEnum> valids;
+    }
 }

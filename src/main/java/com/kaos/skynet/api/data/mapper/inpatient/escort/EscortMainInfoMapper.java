@@ -31,6 +31,11 @@ public interface EscortMainInfoMapper {
         /**
          * 患者卡号, 等于 {@code null} 时，不作为判断条件
          */
+        private String patientCardNo;
+
+        /**
+         * 患者卡号, 等于 {@code null} 时，不作为判断条件
+         */
         private List<String> patientCardNos;
 
         /**

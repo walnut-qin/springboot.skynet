@@ -41,22 +41,29 @@
             FROM
                 KAOS.ESCORT_MAIN_INFO T1
                 LEFT JOIN KAOS.ESCORT_STATE_REC T2 ON T2.ESCORT_NO = T1.ESCORT_NO
+        <if test="true">
+            <where>
+                <if test="patientCardNo != null">
+                    AND PATIENT_CARD_NO = #{patientCardNo}
+                </if>
+                <if test="patientCardNos != null">
+                    AND PATIENT_CARD_NO IN
+                    <foreach collection="patientCardNos" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="happenNo != null">
+                    AND HAPPEN_NO = #{happenNo}
+                </if>
+                <if test="helperCardNo != null">
+                    AND HELPER_CARD_NO = #{helperCardNo}
+                </if>
+            </where>
+        </if>
         )
         <where>
             <if test = "true">
                 AND IDX = 1
-            </if>
-            <if test="patientCardNos != null">
-                AND PATIENT_CARD_NO IN
-                <foreach collection="patientCardNos" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
-            <if test="happenNo != null">
-                AND HAPPEN_NO = #{happenNo}
-            </if>
-            <if test="helperCardNo != null">
-                AND HELPER_CARD_NO = #{helperCardNo}
             </if>
             <if test="states != null">
                 AND STATE IN
