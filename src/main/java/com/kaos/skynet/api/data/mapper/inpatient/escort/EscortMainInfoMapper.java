@@ -6,7 +6,8 @@ import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface EscortMainInfoMapper {
     /**
@@ -25,7 +26,8 @@ public interface EscortMainInfoMapper {
      */
     List<EscortMainInfo> queryEscortMainInfos(Key key);
 
-    @Data
+    @Getter
+    @Setter
     @Builder
     public static class Key {
         /**

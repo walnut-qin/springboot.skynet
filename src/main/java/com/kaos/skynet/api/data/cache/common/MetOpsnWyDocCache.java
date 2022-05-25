@@ -18,7 +18,7 @@ public class MetOpsnWyDocCache extends Cache<String, MetOpsnWyDoc> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 100, new Converter<String, MetOpsnWyDoc>() {
+        super.postConstruct(100, new Converter<String, MetOpsnWyDoc>() {
             @Override
             public MetOpsnWyDoc convert(String source) {
                 return metOpsnWyDocMapper.queryEmpl(source);

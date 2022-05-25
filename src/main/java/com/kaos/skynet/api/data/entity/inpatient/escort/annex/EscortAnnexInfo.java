@@ -7,9 +7,11 @@ import com.google.common.base.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class EscortAnnexInfo {
     /**

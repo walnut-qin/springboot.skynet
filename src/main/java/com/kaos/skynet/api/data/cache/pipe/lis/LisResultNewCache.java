@@ -14,7 +14,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
-import lombok.Data;
 
 @Component
 public class LisResultNewCache extends Cache<LisResultNewCache.Key, List<LisResultNew>> {
@@ -27,7 +26,7 @@ public class LisResultNewCache extends Cache<LisResultNewCache.Key, List<LisResu
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(Key.class, 300, new Converter<Key, List<LisResultNew>>() {
+        super.postConstruct(1000, new Converter<Key, List<LisResultNew>>() {
             @Override
             public List<LisResultNew> convert(Key source) {
                 // 检索数据库
@@ -50,7 +49,6 @@ public class LisResultNewCache extends Cache<LisResultNewCache.Key, List<LisResu
     /**
      * 缓存键值
      */
-    @Data
     @Builder
     public static class Key {
         /**

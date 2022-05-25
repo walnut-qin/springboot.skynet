@@ -30,7 +30,7 @@ public class EscortStateRecCache extends Cache<String, List<EscortStateRec>> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 100, new Converter<String, List<EscortStateRec>>() {
+        super.postConstruct(3000, new Converter<String, List<EscortStateRec>>() {
             @Override
             public List<EscortStateRec> convert(String source) {
                 // 检索原始数据

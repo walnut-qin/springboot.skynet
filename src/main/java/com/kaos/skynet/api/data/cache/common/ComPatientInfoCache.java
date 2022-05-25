@@ -30,7 +30,7 @@ public class ComPatientInfoCache extends Cache<String, ComPatientInfo> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 300, new Converter<String, ComPatientInfo>() {
+        super.postConstruct(300, new Converter<String, ComPatientInfo>() {
             @Override
             public ComPatientInfo convert(String source) {
                 return patientInfoMapper.queryPatientInfo(source);

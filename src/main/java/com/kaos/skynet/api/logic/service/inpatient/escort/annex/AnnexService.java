@@ -2,8 +2,7 @@ package com.kaos.skynet.api.logic.service.inpatient.escort.annex;
 
 import java.time.LocalDateTime;
 
-import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexCheckCache;
-import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexInfoCache;
+import com.kaos.skynet.api.data.cache.DataCache;
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexCheck;
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexInfo;
 import com.kaos.skynet.api.data.mapper.common.SequenceMapper;
@@ -21,6 +20,12 @@ import lombok.extern.log4j.Log4j;
 @Service
 public class AnnexService {
     /**
+     * 缓存
+     */
+    @Autowired
+    DataCache cache;
+
+    /**
      * 序列查询器
      */
     @Autowired
@@ -33,28 +38,10 @@ public class AnnexService {
     EscortAnnexInfoMapper annexInfoMapper;
 
     /**
-     * 附件信息接口
-     */
-    @Autowired
-    EscortAnnexInfoCache.MasterCache annexInfoMasterCache;
-
-    /**
      * 附件审核接口
      */
     @Autowired
     EscortAnnexCheckMapper annexCheckMapper;
-
-    /**
-     * 审核缓存
-     */
-    @Autowired
-    EscortAnnexCheckCache.MasterCache annexCheckMasterCache;
-
-    /**
-     * 审核缓存
-     */
-    @Autowired
-    EscortAnnexCheckCache.SlaveCache annexCheckSlaveCache;
 
     /**
      * 上传附件
@@ -94,14 +81,14 @@ public class AnnexService {
     @Transactional
     public void checkAnnex(String annexNo, String checker, Boolean negativeFlag, LocalDateTime inspectDate) {
         // 查询附件记录
-        EscortAnnexInfo annexInfo = annexInfoMasterCache.get(annexNo);
+        EscortAnnexInfo annexInfo = cache.getAnnexInfoCache().getMasterCache().get(annexNo);
         if (annexInfo == null) {
             log.error(String.format("待审附件不存在(annexNo = %s)", annexNo));
             throw new RuntimeException("待审附件不存在");
         }
 
         // 检索审核记录
-        EscortAnnexCheck annexCheck = annexCheckMasterCache.get(annexNo);
+        EscortAnnexCheck annexCheck = cache.getAnnexCheckCache().getMasterCache().getClone(annexNo);
         if (annexCheck == null) {
             // 构造待插入对象
             annexCheck = EscortAnnexCheck.builder()
@@ -125,6 +112,6 @@ public class AnnexService {
         }
 
         // 更新缓存
-        annexCheckMasterCache.refresh(annexNo);
+        cache.getAnnexCheckCache().getMasterCache().refresh(annexNo);
     }
 }

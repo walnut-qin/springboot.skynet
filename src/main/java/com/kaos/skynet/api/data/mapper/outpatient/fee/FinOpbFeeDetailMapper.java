@@ -6,7 +6,8 @@ import java.util.List;
 import com.kaos.skynet.api.data.entity.outpatient.fee.FinOpbFeeDetail;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface FinOpbFeeDetailMapper {
     /**
@@ -17,7 +18,8 @@ public interface FinOpbFeeDetailMapper {
      */
     List<FinOpbFeeDetail> queryFeeDetails(Key key);
 
-    @Data
+    @Getter
+    @Setter
     @Builder
     public static class Key {
         /**

@@ -17,6 +17,10 @@ public class DescriptionStringToEnumConverter<E extends Enum> implements Convert
 
     @Override
     public E convert(String source) {
+        // 判空
+        if (source == null) {
+            return null;
+        }
         // 轮训检查
         for (E e : classOfE.getEnumConstants()) {
             if (e.getDescription().equals(source)) {

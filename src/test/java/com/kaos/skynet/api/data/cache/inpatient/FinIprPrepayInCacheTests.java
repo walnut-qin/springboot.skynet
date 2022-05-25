@@ -11,11 +11,8 @@ public class FinIprPrepayInCacheTests {
 
     @Test
     void get() {
-        prepayInCache.get(new FinIprPrepayInCache.Key() {
-            {
-                setCardNo("2000003605");
-                setHappenNo(10);
-            }
-        });
+        prepayInCache.get(FinIprPrepayInCache.Key.builder()
+                .cardNo("2000003605")
+                .happenNo(10).build());
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import lombok.Data;
+import lombok.Builder;
 
 @Component
 public class FinIprPrepayInCache extends Cache<FinIprPrepayInCache.Key, FinIprPrepayIn> {
@@ -20,7 +20,7 @@ public class FinIprPrepayInCache extends Cache<FinIprPrepayInCache.Key, FinIprPr
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(Key.class, 100, new Converter<Key, FinIprPrepayIn>() {
+        super.postConstruct(100, new Converter<Key, FinIprPrepayIn>() {
             @Override
             public FinIprPrepayIn convert(Key source) {
                 return prepayInMapper.queryPrepayIn(source.cardNo, source.happenNo);
@@ -31,16 +31,16 @@ public class FinIprPrepayInCache extends Cache<FinIprPrepayInCache.Key, FinIprPr
     /**
      * 索引
      */
-    @Data
+    @Builder
     public static class Key {
         /**
          * 卡号
          */
-        private String cardNo = null;
+        private String cardNo;
 
         /**
          * 序号
          */
-        private Integer happenNo = null;
+        private Integer happenNo;
     }
 }

@@ -14,12 +14,14 @@ import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 实体：患者信息（XYHIS.COM_PATIENTINFO）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class ComPatientInfo {
     /**

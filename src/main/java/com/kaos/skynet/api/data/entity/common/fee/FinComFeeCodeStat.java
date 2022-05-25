@@ -9,13 +9,14 @@ import com.kaos.skynet.core.type.Enum;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 统计小类到统计大类的对照关系
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class FinComFeeCodeStat {
     /**

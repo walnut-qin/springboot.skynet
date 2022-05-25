@@ -28,7 +28,7 @@ public class DawnOrgDeptCache extends Cache<String, DawnOrgDept> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 500, new Converter<String, DawnOrgDept>() {
+        super.postConstruct(500, new Converter<String, DawnOrgDept>() {
             @Override
             public DawnOrgDept convert(String source) {
                 return deptMapper.queryDept(source);

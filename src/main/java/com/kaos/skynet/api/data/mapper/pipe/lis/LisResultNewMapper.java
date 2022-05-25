@@ -6,7 +6,8 @@ import java.util.List;
 import com.kaos.skynet.api.data.entity.pipe.lis.LisResultNew;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface LisResultNewMapper {
     /**
@@ -17,7 +18,8 @@ public interface LisResultNewMapper {
     /**
      * 查询的Key集合
      */
-    @Data
+    @Getter
+    @Setter
     @Builder
     public static class Key {
         /**

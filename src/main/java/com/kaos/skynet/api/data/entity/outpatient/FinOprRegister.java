@@ -15,12 +15,14 @@ import com.kaos.skynet.api.enums.outpatient.OutpatientStateEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 门诊挂号实体
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class FinOprRegister {
     /**

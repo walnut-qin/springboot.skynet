@@ -6,12 +6,14 @@ import com.kaos.skynet.api.enums.common.PayTypeEnum;
 import com.kaos.skynet.api.enums.common.TradeCodeEnum;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 支付方式表（XYHIS.FIN_OPR_PAYMODEL）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class FinOprPayModel {
     /**

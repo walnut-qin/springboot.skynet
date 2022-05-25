@@ -6,7 +6,8 @@ import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface FinIprInMainInfoMapper {
     /**
@@ -31,7 +32,8 @@ public interface FinIprInMainInfoMapper {
     /**
      * 检索Key值
      */
-    @Data
+    @Getter
+    @Setter
     @Builder
     public static class Key {
         /**

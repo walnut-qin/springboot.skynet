@@ -3,12 +3,14 @@ package com.kaos.skynet.api.data.entity.pipe.lis;
 import java.time.LocalDateTime;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * LIS检验结果（LISNEW.LIS_RESULT_NEW）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class LisResultNew {
     /**

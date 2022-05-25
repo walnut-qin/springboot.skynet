@@ -11,12 +11,14 @@ import com.kaos.skynet.api.enums.inpatient.BedStateEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 床位信息（XYHIS.COM_BEDINFO）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class ComBedInfo {
     /**

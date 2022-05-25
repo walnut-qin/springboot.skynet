@@ -3,18 +3,21 @@ package com.kaos.skynet.api.data.entity.inpatient.escort.annex;
 import java.time.LocalDateTime;
 
 import com.google.common.base.Objects;
+import com.kaos.skynet.core.type.Entity;
 
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 实体：附件审核（KAOS.ESCORT_ANNEX_CHK）
  */
-@Data
+@Getter
+@Setter
 @Builder
-public class EscortAnnexCheck {
+public class EscortAnnexCheck extends Entity {
     /**
      * 附件id
      */

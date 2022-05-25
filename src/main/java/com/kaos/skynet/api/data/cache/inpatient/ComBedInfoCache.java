@@ -28,7 +28,7 @@ public class ComBedInfoCache extends Cache<String, ComBedInfo> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 500, new Converter<String, ComBedInfo>() {
+        super.postConstruct(500, new Converter<String, ComBedInfo>() {
             @Override
             public ComBedInfo convert(String source) {
                 return bedInfoMapper.queryBedInfo(source);

@@ -14,7 +14,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * @param 类型 缓存
@@ -23,20 +23,24 @@ import lombok.Data;
  * @param 刷频 无刷
  * @param 过期 5sec
  */
+@Getter
 @Component
 public class EscortAnnexCheckCache {
-    /**
-     * 审核接口
-     */
     @Autowired
-    EscortAnnexCheckMapper annexCheckMapper;
+    MasterCache masterCache;
+
+    @Autowired
+    SlaveCache slaveCache;
 
     @Component
-    public class MasterCache extends Cache<String, EscortAnnexCheck> {
+    public static class MasterCache extends Cache<String, EscortAnnexCheck> {
+        @Autowired
+        EscortAnnexCheckMapper annexCheckMapper;
+
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(String.class, 100, new Converter<String, EscortAnnexCheck>() {
+            super.postConstruct(100, new Converter<String, EscortAnnexCheck>() {
                 @Override
                 public EscortAnnexCheck convert(String source) {
                     return annexCheckMapper.queryAnnexCheck(source);
@@ -46,11 +50,14 @@ public class EscortAnnexCheckCache {
     }
 
     @Component
-    public class SlaveCache extends Cache<Key, List<EscortAnnexCheck>> {
+    public static class SlaveCache extends Cache<SlaveCache.Key, List<EscortAnnexCheck>> {
+        @Autowired
+        EscortAnnexCheckMapper annexCheckMapper;
+
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(Key.class, 100, new Converter<Key, List<EscortAnnexCheck>>() {
+            super.postConstruct(1000, new Converter<Key, List<EscortAnnexCheck>>() {
                 @Override
                 public List<EscortAnnexCheck> convert(Key source) {
                     // 查询原始数据
@@ -69,19 +76,18 @@ public class EscortAnnexCheckCache {
                 }
             });
         }
-    }
 
-    @Data
-    @Builder
-    public static class Key {
-        /**
-         * 就诊卡号
-         */
-        private String cardNo;
+        @Builder
+        public static class Key {
+            /**
+             * 就诊卡号
+             */
+            private String cardNo;
 
-        /**
-         * 有效期
-         */
-        private Integer offset;
+            /**
+             * 有效期
+             */
+            private Integer offset;
+        }
     }
 }

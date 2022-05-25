@@ -2,7 +2,7 @@ package com.kaos.skynet.api.logic.service.inpatient.escort;
 
 import java.time.LocalDateTime;
 
-import com.kaos.skynet.api.data.cache.inpatient.escort.EscortStateRecCache;
+import com.kaos.skynet.api.data.cache.DataCache;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortVip;
@@ -14,12 +14,19 @@ import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortVipMapper;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EscortService {
+    /**
+     * 缓存
+     */
+    @Autowired
+    DataCache cache;
+
     /**
      * 陪护业务核心
      */
@@ -54,12 +61,6 @@ public class EscortService {
      * 状态表接口
      */
     @Autowired
-    EscortStateRecCache stateRecCache;
-
-    /**
-     * 状态表接口
-     */
-    @Autowired
     EscortActionRecMapper actionRecMapper;
 
     /**
@@ -87,17 +88,17 @@ public class EscortService {
         }
 
         // 插入主表
-        mainInfo.setEscortNo(sequenceMapper.query("KAOS.SEQ_ESCORT_NO"));
+        mainInfo.setEscortNo(StringUtils.leftPad(sequenceMapper.query("KAOS.SEQ_ESCORT_NO"), 10, '0'));
         mainInfoMapper.insertEscortMainInfo(mainInfo);
 
         // 插入状态表
         stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
                 .escortNo(simulateResult.getMainInfo().getEscortNo())
                 .recNo(1)
-                .state(simulateResult.getState())
+                .state(simulateResult.getStateResult().getState())
                 .recEmplCode(operCode)
                 .recDate(LocalDateTime.now())
-                .remark("登记陪护证").build());
+                .remark(simulateResult.getStateResult().getReason()).build());
 
         return simulateResult.getMainInfo().getEscortNo();
     }
@@ -120,17 +121,18 @@ public class EscortService {
 
         // 若未设置状态，则获取实时状态
         if (state == null) {
-            state = coreService.getState(mainInfo).getState();
+            var stateResult = coreService.getState(mainInfo);
+            state = stateResult.getState();
+            remark = stateResult.getReason();
         }
-        final EscortStateEnum newState = state;
 
         // 读取状态列表
-        var stateRecs = stateRecCache.get(escortNo);
+        var stateRecs = cache.getEscortStateRecCache().get(escortNo);
         if (stateRecs == null || stateRecs.isEmpty()) {
             stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
                     .escortNo(escortNo)
                     .recNo(1)
-                    .state(newState)
+                    .state(state)
                     .recEmplCode(operCode)
                     .recDate(LocalDateTime.now())
                     .remark(remark).build());
@@ -138,14 +140,14 @@ public class EscortService {
             stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
                     .escortNo(escortNo)
                     .recNo(stateRecs.get(0).getRecNo() + 1)
-                    .state(newState)
+                    .state(state)
                     .recEmplCode(operCode)
                     .recDate(LocalDateTime.now())
                     .remark(remark).build());
         }
 
         // 更新缓存
-        stateRecCache.refresh(escortNo);
+        cache.getEscortStateRecCache().refresh(escortNo);
     }
 
     /**

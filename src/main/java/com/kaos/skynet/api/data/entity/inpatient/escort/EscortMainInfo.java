@@ -5,12 +5,14 @@ import com.google.common.base.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 实体：陪护证主表（KAOS.ESCORT_MAIN_INFO）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class EscortMainInfo {
     /**

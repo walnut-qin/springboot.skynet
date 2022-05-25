@@ -7,15 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class FinIprInMainInfoCacheTests {
     @Autowired
-    FinIprInMainInfoCache.MasterCache inMainInfoMasterCache;
-
-    @Autowired
-    FinIprInMainInfoCache.SlaveCache inMainInfoSlaveCache;
+    FinIprInMainInfoCache inMainInfoCache;
 
     @Test
     public void getCacheValue() {
-        inMainInfoMasterCache.get("ZY010000705856");
-        inMainInfoSlaveCache.get(FinIprInMainInfoCache.SlaveCacheKey.builder()
+        inMainInfoCache.getMasterCache().get("ZY010000705856");
+        inMainInfoCache.getSlaveCache().get(FinIprInMainInfoCache.SlaveCache.Key.builder()
                 .cardNo("2000003605")
                 .happenNo(10)
                 .build());

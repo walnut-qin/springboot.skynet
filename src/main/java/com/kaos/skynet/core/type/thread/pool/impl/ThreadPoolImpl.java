@@ -77,20 +77,21 @@ public class ThreadPoolImpl implements ThreadPool {
 
     @Override
     public void execute(Runnable runnable) {
-        if (counter == null) {
-            this.executor.execute(runnable);
-        } else {
-            this.executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        runnable.run();
-                    } finally {
+        this.executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } catch (Exception e) {
+                    // 若发生异常，则记录异常，但不影响线程运行
+                    log.error(String.format("线程池(%s)执行任务时发生异常(%s)", name, e.getMessage()));
+                } finally {
+                    if (counter != null) {
                         counter.countDown();
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override

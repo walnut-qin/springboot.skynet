@@ -14,7 +14,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
-import lombok.Data;
 
 @Component
 public class FinOpbFeeDetailCache extends Cache<FinOpbFeeDetailCache.Key, List<FinOpbFeeDetail>> {
@@ -24,7 +23,7 @@ public class FinOpbFeeDetailCache extends Cache<FinOpbFeeDetailCache.Key, List<F
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(Key.class, 100, new Converter<Key, List<FinOpbFeeDetail>>() {
+        super.postConstruct(100, new Converter<Key, List<FinOpbFeeDetail>>() {
             @Override
             public List<FinOpbFeeDetail> convert(Key source) {
                 var builder = FinOpbFeeDetailMapper.Key.builder();
@@ -38,7 +37,6 @@ public class FinOpbFeeDetailCache extends Cache<FinOpbFeeDetailCache.Key, List<F
         });
     }
 
-    @Data
     @Builder
     public static class Key {
         /**

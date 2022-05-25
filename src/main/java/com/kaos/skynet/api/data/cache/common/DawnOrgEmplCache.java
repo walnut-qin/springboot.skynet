@@ -29,7 +29,7 @@ public class DawnOrgEmplCache extends Cache<String, DawnOrgEmpl> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 1000, new Converter<String,DawnOrgEmpl>() {
+        super.postConstruct(1000, new Converter<String,DawnOrgEmpl>() {
             @Override
             public DawnOrgEmpl convert(String source) {
                 return emplMapper.queryEmpl(source);

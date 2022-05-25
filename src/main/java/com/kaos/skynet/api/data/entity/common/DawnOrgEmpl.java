@@ -11,13 +11,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 实体：职员（DAWN_ORG_EMPL）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class DawnOrgEmpl {
     /**

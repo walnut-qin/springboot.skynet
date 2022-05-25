@@ -6,7 +6,8 @@ import com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface FinIprPrepayInMapper {
     /**
@@ -29,7 +30,8 @@ public interface FinIprPrepayInMapper {
     /**
      * 多查询索引
      */
-    @Data
+    @Getter
+    @Setter
     @Builder
     public static class Key{
         /**

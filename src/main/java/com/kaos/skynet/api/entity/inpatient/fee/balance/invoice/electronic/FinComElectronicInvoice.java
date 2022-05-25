@@ -8,12 +8,14 @@ import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.Busine
 import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.StateEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.SuccessStateEnum;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 电子发票中间表实体
  */
-@Data
+@Getter
+@Setter
 public class FinComElectronicInvoice {
     /**
      * HIS内发票号

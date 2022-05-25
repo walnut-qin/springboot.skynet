@@ -1,6 +1,6 @@
-package com.kaos.skynet.api.mapper.inpatient;
+package com.kaos.skynet.api.data.mapper.inpatient;
 
-import com.kaos.skynet.api.entity.inpatient.FinSpecialCityPatient;
+import com.kaos.skynet.api.data.entity.inpatient.FinSpecialCityPatient;
 
 public interface FinSpecialCityPatientMapper {
     /**

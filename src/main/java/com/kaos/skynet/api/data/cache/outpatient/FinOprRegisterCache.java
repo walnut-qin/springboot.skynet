@@ -12,7 +12,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
-import lombok.Data;
 
 @Component
 public class FinOprRegisterCache extends Cache<FinOprRegisterCache.Key, FinOprRegister> {
@@ -22,7 +21,7 @@ public class FinOprRegisterCache extends Cache<FinOprRegisterCache.Key, FinOprRe
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(Key.class, 100, new Converter<Key, FinOprRegister>() {
+        super.postConstruct(100, new Converter<Key, FinOprRegister>() {
             @Override
             public FinOprRegister convert(Key source) {
                 return registerMapper.queryRegister(source.clinicCode, source.transType);
@@ -30,7 +29,6 @@ public class FinOprRegisterCache extends Cache<FinOprRegisterCache.Key, FinOprRe
         });
     }
 
-    @Data
     @Builder
     public static class Key {
         /**

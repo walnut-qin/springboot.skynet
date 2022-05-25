@@ -13,19 +13,26 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
+@Getter
 @Component
 public class EscortAnnexInfoCache {
     @Autowired
-    EscortAnnexInfoMapper annexInfoMapper;
+    MasterCache masterCache;
+
+    @Autowired
+    SlaveCache slaveCache;
 
     @Component
-    public class MasterCache extends Cache<String, EscortAnnexInfo> {
+    public static class MasterCache extends Cache<String, EscortAnnexInfo> {
+        @Autowired
+        EscortAnnexInfoMapper annexInfoMapper;
+
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(String.class, 100, new Converter<String, EscortAnnexInfo>() {
+            super.postConstruct(1000, new Converter<String, EscortAnnexInfo>() {
                 @Override
                 public EscortAnnexInfo convert(String source) {
                     return annexInfoMapper.queryAnnexInfo(source);
@@ -35,31 +42,33 @@ public class EscortAnnexInfoCache {
     }
 
     @Component
-    public class SlaveCache extends Cache<SlaveCacheKey, List<EscortAnnexInfo>> {
+    public static class SlaveCache extends Cache<SlaveCache.Key, List<EscortAnnexInfo>> {
+        @Autowired
+        EscortAnnexInfoMapper annexInfoMapper;
+
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(SlaveCacheKey.class, 100, new Converter<SlaveCacheKey, List<EscortAnnexInfo>>() {
+            super.postConstruct(100, new Converter<Key, List<EscortAnnexInfo>>() {
                 @Override
-                public List<EscortAnnexInfo> convert(SlaveCacheKey source) {
+                public List<EscortAnnexInfo> convert(Key source) {
                     return annexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
-                            .cardNo(source.getCardNo()).checked(source.getChecked()).build());
+                            .cardNo(source.cardNo).checked(source.checked).build());
                 }
             });
         }
-    }
 
-    @Data
-    @Builder
-    public static class SlaveCacheKey {
-        /**
-         * 就诊卡号
-         */
-        private String cardNo;
+        @Builder
+        public static class Key {
+            /**
+             * 就诊卡号
+             */
+            private String cardNo;
 
-        /**
-         * 是否已审核
-         */
-        private Boolean checked;
+            /**
+             * 是否已审核
+             */
+            private Boolean checked;
+        }
     }
 }

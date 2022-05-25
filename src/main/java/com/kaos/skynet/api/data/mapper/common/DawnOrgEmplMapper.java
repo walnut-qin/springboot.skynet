@@ -7,7 +7,8 @@ import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface DawnOrgEmplMapper {
     /**
@@ -26,7 +27,8 @@ public interface DawnOrgEmplMapper {
      */
     List<DawnOrgEmpl> queryEmpls(Key key);
 
-    @Data
+    @Getter
+    @Setter
     @Builder
     public static class Key {
         /**

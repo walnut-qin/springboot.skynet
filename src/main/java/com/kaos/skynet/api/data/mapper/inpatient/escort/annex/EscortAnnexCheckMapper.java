@@ -6,7 +6,8 @@ import java.util.List;
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexCheck;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface EscortAnnexCheckMapper {
     /**
@@ -25,7 +26,8 @@ public interface EscortAnnexCheckMapper {
      */
     List<EscortAnnexCheck> queryAnnexChecks(Key key);
 
-    @Data
+    @Getter
+    @Setter
     @Builder
     public static class Key {
         /**

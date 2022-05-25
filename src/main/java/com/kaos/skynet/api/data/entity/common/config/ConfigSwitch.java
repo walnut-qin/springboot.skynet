@@ -6,9 +6,11 @@ import com.kaos.skynet.api.data.enums.ValidEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class ConfigSwitch {
     /**

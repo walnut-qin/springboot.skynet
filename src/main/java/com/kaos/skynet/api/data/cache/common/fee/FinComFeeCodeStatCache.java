@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
 
 @Component
 public class FinComFeeCodeStatCache extends Cache<FinComFeeCodeStatCache.Key, FinComFeeCodeStat> {
@@ -23,7 +22,7 @@ public class FinComFeeCodeStatCache extends Cache<FinComFeeCodeStatCache.Key, Fi
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(Key.class, 100, new Converter<Key, FinComFeeCodeStat>() {
+        super.postConstruct(100, new Converter<Key, FinComFeeCodeStat>() {
             @Override
             public FinComFeeCodeStat convert(Key source) {
                 return feeCodeStatMapper.queryFeeCodeStat(source.reportType, source.minFee);
@@ -31,17 +30,16 @@ public class FinComFeeCodeStatCache extends Cache<FinComFeeCodeStatCache.Key, Fi
         });
     }
 
-    @Data
-    @AllArgsConstructor
+    @Builder
     public static class Key {
         /**
          * 报告类型
          */
-        private ReportTypeEnum reportType = null;
+        private ReportTypeEnum reportType;
 
         /**
          * 最小费用编码
          */
-        private MinFeeEnum minFee = null;
+        private MinFeeEnum minFee;
     }
 }

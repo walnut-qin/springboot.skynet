@@ -18,7 +18,7 @@ public class EscortMainInfoCache extends Cache<String, EscortMainInfo> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 100, new Converter<String, EscortMainInfo>() {
+        super.postConstruct(3000, new Converter<String, EscortMainInfo>() {
             @Override
             public EscortMainInfo convert(String source) {
                 return mainInfoMapper.queryEscortMainInfo(source);

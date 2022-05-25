@@ -13,8 +13,9 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
+@Getter
 @Component
 public class ConfigMultiMapCache {
     @Autowired
@@ -31,7 +32,7 @@ public class ConfigMultiMapCache {
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(Key.class, 100, new Converter<Key, ConfigMultiMap>() {
+            super.postConstruct(100, new Converter<Key, ConfigMultiMap>() {
                 @Override
                 public ConfigMultiMap convert(Key source) {
                     return configMultiMapMapper.queryConfigMultiMap(source.name, source.value);
@@ -39,7 +40,6 @@ public class ConfigMultiMapCache {
             });
         }
 
-        @Data
         @Builder
         public static class Key {
             /**
@@ -62,7 +62,7 @@ public class ConfigMultiMapCache {
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(String.class, 100, new Converter<String, List<ConfigMultiMap>>() {
+            super.postConstruct(100, new Converter<String, List<ConfigMultiMap>>() {
                 @Override
                 public List<ConfigMultiMap> convert(String source) {
                     return configMultiMapMapper.queryConfigMultiMaps(source);

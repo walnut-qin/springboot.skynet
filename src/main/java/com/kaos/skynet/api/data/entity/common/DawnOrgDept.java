@@ -9,13 +9,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 实体：科室信息（XYHIS.DAWN_ORG_DEPT）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class DawnOrgDept {
     /**
@@ -72,13 +73,13 @@ public class DawnOrgDept {
         机关("D", "机关"),
         药房("P", "药房"),
         护士站("N", "护士站");
-    
+
         /**
          * 数据库存值
          */
         @Getter
         private String value;
-    
+
         /**
          * 描述存值
          */

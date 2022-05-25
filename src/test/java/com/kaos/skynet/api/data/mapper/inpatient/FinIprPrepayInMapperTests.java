@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class BedMapperTests {
+public class FinIprPrepayInMapperTests {
     @Autowired
-    ComBedInfoMapper bedMapper;
+    FinIprPrepayInMapper prepayInMapper;
 
     @Test
-    void queryBedInfo() {
-        this.bedMapper.queryBedInfo("901985");
+    void queryPrepayIn() {
+        prepayInMapper.queryPrepayIn("2000003605", 10);
     }
 }

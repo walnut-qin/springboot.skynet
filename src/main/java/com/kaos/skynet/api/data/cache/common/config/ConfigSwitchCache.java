@@ -18,7 +18,7 @@ public class ConfigSwitchCache extends Cache<String, ConfigSwitch> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 100, new Converter<String, ConfigSwitch>() {
+        super.postConstruct(100, new Converter<String, ConfigSwitch>() {
             @Override
             public ConfigSwitch convert(String source) {
                 return configSwitchMapper.queryConfigSwitch(source);

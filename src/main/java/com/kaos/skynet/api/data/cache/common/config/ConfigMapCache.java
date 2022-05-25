@@ -18,7 +18,7 @@ public class ConfigMapCache extends Cache<String, ConfigMap> {
     @Override
     @PostConstruct
     protected void postConstruct() {
-        super.postConstruct(String.class, 100, new Converter<String, ConfigMap>() {
+        super.postConstruct(100, new Converter<String, ConfigMap>() {
             @Override
             public ConfigMap convert(String source) {
                 return configMapMapper.queryConfigMap(source);

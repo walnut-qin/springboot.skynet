@@ -11,12 +11,14 @@ import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 发票信息表(结算信息表)
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class FinOpbInvoiceInfo {
     /**
@@ -268,9 +270,9 @@ public class FinOpbInvoiceInfo {
     public boolean equals(Object arg0) {
         if (arg0 instanceof FinOpbInvoiceInfo) {
             var that = (FinOpbInvoiceInfo) arg0;
-            return StringUtils.equals(this.invoiceNo, that.invoiceNo) 
-                && this.transType == that.transType
-                && StringUtils.equals(this.invoiceSeq, that.invoiceSeq);
+            return StringUtils.equals(this.invoiceNo, that.invoiceNo)
+                    && this.transType == that.transType
+                    && StringUtils.equals(this.invoiceSeq, that.invoiceSeq);
         }
         return false;
     }

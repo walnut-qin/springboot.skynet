@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.data.entity.outpatient.fee;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
@@ -13,17 +13,19 @@ import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailCostSourceEnum;
 import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailPayFlagEnum;
 import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailSendFlagEnum;
 import com.kaos.skynet.api.enums.pharmacy.DrugQualityEnum;
-import com.kaos.skynet.core.IntegerUtils;
+import com.kaos.skynet.core.utils.IntegerUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 门诊费用明细（XYHIS.FIN_OPB_FEEDETAIL）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class FinOpbFeeDetail {
     /**
@@ -54,7 +56,7 @@ public class FinOpbFeeDetail {
     /**
      * 挂号日期
      */
-    private Date regDate;
+    private LocalDateTime regDate;
 
     /**
      * 挂号科室
@@ -244,7 +246,7 @@ public class FinOpbFeeDetail {
     /**
      * 划价时间
      */
-    private Date operDate;
+    private LocalDateTime operDate;
 
     /**
      * 类型
@@ -264,7 +266,7 @@ public class FinOpbFeeDetail {
     /**
      * 收费日期
      */
-    private Date feeDate;
+    private LocalDateTime feeDate;
 
     /**
      * 发票号
@@ -299,7 +301,7 @@ public class FinOpbFeeDetail {
     /**
      * 确认时间
      */
-    private Date confirmDate;
+    private LocalDateTime confirmDate;
 
     /**
      * 优惠金额
@@ -479,7 +481,7 @@ public class FinOpbFeeDetail {
     /**
      * 转费时间
      */
-    private Date sendDate;
+    private LocalDateTime sendDate;
 
     /**
      * 转费备注

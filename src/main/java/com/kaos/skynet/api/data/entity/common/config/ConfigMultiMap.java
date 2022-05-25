@@ -5,9 +5,11 @@ import com.kaos.skynet.api.data.enums.ValidEnum;
 
 import org.apache.commons.lang3.StringUtils;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ConfigMultiMap {
     /**
      * 开关名

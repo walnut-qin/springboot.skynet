@@ -15,12 +15,14 @@ import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 住院主表信息(XYHIS.FIN_IPR_INMAININFO)
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class FinIprInMainInfo {
     /**

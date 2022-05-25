@@ -4,17 +4,19 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
-import com.kaos.skynet.core.IntegerUtils;
+import com.kaos.skynet.core.utils.IntegerUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 实体：住院证（XYHIS.FIN_IPR_PREPAYIN）
  */
-@Data
+@Getter
+@Setter
 @Builder
 public class FinIprPrepayIn {
     /**

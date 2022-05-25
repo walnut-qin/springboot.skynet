@@ -7,16 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class EscortAnnexInfoCacheTests {
     @Autowired
-    EscortAnnexInfoCache.MasterCache annexInfoMasterCache = null;
-
-    @Autowired
-    EscortAnnexInfoCache.SlaveCache annexInfoSlaveCache = null;
+    EscortAnnexInfoCache annexInfoCache = null;
 
     @Test
     void get() {
-        annexInfoMasterCache.get("0000000001");
-        var a = EscortAnnexInfoCache.SlaveCacheKey.builder()
-                .cardNo("2552076744").build();
-        annexInfoSlaveCache.get(a);
+        annexInfoCache.getMasterCache().get("0000000001");
+        annexInfoCache.getSlaveCache().get(EscortAnnexInfoCache.SlaveCache.Key.builder().cardNo("2552076744").build());
     }
 }

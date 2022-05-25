@@ -14,7 +14,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * @param 类型 缓存
@@ -23,20 +23,24 @@ import lombok.Data;
  * @param 刷频 无刷
  * @param 过期 5sec
  */
+@Getter
 @Component
 public class FinIprInMainInfoCache {
-    /**
-     * 数据库接口
-     */
     @Autowired
-    FinIprInMainInfoMapper inMainInfoMapper;
+    MasterCache masterCache;
+
+    @Autowired
+    SlaveCache slaveCache;
 
     @Component
-    public class MasterCache extends Cache<String, FinIprInMainInfo> {
+    public static class MasterCache extends Cache<String, FinIprInMainInfo> {
+        @Autowired
+        FinIprInMainInfoMapper inMainInfoMapper;
+
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(String.class, 500, new Converter<String, FinIprInMainInfo>() {
+            super.postConstruct(500, new Converter<String, FinIprInMainInfo>() {
                 @Override
                 public FinIprInMainInfo convert(String source) {
                     return inMainInfoMapper.queryInMainInfo(source);
@@ -46,36 +50,38 @@ public class FinIprInMainInfoCache {
     }
 
     @Component
-    public class SlaveCache extends Cache<SlaveCacheKey, List<FinIprInMainInfo>> {
+    public static class SlaveCache extends Cache<SlaveCache.Key, List<FinIprInMainInfo>> {
+        @Autowired
+        FinIprInMainInfoMapper inMainInfoMapper;
+
         @Override
         @PostConstruct
         protected void postConstruct() {
-            super.postConstruct(SlaveCacheKey.class, 500, new Converter<SlaveCacheKey, List<FinIprInMainInfo>>() {
+            super.postConstruct(500, new Converter<Key, List<FinIprInMainInfo>>() {
                 @Override
-                public List<FinIprInMainInfo> convert(SlaveCacheKey source) {
+                public List<FinIprInMainInfo> convert(Key source) {
                     return inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
                             .cardNo(source.cardNo).happenNo(source.happenNo).states(source.states).build());
                 }
             });
         }
-    }
 
-    @Data
-    @Builder
-    public static class SlaveCacheKey {
-        /**
-         * 卡号
-         */
-        private String cardNo;
+        @Builder
+        public static class Key {
+            /**
+             * 卡号
+             */
+            private String cardNo;
 
-        /**
-         * 住院证序号
-         */
-        private Integer happenNo;
+            /**
+             * 住院证序号
+             */
+            private Integer happenNo;
 
-        /**
-         * 在院状态
-         */
-        private List<InStateEnum> states;
+            /**
+             * 在院状态
+             */
+            private List<InStateEnum> states;
+        }
     }
 }

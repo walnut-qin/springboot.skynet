@@ -6,17 +6,14 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.DataCache;
 import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
-import com.kaos.skynet.api.data.cache.inpatient.FinIprPrepayInCache;
-import com.kaos.skynet.api.data.cache.inpatient.escort.EscortStateRecCache;
 import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexCheckCache;
 import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexInfoCache;
 import com.kaos.skynet.api.data.cache.outpatient.fee.FinOpbFeeDetailCache;
 import com.kaos.skynet.api.data.cache.pipe.lis.LisResultNewCache;
 import com.kaos.skynet.api.data.entity.common.ComPatientInfo;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
-import com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexCheck;
@@ -25,50 +22,37 @@ import com.kaos.skynet.api.data.entity.outpatient.fee.FinOpbFeeDetail;
 import com.kaos.skynet.api.data.entity.pipe.lis.LisResultNew;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
-import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.core.Gsons;
+import com.kaos.skynet.core.type.converter.duration.string.AgeDurationToStringConverter;
+import com.kaos.skynet.core.utils.DurationUtils;
+import com.kaos.skynet.core.utils.IntegerUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Service
 class CoreService {
     /**
+     * 缓存
+     */
+    @Autowired
+    DataCache cache;
+
+    /**
      * 陪护主接口
      */
     @Autowired
     EscortMainInfoMapper mainInfoMapper;
-
-    /**
-     * 状态缓存
-     */
-    @Autowired
-    EscortStateRecCache stateRecCache;
-
-    /**
-     * 附件缓存
-     */
-    @Autowired
-    EscortAnnexInfoCache.SlaveCache annexInfoSlaveCache;
-
-    /**
-     * 审核缓存
-     */
-    @Autowired
-    EscortAnnexCheckCache.SlaveCache annexCheckSlaveCache;
-
-    /**
-     * 住院证缓存
-     */
-    @Autowired
-    FinIprPrepayInCache prepayInCache;
 
     /**
      * 住院证接口
@@ -77,33 +61,14 @@ class CoreService {
     FinIprPrepayInMapper prepayInMapper;
 
     /**
-     * 住院证缓存
-     */
-    @Autowired
-    FinIprInMainInfoCache.SlaveCache inMainInfoSlaveCache;
-
-    /**
-     * 患者信息缓存
-     */
-    @Autowired
-    ComPatientInfoCache patientInfoCache;
-
-    /**
-     * LIS结果检索功能
-     */
-    @Autowired
-    LisResultNewCache lisResultNewCache;
-
-    /**
-     * 门诊划价收费接口
-     */
-    @Autowired
-    FinOpbFeeDetailCache feeDetailCache;
-
-    /**
      * 序列化工具
      */
     final Gson gson = Gsons.newGson();
+
+    /**
+     * Duration转为字符串描述
+     */
+    final Converter<Duration, String> durationToStringConverter = new AgeDurationToStringConverter();
 
     /**
      * 逻辑核心 - 判断陪护证状态
@@ -113,7 +78,7 @@ class CoreService {
      */
     private StateResult getStateCore(EscortMainInfo escortMainInfo) {
         // 获取陪护人的信息实体
-        ComPatientInfo helper = patientInfoCache.get(escortMainInfo.getHelperCardNo());
+        ComPatientInfo helper = cache.getPatientInfoCache().get(escortMainInfo.getHelperCardNo());
         if (helper == null) {
             return StateResult.builder()
                     .state(EscortStateEnum.注销)
@@ -163,23 +128,24 @@ class CoreService {
 
         // 决定有效核酸结果有效期
         Integer ptr = 0;
-        List<EscortStateRec> stateRecs = stateRecCache.get(escortMainInfo.getEscortNo());
+        List<EscortStateRec> stateRecs = cache.getEscortStateRecCache().get(escortMainInfo.getEscortNo());
         if (stateRecs != null && !stateRecs.isEmpty() && stateRecs.get(0).getState() == EscortStateEnum.生效中) {
-            ptr = 2;
-        } else {
             ptr = 14;
+        } else {
+            ptr = 2;
         }
         final Integer offset = ptr;
 
         // 本院核酸结果
-        List<LisResultNew> lisResults = lisResultNewCache.get(LisResultNewCache.Key.builder()
+        List<LisResultNew> lisResults = cache.getLisResultCache().get(LisResultNewCache.Key.builder()
                 .patientId(helper.getCardNo())
                 .itemCodes(Lists.newArrayList("SARS-CoV-2-RNA"))
                 .offset(offset).build());
         // 院外审核结果
-        List<EscortAnnexCheck> annexChecks = annexCheckSlaveCache.get(EscortAnnexCheckCache.Key.builder()
-                .cardNo(helper.getCardNo())
-                .offset(offset).build());
+        List<EscortAnnexCheck> annexChecks = cache.getAnnexCheckCache().getSlaveCache()
+                .get(EscortAnnexCheckCache.SlaveCache.Key.builder()
+                        .cardNo(helper.getCardNo())
+                        .offset(offset).build());
         // 整合结果
         List<EscortAnnexCheck> allResults = Lists.newLinkedList();
         if (lisResults != null && !lisResults.isEmpty()) {
@@ -210,20 +176,27 @@ class CoreService {
         }
 
         // 判断是否有院内核酸请求
-        List<FinOpbFeeDetail> feeDetails = feeDetailCache.get(FinOpbFeeDetailCache.Key.builder()
+        List<FinOpbFeeDetail> feeDetails = cache.getFeeDetailCache().get(FinOpbFeeDetailCache.Key.builder()
                 .cardNo(helper.getCardNo())
-                .itemCode("F00000068231")
-                .offset(offset).build());
+                .itemCode("F00000068231").build());
         if (feeDetails != null && !feeDetails.isEmpty()) {
+            // 按照操作时间排序
+            feeDetails.sort((x, y) -> {
+                return y.getOperDate().compareTo(x.getOperDate());
+            });
+            var duration = Duration.between(feeDetails.get(0).getOperDate(), LocalDateTime.now());
+            if (duration.compareTo(Duration.ofDays(14)) < 0) {
+            }
             return StateResult.builder()
                     .state(EscortStateEnum.等待院内核酸检测结果)
-                    .reason("无核酸检测结果，已开核酸检测").build();
+                    .reason("无核酸检测结果, 14天内开立过核酸项目").build();
         }
 
         // 判断是否有未审核的院外结果
-        List<EscortAnnexInfo> annexInfos = annexInfoSlaveCache.get(EscortAnnexInfoCache.SlaveCacheKey.builder()
-                .cardNo(helper.getCardNo())
-                .checked(false).build());
+        List<EscortAnnexInfo> annexInfos = cache.getAnnexInfoCache().getSlaveCache()
+                .get(EscortAnnexInfoCache.SlaveCache.Key.builder()
+                        .cardNo(helper.getCardNo())
+                        .checked(false).build());
         if (annexInfos != null && !annexInfos.isEmpty()) {
             return StateResult.builder()
                     .state(EscortStateEnum.等待院外核酸检测结果审核)
@@ -243,9 +216,10 @@ class CoreService {
      */
     private StateResult getStrongEscortState(EscortMainInfo escortMainInfo) {
         // 获取住院实体
-        List<FinIprInMainInfo> inMainInfos = inMainInfoSlaveCache.get(FinIprInMainInfoCache.SlaveCacheKey.builder()
-                .cardNo(escortMainInfo.getPatientCardNo())
-                .happenNo(escortMainInfo.getHappenNo()).build());
+        List<FinIprInMainInfo> inMainInfos = cache.getInMainInfoCache().getSlaveCache()
+                .get(FinIprInMainInfoCache.SlaveCache.Key.builder()
+                        .cardNo(escortMainInfo.getPatientCardNo())
+                        .happenNo(escortMainInfo.getHappenNo()).build());
 
         // 创建在院列表和出院列表
         List<FinIprInMainInfo> inList = Lists.newArrayList();
@@ -275,7 +249,7 @@ class CoreService {
             switch (outList.get(0).getInState()) {
                 case 出院结算:
                 case 无费退院:
-                    if (duration.toHours() >= 6) {
+                    if (DurationUtils.compare(duration, Duration.ofHours(6)) > 0) {
                         return StateResult.builder()
                                 .state(EscortStateEnum.注销)
                                 .reason("出院已超过6小时").build();
@@ -283,7 +257,7 @@ class CoreService {
                     break;
 
                 case 出院登记:
-                    if (duration.toHours() >= 12) {
+                    if (DurationUtils.compare(duration, Duration.ofHours(12)) > 0) {
                         return StateResult.builder()
                                 .state(EscortStateEnum.注销)
                                 .reason("出院登记已超过12小时").build();
@@ -303,19 +277,25 @@ class CoreService {
      * @return
      */
     private StateResult getWeakEscortState(EscortMainInfo escortMainInfo) {
-        // 检索陪护证关联的住院证
-        FinIprPrepayIn prepayIn = prepayInCache.get(new FinIprPrepayInCache.Key() {
-            {
-                setCardNo(escortMainInfo.getPatientCardNo());
-                setHappenNo(escortMainInfo.getHappenNo());
-            }
-        });
-        if (prepayIn == null) {
+        // 检索患者住院证列表
+        var prepayIns = prepayInMapper.queryPrepayIns(FinIprPrepayInMapper.Key.builder()
+                .cardNo(escortMainInfo.getPatientCardNo()).build());
+        if (prepayIns == null || prepayIns.isEmpty()) {
             return StateResult.builder()
                     .state(EscortStateEnum.注销)
                     .reason("住院证丢失").build();
         } else {
-            switch (prepayIn.getState()) {
+            // 按happenNo逆序
+            prepayIns.sort((x, y) -> {
+                return IntegerUtils.compare(y.getHappenNo(), x.getHappenNo());
+            });
+            // 是否为最新的住院证
+            if (!escortMainInfo.getHappenNo().equals(prepayIns.get(0).getHappenNo())) {
+                return StateResult.builder()
+                        .state(EscortStateEnum.注销)
+                        .reason("已开立新住院证").build();
+            }
+            switch (prepayIns.get(0).getState()) {
                 case 作废 -> {
                     return StateResult.builder()
                             .state(EscortStateEnum.注销)
@@ -335,6 +315,7 @@ class CoreService {
      * @param escortNo 陪护证编号
      * @return
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     public StateResult getState(EscortMainInfo escortMainInfo) {
         // 校验陪护证
         if (escortMainInfo == null) {
@@ -343,7 +324,7 @@ class CoreService {
         }
 
         // 检索现有状态清单
-        List<EscortStateRec> states = stateRecCache.get(escortMainInfo.getEscortNo());
+        List<EscortStateRec> states = cache.getEscortStateRecCache().get(escortMainInfo.getEscortNo());
         if (states != null && !states.isEmpty()) {
             // 逆序
             states.sort((x, y) -> {
@@ -358,9 +339,10 @@ class CoreService {
         }
 
         // 检索关联的住院患者实体
-        List<FinIprInMainInfo> inMainInfos = inMainInfoSlaveCache.get(FinIprInMainInfoCache.SlaveCacheKey.builder()
-                .cardNo(escortMainInfo.getPatientCardNo())
-                .happenNo(escortMainInfo.getHappenNo()).build());
+        List<FinIprInMainInfo> inMainInfos = cache.getInMainInfoCache().getSlaveCache()
+                .get(FinIprInMainInfoCache.SlaveCache.Key.builder()
+                        .cardNo(escortMainInfo.getPatientCardNo())
+                        .happenNo(escortMainInfo.getHappenNo()).build());
         // 若存在关联的住院实体，则说明是强陪护
         if (inMainInfos != null && !inMainInfos.isEmpty()) {
             return getStrongEscortState(escortMainInfo);
@@ -369,7 +351,7 @@ class CoreService {
         }
     }
 
-    @Data
+    @Getter
     @Builder
     public static class StateResult {
         /**
@@ -405,7 +387,7 @@ class CoreService {
             List<EscortMainInfo> inactiveList = Lists.newArrayList();
             for (var escortInfo : escortInfos) {
                 // 获取当前状态
-                var states = stateRecCache.get(escortInfo.getEscortNo());
+                var states = cache.getEscortStateRecCache().get(escortInfo.getEscortNo());
                 if (states == null || states.isEmpty()) {
                     log.error(String.format("陪护关系(空状态)已绑定(escortNo = %s)", escortInfo.getEscortNo()));
                     throw new RuntimeException("陪护关系(空状态)已绑定");
@@ -432,15 +414,19 @@ class CoreService {
                 // 若未逃逸，判断最后一次注销的时间
                 if (escape == null || !escape) {
                     inactiveList.sort((x, y) -> {
-                        var xStates = stateRecCache.get(x.getEscortNo());
-                        var yStates = stateRecCache.get(y.getEscortNo());
+                        var xStates = cache.getEscortStateRecCache().get(x.getEscortNo());
+                        var yStates = cache.getEscortStateRecCache().get(y.getEscortNo());
                         return yStates.get(0).getRecDate().compareTo(xStates.get(0).getRecDate());
                     });
-                    var state = stateRecCache.get(inactiveList.get(0).getEscortNo());
+                    var state = cache.getEscortStateRecCache().get(inactiveList.get(0).getEscortNo());
                     var duration = Duration.between(state.get(0).getRecDate(), LocalDateTime.now());
-                    if (duration.toHours() < 12) {
-                        log.error(String.format("注销后12小时内无法再次登记为陪护"));
-                        throw new RuntimeException("注销后12小时内无法再次登记为陪护");
+                    var guard = Duration.ofHours(12);
+                    if (duration.compareTo(guard) < 0) {
+                        // 计算差额
+                        Duration offset = guard.minus(duration);
+                        String errStr = durationToStringConverter.convert(offset);
+                        log.error(String.format("注销后12小时内无法再次登记为陪护, 剩余%s", errStr));
+                        throw new RuntimeException(String.format("注销后12小时内无法再次登记为陪护, 剩余%s", errStr));
                     }
                 }
             }
@@ -483,14 +469,15 @@ class CoreService {
      */
     private Integer getHappenNo(String patientCardNo) {
         // 检索在院记录
-        List<FinIprInMainInfo> inMainInfos = inMainInfoSlaveCache.get(FinIprInMainInfoCache.SlaveCacheKey.builder()
-                .cardNo(patientCardNo)
-                .states(Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊))
-                .build());
+        List<FinIprInMainInfo> inMainInfos = cache.getInMainInfoCache().getSlaveCache()
+                .get(FinIprInMainInfoCache.SlaveCache.Key.builder()
+                        .cardNo(patientCardNo)
+                        .states(Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊))
+                        .build());
         inMainInfos = inMainInfos.stream().filter((x) -> {
             return x.getHappenNo() != null;
         }).toList();
-        if (inMainInfos != null && inMainInfos.isEmpty()) {
+        if (inMainInfos != null && !inMainInfos.isEmpty()) {
             if (inMainInfos.size() > 1) {
                 log.error(String.format("存在多条在院记录，无法确定陪护证关联(patientNo = %s)", inMainInfos.stream().map((x) -> {
                     return x.getPatientNo();
@@ -500,20 +487,24 @@ class CoreService {
                 return inMainInfos.get(0).getHappenNo();
             }
         } else {
-            // 检索最后一张有效的住院证
+            // 检索最后一张住院证
             var prepayIns = prepayInMapper.queryPrepayIns(FinIprPrepayInMapper.Key.builder()
-                    .cardNo(patientCardNo)
-                    .states(Lists.newArrayList(FinIprPrepayInStateEnum.预约,
-                            FinIprPrepayInStateEnum.转住院,
-                            FinIprPrepayInStateEnum.签床,
-                            FinIprPrepayInStateEnum.预住院预约))
-                    .build());
+                    .cardNo(patientCardNo).build());
             if (prepayIns != null && !prepayIns.isEmpty()) {
                 // 按时间逆序
                 prepayIns.sort((x, y) -> {
-                    return y.getPreDate().compareTo(x.getPreDate());
+                    return IntegerUtils.compare(y.getHappenNo(), x.getHappenNo());
                 });
-                return prepayIns.get(0).getHappenNo();
+                switch (prepayIns.get(0).getState()) {
+                    case 作废 -> {
+                        log.error(String.format("最新的住院证已作废(happenNo = %d)", prepayIns.get(0).getHappenNo()));
+                        throw new RuntimeException("最新的住院证已作废");
+                    }
+
+                    default -> {
+                        return prepayIns.get(0).getHappenNo();
+                    }
+                }
             } else {
                 log.error(String.format("无有效陪护证"));
                 throw new RuntimeException("无有效陪护证");
@@ -529,6 +520,7 @@ class CoreService {
      * @param escape
      * @return
      */
+    @Transactional(propagation = Propagation.MANDATORY)
     public SimulateResult simulateRegister(String patientCardNo, String helperCardNo, Boolean escape) {
         // 先做基本判断
         canRegister(patientCardNo, helperCardNo, escape);
@@ -542,7 +534,7 @@ class CoreService {
 
         // 构造模拟插入的陪护证
         EscortMainInfo mainInfo = EscortMainInfo.builder()
-                .escortNo(null)
+                .escortNo("virtualNo")
                 .patientCardNo(patientCardNo)
                 .happenNo(happenNo)
                 .helperCardNo(helperCardNo).build();
@@ -553,10 +545,10 @@ class CoreService {
             throw new RuntimeException(state.getReason());
         }
 
-        return SimulateResult.builder().mainInfo(mainInfo).state(state.getState()).build();
+        return SimulateResult.builder().mainInfo(mainInfo).stateResult(state).build();
     }
 
-    @Data
+    @Getter
     @Builder
     public static class SimulateResult {
         /**
@@ -567,6 +559,6 @@ class CoreService {
         /**
          * 状态
          */
-        private EscortStateEnum state;
+        private StateResult stateResult;
     }
 }

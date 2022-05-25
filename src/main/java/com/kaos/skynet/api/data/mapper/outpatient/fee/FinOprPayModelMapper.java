@@ -5,7 +5,8 @@ import java.util.List;
 import com.kaos.skynet.api.data.entity.outpatient.fee.FinOprPayModel;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface FinOprPayModelMapper {
     /**
@@ -19,7 +20,8 @@ public interface FinOprPayModelMapper {
     /**
      * 检索Key值
      */
-    @Data
+    @Getter
+    @Setter
     @Builder
     public static class Key {
         /**
