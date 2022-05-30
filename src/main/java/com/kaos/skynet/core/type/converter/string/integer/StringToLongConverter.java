@@ -1,7 +1,9 @@
 package com.kaos.skynet.core.type.converter.string.integer;
 
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component("StringToLongConverter")
 public class StringToLongConverter implements Converter<String, Long> {
     @Override
     public Long convert(String source) {

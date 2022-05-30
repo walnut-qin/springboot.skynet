@@ -2,6 +2,9 @@ package com.kaos.skynet.core.type.converter.string.decimal;
 
 import org.springframework.core.convert.converter.Converter;
 
+import org.springframework.stereotype.Component;
+
+@Component("StringToDoubleConverter")
 public class StringToDoubleConverter implements Converter<String, Double> {
     @Override
     public Double convert(String source) {
