@@ -1,5 +1,9 @@
 package com.kaos.skynet.core.json;
 
+import java.io.Reader;
+import java.io.Writer;
+import java.lang.reflect.Type;
+
 import com.kaos.skynet.core.json.gson.GsonHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,16 @@ public class Json {
     }
 
     /**
+     * 序列化
+     * 
+     * @param src
+     * @return
+     */
+    public void toJson(Object src, Writer writer) {
+        gsonHolder.getGson().toJson(src, writer);
+    }
+
+    /**
      * 反序列化
      * 
      * @param <T>
@@ -31,8 +45,20 @@ public class Json {
      * @param classOfT
      * @return
      */
-    public <T> T fromJson(String json, Class<T> classOfT) {// 反射出classOfV
+    public <T> T fromJson(String json, Class<T> classOfT) {
         return gsonHolder.getGson().fromJson(json, classOfT);
+    }
+
+    /**
+     * 用于反射的反序列化
+     * 
+     * @param <T>
+     * @param reader
+     * @param type
+     * @return
+     */
+    public <T> T fromJson(Reader reader, Type type) {
+        return gsonHolder.getGson().fromJson(reader, type);
     }
 
     /**

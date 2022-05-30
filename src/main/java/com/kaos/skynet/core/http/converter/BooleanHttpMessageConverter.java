@@ -1,10 +1,10 @@
-package com.kaos.skynet.core.http.message.converter;
+package com.kaos.skynet.core.http.converter;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import com.kaos.skynet.core.type.converter.decimal.DoubleToStringConverter;
-import com.kaos.skynet.core.type.converter.string.decimal.StringToDoubleConverter;
+import com.kaos.skynet.core.type.converter.bool.string.StandardBooleanToStringConverter;
+import com.kaos.skynet.core.type.converter.string.bool.StandardStringToBooleanConverter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpInputMessage;
@@ -15,41 +15,41 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.util.StreamUtils;
 
-public class DoubleHttpMessageConverter extends AbstractHttpMessageConverter<Double> {
+public class BooleanHttpMessageConverter extends AbstractHttpMessageConverter<Boolean> {
     /**
-     * Double -> String 转换器
+     * Boolean -> String 转换器
      */
-    Converter<Double, String> doubleToStringConverter = new DoubleToStringConverter();
+    Converter<Boolean, String> standardBooleanToStringConverter = new StandardBooleanToStringConverter();
 
     /**
-     * String -> Double 转换器
+     * String -> Boolean 转换器
      */
-    Converter<String, Double> stringToDoubleConverter = new StringToDoubleConverter();
+    Converter<String, Boolean> standardStringToBooleanConverter = new StandardStringToBooleanConverter();
 
     /**
      * Boolean型的消息处理器
      */
-    public DoubleHttpMessageConverter() {
+    public BooleanHttpMessageConverter() {
         super(new MediaType("text", "plain", Charset.forName("UTF-8")));
     }
 
     @Override
     protected boolean supports(Class<?> clazz) {
-        return Double.class.isAssignableFrom(clazz);
+        return Boolean.class.isAssignableFrom(clazz);
     }
 
     @Override
-    protected Double readInternal(Class<? extends Double> clazz, HttpInputMessage inputMessage)
+    protected Boolean readInternal(Class<? extends Boolean> clazz, HttpInputMessage inputMessage)
             throws IOException, HttpMessageNotReadableException {
         // 读取原始body字符串
         String strVal = StreamUtils.copyToString(inputMessage.getBody(), Charset.forName("UTF-8"));
 
-        return this.stringToDoubleConverter.convert(strVal);
+        return this.standardStringToBooleanConverter.convert(strVal);
     }
 
     @Override
-    protected void writeInternal(Double t, HttpOutputMessage outputMessage)
+    protected void writeInternal(Boolean t, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
-        outputMessage.getBody().write(this.doubleToStringConverter.convert(t).getBytes());
+        outputMessage.getBody().write(this.standardBooleanToStringConverter.convert(t).getBytes());
     }
 }

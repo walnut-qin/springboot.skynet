@@ -3,8 +3,8 @@ package com.kaos.skynet.core.http.client.impl;
 import com.google.common.collect.Lists;
 import com.kaos.skynet.core.Gsons;
 import com.kaos.skynet.core.http.client.HttpClient;
-import com.kaos.skynet.core.http.message.converter.BooleanHttpMessageConverter;
-import com.kaos.skynet.core.http.message.converter.DoubleHttpMessageConverter;
+import com.kaos.skynet.core.http.converter.BooleanHttpMessageConverter;
+import com.kaos.skynet.core.http.converter.DoubleHttpMessageConverter;
 
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
