@@ -122,7 +122,7 @@ public class StatisticController {
                     .duration(Duration.ofDays(14))
                     .build());
             if (nats != null) {
-                builder.nucleicAcidResult(nats.getNegative() ? "阴性" : "阳性");
+                builder.nucleicAcidResult(nats.toString());
             }
             // 陪护信息
             var escortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
@@ -146,7 +146,7 @@ public class StatisticController {
                             .duration(Duration.ofDays(14))
                             .build());
                     if (helperNats != null) {
-                        builder.escort1NucleicAcidResult(nats.getNegative() ? "阴性" : "阳性");
+                        builder.escort1NucleicAcidResult(nats.toString());
                     }
                     builder.escort1Tel(helper.getLinkmanTel());
                     builder.escort1HealthCode(helper.getHealthCode());
@@ -167,7 +167,7 @@ public class StatisticController {
                             .duration(Duration.ofDays(14))
                             .build());
                     if (helperNats != null) {
-                        builder.escort2NucleicAcidResult(nats.getNegative() ? "阴性" : "阳性");
+                        builder.escort2NucleicAcidResult(nats.toString());
                     }
                     builder.escort2Tel(helper.getLinkmanTel());
                     builder.escort2HealthCode(helper.getHealthCode());

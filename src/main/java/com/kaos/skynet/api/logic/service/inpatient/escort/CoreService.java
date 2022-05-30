@@ -165,11 +165,11 @@ class CoreService {
             if (nats.getNegative()) {
                 return StateResult.builder()
                         .state(EscortStateEnum.生效中)
-                        .reason("核酸结果为阴性").build();
+                        .reason(nats.toString()).build();
             } else {
                 return StateResult.builder()
                         .state(EscortStateEnum.其他)
-                        .reason("核酸结果为阳性").build();
+                        .reason(nats.toString()).build();
             }
         }
 

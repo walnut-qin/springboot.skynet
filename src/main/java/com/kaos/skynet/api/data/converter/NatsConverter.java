@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexCheckMapper;
 import com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper;
 import com.kaos.skynet.core.type.converter.Converter;
+import com.kaos.skynet.core.type.converter.local.datime.StandardLocalDateTimeToStringConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -94,5 +95,19 @@ public class NatsConverter implements Converter<NatsConverter.Key, NatsConverter
          * 检测时间
          */
         private LocalDateTime inspectDate;
+
+        /**
+         * 时间格式化转换器
+         */
+        private final static Converter<LocalDateTime, String> cvt = new StandardLocalDateTimeToStringConverter();
+
+        @Override
+        public String toString() {
+            if (negative) {
+                return "阴性(-)".concat(cvt.convert(inspectDate));
+            } else {
+                return "阳性(-)".concat(cvt.convert(inspectDate));
+            }
+        }
     }
 }
