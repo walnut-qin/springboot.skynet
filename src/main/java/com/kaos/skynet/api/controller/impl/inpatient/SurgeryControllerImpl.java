@@ -30,7 +30,7 @@ import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.skynet.api.service.inf.inpatient.SurgeryService;
 import com.kaos.skynet.core.Gsons;
 import com.kaos.skynet.core.HttpClients;
-import com.kaos.skynet.core.type.http.client.HttpClient;
+import com.kaos.skynet.core.http.client.HttpClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

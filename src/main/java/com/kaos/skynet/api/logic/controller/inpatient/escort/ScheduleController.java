@@ -6,7 +6,7 @@ import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.ThreadPools;
-import com.kaos.skynet.core.type.thread.pool.ThreadPool;
+import com.kaos.skynet.core.thread.pool.ThreadPool;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

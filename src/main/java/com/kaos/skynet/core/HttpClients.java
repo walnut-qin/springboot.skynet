@@ -1,7 +1,7 @@
 package com.kaos.skynet.core;
 
-import com.kaos.skynet.core.type.http.client.HttpClient;
-import com.kaos.skynet.core.type.http.client.impl.HttpClientImpl;
+import com.kaos.skynet.core.http.client.HttpClient;
+import com.kaos.skynet.core.http.client.impl.HttpClientImpl;
 
 import lombok.AllArgsConstructor;
 

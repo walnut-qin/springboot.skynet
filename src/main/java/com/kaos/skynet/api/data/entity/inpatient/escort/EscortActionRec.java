@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.core.utils.IntegerUtils;
+import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.apache.commons.lang3.StringUtils;
 

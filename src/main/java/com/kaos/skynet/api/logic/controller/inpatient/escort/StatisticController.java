@@ -19,7 +19,7 @@ import com.kaos.skynet.api.enums.common.TravelCodeEnum;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.type.json.gson.adapter.bool.ChineseBooleanTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.bool.ChineseBooleanTypeAdapter;
 
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;

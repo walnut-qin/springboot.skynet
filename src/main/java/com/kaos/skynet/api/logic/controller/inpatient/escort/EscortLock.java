@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.logic.controller.inpatient.escort;
 
 import com.kaos.skynet.core.Locks;
-import com.kaos.skynet.core.type.thread.lock.LockFactory;
+import com.kaos.skynet.core.thread.lock.LockFactory;
 
 import org.springframework.stereotype.Component;
 

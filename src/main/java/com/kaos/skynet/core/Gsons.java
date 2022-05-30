@@ -8,17 +8,15 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.bind.DateTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.cache.CacheTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.enums.DescriptionEnumTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.local.date.StandardLocalDateTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.local.datime.StandardLocalDateTimeTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.local.time.StandardLocalTimeTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.period.AgePeriodTypeAdapter;
 import com.kaos.skynet.core.type.Cache;
-// import com.kaos.skynet.core.type.Enum;
-import com.kaos.skynet.core.type.converter.date.string.StandardDateToStringConverter;
-import com.kaos.skynet.core.type.converter.string.date.StandardStringToDateConverter;
-import com.kaos.skynet.core.type.json.gson.adapter.cache.CacheTypeAdapter;
-import com.kaos.skynet.core.type.json.gson.adapter.date.StandardDateTypeAdapter;
-// import com.kaos.skynet.core.type.json.gson.adapter.enums.DescriptionEnumTypeAdapter;
-import com.kaos.skynet.core.type.json.gson.adapter.local.date.StandardLocalDateTypeAdapter;
-import com.kaos.skynet.core.type.json.gson.adapter.local.datime.StandardLocalDateTimeTypeAdapter;
-import com.kaos.skynet.core.type.json.gson.adapter.local.time.StandardLocalTimeTypeAdapter;
-import com.kaos.skynet.core.type.json.gson.adapter.period.AgePeriodTypeAdapter;
+import com.kaos.skynet.core.type.Enum;
 
 public final class Gsons {
     /**
@@ -32,14 +30,13 @@ public final class Gsons {
         builder.setDateFormat("yyyy-MM-dd HH:mm:ss");
 
         // 注册枚举适配器
-        // builder.registerTypeHierarchyAdapter(Enum.class, new DescriptionEnumTypeAdapter<>());
+        builder.registerTypeHierarchyAdapter(Enum.class, new DescriptionEnumTypeAdapter<>());
 
         // 注册缓存适配器
         builder.registerTypeHierarchyAdapter(Cache.class, new CacheTypeAdapter<>());
 
         // 注册Date解析器
-        builder.registerTypeAdapter(Date.class,
-                new StandardDateTypeAdapter(new StandardDateToStringConverter(), new StandardStringToDateConverter()));
+        builder.registerTypeAdapter(Date.class, new DateTypeAdapter());
 
         // 注册LocalDate解析器
         builder.registerTypeAdapter(LocalDate.class, new StandardLocalDateTypeAdapter());

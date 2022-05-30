@@ -26,8 +26,8 @@ import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.core.Gsons;
 import com.kaos.skynet.core.type.converter.duration.string.AgeDurationToStringConverter;
-import com.kaos.skynet.core.utils.DurationUtils;
-import com.kaos.skynet.core.utils.IntegerUtils;
+import com.kaos.skynet.core.type.utils.DurationUtils;
+import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;

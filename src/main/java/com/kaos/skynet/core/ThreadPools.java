@@ -5,8 +5,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Queues;
-import com.kaos.skynet.core.type.thread.pool.ThreadPool;
-import com.kaos.skynet.core.type.thread.pool.impl.ThreadPoolImpl;
+import com.kaos.skynet.core.thread.pool.ThreadPool;
+import com.kaos.skynet.core.thread.pool.impl.ThreadPoolImpl;
 
 import lombok.extern.log4j.Log4j;
 

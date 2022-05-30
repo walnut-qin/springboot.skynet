@@ -13,7 +13,7 @@ import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailCostSourceEnum;
 import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailPayFlagEnum;
 import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailSendFlagEnum;
 import com.kaos.skynet.api.enums.pharmacy.DrugQualityEnum;
-import com.kaos.skynet.core.utils.IntegerUtils;
+import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
