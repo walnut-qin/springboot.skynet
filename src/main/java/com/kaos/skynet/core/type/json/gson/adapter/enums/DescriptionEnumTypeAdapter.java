@@ -13,15 +13,24 @@ import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.converter.enums.string.DescriptionEnumToStringConverter;
 import com.kaos.skynet.core.type.converter.string.enums.factory.DescriptionStringToEnumConverterFactory;
 
+import org.springframework.stereotype.Component;
+
 import lombok.extern.log4j.Log4j;
 
 @Log4j
+@Component("DescriptionEnumTypeAdapter")
 public class DescriptionEnumTypeAdapter<E extends Enum> implements JsonSerializer<E>, JsonDeserializer<E> {
     // 正向转换器, 由于存在无参构造函数，可以预构造
-    final DescriptionEnumToStringConverter<E> enumToStringConverter = new DescriptionEnumToStringConverter<>();
+    DescriptionEnumToStringConverter<E> enumToStringConverter;
 
     // 逆向转换器, 构造需要传入泛型E的类型，动态构造
-    final DescriptionStringToEnumConverterFactory stringToEnumConverterFactory = new DescriptionStringToEnumConverterFactory();
+    DescriptionStringToEnumConverterFactory stringToEnumConverterFactory;
+
+    DescriptionEnumTypeAdapter(DescriptionEnumToStringConverter<E> enumToStringConverter,
+            DescriptionStringToEnumConverterFactory stringToEnumConverterFactory) {
+        this.enumToStringConverter = enumToStringConverter;
+        this.stringToEnumConverterFactory = stringToEnumConverterFactory;
+    }
 
     @Override
     public JsonElement serialize(E src, Type typeOfSrc, JsonSerializationContext context) {
