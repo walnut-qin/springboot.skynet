@@ -13,6 +13,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
@@ -41,6 +42,7 @@ public class ConfigMultiMapCache {
         }
 
         @Builder
+        @EqualsAndHashCode
         public static class Key {
             /**
              * 变量名

@@ -16,7 +16,7 @@ import org.springframework.core.convert.converter.Converter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-public abstract class Cache<K extends Object, V extends Object> {
+public abstract class Cache<K, V> {
     /**
      * 序列化工具
      */
@@ -25,7 +25,7 @@ public abstract class Cache<K extends Object, V extends Object> {
     /**
      * 缓存实体
      */
-    LoadingCache<String, Optional<V>> loadingCache;
+    LoadingCache<K, Optional<V>> loadingCache;
 
     /**
      * 必须调用后构造函数构造成员变量
@@ -38,7 +38,6 @@ public abstract class Cache<K extends Object, V extends Object> {
      * @param size
      * @param converter
      */
-    @SuppressWarnings("unchecked")
     protected void postConstruct(Integer size, Converter<K, V> converter) {
         // 构造缓存实体
         this.loadingCache = CacheBuilder.newBuilder()
@@ -46,21 +45,10 @@ public abstract class Cache<K extends Object, V extends Object> {
                 .expireAfterAccess(5, TimeUnit.MINUTES)
                 .refreshAfterWrite(15, TimeUnit.SECONDS)
                 .recordStats()
-                .build(new CacheLoader<String, Optional<V>>() {
+                .build(new CacheLoader<K, Optional<V>>() {
                     @Override
-                    public Optional<V> load(String key) throws Exception {
-                        // 反射出classOfK
-                        Class<K> classOfK = null;
-                        var type = getClass().getGenericSuperclass();
-                        if (type instanceof ParameterizedType) {
-                            classOfK = (Class<K>) ((ParameterizedType) type).getActualTypeArguments()[0];
-                        }
-
-                        // 反序列化出实际的key
-                        K realKey = gson.fromJson(key, classOfK);
-
-                        // 使用传入的loader加载对象
-                        return Optional.fromNullable(converter.convert(realKey));
+                    public Optional<V> load(K key) throws Exception {
+                        return Optional.fromNullable(converter.convert(key));
                     }
                 });
     }
@@ -72,16 +60,9 @@ public abstract class Cache<K extends Object, V extends Object> {
      * @return
      */
     public V get(K key) {
-        // 序列化出真实的Key
-        String keyStr = gson.toJson(key);
-        if (keyStr == null) {
-            log.warn("缓存不支持null键");
-            return null;
-        }
-
         // 检索缓存
         try {
-            return loadingCache.get(keyStr).orNull();
+            return loadingCache.get(key).orNull();
         } catch (Exception e) {
             log.warn(String.format("检索缓存出现异常(%s)", e.getMessage()));
             return null;
@@ -119,14 +100,8 @@ public abstract class Cache<K extends Object, V extends Object> {
      * @param key
      */
     public void refresh(K key) {
-        // 序列化出真实的Key
-        String keyStr = gson.toJson(key);
-        if (keyStr == null) {
-            log.warn("缓存不支持null键");
-        }
-
         // 检索缓存
-        loadingCache.refresh(keyStr);
+        loadingCache.refresh(key);
     }
 
     /**
