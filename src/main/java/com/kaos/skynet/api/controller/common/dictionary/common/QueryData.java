@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.controller.MediaType;
-import com.kaos.skynet.api.controller.impl.AbstractController;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,7 @@ import lombok.extern.log4j.Log4j;
 @Validated
 @RestController
 @RequestMapping("/ms/common/dictionary/common")
-public class QueryData extends AbstractController {
+public class QueryData {
     /**
      * 查询公共字典
      */

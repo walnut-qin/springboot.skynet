@@ -11,10 +11,6 @@ public class FinIprInMainInfoCacheTests {
 
     @Test
     public void getCacheValue() {
-        inMainInfoCache.getMasterCache().get("ZY010000705856");
-        inMainInfoCache.getSlaveCache().get(FinIprInMainInfoCache.SlaveCache.Key.builder()
-                .cardNo("2000003605")
-                .happenNo(10)
-                .build());
+        inMainInfoCache.get("ZY010000705856");
     }
 }

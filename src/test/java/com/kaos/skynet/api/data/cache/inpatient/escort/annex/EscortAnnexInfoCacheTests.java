@@ -11,7 +11,6 @@ public class EscortAnnexInfoCacheTests {
 
     @Test
     void get() {
-        annexInfoCache.getMasterCache().get("0000000001");
-        annexInfoCache.getSlaveCache().get(EscortAnnexInfoCache.SlaveCache.Key.builder().cardNo("2552076744").build());
+        annexInfoCache.get("0000000001");
     }
 }

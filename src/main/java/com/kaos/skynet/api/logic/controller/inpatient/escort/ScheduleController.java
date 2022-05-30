@@ -5,7 +5,7 @@ import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
-import com.kaos.skynet.core.ThreadPools;
+import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.thread.pool.ThreadPool;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,12 @@ public class ScheduleController {
     /**
      * 定时任务主线程池
      */
-    final ThreadPool guardPool = ThreadPools.newGuardThreadPool("陪护证守护线程池");
+    final ThreadPool guardPool = Threads.newGuardThreadPool("陪护证守护线程池");
 
     /**
      * 子线程池
      */
-    final ThreadPool taskPool = ThreadPools.newThreadPool("陪护证线程池", 10);
+    final ThreadPool taskPool = Threads.newThreadPool("陪护证线程池", 10);
 
     /**
      * 陪护证主表接口

@@ -8,6 +8,7 @@ import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexInfo;
 import com.kaos.skynet.api.data.mapper.common.SequenceMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexCheckMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
+import com.kaos.skynet.core.json.Json;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,12 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Service
 public class AnnexService {
+    /**
+     * 序列化工具
+     */
+    @Autowired
+    Json json;
+
     /**
      * 缓存
      */
@@ -81,14 +88,14 @@ public class AnnexService {
     @Transactional
     public void checkAnnex(String annexNo, String checker, Boolean negativeFlag, LocalDateTime inspectDate) {
         // 查询附件记录
-        EscortAnnexInfo annexInfo = cache.getAnnexInfoCache().getMasterCache().get(annexNo);
+        EscortAnnexInfo annexInfo = cache.getAnnexInfoCache().get(annexNo);
         if (annexInfo == null) {
             log.error(String.format("待审附件不存在(annexNo = %s)", annexNo));
             throw new RuntimeException("待审附件不存在");
         }
 
         // 检索审核记录
-        EscortAnnexCheck annexCheck = cache.getAnnexCheckCache().getMasterCache().getClone(annexNo);
+        EscortAnnexCheck annexCheck = json.clone(cache.getAnnexCheckCache().get(annexNo), EscortAnnexCheck.class);
         if (annexCheck == null) {
             // 构造待插入对象
             annexCheck = EscortAnnexCheck.builder()
@@ -112,6 +119,6 @@ public class AnnexService {
         }
 
         // 更新缓存
-        cache.getAnnexCheckCache().getMasterCache().refresh(annexNo);
+        cache.getAnnexCheckCache().refresh(annexNo);
     }
 }

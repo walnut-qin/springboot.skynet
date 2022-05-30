@@ -49,7 +49,7 @@ public class SurgeryServiceImpl implements SurgeryService {
      * 住院接口
      */
     @Autowired
-    FinIprInMainInfoCache.MasterCache inMainInfoCache;
+    FinIprInMainInfoCache inMainInfoCache;
 
     /**
      * 患者基本信息cache

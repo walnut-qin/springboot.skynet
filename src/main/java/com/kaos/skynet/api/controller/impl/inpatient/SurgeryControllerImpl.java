@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
 import com.kaos.skynet.api.controller.inf.inpatient.SurgeryController;
@@ -28,9 +27,8 @@ import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
 import com.kaos.skynet.api.service.inf.inpatient.SurgeryService;
-import com.kaos.skynet.core.Gsons;
-import com.kaos.skynet.core.HttpClients;
-import com.kaos.skynet.core.http.client.HttpClient;
+import com.kaos.skynet.core.http.handler.impl.DocareHttpHandler;
+import com.kaos.skynet.core.json.Json;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -47,14 +45,15 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/ms/inpatient/surgery")
 public class SurgeryControllerImpl implements SurgeryController {
     /**
-     * gson处理器
+     * 序列化工具
      */
-    Gson gson = Gsons.newGson();
+    @Autowired
+    Json json;
 
     /**
      * HttpHelper
      */
-    HttpClient httpClient = HttpClients.newHttpClient(HttpClients.docareNode);
+    DocareHttpHandler httpClient;
 
     /**
      * 接口：手术服务
@@ -298,7 +297,7 @@ public class SurgeryControllerImpl implements SurgeryController {
     public QueryAppliesRsp querySurgeries(@RequestBody @Valid QueryAppliesReq req) {
         // 记录日志
         log.info("查询手术申请, 入参:");
-        log.info(this.gson.toJson(req));
+        log.info(this.json.toJson(req));
 
         // 调用服务
         var rs = this.surgeryService.queryApplies(req.deptCode, req.roomNo, req.beginDate, req.endDate, req.states);

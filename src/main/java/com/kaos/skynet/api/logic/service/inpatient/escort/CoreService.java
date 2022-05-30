@@ -5,32 +5,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.kaos.skynet.api.data.cache.DataCache;
-import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
-import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexCheckCache;
-import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexInfoCache;
-import com.kaos.skynet.api.data.cache.outpatient.fee.FinOpbFeeDetailCache;
-import com.kaos.skynet.api.data.cache.pipe.lis.LisResultNewCache;
+import com.kaos.skynet.api.data.converter.NatsConverter;
 import com.kaos.skynet.api.data.entity.common.ComPatientInfo;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
-import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexCheck;
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexInfo;
 import com.kaos.skynet.api.data.entity.outpatient.fee.FinOpbFeeDetail;
-import com.kaos.skynet.api.data.entity.pipe.lis.LisResultNew;
+import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
+import com.kaos.skynet.api.data.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
-import com.kaos.skynet.core.Gsons;
+import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.type.converter.duration.string.AgeDurationToStringConverter;
 import com.kaos.skynet.core.type.utils.DurationUtils;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +37,12 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Service
 class CoreService {
+    /**
+     * 序列化工具
+     */
+    @Autowired
+    Json json;
+
     /**
      * 缓存
      */
@@ -55,20 +56,40 @@ class CoreService {
     EscortMainInfoMapper mainInfoMapper;
 
     /**
+     * 住院主表接口
+     */
+    @Autowired
+    FinIprInMainInfoMapper inMainInfoMapper;
+
+    /**
      * 住院证接口
      */
     @Autowired
     FinIprPrepayInMapper prepayInMapper;
 
     /**
-     * 序列化工具
+     * 费用接口
      */
-    final Gson gson = Gsons.newGson();
+    @Autowired
+    FinOpbFeeDetailMapper feeDetailMapper;
+
+    /**
+     * 附件接口
+     */
+    @Autowired
+    EscortAnnexInfoMapper annexInfoMapper;
 
     /**
      * Duration转为字符串描述
      */
-    final Converter<Duration, String> durationToStringConverter = new AgeDurationToStringConverter();
+    @Autowired
+    AgeDurationToStringConverter ageDurationToStringConverter;
+
+    /**
+     * 核酸检测结果转换器
+     */
+    @Autowired
+    NatsConverter natsConverter;
 
     /**
      * 逻辑核心 - 判断陪护证状态
@@ -127,44 +148,21 @@ class CoreService {
         }
 
         // 决定有效核酸结果有效期
-        Integer ptr = 0;
+        Integer offset = 0;
         List<EscortStateRec> stateRecs = cache.getEscortStateRecCache().get(escortMainInfo.getEscortNo());
         if (stateRecs != null && !stateRecs.isEmpty() && stateRecs.get(0).getState() == EscortStateEnum.生效中) {
-            ptr = 14;
+            offset = 14;
         } else {
-            ptr = 2;
+            offset = 2;
         }
-        final Integer offset = ptr;
 
-        // 本院核酸结果
-        List<LisResultNew> lisResults = cache.getLisResultCache().get(LisResultNewCache.Key.builder()
-                .patientId(helper.getCardNo())
-                .itemCodes(Lists.newArrayList("SARS-CoV-2-RNA"))
-                .offset(offset).build());
-        // 院外审核结果
-        List<EscortAnnexCheck> annexChecks = cache.getAnnexCheckCache().getSlaveCache()
-                .get(EscortAnnexCheckCache.SlaveCache.Key.builder()
-                        .cardNo(helper.getCardNo())
-                        .offset(offset).build());
-        // 整合结果
-        List<EscortAnnexCheck> allResults = Lists.newLinkedList();
-        if (lisResults != null && !lisResults.isEmpty()) {
-            allResults.addAll(lisResults.stream().map(x -> {
-                return EscortAnnexCheck.builder()
-                        .negative(x.getResult().equals("阴性(-)"))
-                        .inspectDate(x.getInspectDate()).build();
-            }).toList());
-        }
-        if (annexChecks != null && !annexChecks.isEmpty()) {
-            allResults.addAll(annexChecks);
-        }
-        // 逆序
-        allResults.sort((x, y) -> {
-            return y.getInspectDate().compareTo(x.getInspectDate());
-        });
-        // 判断最近的一次结果
-        if (allResults != null && !allResults.isEmpty()) {
-            if (allResults.get(0).getNegative()) {
+        // 检索核酸检测结果
+        var nats = natsConverter.convert(NatsConverter.Key.builder()
+                .cardNos(Lists.newArrayList(helper.getCardNo()))
+                .duration(Duration.ofDays(offset))
+                .build());
+        if (nats != null) {
+            if (nats.getNegative()) {
                 return StateResult.builder()
                         .state(EscortStateEnum.生效中)
                         .reason("核酸结果为阴性").build();
@@ -176,9 +174,11 @@ class CoreService {
         }
 
         // 判断是否有院内核酸请求
-        List<FinOpbFeeDetail> feeDetails = cache.getFeeDetailCache().get(FinOpbFeeDetailCache.Key.builder()
+        List<FinOpbFeeDetail> feeDetails = feeDetailMapper.queryFeeDetails(FinOpbFeeDetailMapper.Key.builder()
                 .cardNo(helper.getCardNo())
-                .itemCode("F00000068231").build());
+                .itemCode("F00000068231")
+                .operBeginDate(LocalDateTime.now().minus(Duration.ofDays(offset)))
+                .build());
         if (feeDetails != null && !feeDetails.isEmpty()) {
             // 按照操作时间排序
             feeDetails.sort((x, y) -> {
@@ -193,10 +193,10 @@ class CoreService {
         }
 
         // 判断是否有未审核的院外结果
-        List<EscortAnnexInfo> annexInfos = cache.getAnnexInfoCache().getSlaveCache()
-                .get(EscortAnnexInfoCache.SlaveCache.Key.builder()
-                        .cardNo(helper.getCardNo())
-                        .checked(false).build());
+        List<EscortAnnexInfo> annexInfos = annexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
+                .cardNo(helper.getCardNo())
+                .checked(false)
+                .build());
         if (annexInfos != null && !annexInfos.isEmpty()) {
             return StateResult.builder()
                     .state(EscortStateEnum.等待院外核酸检测结果审核)
@@ -216,10 +216,10 @@ class CoreService {
      */
     private StateResult getStrongEscortState(EscortMainInfo escortMainInfo) {
         // 获取住院实体
-        List<FinIprInMainInfo> inMainInfos = cache.getInMainInfoCache().getSlaveCache()
-                .get(FinIprInMainInfoCache.SlaveCache.Key.builder()
-                        .cardNo(escortMainInfo.getPatientCardNo())
-                        .happenNo(escortMainInfo.getHappenNo()).build());
+        List<FinIprInMainInfo> inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                .cardNo(escortMainInfo.getPatientCardNo())
+                .happenNo(escortMainInfo.getHappenNo())
+                .build());
 
         // 创建在院列表和出院列表
         List<FinIprInMainInfo> inList = Lists.newArrayList();
@@ -339,10 +339,11 @@ class CoreService {
         }
 
         // 检索关联的住院患者实体
-        List<FinIprInMainInfo> inMainInfos = cache.getInMainInfoCache().getSlaveCache()
-                .get(FinIprInMainInfoCache.SlaveCache.Key.builder()
-                        .cardNo(escortMainInfo.getPatientCardNo())
-                        .happenNo(escortMainInfo.getHappenNo()).build());
+        List<FinIprInMainInfo> inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                .cardNo(escortMainInfo.getPatientCardNo())
+                .happenNo(escortMainInfo.getHappenNo())
+                .build());
+
         // 若存在关联的住院实体，则说明是强陪护
         if (inMainInfos != null && !inMainInfos.isEmpty()) {
             return getStrongEscortState(escortMainInfo);
@@ -406,7 +407,7 @@ class CoreService {
             // 上述循环已确保了无空状态
             if (!activeList.isEmpty()) {
                 // 尚存有效陪护
-                log.error(String.format("陪护关系已绑定(escortNo = %s)", gson.toJson(activeList.stream().map((x) -> {
+                log.error(String.format("陪护关系已绑定(escortNo = %s)", json.toJson(activeList.stream().map((x) -> {
                     return x.getEscortNo();
                 }).toList())));
                 throw new RuntimeException("陪护关系已绑定");
@@ -424,7 +425,7 @@ class CoreService {
                     if (duration.compareTo(guard) < 0) {
                         // 计算差额
                         Duration offset = guard.minus(duration);
-                        String errStr = durationToStringConverter.convert(offset);
+                        String errStr = ageDurationToStringConverter.convert(offset);
                         log.error(String.format("注销后12小时内无法再次登记为陪护, 剩余%s", errStr));
                         throw new RuntimeException(String.format("注销后12小时内无法再次登记为陪护, 剩余%s", errStr));
                     }
@@ -469,11 +470,10 @@ class CoreService {
      */
     private Integer getHappenNo(String patientCardNo) {
         // 检索在院记录
-        List<FinIprInMainInfo> inMainInfos = cache.getInMainInfoCache().getSlaveCache()
-                .get(FinIprInMainInfoCache.SlaveCache.Key.builder()
-                        .cardNo(patientCardNo)
-                        .states(Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊))
-                        .build());
+        List<FinIprInMainInfo> inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                .cardNo(patientCardNo)
+                .states(Lists.newArrayList(InStateEnum.住院登记, InStateEnum.病房接诊))
+                .build());
         inMainInfos = inMainInfos.stream().filter((x) -> {
             return x.getHappenNo() != null;
         }).toList();

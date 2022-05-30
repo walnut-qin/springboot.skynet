@@ -2,8 +2,6 @@ package com.kaos.skynet.api.data.cache.common.config;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import com.kaos.skynet.api.data.entity.common.config.ConfigMultiMap;
 import com.kaos.skynet.api.data.mapper.common.config.ConfigMultiMapMapper;
 import com.kaos.skynet.core.type.Cache;
@@ -27,13 +25,8 @@ public class ConfigMultiMapCache {
 
     @Component
     public static class MasterCache extends Cache<MasterCache.Key, ConfigMultiMap> {
-        @Autowired
-        ConfigMultiMapMapper configMultiMapMapper;
-
-        @Override
-        @PostConstruct
-        protected void postConstruct() {
-            super.postConstruct(100, new Converter<Key, ConfigMultiMap>() {
+        MasterCache(ConfigMultiMapMapper configMultiMapMapper) {
+            super(100, new Converter<Key, ConfigMultiMap>() {
                 @Override
                 public ConfigMultiMap convert(Key source) {
                     return configMultiMapMapper.queryConfigMultiMap(source.name, source.value);
@@ -58,13 +51,8 @@ public class ConfigMultiMapCache {
 
     @Component
     public static class SlaveCache extends Cache<String, List<ConfigMultiMap>> {
-        @Autowired
-        ConfigMultiMapMapper configMultiMapMapper;
-
-        @Override
-        @PostConstruct
-        protected void postConstruct() {
-            super.postConstruct(100, new Converter<String, List<ConfigMultiMap>>() {
+        SlaveCache(ConfigMultiMapMapper configMultiMapMapper) {
+            super(100, new Converter<String, List<ConfigMultiMap>>() {
                 @Override
                 public List<ConfigMultiMap> convert(String source) {
                     return configMultiMapMapper.queryConfigMultiMaps(source);

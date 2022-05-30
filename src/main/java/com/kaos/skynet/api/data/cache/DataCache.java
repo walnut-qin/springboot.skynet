@@ -22,8 +22,6 @@ import com.kaos.skynet.api.data.cache.inpatient.escort.EscortVipCache;
 import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexCheckCache;
 import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexInfoCache;
 import com.kaos.skynet.api.data.cache.outpatient.FinOprRegisterCache;
-import com.kaos.skynet.api.data.cache.outpatient.fee.FinOpbFeeDetailCache;
-import com.kaos.skynet.api.data.cache.pipe.lis.LisResultNewCache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -88,13 +86,7 @@ public class DataCache {
     FinSpecialCityPatientCache specialCityPatientCache;
 
     @Autowired
-    FinOpbFeeDetailCache feeDetailCache;
-
-    @Autowired
     FinOprRegisterCache registerCache;
-
-    @Autowired
-    LisResultNewCache lisResultCache;
 
     public Map<String, Object> showCacheLog() {
         // 注册缓存实体
@@ -112,33 +104,16 @@ public class DataCache {
         caches.put("deptCache", deptCache);
         caches.put("emplCache", emplCache);
         caches.put("wyDocCache", wyDocCache);
-        caches.put("annexCheckCache", Maps.newHashMap(new HashMap<String, Object>() {
-            {
-                put("masterCache", annexCheckCache.getMasterCache());
-                put("slaveCache", annexCheckCache.getSlaveCache());
-            }
-        }));
-        caches.put("annexInfoCache", Maps.newHashMap(new HashMap<String, Object>() {
-            {
-                put("masterCache", annexInfoCache.getMasterCache());
-                put("slaveCache", annexInfoCache.getSlaveCache());
-            }
-        }));
+        caches.put("annexCheckCache", annexCheckCache);
+        caches.put("annexInfoCache", annexInfoCache);
         caches.put("escortMainInfoCache", escortMainInfoCache);
         caches.put("bedInfoCache", escortStateRecCache);
         caches.put("escortVipCache", escortVipCache);
         caches.put("bedInfoCache", bedInfoCache);
-        caches.put("inMainInfoCache", Maps.newHashMap(new HashMap<String, Object>() {
-            {
-                put("masterCache", inMainInfoCache.getMasterCache());
-                put("slaveCache", inMainInfoCache.getSlaveCache());
-            }
-        }));
+        caches.put("inMainInfoCache", inMainInfoCache);
         caches.put("prepayInCache", prepayInCache);
         caches.put("specialCityPatientCache", specialCityPatientCache);
-        caches.put("feeDetailCache", feeDetailCache);
         caches.put("registerCache", registerCache);
-        caches.put("lisResultCache", lisResultCache);
         return caches;
     }
 }

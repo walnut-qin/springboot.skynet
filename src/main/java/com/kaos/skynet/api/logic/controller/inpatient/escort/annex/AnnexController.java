@@ -11,18 +11,18 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.data.cache.DataCache;
-import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexInfoCache;
 import com.kaos.skynet.api.data.converter.PatientNameConverter;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexInfo;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.enums.inpatient.InStateEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.annex.AnnexService;
-import com.kaos.skynet.core.Locks;
+import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.type.converter.string.bool.NumericStringToBooleanConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +77,9 @@ public class AnnexController {
     @Autowired
     FinIprInMainInfoMapper inMainInfoMapper;
 
+    @Autowired
+    EscortAnnexInfoMapper annexInfoMapper;
+
     @RequestMapping(value = "uploadAnnex", method = RequestMethod.GET, produces = MediaType.TEXT)
     public String uploadAnnex(@NotNull(message = "陪护人卡号不能为空") String helperCardNo,
             @NotNull(message = "附件链接不能为空") String url) {
@@ -99,7 +102,7 @@ public class AnnexController {
         if (escorts != null && !escorts.isEmpty()) {
             for (var escort : escorts) {
                 // 更新关联陪护状态
-                Locks.newLockExecutor().link(escortLock.getStateLock().getLock(escort.getEscortNo())).execute(() -> {
+                Threads.newLockExecutor().link(escortLock.getStateLock().getLock(escort.getEscortNo())).execute(() -> {
                     escortService.updateState(escort.getEscortNo(), null, "WebService", "患者上传外院报告");
                 });
             }
@@ -121,12 +124,12 @@ public class AnnexController {
                 checker, negativeFlag.toString(), inspectDate.toString()));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        Locks.newLockExecutor().link(escortLock.getAnnexLock().getLock(annexNo)).execute(() -> {
+        Threads.newLockExecutor().link(escortLock.getAnnexLock().getLock(annexNo)).execute(() -> {
             annexService.checkAnnex(annexNo, checker, negativeFlagBoolean, inspectDate);
         });
 
         // 检索附件信息
-        var annex = dataCache.getAnnexInfoCache().getMasterCache().get(annexNo);
+        var annex = dataCache.getAnnexInfoCache().get(annexNo);
 
         // 查询所有关联陪护证
         var escorts = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
@@ -141,7 +144,7 @@ public class AnnexController {
         if (escorts != null && !escorts.isEmpty()) {
             for (var escort : escorts) {
                 // 更新关联陪护状态
-                Locks.newLockExecutor().link(escortLock.getStateLock().getLock(escort.getEscortNo())).execute(() -> {
+                Threads.newLockExecutor().link(escortLock.getStateLock().getLock(escort.getEscortNo())).execute(() -> {
                     escortService.updateState(escort.getEscortNo(), null, "WebService", "患者上传外院报告");
                 });
             }
@@ -185,11 +188,9 @@ public class AnnexController {
         // 构造所有附件信息
         List<EscortAnnexInfo> annexInfos = Lists.newArrayList();
         for (String helperCardNo : escortRelation.keySet()) {
-            annexInfos.addAll(
-                    dataCache.getAnnexInfoCache().getSlaveCache().get(
-                            EscortAnnexInfoCache.SlaveCache.Key.builder()
-                                    .cardNo(helperCardNo)
-                                    .checked(checkedBoolean).build()));
+            annexInfos.addAll(annexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
+                    .cardNo(helperCardNo)
+                    .checked(checkedBoolean).build()));
         }
 
         // 映射到响应体
@@ -203,9 +204,8 @@ public class AnnexController {
             }).toList());
             // 若查询审核内容，则添加审核信息
             if (checkedBoolean) {
-                builder.negative(dataCache.getAnnexCheckCache().getMasterCache().get(x.getAnnexNo()).getNegative());
-                builder.inspectDate(
-                        dataCache.getAnnexCheckCache().getMasterCache().get(x.getAnnexNo()).getInspectDate());
+                builder.negative(dataCache.getAnnexCheckCache().get(x.getAnnexNo()).getNegative());
+                builder.inspectDate(dataCache.getAnnexCheckCache().get(x.getAnnexNo()).getInspectDate());
             }
             return builder.build();
         }).toList();
@@ -253,7 +253,7 @@ public class AnnexController {
     @RequestMapping(value = "getPic", method = RequestMethod.GET, produces = MediaType.JPEG)
     public BufferedImage getPic(@NotNull(message = "键值不能为空") String refer) {
         // 根据refer号获取annexUrl
-        var rec = dataCache.getAnnexInfoCache().getMasterCache().get(refer);
+        var rec = dataCache.getAnnexInfoCache().get(refer);
         if (rec == null) {
             throw new RuntimeException("未查询到附件记录");
         }

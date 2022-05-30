@@ -12,6 +12,5 @@ public class DawnOrgDeptCacheTests {
     @Test
     public void getCacheValue() {
         this.deptCache.get("1000");
-        this.deptCache.getClone("1000");
     }
 }

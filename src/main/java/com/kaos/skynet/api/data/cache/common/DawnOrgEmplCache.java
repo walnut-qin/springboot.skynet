@@ -1,13 +1,9 @@
 package com.kaos.skynet.api.data.cache.common;
 
-
-import javax.annotation.PostConstruct;
-
 import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.data.mapper.common.DawnOrgEmplMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -23,17 +19,12 @@ public class DawnOrgEmplCache extends Cache<String, DawnOrgEmpl> {
     /**
      * 数据库接口
      */
-    @Autowired
-    DawnOrgEmplMapper emplMapper;
-
-    @Override
-    @PostConstruct
-    protected void postConstruct() {
-        super.postConstruct(1000, new Converter<String,DawnOrgEmpl>() {
+    DawnOrgEmplCache(DawnOrgEmplMapper emplMapper) {
+        super(1000, new Converter<String, DawnOrgEmpl>() {
             @Override
             public DawnOrgEmpl convert(String source) {
                 return emplMapper.queryEmpl(source);
             }
-        });    
+        });
     }
 }

@@ -1,5 +1,6 @@
 package com.kaos.skynet.api.logic.controller.inpatient.escort;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,9 +10,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.cache.DataCache;
-import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexCheckCache;
-import com.kaos.skynet.api.data.cache.pipe.lis.LisResultNewCache;
 import com.kaos.skynet.api.data.converter.BedNoConverter;
+import com.kaos.skynet.api.data.converter.NatsConverter;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.enums.common.HealthCodeEnum;
@@ -21,9 +21,7 @@ import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.json.gson.adapter.bool.ChineseBooleanTypeAdapter;
 
-import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -65,44 +63,8 @@ public class StatisticController {
     /**
      * 核酸检测
      */
-    final Converter<List<String>, String> nucleicConverter = new Converter<List<String>, String>() {
-        @Override
-        public String convert(List<String> cardNos) {
-            // 构造结果集
-            List<Pair<LocalDateTime, String>> result = Lists.newArrayList();
-            for (var cardNo : cardNos) {
-                // 检索院内核酸记录
-                var r1 = dataCache.getLisResultCache().get(
-                        LisResultNewCache.Key.builder()
-                                .patientId(cardNo)
-                                .itemCodes(Lists.newArrayList("SARS-CoV-2-RNA"))
-                                .offset(14).build());
-                if (!r1.isEmpty()) {
-                    result.addAll(r1.stream().map(x -> {
-                        return new Pair<LocalDateTime, String>(x.getInspectDate(), x.getResult());
-                    }).toList());
-                }
-                // 检索院外核酸报告
-                var r2 = dataCache.getAnnexCheckCache().getSlaveCache().get(
-                        EscortAnnexCheckCache.SlaveCache.Key.builder()
-                                .cardNo(cardNo)
-                                .offset(14).build());
-                if (!r2.isEmpty()) {
-                    result.addAll(r2.stream().map(x -> {
-                        return new Pair<LocalDateTime, String>(x.getInspectDate(), x.getNegative() ? "阴性(-)<o>" : "阳性");
-                    }).toList());
-                }
-            }
-            if (!result.isEmpty()) {
-                // 按时间逆序
-                result.sort((x, y) -> {
-                    return y.getValue0().compareTo(x.getValue0());
-                });
-                return result.get(0).getValue1();
-            }
-            return null;
-        };
-    };
+    @Autowired
+    NatsConverter natsConverter;
 
     /**
      * 查询科室的患者及陪护基本信息
@@ -155,7 +117,13 @@ public class StatisticController {
                 builder.highRiskFlag(patientInfo.getHighRiskFlag());
                 builder.highRiskArea(patientInfo.getHighRiskArea());
             }
-            builder.nucleicAcidResult(nucleicConverter.convert(Lists.newArrayList(x.getCardNo(), x.getPatientNo())));
+            var nats = natsConverter.convert(NatsConverter.Key.builder()
+                    .cardNos(Lists.newArrayList(x.getCardNo(), x.getPatientNo()))
+                    .duration(Duration.ofDays(14))
+                    .build());
+            if (nats != null) {
+                builder.nucleicAcidResult(nats.getNegative() ? "阴性" : "阳性");
+            }
             // 陪护信息
             var escortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
                     .patientCardNo(x.getCardNo())
@@ -173,7 +141,13 @@ public class StatisticController {
                     builder.escort1Name(helper.getName());
                     builder.escort1CardNo(helper.getCardNo());
                     builder.escort1IdenNo(helper.getIdentityCardNo());
-                    builder.escort1NucleicAcidResult(nucleicConverter.convert(Lists.newArrayList(helper.getCardNo())));
+                    var helperNats = natsConverter.convert(NatsConverter.Key.builder()
+                            .cardNos(Lists.newArrayList(helper.getCardNo()))
+                            .duration(Duration.ofDays(14))
+                            .build());
+                    if (helperNats != null) {
+                        builder.escort1NucleicAcidResult(nats.getNegative() ? "阴性" : "阳性");
+                    }
                     builder.escort1Tel(helper.getLinkmanTel());
                     builder.escort1HealthCode(helper.getHealthCode());
                     builder.escort1TravelCode(helper.getTravelCode());
@@ -188,7 +162,13 @@ public class StatisticController {
                     builder.escort2Name(helper.getName());
                     builder.escort2CardNo(helper.getCardNo());
                     builder.escort2IdenNo(helper.getIdentityCardNo());
-                    builder.escort2NucleicAcidResult(nucleicConverter.convert(Lists.newArrayList(helper.getCardNo())));
+                    var helperNats = natsConverter.convert(NatsConverter.Key.builder()
+                            .cardNos(Lists.newArrayList(helper.getCardNo()))
+                            .duration(Duration.ofDays(14))
+                            .build());
+                    if (helperNats != null) {
+                        builder.escort2NucleicAcidResult(nats.getNegative() ? "阴性" : "阳性");
+                    }
                     builder.escort2Tel(helper.getLinkmanTel());
                     builder.escort2HealthCode(helper.getHealthCode());
                     builder.escort2TravelCode(helper.getTravelCode());

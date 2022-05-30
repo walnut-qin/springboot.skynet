@@ -4,8 +4,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.api.controller.MediaType;
-import com.kaos.skynet.api.controller.impl.AbstractController;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
+import com.kaos.skynet.core.json.Json;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -24,12 +24,15 @@ import lombok.extern.log4j.Log4j;
 @Validated
 @RestController
 @RequestMapping("/ms/inpatient/surgery")
-public class QuerySurgeryApply extends AbstractController {
+public class QuerySurgeryApply {
     /**
      * 手术请求接口
      */
     @Autowired
     MetOpsApplyMapper metOpsApplyMapper;
+
+    @Autowired
+    Json json;
 
     /**
      * 查询手术申请记录
@@ -40,7 +43,7 @@ public class QuerySurgeryApply extends AbstractController {
     @RequestMapping(value = "querySurgeryApply", method = RequestMethod.POST, produces = MediaType.JSON)
     public Response querySurgeryApply(@RequestBody @Valid Request req) {
         // 入参记录
-        log.info(String.format("查询手术申请记录: %s", this.gson.toJson(req)));
+        log.info(String.format("查询手术申请记录: %s", this.json.toJson(req)));
 
         // 检索手术信息
         var surgeryInfo = this.metOpsApplyMapper.queryMetOpsApply(req.surgeryNo);

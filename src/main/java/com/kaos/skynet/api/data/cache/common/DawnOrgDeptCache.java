@@ -1,12 +1,9 @@
 package com.kaos.skynet.api.data.cache.common;
 
-import javax.annotation.PostConstruct;
-
 import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.data.mapper.common.DawnOrgDeptMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -22,13 +19,8 @@ public class DawnOrgDeptCache extends Cache<String, DawnOrgDept> {
     /**
      * 数据库接口
      */
-    @Autowired
-    DawnOrgDeptMapper deptMapper;
-
-    @Override
-    @PostConstruct
-    protected void postConstruct() {
-        super.postConstruct(500, new Converter<String, DawnOrgDept>() {
+    DawnOrgDeptCache(DawnOrgDeptMapper deptMapper) {
+        super(500, new Converter<String, DawnOrgDept>() {
             @Override
             public DawnOrgDept convert(String source) {
                 return deptMapper.queryDept(source);

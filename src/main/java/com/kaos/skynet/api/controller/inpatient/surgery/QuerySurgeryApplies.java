@@ -15,7 +15,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.kaos.skynet.api.cache.Cache;
 import com.kaos.skynet.api.controller.MediaType;
-import com.kaos.skynet.api.controller.impl.AbstractController;
 import com.kaos.skynet.api.controller.inpatient.surgery.QuerySurgeryApplies.Response.DataItem;
 import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
@@ -36,6 +35,7 @@ import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsArrangeMapper;
 import com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsItemMapper;
+import com.kaos.skynet.core.json.Json;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j;
 @Validated
 @RestController
 @RequestMapping("/ms/inpatient/surgery")
-public class QuerySurgeryApplies extends AbstractController {
+public class QuerySurgeryApplies {
     /**
      * 手术请求接口
      */
@@ -93,7 +93,10 @@ public class QuerySurgeryApplies extends AbstractController {
      * 住院主表接口
      */
     @Autowired
-    FinIprInMainInfoCache.MasterCache inMainInfoCache;
+    FinIprInMainInfoCache inMainInfoCache;
+
+    @Autowired
+    Json json;
 
     /**
      * 查询手术申请记录
@@ -104,7 +107,7 @@ public class QuerySurgeryApplies extends AbstractController {
     @RequestMapping(value = "querySurgeryApplies", method = RequestMethod.POST, produces = MediaType.JSON)
     public Response querySurgeryApplies(@RequestBody @Valid Request req) {
         // 入参记录
-        log.info(String.format("查询手术申请记录: %s", this.gson.toJson(req)));
+        log.info(String.format("查询手术申请记录: %s", this.json.toJson(req)));
 
         // 检索原始结果
         var resultSet = this.metOpsApplyMapper.queryApplies(req.getLoginDeptCode(), req.getBeginPreDate(),

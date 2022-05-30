@@ -1,12 +1,9 @@
 package com.kaos.skynet.api.data.cache.common;
 
-import javax.annotation.PostConstruct;
-
 import com.kaos.skynet.api.data.entity.common.ComPatientInfo;
 import com.kaos.skynet.api.data.mapper.common.ComPatientInfoMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -24,13 +21,8 @@ public class ComPatientInfoCache extends Cache<String, ComPatientInfo> {
     /**
      * 数据库接口
      */
-    @Autowired
-    ComPatientInfoMapper patientInfoMapper;
-
-    @Override
-    @PostConstruct
-    protected void postConstruct() {
-        super.postConstruct(300, new Converter<String, ComPatientInfo>() {
+    ComPatientInfoCache(ComPatientInfoMapper patientInfoMapper) {
+        super(300, new Converter<String, ComPatientInfo>() {
             @Override
             public ComPatientInfo convert(String source) {
                 return patientInfoMapper.queryPatientInfo(source);

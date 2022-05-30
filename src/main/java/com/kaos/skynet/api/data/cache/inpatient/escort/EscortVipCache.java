@@ -1,29 +1,19 @@
 package com.kaos.skynet.api.data.cache.inpatient.escort;
 
-import javax.annotation.PostConstruct;
-
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortVip;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortVipMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 
 @Component
 public class EscortVipCache extends Cache<EscortVipCache.Key, EscortVip> {
-    /**
-     * 审核接口
-     */
-    @Autowired
-    EscortVipMapper vipMapper;
-
-    @Override
-    @PostConstruct
-    protected void postConstruct() {
-        super.postConstruct(1000, new Converter<Key, EscortVip>() {
+    EscortVipCache(EscortVipMapper vipMapper) {
+        super(1000, new Converter<Key, EscortVip>() {
             @Override
             public EscortVip convert(Key source) {
                 return vipMapper.queryEscortVip(source.cardNo, source.happenNo);
@@ -32,6 +22,7 @@ public class EscortVipCache extends Cache<EscortVipCache.Key, EscortVip> {
     }
 
     @Builder
+    @EqualsAndHashCode
     public static class Key {
         /**
          * 卡号

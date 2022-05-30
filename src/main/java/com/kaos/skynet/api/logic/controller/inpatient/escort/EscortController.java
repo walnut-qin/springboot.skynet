@@ -11,11 +11,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.kaos.skynet.api.data.cache.DataCache;
-import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.cache.inpatient.FinIprPrepayInCache;
 import com.kaos.skynet.api.data.cache.inpatient.escort.EscortVipCache;
 import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
@@ -30,12 +28,12 @@ import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
 import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
-import com.kaos.skynet.core.Gsons;
-import com.kaos.skynet.core.Locks;
+import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.json.gson.adapter.bool.NumericBooleanTypeAdapter;
 import com.kaos.skynet.core.json.gson.adapter.enums.ValueEnumTypeAdapter;
-import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverter;
-import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverter;
+import com.kaos.skynet.core.thread.Threads;
+import com.kaos.skynet.core.type.converter.string.enums.factory.DescriptionStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.string.enums.factory.ValueStringToEnumConverterFactory;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
@@ -88,17 +86,20 @@ public class EscortController {
     /**
      * 序列化工具
      */
-    final Gson gson = Gsons.newGson();
+    @Autowired
+    Json json;
 
     /**
      * 枚举值转换器
      */
-    Converter<String, EscortStateEnum> vEnumConverter = new ValueStringToEnumConverter<>(EscortStateEnum.class);
+    @Autowired
+    ValueStringToEnumConverterFactory valueStringToEnumConverterFactory;
 
     /**
      * 枚举值转换器
      */
-    Converter<String, EscortStateEnum> dEnumConverter = new DescriptionStringToEnumConverter<>(EscortStateEnum.class);
+    @Autowired
+    DescriptionStringToEnumConverterFactory descriptionStringToEnumConverterFactory;
 
     /**
      * 患者索引转卡号的转换器
@@ -154,13 +155,13 @@ public class EscortController {
     @RequestMapping(value = "register", method = RequestMethod.POST, produces = MediaType.TEXT)
     public String register(@RequestBody @Valid RegisterReqBody req) {
         // 记录日志
-        log.info(String.format("登记陪护证, 入参%s", gson.toJson(req)));
+        log.info(String.format("登记陪护证, 入参%s", json.toJson(req)));
 
         // 获取就诊卡号
         String patientCardNo = patientIdxToCardNoConverter.convert(req.getPatientIdx());
 
         // 带锁运行业务
-        return Locks.newLockExecutor().link(escortLock.getPatientLock().getLock(patientCardNo))
+        return Threads.newLockExecutor().link(escortLock.getPatientLock().getLock(patientCardNo))
                 .link(escortLock.getHelperLock().getLock(req.getHelperCardNo()))
                 .execute(() -> {
                     return escortService.register(patientCardNo,
@@ -217,10 +218,10 @@ public class EscortController {
         // 解析状态参数
         EscortStateEnum ptr = null;
         if (ptr == null) {
-            ptr = vEnumConverter.convert(state);
+            ptr = valueStringToEnumConverterFactory.getConverter(EscortStateEnum.class).convert(state);
         }
         if (ptr == null) {
-            ptr = dEnumConverter.convert(state);
+            ptr = descriptionStringToEnumConverterFactory.getConverter(EscortStateEnum.class).convert(state);
         }
         final EscortStateEnum stateEnum = ptr;
 
@@ -229,7 +230,7 @@ public class EscortController {
                 stateEnum == null ? "null" : stateEnum.getDescription(), emplCode));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        Locks.newLockExecutor().link(escortLock.getStateLock().getLock(escortNo)).execute(() -> {
+        Threads.newLockExecutor().link(escortLock.getStateLock().getLock(escortNo)).execute(() -> {
             escortService.updateState(escortNo, stateEnum, emplCode, "收到客户端请求");
         });
     }
@@ -247,7 +248,7 @@ public class EscortController {
         log.info(String.format("记录陪护证行为<escortNo = %s, action = %s>", escortNo, action.getDescription()));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        Locks.newLockExecutor().link(escortLock.getActionLock().getLock(escortNo)).execute(() -> {
+        Threads.newLockExecutor().link(escortLock.getActionLock().getLock(escortNo)).execute(() -> {
             escortService.recordAction(escortNo, action, "收到客户端请求");
         });
     }
@@ -350,11 +351,10 @@ public class EscortController {
                 rsp.sex = patient.getSex();
                 rsp.age = Period.between(patient.getBirthday().toLocalDate(), LocalDate.now());
             }
-            var inMainInfos = dataCache.getInMainInfoCache().getSlaveCache().get(
-                    FinIprInMainInfoCache.SlaveCache.Key.builder()
-                            .cardNo(x.getPatientCardNo())
-                            .happenNo(x.getHappenNo())
-                            .build());
+            var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                    .cardNo(x.getPatientCardNo())
+                    .happenNo(x.getHappenNo())
+                    .build());
             if (inMainInfos != null && inMainInfos.size() == 1) {
                 var inMainInfo = inMainInfos.get(0);
                 rsp.deptName = deptNameConverter.convert(inMainInfo.getDeptCode());
