@@ -2,7 +2,7 @@ package com.kaos.skynet.core.type.converter.duration.string;
 
 import java.time.Duration;
 
-import org.springframework.core.convert.converter.Converter;
+import com.kaos.skynet.core.type.converter.Converter;
 
 import lombok.AllArgsConstructor;
 

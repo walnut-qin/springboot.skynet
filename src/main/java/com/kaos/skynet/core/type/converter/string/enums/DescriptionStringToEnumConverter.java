@@ -1,8 +1,7 @@
 package com.kaos.skynet.core.type.converter.string.enums;
 
 import com.kaos.skynet.core.type.Enum;
-
-import org.springframework.core.convert.converter.Converter;
+import com.kaos.skynet.core.type.converter.Converter;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;

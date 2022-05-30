@@ -469,12 +469,12 @@ public class EscortController {
         // 构造响应body
         return escortInfos.stream().map(x -> {
             QueryHelperInfoRsp rsp = new QueryHelperInfoRsp();
-            rsp.cardNo = x.getPatientCardNo();
-            var patient = dataCache.getPatientInfoCache().get(rsp.cardNo);
-            if (patient != null) {
-                rsp.name = patient.getName();
-                rsp.sex = patient.getSex();
-                rsp.age = Period.between(patient.getBirthday().toLocalDate(), LocalDate.now());
+            rsp.cardNo = x.getHelperCardNo();
+            var helper = dataCache.getPatientInfoCache().get(x.getHelperCardNo());
+            if (helper != null) {
+                rsp.name = helper.getName();
+                rsp.sex = helper.getSex();
+                rsp.age = Period.between(helper.getBirthday().toLocalDate(), LocalDate.now());
             }
             var vip = dataCache.getEscortVipCache().get(
                     EscortVipCache.Key.builder()

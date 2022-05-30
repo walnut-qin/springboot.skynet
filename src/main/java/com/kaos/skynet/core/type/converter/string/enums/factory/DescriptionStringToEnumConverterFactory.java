@@ -1,10 +1,9 @@
 package com.kaos.skynet.core.type.converter.string.enums.factory;
 
 import com.kaos.skynet.core.type.Enum;
+import com.kaos.skynet.core.type.converter.Converter;
+import com.kaos.skynet.core.type.converter.ConverterFactory;
 import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverter;
-
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.core.convert.converter.ConverterFactory;
 
 import org.springframework.stereotype.Component;
 

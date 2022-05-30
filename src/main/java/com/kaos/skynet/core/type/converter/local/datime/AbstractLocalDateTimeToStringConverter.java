@@ -3,7 +3,7 @@ package com.kaos.skynet.core.type.converter.local.datime;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.core.convert.converter.Converter;
+import com.kaos.skynet.core.type.converter.Converter;
 
 import lombok.AllArgsConstructor;
 

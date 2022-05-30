@@ -2,9 +2,9 @@ package com.kaos.skynet.api.data.converter;
 
 import com.kaos.skynet.api.data.cache.DataCache;
 import com.kaos.skynet.api.data.entity.inpatient.ComBedInfo;
+import com.kaos.skynet.core.type.converter.Converter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**

@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexCheckMapper;
 import com.kaos.skynet.api.data.mapper.pipe.lis.LisResultNewMapper;
+import com.kaos.skynet.core.type.converter.Converter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;

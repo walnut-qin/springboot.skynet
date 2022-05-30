@@ -1,6 +1,6 @@
 package com.kaos.skynet.core.type.converter.string.decimal;
 
-import org.springframework.core.convert.converter.Converter;
+import com.kaos.skynet.core.type.converter.Converter;
 
 import org.springframework.stereotype.Component;
 
