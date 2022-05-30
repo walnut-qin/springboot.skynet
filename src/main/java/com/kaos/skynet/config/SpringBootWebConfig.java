@@ -46,6 +46,12 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
     StandardStringToLocalDateTimeConverter standardStringToLocalDateTimeConverter;
 
     @Autowired
+    BooleanHttpMessageConverter booleanHttpMessageConverter;
+
+    @Autowired
+    DoubleHttpMessageConverter doubleHttpMessageConverter;
+
+    @Autowired
     JsonHttpMessageConverter jsonHttpMessageConverter;
 
     /**
@@ -103,8 +109,8 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
         // 设置定制转换器，插入队列最前段，给予最高优先级
         converters.add(0, new BufferedImageHttpMessageConverter());
         converters.add(0, jsonHttpMessageConverter);
-        converters.add(0, new BooleanHttpMessageConverter());
-        converters.add(0, new DoubleHttpMessageConverter());
+        converters.add(0, booleanHttpMessageConverter);
+        converters.add(0, doubleHttpMessageConverter);
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
     }
