@@ -11,7 +11,7 @@ import com.kaos.skynet.core.http.converter.DoubleHttpMessageConverter;
 import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.converter.string.date.StandardStringToDateConverter;
-import com.kaos.skynet.core.type.converter.string.enums.factory.DescriptionStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverterFactory;
 import com.kaos.skynet.core.type.converter.string.local.date.StandardStringToLocalDateConverter;
 import com.kaos.skynet.core.type.converter.string.local.datime.StandardStringToLocalDateTimeConverter;
 import com.kaos.skynet.core.type.converter.string.local.time.StandardStringToLocalTimeConverter;

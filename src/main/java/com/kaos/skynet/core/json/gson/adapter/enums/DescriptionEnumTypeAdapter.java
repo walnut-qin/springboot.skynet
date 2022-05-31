@@ -11,7 +11,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.converter.enums.string.DescriptionEnumToStringConverter;
-import com.kaos.skynet.core.type.converter.string.enums.factory.DescriptionStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverterFactory;
 
 import org.springframework.stereotype.Component;
 

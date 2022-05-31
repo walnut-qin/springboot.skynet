@@ -32,8 +32,8 @@ import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.json.gson.adapter.bool.NumericBooleanTypeAdapter;
 import com.kaos.skynet.core.json.gson.adapter.enums.ValueEnumTypeAdapter;
 import com.kaos.skynet.core.thread.Threads;
-import com.kaos.skynet.core.type.converter.string.enums.factory.DescriptionStringToEnumConverterFactory;
-import com.kaos.skynet.core.type.converter.string.enums.factory.ValueStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverterFactory;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
 

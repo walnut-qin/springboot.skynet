@@ -9,7 +9,7 @@ import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.converter.Converter;
 import com.kaos.skynet.core.type.converter.ConverterFactory;
 import com.kaos.skynet.core.type.converter.enums.string.ValueEnumToStringConverter;
-import com.kaos.skynet.core.type.converter.string.enums.factory.ValueStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverterFactory;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
