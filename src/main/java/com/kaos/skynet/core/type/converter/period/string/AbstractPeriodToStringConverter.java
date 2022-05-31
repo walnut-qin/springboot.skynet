@@ -7,7 +7,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public abstract class AbstractPeriodToStringConverter implements Converter<Period, String> {
+public abstract class AbstractPeriodToStringConverter extends Converter<Period, String> {
     /**
      * 是否缩略为0的值
      */

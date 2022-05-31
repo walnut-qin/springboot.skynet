@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * 科室编码到科室名称的转换器
  */
 @Component
-public class DeptNameConverter implements Converter<String, String> {
+public class DeptNameConverter extends Converter<String, String> {
     @Autowired
     DataCache dataCache;
 

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmplNameConverter implements Converter<String, String> {
+public class EmplNameConverter extends Converter<String, String> {
     @Autowired
     DataCache dataCache;
 

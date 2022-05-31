@@ -22,7 +22,7 @@ import lombok.Setter;
  * 患者索引(卡号或住院号)到核酸结果的转换器
  */
 @Component
-public class NatsConverter implements Converter<NatsConverter.Key, NatsConverter.Value> {
+public class NatsConverter extends Converter<NatsConverter.Key, NatsConverter.Value> {
     @Autowired
     LisResultNewMapper lisResultNewMapper;
 

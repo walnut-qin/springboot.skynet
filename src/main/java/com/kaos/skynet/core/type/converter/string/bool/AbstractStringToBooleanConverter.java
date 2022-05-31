@@ -7,7 +7,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @AllArgsConstructor
-public class AbstractStringToBooleanConverter implements Converter<String, Boolean> {
+public class AbstractStringToBooleanConverter extends Converter<String, Boolean> {
     /**
      * 对应true
      */

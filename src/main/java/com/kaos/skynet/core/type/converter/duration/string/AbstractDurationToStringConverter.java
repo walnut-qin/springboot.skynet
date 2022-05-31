@@ -7,7 +7,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public abstract class AbstractDurationToStringConverter implements Converter<Duration, String> {
+public abstract class AbstractDurationToStringConverter extends Converter<Duration, String> {
     /**
      * 是否缩略为0的值
      */

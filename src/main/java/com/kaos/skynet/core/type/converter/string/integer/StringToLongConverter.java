@@ -5,7 +5,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component("StringToLongConverter")
-public class StringToLongConverter implements Converter<String, Long> {
+public class StringToLongConverter extends Converter<String, Long> {
     @Override
     public Long convert(String source) {
         // 判空

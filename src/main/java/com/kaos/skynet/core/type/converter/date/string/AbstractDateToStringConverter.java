@@ -8,7 +8,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public abstract class AbstractDateToStringConverter implements Converter<Date, String> {
+public abstract class AbstractDateToStringConverter extends Converter<Date, String> {
     /**
      * 时间格式
      */

@@ -5,7 +5,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component("DoubleToStringConverter")
-public class DoubleToStringConverter implements Converter<Double, String> {
+public class DoubleToStringConverter extends Converter<Double, String> {
     @Override
     public String convert(Double source) {
         // 判空

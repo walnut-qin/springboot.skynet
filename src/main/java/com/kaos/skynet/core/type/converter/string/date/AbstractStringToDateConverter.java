@@ -10,7 +10,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @AllArgsConstructor
-public abstract class AbstractStringToDateConverter implements Converter<String, Date> {
+public abstract class AbstractStringToDateConverter extends Converter<String, Date> {
     /**
      * 时间格式
      */

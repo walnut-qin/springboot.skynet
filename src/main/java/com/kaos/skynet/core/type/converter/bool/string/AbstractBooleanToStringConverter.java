@@ -5,7 +5,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public abstract class AbstractBooleanToStringConverter implements Converter<Boolean, String> {
+public abstract class AbstractBooleanToStringConverter extends Converter<Boolean, String> {
     /**
      * true时对应的值
      */
