@@ -1,8 +1,8 @@
-package com.kaos.skynet.api.mapper.inpatient.fee;
+package com.kaos.skynet.api.data.mapper.inpatient.fee;
 
 import java.util.List;
 
-import com.kaos.skynet.api.entity.inpatient.fee.FinIpbInPrepay;
+import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbInPrepay;
 
 public interface FinIpbInPrepayMapper {
     /**
@@ -21,5 +21,5 @@ public interface FinIpbInPrepayMapper {
      * @param cost        预交金金额
      * @return 修改记录数量
      */
-    Integer updatePrepayCost(String inpatientNo, Integer happenNo, Double cost);
+    Integer updatePrepay(FinIpbInPrepay inPrepay);
 }

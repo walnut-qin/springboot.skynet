@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.fee.FinIpbInPrepayMapper">
-    <resultMap id="map" type="com.kaos.skynet.api.entity.inpatient.fee.FinIpbInPrepay">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbInPrepayMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbInPrepay">
         <id column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
         <id column="HAPPEN_NO" jdbcType="VARCHAR" property="happenNo"/>
         <result column="NAME" jdbcType="VARCHAR" property="name"/>
@@ -91,12 +91,111 @@
         </where>
     </select>
 
-    <update id="updatePrepayCost">
+    <update id="updatePrepay">
         UPDATE
             XYHIS.FIN_IPB_INPREPAY
         <trim prefix="SET" suffixOverrides=",">
-            <if test="true">
-                PREPAY_COST = #{cost},
+            <if test = "true">
+                NAME = #{name},
+            </if>
+            <if test = "true">
+                PREPAY_COST = #{prepayCost},
+            </if>
+            <if test = "true">
+                PAY_WAY = #{payWay},
+            </if>
+            <if test = "true">
+                DEPT_CODE = #{deptCode},
+            </if>
+            <if test = "true">
+                RECEIPT_NO = #{receiptNo},
+            </if>
+            <if test = "true">
+                STAT_DATE = #{statDate},
+            </if>
+            <if test = "true">
+                BALANCE_DATE = #{balanceDate},
+            </if>
+            <if test = "true">
+                BALANCE_STATE = #{balanceState},
+            </if>
+            <if test = "true">
+                PREPAY_STATE = #{prepayState},
+            </if>
+            <if test = "true">
+                OLD_RECIPENO = #{oldRecipeNo},
+            </if>
+            <if test = "true">
+                OPEN_BANK = #{openBank},
+            </if>
+            <if test = "true">
+                OPEN_ACCOUNTS = #{openAccounts},
+            </if>
+            <if test = "true">
+                INVOICE_NO = #{invoiceNo},
+            </if>
+            <if test = "true">
+                BALANCE_NO = #{balanceNo},
+            </if>
+            <if test = "true">
+                BALANCE_OPERCODE = #{balanceOperCode},
+            </if>
+            <if test = "true">
+                REPORT_FLAG = #{reportFlag},
+            </if>
+            <if test = "true">
+                CHECK_NO = #{checkNo},
+            </if>
+            <if test = "true">
+                FINGRP_CODE = #{finFrpCode},
+            </if>
+            <if test = "true">
+                WORK_NAME = #{workName},
+            </if>
+            <if test = "true">
+                TRANS_FLAG = #{transFlag},
+            </if>
+            <if test = "true">
+                CHANGE_BALANCE_NO = #{changeBalanceNo},
+            </if>
+            <if test = "true">
+                TRANS_CODE = #{transCode},
+            </if>
+            <if test = "true">
+                TRANS_DATE = #{transDate},
+            </if>
+            <if test = "true">
+                PRINT_FLAG = #{printFlag},
+            </if>
+            <if test = "true">
+                EXT_FLAG = #{extFlag},
+            </if>
+            <if test = "true">
+                EXT1_FLAG = #{ext1Flag},
+            </if>
+            <if test = "true">
+                POSTRANS_NO = #{posTransNo},
+            </if>
+            <if test = "true">
+                OPER_CODE = #{operCode},
+            </if>
+            <if test = "true">
+                OPER_DATE = #{operDate},
+            </if>
+            <if test = "true">
+                OPER_DEPTCODE = #{operDeptCode},
+            </if>
+            <if test = "true">
+                MEMO = #{memo},
+            </if>
+            <if test = "true">
+                DEPTOWN = #{deptOwn},
+            </if>
+            <if test = "true">
+                EMPLOYEEOWN = #{employeeOwn},
+            </if>
+            <if test = "true">
+                REFERNUM = #{referNum},
             </if>
         </trim>
         <where>

@@ -1,206 +1,215 @@
-package com.kaos.skynet.api.entity.inpatient.fee;
+package com.kaos.skynet.api.data.entity.inpatient.fee;
 
 import java.util.Date;
 
-import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
+import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.enums.common.PayWayEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.PrepayStateEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
+import com.kaos.skynet.core.type.utils.IntegerUtils;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
 public class FinIpbInPrepay {
     /**
      * 住院流水号 {@link FinIpbInPrepay.AssociateEntity#inMainInfo}
      */
-    public String inpatientNo = null;
+    private String inpatientNo;
 
     /**
      * 发生序号
      */
-    public Integer happenNo = null;
+    private Integer happenNo;
 
     /**
      * 姓名
      */
-    public String name = null;
+    private String name;
 
     /**
      * 预交金额
      */
-    public Double prepayCost = null;
+    private Double prepayCost;
 
     /**
      * 支付方式
      */
-    public PayWayEnum payWay = null;
+    private PayWayEnum payWay;
 
     /**
      * 科室代码
      */
-    public String deptCode = null;
+    private String deptCode;
 
     /**
      * 预交金收据号码
      */
-    public String receiptNo = null;
+    private String receiptNo;
 
     /**
      * 统计日期
      */
-    public Date statDate = null;
+    private Date statDate;
 
     /**
      * 结算时间
      */
-    public Date balanceDate = null;
+    private Date balanceDate;
 
     /**
      * 结算标志 0:未结算；1:已结算 2:已结转
      */
-    public BalanceStateEnum balanceState = null;
+    private BalanceStateEnum balanceState;
 
     /**
      * 预交金状态
      */
-    public PrepayStateEnum prepayState = null;
+    private PrepayStateEnum prepayState;
 
     /**
      * 原票据号
      */
-    public String oldRecipeNo = null;
+    private String oldRecipeNo;
 
     /**
      * 开户银行
      */
-    public String openBank = null;
+    private String openBank;
 
     /**
      * 开户帐户
      */
-    public String openAccounts = null;
+    private String openAccounts;
 
     /**
      * 结算发票号
      */
-    public String invoiceNo = null;
+    private String invoiceNo;
 
     /**
      * 结算序号
      */
-    public Integer balanceNo = null;
+    private Integer balanceNo;
 
     /**
      * 结算人代码
      */
-    public String balanceOperCode = null;
+    private String balanceOperCode;
 
     /**
      * 上缴标志（1是 0否）
      */
-    public Boolean reportFlag = null;
+    private Boolean reportFlag;
 
     /**
      * 审核序号
      */
-    public String checkNo = null;
+    private String checkNo;
 
     /**
      * 财务组代码
      */
-    public String finFrpCode = null;
+    private String finFrpCode;
 
     /**
      * 工作单位
      */
-    public String workName = null;
+    private String workName;
 
     /**
      * 0非转押金，1转押金，2转押金已打印
      */
-    public String transFlag = null;
+    private String transFlag;
 
     /**
      * 转押金时结算序号
      */
-    public Integer changeBalanceNo = null;
+    private Integer changeBalanceNo;
 
     /**
      * 转押金结算员
      */
-    public String transCode = null;
+    private String transCode;
 
     /**
      * 转押金时间
      */
-    public Date transDate = null;
+    private Date transDate;
 
     /**
      * 打印标志
      */
-    public Boolean printFlag = null;
+    private Boolean printFlag;
 
     /**
      * 正常收取 1 结算召回 2
      */
-    public String extFlag = null;
+    private String extFlag;
 
     /**
      * 日结标志 0未日结 1日结
      */
-    public String ext1Flag = null;
+    private String ext1Flag;
 
     /**
      * pos交易流水号或支票号或汇票号
      */
-    public String posTransNo = null;
+    private String posTransNo;
 
     /**
      * 操作员
      */
-    public String operCode = null;
+    private String operCode;
 
     /**
      * 操作日期
      */
-    public Date operDate = null;
+    private Date operDate;
 
     /**
      * 操作员科室
      */
-    public String operDeptCode = null;
+    private String operDeptCode;
 
     /**
      * 存交易的原始信息
      */
-    public String memo = null;
+    private String memo;
 
     /**
      * 职员院区标识
      */
-    public DeptOwnEnum deptOwn = null;
+    private DeptOwnEnum deptOwn;
 
     /**
      * 职员院区标识
      */
-    public DeptOwnEnum employeeOwn = null;
+    private DeptOwnEnum employeeOwn;
 
     /**
      * 自助机交易订单号
      */
-    public String referNum = null;
+    private String referNum;
 
-    /**
-     * 关联实体
-     */
-    public class AssociateEntity {
-        /**
-         * 住院实体 {@link FinIpbInPrepay#inpatientNo}
-         */
-        public FinIprInMainInfo inMainInfo = null;
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof FinIpbInPrepay) {
+            var that = (FinIpbInPrepay) arg0;
+            return StringUtils.equals(this.inpatientNo, that.inpatientNo)
+                    && IntegerUtils.equals(this.balanceNo, that.balanceNo);
+        }
+        return false;
     }
 
-    /**
-     * 关联实体
-     */
-    transient public AssociateEntity associateEntity = new AssociateEntity();
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(inpatientNo, balanceNo);
+    }
 }
