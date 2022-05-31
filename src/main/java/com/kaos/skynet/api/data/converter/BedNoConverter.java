@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * 床号到简略床位号的转换器
  */
 @Component
-public class BedNoConverter extends Converter<String, String> {
+public class BedNoConverter implements Converter<String, String> {
     @Autowired
     DataCache dataCache;
 

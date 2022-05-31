@@ -10,7 +10,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Component("ValueStringToEnumConverterFactory")
-public class ValueStringToEnumConverterFactory extends ConverterFactory<String, Enum> {
+public class ValueStringToEnumConverterFactory implements ConverterFactory<String, Enum> {
     @Override
     public <T extends Enum> Converter<String, T> getConverter(Class<T> targetType) {
         return new Converter<String, T>() {

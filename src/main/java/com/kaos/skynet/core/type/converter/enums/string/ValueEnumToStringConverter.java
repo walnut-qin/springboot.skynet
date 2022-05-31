@@ -6,7 +6,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component("ValueEnumToStringConverter")
-public class ValueEnumToStringConverter<E extends Enum> extends Converter<E, String> {
+public class ValueEnumToStringConverter<E extends Enum> implements Converter<E, String> {
     @Override
     public String convert(E source) {
         if (source == null) {

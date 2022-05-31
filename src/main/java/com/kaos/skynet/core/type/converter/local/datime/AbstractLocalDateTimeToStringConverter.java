@@ -8,7 +8,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public abstract class AbstractLocalDateTimeToStringConverter extends Converter<LocalDateTime, String> {
+public abstract class AbstractLocalDateTimeToStringConverter implements Converter<LocalDateTime, String> {
     /**
      * 格式串
      */

@@ -5,7 +5,7 @@ import com.kaos.skynet.core.type.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component("StringToFloatConvert")
-public class StringToFloatConvert extends Converter<String, Float> {
+public class StringToFloatConvert implements Converter<String, Float> {
     @Override
     public Float convert(String source) {
         // 判空
