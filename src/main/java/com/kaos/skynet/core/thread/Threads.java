@@ -27,16 +27,6 @@ public final class Threads {
     }
 
     /**
-     * 构造指定容量的匿名锁
-     * 
-     * @param size
-     * @return
-     */
-    public static LockFactory newLockFactory(Integer size) {
-        return newLockFactory("匿名锁", size);
-    }
-
-    /**
      * 构造运行器
      */
     public static LockExecutor newLockExecutor() {
