@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.fee.FinIpbFeeInfoMapper">
-    <resultMap id="map" type="com.kaos.skynet.api.entity.inpatient.fee.FinIpbFeeInfo">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbFeeInfoMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbFeeInfo">
         <id column="RECIPE_NO" jdbcType="VARCHAR" property="recipeNo"/>
         <id column="FEE_CODE" jdbcType="VARCHAR" property="feeCode"/>
         <id column="EXECUTE_DEPTCODE" jdbcType="VARCHAR" property="executeDeptCode"/>
@@ -85,7 +85,7 @@
         WZ_APPLY_NO
     </sql>
 
-    <select id="queryFeeInfos" resultMap="map">
+    <select id="queryFeeInfos" parameterType="com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbFeeInfoMapper$Key" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
@@ -94,11 +94,11 @@
             <if test = "deptCode != null">
                 AND EXECUTE_DEPTCODE = #{deptCode}
             </if>
-            <if test = "true">
-                AND FEE_DATE &gt;= #{beginDate} + 0
+            <if test = "feeBeginDate != null">
+                AND FEE_DATE &gt;= #{feeBeginDate} + 0
             </if>
-            <if test = "true">
-                AND FEE_DATE &lt;= #{endDate} + 0
+            <if test = "feeEndDate != null">
+                AND FEE_DATE &lt;= #{feeEndDate} + 0
             </if>
         </where>
     </select>

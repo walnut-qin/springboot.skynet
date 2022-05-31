@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Multimap;
+import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
-import com.kaos.skynet.api.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.skynet.api.entity.inpatient.fee.FinIpbItemList;
 import com.kaos.skynet.api.entity.inpatient.fee.FinIpbMedicineList;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
