@@ -1,6 +1,6 @@
-package com.kaos.skynet.api.mapper.inpatient.surgery;
+package com.kaos.skynet.api.data.mapper.inpatient.surgery;
 
-import com.kaos.skynet.api.entity.inpatient.surgery.MetOpsRoom;
+import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsRoom;
 
 public interface MetOpsRoomMapper {
     /**
