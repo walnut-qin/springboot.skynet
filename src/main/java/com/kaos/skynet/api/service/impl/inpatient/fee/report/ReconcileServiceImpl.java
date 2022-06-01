@@ -27,7 +27,7 @@ import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbFeeInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbItemListMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbMedicineListMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
-import com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.report.FinIpbDayReportMapper;
 import com.kaos.skynet.api.service.inf.inpatient.fee.report.ReconcileService;
 
 import org.apache.log4j.Logger;
@@ -322,7 +322,8 @@ public class ReconcileServiceImpl implements ReconcileService {
         Map<String, Pair<Pair<Double, Double>, Multimap<String, FinIpbBalanceHead>>> rtMap = Maps.newTreeMap(cmp);
 
         // 查询满足条件的日结数据
-        var rpts = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
+        // var rpts = this.finIpbDayReportMapper.queryDayReprots(beginDate, endDate, deptOwn);
+        var rpts = this.finIpbDayReportMapper.queryDayReprots(null);
         if (rpts == null) {
             return null;
         }
@@ -339,7 +340,7 @@ public class ReconcileServiceImpl implements ReconcileService {
                     var newPubCost = dataPair.getValue0().getValue0() + balance.getPubCost();
                     var newPayCost = dataPair.getValue0().getValue1() + balance.getPayCost();
                     var newDataPair = dataPair.setAt0(new Pair<>(newPubCost, newPayCost));
-                    newDataPair.getValue1().put(rpt.statNo, balance);
+                    newDataPair.getValue1().put(rpt.getStatNo(), balance);
                     // 替换数据
                     rtMap.replace(balance.getPactCode(), dataPair);
                 } else {
@@ -352,7 +353,7 @@ public class ReconcileServiceImpl implements ReconcileService {
                                 };
                             })));
                     // 插入第一个明细
-                    rtMap.get(balance.getPactCode()).getValue1().put(rpt.statNo, balance);
+                    rtMap.get(balance.getPactCode()).getValue1().put(rpt.getStatNo(), balance);
                 }
             }
         }

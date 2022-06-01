@@ -54,7 +54,7 @@ public class ReportControllerImpl implements DayReportController {
     @RequestMapping(value = "fixNewYbData", method = RequestMethod.GET, produces = MediaType.TEXT)
     public String fixNewYbData(@NotNull(message = "日结编码不能为空") String statNo) {
         // 调用服务
-        this.dayReportService.fixNewYbDayReportData(statNo);
+        // this.dayReportService.fixNewYbDayReportData(statNo);
 
         return "修改完毕";
     }
@@ -63,7 +63,7 @@ public class ReportControllerImpl implements DayReportController {
     @RequestMapping(value = "fixNewYbDataInDeptOwn", method = RequestMethod.POST, produces = MediaType.TEXT)
     public String fixNewYbDataInDeptOwn(@RequestBody @Valid FixInDeptOwnReq req) {
         // 调用服务
-        this.dayReportService.fixNewYbDayReportData(req.beginDate, req.endDate, req.deptOwn);
+        // this.dayReportService.fixNewYbDayReportData(req.beginDate, req.endDate, req.deptOwn);
 
         return "修改完毕";
     }

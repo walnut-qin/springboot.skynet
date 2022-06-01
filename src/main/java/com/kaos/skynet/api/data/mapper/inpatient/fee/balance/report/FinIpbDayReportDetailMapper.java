@@ -1,8 +1,8 @@
-package com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport;
+package com.kaos.skynet.api.data.mapper.inpatient.fee.balance.report;
 
 import java.util.List;
 
-import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
+import com.kaos.skynet.api.data.entity.inpatient.fee.balance.report.FinIpbDayReportDetail;
 
 public interface FinIpbDayReportDetailMapper {
     /**
@@ -23,6 +23,14 @@ public interface FinIpbDayReportDetailMapper {
     List<FinIpbDayReportDetail> queryDayReportDetails(String statNo);
 
     /**
+     * 插入一条记录
+     * 
+     * @param finIpbDayReportDetail 日结明细记录
+     * @return
+     */
+    Integer insertDayReportDetail(FinIpbDayReportDetail finIpbDayReportDetail);
+
+    /**
      * 主键修改
      * 
      * @param statNo   日结编号；等于 {@code null} 时，将 IS NULL 作为判断条件
@@ -30,13 +38,5 @@ public interface FinIpbDayReportDetailMapper {
      * @param totCost  日结项目数值
      * @return
      */
-    int updateDayReportDetail(String statNo, String statCode, Double totCost);
-
-    /**
-     * 插入一条记录
-     * 
-     * @param finIpbDayReportDetail 日结明细记录
-     * @return
-     */
-    int insertDayReportDetail(FinIpbDayReportDetail finIpbDayReportDetail);
+    Integer updateDayReportDetail(FinIpbDayReportDetail finIpbDayReportDetail);
 }

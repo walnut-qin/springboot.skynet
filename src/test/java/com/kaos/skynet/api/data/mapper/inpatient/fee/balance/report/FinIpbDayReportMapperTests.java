@@ -1,0 +1,28 @@
+package com.kaos.skynet.api.data.mapper.inpatient.fee.balance.report;
+
+import java.time.LocalDateTime;
+
+import com.kaos.skynet.api.data.enums.DeptOwnEnum;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+public class FinIpbDayReportMapperTests {
+    @Autowired
+    FinIpbDayReportMapper dayReportMapper;
+
+    @Test
+    void queryDayReport() {
+        dayReportMapper.queryDayReport("347299");
+    }
+
+    @Test
+    void queryDayReports() {
+        dayReportMapper.queryDayReprots(FinIpbDayReportMapper.Key.builder()
+                .deptOwn(DeptOwnEnum.All)
+                .rptBeginDate(LocalDateTime.now().minusMinutes(1))
+                .build());
+    }
+}

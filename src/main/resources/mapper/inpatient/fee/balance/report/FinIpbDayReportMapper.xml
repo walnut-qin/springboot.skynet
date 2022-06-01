@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper">
-    <resultMap id="map" type="com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReport">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.fee.balance.report.FinIpbDayReportMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.fee.balance.report.FinIpbDayReport">
         <id column="STAT_NO" jdbcType="VARCHAR" property="statNo"/>
         <result column="BEGIN_DATE" jdbcType="VARCHAR" property="beginDate"/>
         <result column="END_DATE" jdbcType="VARCHAR" property="endDate"/>
@@ -35,39 +35,21 @@
         </where>
     </select>
 
-    <sql id = "rank1">
-        SELECT
-            T1.*,
-            T3.DEPTOWN
-        FROM
-            XYHIS.FIN_IPB_DAYREPORT T1
-            LEFT JOIN XYHIS.DAWN_ORG_EMPL T2 ON T2.EMPL_ID = T1.OPER_CODE AND T2.VALID_STATE = 1
-            LEFT JOIN XYHIS.DAWN_ORG_DEPT T3 ON T3.DEPT_ID = T2.DEPT_ID AND T3.VALID_STATE = 1
-        <where>
-            <if test = "beginDate != null">
-                AND T1.OPER_DATE &gt;= #{beginDate} + 0
-            </if>
-            <if test = "endDate != null">
-                AND T1.OPER_DATE &lt;= #{endDate} + 0
-            </if>
-        </where>
-        ORDER BY
-            T1.STAT_NO
-    </sql>
-
     <select id="queryDayReprots" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
-        (
-        <include refid = "rank1"/>
-        )
+            XYHIS.FIN_IPB_DAYREPORT
         <where>
-            <if test = "deptOwn != null and deptOwn != @com.kaos.skynet.api.enums.common.DeptOwnEnum@All">
+            <if test = "rptBeginDate != null">
+                AND OPER_DATE &gt;= #{rptBeginDate} + 0
+            </if>
+            <if test = "rptEndDate != null">
+                AND OPER_DATE &lt;= #{rptEndDate} + 0
+            </if>
+            <if test = "deptOwn != null and deptOwn != @com.kaos.skynet.api.data.enums.DeptOwnEnum@All">
                 AND DEPTOWN = #{deptOwn}
             </if>
         </where>
-        ORDER BY
-            STAT_NO
     </select>
 </mapper>
