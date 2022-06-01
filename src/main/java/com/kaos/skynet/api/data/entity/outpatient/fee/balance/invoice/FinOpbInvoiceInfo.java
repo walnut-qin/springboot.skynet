@@ -6,7 +6,7 @@ import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.PayKindEnum;
 import com.kaos.skynet.api.data.enums.PayModeEnum;
-import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.data.enums.TransTypeEnum;
 
 import org.apache.commons.lang3.StringUtils;
 

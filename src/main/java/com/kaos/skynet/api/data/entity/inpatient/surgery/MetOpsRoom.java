@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.data.entity.inpatient.surgery;
 
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class MetOpsRoom {
     /**
      * 有效标识
      */
-    private ValidStateEnum valid;
+    private ValidEnum valid;
 
     /**
      * 操作员 {@link MetOpsRoom.AssociateEntity#operEmpl}

@@ -1,8 +1,8 @@
 package com.kaos.skynet.api.data.cache.outpatient;
 
 import com.kaos.skynet.api.data.entity.outpatient.FinOprRegister;
+import com.kaos.skynet.api.data.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.mapper.outpatient.FinOprRegisterMapper;
-import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import com.kaos.skynet.core.type.Cache;
 
 import org.springframework.core.convert.converter.Converter;

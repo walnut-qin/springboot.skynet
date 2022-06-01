@@ -2,13 +2,13 @@ package com.kaos.skynet.api.data.entity.inpatient.fee;
 
 import java.util.Date;
 
+import com.kaos.skynet.api.data.entity.pharmacy.PhaComBaseInfo.DrugQualityEnum;
+import com.kaos.skynet.api.data.entity.pharmacy.PhaComBaseInfo.DrugTypeEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.MinFeeEnum;
 import com.kaos.skynet.api.data.enums.PayKindEnum;
-import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.data.enums.TransTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
-import com.kaos.skynet.api.enums.pharmacy.DrugQualityEnum;
-import com.kaos.skynet.api.enums.pharmacy.DrugTypeEnum;
 
 import lombok.Builder;
 import lombok.Getter;

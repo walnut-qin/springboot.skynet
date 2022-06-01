@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.api.enums.inpatient.BedGradeEnum;
 import com.kaos.skynet.api.enums.inpatient.BedStateEnum;
 
@@ -79,7 +79,7 @@ public class ComBedInfo {
     /**
      * 有效标识
      */
-    private ValidStateEnum validState;
+    private ValidEnum validState;
 
     /**
      * 预约标志

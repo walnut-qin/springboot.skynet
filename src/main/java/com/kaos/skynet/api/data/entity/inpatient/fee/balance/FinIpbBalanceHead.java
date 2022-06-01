@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.data.enums.TransTypeEnum;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.Builder;

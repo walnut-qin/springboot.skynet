@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead;
-import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.data.enums.TransTypeEnum;
 
 import lombok.Builder;
 import lombok.Getter;

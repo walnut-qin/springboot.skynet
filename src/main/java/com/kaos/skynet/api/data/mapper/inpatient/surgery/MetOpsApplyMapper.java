@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
 
 import org.springframework.validation.annotation.Validated;
@@ -69,7 +69,7 @@ public interface MetOpsApplyMapper {
         /**
          * 有效性标识
          */
-        private ValidStateEnum valid;
+        private ValidEnum valid;
 
         /**
          * 院区

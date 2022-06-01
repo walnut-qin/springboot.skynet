@@ -8,8 +8,8 @@ import com.kaos.skynet.api.data.enums.BloodTypeEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.HealthCodeEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.common.TravelCodeEnum;
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.data.enums.TravelCodeEnum;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -277,7 +277,7 @@ public class ComPatientInfo {
     /**
      * 有效性
      */
-    private ValidStateEnum isValid;
+    private ValidEnum isValid;
 
     /**
      * 算法类别

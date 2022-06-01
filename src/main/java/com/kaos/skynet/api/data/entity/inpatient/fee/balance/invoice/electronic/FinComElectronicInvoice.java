@@ -3,8 +3,8 @@ package com.kaos.skynet.api.data.entity.inpatient.fee.balance.invoice.electronic
 import java.time.LocalDateTime;
 
 import com.google.common.base.Objects;
-import com.kaos.skynet.api.enums.common.SourceTypeEnum;
-import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.data.enums.SourceTypeEnum;
+import com.kaos.skynet.api.data.enums.TransTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.BusinessTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.StateEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.SuccessStateEnum;

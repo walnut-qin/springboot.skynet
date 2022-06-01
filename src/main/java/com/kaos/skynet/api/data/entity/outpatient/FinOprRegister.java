@@ -7,8 +7,8 @@ import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.PayModeEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.common.TransTypeEnum;
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.data.enums.TransTypeEnum;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.api.enums.outpatient.OutpatientStateEnum;
 import com.kaos.skynet.core.type.Enum;
 
@@ -234,7 +234,7 @@ public class FinOprRegister {
     /**
      * 有效标识
      */
-    private ValidStateEnum validFlag;
+    private ValidEnum validFlag;
 
     /**
      * 操作员编码

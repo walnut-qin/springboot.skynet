@@ -2,7 +2,6 @@ package com.kaos.skynet.api.data.entity.outpatient.fee;
 
 import java.util.Date;
 
-import com.kaos.skynet.api.enums.common.TradeCodeEnum;
 import com.kaos.skynet.core.type.Enum;
 
 import lombok.AllArgsConstructor;
@@ -229,6 +228,24 @@ public class FinOprPayModel {
         建行("10", "建行"),
         weimaiAPP("12", "weimaiAPP"),
         医保线上支付("13", "医保线上支付");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum TradeCodeEnum implements Enum {
+        正交易("S1", "正交易"),
+        当日反交易("S2", "当日反交易"),
+        隔日反交易("07", "隔日退费");
     
         /**
          * 数据库存值

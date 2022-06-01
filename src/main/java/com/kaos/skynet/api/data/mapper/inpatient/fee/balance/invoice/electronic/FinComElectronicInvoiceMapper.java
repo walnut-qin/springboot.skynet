@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.data.mapper.inpatient.fee.balance.invoice.electronic;
 
 import com.kaos.skynet.api.data.entity.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoice;
-import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.api.data.enums.TransTypeEnum;
 
 public interface FinComElectronicInvoiceMapper {
     /**

@@ -2,7 +2,7 @@ package com.kaos.skynet.api.data.entity.inpatient.surgery;
 
 import java.time.LocalDateTime;
 
-import com.kaos.skynet.api.enums.common.ValidStateEnum;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.AnesTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.MetOpsInciTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryDegreeEnum;
@@ -193,7 +193,7 @@ public class MetOpsApply {
     /**
      * 有效标识
      */
-    private ValidStateEnum valid;
+    private ValidEnum valid;
 
     /**
      * 手术间编码 {@link MetOpsApply.AssociateEntity#room}
