@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.surgery.MetOpsApplyMapper">
-    <resultMap id="map" type="com.kaos.skynet.api.entity.inpatient.surgery.MetOpsApply">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.surgery.MetOpsApplyMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply">
         <id column="OPERATIONNO" jdbcType="VARCHAR" property="operationNo"/>
         <result column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
         <result column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
@@ -97,7 +97,7 @@
         ICU_FLAG
     </sql>
 
-    <select id="queryMetOpsApply" resultMap="map">
+    <select id="queryApply" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
@@ -115,8 +115,11 @@
         FROM
             MET_OPS_APPLY
         <where>
-            <if test="surgeryDeptCode != null">
-                AND EXEC_DEPT = #{surgeryDeptCode}
+            <if test="patientNo != null">
+                AND PATIENT_NO = #{patientNo}
+            </if>
+            <if test="execDeptCode != null">
+                AND EXEC_DEPT = #{execDeptCode}
             </if>
             <if test="beginPreDate != null">
                 AND PRE_DATE &gt;= #{beginPreDate}
@@ -136,29 +139,8 @@
             <if test="valid != null">
                 AND YNVALID = #{valid}
             </if>
-            <if test="deptOwn != null and deptOwn != @com.kaos.skynet.api.enums.common.DeptOwnEnum@All">
+            <if test="deptOwn != null and deptOwn != @com.kaos.skynet.api.data.enums.DeptOwnEnum@All">
                 AND DEPTOWN = #{deptOwn}
-            </if>
-        </where>
-    </select>
-
-    <select id="queryPatientMetOpsApplies" resultMap="map">
-        SELECT
-        <include refid="item"/>
-        FROM
-            MET_OPS_APPLY
-        <where>
-            <if test="true">
-                AND PATIENT_NO = #{patientNo}
-            </if>
-            <if test="beginDate != null">
-                AND PRE_DATE &gt;= #{beginDate} + 0
-            </if>
-            <if test="endDate != null">
-                AND PRE_DATE &lt;= #{endDate} + 0
-            </if>
-            <if test="valid != null">
-                AND YNVALID = #{valid}
             </if>
         </where>
     </select>
