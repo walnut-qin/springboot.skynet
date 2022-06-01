@@ -45,11 +45,11 @@
                         ANNEX_NO = KAOS.ESCORT_ANNEX_CHK.ANNEX_NO
                 ) = #{cardNo}
             </if>
-            <if test="inspectBeginDate != null">
-                AND EXEC_DATE &gt;= #{inspectBeginDate} + 0
+            <if test="beginInspectDate != null">
+                AND EXEC_DATE &gt;= #{beginInspectDate} + 0
             </if>
-            <if test="inspectEndDate != null">
-                AND EXEC_DATE &lt;= #{inspectEndDate} + 0
+            <if test="endInspectDate != null">
+                AND EXEC_DATE &lt;= #{endInspectDate} + 0
             </if>
         </where>
     </select>

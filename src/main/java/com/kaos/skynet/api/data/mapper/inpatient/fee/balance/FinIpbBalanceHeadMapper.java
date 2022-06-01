@@ -43,12 +43,12 @@ public interface FinIpbBalanceHeadMapper {
         /**
          * 结算开始时间
          */
-        private LocalDateTime balanceBeginDate;
+        private LocalDateTime beginBalanceDate;
 
         /**
          * 结算结束时间
          */
-        private LocalDateTime balanceEndDate;
+        private LocalDateTime endBalanceDate;
 
         /**
          * 医保编码

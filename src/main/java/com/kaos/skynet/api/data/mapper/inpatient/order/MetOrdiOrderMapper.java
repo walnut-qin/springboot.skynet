@@ -46,11 +46,11 @@ public interface MetOrdiOrderMapper {
         /**
          * 开立医嘱时间 - 开始时间, 等于 {@code null} 时，不作为判断条件
          */
-        private LocalDateTime moBeginDate;
+        private LocalDateTime beginMoDate;
 
         /**
          * 开立医嘱时间 - 结束时间, 等于 {@code null} 时，不作为判断条件, 等于 {@code null} 时，不作为判断条件
          */
-        private LocalDateTime moEndDate;
+        private LocalDateTime endMoDate;
     }
 }

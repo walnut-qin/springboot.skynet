@@ -15,7 +15,7 @@ public class FinIpbMedicineListMapperTests {
     void queryMedicineLists() {
         medicineListMapper.queryMedicineLists(FinIpbMedicineListMapper.Key.builder()
                 .deptCode("1000")
-                .feeBeginDate(LocalDateTime.now().minusDays(1))
+                .beginFeeDate(LocalDateTime.now().minusDays(1))
                 .build());
     }
 }

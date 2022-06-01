@@ -228,11 +228,11 @@
             <if test="itemCode != null">
                 AND ITEM_CODE = #{itemCode}
             </if>
-            <if test="operBeginDate != null">
-                AND OPER_DATE &gt;= #{operBeginDate} + 0
+            <if test="beginOperDate != null">
+                AND OPER_DATE &gt;= #{beginOperDate} + 0
             </if>
-            <if test="operEndDate != null">
-                AND OPER_DATE &lt;= #{operEndDate} + 0
+            <if test="endOperDate != null">
+                AND OPER_DATE &lt;= #{endOperDate} + 0
             </if>
         </where>
     </select>

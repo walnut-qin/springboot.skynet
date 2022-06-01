@@ -40,11 +40,11 @@ public interface FinOpbFeeDetailMapper {
         /**
          * 开始时间, 等于 {@code null} 时，不作为条件
          */
-        private LocalDateTime operBeginDate;
+        private LocalDateTime beginOperDate;
 
         /**
          * 结束时间, 等于 {@code null} 时，不作为条件
          */
-        private LocalDateTime operEndDate;
+        private LocalDateTime endOperDate;
     }
 }

@@ -238,12 +238,12 @@ public class MetOpsApply {
     /**
      * 术中冰冻开始时间
      */
-    private LocalDateTime frozenBeginDate;
+    private LocalDateTime beginFrozenDate;
 
     /**
      * 术中冰冻结束时间
      */
-    private LocalDateTime frozenEndDate;
+    private LocalDateTime endFrozenDate;
 
     /**
      * 术后是否转入ICU

@@ -21,8 +21,8 @@ public class FinOpbFeeDetailMapperTests {
         finOpbFeeDetailMapper.queryFeeDetails(FinOpbFeeDetailMapper.Key.builder()
                 .clinicCode("160670")
                 .itemCode("F00000005341")
-                .operBeginDate(LocalDateTime.of(2013, 9, 1, 0, 0, 0))
-                .operEndDate(LocalDateTime.of(2013, 9, 1, 23, 59, 59))
+                .beginOperDate(LocalDateTime.of(2013, 9, 1, 0, 0, 0))
+                .endOperDate(LocalDateTime.of(2013, 9, 1, 23, 59, 59))
                 .build());
     }
 }

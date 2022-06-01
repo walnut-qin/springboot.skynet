@@ -38,12 +38,12 @@ public interface EscortAnnexInfoMapper {
         /**
          * 上传时间起点, 等于 {@code null} 时，不作为判断条件
          */
-        private LocalDateTime uploadBeginDate;
+        private LocalDateTime beginUploadDate;
 
         /**
          * 上传时间终点, 等于 {@code null} 时，不作为判断条件
          */
-        private LocalDateTime uploadEndDate;
+        private LocalDateTime endUploadDate;
 
         /**
          * 是否已审核

@@ -31,11 +31,11 @@ public interface FinIpbFeeInfoMapper {
         /**
          * 计费开始时间, 等于 {@code null} 时，不作为判断条件
          */
-        private LocalDateTime feeBeginDate;
+        private LocalDateTime beginFeeDate;
 
         /**
          * 计费结束时间, 等于 {@code null} 时，不作为判断条件
          */
-        private LocalDateTime feeEndDate;
+        private LocalDateTime endFeeDate;
     }
 }

@@ -15,7 +15,7 @@ public class FinIpbItemListMapperTests {
     void queryItemLists() {
         itemListMapper.queryItemLists(FinIpbItemListMapper.Key.builder()
                 .deptCode("1000")
-                .feeBeginDate(LocalDateTime.now().minusDays(1))
+                .beginFeeDate(LocalDateTime.now().minusDays(1))
                 .build());
     }
 }

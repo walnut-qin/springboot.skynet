@@ -48,7 +48,7 @@ public class NatsConverter implements Converter<NatsConverter.Key, NatsConverter
             // 外院核酸结果
             var annexResult = escortAnnexCheckMapper.queryAnnexChecks(EscortAnnexCheckMapper.Key.builder()
                     .cardNo(cardNo)
-                    .inspectBeginDate(LocalDateTime.now().minus(key.duration))
+                    .beginInspectDate(LocalDateTime.now().minus(key.duration))
                     .build()).stream().map(x -> {
                         return Value.builder()
                                 .negative(x.getNegative())

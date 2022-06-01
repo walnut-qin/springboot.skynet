@@ -28,11 +28,11 @@ public interface FinIpbMedicineListMapper {
         /**
          * 费用开始时间
          */
-        private LocalDateTime feeBeginDate;
+        private LocalDateTime beginFeeDate;
 
         /**
          * 费用结束时间
          */
-        private LocalDateTime feeEndDate;
+        private LocalDateTime endFeeDate;
     }
 }

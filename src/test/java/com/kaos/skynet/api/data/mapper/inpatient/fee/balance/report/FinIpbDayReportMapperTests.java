@@ -22,7 +22,7 @@ public class FinIpbDayReportMapperTests {
     void queryDayReports() {
         dayReportMapper.queryDayReprots(FinIpbDayReportMapper.Key.builder()
                 .deptOwn(DeptOwnEnum.All)
-                .rptBeginDate(LocalDateTime.now().minusMinutes(1))
+                .beginRptDate(LocalDateTime.now().minusMinutes(1))
                 .build());
     }
 }

@@ -94,11 +94,11 @@
             <if test = "deptCode != null">
                 AND EXECUTE_DEPTCODE = #{deptCode}
             </if>
-            <if test = "feeBeginDate != null">
-                AND FEE_DATE &gt;= #{feeBeginDate} + 0
+            <if test = "beginFeeDate != null">
+                AND FEE_DATE &gt;= #{beginFeeDate} + 0
             </if>
-            <if test = "feeEndDate != null">
-                AND FEE_DATE &lt;= #{feeEndDate} + 0
+            <if test = "endFeeDate != null">
+                AND FEE_DATE &lt;= #{endFeeDate} + 0
             </if>
         </where>
     </select>

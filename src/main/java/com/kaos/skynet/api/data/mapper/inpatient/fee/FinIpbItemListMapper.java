@@ -28,11 +28,11 @@ public interface FinIpbItemListMapper {
         /**
          * 收费开始时间
          */
-        private LocalDateTime feeBeginDate;
+        private LocalDateTime beginFeeDate;
 
         /**
          * 收费结束时间
          */
-        private LocalDateTime feeEndDate;
+        private LocalDateTime endFeeDate;
     }
 }

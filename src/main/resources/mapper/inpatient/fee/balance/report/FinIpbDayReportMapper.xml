@@ -41,11 +41,11 @@
         FROM
             XYHIS.FIN_IPB_DAYREPORT
         <where>
-            <if test = "rptBeginDate != null">
-                AND OPER_DATE &gt;= #{rptBeginDate} + 0
+            <if test = "beginRptDate != null">
+                AND OPER_DATE &gt;= #{beginRptDate} + 0
             </if>
-            <if test = "rptEndDate != null">
-                AND OPER_DATE &lt;= #{rptEndDate} + 0
+            <if test = "endRptDate != null">
+                AND OPER_DATE &lt;= #{endRptDate} + 0
             </if>
             <if test = "deptOwn != null and deptOwn != @com.kaos.skynet.api.data.enums.DeptOwnEnum@All">
                 AND DEPTOWN = #{deptOwn}

@@ -44,8 +44,8 @@
         <result column="OPERMARK" jdbcType="VARCHAR" property="operRemark"/>
         <result column="CLINICCODE" jdbcType="VARCHAR" property="daySurgeryClinicCode"/>
         <result column="FROZEN_FLAG" jdbcType="VARCHAR" property="frozenFlag"/>
-        <result column="FROZEN_BEGIN_DATE" jdbcType="VARCHAR" property="frozenBeginDate"/>
-        <result column="FROZEN_END_DATE" jdbcType="VARCHAR" property="frozenEndDate"/>
+        <result column="FROZEN_BEGIN_DATE" jdbcType="VARCHAR" property="beginFrozenDate"/>
+        <result column="FROZEN_END_DATE" jdbcType="VARCHAR" property="endFrozenDate"/>
         <result column="ICU_FLAG" jdbcType="VARCHAR" property="icuFlag"/>
     </resultMap>
 

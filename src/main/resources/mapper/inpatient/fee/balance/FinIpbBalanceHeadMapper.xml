@@ -80,11 +80,11 @@
             <if test="balanceOperCode != null">
                 AND BALANCE_OPERCODE = #{balanceOperCode}
             </if>
-            <if test="balanceBeginDate != null">
-                AND BALANCE_DATE &gt;= #{balanceBeginDate} + 0
+            <if test="beginBalanceDate != null">
+                AND BALANCE_DATE &gt;= #{beginBalanceDate} + 0
             </if>
-            <if test="balanceEndDate != null">
-                AND BALANCE_DATE &lt;= #{balanceEndDate} + 0
+            <if test="endBalanceDate != null">
+                AND BALANCE_DATE &lt;= #{endBalanceDate} + 0
             </if>
             <if test="pactCode != null">
                 AND PACT_CODE = #{pactCode}

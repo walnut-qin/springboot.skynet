@@ -37,11 +37,11 @@ public interface FinIpbDayReportMapper {
         /**
          * 日结开始时间
          */
-        private LocalDateTime rptBeginDate;
+        private LocalDateTime beginRptDate;
 
         /**
          * 日结结束时间
          */
-        private LocalDateTime rptEndDate;
+        private LocalDateTime endRptDate;
     }
 }

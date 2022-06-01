@@ -177,7 +177,7 @@ class CoreService {
         List<FinOpbFeeDetail> feeDetails = feeDetailMapper.queryFeeDetails(FinOpbFeeDetailMapper.Key.builder()
                 .cardNo(helper.getCardNo())
                 .itemCode("F00000068231")
-                .operBeginDate(LocalDateTime.now().minus(Duration.ofDays(offset)))
+                .beginOperDate(LocalDateTime.now().minus(Duration.ofDays(offset)))
                 .build());
         if (feeDetails != null && !feeDetails.isEmpty()) {
             // 按照操作时间排序

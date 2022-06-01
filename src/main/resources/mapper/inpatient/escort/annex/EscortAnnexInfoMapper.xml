@@ -36,11 +36,11 @@
             <if test="cardNo != null">
                 AND CARD_NO = #{cardNo}
             </if>
-            <if test="uploadBeginDate != null">
-                AND OPER_DATE &gt;= #{uploadBeginDate} + 0
+            <if test="beginUploadDate != null">
+                AND OPER_DATE &gt;= #{beginUploadDate} + 0
             </if>
-            <if test="uploadEndDate != null">
-                AND OPER_DATE &lt;= #{uploadEndDate} + 0
+            <if test="endUploadDate != null">
+                AND OPER_DATE &lt;= #{endUploadDate} + 0
             </if>
             <if test="checked != null">
                 <if test="checked == true">

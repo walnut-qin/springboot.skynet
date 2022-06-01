@@ -47,11 +47,11 @@
             <if test="termId != null">
                 AND TERM_ID = #{termId}
             </if>
-            <if test="moBeginDate != null">
-                AND MO_DATE &gt;= #{moBeginDate} + 0
+            <if test="beginMoDate != null">
+                AND MO_DATE &gt;= #{beginMoDate} + 0
             </if>
-            <if test="moEndDate != null">
-                AND MO_DATE &lt;= #{moEndDate} + 0
+            <if test="endMoDate != null">
+                AND MO_DATE &lt;= #{endMoDate} + 0
             </if>
         </where>
     </select>

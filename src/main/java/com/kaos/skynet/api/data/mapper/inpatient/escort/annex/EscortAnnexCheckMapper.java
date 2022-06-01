@@ -38,12 +38,12 @@ public interface EscortAnnexCheckMapper {
         /**
          * 检测开始时间
          */
-        private LocalDateTime inspectBeginDate;
+        private LocalDateTime beginInspectDate;
 
         /**
          * 检测结束时间
          */
-        private LocalDateTime inspectEndDate;
+        private LocalDateTime endInspectDate;
     }
 
     /**
