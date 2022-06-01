@@ -19,13 +19,13 @@ import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
 import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbFeeInfo;
+import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbItemList;
+import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbMedicineList;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbFeeInfoMapper;
-import com.kaos.skynet.api.entity.inpatient.fee.FinIpbItemList;
-import com.kaos.skynet.api.entity.inpatient.fee.FinIpbMedicineList;
+import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbItemListMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbMedicineListMapper;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
-import com.kaos.skynet.api.mapper.inpatient.fee.FinIpbItemListMapper;
-import com.kaos.skynet.api.mapper.inpatient.fee.FinIpbMedicineListMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
 import com.kaos.skynet.api.service.inf.inpatient.fee.report.ReconcileService;
@@ -120,12 +120,12 @@ public class ReconcileServiceImpl implements ReconcileService {
      */
     private Multimap<String, FinIpbItemList> getYongYouUndrugInpatientIncome(Date beginDate, Date endDate) {
         // 查询原始费用信息
-        var orgData = this.itemListMapper.queryItemLists(null, beginDate, endDate);
+        var orgData = this.itemListMapper.queryItemLists(FinIpbItemListMapper.Key.builder().build());
 
         return Multimaps.index(orgData, new Function<FinIpbItemList, String>() {
             @Override
             public @Nullable String apply(@Nullable FinIpbItemList input) {
-                return input.executeDeptCode;
+                return input.getExecuteDeptCode();
             }
         });
     }
@@ -139,12 +139,12 @@ public class ReconcileServiceImpl implements ReconcileService {
      */
     private Multimap<String, FinIpbMedicineList> getYongYouDrugInpatientIncome(Date beginDate, Date endDate) {
         // 查询原始费用信息
-        var orgData = this.medicineListMapper.queryMedicineLists(null, beginDate, endDate);
+        var orgData = this.medicineListMapper.queryMedicineLists(null);
 
         return Multimaps.index(orgData, new Function<FinIpbMedicineList, String>() {
             @Override
             public @Nullable String apply(@Nullable FinIpbMedicineList input) {
-                return input.executeDeptCode;
+                return input.getExecuteDeptCode();
             }
         });
     }
@@ -173,14 +173,14 @@ public class ReconcileServiceImpl implements ReconcileService {
         Double undrugFee = undrugInfos.stream().mapToDouble(new ToDoubleFunction<FinIpbItemList>() {
             @Override
             public double applyAsDouble(FinIpbItemList arg0) {
-                return arg0.totCost;
+                return arg0.getTotCost();
             }
         }).sum();
         // 计算药品费用总和
         Double drugFee = drugInfos.stream().mapToDouble(new ToDoubleFunction<FinIpbMedicineList>() {
             @Override
             public double applyAsDouble(FinIpbMedicineList arg0) {
-                return arg0.totCost;
+                return arg0.getTotCost();
             }
         }).sum();
 
@@ -222,14 +222,14 @@ public class ReconcileServiceImpl implements ReconcileService {
         Double undrugFee = undrugInfos.stream().mapToDouble(new ToDoubleFunction<FinIpbItemList>() {
             @Override
             public double applyAsDouble(FinIpbItemList arg0) {
-                return arg0.totCost;
+                return arg0.getTotCost();
             }
         }).sum();
         // 计算药品费用总和
         Double drugFee = drugInfos.stream().mapToDouble(new ToDoubleFunction<FinIpbMedicineList>() {
             @Override
             public double applyAsDouble(FinIpbMedicineList arg0) {
-                return arg0.totCost;
+                return arg0.getTotCost();
             }
         }).sum();
 
@@ -247,7 +247,7 @@ public class ReconcileServiceImpl implements ReconcileService {
             var undrugInfoDetails = Multimaps.index(undrugInfos, new Function<FinIpbItemList, String>() {
                 @Override
                 public @Nullable String apply(@Nullable FinIpbItemList input) {
-                    return input.recipeNo;
+                    return input.getRecipeNo();
                 }
             });
 
@@ -255,7 +255,7 @@ public class ReconcileServiceImpl implements ReconcileService {
             var drugInfoDetails = Multimaps.index(drugInfos, new Function<FinIpbMedicineList, String>() {
                 @Override
                 public @Nullable String apply(@Nullable FinIpbMedicineList input) {
-                    return input.recipeNo;
+                    return input.getRecipeNo();
                 }
             });
 
