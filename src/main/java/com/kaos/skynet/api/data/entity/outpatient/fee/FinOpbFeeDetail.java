@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.MinFeeEnum;
-import com.kaos.skynet.api.enums.common.ItemGradeEnum;
 import com.kaos.skynet.api.enums.common.SysClassEnum;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailCancelFlagEnum;
@@ -13,10 +12,12 @@ import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailCostSourceEnum;
 import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailPayFlagEnum;
 import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailSendFlagEnum;
 import com.kaos.skynet.api.enums.pharmacy.DrugQualityEnum;
+import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -547,5 +548,21 @@ public class FinOpbFeeDetail {
     @Override
     public int hashCode() {
         return Objects.hashCode(recipeNo, seqNo, transType);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum ItemGradeEnum implements Enum {
+        甲("1", "甲类"), 乙("2", "乙类"), 丙("3", "丙类");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

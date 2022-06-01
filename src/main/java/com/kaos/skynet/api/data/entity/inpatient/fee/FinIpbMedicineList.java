@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.MinFeeEnum;
-import com.kaos.skynet.api.enums.common.PayKindEnum;
+import com.kaos.skynet.api.data.enums.PayKindEnum;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
 import com.kaos.skynet.api.enums.pharmacy.DrugQualityEnum;

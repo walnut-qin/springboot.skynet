@@ -7,11 +7,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum DeptOwnEnum implements Enum {
-    All("0", "全院区"),
-    Sourth("1", "南院区"),
-    North("2", "北院区"),
-    East("3", "东津院区");
+public enum HealthCodeEnum implements Enum {
+    绿码("0", "绿码"),
+    黄码("1", "黄码"),
+    红码("2", "红码");
 
     /**
      * 数据库存值

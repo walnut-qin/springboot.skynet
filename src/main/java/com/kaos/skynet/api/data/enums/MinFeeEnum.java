@@ -8,6 +8,7 @@ import lombok.Getter;
 /**
  * 最小费用编码，统计小类 {@code COM_DICTIONARY#TYPE = MINFEE}
  */
+@Getter
 @AllArgsConstructor
 public enum MinFeeEnum implements Enum {
     西药("001", "西药"), 中成药("002", "中成药"), 中草药("003", "中草药"), 诊查费("004", "诊查费"), 空调冷暖费("005", "空调冷暖费"), 会诊费("006", "会诊费"),
@@ -23,12 +24,10 @@ public enum MinFeeEnum implements Enum {
     /**
      * 数据库存值
      */
-    @Getter
     private String value;
 
     /**
      * 描述存值
      */
-    @Getter
     private String description;
 }

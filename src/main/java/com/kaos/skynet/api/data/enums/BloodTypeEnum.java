@@ -5,6 +5,7 @@ import com.kaos.skynet.core.type.Enum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum BloodTypeEnum implements Enum {
     A("01", "A"),
@@ -15,12 +16,10 @@ public enum BloodTypeEnum implements Enum {
     /**
      * 数据库存值
      */
-    @Getter
     private String value;
 
     /**
      * 描述存值
      */
-    @Getter
     private String description;
 }

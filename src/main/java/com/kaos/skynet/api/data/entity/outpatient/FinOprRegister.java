@@ -5,15 +5,16 @@ import java.util.Date;
 
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
+import com.kaos.skynet.api.data.enums.PayModeEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.common.NoonEnum;
-import com.kaos.skynet.api.enums.common.PayModeEnum;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
 import com.kaos.skynet.api.enums.outpatient.OutpatientStateEnum;
+import com.kaos.skynet.core.type.Enum;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -493,5 +494,21 @@ public class FinOprRegister {
     @Override
     public int hashCode() {
         return Objects.hashCode(clinicCode, transType);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum NoonEnum implements Enum {
+        上午("1", "上午"), 下午("2", "下午"), 夜班("3", "夜班"), 中班("4", "中班");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

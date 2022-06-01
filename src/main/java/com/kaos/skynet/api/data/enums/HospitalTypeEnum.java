@@ -1,7 +1,12 @@
-package com.kaos.skynet.api.enums.common;
+package com.kaos.skynet.api.data.enums;
 
 import com.kaos.skynet.core.type.Enum;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum HospitalTypeEnum implements Enum {
     综合医院("0", "综合医院"),
     中医医院("1", "中医医院"),
@@ -19,25 +24,4 @@ public enum HospitalTypeEnum implements Enum {
      * 描述存值
      */
     private String description;
-
-    /**
-     * 构造
-     * 
-     * @param index
-     * @param description
-     */
-    HospitalTypeEnum(String index, String description) {
-        this.value = index;
-        this.description = description;
-    }
-
-    @Override
-    public String getValue() {
-        return this.value;
-    }
-
-    @Override
-    public String getDescription() {
-        return this.description;
-    }
 }

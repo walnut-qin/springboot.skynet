@@ -6,8 +6,8 @@ import java.util.Date;
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.BloodTypeEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
+import com.kaos.skynet.api.data.enums.HealthCodeEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.common.HealthCodeEnum;
 import com.kaos.skynet.api.enums.common.TravelCodeEnum;
 import com.kaos.skynet.api.enums.common.ValidStateEnum;
 
