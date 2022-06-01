@@ -1,8 +1,8 @@
 package com.kaos.skynet.api.data.cache.inpatient.fee;
 
-import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
+import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead;
+import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
-import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.core.type.Cache;
 
 import org.springframework.core.convert.converter.Converter;
@@ -24,7 +24,7 @@ public class FinIpbBalanceHeadCache extends Cache<FinIpbBalanceHeadCache.Key, Fi
         super(500, new Converter<Key, FinIpbBalanceHead>() {
             @Override
             public FinIpbBalanceHead convert(Key key) {
-                return balanceHeadMapper.queryBalance(key.invoiceNo, key.transType);
+                return balanceHeadMapper.queryBalanceHead(key.invoiceNo, key.transType);
             }
         });
     }

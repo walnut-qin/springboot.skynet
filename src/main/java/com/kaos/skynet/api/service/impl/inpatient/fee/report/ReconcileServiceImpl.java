@@ -21,12 +21,12 @@ import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbFeeInfo;
 import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbItemList;
 import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbMedicineList;
+import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbFeeInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbItemListMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbMedicineListMapper;
-import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
-import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
 import com.kaos.skynet.api.service.inf.inpatient.fee.report.ReconcileService;
 
@@ -327,33 +327,32 @@ public class ReconcileServiceImpl implements ReconcileService {
             return null;
         }
         for (var rpt : rpts) {
-            var balances = this.balanceHeadMapper.queryBalancesInBalancer(rpt.rptEmplCode, rpt.beginDate, rpt.endDate,
-                    null);
+            var balances = this.balanceHeadMapper.queryBalanceHeads(null);
             if (balances == null) {
                 continue;
             }
             for (var balance : balances) {
-                if (rtMap.containsKey(balance.pactCode)) {
+                if (rtMap.containsKey(balance.getPactCode())) {
                     // 已存在该医保类型
-                    var dataPair = rtMap.get(balance.pactCode);
+                    var dataPair = rtMap.get(balance.getPactCode());
                     // 计算新的数据
-                    var newPubCost = dataPair.getValue0().getValue0() + balance.pubCost;
-                    var newPayCost = dataPair.getValue0().getValue1() + balance.payCost;
+                    var newPubCost = dataPair.getValue0().getValue0() + balance.getPubCost();
+                    var newPayCost = dataPair.getValue0().getValue1() + balance.getPayCost();
                     var newDataPair = dataPair.setAt0(new Pair<>(newPubCost, newPayCost));
                     newDataPair.getValue1().put(rpt.statNo, balance);
                     // 替换数据
-                    rtMap.replace(balance.pactCode, newDataPair);
+                    rtMap.replace(balance.getPactCode(), dataPair);
                 } else {
                     // 插入新值
-                    rtMap.put(balance.pactCode, new Pair<>(new Pair<>(balance.pubCost, balance.payCost),
+                    rtMap.put(balance.getPactCode(), new Pair<>(new Pair<>(balance.getPubCost(), balance.getPayCost()),
                             TreeMultimap.create(Ordering.natural(), new Comparator<FinIpbBalanceHead>() {
                                 @Override
                                 public int compare(FinIpbBalanceHead arg0, FinIpbBalanceHead arg1) {
-                                    return arg0.inpatientNo.compareTo(arg1.inpatientNo);
+                                    return arg0.getInpatientNo().compareTo(arg1.getInpatientNo());
                                 };
                             })));
                     // 插入第一个明细
-                    rtMap.get(balance.pactCode).getValue1().put(rpt.statNo, balance);
+                    rtMap.get(balance.getPactCode()).getValue1().put(rpt.statNo, balance);
                 }
             }
         }

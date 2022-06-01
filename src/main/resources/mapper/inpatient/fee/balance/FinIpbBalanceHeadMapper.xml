@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper">
-    <resultMap id="map" type="com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead">
+<mapper namespace="com.kaos.skynet.api.data.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead">
         <id column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
         <id column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
         <result column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
@@ -53,7 +53,7 @@
         DAYBALANCE_NO
     </sql>
 
-    <select id="queryBalance" resultMap="map">
+    <select id="queryBalanceHead" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
@@ -68,50 +68,29 @@
         </where>
     </select>
 
-    <select id="queryBalancesInPatient" resultMap="map">
+    <select id="queryBalanceHeads" resultMap="map">
         SELECT
         <include refid="item"/>
         FROM
             XYHIS.FIN_IPB_BALANCEHEAD
         <where>
-            <if test = "true">
+            <if test = "inpatientNo != null">
                 AND INPATIENT_NO = #{inpatientNo}
             </if>
-        </where>
-    </select>
-
-    <select id="queryBalancesInBalancer" resultMap="map">
-        SELECT
-        <include refid="item"/>
-        FROM
-            XYHIS.FIN_IPB_BALANCEHEAD
-        <where>
-            <if test="balancer != null">
-                AND BALANCE_OPERCODE = #{balancer}
+            <if test="balanceOperCode != null">
+                AND BALANCE_OPERCODE = #{balanceOperCode}
             </if>
-            <if test="beginDate != null">
-                AND BALANCE_DATE &gt;= #{beginDate} + 0
+            <if test="balanceBeginDate != null">
+                AND BALANCE_DATE &gt;= #{balanceBeginDate} + 0
             </if>
-            <if test="endDate != null">
-                AND BALANCE_DATE &lt;= #{endDate} + 0
+            <if test="balanceEndDate != null">
+                AND BALANCE_DATE &lt;= #{balanceEndDate} + 0
             </if>
             <if test="pactCode != null">
                 AND PACT_CODE = #{pactCode}
             </if>
-        </where>
-    </select>
-
-    <select id="queryBalancesInDayReport" resultMap="map">
-        SELECT
-        <include refid="item"/>
-        FROM
-            XYHIS.FIN_IPB_BALANCEHEAD
-        <where>
-            <if test="true">
-                AND DAYBALANCE_NO = #{statNo}
-            </if>
-            <if test="pactCode != null">
-                AND PACT_CODE = #{pactCode}
+            <if test="dayBalanceNo != null">
+                AND DAYBALANCE_NO = #{dayBalanceNo}
             </if>
         </where>
     </select>

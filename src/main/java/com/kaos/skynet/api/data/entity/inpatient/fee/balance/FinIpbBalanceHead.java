@@ -1,150 +1,152 @@
-package com.kaos.skynet.api.entity.inpatient.fee.balance;
+package com.kaos.skynet.api.data.entity.inpatient.fee.balance;
 
 import java.util.Date;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
-import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
-import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReport;
 import com.kaos.skynet.api.enums.common.TransTypeEnum;
+import com.kaos.skynet.core.type.utils.StringUtils;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 实体：结算头表（XYHIS.FIN_IPB_BALANCEHEAD）
  */
+@Getter
+@Setter
+@Builder
 public class FinIpbBalanceHead {
     /**
      * 发票号
      */
-    public String invoiceNo = null;
+    private String invoiceNo;
 
     /**
      * 交易类型
      */
-    public TransTypeEnum transType = null;
+    private TransTypeEnum transType;
 
     /**
      * 住院流水号
      */
-    public String inpatientNo = null;
+    private String inpatientNo;
 
     /**
      * 结算序号
      */
-    public Integer balanceNo = null;
+    private Integer balanceNo;
 
     /**
      * 医保编码
      */
-    public String pactCode = null;
+    private String pactCode;
 
     /**
      * 结算员编码
      */
-    public String balanceEmplCode = null;
+    private String balanceEmplCode;
 
     /**
      * 结算时间
      */
-    public Date balanceDate = null;
+    private Date balanceDate;
 
     /**
      * 总费用，实际交易的费用总额，和明细总和的差值即为四舍五入量
      */
-    public Double totCost = null;
+    private Double totCost;
 
     /**
      * 医保：账户消费
      */
-    public Double payCost = null;
+    private Double payCost;
 
     /**
      * 医保：统筹消费
      */
-    public Double pubCost = null;
+    private Double pubCost;
 
     /**
      * 自费：预交金
      */
-    public Double prepayCost = null;
+    private Double prepayCost;
 
     /**
      * 自费：结算时补交金额
      */
-    public Double supplyCost = null;
+    private Double supplyCost;
 
     /**
      * 自费：结算时返还金额
      */
-    public Double returnCost = null;
+    private Double returnCost;
 
     /**
      * 政策：优惠金额
      */
-    public Double ecoCost = null;
+    private Double ecoCost;
 
     /**
      * 政策：减免金额
      */
-    public Double derCost = null;
+    private Double derCost;
 
     /**
      * 政策：公务员补助
      */
-    public Double officePay = null;
+    private Double officePay;
 
     /**
      * 政策：大额补助
      */
-    public Double largePay = null;
+    private Double largePay;
 
     /**
      * 政策：老红军补贴
      */
-    public Double militaryPay = null;
+    private Double militaryPay;
 
     /**
      * 政策：残联基金
      */
-    public Double clCost = null;
+    private Double clCost;
 
     /**
      * 政策：精准扶贫
      */
-    public Double jzfpCost = null;
+    private Double jzfpCost;
 
     /**
      * 政策：公益宝
      */
-    public Double gybCost = null;
+    private Double gybCost;
 
     /**
      * 政策：医院承担
      */
-    public Double hosCost = null;
+    private Double hosCost;
 
     /**
      * 日结编号
      */
-    public String dayReportNo = null;
+    private String dayReportNo;
 
-    /**
-     * 关联实体
-     */
-    public class AssociateEntity {
-        /**
-         * 实体：结算员
-         */
-        public DawnOrgEmpl balanceEmployee = null;
-
-        /**
-         * 实体：日结记录
-         */
-        public FinIpbDayReport finIpbDayReport = null;
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof FinIpbBalanceHead) {
+            var that = (FinIpbBalanceHead) arg0;
+            return StringUtils.equals(this.invoiceNo, that.invoiceNo)
+                    && this.transType == that.transType;
+        }
+        return false;
     }
 
-    /**
-     * 关联实体
-     */
-    transient public AssociateEntity associateEntity = new AssociateEntity();
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(invoiceNo, transType);
+    }
 
     /**
      * 根据当前结算数据计算四舍五入

@@ -7,10 +7,10 @@ import java.util.function.ToDoubleFunction;
 import com.google.common.base.Optional;
 import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.cache.common.DawnOrgEmplCache;
+import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
-import com.kaos.skynet.api.entity.inpatient.fee.balance.FinIpbBalanceHead;
+import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.entity.inpatient.fee.balance.dayreport.FinIpbDayReportDetail;
-import com.kaos.skynet.api.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportDetailMapper;
 import com.kaos.skynet.api.mapper.inpatient.fee.balance.dayreport.FinIpbDayReportMapper;
 import com.kaos.skynet.api.service.inf.inpatient.fee.report.ReportService;
@@ -68,13 +68,14 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public Double queryNewYbPubCost(String balancer, Date beginDate, Date endDate) {
         // 检索所有结算记录
-        var balances = this.balanceHeadMapper.queryBalancesInBalancer(balancer, beginDate, endDate, "18");
+        // var balances = this.balanceHeadMapper.queryBalancesInBalancer(balancer, beginDate, endDate, "18");
+        var balances = this.balanceHeadMapper.queryBalanceHeads(null);
 
         // 算和
         return balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
             @Override
             public double applyAsDouble(FinIpbBalanceHead arg0) {
-                return Optional.fromNullable(arg0.pubCost).or(0.0);
+                return Optional.fromNullable(arg0.getPubCost()).or(0.0);
             }
         }).sum();
     }
@@ -82,13 +83,14 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public Double queryNewYbPayCost(String balancer, Date beginDate, Date endDate) {
         // 检索所有结算记录
-        var balances = this.balanceHeadMapper.queryBalancesInBalancer(balancer, beginDate, endDate, "18");
+        // var balances = this.balanceHeadMapper.queryBalancesInBalancer(balancer, beginDate, endDate, "18");
+        var balances = this.balanceHeadMapper.queryBalanceHeads(null);
 
         // 算和
         return balances.stream().mapToDouble(new ToDoubleFunction<FinIpbBalanceHead>() {
             @Override
             public double applyAsDouble(FinIpbBalanceHead arg0) {
-                return Optional.fromNullable(arg0.payCost).or(0.0);
+                return Optional.fromNullable(arg0.getPayCost()).or(0.0);
             }
         }).sum();
     }
@@ -108,12 +110,13 @@ public class ReportServiceImpl implements ReportService {
 
         // 查询日结员关联的所有结算记录
         Pair<Double, Double> cost = new Pair<Double, Double>(0d, 0d);
-        var balances = this.balanceHeadMapper.queryBalancesInDayReport(rpt.statNo, "18");
+        // var balances = this.balanceHeadMapper.queryBalancesInDayReport(rpt.statNo, "18");
+        var balances = this.balanceHeadMapper.queryBalanceHeads(null);
         for (var balance : Optional.fromNullable(balances).or(new ArrayList<>())) {
-            this.logger.info(String.format("发票号 = %s, 住院号 = %s, 统筹 = %f, 账户 = %f", balance.invoiceNo,
-                    balance.inpatientNo, balance.pubCost, balance.payCost));
-            cost = cost.setAt0(cost.getValue0() + balance.pubCost);
-            cost = cost.setAt1(cost.getValue1() + balance.payCost);
+            this.logger.info(String.format("发票号 = %s, 住院号 = %s, 统筹 = %f, 账户 = %f", balance.getInvoiceNo(),
+                    balance.getInpatientNo(), balance.getPubCost(), balance.getPayCost()));
+            cost = cost.setAt0(cost.getValue0() + balance.getPubCost());
+            cost = cost.setAt1(cost.getValue1() + balance.getPayCost());
         }
 
         // 修改统筹数据
