@@ -5,12 +5,11 @@ import java.time.LocalDateTime;
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.SourceTypeEnum;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
-import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.BusinessTypeEnum;
-import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.StateEnum;
-import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.SuccessStateEnum;
 import com.kaos.skynet.core.type.Entity;
+import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -120,5 +119,77 @@ public class FinComElectronicInvoice extends Entity {
     @Override
     public int hashCode() {
         return Objects.hashCode(invoiceNo, transType);
+    }
+
+    /**
+     * 电子发票业务类型
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum BusinessTypeEnum implements Enum {
+        住院("01", "住院"),
+        门诊("02", "门诊"),
+        急诊("03", "急诊"),
+        门特("04", "门特"),
+        体检("05", "体检"),
+        挂号("06", "挂号"),
+        住院预交金("07", "住院预交金"),
+        体检预交金("08", "体检预交金"),
+        往来票("09", "体检预交金"),
+        捐赠票("10", "体检预交金"),
+        非税通用票("11", "体检预交金"),
+        门诊预交金("12", "体检预交金");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 电子票据状态专用枚举
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum StateEnum implements Enum {
+        有效("1", "有效"),
+        冲红("2", "冲红");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 操作状态
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum SuccessStateEnum implements Enum {
+        失败("0", "失败"),
+        成功("1", "成功"),
+        补开成功("2", "补开成功"),
+        补冲红成功("3", "补冲红成功");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

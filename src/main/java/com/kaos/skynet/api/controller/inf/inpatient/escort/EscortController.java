@@ -10,8 +10,8 @@ import javax.validation.constraints.Size;
 
 import com.google.gson.annotations.SerializedName;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec.ActionEnum;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.StateEnum;
 
 import lombok.Getter;
 
