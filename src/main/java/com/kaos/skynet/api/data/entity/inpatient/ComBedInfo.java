@@ -5,11 +5,11 @@ import java.util.Date;
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
-import com.kaos.skynet.api.enums.inpatient.BedGradeEnum;
-import com.kaos.skynet.api.enums.inpatient.BedStateEnum;
+import com.kaos.skynet.core.type.Enum;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -150,5 +150,45 @@ public class ComBedInfo {
      */
     public String getBriefBedNo() {
         return this.bedNo.replaceFirst("^" + this.nurseCellCode, "");
+    }
+
+    /**
+     * 床位等级 {@code COM_DICTIONARY#TYPE = BEDGRADE}
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum BedGradeEnum implements Enum {
+        单人间普("01", "单人间(普)"), 单人间标("02", "单人间(标)"), 单人间传("03", "单人间(传)"), 单人间精("04", "单人间(精)"), 双人间普("05", "双人间(普)"),
+        双人间标("06", "双人间(标)"), 双人间传("07", "双人间(传)"), 双人间精("08", "双人间(精)"), 三人间普("09", "三人间(普)"), 三人间标("10", "三人间(标)"),
+        三人间传("11", "三人间(传)"), 三人间精("12", "三人间(精)"), 四人间标("13", "四人间(标)"), 四人以上普("14", "四人以上普"), 四人以上传("15", "四人以上传"),
+        四人以上精("16", "四人以上精"), 五人以上标("17", "五人以上标"), 层流洁净百("18", "层流洁净百"), 层流洁净千("19", "层流洁净千"), 层流洁净万("20", "层流洁净万"),
+        监护病房床("21", "监护病房床"), 特殊防护床("22", "特殊防护床"), 急诊观察床("23", "急诊观察床"), 气垫床("24", "气垫床");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum BedStateEnum implements Enum {
+        占床("O", "占床"), 空床("U", "空床"), 关闭("C", "关闭"), 挂床("H", "挂床"), 包床("W", "包床"), 污染("K", "污染"), 隔离("I", "隔离"),
+        请假("R", "请假");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

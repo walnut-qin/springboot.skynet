@@ -13,12 +13,12 @@ import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.data.cache.DataCache;
 import com.kaos.skynet.api.data.converter.PatientNameConverter;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.entity.inpatient.escort.annex.EscortAnnexInfo;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
-import com.kaos.skynet.api.enums.inpatient.InStateEnum;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo.InStateEnum;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.annex.AnnexService;
@@ -93,11 +93,11 @@ public class AnnexController {
         var escorts = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
                 .helperCardNo(helperCardNo)
                 .states(Lists.newArrayList(
-                        EscortStateEnum.无核酸检测结果,
-                        EscortStateEnum.等待院内核酸检测结果,
-                        EscortStateEnum.等待院外核酸检测结果审核,
-                        EscortStateEnum.生效中,
-                        EscortStateEnum.其他))
+                        StateEnum.无核酸检测结果,
+                        StateEnum.等待院内核酸检测结果,
+                        StateEnum.等待院外核酸检测结果审核,
+                        StateEnum.生效中,
+                        StateEnum.其他))
                 .build());
         if (escorts != null && !escorts.isEmpty()) {
             for (var escort : escorts) {
@@ -135,11 +135,11 @@ public class AnnexController {
         var escorts = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
                 .helperCardNo(annex.getCardNo())
                 .states(Lists.newArrayList(
-                        EscortStateEnum.无核酸检测结果,
-                        EscortStateEnum.等待院内核酸检测结果,
-                        EscortStateEnum.等待院外核酸检测结果审核,
-                        EscortStateEnum.生效中,
-                        EscortStateEnum.其他))
+                        StateEnum.无核酸检测结果,
+                        StateEnum.等待院内核酸检测结果,
+                        StateEnum.等待院外核酸检测结果审核,
+                        StateEnum.生效中,
+                        StateEnum.其他))
                 .build());
         if (escorts != null && !escorts.isEmpty()) {
             for (var escort : escorts) {
@@ -171,11 +171,11 @@ public class AnnexController {
                 .patientCardNos(inMainInfos.stream().map(x -> {
                     return x.getCardNo();
                 }).toList())
-                .states(Lists.newArrayList(EscortStateEnum.无核酸检测结果,
-                        EscortStateEnum.等待院内核酸检测结果,
-                        EscortStateEnum.等待院外核酸检测结果审核,
-                        EscortStateEnum.生效中,
-                        EscortStateEnum.其他))
+                .states(Lists.newArrayList(StateEnum.无核酸检测结果,
+                        StateEnum.等待院内核酸检测结果,
+                        StateEnum.等待院外核酸检测结果审核,
+                        StateEnum.生效中,
+                        StateEnum.其他))
                 .build());
 
         // 轮询陪护记录

@@ -3,7 +3,7 @@ package com.kaos.skynet.api.data.mapper.inpatient;
 import java.util.List;
 
 import com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn;
-import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
+import com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn.InStateEnum;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +42,6 @@ public interface FinIprPrepayInMapper {
         /**
          * 状态清单, 等于 {@code null} 时，不作为判断条件
          */
-        private List<FinIprPrepayInStateEnum> states;
+        private List<InStateEnum> states;
     }
 }

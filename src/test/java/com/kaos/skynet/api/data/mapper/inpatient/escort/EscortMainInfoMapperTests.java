@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.data.mapper.inpatient.escort;
 
 import com.google.common.collect.Lists;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ public class EscortMainInfoMapperTests {
                 .patientCardNo("test")
                 .happenNo(10)
                 .helperCardNo("0123456789")
-                .states(Lists.newArrayList(EscortStateEnum.注销)).build());
+                .states(Lists.newArrayList(StateEnum.注销))
+                .build());
     }
 }

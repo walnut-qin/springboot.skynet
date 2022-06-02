@@ -7,13 +7,11 @@ import com.kaos.skynet.api.data.enums.BloodTypeEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.PayKindEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.inpatient.InAvenueEnum;
-import com.kaos.skynet.api.enums.inpatient.InCircsEnum;
-import com.kaos.skynet.api.enums.inpatient.InSourceEnum;
-import com.kaos.skynet.api.enums.inpatient.InStateEnum;
+import com.kaos.skynet.core.type.Enum;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -757,5 +755,80 @@ public class FinIprInMainInfo {
     @Override
     public int hashCode() {
         return Objects.hashCode(inpatientNo);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum InStateEnum implements Enum {
+        住院登记("R", "住院登记"),
+        病房接诊("I", "病房接诊"),
+        出院登记("B", "出院登记"),
+        出院结算("O", "出院结算"),
+        预约出院("P", "预约出院"),
+        无费退院("N", "无费退院");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 枚举：入院来源
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum InSourceEnum implements Enum {
+        门诊("1", "门诊"), 急诊("2", "急诊"), 转科("3", "转科"), 转院("4", "转院");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 入院情况 {@code COM_DICTIONARY#TYPE = INCIRCS}
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum InCircsEnum implements Enum {
+        一般("1", "一般"), 急("2", "急"), 危("3", "危");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum InAvenueEnum implements Enum {
+        本市("1", "本市"), 市郊("2", "市郊"), 市外("3", "市外"), 省内("4", "省内"), 省外("5", "省外"), 境外("6", "境外");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

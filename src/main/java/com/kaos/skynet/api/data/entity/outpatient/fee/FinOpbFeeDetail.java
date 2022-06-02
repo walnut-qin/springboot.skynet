@@ -7,10 +7,6 @@ import com.kaos.skynet.api.data.entity.pharmacy.PhaComBaseInfo.DrugQualityEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.MinFeeEnum;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
-import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailCancelFlagEnum;
-import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailCostSourceEnum;
-import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailPayFlagEnum;
-import com.kaos.skynet.api.enums.outpatient.fee.FeeDetailSendFlagEnum;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 
@@ -251,12 +247,12 @@ public class FinOpbFeeDetail {
     /**
      * 类型
      */
-    private FeeDetailPayFlagEnum payFlag;
+    private PayFlagEnum payFlag;
 
     /**
      * 取消标识
      */
-    private FeeDetailCancelFlagEnum cancelFlag;
+    private CancelFlagEnum cancelFlag;
 
     /**
      * 收费人
@@ -396,7 +392,7 @@ public class FinOpbFeeDetail {
     /**
      * 费用来源
      */
-    private FeeDetailCostSourceEnum costSource;
+    private CostSourceEnum costSource;
 
     /**
      * 附材标识
@@ -471,7 +467,7 @@ public class FinOpbFeeDetail {
     /**
      * 转费用该表示
      */
-    private FeeDetailSendFlagEnum sendFlag;
+    private SendFlagEnum sendFlag;
 
     /**
      * 转费操作员
@@ -553,6 +549,56 @@ public class FinOpbFeeDetail {
     @AllArgsConstructor
     public enum ItemGradeEnum implements Enum {
         甲("1", "甲类"), 乙("2", "乙类"), 丙("3", "丙类");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum ClassCodeEnum implements Enum {
+        西药("P", "西药"), 中成药("PCZ", "中成药"), 中草药("PCC", "中草药"), 治疗("UZ", "治疗"), 检查("UC", "检查"), 手术("UO", "手术"),
+        检验("UL", "检验"),
+        非药品("U", "非药品"), 其他("UT", "其他");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum CancelFlagEnum implements Enum {
+        退费("0", "退费"), 正常("1", "正常"), 重打("2", "重打"), 注销("3", "注销");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum CostSourceEnum implements Enum {
+        操作员("0", "操作员"), 医嘱("1", "医嘱"), 终端("2", "终端"), 体检("3", "体检");
     
         /**
          * 数据库存值
@@ -564,12 +610,27 @@ public class FinOpbFeeDetail {
          */
         private String description;
     }
- 
+
     @Getter
     @AllArgsConstructor
-    public enum ClassCodeEnum implements Enum {
-        西药("P", "西药"), 中成药("PCZ", "中成药"), 中草药("PCC", "中草药"), 治疗("UZ", "治疗"), 检查("UC", "检查"), 手术("UO", "手术"), 检验("UL", "检验"),
-        非药品("U", "非药品"), 其他("UT", "其他");
+    public enum PayFlagEnum implements Enum {
+        划价("0", "划价"), 收费("1", "收费"), 预收费团体体检("3", "预收费团体体检"), 药品预审核("4", "药品预审核");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum SendFlagEnum implements Enum {
+        未转("0", "未转"), 已转("1", "已转"), 转失败("2", "转失败");
     
         /**
          * 数据库存值

@@ -21,11 +21,11 @@ import com.kaos.skynet.api.data.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec.ActionEnum;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.json.Json;
@@ -216,14 +216,14 @@ public class EscortController {
             String state,
             @NotNull(message = "操作员编码不能为空") String emplCode) {
         // 解析状态参数
-        EscortStateEnum ptr = null;
+        StateEnum ptr = null;
         if (ptr == null) {
-            ptr = valueStringToEnumConverterFactory.getConverter(EscortStateEnum.class).convert(state);
+            ptr = valueStringToEnumConverterFactory.getConverter(StateEnum.class).convert(state);
         }
         if (ptr == null) {
-            ptr = descriptionStringToEnumConverterFactory.getConverter(EscortStateEnum.class).convert(state);
+            ptr = descriptionStringToEnumConverterFactory.getConverter(StateEnum.class).convert(state);
         }
-        final EscortStateEnum stateEnum = ptr;
+        final StateEnum stateEnum = ptr;
 
         // 入参日志
         log.info(String.format("修改陪护证状态<escortNo = %s, state = %s, emplCode = %s>", escortNo,
@@ -243,7 +243,7 @@ public class EscortController {
      */
     @RequestMapping(value = "recordAction", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void recordAction(@NotNull(message = "陪护证号不能为空") String escortNo,
-            @NotNull(message = "记录的动作不能为空") EscortActionEnum action) {
+            @NotNull(message = "记录的动作不能为空") ActionEnum action) {
         // 入参日志
         log.info(String.format("记录陪护证行为<escortNo = %s, action = %s>", escortNo, action.getDescription()));
 
@@ -312,7 +312,7 @@ public class EscortController {
          * 当前状态<枚举值>
          */
         @JsonAdapter(ValueEnumTypeAdapter.class)
-        public EscortStateEnum state = null;
+        public StateEnum state = null;
     }
 
     /**
@@ -331,11 +331,11 @@ public class EscortController {
                 EscortMainInfoMapper.Key.builder()
                         .helperCardNo(helperCardNo)
                         .states(Lists.newArrayList(
-                                EscortStateEnum.无核酸检测结果,
-                                EscortStateEnum.等待院内核酸检测结果,
-                                EscortStateEnum.等待院外核酸检测结果审核,
-                                EscortStateEnum.生效中,
-                                EscortStateEnum.其他))
+                                StateEnum.无核酸检测结果,
+                                StateEnum.等待院内核酸检测结果,
+                                StateEnum.等待院外核酸检测结果审核,
+                                StateEnum.生效中,
+                                StateEnum.其他))
                         .build());
         if (escortInfos == null) {
             return null;
@@ -456,11 +456,11 @@ public class EscortController {
                 EscortMainInfoMapper.Key.builder()
                         .patientCardNo(patientCardNo)
                         .states(Lists.newArrayList(
-                                EscortStateEnum.无核酸检测结果,
-                                EscortStateEnum.等待院内核酸检测结果,
-                                EscortStateEnum.等待院外核酸检测结果审核,
-                                EscortStateEnum.生效中,
-                                EscortStateEnum.其他))
+                                StateEnum.无核酸检测结果,
+                                StateEnum.等待院内核酸检测结果,
+                                StateEnum.等待院外核酸检测结果审核,
+                                StateEnum.生效中,
+                                StateEnum.其他))
                         .build());
         if (escortInfos == null) {
             return null;

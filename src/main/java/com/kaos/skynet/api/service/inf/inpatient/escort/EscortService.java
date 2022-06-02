@@ -5,8 +5,8 @@ import java.util.List;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec.ActionEnum;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 
 public interface EscortService {
     /**
@@ -30,7 +30,7 @@ public interface EscortService {
      * @param remark
      * @return
      */
-    EscortStateRec updateEscortState(String escortNo, EscortStateEnum state, String emplCode, String remark);
+    EscortStateRec updateEscortState(String escortNo, StateEnum state, String emplCode, String remark);
 
     /**
      * 记录陪护动作
@@ -40,7 +40,7 @@ public interface EscortService {
      * @param remark
      * @return
      */
-    EscortActionRec recordEscortAction(String escortNo, EscortActionEnum action, String remark);
+    EscortActionRec recordEscortAction(String escortNo, ActionEnum action, String remark);
 
     /**
      * 查询陪护证，主键查询

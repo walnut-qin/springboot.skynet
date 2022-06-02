@@ -2,8 +2,8 @@ package com.kaos.skynet.api.logic.controller.inpatient.escort;
 
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.thread.pool.ThreadPool;
@@ -46,17 +46,17 @@ public class ScheduleController {
             var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
                     EscortMainInfoMapper.Key.builder()
                             .states(Lists.newArrayList(
-                                    EscortStateEnum.无核酸检测结果,
-                                    EscortStateEnum.等待院内核酸检测结果,
-                                    EscortStateEnum.等待院外核酸检测结果审核,
-                                    EscortStateEnum.生效中,
-                                    EscortStateEnum.其他))
+                                    StateEnum.无核酸检测结果,
+                                    StateEnum.等待院内核酸检测结果,
+                                    StateEnum.等待院外核酸检测结果审核,
+                                    StateEnum.生效中,
+                                    StateEnum.其他))
                             .build());
             // 刷新状态
             taskPool.monitor(escortInfos.size());
             for (EscortMainInfo escortMainInfo : escortInfos) {
                 taskPool.execute(() -> {
-                    escortService.updateState(escortMainInfo.getEscortNo(), EscortStateEnum.生效中, "schedule", "临时处理");
+                    escortService.updateState(escortMainInfo.getEscortNo(), StateEnum.生效中, "schedule", "临时处理");
                 });
             }
             taskPool.await();

@@ -6,13 +6,13 @@ import com.kaos.skynet.api.data.cache.DataCache;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortVip;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec.ActionEnum;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.common.SequenceMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortActionRecMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortStateRecMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortVipMapper;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +112,7 @@ public class EscortService {
      * @param remark   状态
      */
     @Transactional
-    public void updateState(String escortNo, EscortStateEnum state, String operCode, String remark) {
+    public void updateState(String escortNo, StateEnum state, String operCode, String remark) {
         // 检索陪护实体
         var mainInfo = mainInfoMapper.queryEscortMainInfo(escortNo);
         if (mainInfo == null) {
@@ -158,7 +158,7 @@ public class EscortService {
      * @param remark   备注信息
      */
     @Transactional
-    public void recordAction(String escortNo, EscortActionEnum action, String remark) {
+    public void recordAction(String escortNo, ActionEnum action, String remark) {
         // 检索陪护实体
         var mainInfo = mainInfoMapper.queryEscortMainInfo(escortNo);
         if (mainInfo == null) {

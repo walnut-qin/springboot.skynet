@@ -3,7 +3,7 @@ package com.kaos.skynet.api.data.mapper.inpatient.escort;
 import java.util.List;
 
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -53,7 +53,7 @@ public interface EscortMainInfoMapper {
         /**
          * 陪护证状态, 等于 {@code null} 时，不作为判断条件
          */
-        private List<EscortStateEnum> states;
+        private List<StateEnum> states;
     }
 
     /**

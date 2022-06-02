@@ -3,7 +3,7 @@ package com.kaos.skynet.api.data.mapper.inpatient;
 import java.util.List;
 
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
-import com.kaos.skynet.api.enums.inpatient.InStateEnum;
+import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo.InStateEnum;
 
 import lombok.Builder;
 import lombok.Getter;

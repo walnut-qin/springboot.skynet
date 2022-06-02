@@ -3,11 +3,12 @@ package com.kaos.skynet.api.data.entity.inpatient;
 import java.util.Date;
 
 import com.google.common.base.Objects;
-import com.kaos.skynet.api.enums.inpatient.FinIprPrepayInStateEnum;
+import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,7 +63,7 @@ public class FinIprPrepayIn {
     /**
      * 住院证状态
      */
-    private FinIprPrepayInStateEnum state;
+    private InStateEnum state;
 
     @Override
     public boolean equals(Object arg0) {
@@ -76,5 +77,21 @@ public class FinIprPrepayIn {
     @Override
     public int hashCode() {
         return Objects.hashCode(cardNo, happenNo);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum InStateEnum implements Enum {
+        预约("0", "预约"), 作废("1", "作废"), 转住院("2", "转住院"), 签床("3", "签床"), 预住院预约("4", "预住院预约");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

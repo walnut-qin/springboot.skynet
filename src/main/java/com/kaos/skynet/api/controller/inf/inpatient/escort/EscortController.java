@@ -9,9 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.google.gson.annotations.SerializedName;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec.ActionEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortActionEnum;
-import com.kaos.skynet.api.enums.inpatient.escort.EscortStateEnum;
+import com.kaos.skynet.api.enums.inpatient.fee.balance.invoice.electronic.StateEnum;
 
 import lombok.Getter;
 
@@ -88,7 +88,7 @@ public interface EscortController {
      * @param action   记录的动作
      */
     void recordAction(@NotNull(message = "陪护证号不能为空") String escortNo,
-            @NotNull(message = "记录的动作不能为空") EscortActionEnum action);
+            @NotNull(message = "记录的动作不能为空") ActionEnum action);
 
     /**
      * 查询陪护证状态
@@ -257,7 +257,7 @@ public interface EscortController {
         /**
          * 状态
          */
-        public EscortStateEnum state = null;
+        public StateEnum state = null;
 
         /**
          * 记录员编码
@@ -282,7 +282,7 @@ public interface EscortController {
         /**
          * 状态
          */
-        public EscortActionEnum action = null;
+        public ActionEnum action = null;
 
         /**
          * 记录时间

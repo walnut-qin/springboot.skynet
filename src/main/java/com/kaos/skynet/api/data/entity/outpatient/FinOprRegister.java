@@ -9,7 +9,6 @@ import com.kaos.skynet.api.data.enums.PayModeEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
-import com.kaos.skynet.api.enums.outpatient.OutpatientStateEnum;
 import com.kaos.skynet.core.type.Enum;
 
 import org.apache.commons.lang3.StringUtils;
@@ -389,7 +388,7 @@ public class FinOprRegister {
     /**
      * 状态
      */
-    private OutpatientStateEnum inState;
+    private InStateEnum inState;
 
     /**
      * 优惠金额
@@ -506,6 +505,23 @@ public class FinOprRegister {
          */
         private String value;
 
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum InStateEnum implements Enum {
+        正常挂号("N", "正常挂号"), 留观登记("R", "留观登记"), 正在留观("I", "正在留观"), 出观登记("P", "出观登记"), 留观出院完成("B", "留观出院完成"),
+        留观转住院登记("E", "留观转住院登记"), 留观转住院完成("C", "留观转住院完成");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
         /**
          * 描述存值
          */
