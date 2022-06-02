@@ -1,16 +1,26 @@
 package com.kaos.skynet.api.logic.service.inpatient.escort.core;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Lists;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.converter.NatsConverter;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
+import com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortStateRecMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
+import com.kaos.skynet.api.data.mapper.outpatient.fee.FinOpbFeeDetailMapper;
+import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,10 +52,40 @@ public class StateService {
     EscortStateRecMapper escortStateRecMapper;
 
     /**
+     * 附件接口
+     */
+    @Autowired
+    EscortAnnexInfoMapper escortAnnexInfoMapper;
+
+    /**
      * 住院实体接口
      */
     @Autowired
     FinIprInMainInfoMapper inMainInfoMapper;
+
+    /**
+     * 住院证接口
+     */
+    @Autowired
+    FinIprPrepayInMapper prepayInMapper;
+
+    /**
+     * 划价记录
+     */
+    @Autowired
+    FinOpbFeeDetailMapper feeDetailMapper;
+
+    /**
+     * 核酸结果转换器
+     */
+    @Autowired
+    NatsConverter natsConverter;
+
+    /**
+     * 患者基本信息缓存
+     */
+    @Autowired
+    ComPatientInfoCache patientInfoCache;
 
     /**
      * 查询陪护证状态
@@ -63,18 +103,187 @@ public class StateService {
             throw new RuntimeException(errInfo);
         }
 
+        return queryEscortState(escortInfo);
+    }
+
+    /**
+     * 根据陪护主表记录查询陪护状态
+     * 
+     * @param escortInfo
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Result queryEscortState(@NotNull(message = "陪护证不能为空") EscortMainInfo escortInfo) {
         // 检索住院实体
         List<FinIprInMainInfo> inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
                 .cardNo(escortInfo.getPatientCardNo())
                 .happenNo(escortInfo.getHappenNo())
                 .build());
         if (!inMainInfos.isEmpty()) {
-            // 强陪护确定
+            /**
+             * 强陪护逻辑
+             */
+            // 筛选在院记录
+            Long inCnt = inMainInfos.stream().filter(x -> {
+                switch (x.getInState()) {
+                    case 住院登记:
+                    case 病房接诊:
+                        return true;
 
-        } else { // 弱陪护确定
+                    default:
+                        return false;
+                }
+            }).count();
+            // 全部出院？
+            if (inCnt == 0) {
+                return new Result(StateEnum.注销, "患者已出院");
+            }
+            // 执行核心逻辑
+            return core(escortInfo);
+        } else {
+            /**
+             * 弱陪护逻辑
+             */
+            // 检索关联住院证
+            var prepayIn = prepayInMapper.queryPrepayIn(escortInfo.getPatientCardNo(), escortInfo.getHappenNo());
+            if (prepayIn == null) {
+                return new Result(StateEnum.注销, "关联的住院证已被删除");
+            } else {
+                // 检索患者的所有住院证
+                var allPrepayIns = prepayInMapper.queryPrepayIns(FinIprPrepayInMapper.Key.builder()
+                        .cardNo(escortInfo.getPatientCardNo())
+                        .build());
+                // 逆序
+                allPrepayIns.sort((x, y) -> {
+                    return IntegerUtils.compare(y.getHappenNo(), x.getHappenNo());
+                });
+                // 最新判断
+                if (!IntegerUtils.equals(prepayIn.getHappenNo(), allPrepayIns.get(0).getHappenNo())) {
+                    return new Result(StateEnum.注销, "患者未入院, 且已开立新住院证");
+                }
+                // 住院证已作废？
+                if (prepayIn.getState() == FinIprPrepayIn.InStateEnum.作废) {
+                    return new Result(StateEnum.注销, "患者未入院, 且已开立新住院证");
+                }
+                // 执行核心逻辑
+                return core(escortInfo);
+            }
+        }
+    }
+
+    /**
+     * 核心逻辑
+     * 
+     * @param escortInfo
+     * @return
+     */
+    private Result core(@NotNull EscortMainInfo escortInfo) {
+        // 检索历史状态
+        var historyStates = escortStateRecMapper.queryEscortStateRecs(escortInfo.getEscortNo());
+
+        // 检索核酸结果
+        NatsConverter.Value natsResult = null;
+        if (historyStates.isEmpty()) {
+            // 检索14天内核酸结果
+            natsResult = natsConverter.convert(NatsConverter.Key.builder()
+                    .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
+                    .duration(Duration.ofDays(14))
+                    .build());
+        } else {
+            // 逆序
+            historyStates.sort((x, y) -> {
+                return IntegerUtils.compare(y.getRecNo(), x.getRecNo());
+            });
+            // 状态判断
+            switch (historyStates.get(0).getState()) {
+                case 注销 -> {
+                    return new Result(StateEnum.注销, "陪护证已注销");
+                }
+
+                case 生效中 -> {
+                    // 检索2天内核酸结果
+                    natsResult = natsConverter.convert(NatsConverter.Key.builder()
+                            .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
+                            .duration(Duration.ofDays(2))
+                            .build());
+                }
+
+                default -> {
+                    // 检索14天内核酸结果
+                    natsResult = natsConverter.convert(NatsConverter.Key.builder()
+                            .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
+                            .duration(Duration.ofDays(14))
+                            .build());
+                }
+            }
         }
 
-        return null;
+        // 核酸结果是否存在
+        if (natsResult != null) {
+            if (natsResult.getNegative()) {
+                return new Result(StateEnum.生效中, natsResult.toString());
+            } else {
+                return new Result(StateEnum.其他, natsResult.toString());
+            }
+        }
+
+        // 检索7日内核酸划价记录
+        var feeDetails = feeDetailMapper.queryFeeDetails(FinOpbFeeDetailMapper.Key.builder()
+                .cardNo(escortInfo.getHelperCardNo())
+                .itemCode("F00000068231")
+                .beginOperDate(LocalDateTime.now().minus(Duration.ofDays(7)))
+                .build());
+        if (!feeDetails.isEmpty()) {
+            return new Result(StateEnum.等待院内核酸检测结果, "存在7天内的核酸划价记录");
+        }
+
+        // 院外附件
+        var annexInfos = escortAnnexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
+                .cardNo(escortInfo.getHelperCardNo())
+                .checked(false)
+                .build());
+        if (!annexInfos.isEmpty()) {
+            return new Result(StateEnum.等待院外核酸检测结果审核, "存在未审核的院外报告");
+        }
+
+        // 检索陪护人信息
+        var helper = patientInfoCache.get(escortInfo.getHelperCardNo());
+        if (helper != null) {
+            // 健康码判断
+            if (helper.getHealthCode() != null) {
+                switch (helper.getHealthCode()) {
+                    case 绿码 -> {
+                        // 通过
+                    }
+
+                    default -> {
+                        return new Result(StateEnum.其他, "健康码异常");
+                    }
+                }
+            }
+
+            // 健康码判断
+            if (helper.getTravelCode() != null) {
+                switch (helper.getTravelCode()) {
+                    case 正常 -> {
+                        // 通过
+                    }
+
+                    default -> {
+                        return new Result(StateEnum.其他, "行程码异常");
+                    }
+                }
+            }
+
+            // 健康码判断
+            if (helper.getHighRiskFlag() != null) {
+                if (!helper.getHighRiskFlag()) {
+                    return new Result(StateEnum.其他, "经过高风险地区");
+                }
+            }
+        }
+
+        return new Result(StateEnum.无核酸检测结果, "无有效依据");
     }
 
     /**
