@@ -5,7 +5,7 @@ import com.kaos.skynet.api.data.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import org.springframework.core.convert.converter.Converter;
+import com.kaos.skynet.core.type.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;

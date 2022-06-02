@@ -4,7 +4,7 @@ import com.kaos.skynet.api.data.entity.common.DawnOrgEmpl;
 import com.kaos.skynet.api.data.mapper.common.DawnOrgEmplMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import org.springframework.core.convert.converter.Converter;
+import com.kaos.skynet.core.type.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**

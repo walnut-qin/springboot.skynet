@@ -7,7 +7,7 @@ import com.kaos.skynet.api.data.mapper.common.config.ConfigMultiMapMapper;
 import com.kaos.skynet.core.type.Cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
+import com.kaos.skynet.core.type.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;
