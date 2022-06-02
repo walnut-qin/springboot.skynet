@@ -1,9 +1,10 @@
 package com.kaos.skynet.api.data.entity.inpatient.surgery;
 
 import com.google.common.base.Objects;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +24,7 @@ public class MetOpsArrange {
     /**
      * 角色
      */
-    private SurgeryArrangeRoleEnum role;
+    private RoleEnum role;
 
     /**
      * 职工编码
@@ -44,5 +45,28 @@ public class MetOpsArrange {
     @Override
     public int hashCode() {
         return Objects.hashCode(this.operationNo, this.role, this.emplCode);
+    }
+
+    /**
+     * 手术安排角色字典
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum RoleEnum implements Enum {
+        AnaesthesiaHelper("AnaesthesiaHelper", "麻醉助手"), Anaesthetist("Anaesthetist", "麻醉医生"), Helper1("Helper1", "手术助手"),
+        Helper2("Helper2", "手术助手"), Helper3("Helper3", "手术助手"), ItinerantNurse("ItinerantNurse", "巡回护士"),
+        ItinerantNurse1("ItinerantNurse1", "巡回护士"), Operator("Operator", "主刀医师"),
+        WashingHandNurse("WashingHandNurse", "洗手护士"),
+        WashingHandNurse1("WashingHandNurse1", "洗手护士");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

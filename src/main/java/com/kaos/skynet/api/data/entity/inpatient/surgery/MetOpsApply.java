@@ -4,11 +4,6 @@ import java.time.LocalDateTime;
 
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.ValidEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.MetOpsInciTypeEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryDegreeEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryInspectResultEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryKindEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
@@ -54,7 +49,7 @@ public class MetOpsApply {
     /**
      * 手术类型
      */
-    private SurgeryKindEnum surgeryKind;
+    private KindEnum surgeryKind;
 
     /**
      * 手术医生编码 {@link MetOpsApply.AssociateEntity#opsDoc}
@@ -119,12 +114,12 @@ public class MetOpsApply {
     /**
      * 手术等级
      */
-    private SurgeryDegreeEnum degree;
+    private DegreeEnum degree;
 
     /**
      * 切口类型
      */
-    private MetOpsInciTypeEnum inciType;
+    private InciTypeEnum inciType;
 
     /**
      * 是否首台
@@ -135,7 +130,7 @@ public class MetOpsApply {
     /**
      * 检验结果 [BLOOD_NUM]
      */
-    private SurgeryInspectResultEnum inspectResult;
+    private InspectResultEnum inspectResult;
 
     /**
      * 台次
@@ -146,7 +141,7 @@ public class MetOpsApply {
     /**
      * 手术状态
      */
-    private SurgeryStatusEnum surgeryStatus;
+    private StatusEnum surgeryStatus;
 
     /**
      * 结束标识
@@ -277,6 +272,101 @@ public class MetOpsApply {
         基础麻醉("7", "基础麻醉"),
         硬膜外封闭("8", "硬膜外封闭"), 气管内麻醉("9", "气管内麻醉"), 腰硬联合麻醉("10", "腰硬联合麻醉"), 静脉麻醉("11", "静脉麻醉"),
         颈丛麻醉("12", "颈丛麻醉"), 局麻_心电监护("13", "局麻+心电监护"), 局麻_备气管内麻("14", "局麻(备气管内麻)"), 测试麻醉("15", "测试麻醉"), 缺省("16", "-");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 手术切口类型
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum InciTypeEnum implements Enum {
+        I类切口("1", "I类切口"), II类切口("2", "II类切口"), III类切口("3", "III类切口"), IV类切口("4", "IV类切口"), 零类切口("5", "零类切口");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 手术等级
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum DegreeEnum implements Enum {
+        一级("1级", "一级"), 二级("2级", "二级"), 三级("3级", "三级"), 四级("4级", "四级");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 手术检验结果
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum InspectResultEnum implements Enum {
+        否("1", "否"), HAV("2", "HAV"), HBV("3", "HBV"), HCV("4", "HCV"), HIV("5", "HIV");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 手术类型
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum KindEnum implements Enum {
+        普通("1", "普通"), 急诊("2", "急诊"), 日间("3", "日间"), 痔瘘("4", "痔瘘"), 预约出院("5", "腔镜"), 择期("6", "择期");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 手术状态
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum StatusEnum implements Enum {
+        手术申请("1", "手术申请"), 手术审批("2", "手术审批"), 手术安排("3", "手术安排"), 手术完成("4", "手术完成"), 取消手术登记("5", "取消手术登记"), 手术审批未通过("6", "手术审批未通过");
     
         /**
          * 数据库存值

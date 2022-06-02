@@ -5,7 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsArrange;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryArrangeRoleEnum;
+import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsArrange.RoleEnum;
 
 import org.springframework.validation.annotation.Validated;
 
@@ -37,6 +37,6 @@ public interface MetOpsArrangeMapper {
         /**
          * 角色清单
          */
-        private List<SurgeryArrangeRoleEnum> roles;
+        private List<RoleEnum> roles;
     }
 }

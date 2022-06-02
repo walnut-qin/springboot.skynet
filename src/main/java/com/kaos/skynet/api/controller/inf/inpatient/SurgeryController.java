@@ -7,11 +7,11 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply;
+import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply.AnesTypeEnum;
+import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply.InspectResultEnum;
+import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply.StatusEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.AnesTypeEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryDegreeEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryInspectResultEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
 
 public interface SurgeryController {
     /**
@@ -51,7 +51,7 @@ public interface SurgeryController {
         /**
          * 状态清单
          */
-        public List<SurgeryStatusEnum> states = null;
+        public List<StatusEnum> states = null;
     }
 
     /**
@@ -130,7 +130,7 @@ public interface SurgeryController {
             /**
              * 手术分级
              */
-            public SurgeryDegreeEnum degree = null;
+            public MetOpsApply.DegreeEnum degree = null;
 
             /**
              * 术者
@@ -175,7 +175,7 @@ public interface SurgeryController {
             /**
              * 检验结果
              */
-            public SurgeryInspectResultEnum inspectResult = null;
+            public InspectResultEnum inspectResult = null;
 
             /**
              * 是否公布

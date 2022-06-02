@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
+import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply.StatusEnum;
 
 public interface SurgeryService {
     /**
@@ -18,5 +18,5 @@ public interface SurgeryService {
      * @return
      */
     List<MetOpsApply> queryApplies(String deptCode, String roomNo, LocalDateTime beginDate, LocalDateTime endDate,
-            List<SurgeryStatusEnum> status);
+            List<StatusEnum> status);
 }

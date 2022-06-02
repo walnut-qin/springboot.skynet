@@ -6,9 +6,9 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply;
+import com.kaos.skynet.api.data.entity.inpatient.surgery.MetOpsApply.StatusEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
-import com.kaos.skynet.api.enums.inpatient.surgery.SurgeryStatusEnum;
 
 import org.springframework.validation.annotation.Validated;
 
@@ -59,7 +59,7 @@ public interface MetOpsApplyMapper {
         /**
          * 手术状态
          */
-        private List<SurgeryStatusEnum> execStatus;
+        private List<StatusEnum> execStatus;
 
         /**
          * 麻醉标识
