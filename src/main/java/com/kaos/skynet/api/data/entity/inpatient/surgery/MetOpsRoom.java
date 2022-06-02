@@ -1,6 +1,8 @@
 package com.kaos.skynet.api.data.entity.inpatient.surgery;
 
+import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.ValidEnum;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -47,4 +49,18 @@ public class MetOpsRoom {
      * 操作时间
      */
     private String operDate;
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof MetOpsRoom) {
+            var that = (MetOpsRoom) arg0;
+            return StringUtils.equals(this.roomId, that.roomId);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.roomId);
+    }
 }

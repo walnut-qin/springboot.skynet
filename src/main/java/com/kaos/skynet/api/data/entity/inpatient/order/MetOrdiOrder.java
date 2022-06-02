@@ -3,10 +3,11 @@ package com.kaos.skynet.api.data.entity.inpatient.order;
 import java.util.Date;
 
 import com.google.common.base.Objects;
-import com.kaos.skynet.api.enums.inpatient.order.MetOrdiOrderStateEnum;
 import com.kaos.skynet.core.type.Entity;
+import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +39,7 @@ public class MetOrdiOrder extends Entity {
     /**
      * 医嘱状态
      */
-    private MetOrdiOrderStateEnum state;
+    private OrderStateEnum state;
 
     /**
      * 医嘱开立医生
@@ -67,5 +68,30 @@ public class MetOrdiOrder extends Entity {
     @Override
     public int hashCode() {
         return Objects.hashCode(this.moOrder);
+    }
+
+    /**
+     * 医嘱状态字典
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum OrderStateEnum implements Enum {
+        待审核("10", "待审核"),
+        暂存("15", "暂存"),
+        签发("20", "已提交(签发)"),
+        已接收("30", "已接收"),
+        已执行("40", "已执行"),
+        已完成("50", "已完成"),
+        停止作废("90", "停止作废");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

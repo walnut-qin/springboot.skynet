@@ -3,9 +3,8 @@ package com.kaos.skynet.api.data.entity.inpatient.fee;
 import java.util.Date;
 
 import com.google.common.base.Objects;
+import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead.BalanceStateEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
-import com.kaos.skynet.api.enums.inpatient.fee.PrepayStateEnum;
-import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
@@ -214,6 +213,9 @@ public class FinIpbInPrepay {
         return Objects.hashCode(inpatientNo, balanceNo);
     }
 
+    /**
+     * 预交金支付方式字典
+     */
     @Getter
     @AllArgsConstructor
     public enum PayWayEnum implements Enum {
@@ -227,6 +229,28 @@ public class FinIpbInPrepay {
         院内账户("YS", "院内账户"),
         东风卡("DFK", "东风卡"),
         日间手术账户("RJSH", "日间手术账户");
+    
+        /**
+         * 数据库存值
+         */
+        private String value;
+    
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
+
+    /**
+     * 预交金状态字典
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum PrepayStateEnum implements Enum {
+        收取("0", "收取"),
+        作废("1", "作废"),
+        补打("2", "补打"),
+        结算召回作废("3", "结算召回作废");
     
         /**
          * 数据库存值

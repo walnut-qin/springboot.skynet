@@ -5,8 +5,10 @@ import java.util.Date;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
+import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -173,5 +175,24 @@ public class FinIpbBalanceHead {
         }
 
         return round;
+    }
+
+    /**
+     * 结算状态
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum BalanceStateEnum implements Enum {
+        未结算("0", "未结算"), 已结算("1", "已结算"), 已结转("2", "已结转");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
     }
 }

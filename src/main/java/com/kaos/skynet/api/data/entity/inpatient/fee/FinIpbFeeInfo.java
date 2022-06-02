@@ -3,11 +3,11 @@ package com.kaos.skynet.api.data.entity.inpatient.fee;
 import java.util.Date;
 
 import com.google.common.base.Objects;
+import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead.BalanceStateEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.MinFeeEnum;
 import com.kaos.skynet.api.data.enums.PayKindEnum;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
-import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
 

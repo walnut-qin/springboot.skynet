@@ -2,13 +2,16 @@ package com.kaos.skynet.api.data.entity.inpatient.fee;
 
 import java.util.Date;
 
+import com.google.common.base.Objects;
+import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead.BalanceStateEnum;
 import com.kaos.skynet.api.data.entity.pharmacy.PhaComBaseInfo.DrugQualityEnum;
 import com.kaos.skynet.api.data.entity.pharmacy.PhaComBaseInfo.DrugTypeEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.MinFeeEnum;
 import com.kaos.skynet.api.data.enums.PayKindEnum;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
-import com.kaos.skynet.api.enums.inpatient.fee.balance.BalanceStateEnum;
+import com.kaos.skynet.core.type.utils.IntegerUtils;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -493,4 +496,20 @@ public class FinIpbMedicineList {
      * 医保费用代码类别 liubinglin20210827
      */
     private String centerFeeCode;
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof FinIpbMedicineList) {
+            var that = (FinIpbMedicineList) arg0;
+            return StringUtils.equals(this.recipeNo, that.recipeNo)
+                    && IntegerUtils.equals(this.sequenceNo, that.sequenceNo)
+                    && this.transType == that.transType;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(recipeNo, sequenceNo, transType);
+    }
 }
