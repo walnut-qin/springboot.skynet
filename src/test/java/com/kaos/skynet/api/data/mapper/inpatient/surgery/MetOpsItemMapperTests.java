@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class MetOpsItemMapperTests {
     @Autowired
-    MetOpsItemMapper metOpsItemMapper;
+    MetOpsOperationItemMapper metOpsItemMapper;
 
     @Test
     void queryMetOpsItem() {
