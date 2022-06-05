@@ -2,10 +2,7 @@ package com.kaos.skynet.api.logic.service.inpatient.escort;
 
 import java.time.LocalDateTime;
 
-import com.kaos.skynet.api.data.cache.DataCache;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec;
-import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
-import com.kaos.skynet.api.data.entity.inpatient.escort.EscortVip;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec.ActionEnum;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.common.SequenceMapper;
@@ -13,8 +10,9 @@ import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortActionRecMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortStateRecMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortVipMapper;
+import com.kaos.skynet.api.logic.service.inpatient.escort.core.StateService;
+import com.kaos.skynet.api.logic.service.inpatient.escort.core.ValidateService;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class EscortService {
     /**
-     * 缓存
+     * 核心鉴权业务
      */
-    @Autowired
-    DataCache cache;
+    ValidateService validateService;
 
     /**
-     * 陪护业务核心
+     * 核心状态业务
      */
     @Autowired
-    CoreService coreService;
+    StateService stateService;
 
     /**
      * 序列获取器
@@ -74,33 +71,33 @@ public class EscortService {
      */
     @Transactional
     public String register(String patientCardNo, String helperCardNo, String operCode, Boolean escape) {
-        // 模拟登记
-        var simulateResult = coreService.simulateRegister(patientCardNo, helperCardNo, escape);
-        var mainInfo = simulateResult.getMainInfo();
+        // // 模拟登记
+        // var simulateResult = coreService.simulateRegister(patientCardNo, helperCardNo, escape);
+        // var mainInfo = simulateResult.getMainInfo();
 
-        // 模拟成功后正式更新数据库
-        var vip = vipMapper.queryEscortVip(mainInfo.getPatientCardNo(), mainInfo.getHappenNo());
-        if (vip == null) {
-            vipMapper.insertEscortVip(EscortVip.builder()
-                    .patientCardNo(patientCardNo)
-                    .happenNo(mainInfo.getHappenNo())
-                    .recDate(LocalDateTime.now()).build());
-        }
+        // // 模拟成功后正式更新数据库
+        // var vip = vipMapper.queryEscortVip(mainInfo.getPatientCardNo(), mainInfo.getHappenNo());
+        // if (vip == null) {
+        //     vipMapper.insertEscortVip(EscortVip.builder()
+        //             .patientCardNo(patientCardNo)
+        //             .happenNo(mainInfo.getHappenNo())
+        //             .recDate(LocalDateTime.now()).build());
+        // }
 
-        // 插入主表
-        mainInfo.setEscortNo(StringUtils.leftPad(sequenceMapper.query("KAOS.SEQ_ESCORT_NO"), 10, '0'));
-        mainInfoMapper.insertEscortMainInfo(mainInfo);
+        // // 插入主表
+        // mainInfo.setEscortNo(StringUtils.leftPad(sequenceMapper.query("KAOS.SEQ_ESCORT_NO"), 10, '0'));
+        // mainInfoMapper.insertEscortMainInfo(mainInfo);
 
-        // 插入状态表
-        stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
-                .escortNo(simulateResult.getMainInfo().getEscortNo())
-                .recNo(1)
-                .state(simulateResult.getStateResult().getState())
-                .recEmplCode(operCode)
-                .recDate(LocalDateTime.now())
-                .remark(simulateResult.getStateResult().getReason()).build());
+        // // 插入状态表
+        // stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
+        //         .escortNo(simulateResult.getMainInfo().getEscortNo())
+        //         .recNo(1)
+        //         .state(simulateResult.getStateResult().getState())
+        //         .recEmplCode(operCode)
+        //         .recDate(LocalDateTime.now())
+        //         .remark(simulateResult.getStateResult().getReason()).build());
 
-        return simulateResult.getMainInfo().getEscortNo();
+        return null;
     }
 
     /**
@@ -113,41 +110,41 @@ public class EscortService {
      */
     @Transactional
     public void updateState(String escortNo, StateEnum state, String operCode, String remark) {
-        // 检索陪护实体
-        var mainInfo = mainInfoMapper.queryEscortMainInfo(escortNo);
-        if (mainInfo == null) {
-            throw new RuntimeException(String.format("陪护证不存在(%s)", escortNo));
-        }
+        // // 检索陪护实体
+        // var mainInfo = mainInfoMapper.queryEscortMainInfo(escortNo);
+        // if (mainInfo == null) {
+        //     throw new RuntimeException(String.format("陪护证不存在(%s)", escortNo));
+        // }
 
-        // 若未设置状态，则获取实时状态
-        if (state == null) {
-            var stateResult = coreService.getState(mainInfo);
-            state = stateResult.getState();
-            remark = stateResult.getReason();
-        }
+        // // 若未设置状态，则获取实时状态
+        // if (state == null) {
+        //     var stateResult = coreService.getState(mainInfo);
+        //     state = stateResult.getState();
+        //     remark = stateResult.getReason();
+        // }
 
-        // 读取状态列表
-        var stateRecs = cache.getEscortStateRecCache().get(escortNo);
-        if (stateRecs == null || stateRecs.isEmpty()) {
-            stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
-                    .escortNo(escortNo)
-                    .recNo(1)
-                    .state(state)
-                    .recEmplCode(operCode)
-                    .recDate(LocalDateTime.now())
-                    .remark(remark).build());
-        } else if (stateRecs.get(0).getState() != state) {
-            stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
-                    .escortNo(escortNo)
-                    .recNo(stateRecs.get(0).getRecNo() + 1)
-                    .state(state)
-                    .recEmplCode(operCode)
-                    .recDate(LocalDateTime.now())
-                    .remark(remark).build());
-        }
+        // // 读取状态列表
+        // var stateRecs = cache.getEscortStateRecCache().get(escortNo);
+        // if (stateRecs == null || stateRecs.isEmpty()) {
+        //     stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
+        //             .escortNo(escortNo)
+        //             .recNo(1)
+        //             .state(state)
+        //             .recEmplCode(operCode)
+        //             .recDate(LocalDateTime.now())
+        //             .remark(remark).build());
+        // } else if (stateRecs.get(0).getState() != state) {
+        //     stateRecMapper.insertEscortStateRec(EscortStateRec.builder()
+        //             .escortNo(escortNo)
+        //             .recNo(stateRecs.get(0).getRecNo() + 1)
+        //             .state(state)
+        //             .recEmplCode(operCode)
+        //             .recDate(LocalDateTime.now())
+        //             .remark(remark).build());
+        // }
 
-        // 更新缓存
-        cache.getEscortStateRecCache().refresh(escortNo);
+        // // 更新缓存
+        // cache.getEscortStateRecCache().refresh(escortNo);
     }
 
     /**

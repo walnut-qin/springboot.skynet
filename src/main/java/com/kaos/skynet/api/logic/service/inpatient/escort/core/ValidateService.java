@@ -1,15 +1,21 @@
 package com.kaos.skynet.api.logic.service.inpatient.escort.core;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.inpatient.escort.EscortStateRecCache;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.order.MetOrdiOrderMapper;
+import com.kaos.skynet.core.type.converter.duration.string.AgeDurationToStringConverter;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
@@ -41,6 +47,12 @@ public class ValidateService {
     EscortMainInfoMapper escortMainInfoMapper;
 
     /**
+     * 陪护证状态表接口
+     */
+    @Autowired
+    EscortStateRecCache escortStateRecCache;
+
+    /**
      * 住院实体接口
      */
     @Autowired
@@ -59,14 +71,22 @@ public class ValidateService {
     MetOrdiOrderMapper metOrdiOrderMapper;
 
     /**
+     * 时段转换器
+     */
+    @Autowired
+    AgeDurationToStringConverter durationToStringConverter;
+
+    /**
      * 判断是否可以注册
      * 
      * @param patientCardNo
      * @param helperCardNo
+     * @param escape
      * @return
      */
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Integer getHappenNo(@NotBlank String patientCardNo, @NotBlank String helperCardNo) throws RuntimeException {
+    public Integer getHappenNo(@NotBlank String patientCardNo, @NotBlank String helperCardNo, @NotNull Boolean escape)
+            throws RuntimeException {
         // 自陪护检查
         if (StringUtils.equals(patientCardNo, helperCardNo)) {
             log.error(String.format("不能给自己陪护(%s)", patientCardNo));
@@ -85,6 +105,59 @@ public class ValidateService {
         if (helper == null) {
             log.error(String.format("无效的陪护人(%s)", helperCardNo));
             throw new RuntimeException("无效的陪护人");
+        }
+
+        // 检索旧陪护证
+        var oldEscortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
+                .patientCardNo(patientCardNo)
+                .helperCardNo(helperCardNo)
+                .states(Lists.newArrayList(
+                        EscortStateRec.StateEnum.无核酸检测结果,
+                        EscortStateRec.StateEnum.等待院内核酸检测结果,
+                        EscortStateRec.StateEnum.等待院外核酸检测结果审核,
+                        EscortStateRec.StateEnum.生效中,
+                        EscortStateRec.StateEnum.其他))
+                .build());
+        if (!oldEscortInfos.isEmpty()) {
+            log.error(String.format("陪护关系已存在"));
+            throw new RuntimeException("陪护关系已存在");
+        }
+
+        // 12小时判断
+        if (!escape) {
+            var canceledEscortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
+                    .patientCardNo(patientCardNo)
+                    .helperCardNo(helperCardNo)
+                    .states(Lists.newArrayList(EscortStateRec.StateEnum.注销))
+                    .build());
+            if (!canceledEscortInfos.isEmpty()) {
+                // 检索最近注销的时间
+                LocalDateTime cancelDate = null;
+                for (var escortInfo : canceledEscortInfos) {
+                    // 检索状态
+                    var state = escortStateRecCache.get(escortInfo.getEscortNo());
+                    // 逆序
+                    state.sort((x, y) -> {
+                        return IntegerUtils.compare(y.getRecNo(), x.getRecNo());
+                    });
+                    // 记录初始值
+                    if (cancelDate == null) {
+                        cancelDate = state.get(0).getRecDate();
+                    }
+                    // 记录更大的值
+                    if (cancelDate.isBefore(state.get(0).getRecDate())) {
+                        cancelDate = state.get(0).getRecDate();
+                    }
+                }
+                // 注销时段判断
+                Duration duration = Duration.between(cancelDate, LocalDateTime.now());
+                if (duration.compareTo(Duration.ofHours(12)) < 0) {
+                    var offset = Duration.ofHours(12).minus(duration);
+                    var offsetStr = durationToStringConverter.convert(offset);
+                    log.error(String.format("注销12小时内无法再次注册, 剩余%s", offsetStr));
+                    throw new RuntimeException(String.format("注销12小时内无法再次注册, 剩余%s", offsetStr));
+                }
+            }
         }
 
         // 检索陪护人关联的陪护证
