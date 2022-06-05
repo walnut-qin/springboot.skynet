@@ -136,10 +136,54 @@ public class StateService {
             }).count();
             // 全部出院？
             if (inCnt == 0) {
-                return new Result(StateEnum.注销, "患者已出院");
+                /**
+                 * 逻辑增强，对于仅有一条的出院记录，作详细判断
+                 */
+                // 筛选出院记录
+                var outMainInfos = inMainInfos.stream().filter(x -> {
+                    switch (x.getInState()) {
+                        case 住院登记:
+                        case 病房接诊:
+                            return false;
+
+                        default:
+                            return true;
+                    }
+                }).toList();
+                switch (outMainInfos.size()) {
+                    case 1 -> {
+                        switch (outMainInfos.get(0).getInState()) {
+                            case 出院登记 -> {
+                                var duration = Duration.between(outMainInfos.get(0).getOutDate(), LocalDateTime.now());
+                                if (duration.compareTo(Duration.ofHours(12)) < 0) {
+                                    return core(escortInfo);
+                                } else {
+                                    return new Result(StateEnum.注销, "患者已出科达到12小时");
+                                }
+                            }
+
+                            case 出院结算 -> {
+                                var duration = Duration.between(outMainInfos.get(0).getOutDate(), LocalDateTime.now());
+                                if (duration.compareTo(Duration.ofHours(6)) < 0) {
+                                    return core(escortInfo);
+                                } else {
+                                    return new Result(StateEnum.注销, "患者已出院达到6小时");
+                                }
+                            }
+
+                            default -> {
+                                return new Result(StateEnum.注销, "患者已出院");
+                            }
+                        }
+                    }
+
+                    default -> {
+                        return new Result(StateEnum.注销, "患者存在多条出院记录");
+                    }
+                }
+            } else {
+                return core(escortInfo);
             }
-            // 执行核心逻辑
-            return core(escortInfo);
         } else {
             /**
              * 弱陪护逻辑
@@ -204,7 +248,7 @@ public class StateService {
                     // 检索2天内核酸结果
                     natsResult = natsConverter.convert(NatsConverter.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(2))
+                            .duration(Duration.ofDays(14))
                             .build());
                 }
 
@@ -212,7 +256,7 @@ public class StateService {
                     // 检索14天内核酸结果
                     natsResult = natsConverter.convert(NatsConverter.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(14))
+                            .duration(Duration.ofDays(2))
                             .build());
                 }
             }
@@ -237,10 +281,11 @@ public class StateService {
             return new Result(StateEnum.等待院内核酸检测结果, "存在7天内的核酸划价记录");
         }
 
-        // 院外附件
+        // 14天内院外附件
         var annexInfos = escortAnnexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
                 .cardNo(escortInfo.getHelperCardNo())
                 .checked(false)
+                .beginUploadDate(LocalDateTime.now().minusDays(14))
                 .build());
         if (!annexInfos.isEmpty()) {
             return new Result(StateEnum.等待院外核酸检测结果审核, "存在未审核的院外报告");
