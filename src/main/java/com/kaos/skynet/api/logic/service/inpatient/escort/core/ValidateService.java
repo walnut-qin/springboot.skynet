@@ -6,11 +6,11 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
-import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.order.MetOrdiOrderMapper;
+import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import lombok.Builder;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 /**
@@ -68,7 +66,7 @@ public class ValidateService {
      * @return
      */
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Integer getHappenNo(@NotBlank String patientCardNo, @NotBlank String helperCardNo) {
+    public Integer getHappenNo(@NotBlank String patientCardNo, @NotBlank String helperCardNo) throws RuntimeException {
         // 自陪护检查
         if (StringUtils.equals(patientCardNo, helperCardNo)) {
             log.error(String.format("不能给自己陪护(%s)", patientCardNo));
@@ -116,6 +114,27 @@ public class ValidateService {
                 .build());
         switch (patientEscortInfos.size()) {
             case 0 -> {
+                // 检索患者在院记录
+                var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                        .cardNo(patientCardNo)
+                        .states(Lists.newArrayList(
+                                FinIprInMainInfo.InStateEnum.住院登记,
+                                FinIprInMainInfo.InStateEnum.病房接诊))
+                        .build());
+                switch (inMainInfos.size()) {
+                    case 0 -> {
+                        break;
+                    }
+
+                    case 1 -> {
+                        return inMainInfos.get(0).getHappenNo();
+                    }
+
+                    default -> {
+                        log.error(String.format("患者存在%d条在院记录, 无法创建有效关联", inMainInfos.size()));
+                        throw new RuntimeException("患者存在多条在院记录, 无法创建有效关联");
+                    }
+                }
             }
 
             case 1 -> {
@@ -133,9 +152,16 @@ public class ValidateService {
 
                     case 1 -> {
                         // 获取第二陪护医嘱
-                        metOrdiOrderMapper.queryOrders(MetOrdiOrderMapper.Key.builder()
-                                .termId("")
+                        var orders = metOrdiOrderMapper.queryOrders(MetOrdiOrderMapper.Key.builder()
+                                .inpatientNo(inMainInfos.get(0).getInpatientNo())
+                                .termId("5070672")
                                 .build());
+                        if (orders.isEmpty()) {
+                            log.error(String.format("患者(%s)没有开立第二陪护医嘱", patientCardNo));
+                            throw new RuntimeException("患者没有开立第二陪护医嘱");
+                        } else {
+                            return inMainInfos.get(0).getHappenNo();
+                        }
                     }
 
                     default -> {
@@ -150,30 +176,29 @@ public class ValidateService {
                 throw new RuntimeException("患者的陪护证数量达到上限");
             }
         }
-        return null;
-    }
 
-    @Getter
-    @Builder
-    public static class Result {
-        /**
-         * 可以注册陪护
-         */
-        private Boolean canRegister;
+        // 检索患者住院证
+        var prepayIns = prepayInMapper.queryPrepayIns(FinIprPrepayInMapper.Key.builder()
+                .cardNo(patientCardNo)
+                .build());
+        // 判空
+        if (prepayIns.isEmpty()) {
+            log.error("无可关联的住院证");
+            throw new RuntimeException("无可关联的住院证");
+        }
+        // 逆序
+        prepayIns.sort((x, y) -> {
+            return IntegerUtils.compare(y.getHappenNo(), x.getHappenNo());
+        });
+        switch (prepayIns.get(0).getState()) {
+            case 作废 -> {
+                log.error("无可关联的住院证");
+                throw new RuntimeException("无可关联的住院证");
+            }
 
-        /**
-         * 若失败，保存原因
-         */
-        private String reason;
-
-        /**
-         * 若成功，保存关联的happenNo
-         */
-        private Integer happenNo;
-
-        /**
-         * 若成功，保存最新的状态
-         */
-        private StateEnum state;
+            default -> {
+                return prepayIns.get(0).getHappenNo();
+            }
+        }
     }
 }
