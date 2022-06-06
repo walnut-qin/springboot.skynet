@@ -9,7 +9,8 @@ import javax.validation.constraints.NotNull;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.JsonAdapter;
-import com.kaos.skynet.api.data.cache.DataCache;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.cache.inpatient.FinSpecialCityPatientCache;
 import com.kaos.skynet.api.data.converter.BedNoConverter;
 import com.kaos.skynet.api.data.converter.NatsConverter;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo.InStateEnum;
@@ -37,18 +38,6 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/ms/inpatient/escort/statistic")
 public class StatisticController {
     /**
-     * 床号转缩略床号
-     */
-    @Autowired
-    BedNoConverter bedNoConverter;
-
-    /**
-     * 缓存数据
-     */
-    @Autowired
-    DataCache dataCache;
-
-    /**
      * 住院主表接口
      */
     @Autowired
@@ -61,10 +50,28 @@ public class StatisticController {
     EscortMainInfoMapper escortMainInfoMapper;
 
     /**
+     * 特殊信息缓存
+     */
+    @Autowired
+    FinSpecialCityPatientCache specialCityPatientCache;
+
+    /**
+     * 特殊信息缓存
+     */
+    @Autowired
+    ComPatientInfoCache patientInfoCache;
+
+    /**
      * 核酸检测
      */
     @Autowired
     NatsConverter natsConverter;
+
+    /**
+     * 床号转缩略床号
+     */
+    @Autowired
+    BedNoConverter bedNoConverter;
 
     /**
      * 查询科室的患者及陪护基本信息
@@ -86,7 +93,7 @@ public class StatisticController {
         // 过滤部分患者
         var filteredPats = pats.stream().filter(x -> {
             // 检索特殊标识
-            var specialFlag = dataCache.getSpecialCityPatientCache().get(x.getInpatientNo());
+            var specialFlag = specialCityPatientCache.get(x.getInpatientNo());
             if (specialFlag != null) {
                 switch (Optional.fromNullable(specialFlag.getIsSpecial()).or("0")) {
                     case "0":
@@ -110,7 +117,7 @@ public class StatisticController {
             builder.bedNo(bedNoConverter.convert(x.getBedNo()));
             builder.name(x.getName());
             builder.cardNo(x.getCardNo());
-            var patientInfo = dataCache.getPatientInfoCache().get(x.getCardNo());
+            var patientInfo = patientInfoCache.get(x.getCardNo());
             if (patientInfo != null) {
                 builder.healthCode(patientInfo.getHealthCode());
                 builder.travelCode(patientInfo.getTravelCode());
@@ -136,7 +143,7 @@ public class StatisticController {
                     .build());
             if (escortInfos.size() >= 1) {
                 var escort = escortInfos.get(0);
-                var helper = dataCache.getPatientInfoCache().get(escort.getHelperCardNo());
+                var helper = patientInfoCache.get(escort.getHelperCardNo());
                 if (helper != null) {
                     builder.escort1Name(helper.getName());
                     builder.escort1CardNo(helper.getCardNo());
@@ -157,7 +164,7 @@ public class StatisticController {
             }
             if (escortInfos.size() >= 2) {
                 var escort = escortInfos.get(1);
-                var helper = dataCache.getPatientInfoCache().get(escort.getHelperCardNo());
+                var helper = patientInfoCache.get(escort.getHelperCardNo());
                 if (helper != null) {
                     builder.escort2Name(helper.getName());
                     builder.escort2CardNo(helper.getCardNo());

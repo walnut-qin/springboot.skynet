@@ -2,6 +2,7 @@ package com.kaos.skynet.api.logic.service.inpatient.escort;
 
 import java.time.LocalDateTime;
 
+import com.kaos.skynet.api.data.cache.inpatient.escort.EscortStateRecCache;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
@@ -66,6 +67,12 @@ public class EscortService {
      */
     @Autowired
     EscortActionRecMapper actionRecMapper;
+
+    /**
+     * 陪护状态缓存
+     */
+    @Autowired
+    EscortStateRecCache escortStateRecCache;
 
     /**
      * 登记陪护证
@@ -162,6 +169,9 @@ public class EscortService {
                     .recDate(LocalDateTime.now())
                     .remark(remark).build());
         }
+
+        // 更新缓存
+        escortStateRecCache.refresh(escortNo);
     }
 
     /**

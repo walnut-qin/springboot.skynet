@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
+import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.thread.pool.ThreadPool;
@@ -23,6 +24,12 @@ public class ScheduleController {
      * 子线程池
      */
     final ThreadPool taskPool = Threads.newThreadPool("陪护证线程池", 10);
+
+    /**
+     * 陪护锁
+     */
+    @Autowired
+    EscortLock escortLock;
 
     /**
      * 陪护证主表接口
@@ -56,7 +63,10 @@ public class ScheduleController {
             taskPool.monitor(escortInfos.size());
             for (EscortMainInfo escortMainInfo : escortInfos) {
                 taskPool.execute(() -> {
-                    escortService.updateState(escortMainInfo.getEscortNo(), StateEnum.生效中, "schedule", "临时处理");
+                    var lock = escortLock.getStateLock().getLock(escortMainInfo.getEscortNo());
+                    Threads.newLockExecutor().link(lock).execute(() -> {
+                        escortService.updateState(escortMainInfo.getEscortNo(), StateEnum.生效中, "schedule", "临时处理");
+                    });
                 });
             }
             taskPool.await();

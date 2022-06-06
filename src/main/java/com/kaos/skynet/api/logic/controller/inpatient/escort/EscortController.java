@@ -3,7 +3,6 @@ package com.kaos.skynet.api.logic.controller.inpatient.escort;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,11 +12,13 @@ import javax.validation.constraints.Size;
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.kaos.skynet.api.data.cache.DataCache;
+import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.cache.inpatient.FinIprPrepayInCache;
+import com.kaos.skynet.api.data.cache.inpatient.escort.EscortMainInfoCache;
+import com.kaos.skynet.api.data.cache.inpatient.escort.EscortStateRecCache;
 import com.kaos.skynet.api.data.cache.inpatient.escort.EscortVipCache;
-import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
-import com.kaos.skynet.api.data.entity.inpatient.ComBedInfo;
+import com.kaos.skynet.api.data.converter.BedNoConverter;
+import com.kaos.skynet.api.data.converter.DeptNameConverter;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
@@ -26,7 +27,9 @@ import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortStateRecMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
+import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.json.gson.adapter.bool.NumericBooleanTypeAdapter;
@@ -54,6 +57,12 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/ms/inpatient/escort")
 public class EscortController {
     /**
+     * 序列化工具
+     */
+    @Autowired
+    Json json;
+
+    /**
      * 陪护锁
      */
     @Autowired
@@ -66,16 +75,16 @@ public class EscortController {
     EscortService escortService;
 
     /**
-     * 数据缓存
-     */
-    @Autowired
-    DataCache dataCache;
-
-    /**
      * 住院主表接口
      */
     @Autowired
     EscortMainInfoMapper escortMainInfoMapper;
+
+    /**
+     * 陪护状态表接口
+     */
+    @Autowired
+    EscortStateRecMapper escortStateRecMapper;
 
     /**
      * 住院主表接口
@@ -84,10 +93,34 @@ public class EscortController {
     FinIprInMainInfoMapper inMainInfoMapper;
 
     /**
-     * 序列化工具
+     * 陪护主表缓存
      */
     @Autowired
-    Json json;
+    EscortMainInfoCache escortMainInfoCache;
+
+    /**
+     * 陪护主表缓存
+     */
+    @Autowired
+    EscortStateRecCache escortStateRecCache;
+
+    /**
+     * VIP缓存
+     */
+    @Autowired
+    EscortVipCache escortVipCache;
+
+    /**
+     * 患者信息缓存
+     */
+    @Autowired
+    ComPatientInfoCache patientInfoCache;
+
+    /**
+     * 住院证缓存
+     */
+    @Autowired
+    FinIprPrepayInCache prepayInCache;
 
     /**
      * 枚举值转换器
@@ -102,6 +135,18 @@ public class EscortController {
     DescriptionStringToEnumConverterFactory descriptionStringToEnumConverterFactory;
 
     /**
+     * 床号转换器
+     */
+    @Autowired
+    BedNoConverter bedNoConverter;
+
+    /**
+     * 科室名称转换器
+     */
+    @Autowired
+    DeptNameConverter deptNameConverter;
+
+    /**
      * 患者索引转卡号的转换器
      */
     final Converter<String, String> patientIdxToCardNoConverter = new Converter<String, String>() {
@@ -113,36 +158,6 @@ public class EscortController {
                 return inMainInfo.getCardNo();
             }
             return patientIdx;
-        };
-    };
-
-    /**
-     * 床号转缩略床号
-     */
-    final Converter<String, String> bedNoConverter = new Converter<String, String>() {
-        @Override
-        public String convert(String bedNo) {
-            // 尝试检索住院实体
-            ComBedInfo bedInfo = dataCache.getBedInfoCache().get(bedNo);
-            if (bedInfo != null) {
-                return bedInfo.getBriefBedNo();
-            }
-            return bedNo;
-        };
-    };
-
-    /**
-     * 床号转缩略床号
-     */
-    final Converter<String, String> deptNameConverter = new Converter<String, String>() {
-        @Override
-        public String convert(String deptCode) {
-            // 尝试检索住院实体
-            DawnOrgDept dept = dataCache.getDeptCache().get(deptCode);
-            if (dept != null) {
-                return dept.getDeptName();
-            }
-            return deptCode;
         };
     };
 
@@ -161,14 +176,14 @@ public class EscortController {
         String patientCardNo = patientIdxToCardNoConverter.convert(req.getPatientIdx());
 
         // 带锁运行业务
-        return Threads.newLockExecutor().link(escortLock.getPatientLock().getLock(patientCardNo))
-                .link(escortLock.getHelperLock().getLock(req.getHelperCardNo()))
-                .execute(() -> {
-                    return escortService.register(patientCardNo,
-                            req.getHelperCardNo(),
-                            req.getEmplCode(),
-                            req.getRegByWindow());
-                });
+        var patientLock = escortLock.getHelperLock().getLock(patientCardNo);
+        var helperLock = escortLock.getHelperLock().getLock(req.getHelperCardNo());
+        return Threads.newLockExecutor().link(patientLock).link(helperLock).execute(() -> {
+            return escortService.register(patientCardNo,
+                    req.getHelperCardNo(),
+                    req.getEmplCode(),
+                    req.getRegByWindow());
+        });
     }
 
     @Getter
@@ -265,7 +280,7 @@ public class EscortController {
         log.info(String.format("查询陪护证状态<escortNo = %s>", escortNo));
 
         // 调用业务
-        var escortInfo = dataCache.getEscortMainInfoCache().get(escortNo);
+        var escortInfo = escortMainInfoCache.get(escortNo);
         if (escortInfo == null) {
             log.error(String.format("不存在的陪护号", escortNo));
             throw new RuntimeException(String.format("不存在的陪护号", escortNo));
@@ -275,15 +290,8 @@ public class EscortController {
         var rsp = new QueryStateInfoRsp();
         rsp.patientCardNo = escortInfo.getPatientCardNo();
         rsp.helperCardNo = escortInfo.getHelperCardNo();
-        var states = dataCache.getEscortStateRecCache().get(escortNo);
-        if (states != null && !states.isEmpty()) {
-            states.sort((x, y) -> {
-                return IntegerUtils.compare(x.getRecNo(), y.getRecNo());
-            });
-            rsp.regDate = states.get(0).getRecDate();
-            Collections.reverse(states);
-            rsp.state = states.get(0).getState();
-        }
+        rsp.regDate = escortStateRecMapper.queryFirstEscortStateRec(escortNo).getRecDate();
+        rsp.state = escortStateRecMapper.queryLastEscortStateRec(escortNo).getState();
 
         return rsp;
     }
@@ -345,7 +353,7 @@ public class EscortController {
         return escortInfos.stream().map(x -> {
             QueryPatientInfoRsp rsp = new QueryPatientInfoRsp();
             rsp.cardNo = x.getPatientCardNo();
-            var patient = dataCache.getPatientInfoCache().get(rsp.cardNo);
+            var patient = patientInfoCache.get(rsp.cardNo);
             if (patient != null) {
                 rsp.name = patient.getName();
                 rsp.sex = patient.getSex();
@@ -361,23 +369,23 @@ public class EscortController {
                 rsp.bedNo = bedNoConverter.convert(inMainInfo.getBedNo());
                 rsp.patientNo = inMainInfo.getPatientNo();
             } else {
-                var prepayIn = dataCache.getPrepayInCache().get(
-                        FinIprPrepayInCache.Key.builder()
-                                .cardNo(x.getPatientCardNo())
-                                .happenNo(x.getHappenNo()).build());
+                var builder = FinIprPrepayInCache.Key.builder();
+                builder.cardNo(x.getPatientCardNo());
+                builder.happenNo(x.getHappenNo());
+                var prepayIn = prepayInCache.get(builder.build());
                 if (prepayIn != null) {
                     rsp.deptName = deptNameConverter.convert(prepayIn.getPreDeptCode());
                     rsp.bedNo = bedNoConverter.convert(prepayIn.getBedNo());
                 }
             }
-            var vip = dataCache.getEscortVipCache().get(
+            var vip = escortVipCache.get(
                     EscortVipCache.Key.builder()
                             .cardNo(x.getPatientCardNo())
                             .happenNo(x.getHappenNo()).build());
             if (vip != null) {
                 rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
             }
-            rsp.states = dataCache.getEscortStateRecCache().get(x.getEscortNo());
+            rsp.states = escortStateRecCache.get(x.getEscortNo());
             rsp.states.sort((a, b) -> {
                 return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
             });
@@ -470,13 +478,13 @@ public class EscortController {
         return escortInfos.stream().map(x -> {
             QueryHelperInfoRsp rsp = new QueryHelperInfoRsp();
             rsp.cardNo = x.getHelperCardNo();
-            var helper = dataCache.getPatientInfoCache().get(x.getHelperCardNo());
+            var helper = patientInfoCache.get(x.getHelperCardNo());
             if (helper != null) {
                 rsp.name = helper.getName();
                 rsp.sex = helper.getSex();
                 rsp.age = Period.between(helper.getBirthday().toLocalDate(), LocalDate.now());
             }
-            var vip = dataCache.getEscortVipCache().get(
+            var vip = escortVipCache.get(
                     EscortVipCache.Key.builder()
                             .cardNo(x.getPatientCardNo())
                             .happenNo(x.getHappenNo()).build());
@@ -484,7 +492,7 @@ public class EscortController {
                 rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
             }
             rsp.escortNo = x.getEscortNo();
-            rsp.states = dataCache.getEscortStateRecCache().get(x.getEscortNo());
+            rsp.states = escortStateRecCache.get(x.getEscortNo());
             rsp.states.sort((a, b) -> {
                 return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
             });
