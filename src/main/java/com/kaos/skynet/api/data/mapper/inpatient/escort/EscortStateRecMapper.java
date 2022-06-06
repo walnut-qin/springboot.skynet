@@ -14,6 +14,22 @@ public interface EscortStateRecMapper {
     List<EscortStateRec> queryEscortStateRecs(String escortNo);
 
     /**
+     * 查询陪住登记状态
+     * 
+     * @param escortNo
+     * @return
+     */
+    EscortStateRec queryFirstEscortStateRec(String escortNo);
+
+    /**
+     * 查询陪护证最后的状态
+     * 
+     * @param escortNo
+     * @return
+     */
+    EscortStateRec queryLastEscortStateRec(String escortNo);
+
+    /**
      * 插入新状态
      * 
      * @param escortStateRec 状态实体

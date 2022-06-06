@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.logic.service.inpatient.escort.annex;
+package com.kaos.skynet.api.logic.service.inpatient.escort;
 
 import java.time.LocalDateTime;
 

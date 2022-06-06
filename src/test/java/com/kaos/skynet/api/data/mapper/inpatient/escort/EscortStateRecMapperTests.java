@@ -13,4 +13,14 @@ public class EscortStateRecMapperTests {
     void queryEscortStateRecs() {
         stateRecMapper.queryEscortStateRecs("0000001170");
     }
+
+    @Test
+    void queryFirstEscortStateRec() {
+        stateRecMapper.queryFirstEscortStateRec("0000001170");
+    }
+
+    @Test
+    void queryLastEscortStateRec() {
+        stateRecMapper.queryLastEscortStateRec("0000001170");
+    }
 }

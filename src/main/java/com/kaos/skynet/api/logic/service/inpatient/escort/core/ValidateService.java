@@ -8,14 +8,15 @@ import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
-import com.kaos.skynet.api.data.cache.inpatient.escort.EscortStateRecCache;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
+import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortStateRecMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.order.MetOrdiOrderMapper;
 import com.kaos.skynet.core.type.converter.duration.string.AgeDurationToStringConverter;
+import com.kaos.skynet.core.type.utils.DurationUtils;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
@@ -50,7 +51,7 @@ public class ValidateService {
      * 陪护证状态表接口
      */
     @Autowired
-    EscortStateRecCache escortStateRecCache;
+    EscortStateRecMapper escortStateRecMapper;
 
     /**
      * 住院实体接口
@@ -93,14 +94,14 @@ public class ValidateService {
             throw new RuntimeException("不能给自己陪护");
         }
 
-        // 检索患者信息
+        // 检查患者是否存在
         var patient = patientInfoCache.get(patientCardNo);
         if (patient == null) {
             log.error(String.format("无效的患者(%s)", patientCardNo));
             throw new RuntimeException("无效的患者");
         }
 
-        // 检索陪护人信息
+        // 检查陪护人是否存在
         var helper = patientInfoCache.get(helperCardNo);
         if (helper == null) {
             log.error(String.format("无效的陪护人(%s)", helperCardNo));
@@ -123,44 +124,12 @@ public class ValidateService {
             throw new RuntimeException("陪护关系已存在");
         }
 
-        // 12小时判断
+        // 可逃逸判断
         if (!escape) {
-            var canceledEscortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
-                    .patientCardNo(patientCardNo)
-                    .helperCardNo(helperCardNo)
-                    .states(Lists.newArrayList(EscortStateRec.StateEnum.注销))
-                    .build());
-            if (!canceledEscortInfos.isEmpty()) {
-                // 检索最近注销的时间
-                LocalDateTime cancelDate = null;
-                for (var escortInfo : canceledEscortInfos) {
-                    // 检索状态
-                    var state = escortStateRecCache.get(escortInfo.getEscortNo());
-                    // 逆序
-                    state.sort((x, y) -> {
-                        return IntegerUtils.compare(y.getRecNo(), x.getRecNo());
-                    });
-                    // 记录初始值
-                    if (cancelDate == null) {
-                        cancelDate = state.get(0).getRecDate();
-                    }
-                    // 记录更大的值
-                    if (cancelDate.isBefore(state.get(0).getRecDate())) {
-                        cancelDate = state.get(0).getRecDate();
-                    }
-                }
-                // 注销时段判断
-                Duration duration = Duration.between(cancelDate, LocalDateTime.now());
-                if (duration.compareTo(Duration.ofHours(12)) < 0) {
-                    var offset = Duration.ofHours(12).minus(duration);
-                    var offsetStr = durationToStringConverter.convert(offset);
-                    log.error(String.format("注销12小时内无法再次注册, 剩余%s", offsetStr));
-                    throw new RuntimeException(String.format("注销12小时内无法再次注册, 剩余%s", offsetStr));
-                }
-            }
+            escapableCheck(patientCardNo, helperCardNo);
         }
 
-        // 检索陪护人关联的陪护证
+        // 陪护人陪护上限
         var helperEscortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
                 .helperCardNo(helperCardNo)
                 .states(Lists.newArrayList(
@@ -175,7 +144,7 @@ public class ValidateService {
             throw new RuntimeException("陪护人的陪护证已达到上限");
         }
 
-        // 检索患者陪护证
+        // 患者陪护上限
         var patientEscortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
                 .patientCardNo(helperCardNo)
                 .states(Lists.newArrayList(
@@ -185,81 +154,90 @@ public class ValidateService {
                         EscortStateRec.StateEnum.生效中,
                         EscortStateRec.StateEnum.其他))
                 .build());
-        switch (patientEscortInfos.size()) {
+        if (patientEscortInfos.size() > 1) {
+            log.error(String.format("患者的陪护证数量达到上限(%s)", helperEscortInfos.size()));
+            throw new RuntimeException("患者的陪护证数量达到上限");
+        }
+
+        // 检索患者在院记录
+        var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                .cardNo(patientCardNo)
+                .states(Lists.newArrayList(
+                        FinIprInMainInfo.InStateEnum.住院登记,
+                        FinIprInMainInfo.InStateEnum.病房接诊))
+                .build());
+        switch (inMainInfos.size()) {
             case 0 -> {
-                // 检索患者在院记录
-                var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
-                        .cardNo(patientCardNo)
-                        .states(Lists.newArrayList(
-                                FinIprInMainInfo.InStateEnum.住院登记,
-                                FinIprInMainInfo.InStateEnum.病房接诊))
-                        .build());
-                switch (inMainInfos.size()) {
-                    case 0 -> {
-                        break;
-                    }
-
-                    case 1 -> {
-                        return inMainInfos.get(0).getHappenNo();
-                    }
-
-                    default -> {
-                        log.error(String.format("患者存在%d条在院记录, 无法创建有效关联", inMainInfos.size()));
-                        throw new RuntimeException("患者存在多条在院记录, 无法创建有效关联");
-                    }
-                }
+                return weakEscortCheck(patientCardNo);
             }
 
             case 1 -> {
-                // 检索患者在院记录
-                var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
-                        .cardNo(patientCardNo)
-                        .states(Lists.newArrayList(
-                                FinIprInMainInfo.InStateEnum.住院登记,
-                                FinIprInMainInfo.InStateEnum.病房接诊))
-                        .build());
-                switch (inMainInfos.size()) {
-                    case 0 -> {
-                        break;
-                    }
-
-                    case 1 -> {
-                        // 获取第二陪护医嘱
-                        var orders = metOrdiOrderMapper.queryOrders(MetOrdiOrderMapper.Key.builder()
-                                .inpatientNo(inMainInfos.get(0).getInpatientNo())
-                                .termId("5070672")
-                                .build());
-                        if (orders.isEmpty()) {
-                            log.error(String.format("患者(%s)没有开立第二陪护医嘱", patientCardNo));
-                            throw new RuntimeException("患者没有开立第二陪护医嘱");
-                        } else {
-                            return inMainInfos.get(0).getHappenNo();
-                        }
-                    }
-
-                    default -> {
-                        log.error(String.format("患者存在%d条在院记录, 无法创建有效关联", inMainInfos.size()));
-                        throw new RuntimeException("患者存在多条在院记录, 无法创建有效关联");
-                    }
-                }
+                return strongEscortCheck(patientEscortInfos.size(), inMainInfos.get(0));
             }
 
             default -> {
-                log.error(String.format("患者的陪护证数量达到上限(%s)", helperEscortInfos.size()));
-                throw new RuntimeException("患者的陪护证数量达到上限");
+                log.error(String.format("患者存在%d条在院记录, 无法创建有效关联", inMainInfos.size()));
+                throw new RuntimeException("患者存在多条在院记录, 无法创建有效关联");
+            }
+        }
+    }
+
+    /**
+     * 可逃逸判断
+     * 
+     * @param patientCardNo
+     * @param helperCardNo
+     */
+    private void escapableCheck(String patientCardNo, String helperCardNo) {
+        // 旧的已注销的陪护证判断
+        var canceledEscortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
+                .patientCardNo(patientCardNo)
+                .helperCardNo(helperCardNo)
+                .states(Lists.newArrayList(EscortStateRec.StateEnum.注销))
+                .build());
+        if (canceledEscortInfos.isEmpty()) {
+            return;
+        }
+
+        // 检索最近注销的时间
+        LocalDateTime cancelDate = null;
+        for (var escortInfo : canceledEscortInfos) {
+            var lastState = escortStateRecMapper.queryLastEscortStateRec(escortInfo.getEscortNo());
+            if (cancelDate == null) {
+                cancelDate = lastState.getRecDate();
+            }
+            if (lastState.getRecDate().isAfter(cancelDate)) {
+                cancelDate = lastState.getRecDate();
             }
         }
 
+        // 注销后12小时内无法再次注册
+        Duration duration = Duration.between(cancelDate, LocalDateTime.now());
+        if (DurationUtils.compare(duration, Duration.ofHours(12)) < 0) {
+            var offset = Duration.ofHours(12).minus(duration);
+            var offsetStr = durationToStringConverter.convert(offset);
+            log.error(String.format("注销12小时内无法再次注册, 剩余%s", offsetStr));
+            throw new RuntimeException(String.format("注销12小时内无法再次注册, 剩余%s", offsetStr));
+        }
+    }
+
+    /**
+     * 弱陪护检查
+     * 
+     * @param patientCardNo
+     * @return
+     */
+    private Integer weakEscortCheck(String patientCardNo) {
         // 检索患者住院证
         var prepayIns = prepayInMapper.queryPrepayIns(FinIprPrepayInMapper.Key.builder()
                 .cardNo(patientCardNo)
                 .build());
-        // 判空
         if (prepayIns.isEmpty()) {
             log.error("无可关联的住院证");
             throw new RuntimeException("无可关联的住院证");
         }
-        // 逆序
+
+        // 最后一张住院证状态
         prepayIns.sort((x, y) -> {
             return IntegerUtils.compare(y.getHappenNo(), x.getHappenNo());
         });
@@ -271,6 +249,40 @@ public class ValidateService {
 
             default -> {
                 return prepayIns.get(0).getHappenNo();
+            }
+        }
+    }
+
+    /**
+     * 强陪护逻辑
+     * 
+     * @param escortCnt
+     * @param inMainInfo
+     * @return
+     */
+    private Integer strongEscortCheck(Integer escortCnt, FinIprInMainInfo inMainInfo) {
+        switch (escortCnt) {
+            case 0 -> {
+                return inMainInfo.getHappenNo();
+            }
+
+            case 1 -> {
+                // 读取患者第二陪护医嘱
+                var orders = metOrdiOrderMapper.queryOrders(MetOrdiOrderMapper.Key.builder()
+                        .inpatientNo(inMainInfo.getInpatientNo())
+                        .termId("5070672")
+                        .build());
+                if (orders.isEmpty()) {
+                    log.error(String.format("患者(%s)没有开立第二陪护医嘱", inMainInfo.getInpatientNo()));
+                    throw new RuntimeException("患者没有开立第二陪护医嘱");
+                } else {
+                    return inMainInfo.getHappenNo();
+                }
+            }
+
+            default -> {
+                log.error("陪护逻辑异常");
+                throw new RuntimeException("业务逻辑异常");
             }
         }
     }
