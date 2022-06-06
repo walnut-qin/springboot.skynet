@@ -33,25 +33,28 @@
         SELECT
         <include refid="item"/>
         FROM
-            KAOS.ESCORT_ANNEX_CHK
-        <where>
+        (
+        <if test="true">
+            SELECT
+                T1.*
+            FROM
+                KAOS.ESCORT_ANNEX_CHK T1
             <if test="cardNo != null">
-                AND (
-                    SELECT
-                        CARD_NO
-                    FROM
-                        KAOS.ESCORT_ANNEX_INFO
-                    WHERE
-                        ANNEX_NO = KAOS.ESCORT_ANNEX_CHK.ANNEX_NO
-                ) = #{cardNo}
+                LEFT JOIN KAOS.ESCORT_ANNEX_INFO T2 ON T2.ANNEX_NO = T1.ANNEX_NO
             </if>
-            <if test="beginInspectDate != null">
-                AND EXEC_DATE &gt;= #{beginInspectDate} + 0
-            </if>
-            <if test="endInspectDate != null">
-                AND EXEC_DATE &lt;= #{endInspectDate} + 0
-            </if>
-        </where>
+            <where>
+                <if test="cardNo != null">
+                    AND T2.CARD_NO = #{cardNo}
+                </if>
+                <if test="beginInspectDate != null">
+                    AND T1.EXEC_DATE &gt;= #{beginInspectDate} + 0
+                </if>
+                <if test="endInspectDate != null">
+                    AND T1.EXEC_DATE &lt;= #{endInspectDate} + 0
+                </if>
+            </where>
+        </if>
+        )
     </select>
 
     <insert id="insertAnnexCheck">

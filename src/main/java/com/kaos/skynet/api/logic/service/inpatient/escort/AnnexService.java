@@ -48,11 +48,13 @@ public class AnnexService {
     /**
      * 陪护附件缓存
      */
+    @Autowired
     EscortAnnexInfoCache escortAnnexInfoCache;
 
     /**
      * 陪护附件审核缓存
      */
+    @Autowired
     EscortAnnexCheckCache escortAnnexCheckCache;
 
     /**

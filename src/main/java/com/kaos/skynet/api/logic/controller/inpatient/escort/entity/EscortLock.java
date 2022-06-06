@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.logic.controller.inpatient.escort;
+package com.kaos.skynet.api.logic.controller.inpatient.escort.entity;
 
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.thread.lock.LockFactory;

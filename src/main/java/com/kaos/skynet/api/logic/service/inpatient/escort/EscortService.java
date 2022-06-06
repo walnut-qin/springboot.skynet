@@ -30,6 +30,7 @@ public class EscortService {
     /**
      * 核心鉴权业务
      */
+    @Autowired
     ValidateService validateService;
 
     /**

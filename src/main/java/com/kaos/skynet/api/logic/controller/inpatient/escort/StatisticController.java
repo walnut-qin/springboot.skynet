@@ -153,7 +153,7 @@ public class StatisticController {
                             .duration(Duration.ofDays(14))
                             .build());
                     if (helperNats != null) {
-                        builder.escort1NucleicAcidResult(nats.toString());
+                        builder.escort1NucleicAcidResult(helperNats.toString());
                     }
                     builder.escort1Tel(helper.getLinkmanTel());
                     builder.escort1HealthCode(helper.getHealthCode());
@@ -174,7 +174,7 @@ public class StatisticController {
                             .duration(Duration.ofDays(14))
                             .build());
                     if (helperNats != null) {
-                        builder.escort2NucleicAcidResult(nats.toString());
+                        builder.escort2NucleicAcidResult(helperNats.toString());
                     }
                     builder.escort2Tel(helper.getLinkmanTel());
                     builder.escort2HealthCode(helper.getHealthCode());
