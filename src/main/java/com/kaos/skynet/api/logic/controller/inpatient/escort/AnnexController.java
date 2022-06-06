@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.logic.controller.inpatient.escort.annex;
+package com.kaos.skynet.api.logic.controller.inpatient.escort;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +10,9 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.api.data.cache.DataCache;
+import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
+import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexCheckCache;
+import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexInfoCache;
 import com.kaos.skynet.api.data.converter.PatientNameConverter;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
@@ -19,7 +21,6 @@ import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo.InStateEnum;
-import com.kaos.skynet.api.logic.controller.inpatient.escort.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.thread.Threads;
@@ -42,44 +43,75 @@ import net.coobird.thumbnailator.Thumbnails;
 @Log4j
 @Validated
 @RestController
-@RequestMapping({ "/ms/inpatient/escort/annex", "/ms/inpatient/escort" })
+@RequestMapping({ "api/inpatient/escort/annex", "/ms/inpatient/escort/annex", "/ms/inpatient/escort" })
 public class AnnexController {
+    /**
+     * 陪护锁
+     */
     @Autowired
-    PatientNameConverter patientNameConverter;
+    EscortLock escortLock;
 
     /**
-     * 转换器
+     * 附件服务
+     */
+    @Autowired
+    AnnexService annexService;
+
+    /**
+     * 陪护服务
+     */
+    @Autowired
+    EscortService escortService;
+
+    /**
+     * 附件缓存
+     */
+    @Autowired
+    EscortAnnexInfoMapper annexInfoMapper;
+
+    /**
+     * 陪护主表接口
+     */
+    @Autowired
+    EscortMainInfoMapper escortMainInfoMapper;
+
+    /**
+     * 住院主表接口
+     */
+    @Autowired
+    FinIprInMainInfoMapper inMainInfoMapper;
+
+    /**
+     * 附件信息缓存
+     */
+    @Autowired
+    EscortAnnexInfoCache annexInfoCache;
+
+    /**
+     * 附件审核缓存
+     */
+    @Autowired
+    EscortAnnexCheckCache annexCheckCache;
+
+    /**
+     * 字符串转Boolean对象
      */
     @Autowired
     NumericStringToBooleanConverter stringToBooleanConverter;
 
     /**
-     * 缓存
+     * 患者姓名转换器
      */
     @Autowired
-    DataCache dataCache;
+    PatientNameConverter patientNameConverter;
 
     /**
-     * 锁
+     * 上传附件
+     * 
+     * @param helperCardNo
+     * @param url
+     * @return
      */
-    @Autowired
-    EscortLock escortLock;
-
-    @Autowired
-    AnnexService annexService;
-
-    @Autowired
-    EscortService escortService;
-
-    @Autowired
-    EscortMainInfoMapper escortMainInfoMapper;
-
-    @Autowired
-    FinIprInMainInfoMapper inMainInfoMapper;
-
-    @Autowired
-    EscortAnnexInfoMapper annexInfoMapper;
-
     @RequestMapping(value = "uploadAnnex", method = RequestMethod.GET, produces = MediaType.TEXT)
     public String uploadAnnex(@NotNull(message = "陪护人卡号不能为空") String helperCardNo,
             @NotNull(message = "附件链接不能为空") String url) {
@@ -90,20 +122,21 @@ public class AnnexController {
         var annexNo = annexService.uploadAnnex(helperCardNo, url);
 
         // 查询所有关联陪护证
-        var escorts = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
-                .helperCardNo(helperCardNo)
-                .states(Lists.newArrayList(
-                        StateEnum.无核酸检测结果,
-                        StateEnum.等待院内核酸检测结果,
-                        StateEnum.等待院外核酸检测结果审核,
-                        StateEnum.生效中,
-                        StateEnum.其他))
-                .build());
-        if (escorts != null && !escorts.isEmpty()) {
+        var escortBuilder = EscortMainInfoMapper.Key.builder();
+        escortBuilder.helperCardNo(helperCardNo);
+        escortBuilder.states(Lists.newArrayList(
+                StateEnum.无核酸检测结果,
+                StateEnum.等待院内核酸检测结果,
+                StateEnum.等待院外核酸检测结果审核,
+                StateEnum.生效中,
+                StateEnum.其他));
+        var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
+        if (!escorts.isEmpty()) {
             for (var escort : escorts) {
+                var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
                 // 更新关联陪护状态
-                Threads.newLockExecutor().link(escortLock.getStateLock().getLock(escort.getEscortNo())).execute(() -> {
-                    escortService.updateState(escort.getEscortNo(), null, "WebService", "患者上传外院报告");
+                Threads.newLockExecutor().link(stateLock).execute(() -> {
+                    escortService.updateState(escort.getEscortNo(), null, "WebApi", "患者上传外院报告");
                 });
             }
         }
@@ -111,6 +144,14 @@ public class AnnexController {
         return annexNo;
     }
 
+    /**
+     * 审核附件
+     * 
+     * @param annexNo
+     * @param checker
+     * @param negativeFlag
+     * @param inspectDate
+     */
     @RequestMapping(value = "checkAnnex", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void checkAnnex(@NotNull(message = "附件号不能为空") String annexNo,
             @NotNull(message = "审核人不能为空") String checker,
@@ -128,29 +169,34 @@ public class AnnexController {
             annexService.checkAnnex(annexNo, checker, negativeFlagBoolean, inspectDate);
         });
 
-        // 检索附件信息
-        var annex = dataCache.getAnnexInfoCache().get(annexNo);
-
         // 查询所有关联陪护证
-        var escorts = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
-                .helperCardNo(annex.getCardNo())
-                .states(Lists.newArrayList(
-                        StateEnum.无核酸检测结果,
-                        StateEnum.等待院内核酸检测结果,
-                        StateEnum.等待院外核酸检测结果审核,
-                        StateEnum.生效中,
-                        StateEnum.其他))
-                .build());
-        if (escorts != null && !escorts.isEmpty()) {
+        var escortBuilder = EscortMainInfoMapper.Key.builder();
+        escortBuilder.helperCardNo(annexInfoCache.get(annexNo).getCardNo());
+        escortBuilder.states(Lists.newArrayList(
+                StateEnum.无核酸检测结果,
+                StateEnum.等待院内核酸检测结果,
+                StateEnum.等待院外核酸检测结果审核,
+                StateEnum.生效中,
+                StateEnum.其他));
+        var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
+        if (!escorts.isEmpty()) {
             for (var escort : escorts) {
+                var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
                 // 更新关联陪护状态
-                Threads.newLockExecutor().link(escortLock.getStateLock().getLock(escort.getEscortNo())).execute(() -> {
-                    escortService.updateState(escort.getEscortNo(), null, "WebService", "患者上传外院报告");
+                Threads.newLockExecutor().link(stateLock).execute(() -> {
+                    escortService.updateState(escort.getEscortNo(), null, "WebApi", "患者上传外院报告");
                 });
             }
         }
     }
 
+    /**
+     * 查询指定科室的陪护附件
+     * 
+     * @param deptCode
+     * @param checked
+     * @return
+     */
     @RequestMapping(value = "queryAnnexInDept", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryAnnexInDeptRsp> queryAnnexInDept(@NotNull(message = "科室编码不能为空") String deptCode,
             @NotNull(message = "审核标识不能为空") String checked) {
@@ -161,10 +207,10 @@ public class AnnexController {
         log.info(String.format("查询科室信息<deptCode = %s, checked = %s>", deptCode, checked.toString()));
 
         // 检索该科室所有患者
-        var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
-                .deptCode(deptCode)
-                .states(Lists.newArrayList(InStateEnum.病房接诊))
-                .build());
+        var inMainInfoBuilder = FinIprInMainInfoMapper.Key.builder();
+        inMainInfoBuilder.deptCode(deptCode);
+        inMainInfoBuilder.states(Lists.newArrayList(InStateEnum.病房接诊));
+        var inMainInfos = inMainInfoMapper.queryInMainInfos(inMainInfoBuilder.build());
 
         // 查询所有有效的陪护人
         var escortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
@@ -204,8 +250,8 @@ public class AnnexController {
             }).toList());
             // 若查询审核内容，则添加审核信息
             if (checkedBoolean) {
-                builder.negative(dataCache.getAnnexCheckCache().get(x.getAnnexNo()).getNegative());
-                builder.inspectDate(dataCache.getAnnexCheckCache().get(x.getAnnexNo()).getInspectDate());
+                builder.negative(annexCheckCache.get(x.getAnnexNo()).getNegative());
+                builder.inspectDate(annexCheckCache.get(x.getAnnexNo()).getInspectDate());
             }
             return builder.build();
         }).toList();
@@ -253,7 +299,7 @@ public class AnnexController {
     @RequestMapping(value = "getPic", method = RequestMethod.GET, produces = MediaType.JPEG)
     public BufferedImage getPic(@NotNull(message = "键值不能为空") String refer) {
         // 根据refer号获取annexUrl
-        var rec = dataCache.getAnnexInfoCache().get(refer);
+        var rec = annexInfoCache.get(refer);
         if (rec == null) {
             throw new RuntimeException("未查询到附件记录");
         }
