@@ -11,9 +11,12 @@ import com.kaos.skynet.core.thread.pool.ThreadPool;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/inpatient/escort/schedule")
 public class ScheduleController {
     /**
      * 定时任务主线程池
@@ -47,6 +50,7 @@ public class ScheduleController {
      * 定时更新系统内尚未注销的陪护证状态
      */
     @Scheduled(cron = "0 5/10 * * * ?")
+    @RequestMapping(value = "updateState", method = RequestMethod.GET)
     public void updateState() {
         guardPool.execute(() -> {
             // 检索尚且有效的陪护证
