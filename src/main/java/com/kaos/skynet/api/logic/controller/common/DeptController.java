@@ -110,7 +110,7 @@ public class DeptController {
         keyBuilder.deptOwn(req.getDeptOwn());
         keyBuilder.deptTypes(req.getDeptTypes());
         keyBuilder.valids(Lists.newArrayList(ValidEnum.VALID));
-        var depts = deptMapper.queryDepts(null);
+        var depts = deptMapper.queryDepts(keyBuilder.build());
 
         // 构造响应
         var rspBuilder = QueryDeptListRsp.builder();

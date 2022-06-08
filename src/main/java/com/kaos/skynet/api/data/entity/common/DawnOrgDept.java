@@ -61,6 +61,7 @@ public class DawnOrgDept {
     /**
      * 科室类型
      */
+    @Getter
     @AllArgsConstructor
     public static enum DeptTypeEnum implements Enum {
         门诊("C", "门诊"),
@@ -77,13 +78,11 @@ public class DawnOrgDept {
         /**
          * 数据库存值
          */
-        @Getter
         private String value;
 
         /**
          * 描述存值
          */
-        @Getter
         private String description;
     }
 }
