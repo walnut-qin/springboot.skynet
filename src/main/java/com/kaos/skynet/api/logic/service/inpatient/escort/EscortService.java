@@ -2,6 +2,8 @@ package com.kaos.skynet.api.logic.service.inpatient.escort;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
+
 import com.kaos.skynet.api.data.cache.inpatient.escort.EscortStateRecCache;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
@@ -85,7 +87,7 @@ public class EscortService {
      * @return
      */
     @Transactional
-    public String register(String patientCardNo, String helperCardNo, String operCode, Boolean escape) {
+    public String register(String patientCardNo, String helperCardNo, String operCode, @NotNull Boolean escape) {
         // 获取待注册的happenNo
         Integer happenNo = validateService.getHappenNo(patientCardNo, helperCardNo, escape);
         if (happenNo == null) {

@@ -216,7 +216,7 @@ public class EscortController {
         /**
          * 是否为窗口操作
          */
-        private Boolean regByWindow = null;
+        private Boolean regByWindow = false;
     }
 
     /**
