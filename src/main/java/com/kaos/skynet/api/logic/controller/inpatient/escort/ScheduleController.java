@@ -65,7 +65,7 @@ public class ScheduleController {
                 taskPool.execute(() -> {
                     var lock = escortLock.getStateLock().getLock(escortMainInfo.getEscortNo());
                     Threads.newLockExecutor().link(lock).execute(() -> {
-                        escortService.updateState(escortMainInfo.getEscortNo(), StateEnum.生效中, "schedule", "临时处理");
+                        escortService.updateState(escortMainInfo.getEscortNo(), null, "schedule", null);
                     });
                 });
             }
