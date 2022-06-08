@@ -2,10 +2,16 @@ package com.kaos.skynet.api.data.mapper.common;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.kaos.skynet.api.data.entity.common.DawnOrgDept;
 import com.kaos.skynet.api.data.entity.common.DawnOrgDept.DeptTypeEnum;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface DawnOrgDeptMapper {
     /**
@@ -19,10 +25,31 @@ public interface DawnOrgDeptMapper {
     /**
      * 查询科室列表
      * 
-     * @param deptOwn
-     * @param validStates
+     * @param key
      * @return
      */
-    List<DawnOrgDept> queryDepts(DeptOwnEnum deptOwn, List<DeptTypeEnum> deptTypes,
-            List<ValidEnum> valids);
+    List<DawnOrgDept> queryDepts(@NotNull(message = "查询键值不能为空") Key key);
+
+    /**
+     * 查询键值
+     */
+    @Getter
+    @Setter
+    @Builder
+    public static class Key {
+        /**
+         * 院区
+         */
+        private DeptOwnEnum deptOwn;
+
+        /**
+         * 科室类型
+         */
+        private List<DeptTypeEnum> deptTypes;
+
+        /**
+         * 有效性标志
+         */
+        private List<ValidEnum> valids;
+    }
 }
