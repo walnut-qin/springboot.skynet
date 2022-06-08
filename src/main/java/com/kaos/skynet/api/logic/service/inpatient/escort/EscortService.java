@@ -116,6 +116,7 @@ public class EscortService {
             var vipBuilder = EscortVip.builder();
             vipBuilder.patientCardNo(patientCardNo);
             vipBuilder.happenNo(happenNo);
+            vipBuilder.helperCardNo(helperCardNo);
             vipBuilder.recDate(LocalDateTime.now());
             vipMapper.insertEscortVip(vipBuilder.build());
         }
