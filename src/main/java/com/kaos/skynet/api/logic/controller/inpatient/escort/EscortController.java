@@ -385,6 +385,7 @@ public class EscortController {
             if (vip != null) {
                 rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
             }
+            rsp.escortNo = x.getEscortNo();
             rsp.states = escortStateRecCache.get(x.getEscortNo());
             rsp.states.sort((a, b) -> {
                 return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
