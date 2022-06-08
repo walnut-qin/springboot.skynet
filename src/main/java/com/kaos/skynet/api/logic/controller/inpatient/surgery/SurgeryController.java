@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import com.kaos.skynet.api.data.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.converter.SurgeryNameConverter;
 import com.kaos.skynet.api.data.enums.DeptOwnEnum;
+import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.json.Json;
@@ -117,6 +118,7 @@ public class SurgeryController {
         keyBuilder.beginPreDate(req.getBeginPreDate());
         keyBuilder.endPreDate(req.getEndPreDate());
         keyBuilder.deptOwn(req.getDeptOwn());
+        keyBuilder.valid(ValidEnum.VALID);
         var surgeryInfos = metOpsApplyMapper.queryApplies(keyBuilder.build());
 
         // 构造响应
@@ -125,7 +127,7 @@ public class SurgeryController {
         rspBuilder.data(surgeryInfos.stream().map(x -> {
             var itemBuilder = QuerySurgeryAppliesResponse.Item.builder();
             itemBuilder.patientNo(x.getPatientNo());
-            var inMainInfo = inMainInfoCache.get(x.getPatientNo());
+            var inMainInfo = inMainInfoCache.get("ZY01".concat(x.getPatientNo()));
             if (inMainInfo != null) {
                 itemBuilder.name(inMainInfo.getName());
             }
