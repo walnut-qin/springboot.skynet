@@ -17,6 +17,12 @@ public class DeptNameConverter implements Converter<String, String> {
 
     @Override
     public String convert(String deptCode) {
+        // 判空
+        if (deptCode == null) {
+            return null;
+        }
+
+        // 执行逻辑
         DawnOrgDept deptInfo = dataCache.getDeptCache().get(deptCode);
         if (deptInfo != null) {
             return deptInfo.getDeptName();

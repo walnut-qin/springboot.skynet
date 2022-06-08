@@ -14,6 +14,12 @@ public class PatientNameConverter implements Converter<String, String> {
 
     @Override
     public String convert(String cardNo) {
+        // 判空
+        if (cardNo == null) {
+            return null;
+        }
+
+        // 执行逻辑
         ComPatientInfo patient = dataCache.getPatientInfoCache().get(cardNo);
         if (patient != null) {
             return patient.getName();

@@ -17,6 +17,12 @@ public class BedNoConverter implements Converter<String, String> {
 
     @Override
     public String convert(String bedNo) {
+        // 判空
+        if (bedNo == null) {
+            return null;
+        }
+
+        // 执行逻辑
         ComBedInfo bedInfo = dataCache.getBedInfoCache().get(bedNo);
         if (bedInfo != null) {
             return bedInfo.getBriefBedNo();

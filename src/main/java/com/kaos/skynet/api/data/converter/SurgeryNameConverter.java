@@ -16,6 +16,12 @@ public class SurgeryNameConverter implements Converter<String, String> {
 
     @Override
     public String convert(String operationNo) {
+        // 判空
+        if (operationNo == null) {
+            return null;
+        }
+
+        // 执行逻辑
         var item = metOpsOperationItemMapper.queryMetOpsItem(operationNo, "S991");
         if (item != null) {
             return item.getItemName();

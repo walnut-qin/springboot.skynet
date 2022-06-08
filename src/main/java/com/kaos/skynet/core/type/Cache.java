@@ -46,6 +46,12 @@ public abstract class Cache<K, V> {
      * @return
      */
     public V get(K key) {
+        // 不支持空索引
+        if (key == null) {
+            log.warn("缓存不支持空索引");
+            return null;
+        }
+
         // 检索缓存
         try {
             return loadingCache.get(key).orNull();
