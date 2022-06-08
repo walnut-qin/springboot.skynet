@@ -107,7 +107,7 @@ public class DataCache {
         caches.put("annexCheckCache", annexCheckCache);
         caches.put("annexInfoCache", annexInfoCache);
         caches.put("escortMainInfoCache", escortMainInfoCache);
-        caches.put("bedInfoCache", escortStateRecCache);
+        caches.put("escortStateRecCache", escortStateRecCache);
         caches.put("escortVipCache", escortVipCache);
         caches.put("bedInfoCache", bedInfoCache);
         caches.put("inMainInfoCache", inMainInfoCache);

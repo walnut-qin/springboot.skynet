@@ -22,7 +22,7 @@ public class ComPatientInfoCache extends Cache<String, ComPatientInfo> {
      * 数据库接口
      */
     ComPatientInfoCache(ComPatientInfoMapper patientInfoMapper) {
-        super(300, new Converter<String, ComPatientInfo>() {
+        super(3000, new Converter<String, ComPatientInfo>() {
             @Override
             public ComPatientInfo convert(String source) {
                 return patientInfoMapper.queryPatientInfo(source);

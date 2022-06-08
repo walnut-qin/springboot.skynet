@@ -173,9 +173,6 @@ public class EscortService {
                     .recDate(LocalDateTime.now())
                     .remark(remark).build());
         }
-
-        // 更新缓存
-        escortStateRecCache.refresh(escortNo);
     }
 
     /**
