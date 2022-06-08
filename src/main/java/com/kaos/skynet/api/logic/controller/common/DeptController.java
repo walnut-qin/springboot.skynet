@@ -28,7 +28,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Validated
 @RestController
-@RequestMapping({ "api/common/dept", "/ms/common/dept" })
+@RequestMapping({ "api/common/dept", "/ms/common/switch/dept", "/ms/common/dept" })
 public class DeptController {
     /**
      * 序列化工具

@@ -35,7 +35,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Validated
 @RestController
-@RequestMapping("/ms/inpatient/escort/statistic")
+@RequestMapping({ "/api/inpatient/escort/statistic", "/ms/inpatient/escort/statistic" })
 public class StatisticController {
     /**
      * 住院主表接口

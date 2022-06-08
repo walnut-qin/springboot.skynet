@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Validated
 @RestController
-@RequestMapping("/ms/inpatient/escort")
+@RequestMapping({ "/api/inpatient/escort", "/ms/inpatient/escort" })
 public class EscortController {
     /**
      * 序列化工具
