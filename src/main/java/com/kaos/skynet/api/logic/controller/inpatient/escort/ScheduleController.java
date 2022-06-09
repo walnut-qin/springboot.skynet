@@ -1,6 +1,9 @@
 package com.kaos.skynet.api.logic.controller.inpatient.escort;
 
+import java.util.Map;
+
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
@@ -26,7 +29,7 @@ public class ScheduleController {
     /**
      * 子线程池
      */
-    final ThreadPool taskPool = Threads.newThreadPool("陪护证线程池", 10);
+    final ThreadPool taskPool = Threads.newThreadPool("陪护证线程池", 20);
 
     /**
      * 陪护锁
@@ -75,5 +78,18 @@ public class ScheduleController {
             }
             taskPool.await();
         });
+    }
+
+    /**
+     * 展示线程池状态
+     * 
+     * @return
+     */
+    @RequestMapping(value = "showPoolState", method = RequestMethod.GET)
+    public Map<String, ThreadPool.PoolState> showPoolState() {
+        Map<String, ThreadPool.PoolState> result = Maps.newConcurrentMap();
+        result.put("guardPool", guardPool.show());
+        result.put("taskPool", taskPool.show());
+        return result;
     }
 }
