@@ -263,6 +263,10 @@ public class ValidateService {
     private Integer strongEscortCheck(Integer escortCnt, FinIprInMainInfo inMainInfo) {
         switch (escortCnt) {
             case 0 -> {
+                if (inMainInfo.getHappenNo() == null) {
+                    log.error(String.format("患者未通过住院证入院(inpatientNo = %s)", inMainInfo.getInpatientNo()));
+                    throw new RuntimeException("患者未通过住院证入院");
+                }
                 return inMainInfo.getHappenNo();
             }
 
