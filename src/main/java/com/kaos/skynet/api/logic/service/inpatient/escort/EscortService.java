@@ -175,8 +175,6 @@ public class EscortService {
                     .recDate(LocalDateTime.now())
                     .remark(remark).build());
         }
-
-        log.info("更新完毕 ".concat(escortNo));
     }
 
     /**
