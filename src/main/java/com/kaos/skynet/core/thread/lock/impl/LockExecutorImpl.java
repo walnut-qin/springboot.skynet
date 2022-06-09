@@ -29,9 +29,10 @@ public class LockExecutorImpl implements LockExecutor {
             var lock = it.next();
 
             // 执行
+            log.info(String.format("加锁(hash = %d)", lock.hashCode()));
             synchronized (lock.get()) {
                 try {
-                    log.info(String.format("加锁(hash = %d)", lock.hashCode()));
+                    log.info(String.format("加锁ok(hash = %d)", lock.hashCode()));
                     return execute(it, Callable);
                 } finally {
                     log.info(String.format("解锁(hash = %d)", lock.hashCode()));

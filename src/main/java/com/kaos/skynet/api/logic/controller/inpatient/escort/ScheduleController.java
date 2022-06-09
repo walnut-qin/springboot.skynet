@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.log4j.Log4j;
-
-@Log4j
 @RestController
 @RequestMapping("/api/inpatient/escort/schedule")
 public class ScheduleController {
@@ -73,12 +70,10 @@ public class ScheduleController {
             taskPool.monitor(escortInfos.size());
             for (EscortMainInfo escortMainInfo : escortInfos) {
                 taskPool.execute(() -> {
-                    log.info("开始更新状态 ".concat(escortMainInfo.getEscortNo()));
                     var lock = escortLock.getStateLock().getLock(escortMainInfo.getEscortNo());
                     Threads.newLockExecutor().link(lock).execute(() -> {
                         escortService.updateState(escortMainInfo.getEscortNo(), null, "schedule", null);
                     });
-                    log.info("更新状态完毕 ".concat(escortMainInfo.getEscortNo()));
                 });
             }
             taskPool.await();
