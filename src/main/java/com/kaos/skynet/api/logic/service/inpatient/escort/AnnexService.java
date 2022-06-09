@@ -124,5 +124,8 @@ public class AnnexService {
             // 更新至数据库
             annexCheckMapper.updateAnnexCheck(annexCheck);
         }
+
+        // 刷新cache
+        escortAnnexCheckCache.refresh(annexNo);
     }
 }

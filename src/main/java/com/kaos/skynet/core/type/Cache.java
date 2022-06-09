@@ -62,13 +62,15 @@ public abstract class Cache<K, V> {
     }
 
     /**
-     * 刷新缓存的值
+     * 刷新缓存的值，仅刷新缓存中存在的值
      * 
      * @param key
      */
     public void refresh(K key) {
         // 检索缓存
-        loadingCache.refresh(key);
+        if (loadingCache.getIfPresent(key) != null) {
+            loadingCache.refresh(key);
+        }
     }
 
     /**
