@@ -13,6 +13,7 @@ import com.kaos.skynet.api.data.converter.NatsConverter;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
+import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.FinIprPrepayInMapper;
@@ -30,6 +31,7 @@ import org.springframework.validation.annotation.Validated;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 /**
@@ -103,7 +105,13 @@ public class StateService {
             throw new RuntimeException(errInfo);
         }
 
-        return queryEscortState(escortInfo);
+        // 适配
+        var result = queryEscortState(escortInfo);
+        if (result.getState() == EscortStateRec.StateEnum.其他) {
+            result.setState(EscortStateRec.StateEnum.无核酸检测结果);
+        }
+
+        return result;
     }
 
     /**
@@ -340,6 +348,7 @@ public class StateService {
         /**
          * 状态
          */
+        @Setter
         private StateEnum state;
 
         /**

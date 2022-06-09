@@ -105,6 +105,8 @@ public class EscortService {
         if (stateResult.getState() == EscortStateRec.StateEnum.注销) {
             log.error(stateResult.getReason());
             throw new RuntimeException(stateResult.getReason());
+        } else if (stateResult.getState() == EscortStateRec.StateEnum.其他) {
+            stateResult.setState(EscortStateRec.StateEnum.无核酸检测结果);
         }
 
         // 生成陪护证号
