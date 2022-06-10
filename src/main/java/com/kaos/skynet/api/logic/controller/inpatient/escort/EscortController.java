@@ -390,6 +390,7 @@ public class EscortController {
             rsp.states.sort((a, b) -> {
                 return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
             });
+            rsp.actions = Lists.newArrayList();
             return rsp;
         }).toList();
     }
@@ -497,6 +498,7 @@ public class EscortController {
             rsp.states.sort((a, b) -> {
                 return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
             });
+            rsp.actions = Lists.newArrayList();
             return rsp;
         }).toList();
     }
