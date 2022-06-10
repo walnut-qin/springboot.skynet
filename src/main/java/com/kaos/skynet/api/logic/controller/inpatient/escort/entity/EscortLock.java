@@ -23,7 +23,7 @@ public class EscortLock {
     /**
      * 患者卡号锁
      */
-    final LockFactory stateLock = Threads.newLockFactory("escortStateLock", 35);
+    final LockFactory stateLock = Threads.newLockFactory("escortStateLock", 40);
 
     /**
      * 患者卡号锁

@@ -6,12 +6,5 @@ public interface Lock {
      * 
      * @return
      */
-    String name();
-
-    /**
-     * 获取原始锁对象
-     * 
-     * @return
-     */
-    Object get();
+    String getName();
 }

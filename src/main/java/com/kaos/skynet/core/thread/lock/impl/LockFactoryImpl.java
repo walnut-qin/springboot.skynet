@@ -6,8 +6,8 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.core.thread.lock.Lock;
 import com.kaos.skynet.core.thread.lock.LockFactory;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class LockFactoryImpl implements LockFactory {
     /**
@@ -28,7 +28,7 @@ public class LockFactoryImpl implements LockFactory {
         this.lockName = lockName;
         this.locks = Lists.newArrayListWithCapacity(lockSize);
         for (Integer i = 0; i < lockSize; i++) {
-            this.locks.add(new LockImpl(new Object()));
+            this.locks.add(new LockImpl());
         }
     }
 
@@ -46,20 +46,10 @@ public class LockFactoryImpl implements LockFactory {
         return locks.size();
     }
 
-    @AllArgsConstructor
+    @NoArgsConstructor
     public class LockImpl implements Lock {
-        /**
-         * 实际的锁实体
-         */
-        Object lock;
-
         @Override
-        public Object get() {
-            return lock;
-        }
-
-        @Override
-        public String name() {
+        public String getName() {
             return lockName;
         }
     }

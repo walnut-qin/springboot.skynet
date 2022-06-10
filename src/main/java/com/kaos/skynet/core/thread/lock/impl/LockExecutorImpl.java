@@ -29,13 +29,13 @@ public class LockExecutorImpl implements LockExecutor {
             var lock = it.next();
 
             // 执行
-            log.debug(String.format("加锁(hash = %d)", lock.get().hashCode()));
-            synchronized (lock.get()) {
+            log.debug(String.format("加锁(hash = %d)", lock.hashCode()));
+            synchronized (lock) {
                 try {
-                    log.debug(String.format("加锁ok(hash = %d)", lock.get().hashCode()));
+                    log.debug(String.format("加锁ok(hash = %d)", lock.hashCode()));
                     return execute(it, Callable);
                 } finally {
-                    log.debug(String.format("解锁(hash = %d)", lock.get().hashCode()));
+                    log.debug(String.format("解锁(hash = %d)", lock.hashCode()));
                 }
             }
         } else {
