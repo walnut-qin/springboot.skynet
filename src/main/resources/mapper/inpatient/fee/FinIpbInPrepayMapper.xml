@@ -85,8 +85,11 @@
         FROM
             XYHIS.FIN_IPB_INPREPAY
         <where>
-            <if test = "true">
+            <if test = "inpatientNo != null">
                 AND INPATIENT_NO = #{inpatientNo}
+            </if>
+            <if test = "balanceState != null">
+                AND BALANCE_STATE = #{balanceState}
             </if>
         </where>
     </select>

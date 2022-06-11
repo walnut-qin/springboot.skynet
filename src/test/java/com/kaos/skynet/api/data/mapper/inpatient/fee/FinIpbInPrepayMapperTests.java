@@ -11,6 +11,6 @@ public class FinIpbInPrepayMapperTests {
 
     @Test
     void queryPrepays() {
-        inPrepayMapper.queryPrepays("ZY010000706272");
+        inPrepayMapper.queryPrepays(FinIpbInPrepayMapper.Key.builder().inpatientNo("ZY010000706272").build());
     }
 }
