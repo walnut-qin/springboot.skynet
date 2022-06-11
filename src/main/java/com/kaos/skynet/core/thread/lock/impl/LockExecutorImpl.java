@@ -42,7 +42,6 @@ public class LockExecutorImpl implements LockExecutor {
             try {
                 return Callable.call();
             } catch (Exception e) {
-                log.error(e.getMessage());
                 throw new RuntimeException(e);
             }
         }

@@ -25,10 +25,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseEntity<String> exceptionHandler(HttpServletRequest req, Exception e) {
         // 获取错误信息
-        String errMsg = e.getMessage();
-
-        // 记录异常日志
-        logger.error(errMsg);
+        String errMsg = e.getCause().getMessage();
 
         // 构造响应
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
@@ -42,9 +39,6 @@ public class GlobalExceptionHandler {
         // 获取错误内容
         List<ObjectError> allErrors = ex.getBindingResult().getAllErrors();
         var errMsg = allErrors.stream().map(s -> s.getDefaultMessage()).collect(Collectors.joining(";"));
-
-        // 记录异常日志
-        logger.error(errMsg);
 
         // 构造响应
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
