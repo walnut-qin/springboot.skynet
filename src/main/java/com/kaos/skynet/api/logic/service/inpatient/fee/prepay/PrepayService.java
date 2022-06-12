@@ -1,8 +1,8 @@
 package com.kaos.skynet.api.logic.service.inpatient.fee.prepay;
 
-import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbInPrepay;
 import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead.BalanceStateEnum;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
@@ -58,7 +58,7 @@ public class PrepayService {
      * @return
      */
     @Transactional
-    public List<PrepayModifyResult> fixRecallPrepay(String patientNo) {
+    public Stream<PrepayModifyResult> fixRecallPrepay(String patientNo) {
         // 检索结算记录
         var balanceKeyBuilder = FinIpbBalanceHeadMapper.Key.builder();
         balanceKeyBuilder.inpatientNo("ZY01".concat(patientNo));
@@ -91,40 +91,38 @@ public class PrepayService {
         // 筛选出referNum非空的预交金，这类预交金为线上支付
         var onlinePrepays = prepays.stream().filter(x -> {
             return x.getReferNum() != null;
-        }).toList();
+        });
 
         // 处理所有线上预交金
-        List<PrepayModifyResult> results = Lists.newArrayList();
-        for (var onlinePrepay : onlinePrepays) {
+        return onlinePrepays.map(x -> {
             // 检索该预交金的退费跑批记录
             var builder = FinOprPayModelMapper.Key.builder();
             builder.patientId(patientNo);
-            builder.referNo(onlinePrepay.getReferNum());
+            builder.referNo(x.getReferNum());
             builder.invoiceNo(lastBalanceHead.getInvoiceNo());
             var payModels = payModelMapper.queryPayModels(builder.build());
             if (payModels.isEmpty()) {
-                continue;
+                return null;
             }
 
             // 构造新预交金记录
-            var newPrepay = json.clone(onlinePrepay, FinIpbInPrepay.class);
+            var newPrepay = json.clone(x, FinIpbInPrepay.class);
             for (var payModel : payModels) {
                 newPrepay.setPrepayCost(newPrepay.getPrepayCost() + payModel.getAmt());
             }
-            
+
             // 添加结果集
             var itemBuilder = PrepayModifyResult.builder();
             itemBuilder.inPatientNo(newPrepay.getInpatientNo());
             itemBuilder.happenNo(newPrepay.getHappenNo());
-            itemBuilder.oldCost(onlinePrepay.getPrepayCost());
+            itemBuilder.oldCost(x.getPrepayCost());
             itemBuilder.newCost(newPrepay.getPrepayCost());
-            results.add(itemBuilder.build());
 
             // 修改数据库
             inPrepayMapper.updatePrepay(newPrepay);
-        }
 
-        return results;
+            return itemBuilder.build();
+        }).filter(Objects::nonNull);
     }
 
     /**
