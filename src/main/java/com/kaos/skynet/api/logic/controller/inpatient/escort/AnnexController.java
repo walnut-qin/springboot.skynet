@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -24,11 +25,15 @@ import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMap
 import com.kaos.skynet.api.data.entity.inpatient.FinIprInMainInfo.InStateEnum;
 import com.kaos.skynet.api.logic.service.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
+import com.kaos.skynet.core.http.RspWrapper;
+import com.kaos.skynet.core.http.RspWrapper.CodeEnum;
+import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.type.converter.string.bool.NumericStringToBooleanConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +51,12 @@ import net.coobird.thumbnailator.Thumbnails;
 @RestController
 @RequestMapping({ "api/inpatient/escort/annex", "/ms/inpatient/escort/annex", "/ms/inpatient/escort" })
 public class AnnexController {
+    /**
+     * 序列化工具
+     */
+    @Autowired
+    Json json;
+
     /**
      * 陪护锁
      */
@@ -154,6 +165,66 @@ public class AnnexController {
     }
 
     /**
+     * 上传附件
+     * 
+     * @param helperCardNo
+     * @param url
+     * @return
+     */
+    @RequestMapping(value = "uploadAnnex", method = RequestMethod.POST, produces = MediaType.JSON)
+    public RspWrapper<Object> uploadAnnex(@RequestBody UploadAnnex.ReqBody reqBody) {
+        // 入参记录
+        log.info("上传附件, 入参".concat(json.toJson(reqBody)));
+
+        // 调用服务 - 不存在冲突，无需加锁
+        var annexNo = annexService.uploadAnnex(reqBody.cardNo, reqBody.url);
+
+        // 查询所有关联陪护证
+        var escortBuilder = EscortMainInfoMapper.Key.builder();
+        escortBuilder.helperCardNo(reqBody.cardNo);
+        escortBuilder.states(Lists.newArrayList(
+                StateEnum.无核酸检测结果,
+                StateEnum.等待院内核酸检测结果,
+                StateEnum.等待院外核酸检测结果审核,
+                StateEnum.生效中,
+                StateEnum.其他));
+        var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
+        if (!escorts.isEmpty()) {
+            for (var escort : escorts) {
+                escortPool.getTaskPool().execute(() -> {
+                    var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                    // 更新关联陪护状态
+                    Threads.newLockExecutor().link(stateLock).execute(() -> {
+                        escortService.updateState(escort.getEscortNo(), null, "WebApi", null);
+                    });
+                });
+            }
+        }
+
+        return RspWrapper.builder().code(CodeEnum.E0000).message("成功").data(annexNo).build();
+    }
+
+    /**
+     * 接口Body
+     */
+    public static class UploadAnnex {
+        @Getter
+        public static class ReqBody {
+            /**
+             * 卡号
+             */
+            @NotBlank(message = "卡号不能为空")
+            private String cardNo;
+
+            /**
+             * 附件外链
+             */
+            @NotBlank(message = "附件不能为空")
+            private String url;
+        }
+    }
+
+    /**
      * 审核附件
      * 
      * @param annexNo
@@ -255,7 +326,8 @@ public class AnnexController {
             var builder = QueryAnnexInDeptRsp.builder();
             builder.annexNo(x.getAnnexNo());
             builder.helperName(patientNameConverter.convert(x.getCardNo()));
-            builder.picUrl("http://172.16.100.252:8025/api/inpatient/escort/annex/getPic?refer=".concat(x.getAnnexNo()));
+            builder.picUrl(
+                    "http://172.16.100.252:8025/api/inpatient/escort/annex/getPic?refer=".concat(x.getAnnexNo()));
             builder.patientNames(Set.copyOf(escortRelation.get(x.getCardNo())).stream().map(y -> {
                 return patientNameConverter.convert(y);
             }).toList());
