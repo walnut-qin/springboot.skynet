@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.catalina.connector.ClientAbortException;
 import org.apache.log4j.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +54,17 @@ public class GlobalExceptionHandler {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "text/plain;charset=UTF-8");
         return new ResponseEntity<>(errMsg, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = ClientAbortException.class)
+    @ResponseBody
+    public ResponseEntity<String> clientAbortExceptionHandler(HttpServletRequest req, ClientAbortException ex) {
+        // 获取错误内容
+        log.warn("客户端主动断链");
+
+        // 构造响应
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", "text/plain;charset=UTF-8");
+        return new ResponseEntity<>("客户端断开链接", headers, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
