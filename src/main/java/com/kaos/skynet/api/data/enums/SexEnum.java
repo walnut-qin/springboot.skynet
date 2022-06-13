@@ -10,7 +10,8 @@ import lombok.Getter;
 public enum SexEnum implements Enum {
     Male("M", "男"),
     Female("F", "女"),
-    Unknown("U", "未知");
+    Unknown("U", "未知"),
+    Auto("A", "自动");
 
     /**
      * 数据库存值
