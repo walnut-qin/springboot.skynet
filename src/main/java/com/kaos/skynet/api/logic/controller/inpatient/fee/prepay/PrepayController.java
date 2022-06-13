@@ -53,8 +53,8 @@ public class PrepayController {
 
         // 构造响应
         var builder = FixRecallPrepay.RspBody.builder();
-        builder.size((int) prepayModifyResults.count());
-        builder.data(prepayModifyResults.map(x -> {
+        builder.size((int) prepayModifyResults.size());
+        builder.data(prepayModifyResults.stream().map(x -> {
             var itemBuilder = FixRecallPrepay.RspBody.Item.builder();
             itemBuilder.inPatientNo(x.getInPatientNo());
             itemBuilder.happenNo(x.getHappenNo());

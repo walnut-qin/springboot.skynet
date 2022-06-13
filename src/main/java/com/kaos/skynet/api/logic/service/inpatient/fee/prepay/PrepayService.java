@@ -1,7 +1,7 @@
 package com.kaos.skynet.api.logic.service.inpatient.fee.prepay;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbInPrepay;
 import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead.BalanceStateEnum;
@@ -58,7 +58,7 @@ public class PrepayService {
      * @return
      */
     @Transactional
-    public Stream<PrepayModifyResult> fixRecallPrepay(String patientNo) {
+    public List<PrepayModifyResult> fixRecallPrepay(String patientNo) {
         // 检索结算记录
         var balanceKeyBuilder = FinIpbBalanceHeadMapper.Key.builder();
         balanceKeyBuilder.inpatientNo("ZY01".concat(patientNo));
@@ -73,7 +73,7 @@ public class PrepayService {
             return IntegerUtils.compare(y.getBalanceNo(), x.getBalanceNo());
         });
         var lastBalanceHead = balanceHeads.get(0);
-        if (lastBalanceHead.getTransType() != TransTypeEnum.Positive) {
+        if (lastBalanceHead.getTransType() != TransTypeEnum.Negative) {
             log.error("当前并未召回, 住院号 = ".concat(patientNo));
             throw new RuntimeException("当前并未召回");
         }
@@ -122,7 +122,7 @@ public class PrepayService {
             inPrepayMapper.updatePrepay(newPrepay);
 
             return itemBuilder.build();
-        }).filter(Objects::nonNull);
+        }).filter(Objects::nonNull).toList();
     }
 
     /**
