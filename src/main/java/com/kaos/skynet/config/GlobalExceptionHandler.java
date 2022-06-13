@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lombok.extern.log4j.Log4j;
+
+@Log4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
     // 日志对象
@@ -25,7 +28,13 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseEntity<String> exceptionHandler(HttpServletRequest req, Exception e) {
         // 获取错误信息
-        String errMsg = e.getCause().getMessage();
+        String errMsg = null;
+        if (e.getCause() == null) {
+            errMsg = e.getMessage();
+            log.warn("cause为空, message = ".concat(errMsg));
+        } else {
+            errMsg = e.getCause().getMessage();
+        }
 
         // 构造响应
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
