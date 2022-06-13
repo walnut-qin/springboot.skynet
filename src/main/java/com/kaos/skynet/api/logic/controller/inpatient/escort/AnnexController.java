@@ -255,7 +255,7 @@ public class AnnexController {
             var builder = QueryAnnexInDeptRsp.builder();
             builder.annexNo(x.getAnnexNo());
             builder.helperName(patientNameConverter.convert(x.getCardNo()));
-            builder.picUrl(x.getAnnexUrl());
+            builder.picUrl("http://172.16.100.252:8025/api/inpatient/escort/annex/getPic?refer=".concat(x.getAnnexNo()));
             builder.patientNames(Set.copyOf(escortRelation.get(x.getCardNo())).stream().map(y -> {
                 return patientNameConverter.convert(y);
             }).toList());
