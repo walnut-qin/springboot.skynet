@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
+import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortPool;
 import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexCheckCache;
 import com.kaos.skynet.api.data.cache.inpatient.escort.annex.EscortAnnexInfoCache;
 import com.kaos.skynet.api.data.converter.PatientNameConverter;
@@ -45,6 +46,12 @@ import net.coobird.thumbnailator.Thumbnails;
 @RestController
 @RequestMapping({ "api/inpatient/escort/annex", "/ms/inpatient/escort/annex", "/ms/inpatient/escort" })
 public class AnnexController {
+    /**
+     * 陪护锁
+     */
+    @Autowired
+    EscortPool escortPool;
+
     /**
      * 陪护锁
      */
@@ -133,10 +140,12 @@ public class AnnexController {
         var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
         if (!escorts.isEmpty()) {
             for (var escort : escorts) {
-                var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
-                // 更新关联陪护状态
-                Threads.newLockExecutor().link(stateLock).execute(() -> {
-                    escortService.updateState(escort.getEscortNo(), null, "WebApi", "患者上传外院报告");
+                escortPool.getTaskPool().execute(() -> {
+                    var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                    // 更新关联陪护状态
+                    Threads.newLockExecutor().link(stateLock).execute(() -> {
+                        escortService.updateState(escort.getEscortNo(), null, "WebApi", null);
+                    });
                 });
             }
         }
@@ -181,10 +190,12 @@ public class AnnexController {
         var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
         if (!escorts.isEmpty()) {
             for (var escort : escorts) {
-                var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
-                // 更新关联陪护状态
-                Threads.newLockExecutor().link(stateLock).execute(() -> {
-                    escortService.updateState(escort.getEscortNo(), null, "WebApi", "患者上传外院报告");
+                escortPool.getTaskPool().execute(() -> {
+                    var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                    // 更新关联陪护状态
+                    Threads.newLockExecutor().link(stateLock).execute(() -> {
+                        escortService.updateState(escort.getEscortNo(), null, "WebApi", "患者上传外院报告");
+                    });
                 });
             }
         }

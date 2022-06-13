@@ -3,11 +3,11 @@ package com.kaos.skynet.api.logic.controller.inpatient.escort;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
+import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortPool;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.thread.pool.ThreadPool;
@@ -22,14 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/inpatient/escort/schedule")
 public class ScheduleController {
     /**
-     * 定时任务主线程池
+     * 陪护证线程池
      */
-    final ThreadPool guardPool = Threads.newGuardThreadPool("陪护证守护线程池");
-
-    /**
-     * 子线程池
-     */
-    final ThreadPool taskPool = Threads.newThreadPool("陪护证线程池", 20);
+    @Autowired
+    EscortPool escortPool;
 
     /**
      * 陪护锁
@@ -55,7 +51,7 @@ public class ScheduleController {
     @Scheduled(cron = "0 5/10 * * * ?")
     @RequestMapping(value = "updateState", method = RequestMethod.GET)
     public void updateState() {
-        guardPool.execute(() -> {
+        escortPool.getGuardPool().execute(() -> {
             // 检索尚且有效的陪护证
             var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
                     EscortMainInfoMapper.Key.builder()
@@ -67,16 +63,16 @@ public class ScheduleController {
                                     StateEnum.其他))
                             .build());
             // 刷新状态
-            taskPool.monitor(escortInfos.size());
+            escortPool.getTaskPool().monitor(escortInfos.size());
             for (EscortMainInfo escortMainInfo : escortInfos) {
-                taskPool.execute(() -> {
+                escortPool.getTaskPool().execute(() -> {
                     var lock = escortLock.getStateLock().getLock(escortMainInfo.getEscortNo());
                     Threads.newLockExecutor().link(lock).execute(() -> {
                         escortService.updateState(escortMainInfo.getEscortNo(), null, "schedule", null);
                     });
                 });
             }
-            taskPool.await();
+            escortPool.getTaskPool().await();
         });
     }
 
@@ -87,9 +83,6 @@ public class ScheduleController {
      */
     @RequestMapping(value = "showPoolState", method = RequestMethod.GET)
     public Map<String, ThreadPool.PoolState> showPoolState() {
-        Map<String, ThreadPool.PoolState> result = Maps.newConcurrentMap();
-        result.put("guardPool", guardPool.show());
-        result.put("taskPool", taskPool.show());
-        return result;
+        return escortPool.show();
     }
 }
