@@ -258,13 +258,23 @@ public class EscortController {
      */
     @RequestMapping(value = "recordAction", method = RequestMethod.GET, produces = MediaType.TEXT)
     public void recordAction(@NotNull(message = "陪护证号不能为空") String escortNo,
-            @NotNull(message = "记录的动作不能为空") ActionEnum action) {
+            @NotNull(message = "记录的动作不能为空") String action) {
         // 入参日志
-        log.info(String.format("记录陪护证行为<escortNo = %s, action = %s>", escortNo, action.getDescription()));
+        log.info(String.format("记录陪护证行为<escortNo = %s, action = %s>", escortNo, action));
+
+        // 参数转换
+        ActionEnum actionEnumPtr = valueStringToEnumConverterFactory.getConverter(ActionEnum.class).convert(action);
+        if (actionEnumPtr == null) {
+            actionEnumPtr = descriptionStringToEnumConverterFactory.getConverter(ActionEnum.class).convert(action);
+        }
+        if (actionEnumPtr == null) {
+            throw new RuntimeException("不支持的行为");
+        }
+        final ActionEnum actionEnum = actionEnumPtr;
 
         // 加状态操作锁，防止同时操作同一个陪护证
         Threads.newLockExecutor().link(escortLock.getActionLock().getLock(escortNo)).execute(() -> {
-            escortService.recordAction(escortNo, action, "收到客户端请求");
+            escortService.recordAction(escortNo, actionEnum, "收到客户端请求");
         });
     }
 

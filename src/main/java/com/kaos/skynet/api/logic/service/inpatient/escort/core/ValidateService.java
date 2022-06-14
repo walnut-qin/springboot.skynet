@@ -139,14 +139,14 @@ public class ValidateService {
                         EscortStateRec.StateEnum.生效中,
                         EscortStateRec.StateEnum.其他))
                 .build());
-        if (helperEscortInfos.size() > 2) {
+        if (helperEscortInfos.size() >= 2) {
             log.error(String.format("陪护人的陪护证已达到上限(%s)", helperEscortInfos.size()));
             throw new RuntimeException("陪护人的陪护证已达到上限");
         }
 
         // 患者陪护上限
         var patientEscortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
-                .patientCardNo(helperCardNo)
+                .patientCardNo(patientCardNo)
                 .states(Lists.newArrayList(
                         EscortStateRec.StateEnum.无核酸检测结果,
                         EscortStateRec.StateEnum.等待院内核酸检测结果,
@@ -154,7 +154,7 @@ public class ValidateService {
                         EscortStateRec.StateEnum.生效中,
                         EscortStateRec.StateEnum.其他))
                 .build());
-        if (patientEscortInfos.size() > 1) {
+        if (patientEscortInfos.size() >= 2) {
             log.error(String.format("患者的陪护证数量达到上限(%s)", helperEscortInfos.size()));
             throw new RuntimeException("患者的陪护证数量达到上限");
         }
@@ -168,7 +168,7 @@ public class ValidateService {
                 .build());
         switch (inMainInfos.size()) {
             case 0 -> {
-                return weakEscortCheck(patientCardNo);
+                return weakEscortCheck(patientEscortInfos.size(), patientCardNo);
             }
 
             case 1 -> {
@@ -227,7 +227,19 @@ public class ValidateService {
      * @param patientCardNo
      * @return
      */
-    private Integer weakEscortCheck(String patientCardNo) {
+    private Integer weakEscortCheck(Integer escortCnt, String patientCardNo) {
+        // 预住院仅能添加一个陪护
+        switch (escortCnt) {
+            case 0 -> {
+                break;
+            }
+
+            default -> {
+                log.error(String.format("患者(%s)没有开立第二陪护医嘱", "ZY01".concat(patientCardNo)));
+                throw new RuntimeException("患者没有开立第二陪护医嘱");
+            }
+        }
+
         // 检索患者住院证
         var prepayIns = prepayInMapper.queryPrepayIns(FinIprPrepayInMapper.Key.builder()
                 .cardNo(patientCardNo)
