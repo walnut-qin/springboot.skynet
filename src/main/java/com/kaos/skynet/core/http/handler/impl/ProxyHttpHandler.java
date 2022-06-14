@@ -1,8 +1,6 @@
 package com.kaos.skynet.core.http.handler.impl;
 
 import com.google.common.collect.Lists;
-import com.kaos.skynet.core.http.converter.BooleanHttpMessageConverter;
-import com.kaos.skynet.core.http.converter.DoubleHttpMessageConverter;
 import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
 import com.kaos.skynet.core.http.handler.AbstractHttpHandler;
 
@@ -11,11 +9,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Component("ProxyHttpHandler")
 public class ProxyHttpHandler extends AbstractHttpHandler {
-    ProxyHttpHandler(BooleanHttpMessageConverter booleanHttpMessageConverter,
-            DoubleHttpMessageConverter doubleHttpMessageConverter,
-            JsonHttpMessageConverter jsonHttpMessageConverter) {
+    ProxyHttpHandler(JsonHttpMessageConverter jsonHttpMessageConverter) {
         super(new RestTemplate(
-                Lists.newArrayList(booleanHttpMessageConverter, doubleHttpMessageConverter, jsonHttpMessageConverter)),
+                Lists.newArrayList(jsonHttpMessageConverter)),
                 "172.16.100.50",
                 8025);
     }

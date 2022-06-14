@@ -6,8 +6,6 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
-import com.kaos.skynet.core.http.converter.BooleanHttpMessageConverter;
-import com.kaos.skynet.core.http.converter.DoubleHttpMessageConverter;
 import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.converter.string.date.StandardStringToDateConverter;
@@ -44,12 +42,6 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
 
     @Autowired
     StandardStringToLocalDateTimeConverter standardStringToLocalDateTimeConverter;
-
-    @Autowired
-    BooleanHttpMessageConverter booleanHttpMessageConverter;
-
-    @Autowired
-    DoubleHttpMessageConverter doubleHttpMessageConverter;
 
     @Autowired
     JsonHttpMessageConverter jsonHttpMessageConverter;
@@ -109,8 +101,6 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
         // 设置定制转换器，插入队列最前段，给予最高优先级
         converters.add(0, new BufferedImageHttpMessageConverter());
         converters.add(0, jsonHttpMessageConverter);
-        converters.add(0, booleanHttpMessageConverter);
-        converters.add(0, doubleHttpMessageConverter);
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
     }
