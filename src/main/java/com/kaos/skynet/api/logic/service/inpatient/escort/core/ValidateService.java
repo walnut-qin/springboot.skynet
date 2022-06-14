@@ -140,7 +140,7 @@ public class ValidateService {
                         EscortStateRec.StateEnum.其他))
                 .build());
         if (helperEscortInfos.size() >= 2) {
-            log.error(String.format("陪护人的陪护证已达到上限(%s)", helperEscortInfos.size()));
+            log.error(String.format("陪护人的陪护证已达到上限(%d)", helperEscortInfos.size()));
             throw new RuntimeException("陪护人的陪护证已达到上限");
         }
 
@@ -155,7 +155,7 @@ public class ValidateService {
                         EscortStateRec.StateEnum.其他))
                 .build());
         if (patientEscortInfos.size() >= 2) {
-            log.error(String.format("患者的陪护证数量达到上限(%s)", helperEscortInfos.size()));
+            log.error(String.format("患者的陪护证数量达到上限(%d)", helperEscortInfos.size()));
             throw new RuntimeException("患者的陪护证数量达到上限");
         }
 
