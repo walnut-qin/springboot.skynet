@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class BoSoftApi {
+public class BoSoftPlugin {
     /**
      * Http句柄
      */
@@ -49,7 +49,7 @@ public class BoSoftApi {
      * 
      * @param jsonHttpMessageConverter
      */
-    BoSoftApi(JsonHttpMessageConverter jsonHttpMessageConverter) {
+    BoSoftPlugin(JsonHttpMessageConverter jsonHttpMessageConverter) {
         // 构造HTTP处理器
         httpHandler = new AbstractHttpHandler(
                 new RestTemplate(Lists.newArrayList(jsonHttpMessageConverter)),
@@ -60,11 +60,11 @@ public class BoSoftApi {
     /**
      * 发送POST请求
      * 
-     * @param <R>
-     * @param <S>
-     * @param apiType
-     * @param data
-     * @param classOfS
+     * @param <R>      请求类型
+     * @param <S>      响应类型
+     * @param apiType  业务类型
+     * @param data     请求数据
+     * @param classOfS 响应数据类型
      * @return
      */
     public <R, S> S postForObject(String apiType, R data, Class<S> classOfS) {

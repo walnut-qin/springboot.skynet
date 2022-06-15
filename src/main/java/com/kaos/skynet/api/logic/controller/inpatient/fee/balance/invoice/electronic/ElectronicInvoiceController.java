@@ -4,11 +4,9 @@ import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoiceMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.api.logic.controller.inpatient.fee.balance.invoice.electronic.core.ReqWrapper;
-import com.kaos.skynet.api.logic.controller.inpatient.fee.balance.invoice.electronic.core.RspWrapper;
-import com.kaos.skynet.api.logic.controller.inpatient.fee.balance.invoice.electronic.core.http.BoSoftHttpHandler;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.json.gson.adapter.enums.ValueEnumTypeAdapter;
+import com.kaos.skynet.plugin.bosoft.BoSoftPlugin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -41,7 +39,7 @@ public class ElectronicInvoiceController {
      * 服务器处理器
      */
     @Autowired
-    BoSoftHttpHandler boSoftHttpHandler;
+    BoSoftPlugin boSoftPlugin;
 
     @RequestMapping(value = "queryElectronicInvoiceInfo", method = RequestMethod.POST, produces = MediaType.JSON)
     public Object queryElectronicInvoiceInfo(@RequestBody QueryElectronicInvoiceInfo.ReqBody reqBody) {
@@ -55,11 +53,9 @@ public class ElectronicInvoiceController {
         }
 
         // 发送请求
-        var rspWrapper = boSoftHttpHandler.postForObject("/medical-web/api/medical/getEBillByBusNo",
-                ReqWrapper.wrapData(json, new QueryElectronicInvoiceInfo.BoSoftReqBody(invoice.getBusNo())),
-                RspWrapper.class);
-
-        return rspWrapper.disassemble(json, QueryElectronicInvoiceInfo.BoSoftRspBody.class);
+        return boSoftPlugin.postForObject("getEBillByBusNo",
+                new QueryElectronicInvoiceInfo.BoSoftReqBody(invoice.getBusNo()),
+                QueryElectronicInvoiceInfo.BoSoftRspBody.class);
     }
 
     /**
