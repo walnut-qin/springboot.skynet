@@ -20,7 +20,7 @@ public class Json {
     /**
      * 序列化
      * 
-     * @param src
+     * @param src 数据源
      * @return
      */
     public String toJson(Object src) {
@@ -30,8 +30,8 @@ public class Json {
     /**
      * 序列化
      * 
-     * @param src
-     * @return
+     * @param src    数据源
+     * @param writer 写入器
      */
     public void toJson(Object src, Writer writer) {
         gsonHolder.getGson().toJson(src, writer);
@@ -40,21 +40,21 @@ public class Json {
     /**
      * 反序列化
      * 
-     * @param <T>
-     * @param json
-     * @param classOfT
+     * @param <T>  反序列化目标类型
+     * @param json 数据源读取器
+     * @param type 目标类型
      * @return
      */
-    public <T> T fromJson(String json, Class<T> classOfT) {
-        return gsonHolder.getGson().fromJson(json, classOfT);
+    public <T> T fromJson(String json, Type type) {
+        return gsonHolder.getGson().fromJson(json, type);
     }
 
     /**
      * 用于反射的反序列化
      * 
-     * @param <T>
-     * @param reader
-     * @param type
+     * @param <T>    反序列化目标类型
+     * @param reader 数据源读取器
+     * @param type   目标类型
      * @return
      */
     public <T> T fromJson(Reader reader, Type type) {
@@ -64,16 +64,16 @@ public class Json {
     /**
      * 深拷贝
      * 
-     * @param <T>
-     * @param src
-     * @param classOfT
+     * @param <T>  目标类型
+     * @param src  拷贝源
+     * @param type 目标类型
      * @return
      */
-    public <T> T clone(T src, Class<T> classOfT) {
+    public <T> T clone(T src, Type type) {
         // 序列化
         String str = this.toJson(src);
 
         // 反序列化
-        return this.fromJson(str, classOfT);
+        return this.fromJson(str, type);
     }
 }
