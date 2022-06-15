@@ -10,8 +10,8 @@ import com.kaos.skynet.api.data.mapper.common.SequenceMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexCheckMapper;
 import com.kaos.skynet.api.data.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
 import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

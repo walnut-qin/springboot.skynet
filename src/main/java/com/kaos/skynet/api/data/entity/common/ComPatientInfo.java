@@ -10,8 +10,7 @@ import com.kaos.skynet.api.data.enums.HealthCodeEnum;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.enums.TravelCodeEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
-
-import org.apache.commons.lang3.StringUtils;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.Builder;
 import lombok.Getter;

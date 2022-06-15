@@ -8,7 +8,7 @@ import com.kaos.skynet.api.data.enums.PayKindEnum;
 import com.kaos.skynet.api.data.enums.PayModeEnum;
 import com.kaos.skynet.api.data.enums.TransTypeEnum;
 
-import org.apache.commons.lang3.StringUtils;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.Builder;
 import lombok.Getter;

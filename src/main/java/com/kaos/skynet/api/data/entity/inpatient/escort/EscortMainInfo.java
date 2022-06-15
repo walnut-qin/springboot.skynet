@@ -2,7 +2,7 @@ package com.kaos.skynet.api.data.entity.inpatient.escort;
 
 import com.google.common.base.Objects;
 
-import org.apache.commons.lang3.StringUtils;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.Builder;
 import lombok.Getter;

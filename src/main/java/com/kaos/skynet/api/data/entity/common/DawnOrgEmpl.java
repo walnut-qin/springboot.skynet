@@ -6,8 +6,7 @@ import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.SexEnum;
 import com.kaos.skynet.api.data.enums.ValidEnum;
 import com.kaos.skynet.core.type.Enum;
-
-import org.apache.commons.lang3.StringUtils;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

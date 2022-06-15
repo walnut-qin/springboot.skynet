@@ -2,8 +2,7 @@ package com.kaos.skynet.api.data.entity.common.config;
 
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.enums.ValidEnum;
-
-import org.apache.commons.lang3.StringUtils;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.Getter;
 import lombok.Setter;

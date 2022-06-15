@@ -6,7 +6,7 @@ import com.google.common.base.Objects;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 
-import org.apache.commons.lang3.StringUtils;
+import com.kaos.skynet.core.type.utils.StringUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

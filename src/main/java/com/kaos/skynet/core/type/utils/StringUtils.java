@@ -1,5 +1,7 @@
 package com.kaos.skynet.core.type.utils;
 
+import java.util.Arrays;
+
 public final class StringUtils {
     /**
      * 空字符串
@@ -64,6 +66,16 @@ public final class StringUtils {
      * @return
      */
     public static String leftPad(String str, int size, char padChar) {
-        return org.apache.commons.lang3.StringUtils.leftPad(str, size, padChar);
+        // 如果本就满足要求，直接返回
+        if (str == null || str.length() >= size) {
+            return str;
+        }
+
+        // 计算待补数量
+        Integer cnt = size - str.length();
+        char[] buf = new char[cnt];
+        Arrays.fill(buf, padChar);
+
+        return new String(buf).concat(str);
     }
 }
