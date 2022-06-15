@@ -35,7 +35,7 @@ public class ReportController {
      * @param endDate
      * @return
      */
-    @RequestMapping(value = "queryNewYbPubCost", method = RequestMethod.GET, produces = MediaType.TEXT)
+    @RequestMapping(value = "queryNewYbPubCost", method = RequestMethod.GET, produces = MediaType.JSON)
     public Double queryNewYbPubCost(@NotNull(message = "结算员不能为空") String balancer,
             @NotNull(message = "开始时间不能为空") LocalDateTime beginDate,
             @NotNull(message = "结束时间不能为空") LocalDateTime endDate) {
@@ -64,7 +64,7 @@ public class ReportController {
      * @param endDate
      * @return
      */
-    @RequestMapping(value = "queryNewYbPayCost", method = RequestMethod.GET, produces = MediaType.TEXT)
+    @RequestMapping(value = "queryNewYbPayCost", method = RequestMethod.GET, produces = MediaType.JSON)
     public Double queryNewYbPayCost(@NotNull(message = "结算员不能为空") String balancer,
             @NotNull(message = "开始时间不能为空") LocalDateTime beginDate,
             @NotNull(message = "结束时间不能为空") LocalDateTime endDate) {
