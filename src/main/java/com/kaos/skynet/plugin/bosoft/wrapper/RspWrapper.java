@@ -6,12 +6,13 @@ import java.util.Base64;
 import com.kaos.skynet.core.json.Json;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
-@Getter
+@Component
 public class RspWrapper {
     /**
      * 序列化工具
