@@ -69,12 +69,12 @@ public class BoSoftPlugin {
      */
     public <R, S> S postForObject(String apiType, R data, Class<S> classOfS) {
         // 加密请求信息
-        reqWrapper.wrapData(data);
+        var reqBody = reqWrapper.wrapData(data);
 
         // 发送post请求
-        var result = httpHandler.postForObject(apiPrefix.concat(apiType), reqWrapper, RspWrapper.ResultModel.class);
+        var rspBody = httpHandler.postForObject(apiPrefix.concat(apiType), reqBody, RspWrapper.RspBody.class);
 
         // 解密并抽取响应
-        return rspWrapper.disassemble(result, classOfS);
+        return rspWrapper.disassemble(rspBody, classOfS);
     }
 }

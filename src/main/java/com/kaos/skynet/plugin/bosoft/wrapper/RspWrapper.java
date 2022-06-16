@@ -26,13 +26,13 @@ public class RspWrapper {
      * @param json
      * @return
      */
-    public <T> T disassemble(ResultModel result, Class<T> classOfT) {
+    public <T> T disassemble(RspBody result, Class<T> classOfT) {
         try {
             // base64解码
             String resultWrapperStr = new String(Base64.getDecoder().decode(result.data), "UTF-8");
 
             // 反序列化出resultWrapper
-            DataModel data = json.fromJson(resultWrapperStr, DataModel.class);
+            Data data = json.fromJson(resultWrapperStr, Data.class);
 
             // 反序列化出message
             String messageStr = new String(Base64.getDecoder().decode(data.getMessage()), "UTF-8");
@@ -51,7 +51,7 @@ public class RspWrapper {
     }
 
     @Getter
-    public static class ResultModel {
+    public static class RspBody {
         /**
          * 响应数据
          */
@@ -69,7 +69,7 @@ public class RspWrapper {
     }
 
     @Getter
-    public static class DataModel {
+    private static class Data {
         /**
          * 响应结果
          */
