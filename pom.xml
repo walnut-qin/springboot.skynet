@@ -87,12 +87,21 @@
 			<version>1.3.8.RELEASE</version>
 		</dependency>
 
+		<!-- 多数据源配置 -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+			<version>3.5.1</version>
+		</dependency>
+
 		<!-- 从阿里的中心仓库添加duid相关库 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid-spring-boot-starter</artifactId>
 			<version>1.2.8</version>
 		</dependency>
+
+		<!-- ORACLE数据库连接器 -->
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc</artifactId>
