@@ -18,6 +18,13 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		<!-- easypoi excel处理模块 -->
+		<dependency>
+			<groupId>cn.afterturn</groupId>
+			<artifactId>easypoi-spring-boot-starter</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+
 		<!-- thmbnail图片处理模块 -->
 		<dependency>
 			<groupId>net.coobird</groupId>
