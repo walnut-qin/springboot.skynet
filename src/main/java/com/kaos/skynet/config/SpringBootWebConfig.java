@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
+import com.kaos.skynet.core.http.converter.WorkBookHttpMessageConverter;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.converter.string.date.StandardStringToDateConverter;
 import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverterFactory;
@@ -45,6 +46,9 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
 
     @Autowired
     JsonHttpMessageConverter jsonHttpMessageConverter;
+
+    @Autowired
+    WorkBookHttpMessageConverter workBookHttpMessageConverter;
 
     /**
      * 注册converter，用于解析Http请求参数
@@ -100,6 +104,7 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 设置定制转换器，插入队列最前段，给予最高优先级
         converters.add(0, new BufferedImageHttpMessageConverter());
+        converters.add(0, workBookHttpMessageConverter);
         converters.add(0, jsonHttpMessageConverter);
 
         WebMvcConfigurer.super.extendMessageConverters(converters);

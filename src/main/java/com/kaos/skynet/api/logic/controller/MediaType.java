@@ -12,6 +12,11 @@ public final class MediaType {
     public final static String TEXT = "text/plain;charset=UTF-8";
 
     /**
+     * contentType - application/vnd.ms-excel
+     */
+    public final static String EXCEL = "application/vnd.ms-excel;charset=UTF-8";
+
+    /**
      * contentType - image/jpeg
      */
     public final static String JPEG = org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
