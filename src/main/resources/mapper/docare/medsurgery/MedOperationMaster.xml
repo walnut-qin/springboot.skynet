@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.docare.mapper.medsurgery.MedOperationMasterMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster">
+        <id column="PATIENT_ID" jdbcType="VARCHAR" property="patientId"/>
+        <id column="VISIT_ID" jdbcType="VARCHAR" property="visitId"/>
+        <id column="OPER_ID" jdbcType="VARCHAR" property="operId"/>
+        <result column="DEPT_STAYED" jdbcType="VARCHAR" property="deptStayed"/>
+        <result column="OPERATING_ROOM" jdbcType="VARCHAR" property="operatingRoom"/>
+        <result column="OPERATING_ROOM_NO" jdbcType="VARCHAR" property="operatingRoomNo"/>
+        <result column="DIAG_BEFORE_OPERATION" jdbcType="VARCHAR" property="diagBeforeOperation"/>
+        <result column="PATIENT_CONDITION" jdbcType="VARCHAR" property="patientCondition"/>
+        <result column="OPERATION_SCALE" jdbcType="VARCHAR" property="operationScale"/>
+        <result column="DIAG_AFTER_OPERATION" jdbcType="VARCHAR" property="diagAfterOperation"/>
+        <result column="EMERGENCY_INDICATOR" jdbcType="VARCHAR" property="emergencyIndicator"/>
+        <result column="OPERATING_DEPT" jdbcType="VARCHAR" property="operatingDept"/>
+        <result column="START_DATE_TIME" jdbcType="VARCHAR" property="startDateTime"/>
+        <result column="END_DATE_TIME" jdbcType="VARCHAR" property="endDateTime"/>
+        <result column="OPER_STATUS" jdbcType="VARCHAR" property="operStatus"/>
+        <result column="IN_DATE_TIME" jdbcType="VARCHAR" property="inDateTime"/>
+        <result column="OUT_DATE_TIME" jdbcType="VARCHAR" property="outDateTime"/>
+        <result column="SCHEDULED_DATE_TIME" jdbcType="VARCHAR" property="scheduledDateTime"/>
+    </resultMap>
+
+    <sql id="item">
+        PATIENT_ID,
+        VISIT_ID,
+        OPER_ID,
+        DEPT_STAYED,
+        OPERATING_ROOM,
+        OPERATING_ROOM_NO,
+        DIAG_BEFORE_OPERATION,
+        PATIENT_CONDITION,
+        OPERATION_SCALE,
+        DIAG_AFTER_OPERATION,
+        EMERGENCY_INDICATOR,
+        OPERATING_DEPT,
+        START_DATE_TIME,
+        END_DATE_TIME,
+        OPER_STATUS,
+        IN_DATE_TIME,
+        OUT_DATE_TIME,
+        SCHEDULED_DATE_TIME
+    </sql>
+
+    <select id="queryOperationMaster" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            MEDSURGERY.MED_OPERATION_MASTER
+        <where>
+            <if test="true">
+                AND PATIENT_ID = #{patientId}
+            </if>
+            <if test="true">
+                AND VISIT_ID = #{visitId}
+            </if>
+            <if test="true">
+                AND OPER_ID = #{operId}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryOperationMasters" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            MEDSURGERY.MED_OPERATION_MASTER
+        <where>
+            <if test="beginInDateTime != null">
+                AND IN_DATE_TIME &gt;= #{beginInDateTime}
+            </if>
+            <if test="endInDateTime != null">
+                AND IN_DATE_TIME &lt;= #{endInDateTime}
+            </if>
+            <if test="operStatus != null">
+                AND OPER_STATUS IN
+                <foreach collection="operStatus" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>
