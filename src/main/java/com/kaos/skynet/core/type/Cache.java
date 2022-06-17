@@ -1,6 +1,6 @@
 package com.kaos.skynet.core.type;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
@@ -24,12 +24,12 @@ public abstract class Cache<K, V> {
      * @param size
      * @param converter
      */
-    protected Cache(Integer size, Converter<K, V> converter) {
+    protected Cache(Integer size, Converter<K, V> converter, Duration refresh, Duration expire) {
         // 构造缓存实体
         this.loadingCache = CacheBuilder.newBuilder()
                 .maximumSize(size)
-                .expireAfterAccess(5, TimeUnit.MINUTES)
-                .refreshAfterWrite(15, TimeUnit.SECONDS)
+                .refreshAfterWrite(refresh)
+                .expireAfterAccess(expire)
                 .recordStats()
                 .build(new CacheLoader<K, Optional<V>>() {
                     @Override
@@ -37,6 +37,16 @@ public abstract class Cache<K, V> {
                         return Optional.fromNullable(converter.convert(key));
                     }
                 });
+    }
+
+    /**
+     * 后初始化
+     * 
+     * @param size
+     * @param converter
+     */
+    protected Cache(Integer size, Converter<K, V> converter) {
+        this(size, converter, Duration.ofSeconds(15), Duration.ofMinutes(5));
     }
 
     /**
