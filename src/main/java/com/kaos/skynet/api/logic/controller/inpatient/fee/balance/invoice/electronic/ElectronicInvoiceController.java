@@ -1,8 +1,8 @@
 package com.kaos.skynet.api.logic.controller.inpatient.fee.balance.invoice.electronic;
 
 import com.google.gson.annotations.JsonAdapter;
-import com.kaos.skynet.api.data.enums.TransTypeEnum;
-import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoiceMapper;
+import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
+import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoiceMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.json.gson.adapter.enums.ValueEnumTypeAdapter;

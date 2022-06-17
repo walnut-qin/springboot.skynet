@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.order.MetOrdiOrderMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.order.MetOrdiOrder">
+        <id column="MO_ORDER" jdbcType="VARCHAR" property="moOrder"/>
+        <result column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
+        <result column="TERM_ID" jdbcType="VARCHAR" property="termId"/>
+        <result column="TERM_NAME" jdbcType="VARCHAR" property="termName"/>
+        <result column="MO_STATE" jdbcType="VARCHAR" property="state"/>
+        <result column="MO_DOC" jdbcType="VARCHAR" property="moDocCode"/>
+        <result column="MO_DATE" jdbcType="VARCHAR" property="moDate"/>
+        <result column="EXEC_DEPT" jdbcType="VARCHAR" property="execDeptCode"/>
+    </resultMap>
+
+    <sql id="item">
+        MO_ORDER,
+        INPATIENT_NO,
+        TERM_ID,
+        TERM_NAME,
+        MO_STATE,
+        MO_DOC,
+        MO_DATE,
+        EXEC_DEPT
+    </sql>
+
+    <select id="queryOrder" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            HIS_FSHV1.MET_ORDI_ORDER
+        <where>
+            <if test="true">
+                AND MO_ORDER = #{moOrder}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryOrders" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            HIS_FSHV1.MET_ORDI_ORDER
+        <where>
+            <if test="inpatientNo != null">
+                AND INPATIENT_NO = #{inpatientNo}
+            </if>
+            <if test="termId != null">
+                AND TERM_ID = #{termId}
+            </if>
+            <if test="beginMoDate != null">
+                AND MO_DATE &gt;= #{beginMoDate} + 0
+            </if>
+            <if test="endMoDate != null">
+                AND MO_DATE &lt;= #{endMoDate} + 0
+            </if>
+        </where>
+    </select>
+</mapper>

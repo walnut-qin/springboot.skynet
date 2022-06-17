@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.fee.FinIpbInPrepayMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.fee.FinIpbInPrepay">
+        <id column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
+        <id column="HAPPEN_NO" jdbcType="VARCHAR" property="happenNo"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="PREPAY_COST" jdbcType="VARCHAR" property="prepayCost"/>
+        <result column="PAY_WAY" jdbcType="VARCHAR" property="payWay"/>
+        <result column="DEPT_CODE" jdbcType="VARCHAR" property="deptCode"/>
+        <result column="RECEIPT_NO" jdbcType="VARCHAR" property="receiptNo"/>
+        <result column="STAT_DATE" jdbcType="VARCHAR" property="statDate"/>
+        <result column="BALANCE_DATE" jdbcType="VARCHAR" property="balanceDate"/>
+        <result column="BALANCE_STATE" jdbcType="VARCHAR" property="balanceState"/>
+        <result column="PREPAY_STATE" jdbcType="VARCHAR" property="prepayState"/>
+        <result column="OLD_RECIPENO" jdbcType="VARCHAR" property="oldRecipeNo"/>
+        <result column="OPEN_BANK" jdbcType="VARCHAR" property="openBank"/>
+        <result column="OPEN_ACCOUNTS" jdbcType="VARCHAR" property="openAccounts"/>
+        <result column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
+        <result column="BALANCE_NO" jdbcType="VARCHAR" property="balanceNo"/>
+        <result column="BALANCE_OPERCODE" jdbcType="VARCHAR" property="balanceOperCode"/>
+        <result column="REPORT_FLAG" jdbcType="VARCHAR" property="reportFlag"/>
+        <result column="CHECK_NO" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="FINGRP_CODE" jdbcType="VARCHAR" property="finFrpCode"/>
+        <result column="WORK_NAME" jdbcType="VARCHAR" property="workName"/>
+        <result column="TRANS_FLAG" jdbcType="VARCHAR" property="transFlag"/>
+        <result column="CHANGE_BALANCE_NO" jdbcType="VARCHAR" property="changeBalanceNo"/>
+        <result column="TRANS_CODE" jdbcType="VARCHAR" property="transCode"/>
+        <result column="TRANS_DATE" jdbcType="VARCHAR" property="transDate"/>
+        <result column="PRINT_FLAG" jdbcType="VARCHAR" property="printFlag"/>
+        <result column="EXT_FLAG" jdbcType="VARCHAR" property="extFlag"/>
+        <result column="EXT1_FLAG" jdbcType="VARCHAR" property="ext1Flag"/>
+        <result column="POSTRANS_NO" jdbcType="VARCHAR" property="posTransNo"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+        <result column="OPER_DEPTCODE" jdbcType="VARCHAR" property="operDeptCode"/>
+        <result column="MEMO" jdbcType="VARCHAR" property="memo"/>
+        <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
+        <result column="EMPLOYEEOWN" jdbcType="VARCHAR" property="employeeOwn"/>
+        <result column="REFERNUM" jdbcType="VARCHAR" property="referNum"/>
+    </resultMap>
+
+    <sql id="item">
+        INPATIENT_NO,
+        HAPPEN_NO,
+        NAME,
+        PREPAY_COST,
+        PAY_WAY,
+        DEPT_CODE,
+        RECEIPT_NO,
+        STAT_DATE,
+        BALANCE_DATE,
+        BALANCE_STATE,
+        PREPAY_STATE,
+        OLD_RECIPENO,
+        OPEN_BANK,
+        OPEN_ACCOUNTS,
+        INVOICE_NO,
+        BALANCE_NO,
+        BALANCE_OPERCODE,
+        REPORT_FLAG,
+        CHECK_NO,
+        FINGRP_CODE,
+        WORK_NAME,
+        TRANS_FLAG,
+        CHANGE_BALANCE_NO,
+        TRANS_CODE,
+        TRANS_DATE,
+        PRINT_FLAG,
+        EXT_FLAG,
+        EXT1_FLAG,
+        POSTRANS_NO,
+        OPER_CODE,
+        OPER_DATE,
+        OPER_DEPTCODE,
+        MEMO,
+        DEPTOWN,
+        EMPLOYEEOWN,
+        REFERNUM
+    </sql>
+
+    <select id="queryPrepays" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_INPREPAY
+        <where>
+            <if test = "inpatientNo != null">
+                AND INPATIENT_NO = #{inpatientNo}
+            </if>
+            <if test = "balanceState != null">
+                AND BALANCE_STATE = #{balanceState}
+            </if>
+        </where>
+    </select>
+
+    <update id="updatePrepay">
+        UPDATE
+            XYHIS.FIN_IPB_INPREPAY
+        <trim prefix="SET" suffixOverrides=",">
+            <if test = "true">
+                NAME = #{name},
+            </if>
+            <if test = "true">
+                PREPAY_COST = #{prepayCost},
+            </if>
+            <if test = "true">
+                PAY_WAY = #{payWay},
+            </if>
+            <if test = "true">
+                DEPT_CODE = #{deptCode},
+            </if>
+            <if test = "true">
+                RECEIPT_NO = #{receiptNo},
+            </if>
+            <if test = "true">
+                STAT_DATE = #{statDate},
+            </if>
+            <if test = "true">
+                BALANCE_DATE = #{balanceDate},
+            </if>
+            <if test = "true">
+                BALANCE_STATE = #{balanceState},
+            </if>
+            <if test = "true">
+                PREPAY_STATE = #{prepayState},
+            </if>
+            <if test = "true">
+                OLD_RECIPENO = #{oldRecipeNo},
+            </if>
+            <if test = "true">
+                OPEN_BANK = #{openBank},
+            </if>
+            <if test = "true">
+                OPEN_ACCOUNTS = #{openAccounts},
+            </if>
+            <if test = "true">
+                INVOICE_NO = #{invoiceNo},
+            </if>
+            <if test = "true">
+                BALANCE_NO = #{balanceNo},
+            </if>
+            <if test = "true">
+                BALANCE_OPERCODE = #{balanceOperCode},
+            </if>
+            <if test = "true">
+                REPORT_FLAG = #{reportFlag},
+            </if>
+            <if test = "true">
+                CHECK_NO = #{checkNo},
+            </if>
+            <if test = "true">
+                FINGRP_CODE = #{finFrpCode},
+            </if>
+            <if test = "true">
+                WORK_NAME = #{workName},
+            </if>
+            <if test = "true">
+                TRANS_FLAG = #{transFlag},
+            </if>
+            <if test = "true">
+                CHANGE_BALANCE_NO = #{changeBalanceNo},
+            </if>
+            <if test = "true">
+                TRANS_CODE = #{transCode},
+            </if>
+            <if test = "true">
+                TRANS_DATE = #{transDate},
+            </if>
+            <if test = "true">
+                PRINT_FLAG = #{printFlag},
+            </if>
+            <if test = "true">
+                EXT_FLAG = #{extFlag},
+            </if>
+            <if test = "true">
+                EXT1_FLAG = #{ext1Flag},
+            </if>
+            <if test = "true">
+                POSTRANS_NO = #{posTransNo},
+            </if>
+            <if test = "true">
+                OPER_CODE = #{operCode},
+            </if>
+            <if test = "true">
+                OPER_DATE = #{operDate},
+            </if>
+            <if test = "true">
+                OPER_DEPTCODE = #{operDeptCode},
+            </if>
+            <if test = "true">
+                MEMO = #{memo},
+            </if>
+            <if test = "true">
+                DEPTOWN = #{deptOwn},
+            </if>
+            <if test = "true">
+                EMPLOYEEOWN = #{employeeOwn},
+            </if>
+            <if test = "true">
+                REFERNUM = #{referNum},
+            </if>
+        </trim>
+        <where>
+            <if test="true">
+                AND INPATIENT_NO = #{inpatientNo}
+            </if>
+            <if test="true">
+                AND HAPPEN_NO = #{happenNo}
+            </if>
+        </where>
+    </update>
+</mapper>

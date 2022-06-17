@@ -3,12 +3,12 @@ package com.kaos.skynet.api.logic.service.inpatient.fee.prepay;
 import java.util.List;
 import java.util.Objects;
 
-import com.kaos.skynet.api.data.entity.inpatient.fee.FinIpbInPrepay;
-import com.kaos.skynet.api.data.entity.inpatient.fee.balance.FinIpbBalanceHead.BalanceStateEnum;
-import com.kaos.skynet.api.data.enums.TransTypeEnum;
-import com.kaos.skynet.api.data.mapper.inpatient.fee.FinIpbInPrepayMapper;
-import com.kaos.skynet.api.data.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
-import com.kaos.skynet.api.data.mapper.outpatient.fee.FinOprPayModelMapper;
+import com.kaos.skynet.api.data.his.entity.inpatient.fee.FinIpbInPrepay;
+import com.kaos.skynet.api.data.his.entity.inpatient.fee.balance.FinIpbBalanceHead.BalanceStateEnum;
+import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
+import com.kaos.skynet.api.data.his.mapper.inpatient.fee.FinIpbInPrepayMapper;
+import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
+import com.kaos.skynet.api.data.his.mapper.outpatient.fee.FinOprPayModelMapper;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 

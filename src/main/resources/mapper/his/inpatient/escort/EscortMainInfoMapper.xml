@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortMainInfo">
+        <id column="ESCORT_NO" jdbcType="VARCHAR" property="escortNo"/>
+        <result column="PATIENT_CARD_NO" jdbcType="VARCHAR" property="patientCardNo"/>
+        <result column="HAPPEN_NO" jdbcType="VARCHAR" property="happenNo"/>
+        <result column="HELPER_CARD_NO" jdbcType="VARCHAR" property="helperCardNo"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <sql id="item">
+        ESCORT_NO,
+        PATIENT_CARD_NO,
+        HAPPEN_NO,
+        HELPER_CARD_NO,
+        REMARK
+    </sql>
+
+    <select id="queryEscortMainInfo" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            KAOS.ESCORT_MAIN_INFO
+        <where>
+            <if test="true">
+                AND ESCORT_NO = #{escortNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryEscortMainInfos" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+        (
+            SELECT
+                T1.*,
+                T2.STATE,
+                ROW_NUMBER() OVER (PARTITION BY T2.ESCORT_NO ORDER BY T2.REC_NO DESC) AS IDX
+            FROM
+                KAOS.ESCORT_MAIN_INFO T1
+                LEFT JOIN KAOS.ESCORT_STATE_REC T2 ON T2.ESCORT_NO = T1.ESCORT_NO
+        <if test="true">
+            <where>
+                <if test="patientCardNo != null">
+                    AND PATIENT_CARD_NO = #{patientCardNo}
+                </if>
+                <if test="patientCardNos != null">
+                    AND PATIENT_CARD_NO IN
+                    <foreach collection="patientCardNos" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="happenNo != null">
+                    AND HAPPEN_NO = #{happenNo}
+                </if>
+                <if test="helperCardNo != null">
+                    AND HELPER_CARD_NO = #{helperCardNo}
+                </if>
+            </where>
+        </if>
+        )
+        <where>
+            <if test = "true">
+                AND IDX = 1
+            </if>
+            <if test="states != null">
+                AND STATE IN
+                <foreach collection="states" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertEscortMainInfo">
+        INSERT INTO
+            KAOS.ESCORT_MAIN_INFO(ESCORT_NO, PATIENT_CARD_NO, HAPPEN_NO, HELPER_CARD_NO, REMARK)
+        VALUES
+            (#{escortNo}, #{patientCardNo}, #{happenNo}, #{helperCardNo}, #{remark})
+    </insert>
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.fee.FinIpbFeeInfoMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.fee.FinIpbFeeInfo">
+        <id column="RECIPE_NO" jdbcType="VARCHAR" property="recipeNo"/>
+        <id column="FEE_CODE" jdbcType="VARCHAR" property="feeCode"/>
+        <id column="EXECUTE_DEPTCODE" jdbcType="VARCHAR" property="executeDeptCode"/>
+        <id column="BALANCE_NO" jdbcType="VARCHAR" property="balanceNo"/>
+        <result column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
+        <result column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="PAYKIND_CODE" jdbcType="VARCHAR" property="payKind"/>
+        <result column="PACT_CODE" jdbcType="VARCHAR" property="pactCode"/>
+        <result column="INHOS_DEPTCODE" jdbcType="VARCHAR" property="inHosDeptCode"/>
+        <result column="NURSE_CELL_CODE" jdbcType="VARCHAR" property="nurseCellCode"/>
+        <result column="RECIPE_DEPTCODE" jdbcType="VARCHAR" property="recipeDeptCode"/>
+        <result column="STOCK_DEPTCODE" jdbcType="VARCHAR" property="stockDeptCode"/>
+        <result column="RECIPE_DOCCODE" jdbcType="VARCHAR" property="recipeDocCode"/>
+        <result column="TOT_COST" jdbcType="VARCHAR" property="totCost"/>
+        <result column="OWN_COST" jdbcType="VARCHAR" property="ownCost"/>
+        <result column="PAY_COST" jdbcType="VARCHAR" property="payCost"/>
+        <result column="PUB_COST" jdbcType="VARCHAR" property="pubCost"/>
+        <result column="ECO_COST" jdbcType="VARCHAR" property="ecoCost"/>
+        <result column="CHARGE_OPERCODE" jdbcType="VARCHAR" property="chargeOperCode"/>
+        <result column="CHARGE_DATE" jdbcType="VARCHAR" property="chargeDate"/>
+        <result column="FEE_OPERCODE" jdbcType="VARCHAR" property="feeOperCode"/>
+        <result column="FEE_DATE" jdbcType="VARCHAR" property="feeDate"/>
+        <result column="BALANCE_OPERCODE" jdbcType="VARCHAR" property="balanceOperCode"/>
+        <result column="BALANCE_DATE" jdbcType="VARCHAR" property="balanceDate"/>
+        <result column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
+        <result column="BALANCE_STATE" jdbcType="VARCHAR" property="balanceState"/>
+        <result column="CHECK_NO" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="BABY_FLAG" jdbcType="VARCHAR" property="babyFlag"/>
+        <result column="EXT_FLAG" jdbcType="VARCHAR" property="extFlag"/>
+        <result column="EXT_CODE" jdbcType="VARCHAR" property="extCode"/>
+        <result column="EXT_DATE" jdbcType="VARCHAR" property="extDate"/>
+        <result column="EXT_OPERCODE" jdbcType="VARCHAR" property="extOperCode"/>
+        <result column="FEEOPER_DEPTCODE" jdbcType="VARCHAR" property="feeOperDeptCode"/>
+        <result column="EXT_FLAG1" jdbcType="VARCHAR" property="extFlag1"/>
+        <result column="EXT_FLAG2" jdbcType="VARCHAR" property="extFlag2"/>
+        <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
+        <result column="EMPLOYEEOWN" jdbcType="VARCHAR" property="employeeOwn"/>
+        <result column="WZ_APPLY_NO" jdbcType="VARCHAR" property="wzApplyNo"/>
+    </resultMap>
+
+    <sql id="item">
+        RECIPE_NO,
+        FEE_CODE,
+        EXECUTE_DEPTCODE,
+        BALANCE_NO,
+        TRANS_TYPE,
+        INPATIENT_NO,
+        NAME,
+        PAYKIND_CODE,
+        PACT_CODE,
+        INHOS_DEPTCODE,
+        NURSE_CELL_CODE,
+        RECIPE_DEPTCODE,
+        STOCK_DEPTCODE,
+        RECIPE_DOCCODE,
+        TOT_COST,
+        OWN_COST,
+        PAY_COST,
+        PUB_COST,
+        ECO_COST,
+        CHARGE_OPERCODE,
+        CHARGE_DATE,
+        FEE_OPERCODE,
+        FEE_DATE,
+        BALANCE_OPERCODE,
+        BALANCE_DATE,
+        INVOICE_NO,
+        BALANCE_STATE,
+        CHECK_NO,
+        BABY_FLAG,
+        EXT_FLAG,
+        EXT_CODE,
+        EXT_DATE,
+        EXT_OPERCODE,
+        FEEOPER_DEPTCODE,
+        EXT_FLAG1,
+        EXT_FLAG2,
+        DEPTOWN,
+        EMPLOYEEOWN,
+        WZ_APPLY_NO
+    </sql>
+
+    <select id="queryFeeInfos" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_FEEINFO
+        <where>
+            <if test = "deptCode != null">
+                AND EXECUTE_DEPTCODE = #{deptCode}
+            </if>
+            <if test = "beginFeeDate != null">
+                AND FEE_DATE &gt;= #{beginFeeDate} + 0
+            </if>
+            <if test = "endFeeDate != null">
+                AND FEE_DATE &lt;= #{endFeeDate} + 0
+            </if>
+        </where>
+    </select>
+</mapper>

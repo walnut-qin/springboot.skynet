@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.surgery.MetOpsApplyMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.surgery.MetOpsApply">
+        <id column="OPERATIONNO" jdbcType="VARCHAR" property="operationNo"/>
+        <result column="CLINIC_CODE" jdbcType="VARCHAR" property="clinicCode"/>
+        <result column="PATIENT_NO" jdbcType="VARCHAR" property="patientNo"/>
+        <result column="DEPT_CODE" jdbcType="VARCHAR" property="inDeptCode"/>
+        <result column="DIAGNOSE" jdbcType="VARCHAR" property="diagnosis"/>
+        <result column="OPS_KIND" jdbcType="VARCHAR" property="surgeryKind"/>
+        <result column="OPS_DOCD" jdbcType="VARCHAR" property="opsDocCode"/>
+        <result column="GUI_DOCD" jdbcType="VARCHAR" property="guiDocCode"/>
+        <result column="PRE_DATE" jdbcType="VARCHAR" property="preDate"/>
+        <result column="ANES_TYPE" jdbcType="VARCHAR" property="anesType"/>
+        <result column="EXEC_DEPT" jdbcType="VARCHAR" property="surgeryDeptCode"/>
+        <result column="APPLY_DOCD" jdbcType="VARCHAR" property="applyDocCode"/>
+        <result column="APPLY_DATE" jdbcType="VARCHAR" property="applyDate"/>
+        <result column="APPLY_NOTE" jdbcType="VARCHAR" property="applyNote"/>
+        <result column="APPR_DOCD" jdbcType="VARCHAR" property="apprDocCode"/>
+        <result column="APPR_DATE" jdbcType="VARCHAR" property="apprDate"/>
+        <result column="APPR_NOTE" jdbcType="VARCHAR" property="apprNote"/>
+        <result column="ANES_DOCD" jdbcType="VARCHAR" property="anesDocCode"/>
+        <result column="DEGREE" jdbcType="VARCHAR" property="degree"/>
+        <result column="INCI_TYPE" jdbcType="VARCHAR" property="inciType"/>
+        <result column="SCREENUP" jdbcType="VARCHAR" property="firstFlag"/>
+        <result column="BLOOD_NUM" jdbcType="VARCHAR" property="inspectResult"/>
+        <result column="BLOOD_UNIT" jdbcType="VARCHAR" property="order"/>
+        <result column="EXECSTATUS" jdbcType="VARCHAR" property="surgeryStatus"/>
+        <result column="YNFINISHED" jdbcType="VARCHAR" property="finishFlag"/>
+        <result column="YNANESTH" jdbcType="VARCHAR" property="anesFlag"/>
+        <result column="FOLK" jdbcType="VARCHAR" property="unplannedFlag"/>
+        <result column="RELA_CODE" jdbcType="VARCHAR" property="signedFlag"/>
+        <result column="YNCHANGE" jdbcType="VARCHAR" property="chargeFlag"/>
+        <result column="YNHEAVY" jdbcType="VARCHAR" property="heavyFlag"/>
+        <result column="YNSPECIAL" jdbcType="VARCHAR" property="specialFlag"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="operCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate"/>
+        <result column="YNVALID" jdbcType="VARCHAR" property="valid"/>
+        <result column="ROOM_ID" jdbcType="VARCHAR" property="roomId"/>
+        <result column="POSITION" jdbcType="VARCHAR" property="position"/>
+        <result column="ISCANCEL" jdbcType="VARCHAR" property="cancelFlag"/>
+        <result column="SEEFLAG" jdbcType="VARCHAR" property="publishFlag"/>
+        <result column="AGAINPLAN" jdbcType="VARCHAR" property="surgeryNameNote"/>
+        <result column="OPERMARK" jdbcType="VARCHAR" property="operRemark"/>
+        <result column="CLINICCODE" jdbcType="VARCHAR" property="daySurgeryClinicCode"/>
+        <result column="FROZEN_FLAG" jdbcType="VARCHAR" property="frozenFlag"/>
+        <result column="FROZEN_BEGIN_DATE" jdbcType="VARCHAR" property="beginFrozenDate"/>
+        <result column="FROZEN_END_DATE" jdbcType="VARCHAR" property="endFrozenDate"/>
+        <result column="ICU_FLAG" jdbcType="VARCHAR" property="icuFlag"/>
+    </resultMap>
+
+    <sql id="item">
+        OPERATIONNO,
+        CLINIC_CODE,
+        PATIENT_NO,
+        DEPT_CODE,
+        DIAGNOSE,
+        OPS_KIND,
+        OPS_DOCD,
+        GUI_DOCD,
+        PRE_DATE,
+        ANES_TYPE,
+        EXEC_DEPT,
+        APPLY_DOCD,
+        APPLY_DATE,
+        APPLY_NOTE,
+        APPR_DOCD,
+        APPR_DATE,
+        APPR_NOTE,
+        ANES_DOCD,
+        DEGREE,
+        INCI_TYPE,
+        SCREENUP,
+        BLOOD_NUM,
+        BLOOD_UNIT,
+        EXECSTATUS,
+        YNFINISHED,
+        YNANESTH,
+        FOLK,
+        RELA_CODE,
+        YNCHANGE,
+        YNHEAVY,
+        YNSPECIAL,
+        OPER_CODE,
+        OPER_DATE,
+        YNVALID,
+        ROOM_ID,
+        POSITION,
+        ISCANCEL,
+        SEEFLAG,
+        AGAINPLAN,
+        OPERMARK,
+        CLINICCODE,
+        FROZEN_FLAG,
+        FROZEN_BEGIN_DATE,
+        FROZEN_END_DATE,
+        ICU_FLAG
+    </sql>
+
+    <select id="queryApply" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            MET_OPS_APPLY
+        <where>
+            <if test = "true">
+                AND OPERATIONNO = #{operationNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryApplies" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            MET_OPS_APPLY
+        <where>
+            <if test="patientNo != null">
+                AND PATIENT_NO = #{patientNo}
+            </if>
+            <if test="execDeptCode != null">
+                AND EXEC_DEPT = #{execDeptCode}
+            </if>
+            <if test="beginPreDate != null">
+                AND PRE_DATE &gt;= #{beginPreDate}
+            </if>
+            <if test="endPreDate != null">
+                AND PRE_DATE &lt;= #{endPreDate}
+            </if>
+            <if test="execStatus != null">
+                AND EXECSTATUS IN
+                <foreach collection="execStatus" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="anesFlag != null">
+                AND YNANESTH = #{anesFlag}
+            </if>
+            <if test="valid != null">
+                AND YNVALID = #{valid}
+            </if>
+            <if test="deptOwn != null and deptOwn != @com.kaos.skynet.api.data.his.enums.DeptOwnEnum@All">
+                AND DEPTOWN = #{deptOwn}
+            </if>
+        </where>
+    </select>
+</mapper>

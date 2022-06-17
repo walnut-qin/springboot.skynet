@@ -2,8 +2,8 @@ package com.kaos.skynet.api.logic.controller.common;
 
 import javax.validation.constraints.NotBlank;
 
-import com.kaos.skynet.api.data.cache.common.config.ConfigSwitchCache;
-import com.kaos.skynet.api.data.enums.ValidEnum;
+import com.kaos.skynet.api.data.his.cache.common.config.ConfigSwitchCache;
+import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;

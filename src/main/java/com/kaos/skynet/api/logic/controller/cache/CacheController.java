@@ -2,7 +2,7 @@ package com.kaos.skynet.api.logic.controller.cache;
 
 import java.util.Map;
 
-import com.kaos.skynet.api.data.cache.DataCache;
+import com.kaos.skynet.api.data.his.cache.DataCache;
 import com.kaos.skynet.api.logic.controller.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;

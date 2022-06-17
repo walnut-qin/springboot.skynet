@@ -4,11 +4,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Optional;
-import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
-import com.kaos.skynet.api.data.cache.common.config.ConfigMultiMapCache;
-import com.kaos.skynet.api.data.cache.outpatient.FinOprRegisterCache;
-import com.kaos.skynet.api.data.enums.TransTypeEnum;
-import com.kaos.skynet.api.data.enums.ValidEnum;
+import com.kaos.skynet.api.data.his.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.his.cache.common.config.ConfigMultiMapCache;
+import com.kaos.skynet.api.data.his.cache.outpatient.FinOprRegisterCache;
+import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
+import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;

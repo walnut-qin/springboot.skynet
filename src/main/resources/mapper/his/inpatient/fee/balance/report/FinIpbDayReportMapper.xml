@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.report.FinIpbDayReportMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.fee.balance.report.FinIpbDayReport">
+        <id column="STAT_NO" jdbcType="VARCHAR" property="statNo"/>
+        <result column="BEGIN_DATE" jdbcType="VARCHAR" property="beginDate"/>
+        <result column="END_DATE" jdbcType="VARCHAR" property="endDate"/>
+        <result column="OPER_CODE" jdbcType="VARCHAR" property="rptEmplCode"/>
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="rptOperDate"/>
+        <result column="CHECK_FLAG" jdbcType="VARCHAR" property="chkFlag"/>
+        <result column="CHECK_OPER" jdbcType="VARCHAR" property="chkEmplCode"/>
+        <result column="CHECK_DATE" jdbcType="VARCHAR" property="chkDate"/>
+    </resultMap>
+
+    <sql id="item">
+        STAT_NO,
+        BEGIN_DATE,
+        END_DATE,
+        OPER_CODE,
+        OPER_DATE,
+        CHECK_FLAG,
+        CHECK_OPER,
+        CHECK_DATE
+    </sql>
+
+    <select id="queryDayReport" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_DAYREPORT
+        <where>
+            <if test = "true">
+                AND STAT_NO = #{statNo}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryDayReprots" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_DAYREPORT
+        <where>
+            <if test = "beginRptDate != null">
+                AND OPER_DATE &gt;= #{beginRptDate} + 0
+            </if>
+            <if test = "endRptDate != null">
+                AND OPER_DATE &lt;= #{endRptDate} + 0
+            </if>
+            <if test = "deptOwn != null and deptOwn != @com.kaos.skynet.api.data.his.enums.DeptOwnEnum@All">
+                AND DEPTOWN = #{deptOwn}
+            </if>
+        </where>
+    </select>
+</mapper>

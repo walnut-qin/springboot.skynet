@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.fee.FinIpbMedicineListMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.fee.FinIpbMedicineList">
+        <id column="RECIPE_NO" jdbcType="VARCHAR" property="recipeNo"/>
+        <id column="SEQUENCE_NO" jdbcType="VARCHAR" property="sequenceNo"/>
+        <id column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
+        <result column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="PAYKIND_CODE" jdbcType="VARCHAR" property="payKind"/>
+        <result column="PACT_CODE" jdbcType="VARCHAR" property="pactCode"/>
+        <result column="INHOS_DEPTCODE" jdbcType="VARCHAR" property="inHosDeptCode"/>
+        <result column="NURSE_CELL_CODE" jdbcType="VARCHAR" property="nurseCellCode"/>
+        <result column="RECIPE_DEPTCODE" jdbcType="VARCHAR" property="recipeDeptCode"/>
+        <result column="EXECUTE_DEPTCODE" jdbcType="VARCHAR" property="executeDeptCode"/>
+        <result column="MEDICINE_DEPTCODE" jdbcType="VARCHAR" property="medicineDeptCode"/>
+        <result column="RECIPE_DOCCODE" jdbcType="VARCHAR" property="recipeDocCode"/>
+        <result column="DRUG_CODE" jdbcType="VARCHAR" property="drugCode"/>
+        <result column="FEE_CODE" jdbcType="VARCHAR" property="feeCode"/>
+        <result column="CENTER_CODE" jdbcType="VARCHAR" property="centerCode"/>
+        <result column="DRUG_NAME" jdbcType="VARCHAR" property="drugName"/>
+        <result column="SPECS" jdbcType="VARCHAR" property="specs"/>
+        <result column="DRUG_TYPE" jdbcType="VARCHAR" property="drugType"/>
+        <result column="DRUG_QUALITY" jdbcType="VARCHAR" property="drugQuality"/>
+        <result column="HOME_MADE_FLAG" jdbcType="VARCHAR" property="homeMadeFlag"/>
+        <result column="UNIT_PRICE" jdbcType="VARCHAR" property="unitPrice"/>
+        <result column="CURRENT_UNIT" jdbcType="VARCHAR" property="currentUnit"/>
+        <result column="PACK_QTY" jdbcType="VARCHAR" property="packQty"/>
+        <result column="QTY" jdbcType="VARCHAR" property="qty"/>
+        <result column="DAYS" jdbcType="VARCHAR" property="days"/>
+        <result column="TOT_COST" jdbcType="VARCHAR" property="totCost"/>
+        <result column="OWN_COST" jdbcType="VARCHAR" property="ownCost"/>
+        <result column="PAY_COST" jdbcType="VARCHAR" property="payCost"/>
+        <result column="PUB_COST" jdbcType="VARCHAR" property="pubCost"/>
+        <result column="ECO_COST" jdbcType="VARCHAR" property="ecoCost"/>
+        <result column="UPDATE_SEQUENCENO" jdbcType="VARCHAR" property="updateSequenceNo"/>
+        <result column="SENDDRUG_SEQUENCE" jdbcType="VARCHAR" property="sendMatSequence"/>
+        <result column="SENDDRUG_FLAG" jdbcType="VARCHAR" property="sendFlag"/>
+        <result column="BABY_FLAG" jdbcType="VARCHAR" property="babyFlag"/>
+        <result column="JZQJ_FLAG" jdbcType="VARCHAR" property="jzqjFlag"/>
+        <result column="BROUGHT_FLAG" jdbcType="VARCHAR" property="broughtFlag"/>
+        <result column="EXT_FLAG" jdbcType="VARCHAR" property="extFlag"/>
+        <result column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
+        <result column="BALANCE_NO" jdbcType="VARCHAR" property="balanceNo"/>
+        <result column="BALANCE_STATE" jdbcType="VARCHAR" property="balanceState"/>
+        <result column="NOBACK_NUM" jdbcType="VARCHAR" property="noBackNum"/>
+        <result column="EXT_CODE" jdbcType="VARCHAR" property="extCode"/>
+        <result column="EXT_OPERCODE" jdbcType="VARCHAR" property="extOperCode"/>
+        <result column="EXT_DATE" jdbcType="VARCHAR" property="extDate"/>
+        <result column="APPRNO" jdbcType="VARCHAR" property="apprNo"/>
+        <result column="CHARGE_OPERCODE" jdbcType="VARCHAR" property="chargeOperCode"/>
+        <result column="CHARGE_DATE" jdbcType="VARCHAR" property="chargeDate"/>
+        <result column="FEE_OPERCODE" jdbcType="VARCHAR" property="feeOperCode"/>
+        <result column="FEE_DATE" jdbcType="VARCHAR" property="feeDate"/>
+        <result column="EXEC_OPERCODE" jdbcType="VARCHAR" property="execOperCode"/>
+        <result column="EXEC_DATE" jdbcType="VARCHAR" property="execDate"/>
+        <result column="SENDDRUG_OPERCODE" jdbcType="VARCHAR" property="sendDrugOperCode"/>
+        <result column="SENDDRUG_DATE" jdbcType="VARCHAR" property="sendDrugDate"/>
+        <result column="CHECK_OPERCODE" jdbcType="VARCHAR" property="checkOperCode"/>
+        <result column="CHECK_NO" jdbcType="VARCHAR" property="checkNo"/>
+        <result column="MO_ORDER" jdbcType="VARCHAR" property="moOrder"/>
+        <result column="MO_EXEC_SQN" jdbcType="VARCHAR" property="moExecSqn"/>
+        <result column="FEE_RATE" jdbcType="VARCHAR" property="feeRate"/>
+        <result column="FEEOPER_DEPTCODE" jdbcType="VARCHAR" property="feeOperDeptCode"/>
+        <result column="UPLOAD_FLAG" jdbcType="VARCHAR" property="uploadFlag"/>
+        <result column="EXT_FLAG2" jdbcType="VARCHAR" property="extFlag1"/>
+        <result column="EXT_FLAG1" jdbcType="VARCHAR" property="extFlag2"/>
+        <result column="EXT_FLAG3" jdbcType="VARCHAR" property="extFlag3"/>
+        <result column="MEDICALTEAM_CODE" jdbcType="VARCHAR" property="medicalTeamCode"/>
+        <result column="OPERATIONNO" jdbcType="VARCHAR" property="operationNo"/>
+        <result column="TRANSACTION_SEQUENCE_NUMBER" jdbcType="VARCHAR" property="transactionSequenceNumber"/>
+        <result column="SI_TRANSACTION_DATETIME" jdbcType="VARCHAR" property="siTransactionDateTime"/>
+        <result column="HIS_RECIPE_NO" jdbcType="VARCHAR" property="hisRecipeNo"/>
+        <result column="SI_RECIPE_NO" jdbcType="VARCHAR" property="siRecipeNo"/>
+        <result column="HIS_CANCEL_RECIPE_NO" jdbcType="VARCHAR" property="hisCancelRecipeNo"/>
+        <result column="SI_CANCEL_RECIPE_NO" jdbcType="VARCHAR" property="siCancelRecipeNo"/>
+        <result column="EXT_FLAG4" jdbcType="VARCHAR" property="extFlag4"/>
+        <result column="EXT_FLAG5" jdbcType="VARCHAR" property="extFlag5"/>
+        <result column="CHARGE_DOCT" jdbcType="VARCHAR" property="chargeDocCode"/>
+        <result column="CHARGE_MEDICALTEAM" jdbcType="VARCHAR" property="chargeMedicalTeam"/>
+        <result column="LOCAL_EXT_FLAG1" jdbcType="VARCHAR" property="localExtFlag1"/>
+        <result column="LOCAL_EXT_FLAG2" jdbcType="VARCHAR" property="localExtFlag2"/>
+        <result column="LOCAL_EXT_FLAG3" jdbcType="VARCHAR" property="localExtFlag3"/>
+        <result column="LOCAL_EXT_FLAG4" jdbcType="VARCHAR" property="localExtFlag4"/>
+        <result column="HIS_CANCEL_RECIPE_SEQUENCE_NO" jdbcType="VARCHAR" property="hisCanCelRecipeSequenceNo"/>
+        <result column="GROUP_CODE" jdbcType="VARCHAR" property="groupCode"/>
+        <result column="LONG_FLAG" jdbcType="VARCHAR" property="longFlag"/>
+        <result column="DEPTOWN" jdbcType="VARCHAR" property="deptOwn"/>
+        <result column="EMPLOYEEOWN" jdbcType="VARCHAR" property="employeeOwn"/>
+        <result column="OTINVOICENO" jdbcType="VARCHAR" property="otInvoiceNo"/>
+        <result column="JPFLAG" jdbcType="VARCHAR" property="jpFlag"/>
+        <result column="JPDATE" jdbcType="VARCHAR" property="jpDate"/>
+        <result column="JPOPER" jdbcType="VARCHAR" property="jpOperCode"/>
+        <result column="UPLOAD_OPER" jdbcType="VARCHAR" property="uploadOperCode"/>
+        <result column="UPLOAD_DATE" jdbcType="VARCHAR" property="uploadDate"/>
+        <result column="UPLOAD_IP" jdbcType="VARCHAR" property="uploadIP"/>
+        <result column="SELFPAY_PROP" jdbcType="VARCHAR" property="selfPayProp"/>
+        <result column="FULAMT_OWNPAY_AMT" jdbcType="VARCHAR" property="fulAmtOwnPayAmt"/>
+        <result column="CENTER_FEE_CODE" jdbcType="VARCHAR" property="centerFeeCode"/>
+    </resultMap>
+
+    <sql id="item">
+        RECIPE_NO,
+        SEQUENCE_NO,
+        TRANS_TYPE,
+        INPATIENT_NO,
+        NAME,
+        PAYKIND_CODE,
+        PACT_CODE,
+        INHOS_DEPTCODE,
+        NURSE_CELL_CODE,
+        RECIPE_DEPTCODE,
+        EXECUTE_DEPTCODE,
+        MEDICINE_DEPTCODE,
+        RECIPE_DOCCODE,
+        DRUG_CODE,
+        FEE_CODE,
+        CENTER_CODE,
+        DRUG_NAME,
+        SPECS,
+        DRUG_TYPE,
+        DRUG_QUALITY,
+        HOME_MADE_FLAG,
+        UNIT_PRICE,
+        CURRENT_UNIT,
+        PACK_QTY,
+        QTY,
+        DAYS,
+        TOT_COST,
+        OWN_COST,
+        PAY_COST,
+        PUB_COST,
+        ECO_COST,
+        UPDATE_SEQUENCENO,
+        SENDDRUG_SEQUENCE,
+        SENDDRUG_FLAG,
+        BABY_FLAG,
+        JZQJ_FLAG,
+        BROUGHT_FLAG,
+        EXT_FLAG,
+        INVOICE_NO,
+        BALANCE_NO,
+        BALANCE_STATE,
+        NOBACK_NUM,
+        EXT_CODE,
+        EXT_OPERCODE,
+        EXT_DATE,
+        APPRNO,
+        CHARGE_OPERCODE,
+        CHARGE_DATE,
+        FEE_OPERCODE,
+        FEE_DATE,
+        EXEC_OPERCODE,
+        EXEC_DATE,
+        SENDDRUG_OPERCODE,
+        SENDDRUG_DATE,
+        CHECK_OPERCODE,
+        CHECK_NO,
+        MO_ORDER,
+        MO_EXEC_SQN,
+        FEE_RATE,
+        FEEOPER_DEPTCODE,
+        UPLOAD_FLAG,
+        EXT_FLAG2,
+        EXT_FLAG1,
+        EXT_FLAG3,
+        MEDICALTEAM_CODE,
+        OPERATIONNO,
+        TRANSACTION_SEQUENCE_NUMBER,
+        SI_TRANSACTION_DATETIME,
+        HIS_RECIPE_NO,
+        SI_RECIPE_NO,
+        HIS_CANCEL_RECIPE_NO,
+        SI_CANCEL_RECIPE_NO,
+        EXT_FLAG4,
+        EXT_FLAG5,
+        CHARGE_DOCT,
+        CHARGE_MEDICALTEAM,
+        LOCAL_EXT_FLAG1,
+        LOCAL_EXT_FLAG2,
+        LOCAL_EXT_FLAG3,
+        LOCAL_EXT_FLAG4,
+        HIS_CANCEL_RECIPE_SEQUENCE_NO,
+        GROUP_CODE,
+        LONG_FLAG,
+        DEPTOWN,
+        EMPLOYEEOWN,
+        OTINVOICENO,
+        JPFLAG,
+        JPDATE,
+        JPOPER,
+        UPLOAD_OPER,
+        UPLOAD_DATE,
+        UPLOAD_IP,
+        SELFPAY_PROP,
+        FULAMT_OWNPAY_AMT,
+        CENTER_FEE_CODE
+    </sql>
+
+    <select id="queryMedicineLists" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_MEDICINELIST
+        <where>
+            <if test = "deptCode != null">
+                AND EXECUTE_DEPTCODE = #{deptCode}
+            </if>
+            <if test = "beginFeeDate != null">
+                AND FEE_DATE &gt;= #{beginFeeDate} + 0
+            </if>
+            <if test = "endFeeDate != null">
+                AND FEE_DATE &lt;= #{endFeeDate} + 0
+            </if>
+        </where>
+    </select>
+</mapper>

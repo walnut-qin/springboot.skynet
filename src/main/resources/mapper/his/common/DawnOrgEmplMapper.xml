@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.common.DawnOrgEmplMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.common.DawnOrgEmpl">
+        <id column="EMPL_ID" jdbcType="VARCHAR" property="emplCode"/>
+        <result column="EMPL_NAME" jdbcType="VARCHAR" property="emplName"/>
+        <result column="SPELL_CODE" jdbcType="VARCHAR" property="emplNameSpellCode"/>
+        <result column="SEX_CODE" jdbcType="VARCHAR" property="sex"/>
+        <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
+        <result column="POSI_CODE" jdbcType="VARCHAR" property="position"/>
+        <result column="LEVL_CODE" jdbcType="VARCHAR" property="rank"/>
+        <result column="EMPL_TYPE" jdbcType="VARCHAR" property="emplType"/>
+        <result column="IDENNO" jdbcType="VARCHAR" property="identityCardNo"/>
+        <result column="DEPT_ID" jdbcType="VARCHAR" property="deptCode"/>
+        <result column="NURSE_CELL_ID" jdbcType="VARCHAR" property="nurseCellCode"/>
+        <result column="EMAIL" jdbcType="VARCHAR" property="email"/>
+        <result column="TEL" jdbcType="VARCHAR" property="tel"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <result column="VALID_STATE" jdbcType="VARCHAR" property="valid"/>
+    </resultMap>
+
+    <sql id="item">
+        EMPL_ID,
+        EMPL_NAME,
+        SPELL_CODE,
+        SEX_CODE,
+        BIRTHDAY,
+        POSI_CODE,
+        LEVL_CODE,
+        EMPL_TYPE,
+        IDENNO,
+        DEPT_ID,
+        NURSE_CELL_ID,
+        EMAIL,
+        TEL,
+        REMARK,
+        VALID_STATE
+    </sql>
+
+    <select id="queryEmpl" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            DAWN_ORG_EMPL
+        <where>
+            <if test="true">
+                AND EMPL_ID = #{emplCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryEmpls" parameterType="com.kaos.skynet.api.data.his.mapper.common.DawnOrgEmplMapper$Key" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            DAWN_ORG_EMPL
+        <where>
+            <if test="sex != null">
+                AND SEX_CODE = #{sex}
+            </if>
+            <if test = "valids != null">
+                AND VALID_STATE IN
+                <foreach collection="valids" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>

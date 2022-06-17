@@ -6,8 +6,8 @@ import java.time.Period;
 import javax.validation.constraints.NotBlank;
 
 import com.google.gson.annotations.SerializedName;
-import com.kaos.skynet.api.data.cache.common.ComPatientInfoCache;
-import com.kaos.skynet.api.data.enums.SexEnum;
+import com.kaos.skynet.api.data.his.cache.common.ComPatientInfoCache;
+import com.kaos.skynet.api.data.his.enums.SexEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;

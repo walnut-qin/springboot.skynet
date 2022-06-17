@@ -6,11 +6,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
-import com.kaos.skynet.api.data.cache.common.DawnOrgDeptCache;
-import com.kaos.skynet.api.data.entity.common.DawnOrgDept.DeptTypeEnum;
-import com.kaos.skynet.api.data.enums.DeptOwnEnum;
-import com.kaos.skynet.api.data.enums.ValidEnum;
-import com.kaos.skynet.api.data.mapper.common.DawnOrgDeptMapper;
+import com.kaos.skynet.api.data.his.cache.common.DawnOrgDeptCache;
+import com.kaos.skynet.api.data.his.entity.common.DawnOrgDept.DeptTypeEnum;
+import com.kaos.skynet.api.data.his.enums.DeptOwnEnum;
+import com.kaos.skynet.api.data.his.enums.ValidEnum;
+import com.kaos.skynet.api.data.his.mapper.common.DawnOrgDeptMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.json.Json;
 

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.fee.balance.FinIpbBalanceHead">
+        <id column="INVOICE_NO" jdbcType="VARCHAR" property="invoiceNo"/>
+        <id column="TRANS_TYPE" jdbcType="VARCHAR" property="transType"/>
+        <result column="INPATIENT_NO" jdbcType="VARCHAR" property="inpatientNo"/>
+        <result column="BALANCE_NO" jdbcType="VARCHAR" property="balanceNo"/>
+        <result column="PACT_CODE" jdbcType="VARCHAR" property="pactCode"/>
+        <result column="BALANCE_OPERCODE" jdbcType="VARCHAR" property="balanceEmplCode"/>
+        <result column="BALANCE_DATE" jdbcType="VARCHAR" property="balanceDate"/>
+        <result column="TOT_COST" jdbcType="VARCHAR" property="totCost"/>
+        <result column="PAY_COST" jdbcType="VARCHAR" property="payCost"/>
+        <result column="PUB_COST" jdbcType="VARCHAR" property="pubCost"/>
+        <result column="PREPAY_COST" jdbcType="VARCHAR" property="prepayCost"/>
+        <result column="SUPPLY_COST" jdbcType="VARCHAR" property="supplyCost"/>
+        <result column="RETURN_COST" jdbcType="VARCHAR" property="returnCost"/>
+        <result column="ECO_COST" jdbcType="VARCHAR" property="ecoCost"/>
+        <result column="DER_COST" jdbcType="VARCHAR" property="derCost"/>
+        <result column="OFFICE_PAY" jdbcType="VARCHAR" property="officePay"/>
+        <result column="LARGE_PAY" jdbcType="VARCHAR" property="largePay"/>
+        <result column="MILTARY_PAY" jdbcType="VARCHAR" property="militaryPay"/>
+        <result column="CL_COST" jdbcType="VARCHAR" property="clCost"/>
+        <result column="JZFPBCYZF_COST" jdbcType="VARCHAR" property="jzfpCost"/>
+        <result column="GYBAPI_COST" jdbcType="VARCHAR" property="gybCost"/>
+        <result column="HOS_COST" jdbcType="VARCHAR" property="hosCost"/>
+        <result column="DAYBALANCE_NO" jdbcType="VARCHAR" property="dayReportNo"/>
+    </resultMap>
+
+    <sql id="item">
+        INVOICE_NO,
+        TRANS_TYPE,
+        INPATIENT_NO,
+        BALANCE_NO,
+        PACT_CODE,
+        BALANCE_OPERCODE,
+        BALANCE_DATE,
+        TOT_COST,
+        PAY_COST,
+        PUB_COST,
+        PREPAY_COST,
+        SUPPLY_COST,
+        RETURN_COST,
+        ECO_COST,
+        DER_COST,
+        OFFICE_PAY,
+        LARGE_PAY,
+        MILTARY_PAY,
+        CL_COST,
+        JZFPBCYZF_COST,
+        GYBAPI_COST,
+        HOS_COST,
+        DAYBALANCE_NO
+    </sql>
+
+    <select id="queryBalanceHead" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_BALANCEHEAD
+        <where>
+            <if test = "true">
+                AND INVOICE_NO = #{invoiceNo}
+            </if>
+            <if test = "true">
+                AND TRANS_TYPE = #{transType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBalanceHeads" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            XYHIS.FIN_IPB_BALANCEHEAD
+        <where>
+            <if test = "inpatientNo != null">
+                AND INPATIENT_NO = #{inpatientNo}
+            </if>
+            <if test="balanceOperCode != null">
+                AND BALANCE_OPERCODE = #{balanceOperCode}
+            </if>
+            <if test="beginBalanceDate != null">
+                AND BALANCE_DATE &gt;= #{beginBalanceDate} + 0
+            </if>
+            <if test="endBalanceDate != null">
+                AND BALANCE_DATE &lt;= #{endBalanceDate} + 0
+            </if>
+            <if test="pactCode != null">
+                AND PACT_CODE = #{pactCode}
+            </if>
+            <if test="dayBalanceNo != null">
+                AND DAYBALANCE_NO = #{dayBalanceNo}
+            </if>
+        </where>
+    </select>
+</mapper>

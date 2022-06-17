@@ -3,9 +3,9 @@ package com.kaos.skynet.api.logic.controller.inpatient.escort;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
-import com.kaos.skynet.api.data.entity.inpatient.escort.EscortMainInfo;
-import com.kaos.skynet.api.data.entity.inpatient.escort.EscortStateRec.StateEnum;
-import com.kaos.skynet.api.data.mapper.inpatient.escort.EscortMainInfoMapper;
+import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortMainInfo;
+import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortStateRec.StateEnum;
+import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortPool;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
