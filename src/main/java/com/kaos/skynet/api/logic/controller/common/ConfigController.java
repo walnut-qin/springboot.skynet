@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import com.kaos.skynet.api.data.his.cache.common.config.ConfigSwitchCache;
 import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
+import com.kaos.skynet.core.http.RspWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -31,17 +32,21 @@ public class ConfigController {
      * @param switchName
      * @return
      */
-    @RequestMapping(value = { "queryState", "querySwitchState" }, method = RequestMethod.GET, produces = MediaType.TEXT)
-    public Boolean queryState(@NotBlank(message = "开关名不能为空") String switchName) {
-        // 记录日志
-        log.info(String.format("查询开关变量(key = %s)", switchName));
+    @RequestMapping(value = "queryState", method = RequestMethod.GET, produces = MediaType.JSON)
+    public RspWrapper<Boolean> queryState(@NotBlank(message = "开关名不能为空") String switchName) {
+        try {
+            // 记录日志
+            log.info(String.format("查询开关变量(key = %s)", switchName));
 
-        // 获取开关的值
-        var swt = this.configSwitchCache.get(switchName);
-        if (swt == null || swt.getValid() != ValidEnum.VALID) {
-            return false;
+            // 获取开关的值
+            var swt = this.configSwitchCache.get(switchName);
+            if (swt == null || swt.getValid() != ValidEnum.VALID) {
+                return RspWrapper.wrapSuccessResponse(false);
+            }
+
+            return RspWrapper.wrapSuccessResponse(swt.getValue());
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
         }
-
-        return swt.getValue();
     }
 }
