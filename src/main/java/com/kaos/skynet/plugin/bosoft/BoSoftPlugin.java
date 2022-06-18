@@ -2,7 +2,8 @@ package com.kaos.skynet.plugin.bosoft;
 
 import com.google.common.collect.Lists;
 import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
-import com.kaos.skynet.core.http.handler.AbstractHttpHandler;
+import com.kaos.skynet.core.http.handler.HttpHandler;
+import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.plugin.bosoft.wrapper.ReqWrapper;
 import com.kaos.skynet.plugin.bosoft.wrapper.RspWrapper;
 
@@ -15,7 +16,7 @@ public class BoSoftPlugin {
     /**
      * Http句柄
      */
-    AbstractHttpHandler httpHandler;
+    HttpHandler httpHandler;
 
     /**
      * 请求包装器
@@ -49,12 +50,10 @@ public class BoSoftPlugin {
      * 
      * @param jsonHttpMessageConverter
      */
-    BoSoftPlugin(JsonHttpMessageConverter jsonHttpMessageConverter) {
+    BoSoftPlugin(Json json) {
         // 构造HTTP处理器
-        httpHandler = new AbstractHttpHandler(
-                new RestTemplate(Lists.newArrayList(jsonHttpMessageConverter)),
-                ip, port) {
-        };
+        httpHandler = new HttpHandler(new RestTemplate(Lists.newArrayList(new JsonHttpMessageConverter(json))),
+                ip, port);
     }
 
     /**

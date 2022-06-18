@@ -9,7 +9,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @AllArgsConstructor
-public abstract class AbstractHttpHandler {
+public class HttpHandler {
     /**
      * HTTP句柄
      */

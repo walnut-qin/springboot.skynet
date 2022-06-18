@@ -6,7 +6,8 @@ import java.time.LocalDate;
 import com.google.common.cache.CacheStats;
 import com.google.common.collect.Lists;
 import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
-import com.kaos.skynet.core.http.handler.AbstractHttpHandler;
+import com.kaos.skynet.core.http.handler.HttpHandler;
+import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.type.Cache;
 import com.kaos.skynet.core.type.converter.LocalDateToStringConverter;
 import com.kaos.skynet.plugin.timor.entity.DayInfo;
@@ -30,7 +31,7 @@ public class TimorPlugin {
     /**
      * Http句柄
      */
-    AbstractHttpHandler httpHandler;
+    HttpHandler httpHandler;
 
     /**
      * 时间格式转换器
@@ -58,10 +59,9 @@ public class TimorPlugin {
      * 
      * @param jsonHttpMessageConverter
      */
-    TimorPlugin(JsonHttpMessageConverter jsonHttpMessageConverter) {
+    TimorPlugin(Json json) {
         // 构造HTTP处理器
-        httpHandler = new AbstractHttpHandler(
-                new RestTemplate(Lists.newArrayList(jsonHttpMessageConverter)),
+        httpHandler = new HttpHandler(new RestTemplate(Lists.newArrayList(new JsonHttpMessageConverter(json))),
                 ip, port) {
         };
     }
