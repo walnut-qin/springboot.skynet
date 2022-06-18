@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.kaos.skynet.api.data.his.cache.DataCache;
 import com.kaos.skynet.api.logic.controller.MediaType;
+import com.kaos.skynet.core.http.RspWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -29,11 +30,15 @@ public class CacheController {
      * @return
      */
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = MediaType.JSON)
-    public Map<String, Object> show() {
-        // 入参记录
-        log.info("展示系统缓存日志");
+    public RspWrapper<Map<String, Object>> show() {
+        try {
+            // 入参记录
+            log.info("展示系统缓存日志");
 
-        // 构造响应体
-        return dataCache.showCacheLog();
+            // 构造响应体
+            return RspWrapper.wrapSuccessResponse(dataCache.showCacheLog());
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
     }
 }
