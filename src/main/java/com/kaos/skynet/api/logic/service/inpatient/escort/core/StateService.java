@@ -80,7 +80,8 @@ public class StateService {
     /**
      * 核酸结果转换器
      */
-    NatsRouter natsConverter = new NatsRouter();
+    @Autowired
+    NatsRouter natsConverter;
 
     /**
      * 患者基本信息缓存
