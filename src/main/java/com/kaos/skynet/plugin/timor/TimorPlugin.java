@@ -8,11 +8,10 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
 import com.kaos.skynet.core.http.handler.AbstractHttpHandler;
 import com.kaos.skynet.core.type.Cache;
-import com.kaos.skynet.core.type.converter.Converter;
-import com.kaos.skynet.core.type.converter.local.date.string.StandardLocalDateToStringConverter;
+import com.kaos.skynet.core.type.converter.LocalDateToStringConverter;
 import com.kaos.skynet.plugin.timor.entity.DayInfo;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,8 +35,7 @@ public class TimorPlugin {
     /**
      * 时间格式转换器
      */
-    @Autowired
-    StandardLocalDateToStringConverter dateToStringConverter;
+    final LocalDateToStringConverter dateToStringConverter = new LocalDateToStringConverter("yyyy-MM-dd");
 
     /**
      * 定制化缓存

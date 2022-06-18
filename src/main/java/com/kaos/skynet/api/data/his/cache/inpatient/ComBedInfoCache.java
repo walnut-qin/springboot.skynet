@@ -4,7 +4,7 @@ import com.kaos.skynet.api.data.his.entity.inpatient.ComBedInfo;
 import com.kaos.skynet.api.data.his.mapper.inpatient.ComBedInfoMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import com.kaos.skynet.core.type.converter.Converter;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**

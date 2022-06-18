@@ -14,7 +14,6 @@ import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortPool;
 import com.kaos.skynet.api.data.his.cache.inpatient.escort.annex.EscortAnnexCheckCache;
 import com.kaos.skynet.api.data.his.cache.inpatient.escort.annex.EscortAnnexInfoCache;
-import com.kaos.skynet.api.data.his.converter.PatientNameConverter;
 import com.kaos.skynet.api.data.his.entity.inpatient.FinIprInMainInfo.InStateEnum;
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortStateRec.StateEnum;
@@ -22,11 +21,12 @@ import com.kaos.skynet.api.data.his.entity.inpatient.escort.annex.EscortAnnexInf
 import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
+import com.kaos.skynet.api.data.his.router.PatientNameRouter;
 import com.kaos.skynet.api.logic.service.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.thread.Threads;
-import com.kaos.skynet.core.type.converter.string.bool.NumericStringToBooleanConverter;
+import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -110,14 +110,13 @@ public class AnnexController {
     /**
      * 字符串转Boolean对象
      */
-    @Autowired
-    NumericStringToBooleanConverter stringToBooleanConverter;
+    StringToBooleanConverter stringToBooleanConverter = new StringToBooleanConverter("1", "0");
 
     /**
      * 患者姓名转换器
      */
     @Autowired
-    PatientNameConverter patientNameConverter;
+    PatientNameRouter patientNameConverter;
 
     /**
      * 上传附件
@@ -261,11 +260,11 @@ public class AnnexController {
         List<QueryAnnexInDeptRsp> rsps = annexInfos.stream().map(x -> {
             var builder = QueryAnnexInDeptRsp.builder();
             builder.annexNo(x.getAnnexNo());
-            builder.helperName(patientNameConverter.convert(x.getCardNo()));
+            builder.helperName(patientNameConverter.route(x.getCardNo()));
             builder.picUrl(
                     "http://172.16.100.252:8025/api/inpatient/escort/annex/getPic?refer=".concat(x.getAnnexNo()));
             builder.patientNames(Set.copyOf(escortRelation.get(x.getCardNo())).stream().map(y -> {
-                return patientNameConverter.convert(y);
+                return patientNameConverter.route(y);
             }).toList());
             // 若查询审核内容，则添加审核信息
             if (checkedBoolean) {

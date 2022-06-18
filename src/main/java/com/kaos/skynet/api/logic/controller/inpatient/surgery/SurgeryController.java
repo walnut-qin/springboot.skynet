@@ -7,10 +7,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.api.data.his.cache.inpatient.FinIprInMainInfoCache;
-import com.kaos.skynet.api.data.his.converter.SurgeryNameConverter;
 import com.kaos.skynet.api.data.his.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.MetOpsApplyMapper;
+import com.kaos.skynet.api.data.his.router.SurgeryNameRouter;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.json.Json;
 
@@ -52,7 +52,7 @@ public class SurgeryController {
      * 手术名称转换器
      */
     @Autowired
-    SurgeryNameConverter surgeryNameConverter;
+    SurgeryNameRouter surgeryNameConverter;
 
     /**
      * 检索手术申请单信息
@@ -131,7 +131,7 @@ public class SurgeryController {
             if (inMainInfo != null) {
                 itemBuilder.name(inMainInfo.getName());
             }
-            itemBuilder.surgeryName(surgeryNameConverter.convert(x.getOperationNo()));
+            itemBuilder.surgeryName(surgeryNameConverter.route(x.getOperationNo()));
             itemBuilder.icuFlag(x.getIcuFlag());
             return itemBuilder.build();
         }).toList());

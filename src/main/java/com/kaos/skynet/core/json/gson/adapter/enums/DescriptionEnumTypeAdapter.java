@@ -10,8 +10,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.kaos.skynet.core.type.Enum;
-import com.kaos.skynet.core.type.converter.enums.string.DescriptionEnumToStringConverter;
-import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.EnumToStringConverter;
+import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;
 
 import org.springframework.stereotype.Component;
 
@@ -21,10 +21,10 @@ import lombok.extern.log4j.Log4j;
 @Component("DescriptionEnumTypeAdapter")
 public class DescriptionEnumTypeAdapter<E extends Enum> implements JsonSerializer<E>, JsonDeserializer<E> {
     // 正向转换器, 由于存在无参构造函数，可以预构造
-    final DescriptionEnumToStringConverter<E> enumToStringConverter = new DescriptionEnumToStringConverter<>();
+    final EnumToStringConverter<E> enumToStringConverter = new EnumToStringConverter<>(false);
 
     // 逆向转换器, 构造需要传入泛型E的类型，动态构造
-    final DescriptionStringToEnumConverterFactory stringToEnumConverterFactory = new DescriptionStringToEnumConverterFactory();
+    final StringToEnumConverterFactory stringToEnumConverterFactory = new StringToEnumConverterFactory(false);
 
     @Override
     public JsonElement serialize(E src, Type typeOfSrc, JsonSerializationContext context) {

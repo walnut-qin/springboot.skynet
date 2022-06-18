@@ -6,7 +6,7 @@ import java.time.Period;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.kaos.skynet.core.type.converter.period.string.AbstractPeriodToStringConverter;
+import com.kaos.skynet.core.type.converter.PeriodToStringConverter;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -17,7 +17,7 @@ public abstract class AbstractPeriodTypeAdapter extends TypeAdapter<Period> {
     /**
      * LocalDate转字符串的转换器
      */
-    AbstractPeriodToStringConverter periodToStringConverter;
+    PeriodToStringConverter periodToStringConverter;
 
     @Override
     public Period read(JsonReader in) throws IOException {

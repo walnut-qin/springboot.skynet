@@ -4,7 +4,7 @@ import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import com.kaos.skynet.core.type.converter.Converter;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component

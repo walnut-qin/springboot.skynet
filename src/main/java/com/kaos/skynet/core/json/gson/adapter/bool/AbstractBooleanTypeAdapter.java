@@ -5,8 +5,8 @@ import java.io.IOException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.kaos.skynet.core.type.converter.bool.string.AbstractBooleanToStringConverter;
-import com.kaos.skynet.core.type.converter.string.bool.AbstractStringToBooleanConverter;
+import com.kaos.skynet.core.type.converter.BooleanToStringConverter;
+import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 
 import lombok.AllArgsConstructor;
 
@@ -15,12 +15,12 @@ public class AbstractBooleanTypeAdapter extends TypeAdapter<Boolean> {
     /**
      * LocalDate转字符串的转换器
      */
-    AbstractBooleanToStringConverter booleanToStringConverter;
+    BooleanToStringConverter booleanToStringConverter;
 
     /**
      * 字符串转LocalDate的转换器
      */
-    AbstractStringToBooleanConverter stringToBooleanConverter;
+    StringToBooleanConverter stringToBooleanConverter;
 
     @Override
     public Boolean read(JsonReader in) throws IOException {

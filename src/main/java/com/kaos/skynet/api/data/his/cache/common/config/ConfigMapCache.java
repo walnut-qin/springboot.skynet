@@ -3,8 +3,8 @@ package com.kaos.skynet.api.data.his.cache.common.config;
 import com.kaos.skynet.api.data.his.entity.common.config.ConfigMap;
 import com.kaos.skynet.api.data.his.mapper.common.config.ConfigMapMapper;
 import com.kaos.skynet.core.type.Cache;
-import com.kaos.skynet.core.type.converter.Converter;
 
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component

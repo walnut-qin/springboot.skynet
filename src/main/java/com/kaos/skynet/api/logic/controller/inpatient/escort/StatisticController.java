@@ -11,14 +11,14 @@ import com.google.common.collect.Lists;
 import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.his.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.his.cache.inpatient.FinSpecialCityPatientCache;
-import com.kaos.skynet.api.data.his.converter.BedNoConverter;
-import com.kaos.skynet.api.data.his.converter.NatsConverter;
 import com.kaos.skynet.api.data.his.entity.inpatient.FinIprInMainInfo.InStateEnum;
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.his.enums.HealthCodeEnum;
 import com.kaos.skynet.api.data.his.enums.TravelCodeEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
+import com.kaos.skynet.api.data.his.router.BedNoRouter;
+import com.kaos.skynet.api.data.his.router.NatsRouter;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.json.gson.adapter.bool.ChineseBooleanTypeAdapter;
 
@@ -65,13 +65,13 @@ public class StatisticController {
      * 核酸检测
      */
     @Autowired
-    NatsConverter natsConverter;
+    NatsRouter natsConverter;
 
     /**
      * 床号转缩略床号
      */
     @Autowired
-    BedNoConverter bedNoConverter;
+    BedNoRouter bedNoConverter;
 
     /**
      * 查询科室的患者及陪护基本信息
@@ -114,7 +114,7 @@ public class StatisticController {
             var builder = QueryEscortRsp.builder();
             // 患者信息
             builder.inDate(x.getInDate());
-            builder.bedNo(bedNoConverter.convert(x.getBedNo()));
+            builder.bedNo(bedNoConverter.route(x.getBedNo()));
             builder.name(x.getName());
             builder.cardNo(x.getCardNo());
             var patientInfo = patientInfoCache.get(x.getCardNo());
@@ -124,7 +124,7 @@ public class StatisticController {
                 builder.highRiskFlag(patientInfo.getHighRiskFlag());
                 builder.highRiskArea(patientInfo.getHighRiskArea());
             }
-            var nats = natsConverter.convert(NatsConverter.Key.builder()
+            var nats = natsConverter.route(NatsRouter.Key.builder()
                     .cardNos(Lists.newArrayList(x.getCardNo(), x.getPatientNo()))
                     .duration(Duration.ofDays(14))
                     .build());
@@ -148,7 +148,7 @@ public class StatisticController {
                     builder.escort1Name(helper.getName());
                     builder.escort1CardNo(helper.getCardNo());
                     builder.escort1IdenNo(helper.getIdentityCardNo());
-                    var helperNats = natsConverter.convert(NatsConverter.Key.builder()
+                    var helperNats = natsConverter.route(NatsRouter.Key.builder()
                             .cardNos(Lists.newArrayList(helper.getCardNo()))
                             .duration(Duration.ofDays(14))
                             .build());
@@ -169,7 +169,7 @@ public class StatisticController {
                     builder.escort2Name(helper.getName());
                     builder.escort2CardNo(helper.getCardNo());
                     builder.escort2IdenNo(helper.getIdentityCardNo());
-                    var helperNats = natsConverter.convert(NatsConverter.Key.builder()
+                    var helperNats = natsConverter.route(NatsRouter.Key.builder()
                             .cardNos(Lists.newArrayList(helper.getCardNo()))
                             .duration(Duration.ofDays(14))
                             .build());

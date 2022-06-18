@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 
 import com.kaos.skynet.core.json.Json;
-import com.kaos.skynet.core.type.converter.local.datime.AbstractLocalDateTimeToStringConverter;
+import com.kaos.skynet.core.type.converter.LocalDateTimeToStringConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,14 +20,12 @@ public class ReqWrapper {
     /**
      * 时间转换器
      */
-    final static AbstractLocalDateTimeToStringConverter noiseConverter = new AbstractLocalDateTimeToStringConverter(
-            "yyyyMMddHHmmssSSS") {
-    };
+    final LocalDateTimeToStringConverter noiseConverter = new LocalDateTimeToStringConverter("yyyyMMddHHmmssSSS");
 
     /**
      * 加密Key值
      */
-    final static String key = "dd1893efc3e234a2d2826ad107";
+    final String key = "dd1893efc3e234a2d2826ad107";
 
     /**
      * 序列化工具

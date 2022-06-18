@@ -6,7 +6,7 @@ import com.kaos.skynet.api.data.his.enums.MinFeeEnum;
 import com.kaos.skynet.api.data.his.mapper.common.fee.FinComFeeCodeStatMapper;
 import com.kaos.skynet.core.type.Cache;
 
-import com.kaos.skynet.core.type.converter.Converter;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import lombok.Builder;

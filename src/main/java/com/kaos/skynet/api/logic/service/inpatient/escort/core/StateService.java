@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.his.cache.common.ComPatientInfoCache;
-import com.kaos.skynet.api.data.his.converter.NatsConverter;
 import com.kaos.skynet.api.data.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.his.entity.inpatient.FinIprPrepayIn;
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortMainInfo;
@@ -21,6 +20,7 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortStateRecMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
+import com.kaos.skynet.api.data.his.router.NatsRouter;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +80,7 @@ public class StateService {
     /**
      * 核酸结果转换器
      */
-    @Autowired
-    NatsConverter natsConverter;
+    NatsRouter natsConverter = new NatsRouter();
 
     /**
      * 患者基本信息缓存
@@ -234,10 +233,10 @@ public class StateService {
         var historyStates = escortStateRecMapper.queryEscortStateRecs(escortInfo.getEscortNo());
 
         // 检索核酸结果
-        NatsConverter.Value natsResult = null;
+        NatsRouter.Value natsResult = null;
         if (historyStates.isEmpty()) {
             // 检索14天内核酸结果
-            natsResult = natsConverter.convert(NatsConverter.Key.builder()
+            natsResult = natsConverter.route(NatsRouter.Key.builder()
                     .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
                     .duration(Duration.ofDays(14))
                     .build());
@@ -254,7 +253,7 @@ public class StateService {
 
                 case 生效中 -> {
                     // 检索2天内核酸结果
-                    natsResult = natsConverter.convert(NatsConverter.Key.builder()
+                    natsResult = natsConverter.route(NatsRouter.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
                             .duration(Duration.ofDays(14))
                             .build());
@@ -262,7 +261,7 @@ public class StateService {
 
                 default -> {
                     // 检索14天内核酸结果
-                    natsResult = natsConverter.convert(NatsConverter.Key.builder()
+                    natsResult = natsConverter.route(NatsRouter.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
                             .duration(Duration.ofDays(2))
                             .build());

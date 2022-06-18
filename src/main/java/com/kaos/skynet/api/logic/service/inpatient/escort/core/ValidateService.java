@@ -15,7 +15,7 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprPrepayInMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortStateRecMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.order.MetOrdiOrderMapper;
-import com.kaos.skynet.core.type.converter.duration.string.AgeDurationToStringConverter;
+import com.kaos.skynet.core.type.converter.DurationToStringConverter;
 import com.kaos.skynet.core.type.utils.DurationUtils;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
@@ -74,8 +74,7 @@ public class ValidateService {
     /**
      * 时段转换器
      */
-    @Autowired
-    AgeDurationToStringConverter durationToStringConverter;
+    DurationToStringConverter durationToStringConverter = new DurationToStringConverter("天", "小时", "分", "秒", true);
 
     /**
      * 判断是否可以注册

@@ -6,19 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.kaos.skynet.core.type.Enum;
-import com.kaos.skynet.core.type.converter.Converter;
-import com.kaos.skynet.core.type.converter.ConverterFactory;
-import com.kaos.skynet.core.type.converter.enums.string.ValueEnumToStringConverter;
-import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.EnumToStringConverter;
+import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.springframework.core.convert.converter.Converter;
 
 public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
     /**
      * 字符串转枚举的转换器工厂
      */
-    final ConverterFactory<String, Enum> stringToEnumConverterFactory = new ValueStringToEnumConverterFactory();
+    final StringToEnumConverterFactory stringToEnumConverterFactory = new StringToEnumConverterFactory(true);
 
     /**
      * 字符串转枚举的转换器
@@ -28,10 +27,11 @@ public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
     /**
      * 枚举转字符串的转换器
      */
-    final Converter<E, String> enumToStringConverter = new ValueEnumToStringConverter<>();
+    final EnumToStringConverter<E> enumToStringConverter = new EnumToStringConverter<>(true);
 
     /**
      * 构造函数
+     * 
      * @param typeOfE
      */
     public MybatisEnumTypeHandler(Class<E> classOfE) {

@@ -6,8 +6,8 @@ import java.time.LocalTime;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.kaos.skynet.core.type.converter.local.time.AbstractLocalTimeToStringConverter;
-import com.kaos.skynet.core.type.converter.string.local.time.AbstractStringToLocalTimeConverter;
+import com.kaos.skynet.core.type.converter.LocalTimeToStringConverter;
+import com.kaos.skynet.core.type.converter.StringToLocalTimeConverter;
 
 import lombok.AllArgsConstructor;
 
@@ -16,12 +16,12 @@ public abstract class AbstractLocalTimeTypeAdapter extends TypeAdapter<LocalTime
     /**
      * LocalDate转字符串的转换器
      */
-    AbstractLocalTimeToStringConverter localTimeToStringConverter;
+    LocalTimeToStringConverter localTimeToStringConverter;
 
     /**
      * 字符串转LocalDate的转换器
      */
-    AbstractStringToLocalTimeConverter stringToLocalTimeConverter;
+    StringToLocalTimeConverter stringToLocalTimeConverter;
 
     @Override
     public LocalTime read(JsonReader in) throws IOException {

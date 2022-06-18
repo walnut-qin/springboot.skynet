@@ -6,8 +6,8 @@ import java.util.Date;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.kaos.skynet.core.type.converter.date.string.AbstractDateToStringConverter;
-import com.kaos.skynet.core.type.converter.string.date.AbstractStringToDateConverter;
+import com.kaos.skynet.core.type.converter.DateToStringConverter;
+import com.kaos.skynet.core.type.converter.StringToDateConverter;
 
 import lombok.AllArgsConstructor;
 
@@ -16,12 +16,12 @@ public abstract class AbstractDateTypeAdapter extends TypeAdapter<Date> {
     /**
      * LocalDate转字符串的转换器
      */
-    AbstractDateToStringConverter dateToStringConverter;
+    DateToStringConverter dateToStringConverter;
 
     /**
      * 字符串转LocalDate的转换器
      */
-    AbstractStringToDateConverter stringToDateConverter;
+    StringToDateConverter stringToDateConverter;
 
     @Override
     public Date read(JsonReader in) throws IOException {

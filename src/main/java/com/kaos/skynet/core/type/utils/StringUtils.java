@@ -58,6 +58,19 @@ public final class StringUtils {
     }
 
     /**
+     * 复读
+     * 
+     * @param repeatChar
+     * @return
+     */
+    public static String repeat(char repeatChar, Integer cnt) {
+        char[] buf = new char[cnt];
+        Arrays.fill(buf, repeatChar);
+
+        return new String(buf);
+    }
+
+    /**
      * 左拼接字符
      * 
      * @param str     原始字符串
@@ -72,10 +85,6 @@ public final class StringUtils {
         }
 
         // 计算待补数量
-        Integer cnt = size - str.length();
-        char[] buf = new char[cnt];
-        Arrays.fill(buf, padChar);
-
-        return new String(buf).concat(str);
+        return repeat(padChar, size - str.length()).concat(str);
     }
 }

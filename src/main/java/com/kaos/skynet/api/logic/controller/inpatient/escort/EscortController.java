@@ -17,8 +17,6 @@ import com.kaos.skynet.api.data.his.cache.inpatient.FinIprPrepayInCache;
 import com.kaos.skynet.api.data.his.cache.inpatient.escort.EscortMainInfoCache;
 import com.kaos.skynet.api.data.his.cache.inpatient.escort.EscortStateRecCache;
 import com.kaos.skynet.api.data.his.cache.inpatient.escort.EscortVipCache;
-import com.kaos.skynet.api.data.his.converter.BedNoConverter;
-import com.kaos.skynet.api.data.his.converter.DeptNameConverter;
 import com.kaos.skynet.api.data.his.entity.inpatient.FinIprInMainInfo;
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortActionRec;
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortStateRec;
@@ -28,6 +26,8 @@ import com.kaos.skynet.api.data.his.enums.SexEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortStateRecMapper;
+import com.kaos.skynet.api.data.his.router.BedNoRouter;
+import com.kaos.skynet.api.data.his.router.DeptNameRouter;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
@@ -35,8 +35,7 @@ import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.json.gson.adapter.bool.NumericBooleanTypeAdapter;
 import com.kaos.skynet.core.json.gson.adapter.enums.ValueEnumTypeAdapter;
 import com.kaos.skynet.core.thread.Threads;
-import com.kaos.skynet.core.type.converter.string.enums.DescriptionStringToEnumConverterFactory;
-import com.kaos.skynet.core.type.converter.string.enums.ValueStringToEnumConverterFactory;
+import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
@@ -125,26 +124,24 @@ public class EscortController {
     /**
      * 枚举值转换器
      */
-    @Autowired
-    ValueStringToEnumConverterFactory valueStringToEnumConverterFactory;
+    StringToEnumConverterFactory valueStringToEnumConverterFactory = new StringToEnumConverterFactory(true);
 
     /**
      * 枚举值转换器
      */
-    @Autowired
-    DescriptionStringToEnumConverterFactory descriptionStringToEnumConverterFactory;
+    StringToEnumConverterFactory descriptionStringToEnumConverterFactory = new StringToEnumConverterFactory(false);
 
     /**
      * 床号转换器
      */
     @Autowired
-    BedNoConverter bedNoConverter;
+    BedNoRouter bedNoConverter;
 
     /**
      * 科室名称转换器
      */
     @Autowired
-    DeptNameConverter deptNameConverter;
+    DeptNameRouter deptNameConverter;
 
     /**
      * 患者索引转卡号的转换器
@@ -375,8 +372,8 @@ public class EscortController {
                     .build());
             if (inMainInfos != null && inMainInfos.size() == 1) {
                 var inMainInfo = inMainInfos.get(0);
-                rsp.deptName = deptNameConverter.convert(inMainInfo.getDeptCode());
-                rsp.bedNo = bedNoConverter.convert(inMainInfo.getBedNo());
+                rsp.deptName = deptNameConverter.route(inMainInfo.getDeptCode());
+                rsp.bedNo = bedNoConverter.route(inMainInfo.getBedNo());
                 rsp.patientNo = inMainInfo.getPatientNo();
             } else {
                 var builder = FinIprPrepayInCache.Key.builder();
@@ -384,8 +381,8 @@ public class EscortController {
                 builder.happenNo(x.getHappenNo());
                 var prepayIn = prepayInCache.get(builder.build());
                 if (prepayIn != null) {
-                    rsp.deptName = deptNameConverter.convert(prepayIn.getPreDeptCode());
-                    rsp.bedNo = bedNoConverter.convert(prepayIn.getBedNo());
+                    rsp.deptName = deptNameConverter.route(prepayIn.getPreDeptCode());
+                    rsp.bedNo = bedNoConverter.route(prepayIn.getBedNo());
                 }
             }
             var vip = escortVipCache.get(
