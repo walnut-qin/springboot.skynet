@@ -8,13 +8,13 @@ import java.time.Period;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.kaos.skynet.core.json.gson.adapter.cache.CacheTypeAdapter;
-import com.kaos.skynet.core.json.gson.adapter.date.StandardDateTypeAdapter;
-import com.kaos.skynet.core.json.gson.adapter.enums.DescriptionEnumTypeAdapter;
-import com.kaos.skynet.core.json.gson.adapter.local.date.StandardLocalDateTypeAdapter;
-import com.kaos.skynet.core.json.gson.adapter.local.datime.StandardLocalDateTimeTypeAdapter;
-import com.kaos.skynet.core.json.gson.adapter.local.time.StandardLocalTimeTypeAdapter;
-import com.kaos.skynet.core.json.gson.adapter.period.AgePeriodTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.CacheTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.DateTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.EnumTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.LocalDateTimeTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.LocalDateTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.LocalTimeTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.PeriodTypeAdapter;
 import com.kaos.skynet.core.type.Cache;
 import com.kaos.skynet.core.type.Enum;
 
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.Getter;
 
-@Component("GsonHolder")
+@Component
 public class GsonHolder {
     /**
      * 构造的内容
@@ -32,36 +32,30 @@ public class GsonHolder {
     Gson gson;
 
     @Autowired
-    GsonHolder(DescriptionEnumTypeAdapter<Enum> enumTypeAdapter,
-            CacheTypeAdapter<Object, Object> cacheTypeAdapter,
-            StandardDateTypeAdapter dateTypeAdapter,
-            StandardLocalDateTypeAdapter localDateTypeAdapter,
-            StandardLocalTimeTypeAdapter localTimeTypeAdapter,
-            StandardLocalDateTimeTypeAdapter localDateTimeTypeAdapter,
-            AgePeriodTypeAdapter periodTypeAdapter) {
+    GsonHolder() {
         // 创建构造器
         var builder = new GsonBuilder();
 
         // 注册枚举适配器
-        builder.registerTypeHierarchyAdapter(Enum.class, enumTypeAdapter);
+        builder.registerTypeHierarchyAdapter(Enum.class, new EnumTypeAdapter<>());
 
         // 注册缓存适配器
-        builder.registerTypeHierarchyAdapter(Cache.class, cacheTypeAdapter);
+        builder.registerTypeHierarchyAdapter(Cache.class, new CacheTypeAdapter<>());
 
         // 注册Date解析器
-        builder.registerTypeAdapter(Date.class, dateTypeAdapter);
+        builder.registerTypeAdapter(Date.class, new DateTypeAdapter());
 
         // 注册LocalDate解析器
-        builder.registerTypeAdapter(LocalDate.class, localDateTypeAdapter);
+        builder.registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter());
 
         // 注册LocalTime解析器
-        builder.registerTypeAdapter(LocalTime.class, localTimeTypeAdapter);
+        builder.registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter());
 
         // 注册LocalDateTime解析器
-        builder.registerTypeAdapter(LocalDateTime.class, localDateTimeTypeAdapter);
+        builder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter());
 
         // 注解Period解析器 - 默认为年龄解析
-        builder.registerTypeAdapter(Period.class, periodTypeAdapter);
+        builder.registerTypeAdapter(Period.class, new PeriodTypeAdapter());
 
         // 创建gson对象
         this.gson = builder.create();

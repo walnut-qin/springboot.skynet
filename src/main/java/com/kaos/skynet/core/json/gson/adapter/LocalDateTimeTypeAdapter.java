@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.json.gson.adapter.local.datime;
+package com.kaos.skynet.core.json.gson.adapter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -9,26 +9,23 @@ import com.google.gson.stream.JsonWriter;
 import com.kaos.skynet.core.type.converter.LocalDateTimeToStringConverter;
 import com.kaos.skynet.core.type.converter.StringToLocalDateTimeConverter;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
-public abstract class AbstractLocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
-    /**
-     * LocalDate转字符串的转换器
-     */
-    LocalDateTimeToStringConverter localDateTimeToStringConverter;
-
+public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
     /**
      * 字符串转LocalDate的转换器
      */
-    StringToLocalDateTimeConverter stringToLocalDateTimeConverter;
+    protected StringToLocalDateTimeConverter rConverter = new StringToLocalDateTimeConverter("yyyy-MM-dd HH:mm:ss");
+
+    /**
+     * LocalDate转字符串的转换器
+     */
+    protected LocalDateTimeToStringConverter wConverter = new LocalDateTimeToStringConverter("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public LocalDateTime read(JsonReader in) throws IOException {
         if (in.peek() == null) {
             return null;
         } else {
-            return stringToLocalDateTimeConverter.convert(in.nextString());
+            return rConverter.convert(in.nextString());
         }
     }
 
@@ -37,7 +34,7 @@ public abstract class AbstractLocalDateTimeTypeAdapter extends TypeAdapter<Local
         if (value == null) {
             out.nullValue();
         } else {
-            out.value(localDateTimeToStringConverter.convert(value));
+            out.value(wConverter.convert(value));
         }
     }
 }

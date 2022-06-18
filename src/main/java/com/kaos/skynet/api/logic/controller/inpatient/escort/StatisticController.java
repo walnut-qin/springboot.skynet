@@ -20,7 +20,9 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper
 import com.kaos.skynet.api.data.his.router.BedNoRouter;
 import com.kaos.skynet.api.data.his.router.NatsRouter;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.json.gson.adapter.bool.ChineseBooleanTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.BooleanTypeAdapter;
+import com.kaos.skynet.core.type.converter.BooleanToStringConverter;
+import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -231,7 +233,7 @@ public class StatisticController {
         /**
          * 14天内是否去过高风险地区
          */
-        @JsonAdapter(ChineseBooleanTypeAdapter.class)
+        @JsonAdapter(SpecialBooleanTypeAdapter.class)
         private Boolean highRiskFlag;
 
         /**
@@ -277,7 +279,7 @@ public class StatisticController {
         /**
          * 陪护1高风险标识
          */
-        @JsonAdapter(ChineseBooleanTypeAdapter.class)
+        @JsonAdapter(SpecialBooleanTypeAdapter.class)
         private Boolean escort1HighRiskFlag;
 
         /**
@@ -323,12 +325,23 @@ public class StatisticController {
         /**
          * 陪护2高风险标识
          */
-        @JsonAdapter(ChineseBooleanTypeAdapter.class)
+        @JsonAdapter(SpecialBooleanTypeAdapter.class)
         private Boolean escort2HighRiskFlag;
 
         /**
          * 陪护2高风险地区
          */
         private String escort2HighRiskArea;
+    }
+
+    /**
+     * 专用Boolean适配器
+     */
+    private static class SpecialBooleanTypeAdapter extends BooleanTypeAdapter {
+        @Autowired
+        SpecialBooleanTypeAdapter() {
+            super.rConverter = new StringToBooleanConverter("是", "否");
+            super.wConverter = new BooleanToStringConverter("是", "否");
+        }
     }
 }

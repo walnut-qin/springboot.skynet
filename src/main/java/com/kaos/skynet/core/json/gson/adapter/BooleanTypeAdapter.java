@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.json.gson.adapter.bool;
+package com.kaos.skynet.core.json.gson.adapter;
 
 import java.io.IOException;
 
@@ -8,26 +8,23 @@ import com.google.gson.stream.JsonWriter;
 import com.kaos.skynet.core.type.converter.BooleanToStringConverter;
 import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
-public class AbstractBooleanTypeAdapter extends TypeAdapter<Boolean> {
+public class BooleanTypeAdapter extends TypeAdapter<Boolean> {
     /**
-     * LocalDate转字符串的转换器
+     * 真值
      */
-    BooleanToStringConverter booleanToStringConverter;
+    protected StringToBooleanConverter rConverter = new StringToBooleanConverter("是", "否");
 
     /**
-     * 字符串转LocalDate的转换器
+     * 假值
      */
-    StringToBooleanConverter stringToBooleanConverter;
+    protected BooleanToStringConverter wConverter = new BooleanToStringConverter("是", "否");
 
     @Override
     public Boolean read(JsonReader in) throws IOException {
         if (in.peek() == null) {
             return null;
         } else {
-            return stringToBooleanConverter.convert(in.nextString());
+            return rConverter.convert(in.nextString());
         }
     }
 
@@ -36,7 +33,7 @@ public class AbstractBooleanTypeAdapter extends TypeAdapter<Boolean> {
         if (value == null) {
             out.nullValue();
         } else {
-            out.value(booleanToStringConverter.convert(value));
+            out.value(wConverter.convert(value));
         }
     }
 }

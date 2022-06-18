@@ -5,7 +5,10 @@ import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoiceMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.json.Json;
-import com.kaos.skynet.core.json.gson.adapter.enums.ValueEnumTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.EnumTypeAdapter;
+import com.kaos.skynet.core.type.Enum;
+import com.kaos.skynet.core.type.converter.EnumToStringConverter;
+import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;
 import com.kaos.skynet.plugin.bosoft.BoSoftPlugin;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +78,7 @@ public class ElectronicInvoiceController {
             /**
              * 交易类型
              */
-            @JsonAdapter(ValueEnumTypeAdapter.class)
+            @JsonAdapter(SpecialEnumTypeAdapter.class)
             private TransTypeEnum transType;
         }
 
@@ -118,6 +121,14 @@ public class ElectronicInvoiceController {
              * 电子校验码
              */
             private String random;
+        }
+    }
+
+    private static class SpecialEnumTypeAdapter<E extends Enum> extends EnumTypeAdapter<E> {
+        @Autowired
+        SpecialEnumTypeAdapter() {
+            super.rConverterFactory = new StringToEnumConverterFactory(true);
+            super.wConverter = new EnumToStringConverter<>(true);
         }
     }
 }

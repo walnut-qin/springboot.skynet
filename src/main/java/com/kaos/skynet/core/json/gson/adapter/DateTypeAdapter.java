@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.json.gson.adapter.date;
+package com.kaos.skynet.core.json.gson.adapter;
 
 import java.io.IOException;
 import java.util.Date;
@@ -9,26 +9,23 @@ import com.google.gson.stream.JsonWriter;
 import com.kaos.skynet.core.type.converter.DateToStringConverter;
 import com.kaos.skynet.core.type.converter.StringToDateConverter;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
-public abstract class AbstractDateTypeAdapter extends TypeAdapter<Date> {
-    /**
-     * LocalDate转字符串的转换器
-     */
-    DateToStringConverter dateToStringConverter;
-
+public class DateTypeAdapter extends TypeAdapter<Date> {
     /**
      * 字符串转LocalDate的转换器
      */
-    StringToDateConverter stringToDateConverter;
+    protected StringToDateConverter rConverter;
+
+    /**
+     * LocalDate转字符串的转换器
+     */
+    protected DateToStringConverter wConverter;
 
     @Override
     public Date read(JsonReader in) throws IOException {
         if (in.peek() == null) {
             return null;
         } else {
-            return stringToDateConverter.convert(in.nextString());
+            return rConverter.convert(in.nextString());
         }
     }
 
@@ -37,7 +34,7 @@ public abstract class AbstractDateTypeAdapter extends TypeAdapter<Date> {
         if (value == null) {
             out.nullValue();
         } else {
-            out.value(dateToStringConverter.convert(value));
+            out.value(wConverter.convert(value));
         }
     }
 }

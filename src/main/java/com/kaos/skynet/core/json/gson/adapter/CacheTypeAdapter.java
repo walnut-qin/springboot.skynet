@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.json.gson.adapter.cache;
+package com.kaos.skynet.core.json.gson.adapter;
 
 import java.io.IOException;
 
@@ -7,13 +7,10 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.kaos.skynet.core.type.Cache;
 
-import org.springframework.stereotype.Component;
-
-@Component("CacheTypeAdapter")
 public class CacheTypeAdapter<K, V> extends TypeAdapter<Cache<K, V>> {
     @Override
     public Cache<K, V> read(JsonReader in) throws IOException {
-        throw new RuntimeException("Cache类型不支持反序列化");
+        return null;
     }
 
     @Override

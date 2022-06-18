@@ -3,10 +3,15 @@ package com.kaos.skynet.plugin.timor.entity;
 import java.util.Date;
 
 import com.google.gson.annotations.JsonAdapter;
-import com.kaos.skynet.core.json.gson.adapter.enums.ValueEnumTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.EnumTypeAdapter;
+import com.kaos.skynet.core.type.Enum;
+import com.kaos.skynet.core.type.converter.EnumToStringConverter;
+import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;
 import com.kaos.skynet.plugin.timor.enums.DayTypeEnum;
 import com.kaos.skynet.plugin.timor.enums.ResultCodeEnum;
 import com.kaos.skynet.plugin.timor.enums.WeekEnum;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.Getter;
 
@@ -15,7 +20,7 @@ public class DayInfo {
     /**
      * 服务状态
      */
-    @JsonAdapter(ValueEnumTypeAdapter.class)
+    @JsonAdapter(SpecialEnumTypeAdapter.class)
     private ResultCodeEnum code;
 
     /**
@@ -31,7 +36,7 @@ public class DayInfo {
         /**
          * 日期类型
          */
-        @JsonAdapter(ValueEnumTypeAdapter.class)
+        @JsonAdapter(SpecialEnumTypeAdapter.class)
         private DayTypeEnum type;
 
         /**
@@ -42,7 +47,7 @@ public class DayInfo {
         /**
          * 星期
          */
-        @JsonAdapter(ValueEnumTypeAdapter.class)
+        @JsonAdapter(SpecialEnumTypeAdapter.class)
         private WeekEnum week;
     }
 
@@ -90,5 +95,13 @@ public class DayInfo {
          * 剩余日期
          */
         private Integer rest;
+    }
+
+    private static class SpecialEnumTypeAdapter<E extends Enum> extends EnumTypeAdapter<E> {
+        @Autowired
+        SpecialEnumTypeAdapter() {
+            super.rConverterFactory = new StringToEnumConverterFactory(true);
+            super.wConverter = new EnumToStringConverter<>(true);
+        }
     }
 }

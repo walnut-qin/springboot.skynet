@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.json.gson.adapter.period;
+package com.kaos.skynet.core.json.gson.adapter;
 
 import java.io.IOException;
 import java.time.Period;
@@ -8,21 +8,15 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.kaos.skynet.core.type.converter.PeriodToStringConverter;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j;
-
-@Log4j
-@AllArgsConstructor
-public abstract class AbstractPeriodTypeAdapter extends TypeAdapter<Period> {
+public class PeriodTypeAdapter extends TypeAdapter<Period> {
     /**
-     * LocalDate转字符串的转换器
+     * 写转换器
      */
-    PeriodToStringConverter periodToStringConverter;
+    protected PeriodToStringConverter wConverter = new PeriodToStringConverter("岁", "月", "天", true);
 
     @Override
     public Period read(JsonReader in) throws IOException {
-        log.error("不支持的类型转换(String -> Period)");
-        throw new RuntimeException("不支持的类型转换(String -> Period)");
+        return null;
     }
 
     @Override
@@ -30,7 +24,7 @@ public abstract class AbstractPeriodTypeAdapter extends TypeAdapter<Period> {
         if (value == null) {
             out.nullValue();
         } else {
-            out.value(periodToStringConverter.convert(value));
+            out.value(wConverter.convert(value));
         }
     }
 }
