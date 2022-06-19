@@ -8,6 +8,9 @@ import com.google.gson.stream.JsonWriter;
 import com.kaos.skynet.core.type.converter.BooleanToStringConverter;
 import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 
+/**
+ * Bool型处理器，不纳入默认处理器，只因使用频繁，纳入核心库
+ */
 public class BooleanTypeAdapter extends TypeAdapter<Boolean> {
     /**
      * 真值
