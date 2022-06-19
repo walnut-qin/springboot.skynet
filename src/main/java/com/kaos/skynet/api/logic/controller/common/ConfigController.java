@@ -7,6 +7,7 @@ import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.http.RspWrapper;
 
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import lombok.extern.log4j.Log4j;
 @Validated
 @RestController
 @RequestMapping({ "api/common/config", "/ms/common/config" })
-public class ConfigController {
+class ConfigController {
     /**
      * 开关缓存
      */
@@ -33,7 +34,7 @@ public class ConfigController {
      * @return
      */
     @RequestMapping(value = "queryState", method = RequestMethod.GET, produces = MediaType.JSON)
-    public RspWrapper<Boolean> queryState(@NotBlank(message = "开关名不能为空") String switchName) {
+    RspWrapper<Boolean> queryState(@NotBlank(message = "开关名不能为空") String switchName) {
         try {
             // 记录日志
             log.info(String.format("查询开关变量(key = %s)", switchName));
@@ -41,7 +42,7 @@ public class ConfigController {
             // 获取开关的值
             var swt = this.configSwitchCache.get(switchName);
             if (swt == null || swt.getValid() != ValidEnum.VALID) {
-                return RspWrapper.wrapSuccessResponse(false);
+                throw new NotFoundException("未找到开关");
             }
 
             return RspWrapper.wrapSuccessResponse(swt.getValue());

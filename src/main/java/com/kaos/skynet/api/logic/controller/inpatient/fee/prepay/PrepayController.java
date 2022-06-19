@@ -1,7 +1,6 @@
 package com.kaos.skynet.api.logic.controller.inpatient.fee.prepay;
 
-import java.util.List;
-
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.kaos.skynet.api.logic.controller.MediaType;
@@ -18,14 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Validated
 @RestController
 @RequestMapping("/api/inpatient/fee/prepay")
-public class PrepayController {
+class PrepayController {
     /**
      * 序列化工具
      */
@@ -45,27 +43,23 @@ public class PrepayController {
      * @return
      */
     @RequestMapping(value = "fixRecallPrepay", method = RequestMethod.GET, produces = MediaType.JSON)
-    public RspWrapper<Object> fixRecallPrepay(@RequestBody FixRecallPrepay.ReqBody reqBody) {
+    RspWrapper<Object> fixRecallPrepay(@RequestBody @Valid FixRecallPrepay.ReqBody reqBody) {
         try {
             // 记录日志
             log.info(String.format("隔日召回修改预交金, reqBody = %s", json.toJson(reqBody)));
 
             // 启动事务处理
-            var prepayModifyResults = prepayService
-                    .fixRecallPrepay(StringUtils.leftPad(reqBody.getPatientNo(), 10, '0'));
+            var prepayModifyResults = prepayService.fixRecallPrepay(StringUtils.leftPad(reqBody.patientNo, 10, '0'));
 
             // 构造响应
             var builder = FixRecallPrepay.RspBody.builder();
-            builder.size((int) prepayModifyResults.size());
-            builder.data(prepayModifyResults.stream().map(x -> {
-                var itemBuilder = FixRecallPrepay.RspBody.Item.builder();
-                itemBuilder.inPatientNo(x.getInPatientNo());
-                itemBuilder.happenNo(x.getHappenNo());
-                itemBuilder.oldCost(x.getOldCost());
-                itemBuilder.newCost(x.getNewCost());
-                return itemBuilder.build();
+            return RspWrapper.wrapSuccessResponse(prepayModifyResults.stream().map(x -> {
+                builder.inPatientNo(x.getInPatientNo());
+                builder.happenNo(x.getHappenNo());
+                builder.oldCost(x.getOldCost());
+                builder.newCost(x.getNewCost());
+                return builder.build();
             }).toList());
-            return RspWrapper.wrapSuccessResponse(builder.build());
         } catch (Exception e) {
             return RspWrapper.wrapFailResponse(e.getMessage());
         }
@@ -74,61 +68,42 @@ public class PrepayController {
     /**
      * fixRecallPrepay的请求和响应body
      */
-    public static class FixRecallPrepay {
+    static class FixRecallPrepay {
         /**
          * 请求body
          */
-        @Getter
-        public static class ReqBody {
+        static class ReqBody {
             /**
              * 住院号
              */
             @NotBlank(message = "住院号不能为空")
-            private String patientNo;
+            String patientNo;
         }
 
         /**
          * 响应body
          */
-        @Getter
         @Builder
-        public static class RspBody {
+        static class RspBody {
             /**
-             * 修改的数量
+             * 住院流水号
              */
-            private Integer size;
-
-            /**
-             * 修改明细
-             */
-            private List<Item> data;
+            String inPatientNo;
 
             /**
-             * 明细内容
+             * 预交金序号
              */
-            @Getter
-            @Builder
-            public static class Item {
-                /**
-                 * 住院流水号
-                 */
-                private String inPatientNo;
+            Integer happenNo;
 
-                /**
-                 * 预交金序号
-                 */
-                private Integer happenNo;
+            /**
+             * 原值
+             */
+            Double oldCost;
 
-                /**
-                 * 原值
-                 */
-                private Double oldCost;
-
-                /**
-                 * 新值
-                 */
-                private Double newCost;
-            }
+            /**
+             * 新值
+             */
+            Double newCost;
         }
     }
 }

@@ -20,7 +20,7 @@ import lombok.extern.log4j.Log4j;
 @Validated
 @RestController
 @RequestMapping("/api/cache")
-public class CacheController {
+class CacheController {
     @Autowired
     DataCache dataCache;
 
@@ -30,7 +30,7 @@ public class CacheController {
      * @return
      */
     @RequestMapping(value = "show", method = RequestMethod.GET, produces = MediaType.JSON)
-    public RspWrapper<Map<String, Object>> show() {
+    RspWrapper<Map<String, Object>> show() {
         try {
             // 入参记录
             log.info("展示系统缓存日志");

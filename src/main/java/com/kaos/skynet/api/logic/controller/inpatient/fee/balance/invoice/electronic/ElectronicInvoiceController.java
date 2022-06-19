@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Validated
 @RestController
 @RequestMapping("/api/inpatient/fee/balance/invoice/electronic")
-public class ElectronicInvoiceController {
+class ElectronicInvoiceController {
     /**
      * 序列化工具
      */
@@ -43,13 +42,13 @@ public class ElectronicInvoiceController {
     BoSoftPlugin boSoftPlugin;
 
     @RequestMapping(value = "queryElectronicInvoiceInfo", method = RequestMethod.POST, produces = MediaType.JSON)
-    public RspWrapper<Object> queryElectronicInvoiceInfo(@RequestBody QueryElectronicInvoiceInfo.ReqBody reqBody) {
+    RspWrapper<Object> queryElectronicInvoiceInfo(@RequestBody QueryElectronicInvoiceInfo.ReqBody reqBody) {
         try {
             // 记录日志
             log.info(String.format("获取发票信息, reqBody = %s", json.toJson(reqBody)));
 
             // 查询电子发票记录
-            var invoice = electronicInvoiceMapper.queryInvoice(reqBody.getInvoiceNo(), reqBody.getTransType());
+            var invoice = electronicInvoiceMapper.queryInvoice(reqBody.invoiceNo, reqBody.transType);
             if (invoice == null) {
                 throw new RuntimeException("不存在的电子发票");
             }
@@ -67,35 +66,33 @@ public class ElectronicInvoiceController {
     /**
      * 接口Body
      */
-    public static class QueryElectronicInvoiceInfo {
+    static class QueryElectronicInvoiceInfo {
         /**
          * 请求body
          */
-        @Getter
-        public static class ReqBody {
+        static class ReqBody {
             /**
              * HIS发票号
              */
-            private String invoiceNo;
+            String invoiceNo;
 
             /**
              * 交易类型
              */
             @JsonAdapter(EnumValueTypeAdapter.class)
-            private TransTypeEnum transType;
+            TransTypeEnum transType;
         }
 
-        @Getter
         public static class BoSoftReqBody {
             /**
              * 业务流水号
              */
-            private String busNo;
+            String busNo;
 
             /**
              * 业务发生时间
              */
-            private String busDateTime;
+            String busDateTime;
 
             /**
              * 单参数构造
@@ -108,22 +105,21 @@ public class ElectronicInvoiceController {
             }
         }
 
-        @Getter
-        public static class BoSoftRspBody {
+        static class BoSoftRspBody {
             /**
              * 电子票据代码
              */
-            private String billBatchCode;
+            String billBatchCode;
 
             /**
              * 电子票据号码
              */
-            private String billNo;
+            String billNo;
 
             /**
              * 电子校验码
              */
-            private String random;
+            String random;
         }
     }
 }

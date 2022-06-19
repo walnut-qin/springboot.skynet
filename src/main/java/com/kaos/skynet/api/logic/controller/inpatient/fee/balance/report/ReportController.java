@@ -30,7 +30,7 @@ import lombok.extern.log4j.Log4j;
 @Validated
 @RestController
 @RequestMapping({ "/api/inpatient/fee/balance/report", "/ms/inpatient/fee/balance/report", "/ms/inpatient/dayreport" })
-public class ReportController {
+class ReportController {
     /**
      * 序列化工具
      */
@@ -108,22 +108,22 @@ public class ReportController {
      * @return
      */
     @RequestMapping(value = "queryNewYbDayBalanceCost", method = RequestMethod.POST, produces = MediaType.JSON)
-    public RspWrapper<Double> queryNewYbDayBalanceCost(@RequestBody @Valid QueryNewYbDayBalanceCost.ReqBody reqBody) {
+    RspWrapper<Double> queryNewYbDayBalanceCost(@RequestBody @Valid QueryNewYbDayBalanceCost.ReqBody reqBody) {
         try {
             // 记录日志
             log.info("查询新医保统筹日结".concat(json.toJson(reqBody)));
 
             // 检索所有结算记录
             var keyBuilder = FinIpbBalanceHeadMapper.Key.builder();
-            keyBuilder.balanceOperCode(reqBody.getBalancer());
-            keyBuilder.beginBalanceDate(reqBody.getBeginDate());
-            keyBuilder.endBalanceDate(reqBody.getEndDate());
+            keyBuilder.balanceOperCode(reqBody.balancer);
+            keyBuilder.beginBalanceDate(reqBody.beginDate);
+            keyBuilder.endBalanceDate(reqBody.endDate);
             keyBuilder.pactCode("18");
             var balances = balanceHeadMapper.queryBalanceHeads(keyBuilder.build());
 
             // 算和
             Double cost = balances.stream().mapToDouble(x -> {
-                return Optional.fromNullable(switch (reqBody.getType()) {
+                return Optional.fromNullable(switch (reqBody.type) {
                     case PUB -> x.getPubCost();
                     case PAY -> x.getPayCost();
                 }).or(0.0);
@@ -135,52 +135,51 @@ public class ReportController {
         }
     }
 
-    private static class QueryNewYbDayBalanceCost {
-        @Getter
-        private static class ReqBody {
+    static class QueryNewYbDayBalanceCost {
+        static class ReqBody {
             /**
              * 结算员
              */
             @NotBlank(message = "结算员不能为空")
-            private String balancer;
+            String balancer;
 
             /**
              * 开始时间
              */
             @NotNull(message = "开始时间不能为空")
-            private LocalDateTime beginDate;
+            LocalDateTime beginDate;
 
             /**
              * 截至时间
              */
             @NotNull(message = "截止时间不能为空")
-            private LocalDateTime endDate;
+            LocalDateTime endDate;
 
             /**
              * 类型
              */
             @NotNull(message = "查询类型不能为空")
             @JsonAdapter(EnumValueTypeAdapter.class)
-            private TypeEnum type;
+            TypeEnum type;
 
             /**
              * 类型
              */
             @Getter
             @AllArgsConstructor
-            private enum TypeEnum implements Enum {
+            enum TypeEnum implements Enum {
                 PUB("1", "统筹"),
                 PAY("2", "账户");
 
                 /**
                  * 数据库存值
                  */
-                private String value;
+                String value;
 
                 /**
                  * 描述存值
                  */
-                private String description;
+                String description;
             }
         }
     }

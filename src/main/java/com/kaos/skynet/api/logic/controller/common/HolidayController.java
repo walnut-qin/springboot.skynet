@@ -18,14 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Validated
 @RestController
 @RequestMapping("api/common/holiday")
-public class HolidayController {
+class HolidayController {
     /**
      * 序列化工具
      */
@@ -45,7 +44,7 @@ public class HolidayController {
      * @return
      */
     @RequestMapping(value = "getDayInfo", method = RequestMethod.GET, produces = MediaType.JSON)
-    public RspWrapper<GetDayInfo.RspBody> getDayInfo(@NotNull(message = "日期不能为空") LocalDate date) {
+    RspWrapper<GetDayInfo.RspBody> getDayInfo(@NotNull(message = "日期不能为空") LocalDate date) {
         try {
             // 记录日志
             log.info(String.format("查询节假日信息(date = %s)", json.toJson(date)));
@@ -68,25 +67,23 @@ public class HolidayController {
         }
     }
 
-    @Getter
-    private static class GetDayInfo {
-        @Getter
+    static class GetDayInfo {
         @Builder
         static class RspBody {
             /**
              * 日期类型
              */
-            private DayTypeEnum type;
+            DayTypeEnum type;
 
             /**
              * 类型中文名
              */
-            private String name;
+            String name;
 
             /**
              * 星期
              */
-            private WeekEnum week;
+            WeekEnum week;
         }
     }
 }
