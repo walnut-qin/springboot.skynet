@@ -84,7 +84,7 @@ class ApplyController {
         }
     }
 
-    class QuerySurgeryInfo {
+    static class QuerySurgeryInfo {
         static class ReqBody {
             /**
              * 手术申请单号
@@ -140,7 +140,7 @@ class ApplyController {
         }
     }
 
-    class QuerySurgeryInfos {
+    static class QuerySurgeryInfos {
         static class ReqBody {
             /**
              * 申请时间左值
