@@ -6,9 +6,11 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortMainInfo;
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
+import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortPool;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
+import com.kaos.skynet.core.http.RspWrapper;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.thread.pool.ThreadPool;
 
@@ -49,7 +51,6 @@ public class ScheduleController {
      * 定时更新系统内尚未注销的陪护证状态
      */
     @Scheduled(cron = "0 5/10 * * * ?")
-    @RequestMapping(value = "updateState", method = RequestMethod.GET)
     public void updateState() {
         escortPool.getGuardPool().execute(() -> {
             // 检索尚且有效的陪护证
@@ -81,8 +82,12 @@ public class ScheduleController {
      * 
      * @return
      */
-    @RequestMapping(value = "showPoolState", method = RequestMethod.GET)
-    public Map<String, ThreadPool.PoolState> showPoolState() {
-        return escortPool.show();
+    @RequestMapping(value = "showPoolState", method = RequestMethod.POST, produces = MediaType.JSON)
+    public RspWrapper<Map<String, ThreadPool.PoolState>> showPoolState() {
+        try {
+            return RspWrapper.wrapSuccessResponse(escortPool.show());
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
     }
 }
