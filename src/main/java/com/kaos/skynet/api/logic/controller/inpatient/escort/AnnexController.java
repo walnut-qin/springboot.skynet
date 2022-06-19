@@ -272,7 +272,7 @@ public class AnnexController {
         }
     }
 
-    @RequestMapping(value = "checkAnnex", method = RequestMethod.GET, produces = MediaType.TEXT)
+    @RequestMapping(value = "checkAnnex", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<String> checkAnnex(@RequestBody @Valid CheckAnnex.ReqBody reqBody) {
         try {
             // 入参记录
