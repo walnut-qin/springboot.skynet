@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
@@ -24,12 +27,14 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexInf
 import com.kaos.skynet.api.data.his.router.PatientNameRouter;
 import com.kaos.skynet.api.logic.service.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
+import com.kaos.skynet.core.http.RspWrapper;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -160,6 +165,66 @@ public class AnnexController {
     }
 
     /**
+     * 上传附件
+     * 
+     * @param reqBody
+     * @return
+     */
+    @RequestMapping(value = "uploadAnnex", method = RequestMethod.POST, produces = MediaType.JSON)
+    RspWrapper<String> uploadAnnex(@RequestBody @Valid UploadAnnex.ReqBody reqBody) {
+        try {
+            // 入参记录
+            log.info("上传附件".concat(json.toJson(reqBody)));
+
+            // 调用服务 - 不存在冲突，无需加锁
+            var annexNo = annexService.uploadAnnex(reqBody.cardNo, reqBody.url);
+
+            // 查询所有关联陪护证
+            var escortBuilder = EscortMainInfoMapper.Key.builder();
+            escortBuilder.helperCardNo(reqBody.cardNo);
+            escortBuilder.states(Lists.newArrayList(
+                    StateEnum.无核酸检测结果,
+                    StateEnum.等待院内核酸检测结果,
+                    StateEnum.等待院外核酸检测结果审核,
+                    StateEnum.生效中,
+                    StateEnum.其他));
+            var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
+            if (!escorts.isEmpty()) {
+                for (var escort : escorts) {
+                    escortPool.getTaskPool().execute(() -> {
+                        var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                        // 更新关联陪护状态
+                        Threads.newLockExecutor().link(stateLock).execute(() -> {
+                            escortService.updateState(escort.getEscortNo(), null, "WebApi", null);
+                        });
+                    });
+                }
+            }
+
+            return RspWrapper.wrapSuccessResponse(annexNo);
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    static class UploadAnnex {
+        static class ReqBody {
+            /**
+             * 陪护人卡号
+             */
+            @NotBlank(message = "卡号不能为空")
+            @Size(min = 10, max = 10, message = "卡号长度异常")
+            String cardNo;
+
+            /**
+             * 附件链接
+             */
+            @NotBlank(message = "附件不能为空")
+            String url;
+        }
+    }
+
+    /**
      * 审核附件
      * 
      * @param annexNo
@@ -204,6 +269,73 @@ public class AnnexController {
                     });
                 });
             }
+        }
+    }
+
+    @RequestMapping(value = "checkAnnex", method = RequestMethod.GET, produces = MediaType.TEXT)
+    RspWrapper<String> checkAnnex(@RequestBody @Valid CheckAnnex.ReqBody reqBody) {
+        try {
+            // 入参记录
+            log.info("审核附件".concat(json.toJson(reqBody)));
+
+            // 加状态操作锁，防止同时操作同一个陪护证
+            Threads.newLockExecutor().link(escortLock.getAnnexLock().getLock(reqBody.annexNo)).execute(() -> {
+                annexService.checkAnnex(reqBody.annexNo, reqBody.checker, reqBody.negative, reqBody.inspectDate);
+            });
+
+            // 查询所有关联陪护证
+            var escortBuilder = EscortMainInfoMapper.Key.builder();
+            escortBuilder.helperCardNo(annexInfoCache.get(reqBody.annexNo).getCardNo());
+            escortBuilder.states(Lists.newArrayList(
+                    StateEnum.无核酸检测结果,
+                    StateEnum.等待院内核酸检测结果,
+                    StateEnum.等待院外核酸检测结果审核,
+                    StateEnum.生效中,
+                    StateEnum.其他));
+            var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
+            if (!escorts.isEmpty()) {
+                for (var escort : escorts) {
+                    escortPool.getTaskPool().execute(() -> {
+                        var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                        // 更新关联陪护状态
+                        Threads.newLockExecutor().link(stateLock).execute(() -> {
+                            escortService.updateState(escort.getEscortNo(), null, "WebApi", "患者上传外院报告");
+                        });
+                    });
+                }
+            }
+
+            return RspWrapper.wrapSuccessResponse(reqBody.annexNo);
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    static class CheckAnnex {
+        static class ReqBody {
+            /**
+             * 附件号
+             */
+            @NotBlank(message = "附件号不能为空")
+            String annexNo;
+
+            /**
+             * 审核员
+             */
+            @NotBlank(message = "审核员不能为空")
+            String checker;
+
+            /**
+             * 阴性标识
+             */
+            @NotNull(message = "阴性标识不能为空")
+            Boolean negative;
+
+            /**
+             * 核酸检测时间
+             */
+            @NotNull(message = "核酸检测时间不能为空")
+            LocalDateTime inspectDate;
         }
     }
 
@@ -314,8 +446,108 @@ public class AnnexController {
         private LocalDateTime inspectDate;
     }
 
+    @RequestMapping(value = "queryAnnexs", method = RequestMethod.POST, produces = MediaType.JSON)
+    RspWrapper<List<QueryAnnexs.RspBody>> queryAnnexs(@RequestBody @Valid QueryAnnexs.ReqBody reqBody) {
+        // 入参记录
+        log.info("查询科室信息".concat(json.toJson(reqBody)));
+
+        // 检索该科室所有患者
+        var inMainInfoBuilder = FinIprInMainInfoMapper.Key.builder();
+        inMainInfoBuilder.deptCode(reqBody.deptCode);
+        inMainInfoBuilder.states(Lists.newArrayList(InStateEnum.病房接诊));
+        var inMainInfos = inMainInfoMapper.queryInMainInfos(inMainInfoBuilder.build());
+
+        // 查询所有有效的陪护人
+        var escortInfos = escortMainInfoMapper.queryEscortMainInfos(EscortMainInfoMapper.Key.builder()
+                .patientCardNos(inMainInfos.stream().map(x -> {
+                    return x.getCardNo();
+                }).toList())
+                .states(Lists.newArrayList(StateEnum.无核酸检测结果,
+                        StateEnum.等待院内核酸检测结果,
+                        StateEnum.等待院外核酸检测结果审核,
+                        StateEnum.生效中,
+                        StateEnum.其他))
+                .build());
+
+        // 轮询陪护记录
+        Multimap<String, String> escortRelation = ArrayListMultimap.create();
+        for (EscortMainInfo escortMainInfo : escortInfos) {
+            // 登记陪护关系
+            escortRelation.put(escortMainInfo.getHelperCardNo(), escortMainInfo.getPatientCardNo());
+        }
+
+        // 构造所有附件信息
+        List<EscortAnnexInfo> annexInfos = Lists.newArrayList();
+        for (String helperCardNo : escortRelation.keySet()) {
+            annexInfos.addAll(annexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
+                    .cardNo(helperCardNo)
+                    .checked(reqBody.checked).build()));
+        }
+
+        // 映射到响应体
+        var builder = QueryAnnexs.RspBody.builder();
+        var urlPrefix = "http://172.16.100.252:8025/api/inpatient/escort/annex/getPic?refer=";
+        return RspWrapper.wrapSuccessResponse(annexInfos.stream().map(x -> {
+            builder.annexNo(x.getAnnexNo());
+            builder.helperName(patientNameConverter.route(x.getCardNo()));
+            builder.picUrl(urlPrefix.concat(x.getAnnexNo()));
+            builder.patientNames(Set.copyOf(escortRelation.get(x.getCardNo())).stream().map(y -> {
+                return patientNameConverter.route(y);
+            }).toList());
+            // 若查询审核内容，则添加审核信息
+            if (reqBody.checked) {
+                builder.negative(annexCheckCache.get(x.getAnnexNo()).getNegative());
+                builder.inspectDate(annexCheckCache.get(x.getAnnexNo()).getInspectDate());
+            }
+            return builder.build();
+        }).toList());
+    }
+
+    static class QueryAnnexs {
+        static class ReqBody {
+            @NotBlank(message = "科室编码不能为空")
+            String deptCode;
+
+            @NotNull(message = "审核结果不能为空")
+            Boolean checked;
+        }
+
+        @Builder
+        static class RspBody {
+            /**
+             * 附件编码
+             */
+            String annexNo;
+
+            /**
+             * 陪护人姓名
+             */
+            String helperName;
+
+            /**
+             * 附件链接
+             */
+            String picUrl;
+
+            /**
+             * 被陪护患者列表
+             */
+            List<String> patientNames;
+
+            /**
+             * 审核结果
+             */
+            Boolean negative;
+
+            /**
+             * 检验日期
+             */
+            LocalDateTime inspectDate;
+        }
+    }
+
     @RequestMapping(value = "getPic", method = RequestMethod.GET, produces = MediaType.JPEG)
-    public BufferedImage getPic(@NotNull(message = "键值不能为空") String refer) {
+    BufferedImage getPic(@NotNull(message = "键值不能为空") String refer) {
         // 根据refer号获取annexUrl
         var rec = annexInfoCache.get(refer);
         if (rec == null) {
