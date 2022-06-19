@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.json.gson.adapter;
+package com.kaos.skynet.core.json.gson.adapter.core;
 
 import java.io.IOException;
 import java.time.Period;

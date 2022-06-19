@@ -1,5 +1,6 @@
 package com.kaos.skynet.core.json.gson.adapter;
 
+import com.kaos.skynet.core.json.gson.adapter.core.EnumTypeAdapter;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.type.converter.EnumToStringConverter;
 import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;

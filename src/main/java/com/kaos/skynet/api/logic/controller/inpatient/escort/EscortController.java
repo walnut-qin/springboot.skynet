@@ -32,13 +32,9 @@ import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.json.Json;
-import com.kaos.skynet.core.json.gson.adapter.BooleanTypeAdapter;
-import com.kaos.skynet.core.json.gson.adapter.EnumTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.BooleanNumericTypeAdapter;
+import com.kaos.skynet.core.json.gson.adapter.EnumValueTypeAdapter;
 import com.kaos.skynet.core.thread.Threads;
-import com.kaos.skynet.core.type.Enum;
-import com.kaos.skynet.core.type.converter.BooleanToStringConverter;
-import com.kaos.skynet.core.type.converter.EnumToStringConverter;
-import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 import com.kaos.skynet.core.type.utils.StringUtils;
@@ -330,7 +326,7 @@ public class EscortController {
         /**
          * 当前状态<枚举值>
          */
-        @JsonAdapter(SpecialEnumTypeAdapter.class)
+        @JsonAdapter(EnumValueTypeAdapter.class)
         public StateEnum state = null;
     }
 
@@ -448,7 +444,7 @@ public class EscortController {
         /**
          * 免费标识
          */
-        @JsonAdapter(value = SpecialBooleanTypeAdapter.class)
+        @JsonAdapter(value = BooleanNumericTypeAdapter.class)
         public Boolean freeFlag = null;
 
         /**
@@ -541,7 +537,7 @@ public class EscortController {
         /**
          * 免费标识
          */
-        @JsonAdapter(value = SpecialBooleanTypeAdapter.class)
+        @JsonAdapter(value = BooleanNumericTypeAdapter.class)
         public Boolean freeFlag = null;
 
         /**
@@ -558,24 +554,5 @@ public class EscortController {
          * 行为列表
          */
         public List<EscortActionRec> actions = null;
-    }
-
-    /**
-     * 专用Boolean适配器
-     */
-    private static class SpecialBooleanTypeAdapter extends BooleanTypeAdapter {
-        @Autowired
-        SpecialBooleanTypeAdapter() {
-            super.rConverter = new StringToBooleanConverter("1", "0");
-            super.wConverter = new BooleanToStringConverter("1", "0");
-        }
-    }
-
-    private static class SpecialEnumTypeAdapter<E extends Enum> extends EnumTypeAdapter<E> {
-        @Autowired
-        SpecialEnumTypeAdapter() {
-            super.rConverterFactory = new StringToEnumConverterFactory(true);
-            super.wConverter = new EnumToStringConverter<>(true);
-        }
     }
 }
