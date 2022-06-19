@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.service.inpatient.fee.prepay.PrepayService;
+import com.kaos.skynet.core.http.RspWrapper;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
@@ -44,25 +45,30 @@ public class PrepayController {
      * @return
      */
     @RequestMapping(value = "fixRecallPrepay", method = RequestMethod.GET, produces = MediaType.JSON)
-    public FixRecallPrepay.RspBody fixRecallPrepay(@RequestBody FixRecallPrepay.ReqBody reqBody) {
-        // 记录日志
-        log.info(String.format("隔日召回修改预交金, reqBody = %s", json.toJson(reqBody)));
+    public RspWrapper<Object> fixRecallPrepay(@RequestBody FixRecallPrepay.ReqBody reqBody) {
+        try {
+            // 记录日志
+            log.info(String.format("隔日召回修改预交金, reqBody = %s", json.toJson(reqBody)));
 
-        // 启动事务处理
-        var prepayModifyResults = prepayService.fixRecallPrepay(StringUtils.leftPad(reqBody.getPatientNo(), 10, '0'));
+            // 启动事务处理
+            var prepayModifyResults = prepayService
+                    .fixRecallPrepay(StringUtils.leftPad(reqBody.getPatientNo(), 10, '0'));
 
-        // 构造响应
-        var builder = FixRecallPrepay.RspBody.builder();
-        builder.size((int) prepayModifyResults.size());
-        builder.data(prepayModifyResults.stream().map(x -> {
-            var itemBuilder = FixRecallPrepay.RspBody.Item.builder();
-            itemBuilder.inPatientNo(x.getInPatientNo());
-            itemBuilder.happenNo(x.getHappenNo());
-            itemBuilder.oldCost(x.getOldCost());
-            itemBuilder.newCost(x.getNewCost());
-            return itemBuilder.build();
-        }).toList());
-        return builder.build();
+            // 构造响应
+            var builder = FixRecallPrepay.RspBody.builder();
+            builder.size((int) prepayModifyResults.size());
+            builder.data(prepayModifyResults.stream().map(x -> {
+                var itemBuilder = FixRecallPrepay.RspBody.Item.builder();
+                itemBuilder.inPatientNo(x.getInPatientNo());
+                itemBuilder.happenNo(x.getHappenNo());
+                itemBuilder.oldCost(x.getOldCost());
+                itemBuilder.newCost(x.getNewCost());
+                return itemBuilder.build();
+            }).toList());
+            return RspWrapper.wrapSuccessResponse(builder.build());
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
     }
 
     /**

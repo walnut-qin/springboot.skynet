@@ -1,9 +1,12 @@
 package com.kaos.skynet.api.logic.controller.inpatient.fee.balance.invoice.electronic;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoiceMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
+import com.kaos.skynet.core.http.RspWrapper;
 import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.json.gson.adapter.EnumValueTypeAdapter;
 import com.kaos.skynet.plugin.bosoft.BoSoftPlugin;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,20 +43,25 @@ public class ElectronicInvoiceController {
     BoSoftPlugin boSoftPlugin;
 
     @RequestMapping(value = "queryElectronicInvoiceInfo", method = RequestMethod.POST, produces = MediaType.JSON)
-    public Object queryElectronicInvoiceInfo(@RequestBody QueryElectronicInvoiceInfo.ReqBody reqBody) {
-        // 记录日志
-        log.info(String.format("获取发票信息, reqBody = %s", json.toJson(reqBody)));
+    public RspWrapper<Object> queryElectronicInvoiceInfo(@RequestBody QueryElectronicInvoiceInfo.ReqBody reqBody) {
+        try {
+            // 记录日志
+            log.info(String.format("获取发票信息, reqBody = %s", json.toJson(reqBody)));
 
-        // 查询电子发票记录
-        var invoice = electronicInvoiceMapper.queryInvoice(reqBody.getInvoiceNo(), reqBody.getTransType());
-        if (invoice == null) {
-            throw new RuntimeException("不存在的电子发票");
+            // 查询电子发票记录
+            var invoice = electronicInvoiceMapper.queryInvoice(reqBody.getInvoiceNo(), reqBody.getTransType());
+            if (invoice == null) {
+                throw new RuntimeException("不存在的电子发票");
+            }
+
+            // 发送请求
+            return RspWrapper.wrapSuccessResponse(
+                    boSoftPlugin.postForObject("getEBillByBusNo",
+                            new QueryElectronicInvoiceInfo.BoSoftReqBody(invoice.getBusNo()),
+                            QueryElectronicInvoiceInfo.BoSoftRspBody.class));
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
         }
-
-        // 发送请求
-        return boSoftPlugin.postForObject("getEBillByBusNo",
-                new QueryElectronicInvoiceInfo.BoSoftReqBody(invoice.getBusNo()),
-                QueryElectronicInvoiceInfo.BoSoftRspBody.class);
     }
 
     /**
@@ -73,6 +81,7 @@ public class ElectronicInvoiceController {
             /**
              * 交易类型
              */
+            @JsonAdapter(EnumValueTypeAdapter.class)
             private TransTypeEnum transType;
         }
 

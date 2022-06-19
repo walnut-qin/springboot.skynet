@@ -2,18 +2,28 @@ package com.kaos.skynet.api.logic.controller.inpatient.fee.balance.report;
 
 import java.time.LocalDateTime;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.base.Optional;
+import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
+import com.kaos.skynet.core.http.RspWrapper;
+import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.json.gson.adapter.EnumValueTypeAdapter;
+import com.kaos.skynet.core.type.Enum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -21,6 +31,12 @@ import lombok.extern.log4j.Log4j;
 @RestController
 @RequestMapping({ "/api/inpatient/fee/balance/report", "/ms/inpatient/fee/balance/report", "/ms/inpatient/dayreport" })
 public class ReportController {
+    /**
+     * 序列化工具
+     */
+    @Autowired
+    Json json;
+
     /**
      * 费用明细表
      */
@@ -83,5 +99,89 @@ public class ReportController {
         return balances.stream().mapToDouble(x -> {
             return Optional.fromNullable(x.getPayCost()).or(0.0);
         }).sum();
+    }
+
+    /**
+     * 查询新医保统筹日结
+     * 
+     * @param reqBody
+     * @return
+     */
+    @RequestMapping(value = "queryNewYbDayBalanceCost", method = RequestMethod.POST, produces = MediaType.JSON)
+    public RspWrapper<Double> queryNewYbDayBalanceCost(@RequestBody @Valid QueryNewYbDayBalanceCost.ReqBody reqBody) {
+        try {
+            // 记录日志
+            log.info("查询新医保统筹日结".concat(json.toJson(reqBody)));
+
+            // 检索所有结算记录
+            var keyBuilder = FinIpbBalanceHeadMapper.Key.builder();
+            keyBuilder.balanceOperCode(reqBody.getBalancer());
+            keyBuilder.beginBalanceDate(reqBody.getBeginDate());
+            keyBuilder.endBalanceDate(reqBody.getEndDate());
+            keyBuilder.pactCode("18");
+            var balances = balanceHeadMapper.queryBalanceHeads(keyBuilder.build());
+
+            // 算和
+            Double cost = balances.stream().mapToDouble(x -> {
+                return Optional.fromNullable(switch (reqBody.getType()) {
+                    case PUB -> x.getPubCost();
+                    case PAY -> x.getPayCost();
+                }).or(0.0);
+            }).sum();
+
+            return RspWrapper.wrapSuccessResponse(cost);
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    private static class QueryNewYbDayBalanceCost {
+        @Getter
+        private static class ReqBody {
+            /**
+             * 结算员
+             */
+            @NotBlank(message = "结算员不能为空")
+            private String balancer;
+
+            /**
+             * 开始时间
+             */
+            @NotNull(message = "开始时间不能为空")
+            private LocalDateTime beginDate;
+
+            /**
+             * 截至时间
+             */
+            @NotNull(message = "截止时间不能为空")
+            private LocalDateTime endDate;
+
+            /**
+             * 类型
+             */
+            @NotNull(message = "查询类型不能为空")
+            @JsonAdapter(EnumValueTypeAdapter.class)
+            private TypeEnum type;
+
+            /**
+             * 类型
+             */
+            @Getter
+            @AllArgsConstructor
+            private enum TypeEnum implements Enum {
+                PUB("1", "统筹"),
+                PAY("2", "账户");
+
+                /**
+                 * 数据库存值
+                 */
+                private String value;
+
+                /**
+                 * 描述存值
+                 */
+                private String description;
+            }
+        }
     }
 }
