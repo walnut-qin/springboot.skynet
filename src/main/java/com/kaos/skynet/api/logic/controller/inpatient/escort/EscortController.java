@@ -49,6 +49,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
@@ -219,7 +220,7 @@ public class EscortController {
     }
 
     @RequestMapping(value = "bind", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<String> bind(@RequestBody @Valid SignUp.ReqBody reqBody) {
+    RspWrapper<String> bind(@RequestBody @Valid Bind.ReqBody reqBody) {
         try {
             // 记录日志
             log.info("登记陪护证".concat(json.toJson(reqBody)));
@@ -242,7 +243,7 @@ public class EscortController {
         }
     }
 
-    static class SignUp {
+    static class Bind {
         static class ReqBody {
             /**
              * 住院号
@@ -303,6 +304,51 @@ public class EscortController {
     }
 
     /**
+     * 更新状态
+     * 
+     * @param escortNo
+     * @param state
+     * @param emplCode
+     */
+    @RequestMapping(value = "updateState", method = RequestMethod.POST, produces = MediaType.JSON)
+    RspWrapper<Object> updateState(@RequestBody @Valid UpdateState.ReqBody reqBody) {
+        try {
+            // 入参日志
+            log.info("修改陪护证状态".concat(json.toJson(reqBody)));
+
+            // 加状态操作锁，防止同时操作同一个陪护证
+            Threads.newLockExecutor().link(escortLock.getStateLock().getLock(reqBody.escortNo)).execute(() -> {
+                escortService.updateState(reqBody.escortNo, reqBody.state, reqBody.emplCode, "收到客户端请求");
+            });
+            return RspWrapper.wrapSuccessResponse(null);
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    static class UpdateState {
+        static class ReqBody {
+            /**
+             * 陪护证号
+             */
+            @NotBlank(message = "陪护证号不能为空")
+            String escortNo;
+
+            /**
+             * 待设置状态
+             */
+            @JsonAdapter(EnumValueTypeAdapter.class)
+            EscortStateRec.StateEnum state;
+
+            /**
+             * 操作员
+             */
+            @NotBlank(message = "操作员不能为空")
+            String emplCode;
+        }
+    }
+
+    /**
      * 记录动作
      * 
      * @param escortNo
@@ -328,6 +374,45 @@ public class EscortController {
         Threads.newLockExecutor().link(escortLock.getActionLock().getLock(escortNo)).execute(() -> {
             escortService.recordAction(escortNo, actionEnum, "收到客户端请求");
         });
+    }
+
+    /**
+     * 记录动作
+     * 
+     * @param escortNo
+     * @param action
+     */
+    @RequestMapping(value = "recordAction", method = RequestMethod.POST, produces = MediaType.JSON)
+    RspWrapper<Object> recordAction(@RequestBody @Valid RecordAction.ReqBody reqBody) {
+        try {
+            // 入参日志
+            log.info("记录陪护证行为".concat(json.toJson(reqBody)));
+
+            // 加状态操作锁，防止同时操作同一个陪护证
+            Threads.newLockExecutor().link(escortLock.getActionLock().getLock(reqBody.escortNo)).execute(() -> {
+                escortService.recordAction(reqBody.escortNo, reqBody.actionEnum, "收到客户端请求");
+            });
+
+            return RspWrapper.wrapSuccessResponse(null);
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    static class RecordAction {
+        static class ReqBody {
+            /**
+             * 陪护证号
+             */
+            @NotBlank(message = "陪护证号不能为空")
+            String escortNo;
+
+            /**
+             * 待设置状态
+             */
+            @JsonAdapter(EnumValueTypeAdapter.class)
+            EscortActionRec.ActionEnum actionEnum;
+        }
     }
 
     /**
@@ -383,6 +468,72 @@ public class EscortController {
          */
         @JsonAdapter(EnumValueTypeAdapter.class)
         public StateEnum state = null;
+    }
+
+    /**
+     * 查询陪护状态
+     * 
+     * @param escortNo
+     * @return
+     */
+    @RequestMapping(value = "queryStateInfo", method = RequestMethod.POST, produces = MediaType.JSON)
+    RspWrapper<QueryStateInfo.RspBody> queryStateInfo(@RequestBody @Valid QueryStateInfo.ReqBody reqBody) {
+        try {
+            // 入参日志
+            log.info("查询陪护证状态".concat(json.toJson(reqBody)));
+
+            // 调用业务
+            var escortInfo = escortMainInfoCache.get(reqBody.escortNo);
+            if (escortInfo == null) {
+                log.error(String.format("不存在的陪护号", reqBody.escortNo));
+                throw new RuntimeException("不存在的陪护号".concat(reqBody.escortNo));
+            }
+
+            // 构造响应体
+            var rspBuilder = QueryStateInfo.RspBody.builder();
+            rspBuilder.patientCardNo(escortInfo.getPatientCardNo());
+            rspBuilder.helperCardNo(escortInfo.getHelperCardNo());
+            rspBuilder.regDate(escortStateRecMapper.queryFirstEscortStateRec(reqBody.escortNo).getRecDate());
+            rspBuilder.state(escortStateRecMapper.queryLastEscortStateRec(reqBody.escortNo).getState());
+
+            return RspWrapper.wrapSuccessResponse(rspBuilder.build());
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    static class QueryStateInfo {
+        static class ReqBody {
+            /**
+             * 患者卡号
+             */
+            @NotBlank(message = "陪护证号不能为空")
+            String escortNo;
+        }
+
+        @Builder
+        static class RspBody {
+            /**
+             * 患者卡号
+             */
+            String patientCardNo;
+
+            /**
+             * 陪护人卡号
+             */
+            String helperCardNo;
+
+            /**
+             * 注册时间
+             */
+            LocalDateTime regDate;
+
+            /**
+             * 当前状态<枚举值>
+             */
+            @JsonAdapter(EnumValueTypeAdapter.class)
+            StateEnum state;
+        }
     }
 
     /**
@@ -518,6 +669,151 @@ public class EscortController {
         public List<EscortActionRec> actions = null;
     }
 
+    /**
+     * 根据患者查陪护
+     * 
+     * @param helperCardNo
+     * @return
+     */
+    @RequestMapping(value = "queryPatientInfo", method = RequestMethod.POST, produces = MediaType.JSON)
+    RspWrapper<List<QueryPatientInfo.RspBody>> queryPatientInfo(@RequestBody @Valid QueryPatientInfo.ReqBody reqBody) {
+        try {
+            // 入参日志
+            log.info(String.format("查询陪护患者信息".concat(json.toJson(reqBody))));
+
+            // 调用业务
+            var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
+                    EscortMainInfoMapper.Key.builder()
+                            .helperCardNo(reqBody.helperCardNo)
+                            .states(Lists.newArrayList(
+                                    StateEnum.无核酸检测结果,
+                                    StateEnum.等待院内核酸检测结果,
+                                    StateEnum.等待院外核酸检测结果审核,
+                                    StateEnum.生效中,
+                                    StateEnum.其他))
+                            .build());
+            if (escortInfos == null) {
+                return null;
+            }
+
+            // 构造响应body
+            return RspWrapper.wrapSuccessResponse(escortInfos.stream().map(x -> {
+                var rsp = QueryPatientInfo.RspBody.builder();
+                rsp.cardNo = x.getPatientCardNo();
+                var patient = patientInfoCache.get(rsp.cardNo);
+                if (patient != null) {
+                    rsp.name = patient.getName();
+                    rsp.sex = patient.getSex();
+                    rsp.age = Period.between(patient.getBirthday().toLocalDate(), LocalDate.now());
+                }
+                var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                        .cardNo(x.getPatientCardNo())
+                        .happenNo(x.getHappenNo())
+                        .build());
+                if (inMainInfos != null && inMainInfos.size() == 1) {
+                    var inMainInfo = inMainInfos.get(0);
+                    rsp.deptName = deptNameConverter.route(inMainInfo.getDeptCode());
+                    rsp.bedNo = bedNoConverter.route(inMainInfo.getBedNo());
+                    rsp.patientNo = inMainInfo.getPatientNo();
+                } else {
+                    var builder = FinIprPrepayInCache.Key.builder();
+                    builder.cardNo(x.getPatientCardNo());
+                    builder.happenNo(x.getHappenNo());
+                    var prepayIn = prepayInCache.get(builder.build());
+                    if (prepayIn != null) {
+                        rsp.deptName = deptNameConverter.route(prepayIn.getPreDeptCode());
+                        rsp.bedNo = bedNoConverter.route(prepayIn.getBedNo());
+                    }
+                }
+                var vip = escortVipCache.get(
+                        EscortVipCache.Key.builder()
+                                .cardNo(x.getPatientCardNo())
+                                .happenNo(x.getHappenNo()).build());
+                if (vip != null) {
+                    rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
+                }
+                rsp.escortNo = x.getEscortNo();
+                rsp.states = escortStateRecCache.get(x.getEscortNo());
+                rsp.states.sort((a, b) -> {
+                    return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
+                });
+                rsp.actions = Lists.newArrayList();
+                return rsp.build();
+            }).toList());
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    static class QueryPatientInfo {
+        static class ReqBody {
+            /**
+             * 陪护人卡号
+             */
+            @NotBlank(message = "陪护人卡号不能为空")
+            String helperCardNo;
+        }
+
+        @Builder
+        static class RspBody {
+            /**
+             * 就诊卡号
+             */
+            String cardNo;
+
+            /**
+             * 姓名
+             */
+            String name;
+
+            /**
+             * 性别
+             */
+            SexEnum sex;
+
+            /**
+             * 年龄
+             */
+            Period age;
+
+            /**
+             * 科室
+             */
+            String deptName;
+
+            /**
+             * 床号
+             */
+            String bedNo;
+
+            /**
+             * 住院号
+             */
+            String patientNo;
+
+            /**
+             * 免费标识
+             */
+            @JsonAdapter(value = BooleanNumericTypeAdapter.class)
+            Boolean freeFlag;
+
+            /**
+             * 陪护证号
+             */
+            String escortNo;
+
+            /**
+             * 状态列表
+             */
+            List<EscortStateRec> states;
+
+            /**
+             * 动作列表
+             */
+            List<EscortActionRec> actions;
+        }
+    }
+
     @RequestMapping(value = "queryHelperInfo", method = RequestMethod.GET, produces = MediaType.JSON)
     public List<QueryHelperInfoRsp> queryHelperInfo(@NotNull(message = "患者卡号不能为空") String patientCardNo) {
         // 入参日志
@@ -609,5 +905,110 @@ public class EscortController {
          * 行为列表
          */
         public List<EscortActionRec> actions = null;
+    }
+
+    @RequestMapping(value = "queryHelperInfo", method = RequestMethod.POST, produces = MediaType.JSON)
+    RspWrapper<List<QueryHelperInfo.RspBody>> queryHelperInfo(@RequestBody @Valid QueryHelperInfo.ReqBody reqBody) {
+        try {
+            // 入参日志
+            log.info("查询患者陪护人信息".concat(json.toJson(reqBody)));
+
+            // 调用业务
+            var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
+                    EscortMainInfoMapper.Key.builder()
+                            .patientCardNo(reqBody.patientCardNo)
+                            .states(Lists.newArrayList(
+                                    StateEnum.无核酸检测结果,
+                                    StateEnum.等待院内核酸检测结果,
+                                    StateEnum.等待院外核酸检测结果审核,
+                                    StateEnum.生效中,
+                                    StateEnum.其他))
+                            .build());
+            if (escortInfos == null) {
+                return null;
+            }
+
+            // 构造响应body
+            return RspWrapper.wrapSuccessResponse(escortInfos.stream().map(x -> {
+                var rsp = QueryHelperInfo.RspBody.builder();
+                rsp.cardNo = x.getHelperCardNo();
+                var helper = patientInfoCache.get(x.getHelperCardNo());
+                if (helper != null) {
+                    rsp.name = helper.getName();
+                    rsp.sex = helper.getSex();
+                    rsp.age = Period.between(helper.getBirthday().toLocalDate(), LocalDate.now());
+                }
+                var vip = escortVipCache.get(
+                        EscortVipCache.Key.builder()
+                                .cardNo(x.getPatientCardNo())
+                                .happenNo(x.getHappenNo()).build());
+                if (vip != null) {
+                    rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
+                }
+                rsp.escortNo = x.getEscortNo();
+                rsp.states = escortStateRecCache.get(x.getEscortNo());
+                rsp.states.sort((a, b) -> {
+                    return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
+                });
+                rsp.actions = Lists.newArrayList();
+                return rsp.build();
+            }).toList());
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    static class QueryHelperInfo {
+        static class ReqBody {
+            /**
+             * 患者卡号
+             */
+            @NotBlank(message = "患者卡号不能为空")
+            String patientCardNo;
+        }
+
+        @Builder
+        static class RspBody {
+            /**
+             * 就诊卡号
+             */
+            String cardNo;
+
+            /**
+             * 姓名
+             */
+            String name;
+
+            /**
+             * 性别
+             */
+            SexEnum sex;
+
+            /**
+             * 年龄
+             */
+            Period age;
+
+            /**
+             * 免费标识
+             */
+            @JsonAdapter(value = BooleanNumericTypeAdapter.class)
+            Boolean freeFlag;
+
+            /**
+             * 陪护证号
+             */
+            String escortNo;
+
+            /**
+             * 状态列表
+             */
+            List<EscortStateRec> states;
+
+            /**
+             * 行为列表
+             */
+            List<EscortActionRec> actions;
+        }
     }
 }
