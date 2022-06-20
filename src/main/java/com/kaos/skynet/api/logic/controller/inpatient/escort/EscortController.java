@@ -6,6 +6,7 @@ import java.time.Period;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,6 +32,7 @@ import com.kaos.skynet.api.data.his.router.DeptNameRouter;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
+import com.kaos.skynet.core.http.RspWrapper;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.json.gson.adapter.BooleanNumericTypeAdapter;
 import com.kaos.skynet.core.json.gson.adapter.EnumValueTypeAdapter;
@@ -214,6 +216,59 @@ public class EscortController {
          * 是否为窗口操作
          */
         private Boolean regByWindow = false;
+    }
+
+    @RequestMapping(value = "bind", method = RequestMethod.POST, produces = MediaType.JSON)
+    RspWrapper<String> bind(@RequestBody @Valid SignUp.ReqBody reqBody) {
+        try {
+            // 记录日志
+            log.info("登记陪护证".concat(json.toJson(reqBody)));
+
+            // 获取就诊卡号
+            String patientCardNo = patientIdxToCardNoConverter.convert(reqBody.patientIdx);
+
+            // 带锁运行业务
+            var patientLock = escortLock.getHelperLock().getLock(patientCardNo);
+            var helperLock = escortLock.getHelperLock().getLock(reqBody.helperCardNo);
+            return RspWrapper.wrapSuccessResponse(
+                    Threads.newLockExecutor().link(patientLock).link(helperLock).execute(() -> {
+                        return escortService.register(patientCardNo,
+                                reqBody.helperCardNo,
+                                reqBody.emplCode,
+                                reqBody.regByWindow);
+                    }));
+        } catch (Exception e) {
+            return RspWrapper.wrapFailResponse(e.getMessage());
+        }
+    }
+
+    static class SignUp {
+        static class ReqBody {
+            /**
+             * 住院号
+             */
+            @NotBlank(message = "患者索引<住院号or就诊卡号>不能为空")
+            @Size(message = "患者索引<住院号or就诊卡号>长度异常", min = 10, max = 10)
+            String patientIdx = null;
+
+            /**
+             * 陪护人卡号
+             */
+            @NotBlank(message = "陪护人卡号不能为空")
+            @Size(message = "陪护人卡号长度异常", min = 10, max = 10)
+            String helperCardNo = null;
+
+            /**
+             * 操作员编码
+             */
+            @NotBlank(message = "操作员编码不能为空")
+            String emplCode = null;
+
+            /**
+             * 是否为窗口操作
+             */
+            Boolean regByWindow = false;
+        }
     }
 
     /**
