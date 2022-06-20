@@ -24,6 +24,7 @@ import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.core.http.RspWrapper;
 import com.kaos.skynet.core.json.Json;
 import com.kaos.skynet.core.json.gson.adapter.BooleanChineseTypeAdapter;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -348,6 +349,7 @@ public class StatisticController {
      * @param deptCode
      * @return
      */
+    @ApiName("查询科室住院患者的陪护人信息")
     @RequestMapping(value = "queryData", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<List<QueryData.RspBody>> queryData(@RequestBody @Valid QueryData.ReqBody reqBody) {
         try {

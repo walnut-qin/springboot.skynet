@@ -5,6 +5,8 @@ import java.util.List;
 import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
 import com.kaos.skynet.core.http.converter.WorkBookHttpMessageConverter;
 import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor;
+import com.kaos.skynet.core.spring.interceptor.TokenInterceptor;
 import com.kaos.skynet.core.type.converter.StringToDateConverter;
 import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;
 import com.kaos.skynet.core.type.converter.StringToLocalDateConverter;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -57,5 +60,16 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
         converters.add(0, new JsonHttpMessageConverter(json));
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
+    }
+
+    /**
+     * 配置拦截器
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LogInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**");
+
+        WebMvcConfigurer.super.addInterceptors(registry);
     }
 }
