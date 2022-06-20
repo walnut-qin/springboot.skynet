@@ -353,9 +353,6 @@ public class StatisticController {
     @RequestMapping(value = "queryData", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<List<QueryData.RspBody>> queryData(@RequestBody @Valid QueryData.ReqBody reqBody) {
         try {
-            // 日志
-            log.info("查询科室患者及陪护信息".concat(json.toJson(reqBody)));
-
             // 查询指定科室的在院患者
             var pats = inMainInfoMapper.queryInMainInfos(
                     FinIprInMainInfoMapper.Key.builder()

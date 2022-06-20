@@ -9,6 +9,9 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+
 import org.springframework.util.StreamUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -31,23 +34,23 @@ public class LogInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // 仅对注解了ApiName的方法自动写日志
+        // 对注解了ApiName的方法改名
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
-        if (!method.isAnnotationPresent(ApiName.class)) {
-            return true;
+        String apiName = "匿名";
+        if (method.isAnnotationPresent(ApiName.class)) {
+            // 提取注解内容
+            ApiName apiNameAnnotation = method.getAnnotation(ApiName.class);
+            apiName = apiNameAnnotation.value();
         }
 
-        // 提取注解内容
-        ApiName apiName = method.getAnnotation(ApiName.class);
-        String api = apiName.value();
-
-        // 提取body内容
+        // 提取body内容并简化
         byte[] bodyBytes = StreamUtils.copyToByteArray(request.getInputStream());
-        String body = new String(bodyBytes, request.getCharacterEncoding());
+        String orgBodyStr = new String(bodyBytes, request.getCharacterEncoding());
+        String body = new Gson().toJson(JsonParser.parseString(orgBodyStr));
 
         // 记录日志
-        log.info(api.concat(body.replaceAll("(\r\n|\r|\n|    )", "")));
+        log.info(apiName.concat(", reqBody = ").concat(body));
 
         return true;
     }

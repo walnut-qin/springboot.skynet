@@ -29,6 +29,7 @@ import com.kaos.skynet.api.logic.service.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.http.RspWrapper;
 import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 
@@ -446,11 +447,9 @@ public class AnnexController {
         private LocalDateTime inspectDate;
     }
 
+    @ApiName("查询科室的陪护信息")
     @RequestMapping(value = "queryAnnexs", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<List<QueryAnnexs.RspBody>> queryAnnexs(@RequestBody @Valid QueryAnnexs.ReqBody reqBody) {
-        // 入参记录
-        log.info("查询科室信息".concat(json.toJson(reqBody)));
-
         // 检索该科室所有患者
         var inMainInfoBuilder = FinIprInMainInfoMapper.Key.builder();
         inMainInfoBuilder.deptCode(reqBody.deptCode);
