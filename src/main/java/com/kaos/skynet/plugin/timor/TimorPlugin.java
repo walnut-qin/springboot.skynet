@@ -8,6 +8,7 @@ import com.kaos.skynet.core.type.Cache;
 import com.kaos.skynet.core.type.converter.LocalDateToStringConverter;
 import com.kaos.skynet.plugin.timor.entity.DayInfo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,8 @@ public class TimorPlugin {
     /**
      * 缓存
      */
-    TimorCache timorCache = new TimorCache();
+    @Autowired
+    TimorCache timorCache;
 
     /**
      * 获取日期信息
@@ -41,6 +43,7 @@ public class TimorPlugin {
     /**
      * 缓存
      */
+    @Component
     class TimorCache extends Cache<LocalDate, DayInfo> {
         TimorCache() {
             super(365, new Converter<LocalDate, DayInfo>() {
