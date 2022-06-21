@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
+import lombok.Cleanup;
+
 /**
  * 该过滤器针对HTTP的POST请求过滤，将request作持久化处理，让body可以重复读
  */
@@ -62,8 +64,15 @@ public class PostFilter implements Filter {
          * @throws IOException
          */
         public EternalHttpServletRequestWrapper(HttpServletRequest request) throws IOException {
+            // 拷贝请求信息
             super(request);
-            body = StreamUtils.copyToByteArray(request.getInputStream());
+
+            // 获取输入流
+            @Cleanup
+            var orgInputStream = request.getInputStream();
+
+            // 缓存body
+            body = StreamUtils.copyToByteArray(orgInputStream);
         }
 
         /**
@@ -93,6 +102,12 @@ public class PostFilter implements Filter {
 
                 @Override
                 public void setReadListener(ReadListener listener) {
+                }
+
+                @Override
+                public void close() throws IOException {
+                    bodyStream.close();
+                    super.close();
                 }
             };
         }

@@ -17,6 +17,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import lombok.Cleanup;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -45,8 +46,10 @@ public class LogInterceptor implements HandlerInterceptor {
         }
 
         // 提取body内容并简化
-        byte[] bodyBytes = StreamUtils.copyToByteArray(request.getInputStream());
-        String orgBodyStr = new String(bodyBytes, request.getCharacterEncoding());
+        @Cleanup
+        var InputStream = request.getInputStream();
+        String orgBodyStr = new String(StreamUtils.copyToByteArray(InputStream), request.getCharacterEncoding());
+        new String();
         String body = new Gson().toJson(JsonParser.parseString(orgBodyStr));
 
         // 记录日志
