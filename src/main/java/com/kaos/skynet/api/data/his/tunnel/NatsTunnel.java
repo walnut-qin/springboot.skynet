@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.data.his.router;
+package com.kaos.skynet.api.data.his.tunnel;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexCheckMapper;
 import com.kaos.skynet.api.data.his.mapper.pipe.lis.LisResultNewMapper;
 
-import com.kaos.skynet.core.type.Router;
+import com.kaos.skynet.core.type.Tunnel;
 import com.kaos.skynet.core.type.converter.LocalDateTimeToStringConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 患者索引(卡号或住院号)到核酸结果的转换器
+ * 核酸检测结果隧道
  */
 @Component
-public class NatsRouter implements Router<NatsRouter.Key, NatsRouter.Value> {
+public class NatsTunnel implements Tunnel<NatsTunnel.Key, NatsTunnel.Value> {
     @Autowired
     LisResultNewMapper lisResultNewMapper;
 
@@ -31,7 +31,7 @@ public class NatsRouter implements Router<NatsRouter.Key, NatsRouter.Value> {
     EscortAnnexCheckMapper escortAnnexCheckMapper;
 
     @Override
-    public Value route(Key key) {
+    public Value tunneling(Key key) {
         // 结果整合
         List<Value> result = Lists.newArrayList();
         for (var cardNo : key.cardNos) {

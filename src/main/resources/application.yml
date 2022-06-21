@@ -62,7 +62,7 @@ spring:
           password: DOCARE
 mybatis-plus:
   configuration:
-    default-enum-type-handler: com.kaos.skynet.config.MybatisEnumTypeHandler
+    default-enum-type-handler: com.kaos.skynet.core.mybatis.EnumTypeHandler
     jdbc-type-for-null: 'null'
   mapper-locations:
   - classpath:mapper/**/*.xml

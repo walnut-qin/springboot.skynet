@@ -1,4 +1,4 @@
-package com.kaos.skynet.config;
+package com.kaos.skynet.core.spring.exception;
 
 import java.util.List;
 import java.util.stream.Collectors;

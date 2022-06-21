@@ -1,13 +1,13 @@
-package com.kaos.skynet.api.data.his.router;
+package com.kaos.skynet.api.data.his.tunnel;
 
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.MetOpsOperationItemMapper;
-import com.kaos.skynet.core.type.Router;
+import com.kaos.skynet.core.type.Tunnel;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
-public class SurgeryNameRouter implements Router<String, String> {
+public class SurgeryNameTunnel implements Tunnel<String, String> {
     /**
      * 手术项目接口
      */
@@ -15,7 +15,7 @@ public class SurgeryNameRouter implements Router<String, String> {
     MetOpsOperationItemMapper metOpsOperationItemMapper;
 
     @Override
-    public String route(String operationNo) {
+    public String tunneling(String operationNo) {
         // 判空
         if (operationNo == null) {
             return null;

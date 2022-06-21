@@ -24,11 +24,10 @@ import com.kaos.skynet.api.data.his.entity.inpatient.escort.annex.EscortAnnexInf
 import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
-import com.kaos.skynet.api.data.his.router.PatientNameRouter;
+import com.kaos.skynet.api.data.his.tunnel.PatientNameTunnel;
 import com.kaos.skynet.api.logic.service.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
 import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
@@ -53,12 +52,6 @@ import net.coobird.thumbnailator.Thumbnails;
 @RestController
 @RequestMapping({ "api/inpatient/escort/annex", "/ms/inpatient/escort/annex", "/ms/inpatient/escort" })
 public class AnnexController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 陪护锁
      */
@@ -122,7 +115,7 @@ public class AnnexController {
      * 患者姓名转换器
      */
     @Autowired
-    PatientNameRouter patientNameConverter;
+    PatientNameTunnel patientNameTunnel;
 
     /**
      * 上传附件
@@ -171,12 +164,10 @@ public class AnnexController {
      * @param reqBody
      * @return
      */
+    @ApiName("上传附件")
     @RequestMapping(value = "uploadAnnex", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<String> uploadAnnex(@RequestBody @Valid UploadAnnex.ReqBody reqBody) {
         try {
-            // 入参记录
-            log.info("上传附件".concat(json.toJson(reqBody)));
-
             // 调用服务 - 不存在冲突，无需加锁
             var annexNo = annexService.uploadAnnex(reqBody.cardNo, reqBody.url);
 
@@ -273,12 +264,10 @@ public class AnnexController {
         }
     }
 
+    @ApiName("审核附件")
     @RequestMapping(value = "checkAnnex", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<String> checkAnnex(@RequestBody @Valid CheckAnnex.ReqBody reqBody) {
         try {
-            // 入参记录
-            log.info("审核附件".concat(json.toJson(reqBody)));
-
             // 加状态操作锁，防止同时操作同一个陪护证
             Threads.newLockExecutor().link(escortLock.getAnnexLock().getLock(reqBody.annexNo)).execute(() -> {
                 annexService.checkAnnex(reqBody.annexNo, reqBody.checker, reqBody.negative, reqBody.inspectDate);
@@ -393,11 +382,11 @@ public class AnnexController {
         List<QueryAnnexInDeptRsp> rsps = annexInfos.stream().map(x -> {
             var builder = QueryAnnexInDeptRsp.builder();
             builder.annexNo(x.getAnnexNo());
-            builder.helperName(patientNameConverter.route(x.getCardNo()));
+            builder.helperName(patientNameTunnel.tunneling(x.getCardNo()));
             builder.picUrl(
                     "http://172.16.100.252:8025/api/inpatient/escort/annex/getPic?refer=".concat(x.getAnnexNo()));
             builder.patientNames(Set.copyOf(escortRelation.get(x.getCardNo())).stream().map(y -> {
-                return patientNameConverter.route(y);
+                return patientNameTunnel.tunneling(y);
             }).toList());
             // 若查询审核内容，则添加审核信息
             if (checkedBoolean) {
@@ -488,10 +477,10 @@ public class AnnexController {
         var urlPrefix = "http://172.16.100.252:8025/api/inpatient/escort/annex/getPic?refer=";
         return RspWrapper.wrapSuccessResponse(annexInfos.stream().map(x -> {
             builder.annexNo(x.getAnnexNo());
-            builder.helperName(patientNameConverter.route(x.getCardNo()));
+            builder.helperName(patientNameTunnel.tunneling(x.getCardNo()));
             builder.picUrl(urlPrefix.concat(x.getAnnexNo()));
             builder.patientNames(Set.copyOf(escortRelation.get(x.getCardNo())).stream().map(y -> {
-                return patientNameConverter.route(y);
+                return patientNameTunnel.tunneling(y);
             }).toList());
             // 若查询审核内容，则添加审核信息
             if (reqBody.checked) {

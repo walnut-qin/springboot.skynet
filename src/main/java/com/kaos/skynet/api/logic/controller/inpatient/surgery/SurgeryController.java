@@ -10,9 +10,9 @@ import com.kaos.skynet.api.data.his.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.his.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.MetOpsApplyMapper;
-import com.kaos.skynet.api.data.his.router.SurgeryNameRouter;
+import com.kaos.skynet.api.data.his.tunnel.SurgeryNameTunnel;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -23,19 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j;
 
-@Log4j
 @Validated
 @RestController
 @RequestMapping({ "/api/inpatient/surgery", "/ms/inpatient/surgery" })
 public class SurgeryController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 
      */
@@ -52,7 +44,7 @@ public class SurgeryController {
      * 手术名称转换器
      */
     @Autowired
-    SurgeryNameRouter surgeryNameConverter;
+    SurgeryNameTunnel surgeryNameTunnel;
 
     /**
      * 检索手术申请单信息
@@ -60,11 +52,9 @@ public class SurgeryController {
      * @param req
      * @return
      */
+    @ApiName("查询手术申请记录")
     @RequestMapping(value = "querySurgeryApply", method = RequestMethod.POST, produces = MediaType.JSON)
     public QuerySurgeryApplyResponse querySurgeryApply(@RequestBody @Valid QuerySurgeryApplyRequest req) {
-        // 入参记录
-        log.info(String.format("查询手术申请记录: %s", json.toJson(req)));
-
         // 检索手术信息
         var surgeryInfo = metOpsApplyMapper.queryApply(req.getSurgeryNo());
         if (surgeryInfo == null) {
@@ -108,11 +98,9 @@ public class SurgeryController {
      * @param req
      * @return
      */
+    @ApiName("查询手术申请记录列表")
     @RequestMapping(value = "querySurgeryApplies", method = RequestMethod.POST, produces = MediaType.JSON)
     public QuerySurgeryAppliesResponse querySurgeryApplies(@RequestBody @Valid QuerySurgeryAppliesRequest req) {
-        // 入参记录
-        log.info(String.format("查询手术申请记录列表: %s", json.toJson(req)));
-
         // 检索手术信息
         var keyBuilder = MetOpsApplyMapper.Key.builder();
         keyBuilder.beginPreDate(req.getBeginPreDate());
@@ -131,7 +119,7 @@ public class SurgeryController {
             if (inMainInfo != null) {
                 itemBuilder.name(inMainInfo.getName());
             }
-            itemBuilder.surgeryName(surgeryNameConverter.route(x.getOperationNo()));
+            itemBuilder.surgeryName(surgeryNameTunnel.tunneling(x.getOperationNo()));
             itemBuilder.icuFlag(x.getIcuFlag());
             return itemBuilder.build();
         }).toList());

@@ -1,60 +1,39 @@
 package com.kaos.skynet.plugin.bosoft;
 
-import com.google.common.collect.Lists;
-import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
-import com.kaos.skynet.core.http.handler.HttpHandler;
-import com.kaos.skynet.core.json.Json;
-import com.kaos.skynet.plugin.bosoft.wrapper.ReqWrapper;
-import com.kaos.skynet.plugin.bosoft.wrapper.RspWrapper;
+import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.util.Base64;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.kaos.skynet.core.http.HttpHandler;
+import com.kaos.skynet.core.json.GsonWrapper;
+import com.kaos.skynet.core.type.converter.LocalDateTimeToStringConverter;
+
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.util.DigestUtils;
+
+import lombok.extern.log4j.Log4j;
 
 @Component
 public class BoSoftPlugin {
     /**
      * Http句柄
      */
-    HttpHandler httpHandler;
+    HttpHandler httpHandler = new HttpHandler("172.16.100.123", 17001);
 
     /**
      * 请求包装器
      */
-    @Autowired
-    ReqWrapper reqWrapper;
+    Wrapper.ReqWrapper reqWrapper = new Wrapper.ReqWrapper();
 
     /**
      * 响应包装器
      */
-    @Autowired
-    RspWrapper rspWrapper;
-
-    /**
-     * 服务器IP
-     */
-    final static String ip = "172.16.100.123";
-
-    /**
-     * 服务器PORT
-     */
-    final static Integer port = 17001;
+    Wrapper.RspWrapper rspWrapper = new Wrapper.RspWrapper();
 
     /**
      * API前缀
      */
-    final static String apiPrefix = "/medical-web/api/medical/";
-
-    /**
-     * 构造函数
-     * 
-     * @param jsonHttpMessageConverter
-     */
-    BoSoftPlugin(Json json) {
-        // 构造HTTP处理器
-        httpHandler = new HttpHandler(new RestTemplate(Lists.newArrayList(new JsonHttpMessageConverter(json))),
-                ip, port);
-    }
+    String apiPrefix = "/medical-web/api/medical/";
 
     /**
      * 发送POST请求
@@ -71,9 +50,165 @@ public class BoSoftPlugin {
         var reqBody = reqWrapper.wrapData(data);
 
         // 发送post请求
-        var rspBody = httpHandler.postForObject(apiPrefix.concat(apiType), reqBody, RspWrapper.RspBody.class);
+        var rspBody = httpHandler.postForObject(apiPrefix.concat(apiType), reqBody, Wrapper.RspWrapper.RspBody.class);
 
         // 解密并抽取响应
         return rspWrapper.disassemble(rspBody, classOfS);
+    }
+
+    static class Wrapper {
+        /**
+         * 请求包装器
+         */
+        @Log4j
+        static class ReqWrapper {
+            /**
+             * 时间转换器
+             */
+            LocalDateTimeToStringConverter noiseConverter = new LocalDateTimeToStringConverter("yyyyMMddHHmmssSSS");
+
+            /**
+             * 加密Key值
+             */
+            String key = "dd1893efc3e234a2d2826ad107";
+
+            /**
+             * json工具
+             */
+            GsonWrapper gsonWrapper = new GsonWrapper();
+
+            /**
+             * 包装数据
+             * 
+             * @param data
+             * @return
+             */
+            <T> ReqBody wrapData(T data) {
+                try {
+                    // 构造请求body
+                    ReqBody reqBody = new ReqBody();
+
+                    // 计算数据
+                    reqBody.data = Base64.getEncoder().encodeToString(gsonWrapper.toJson(data).getBytes("UTF-8"));
+
+                    // 计算noise
+                    reqBody.noise = noiseConverter.convert(LocalDateTime.now());
+
+                    // 计算签名
+                    String orgStr = String.format("appid=%s&data=%s&noise=%s&key=%s&version=%s",
+                            reqBody.appid,
+                            reqBody.data,
+                            reqBody.noise,
+                            key,
+                            reqBody.version);
+                    reqBody.sign = DigestUtils.md5DigestAsHex(orgStr.getBytes()).toUpperCase();
+
+                    return reqBody;
+                } catch (UnsupportedEncodingException e) {
+                    log.error(e.getMessage());
+                    throw new RuntimeException(e.getMessage());
+                }
+            }
+
+            static class ReqBody {
+                /**
+                 * 请求ID
+                 */
+                String appid = "XYSZXYY1551463";
+
+                /**
+                 * 业务数据
+                 */
+                String data;
+
+                /**
+                 * 用时间戳生成noise
+                 */
+                String noise;
+
+                /**
+                 * 版本号
+                 */
+                String version = "1.0";
+
+                /**
+                 * 签名
+                 */
+                String sign;
+            }
+        }
+
+        /**
+         * 响应包装器
+         */
+        @Log4j
+        static class RspWrapper {
+            /**
+             * 序列化工具
+             */
+            GsonWrapper gsonWrapper = new GsonWrapper();
+
+            /**
+             * 拆卸包装
+             * 
+             * @param json
+             * @return
+             */
+            public <T> T disassemble(RspBody result, Class<T> classOfT) {
+                try {
+                    // base64解码
+                    String resultWrapperStr = new String(Base64.getDecoder().decode(result.data), "UTF-8");
+
+                    // 反序列化出resultWrapper
+                    RspBody.Data data = gsonWrapper.fromJson(resultWrapperStr, RspBody.Data.class);
+
+                    // 反序列化出message
+                    String messageStr = new String(Base64.getDecoder().decode(data.message), "UTF-8");
+
+                    // 判断响应
+                    if (!data.result.equals("S0000")) {
+                        log.error(messageStr);
+                        throw new RuntimeException(messageStr);
+                    } else {
+                        return gsonWrapper.fromJson(messageStr, classOfT);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    log.error(e.getMessage());
+                    throw new RuntimeException(e.getMessage());
+                }
+            }
+
+            static class RspBody {
+                /**
+                 * 响应数据
+                 */
+                String data;
+
+                /**
+                 * 干扰数据
+                 */
+                String noise;
+
+                /**
+                 * 签名
+                 */
+                String sign;
+
+                /**
+                 * Data域
+                 */
+                static class Data {
+                    /**
+                     * 响应结果
+                     */
+                    String result;
+
+                    /**
+                     * 响应消息
+                     */
+                    String message;
+                }
+            }
+        }
     }
 }

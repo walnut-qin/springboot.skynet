@@ -10,7 +10,8 @@ import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortPool;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
-import com.kaos.skynet.core.http.RspWrapper;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.thread.pool.ThreadPool;
 
@@ -82,6 +83,7 @@ public class ScheduleController {
      * 
      * @return
      */
+    @ApiName("查询陪护线程池状态")
     @RequestMapping(value = "showPoolState", method = RequestMethod.POST, produces = MediaType.JSON)
     public RspWrapper<Map<String, ThreadPool.PoolState>> showPoolState() {
         try {

@@ -4,9 +4,9 @@ import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoiceMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
-import com.kaos.skynet.core.json.gson.adapter.EnumValueTypeAdapter;
+import com.kaos.skynet.core.json.adapter.EnumTypeAdapter_Value;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 import com.kaos.skynet.plugin.bosoft.BoSoftPlugin;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.log4j.Log4j;
-
-@Log4j
 @Validated
 @RestController
 @RequestMapping("/api/inpatient/fee/balance/invoice/electronic")
 class ElectronicInvoiceController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 电子发票表接口
      */
@@ -41,12 +32,10 @@ class ElectronicInvoiceController {
     @Autowired
     BoSoftPlugin boSoftPlugin;
 
+    @ApiName("获取发票信息")
     @RequestMapping(value = "queryElectronicInvoiceInfo", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<Object> queryElectronicInvoiceInfo(@RequestBody QueryElectronicInvoiceInfo.ReqBody reqBody) {
         try {
-            // 记录日志
-            log.info(String.format("获取发票信息, reqBody = %s", json.toJson(reqBody)));
-
             // 查询电子发票记录
             var invoice = electronicInvoiceMapper.queryInvoice(reqBody.invoiceNo, reqBody.transType);
             if (invoice == null) {
@@ -79,7 +68,7 @@ class ElectronicInvoiceController {
             /**
              * 交易类型
              */
-            @JsonAdapter(EnumValueTypeAdapter.class)
+            @JsonAdapter(EnumTypeAdapter_Value.class)
             TransTypeEnum transType;
         }
 

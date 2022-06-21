@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import com.kaos.skynet.api.data.his.cache.common.config.ConfigSwitchCache;
 import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.http.RspWrapper;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
 
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

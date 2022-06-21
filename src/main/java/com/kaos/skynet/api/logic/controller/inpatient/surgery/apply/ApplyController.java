@@ -11,10 +11,10 @@ import com.kaos.skynet.api.data.his.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.his.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.MetOpsApplyMapper;
-import com.kaos.skynet.api.data.his.router.SurgeryNameRouter;
+import com.kaos.skynet.api.data.his.tunnel.SurgeryNameTunnel;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +25,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
-import lombok.extern.log4j.Log4j;
 
-@Log4j
 @Validated
 @RestController
 @RequestMapping("/api/inpatient/surgery/apply")
 class ApplyController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 手术申请单接口
      */
@@ -54,7 +46,7 @@ class ApplyController {
      * 手术名称转换器
      */
     @Autowired
-    SurgeryNameRouter surgeryNameConverter;
+    SurgeryNameTunnel surgeryNameTunnel;
 
     /**
      * 检索手术申请单信息
@@ -62,12 +54,10 @@ class ApplyController {
      * @param req
      * @return
      */
+    @ApiName("查询手术申请记录")
     @RequestMapping(value = "querySurgeryInfo", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<QuerySurgeryInfo.RspBody> querySurgeryInfo(@RequestBody @Valid QuerySurgeryInfo.ReqBody reqBody) {
         try {
-            // 入参记录
-            log.info("查询手术申请记录: ".concat(json.toJson(reqBody)));
-
             // 检索手术信息
             var surgeryInfo = metOpsApplyMapper.queryApply(reqBody.applyNo);
             if (surgeryInfo == null) {
@@ -108,13 +98,11 @@ class ApplyController {
      * @param req
      * @return
      */
+    @ApiName("querySurgeryInfos")
     @RequestMapping(value = "querySurgeryInfos", method = RequestMethod.POST, produces = MediaType.JSON)
     public RspWrapper<List<QuerySurgeryInfos.RspBody>> querySurgeryInfos(
             @RequestBody @Valid QuerySurgeryInfos.ReqBody reqBody) {
         try {
-            // 入参记录
-            log.info("查询手术申请记录列表: ".concat(json.toJson(reqBody)));
-
             // 检索手术信息
             var keyBuilder = MetOpsApplyMapper.Key.builder();
             keyBuilder.beginPreDate(reqBody.beginPreDate);
@@ -131,7 +119,7 @@ class ApplyController {
                 if (inMainInfo != null) {
                     builder.name(inMainInfo.getName());
                 }
-                builder.surgeryName(surgeryNameConverter.route(x.getOperationNo()));
+                builder.surgeryName(surgeryNameTunnel.tunneling(x.getOperationNo()));
                 builder.icuFlag(x.getIcuFlag());
                 return builder.build();
             }).toList());

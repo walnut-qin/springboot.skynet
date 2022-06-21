@@ -20,7 +20,7 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortStateRecMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
-import com.kaos.skynet.api.data.his.router.NatsRouter;
+import com.kaos.skynet.api.data.his.tunnel.NatsTunnel;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +81,7 @@ public class StateService {
      * 核酸结果转换器
      */
     @Autowired
-    NatsRouter natsConverter;
+    NatsTunnel natsTunnel;
 
     /**
      * 患者基本信息缓存
@@ -234,10 +234,10 @@ public class StateService {
         var historyStates = escortStateRecMapper.queryEscortStateRecs(escortInfo.getEscortNo());
 
         // 检索核酸结果
-        NatsRouter.Value natsResult = null;
+        NatsTunnel.Value natsResult = null;
         if (historyStates.isEmpty()) {
             // 检索14天内核酸结果
-            natsResult = natsConverter.route(NatsRouter.Key.builder()
+            natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                     .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
                     .duration(Duration.ofDays(14))
                     .build());
@@ -254,7 +254,7 @@ public class StateService {
 
                 case 生效中 -> {
                     // 检索2天内核酸结果
-                    natsResult = natsConverter.route(NatsRouter.Key.builder()
+                    natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
                             .duration(Duration.ofDays(14))
                             .build());
@@ -262,7 +262,7 @@ public class StateService {
 
                 default -> {
                     // 检索14天内核酸结果
-                    natsResult = natsConverter.route(NatsRouter.Key.builder()
+                    natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
                             .duration(Duration.ofDays(2))
                             .build());

@@ -10,9 +10,9 @@ import com.google.common.base.Optional;
 import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
-import com.kaos.skynet.core.json.gson.adapter.EnumValueTypeAdapter;
+import com.kaos.skynet.core.json.adapter.EnumTypeAdapter_Value;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 import com.kaos.skynet.core.type.Enum;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +31,6 @@ import lombok.extern.log4j.Log4j;
 @RestController
 @RequestMapping({ "/api/inpatient/fee/balance/report", "/ms/inpatient/fee/balance/report", "/ms/inpatient/dayreport" })
 class ReportController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 费用明细表
      */
@@ -107,12 +101,10 @@ class ReportController {
      * @param reqBody
      * @return
      */
+    @ApiName("查询新医保日结")
     @RequestMapping(value = "queryNewYbDayBalanceCost", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<Double> queryNewYbDayBalanceCost(@RequestBody @Valid QueryNewYbDayBalanceCost.ReqBody reqBody) {
         try {
-            // 记录日志
-            log.info("查询新医保统筹日结".concat(json.toJson(reqBody)));
-
             // 检索所有结算记录
             var keyBuilder = FinIpbBalanceHeadMapper.Key.builder();
             keyBuilder.balanceOperCode(reqBody.balancer);
@@ -159,7 +151,7 @@ class ReportController {
              * 类型
              */
             @NotNull(message = "查询类型不能为空")
-            @JsonAdapter(EnumValueTypeAdapter.class)
+            @JsonAdapter(EnumTypeAdapter_Value.class)
             TypeEnum type;
 
             /**

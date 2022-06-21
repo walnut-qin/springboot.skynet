@@ -1,19 +1,19 @@
-package com.kaos.skynet.api.data.his.router;
+package com.kaos.skynet.api.data.his.tunnel;
 
 import com.kaos.skynet.api.data.his.cache.DataCache;
 import com.kaos.skynet.api.data.his.entity.common.ComPatientInfo;
-import com.kaos.skynet.core.type.Router;
+import com.kaos.skynet.core.type.Tunnel;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
-public class PatientNameRouter implements Router<String, String> {
+public class PatientNameTunnel implements Tunnel<String, String> {
     @Autowired
     DataCache dataCache;
 
     @Override
-    public String route(String cardNo) {
+    public String tunneling(String cardNo) {
         // 判空
         if (cardNo == null) {
             return null;

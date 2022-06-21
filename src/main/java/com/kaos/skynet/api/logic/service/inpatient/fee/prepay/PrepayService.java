@@ -9,7 +9,7 @@ import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.FinIpbInPrepayMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.data.his.mapper.outpatient.fee.FinOprPayModelMapper;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.json.GsonWrapper;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,7 @@ public class PrepayService {
     /**
      * 序列化工具
      */
-    @Autowired
-    Json json;
+    GsonWrapper gsonWrapper = new GsonWrapper();
 
     /**
      * 结算头表接口
@@ -106,7 +105,7 @@ public class PrepayService {
             }
 
             // 构造新预交金记录
-            var newPrepay = json.clone(x, FinIpbInPrepay.class);
+            var newPrepay = gsonWrapper.clone(x, FinIpbInPrepay.class);
             for (var payModel : payModels) {
                 newPrepay.setPrepayCost(newPrepay.getPrepayCost() + payModel.getAmt());
             }

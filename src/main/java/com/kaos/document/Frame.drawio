@@ -5,10 +5,7 @@
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="2" value="core" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="740" y="642" width="540" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="3" value="config" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;" parent="1" vertex="1">
-                    <mxGeometry x="740" y="222" width="180" height="420" as="geometry"/>
+                    <mxGeometry x="920" y="642" width="360" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="5" value="enum" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
                     <mxGeometry x="920" y="582" width="180" height="60" as="geometry"/>
@@ -28,11 +25,23 @@
                 <mxCell id="11" value="controller" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="920" y="222" width="180" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="12" value="router" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                <mxCell id="12" value="tunnel" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
                     <mxGeometry x="920" y="342" width="180" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="13" value="plugin" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
                     <mxGeometry x="1100" y="222" width="180" height="420" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="springboot" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="920" y="762" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="mybatis-plus" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="1040" y="702" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="druid" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="1160" y="702" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="dynamic-datasource" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="920" y="702" width="120" height="60" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

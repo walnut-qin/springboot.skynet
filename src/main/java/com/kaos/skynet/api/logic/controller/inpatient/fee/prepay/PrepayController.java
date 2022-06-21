@@ -5,8 +5,8 @@ import javax.validation.constraints.NotBlank;
 
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.service.inpatient.fee.prepay.PrepayService;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
-import lombok.extern.log4j.Log4j;
 
-@Log4j
 @Validated
 @RestController
 @RequestMapping("/api/inpatient/fee/prepay")
 class PrepayController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 预交金业务
      */
@@ -42,12 +34,10 @@ class PrepayController {
      * @param reqBody
      * @return
      */
-    @RequestMapping(value = "fixRecallPrepay", method = RequestMethod.GET, produces = MediaType.JSON)
+    @ApiName("隔日召回修改预交金")
+    @RequestMapping(value = "fixRecallPrepay", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<Object> fixRecallPrepay(@RequestBody @Valid FixRecallPrepay.ReqBody reqBody) {
         try {
-            // 记录日志
-            log.info(String.format("隔日召回修改预交金, reqBody = %s", json.toJson(reqBody)));
-
             // 启动事务处理
             var prepayModifyResults = prepayService.fixRecallPrepay(StringUtils.leftPad(reqBody.patientNo, 10, '0'));
 

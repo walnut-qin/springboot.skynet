@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.json.gson.adapter;
+package com.kaos.skynet.core.json.adapter;
 
 import java.io.IOException;
 
@@ -8,22 +8,30 @@ import com.google.gson.stream.JsonWriter;
 import com.kaos.skynet.core.type.converter.BooleanToStringConverter;
 import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
 
-import lombok.AllArgsConstructor;
-
 /**
  * Bool型处理器，不纳入默认处理器，只因使用频繁，纳入核心库
  */
-@AllArgsConstructor
-abstract class BooleanTypeAdapter extends TypeAdapter<Boolean> {
+abstract class BooleanTypeAdapter_Base extends TypeAdapter<Boolean> {
     /**
      * 真值
      */
-    protected StringToBooleanConverter rConverter;
+    StringToBooleanConverter rConverter;
 
     /**
      * 假值
      */
-    protected BooleanToStringConverter wConverter;
+    BooleanToStringConverter wConverter;
+
+    /**
+     * 构造函数
+     * 
+     * @param trueValue
+     * @param falseValue
+     */
+    public BooleanTypeAdapter_Base(String trueValue, String falseValue) {
+        rConverter = new StringToBooleanConverter(trueValue, falseValue);
+        wConverter = new BooleanToStringConverter(trueValue, falseValue);
+    }
 
     @Override
     public Boolean read(JsonReader in) throws IOException {

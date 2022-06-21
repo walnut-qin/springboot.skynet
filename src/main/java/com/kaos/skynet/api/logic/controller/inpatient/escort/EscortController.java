@@ -27,15 +27,15 @@ import com.kaos.skynet.api.data.his.enums.SexEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortStateRecMapper;
-import com.kaos.skynet.api.data.his.router.BedNoRouter;
-import com.kaos.skynet.api.data.his.router.DeptNameRouter;
+import com.kaos.skynet.api.data.his.tunnel.BedNoTunnel;
+import com.kaos.skynet.api.data.his.tunnel.DeptNameTunnel;
 import com.kaos.skynet.api.logic.controller.MediaType;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
-import com.kaos.skynet.core.json.gson.adapter.BooleanNumericTypeAdapter;
-import com.kaos.skynet.core.json.gson.adapter.EnumValueTypeAdapter;
+import com.kaos.skynet.core.json.adapter.BooleanTypeAdapter_10;
+import com.kaos.skynet.core.json.adapter.EnumTypeAdapter_Value;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 import com.kaos.skynet.core.thread.Threads;
 import com.kaos.skynet.core.type.converter.StringToEnumConverterFactory;
 import com.kaos.skynet.core.type.utils.IntegerUtils;
@@ -58,12 +58,6 @@ import lombok.extern.log4j.Log4j;
 @RestController
 @RequestMapping({ "/api/inpatient/escort", "/ms/inpatient/escort" })
 public class EscortController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 陪护锁
      */
@@ -138,13 +132,13 @@ public class EscortController {
      * 床号转换器
      */
     @Autowired
-    BedNoRouter bedNoConverter;
+    BedNoTunnel bedNoTunnel;
 
     /**
      * 科室名称转换器
      */
     @Autowired
-    DeptNameRouter deptNameConverter;
+    DeptNameTunnel deptNameTunnel;
 
     /**
      * 患者索引转卡号的转换器
@@ -167,11 +161,9 @@ public class EscortController {
      * @param req
      * @return
      */
+    @ApiName("注册陪护人")
     @RequestMapping(value = "register", method = RequestMethod.POST, produces = MediaType.TEXT)
     public String register(@RequestBody @Valid RegisterReqBody req) {
-        // 记录日志
-        log.info(String.format("登记陪护证, 入参%s", json.toJson(req)));
-
         // 获取就诊卡号
         String patientCardNo = patientIdxToCardNoConverter.convert(req.getPatientIdx());
 
@@ -219,12 +211,10 @@ public class EscortController {
         private Boolean regByWindow = false;
     }
 
+    @ApiName("绑定陪护人")
     @RequestMapping(value = "bind", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<String> bind(@RequestBody @Valid Bind.ReqBody reqBody) {
         try {
-            // 记录日志
-            log.info("登记陪护证".concat(json.toJson(reqBody)));
-
             // 获取就诊卡号
             String patientCardNo = patientIdxToCardNoConverter.convert(reqBody.patientIdx);
 
@@ -310,12 +300,10 @@ public class EscortController {
      * @param state
      * @param emplCode
      */
+    @ApiName("更新陪护证状态")
     @RequestMapping(value = "updateState", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<Object> updateState(@RequestBody @Valid UpdateState.ReqBody reqBody) {
         try {
-            // 入参日志
-            log.info("修改陪护证状态".concat(json.toJson(reqBody)));
-
             // 加状态操作锁，防止同时操作同一个陪护证
             Threads.newLockExecutor().link(escortLock.getStateLock().getLock(reqBody.escortNo)).execute(() -> {
                 escortService.updateState(reqBody.escortNo, reqBody.state, reqBody.emplCode, "收到客户端请求");
@@ -337,7 +325,7 @@ public class EscortController {
             /**
              * 待设置状态
              */
-            @JsonAdapter(EnumValueTypeAdapter.class)
+            @JsonAdapter(EnumTypeAdapter_Value.class)
             EscortStateRec.StateEnum state;
 
             /**
@@ -382,15 +370,13 @@ public class EscortController {
      * @param escortNo
      * @param action
      */
+    @ApiName("记录陪护证行为")
     @RequestMapping(value = "recordAction", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<Object> recordAction(@RequestBody @Valid RecordAction.ReqBody reqBody) {
         try {
-            // 入参日志
-            log.info("记录陪护证行为".concat(json.toJson(reqBody)));
-
             // 加状态操作锁，防止同时操作同一个陪护证
             Threads.newLockExecutor().link(escortLock.getActionLock().getLock(reqBody.escortNo)).execute(() -> {
-                escortService.recordAction(reqBody.escortNo, reqBody.actionEnum, "收到客户端请求");
+                escortService.recordAction(reqBody.escortNo, reqBody.action, "收到客户端请求");
             });
 
             return RspWrapper.wrapSuccessResponse(null);
@@ -410,8 +396,8 @@ public class EscortController {
             /**
              * 待设置状态
              */
-            @JsonAdapter(EnumValueTypeAdapter.class)
-            EscortActionRec.ActionEnum actionEnum;
+            @JsonAdapter(EnumTypeAdapter_Value.class)
+            EscortActionRec.ActionEnum action;
         }
     }
 
@@ -466,7 +452,7 @@ public class EscortController {
         /**
          * 当前状态<枚举值>
          */
-        @JsonAdapter(EnumValueTypeAdapter.class)
+        @JsonAdapter(EnumTypeAdapter_Value.class)
         public StateEnum state = null;
     }
 
@@ -476,12 +462,10 @@ public class EscortController {
      * @param escortNo
      * @return
      */
+    @ApiName("查询陪护证状态")
     @RequestMapping(value = "queryStateInfo", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<QueryStateInfo.RspBody> queryStateInfo(@RequestBody @Valid QueryStateInfo.ReqBody reqBody) {
         try {
-            // 入参日志
-            log.info("查询陪护证状态".concat(json.toJson(reqBody)));
-
             // 调用业务
             var escortInfo = escortMainInfoCache.get(reqBody.escortNo);
             if (escortInfo == null) {
@@ -531,7 +515,7 @@ public class EscortController {
             /**
              * 当前状态<枚举值>
              */
-            @JsonAdapter(EnumValueTypeAdapter.class)
+            @JsonAdapter(EnumTypeAdapter_Value.class)
             StateEnum state;
         }
     }
@@ -578,8 +562,8 @@ public class EscortController {
                     .build());
             if (inMainInfos != null && inMainInfos.size() == 1) {
                 var inMainInfo = inMainInfos.get(0);
-                rsp.deptName = deptNameConverter.route(inMainInfo.getDeptCode());
-                rsp.bedNo = bedNoConverter.route(inMainInfo.getBedNo());
+                rsp.deptName = deptNameTunnel.tunneling(inMainInfo.getDeptCode());
+                rsp.bedNo = bedNoTunnel.tunneling(inMainInfo.getBedNo());
                 rsp.patientNo = inMainInfo.getPatientNo();
             } else {
                 var builder = FinIprPrepayInCache.Key.builder();
@@ -587,8 +571,8 @@ public class EscortController {
                 builder.happenNo(x.getHappenNo());
                 var prepayIn = prepayInCache.get(builder.build());
                 if (prepayIn != null) {
-                    rsp.deptName = deptNameConverter.route(prepayIn.getPreDeptCode());
-                    rsp.bedNo = bedNoConverter.route(prepayIn.getBedNo());
+                    rsp.deptName = deptNameTunnel.tunneling(prepayIn.getPreDeptCode());
+                    rsp.bedNo = bedNoTunnel.tunneling(prepayIn.getBedNo());
                 }
             }
             var vip = escortVipCache.get(
@@ -650,7 +634,7 @@ public class EscortController {
         /**
          * 免费标识
          */
-        @JsonAdapter(value = BooleanNumericTypeAdapter.class)
+        @JsonAdapter(value = BooleanTypeAdapter_10.class)
         public Boolean freeFlag = null;
 
         /**
@@ -675,12 +659,10 @@ public class EscortController {
      * @param helperCardNo
      * @return
      */
+    @ApiName("查询陪护患者信息")
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<List<QueryPatientInfo.RspBody>> queryPatientInfo(@RequestBody @Valid QueryPatientInfo.ReqBody reqBody) {
         try {
-            // 入参日志
-            log.info(String.format("查询陪护患者信息".concat(json.toJson(reqBody))));
-
             // 调用业务
             var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
                     EscortMainInfoMapper.Key.builder()
@@ -712,8 +694,8 @@ public class EscortController {
                         .build());
                 if (inMainInfos != null && inMainInfos.size() == 1) {
                     var inMainInfo = inMainInfos.get(0);
-                    rsp.deptName = deptNameConverter.route(inMainInfo.getDeptCode());
-                    rsp.bedNo = bedNoConverter.route(inMainInfo.getBedNo());
+                    rsp.deptName = deptNameTunnel.tunneling(inMainInfo.getDeptCode());
+                    rsp.bedNo = bedNoTunnel.tunneling(inMainInfo.getBedNo());
                     rsp.patientNo = inMainInfo.getPatientNo();
                 } else {
                     var builder = FinIprPrepayInCache.Key.builder();
@@ -721,8 +703,8 @@ public class EscortController {
                     builder.happenNo(x.getHappenNo());
                     var prepayIn = prepayInCache.get(builder.build());
                     if (prepayIn != null) {
-                        rsp.deptName = deptNameConverter.route(prepayIn.getPreDeptCode());
-                        rsp.bedNo = bedNoConverter.route(prepayIn.getBedNo());
+                        rsp.deptName = deptNameTunnel.tunneling(prepayIn.getPreDeptCode());
+                        rsp.bedNo = bedNoTunnel.tunneling(prepayIn.getBedNo());
                     }
                 }
                 var vip = escortVipCache.get(
@@ -794,7 +776,7 @@ public class EscortController {
             /**
              * 免费标识
              */
-            @JsonAdapter(value = BooleanNumericTypeAdapter.class)
+            @JsonAdapter(value = BooleanTypeAdapter_10.class)
             Boolean freeFlag;
 
             /**
@@ -888,7 +870,7 @@ public class EscortController {
         /**
          * 免费标识
          */
-        @JsonAdapter(value = BooleanNumericTypeAdapter.class)
+        @JsonAdapter(value = BooleanTypeAdapter_10.class)
         public Boolean freeFlag = null;
 
         /**
@@ -907,12 +889,10 @@ public class EscortController {
         public List<EscortActionRec> actions = null;
     }
 
+    @ApiName("查询患者陪护人信息")
     @RequestMapping(value = "queryHelperInfo", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<List<QueryHelperInfo.RspBody>> queryHelperInfo(@RequestBody @Valid QueryHelperInfo.ReqBody reqBody) {
         try {
-            // 入参日志
-            log.info("查询患者陪护人信息".concat(json.toJson(reqBody)));
-
             // 调用业务
             var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
                     EscortMainInfoMapper.Key.builder()
@@ -992,7 +972,7 @@ public class EscortController {
             /**
              * 免费标识
              */
-            @JsonAdapter(value = BooleanNumericTypeAdapter.class)
+            @JsonAdapter(value = BooleanTypeAdapter_10.class)
             Boolean freeFlag;
 
             /**

@@ -18,12 +18,11 @@ import com.kaos.skynet.api.data.his.enums.HealthCodeEnum;
 import com.kaos.skynet.api.data.his.enums.TravelCodeEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
-import com.kaos.skynet.api.data.his.router.BedNoRouter;
-import com.kaos.skynet.api.data.his.router.NatsRouter;
+import com.kaos.skynet.api.data.his.tunnel.BedNoTunnel;
+import com.kaos.skynet.api.data.his.tunnel.NatsTunnel;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
-import com.kaos.skynet.core.json.gson.adapter.BooleanChineseTypeAdapter;
+import com.kaos.skynet.core.json.adapter.BooleanTypeAdapter_是否;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
 import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +41,6 @@ import lombok.extern.log4j.Log4j;
 @RestController
 @RequestMapping({ "/api/inpatient/escort/statistic", "/ms/inpatient/escort/statistic" })
 public class StatisticController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 住院主表接口
      */
@@ -76,13 +69,13 @@ public class StatisticController {
      * 核酸检测
      */
     @Autowired
-    NatsRouter natsConverter;
+    NatsTunnel natsTunnel;
 
     /**
      * 床号转缩略床号
      */
     @Autowired
-    BedNoRouter bedNoConverter;
+    BedNoTunnel bedNoTunnel;
 
     /**
      * 查询科室的患者及陪护基本信息
@@ -125,7 +118,7 @@ public class StatisticController {
             var builder = QueryEscortRsp.builder();
             // 患者信息
             builder.inDate(x.getInDate());
-            builder.bedNo(bedNoConverter.route(x.getBedNo()));
+            builder.bedNo(bedNoTunnel.tunneling(x.getBedNo()));
             builder.name(x.getName());
             builder.cardNo(x.getCardNo());
             var patientInfo = patientInfoCache.get(x.getCardNo());
@@ -135,7 +128,7 @@ public class StatisticController {
                 builder.highRiskFlag(patientInfo.getHighRiskFlag());
                 builder.highRiskArea(patientInfo.getHighRiskArea());
             }
-            var nats = natsConverter.route(NatsRouter.Key.builder()
+            var nats = natsTunnel.tunneling(NatsTunnel.Key.builder()
                     .cardNos(Lists.newArrayList(x.getCardNo(), x.getPatientNo()))
                     .duration(Duration.ofDays(14))
                     .build());
@@ -159,7 +152,7 @@ public class StatisticController {
                     builder.escort1Name(helper.getName());
                     builder.escort1CardNo(helper.getCardNo());
                     builder.escort1IdenNo(helper.getIdentityCardNo());
-                    var helperNats = natsConverter.route(NatsRouter.Key.builder()
+                    var helperNats = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(helper.getCardNo()))
                             .duration(Duration.ofDays(14))
                             .build());
@@ -180,7 +173,7 @@ public class StatisticController {
                     builder.escort2Name(helper.getName());
                     builder.escort2CardNo(helper.getCardNo());
                     builder.escort2IdenNo(helper.getIdentityCardNo());
-                    var helperNats = natsConverter.route(NatsRouter.Key.builder()
+                    var helperNats = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(helper.getCardNo()))
                             .duration(Duration.ofDays(14))
                             .build());
@@ -242,7 +235,7 @@ public class StatisticController {
         /**
          * 14天内是否去过高风险地区
          */
-        @JsonAdapter(BooleanChineseTypeAdapter.class)
+        @JsonAdapter(BooleanTypeAdapter_是否.class)
         private Boolean highRiskFlag;
 
         /**
@@ -288,7 +281,7 @@ public class StatisticController {
         /**
          * 陪护1高风险标识
          */
-        @JsonAdapter(BooleanChineseTypeAdapter.class)
+        @JsonAdapter(BooleanTypeAdapter_是否.class)
         private Boolean escort1HighRiskFlag;
 
         /**
@@ -334,7 +327,7 @@ public class StatisticController {
         /**
          * 陪护2高风险标识
          */
-        @JsonAdapter(BooleanChineseTypeAdapter.class)
+        @JsonAdapter(BooleanTypeAdapter_是否.class)
         private Boolean escort2HighRiskFlag;
 
         /**
@@ -383,7 +376,7 @@ public class StatisticController {
                 var builder = QueryData.RspBody.builder();
                 // 患者信息
                 builder.inDate(x.getInDate());
-                builder.bedNo(bedNoConverter.route(x.getBedNo()));
+                builder.bedNo(bedNoTunnel.tunneling(x.getBedNo()));
                 builder.name(x.getName());
                 builder.cardNo(x.getCardNo());
                 var patientInfo = patientInfoCache.get(x.getCardNo());
@@ -393,7 +386,7 @@ public class StatisticController {
                     builder.highRiskFlag(patientInfo.getHighRiskFlag());
                     builder.highRiskArea(patientInfo.getHighRiskArea());
                 }
-                var nats = natsConverter.route(NatsRouter.Key.builder()
+                var nats = natsTunnel.tunneling(NatsTunnel.Key.builder()
                         .cardNos(Lists.newArrayList(x.getCardNo(), x.getPatientNo()))
                         .duration(Duration.ofDays(14))
                         .build());
@@ -417,7 +410,7 @@ public class StatisticController {
                         builder.escort1Name(helper.getName());
                         builder.escort1CardNo(helper.getCardNo());
                         builder.escort1IdenNo(helper.getIdentityCardNo());
-                        var helperNats = natsConverter.route(NatsRouter.Key.builder()
+                        var helperNats = natsTunnel.tunneling(NatsTunnel.Key.builder()
                                 .cardNos(Lists.newArrayList(helper.getCardNo()))
                                 .duration(Duration.ofDays(14))
                                 .build());
@@ -438,7 +431,7 @@ public class StatisticController {
                         builder.escort2Name(helper.getName());
                         builder.escort2CardNo(helper.getCardNo());
                         builder.escort2IdenNo(helper.getIdentityCardNo());
-                        var helperNats = natsConverter.route(NatsRouter.Key.builder()
+                        var helperNats = natsTunnel.tunneling(NatsTunnel.Key.builder()
                                 .cardNos(Lists.newArrayList(helper.getCardNo()))
                                 .duration(Duration.ofDays(14))
                                 .build());
@@ -507,7 +500,7 @@ public class StatisticController {
             /**
              * 14天内是否去过高风险地区
              */
-            @JsonAdapter(BooleanChineseTypeAdapter.class)
+            @JsonAdapter(BooleanTypeAdapter_是否.class)
             Boolean highRiskFlag;
 
             /**
@@ -553,7 +546,7 @@ public class StatisticController {
             /**
              * 陪护1高风险标识
              */
-            @JsonAdapter(BooleanChineseTypeAdapter.class)
+            @JsonAdapter(BooleanTypeAdapter_是否.class)
             Boolean escort1HighRiskFlag;
 
             /**
@@ -599,7 +592,7 @@ public class StatisticController {
             /**
              * 陪护2高风险标识
              */
-            @JsonAdapter(BooleanChineseTypeAdapter.class)
+            @JsonAdapter(BooleanTypeAdapter_是否.class)
             Boolean escort2HighRiskFlag;
 
             /**

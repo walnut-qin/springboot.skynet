@@ -1,10 +1,9 @@
-package com.kaos.skynet.config;
+package com.kaos.skynet.core.spring;
 
 import java.util.List;
 
-import com.kaos.skynet.core.http.converter.JsonHttpMessageConverter;
-import com.kaos.skynet.core.http.converter.WorkBookHttpMessageConverter;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.converter.JsonHttpMessageConverter;
+import com.kaos.skynet.core.spring.converter.WorkBookHttpMessageConverter;
 import com.kaos.skynet.core.spring.interceptor.LogInterceptor;
 import com.kaos.skynet.core.spring.interceptor.TokenInterceptor;
 import com.kaos.skynet.core.type.converter.StringToDateConverter;
@@ -13,7 +12,6 @@ import com.kaos.skynet.core.type.converter.StringToLocalDateConverter;
 import com.kaos.skynet.core.type.converter.StringToLocalDateTimeConverter;
 import com.kaos.skynet.core.type.converter.StringToLocalTimeConverter;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
@@ -21,19 +19,10 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * spring boot Web服务配置
- */
 @Configuration
-public class SpringBootWebConfig implements WebMvcConfigurer {
+class SpringBootWebConfigurer implements WebMvcConfigurer {
     /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
-    /**
-     * 注册converter，用于解析Http请求参数
+     * 参数格式化工具
      */
     @Override
     public void addFormatters(FormatterRegistry registry) {
@@ -42,9 +31,9 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
 
         // 注册时间解析
         registry.addConverter(new StringToDateConverter("yyyy-MM-dd HH:mm:ss"));
+        registry.addConverter(new StringToLocalDateTimeConverter("yyyy-MM-dd HH:mm:ss"));
         registry.addConverter(new StringToLocalDateConverter("yyyy-MM-dd"));
         registry.addConverter(new StringToLocalTimeConverter("HH:mm:ss"));
-        registry.addConverter(new StringToLocalDateTimeConverter("yyyy-MM-dd HH:mm:ss"));
 
         WebMvcConfigurer.super.addFormatters(registry);
     }
@@ -54,10 +43,10 @@ public class SpringBootWebConfig implements WebMvcConfigurer {
      */
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        // 设置定制转换器，插入队列最前段，给予最高优先级
+        // 图像转换器
         converters.add(0, new BufferedImageHttpMessageConverter());
         converters.add(0, new WorkBookHttpMessageConverter());
-        converters.add(0, new JsonHttpMessageConverter(json));
+        converters.add(0, new JsonHttpMessageConverter());
 
         WebMvcConfigurer.super.extendMessageConverters(converters);
     }

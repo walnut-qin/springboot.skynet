@@ -8,8 +8,8 @@ import javax.validation.Valid;
 import com.kaos.skynet.api.data.his.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.his.enums.SexEnum;
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -19,19 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
-import lombok.extern.log4j.Log4j;
 
-@Log4j
 @Validated
 @RestController
 @RequestMapping("api/common/patient")
 public class PatientController {
-    /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
     /**
      * 实体信息服务
      */
@@ -44,12 +36,10 @@ public class PatientController {
      * @param cardNo
      * @return
      */
+    @ApiName("获取患者基本信息")
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<QueryPatientInfo.RspBody> queryPatientInfo(@RequestBody @Valid QueryPatientInfo.ReqBody reqBody) {
         try {
-            // 记录日志
-            log.info("查询患者信息".concat(json.toJson(reqBody)));
-
             // 调用服务
             var patient = this.patientInfoCache.get(reqBody.cardNo);
             if (patient == null) {

@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
 
 import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
 import com.kaos.skynet.plugin.timor.TimorPlugin;
 import com.kaos.skynet.plugin.timor.enums.DayTypeEnum;
 import com.kaos.skynet.plugin.timor.enums.WeekEnum;
@@ -26,12 +26,6 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("api/common/holiday")
 class HolidayController {
     /**
-     * 序列化工具
-     */
-    @Autowired
-    Json json;
-
-    /**
      * Timor插件
      */
     @Autowired
@@ -43,12 +37,10 @@ class HolidayController {
      * @param date
      * @return
      */
+    @ApiName("获取节假日信息")
     @RequestMapping(value = "getDayInfo", method = RequestMethod.GET, produces = MediaType.JSON)
     RspWrapper<GetDayInfo.RspBody> getDayInfo(@NotNull(message = "日期不能为空") LocalDate date) {
         try {
-            // 记录日志
-            log.info(String.format("查询节假日信息(date = %s)", json.toJson(date)));
-
             // 获取节假日信息
             var holidayInfo = timorPlugin.getDayInfo(date);
             if (holidayInfo == null) {

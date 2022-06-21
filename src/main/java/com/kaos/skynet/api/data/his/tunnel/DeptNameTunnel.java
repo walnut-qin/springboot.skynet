@@ -1,8 +1,8 @@
-package com.kaos.skynet.api.data.his.router;
+package com.kaos.skynet.api.data.his.tunnel;
 
-import com.kaos.skynet.api.data.his.cache.DataCache;
+import com.kaos.skynet.api.data.his.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.his.entity.common.DawnOrgDept;
-import com.kaos.skynet.core.type.Router;
+import com.kaos.skynet.core.type.Tunnel;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 科室编码到科室名称的转换器
  */
 @Component
-public class DeptNameRouter implements Router<String, String> {
+public class DeptNameTunnel implements Tunnel<String, String> {
     @Autowired
-    DataCache dataCache;
+    DawnOrgDeptCache deptCache;
 
     @Override
-    public String route(String deptCode) {
+    public String tunneling(String deptCode) {
         // 判空
         if (deptCode == null) {
             return null;
         }
 
         // 执行逻辑
-        DawnOrgDept deptInfo = dataCache.getDeptCache().get(deptCode);
+        DawnOrgDept deptInfo = deptCache.get(deptCode);
         if (deptInfo != null) {
             return deptInfo.getDeptName();
         }

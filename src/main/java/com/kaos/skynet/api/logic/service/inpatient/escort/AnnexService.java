@@ -9,7 +9,7 @@ import com.kaos.skynet.api.data.his.entity.inpatient.escort.annex.EscortAnnexInf
 import com.kaos.skynet.api.data.his.mapper.common.SequenceMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexCheckMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.json.GsonWrapper;
 import com.kaos.skynet.core.type.utils.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,9 @@ public class AnnexService {
     /**
      * 序列化工具
      */
-    @Autowired
-    Json json;
+    GsonWrapper gsonWrapper = new GsonWrapper();
 
-    /**
+    /*
      * 序列查询器
      */
     @Autowired
@@ -102,7 +101,7 @@ public class AnnexService {
         }
 
         // 检索审核记录
-        EscortAnnexCheck annexCheck = json.clone(escortAnnexCheckCache.get(annexNo), EscortAnnexCheck.class);
+        EscortAnnexCheck annexCheck = gsonWrapper.clone(escortAnnexCheckCache.get(annexNo), EscortAnnexCheck.class);
         if (annexCheck == null) {
             // 构造待插入对象
             annexCheck = EscortAnnexCheck.builder()

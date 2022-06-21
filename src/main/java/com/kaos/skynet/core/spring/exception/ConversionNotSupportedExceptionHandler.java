@@ -1,10 +1,9 @@
-package com.kaos.skynet.config.exception;
+package com.kaos.skynet.core.spring.exception;
 
-import com.kaos.skynet.core.http.RspWrapper;
-import com.kaos.skynet.core.json.Json;
+import com.kaos.skynet.core.json.GsonWrapper;
+import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
 
 import org.springframework.beans.ConversionNotSupportedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -17,8 +16,7 @@ public class ConversionNotSupportedExceptionHandler {
     /**
      * 序列化工具
      */
-    @Autowired
-    Json json;
+    static GsonWrapper gsonWrapper = new GsonWrapper();
 
     /**
      * 处理转换异常
@@ -36,7 +34,7 @@ public class ConversionNotSupportedExceptionHandler {
         String errInfo = String.format("类型转换%s->%s失败, 值: %s, 原因: %s",
                 ex.getValue().getClass().getName(),
                 ex.getRequiredType().getName(),
-                json.toJson(ex.getValue()),
+                gsonWrapper.toJson(ex.getValue()),
                 ex.getMessage());
 
         // 构造响应体

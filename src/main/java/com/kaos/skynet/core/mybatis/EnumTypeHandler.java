@@ -1,4 +1,4 @@
-package com.kaos.skynet.config;
+package com.kaos.skynet.core.mybatis;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -13,7 +13,12 @@ import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.core.convert.converter.Converter;
 
-public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
+public class EnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
+    /**
+     * 枚举转字符串的转换器
+     */
+    final EnumToStringConverter<E> enumToStringConverter = new EnumToStringConverter<>(true);
+
     /**
      * 字符串转枚举的转换器工厂
      */
@@ -22,19 +27,14 @@ public class MybatisEnumTypeHandler<E extends Enum> extends BaseTypeHandler<E> {
     /**
      * 字符串转枚举的转换器
      */
-    Converter<String, E> stringToEnumConverter = null;
-
-    /**
-     * 枚举转字符串的转换器
-     */
-    final EnumToStringConverter<E> enumToStringConverter = new EnumToStringConverter<>(true);
+    final Converter<String, E> stringToEnumConverter;
 
     /**
      * 构造函数
      * 
      * @param typeOfE
      */
-    public MybatisEnumTypeHandler(Class<E> classOfE) {
+    public EnumTypeHandler(Class<E> classOfE) {
         stringToEnumConverter = stringToEnumConverterFactory.getConverter(classOfE);
     }
 
