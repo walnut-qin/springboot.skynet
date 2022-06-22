@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.logic.controller;
+package com.kaos.skynet.core.spring.net;
 
 public final class MediaType {
     /**

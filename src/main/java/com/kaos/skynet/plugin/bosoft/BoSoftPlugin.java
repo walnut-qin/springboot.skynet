@@ -4,8 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Base64;
 
-import com.kaos.skynet.core.http.HttpHandler;
 import com.kaos.skynet.core.json.GsonWrapper;
+import com.kaos.skynet.core.spring.net.RestTemplateWrapper;
 import com.kaos.skynet.core.type.converter.LocalDateTimeToStringConverter;
 
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class BoSoftPlugin {
     /**
      * Http句柄
      */
-    HttpHandler httpHandler = new HttpHandler("172.16.100.123", 17001);
+    RestTemplateWrapper restTemplateWrapper = new RestTemplateWrapper("172.16.100.123", 17001);
 
     /**
      * 请求包装器
@@ -50,7 +50,7 @@ public class BoSoftPlugin {
         var reqBody = reqWrapper.wrapData(data);
 
         // 发送post请求
-        var rspBody = httpHandler.postForObject(apiPrefix.concat(apiType), reqBody, Wrapper.RspWrapper.RspBody.class);
+        var rspBody = restTemplateWrapper.post(apiPrefix.concat(apiType), reqBody, Wrapper.RspWrapper.RspBody.class);
 
         // 解密并抽取响应
         return rspWrapper.disassemble(rspBody, classOfS);

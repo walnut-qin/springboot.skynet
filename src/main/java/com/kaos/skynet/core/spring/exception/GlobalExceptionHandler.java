@@ -21,7 +21,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @ControllerAdvice
-public class GlobalExceptionHandler {
+class GlobalExceptionHandler {
     // 日志对象
     static final Logger logger = Logger.getLogger(GlobalExceptionHandler.class.getName());
 

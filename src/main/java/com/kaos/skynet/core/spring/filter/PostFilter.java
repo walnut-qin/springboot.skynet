@@ -27,7 +27,7 @@ import lombok.Cleanup;
  */
 @Component
 @WebFilter(urlPatterns = "/**")
-public class PostFilter implements Filter {
+class PostFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {

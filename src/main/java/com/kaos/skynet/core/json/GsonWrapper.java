@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -103,6 +104,14 @@ public class GsonWrapper {
      */
     public <T> T fromJson(Reader reader, Type type) {
         return gson.fromJson(reader, type);
+    }
+
+    /**
+     * 格式化json字符串
+     */
+    public String format(String json) {
+        var jsonElement = JsonParser.parseString(json);
+        return gson.toJson(jsonElement);
     }
 
     /**

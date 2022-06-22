@@ -1,7 +1,7 @@
 package com.kaos.skynet.core.spring.exception;
 
 import com.kaos.skynet.core.json.GsonWrapper;
-import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
+import com.kaos.skynet.core.spring.net.RspWrapper;
 
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ConversionNotSupportedExceptionHandler {
+class ConversionNotSupportedExceptionHandler {
     /**
      * 序列化工具
      */

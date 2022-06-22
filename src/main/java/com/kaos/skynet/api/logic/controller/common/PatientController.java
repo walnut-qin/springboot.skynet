@@ -7,9 +7,9 @@ import javax.validation.Valid;
 
 import com.kaos.skynet.api.data.his.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.his.enums.SexEnum;
-import com.kaos.skynet.api.logic.controller.MediaType;
-import com.kaos.skynet.core.spring.converter.JsonWrappedHttpMessageConverter.RspWrapper;
-import com.kaos.skynet.core.spring.interceptor.LogInterceptor.ApiName;
+import com.kaos.skynet.core.spring.net.RspWrapper;
+import com.kaos.skynet.core.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.spring.net.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
