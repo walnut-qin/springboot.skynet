@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -26,8 +25,7 @@ import lombok.Cleanup;
  * 该过滤器针对HTTP的POST请求过滤，将request作持久化处理，让body可以重复读
  */
 @Component
-@WebFilter(urlPatterns = "/**")
-class PostFilter implements Filter {
+class BodyCopyFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -37,6 +35,12 @@ class PostFilter implements Filter {
             return;
         }
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+
+        // 仅对/api执行拷贝
+        if (!httpServletRequest.getRequestURI().startsWith("/api")) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         // 仅对POST方法作持久化处理
         if (!httpServletRequest.getMethod().equals("POST")) {
