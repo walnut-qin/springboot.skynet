@@ -1,19 +1,23 @@
-package com.kaos.skynet.core.util.lock;
+package com.kaos.skynet.core.util.thread.lock;
 
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public class Lock {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+public class LockGuardian {
     /**
      * 锁名
      */
+    @Getter
     String name;
 
     /**
      * 锁对象
      */
-    List<Object> locks;
+    List<Lock> locks;
 
     /**
      * 构造锁
@@ -21,11 +25,11 @@ public class Lock {
      * @param 锁名称
      * @param 锁容量
      */
-    public Lock(String name, Integer size) {
+    public LockGuardian(String name, Integer size) {
         this.name = name;
         this.locks = Lists.newArrayListWithCapacity(size);
         for (int i = 0; i < size; i++) {
-            this.locks.add(new Object());
+            this.locks.add(new Lock(i));
         }
     }
 
@@ -35,7 +39,7 @@ public class Lock {
      * @param key
      * @return
      */
-    public Object map(Object key) {
+    public Lock grant(Object key) {
         // 通过hash方法变换到有效索引
         Integer idx = key.hashCode() & Integer.MAX_VALUE % locks.size();
 
@@ -43,7 +47,15 @@ public class Lock {
         return locks.get(idx);
     }
 
-    public class InnerLock {
-
+    /**
+     * 锁芯
+     */
+    @Getter
+    @AllArgsConstructor
+    public class Lock {
+        /**
+         * 锁的实际位置
+         */
+        Integer pos;
     }
 }

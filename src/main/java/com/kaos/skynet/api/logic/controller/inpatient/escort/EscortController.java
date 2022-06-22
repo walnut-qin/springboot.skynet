@@ -39,7 +39,7 @@ import com.kaos.skynet.core.util.StringUtils;
 import com.kaos.skynet.core.util.converter.StringToEnumConverterFactory;
 import com.kaos.skynet.core.util.json.adapter.BooleanTypeAdapter_10;
 import com.kaos.skynet.core.util.json.adapter.EnumTypeAdapter_Value;
-import com.kaos.skynet.core.util.thread.Threads;
+import com.kaos.skynet.core.util.thread.lock.LockExecutor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
@@ -163,14 +163,14 @@ public class EscortController {
      */
     @ApiName("注册陪护人")
     @RequestMapping(value = "register", method = RequestMethod.POST, produces = MediaType.TEXT)
-    public String register(@RequestBody @Valid RegisterReqBody req) {
+    public String register(@RequestBody @Valid RegisterReqBody req) throws Exception {
         // 获取就诊卡号
         String patientCardNo = patientIdxToCardNoConverter.convert(req.getPatientIdx());
 
         // 带锁运行业务
-        var patientLock = escortLock.getHelperLock().getLock(patientCardNo);
-        var helperLock = escortLock.getHelperLock().getLock(req.getHelperCardNo());
-        return Threads.newLockExecutor().link(patientLock).link(helperLock).execute(() -> {
+        var patientLock = escortLock.getHelperLock().grant(patientCardNo);
+        var helperLock = escortLock.getHelperLock().grant(req.getHelperCardNo());
+        return LockExecutor.execute(Lists.newArrayList(patientLock, helperLock), () -> {
             return escortService.register(patientCardNo,
                     req.getHelperCardNo(),
                     req.getEmplCode(),
@@ -219,10 +219,10 @@ public class EscortController {
             String patientCardNo = patientIdxToCardNoConverter.convert(reqBody.patientIdx);
 
             // 带锁运行业务
-            var patientLock = escortLock.getHelperLock().getLock(patientCardNo);
-            var helperLock = escortLock.getHelperLock().getLock(reqBody.helperCardNo);
+            var patientLock = escortLock.getHelperLock().grant(patientCardNo);
+            var helperLock = escortLock.getHelperLock().grant(reqBody.helperCardNo);
             return RspWrapper.wrapSuccessResponse(
-                    Threads.newLockExecutor().link(patientLock).link(helperLock).execute(() -> {
+                    LockExecutor.execute(Lists.newArrayList(patientLock, helperLock), () -> {
                         return escortService.register(patientCardNo,
                                 reqBody.helperCardNo,
                                 reqBody.emplCode,
@@ -288,7 +288,7 @@ public class EscortController {
                 stateEnum == null ? "null" : stateEnum.getDescription(), emplCode));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        Threads.newLockExecutor().link(escortLock.getStateLock().getLock(escortNo)).execute(() -> {
+        LockExecutor.execute(escortLock.getStateLock().grant(escortNo), () -> {
             escortService.updateState(escortNo, stateEnum, emplCode, "收到客户端请求");
         });
     }
@@ -305,7 +305,7 @@ public class EscortController {
     RspWrapper<Object> updateState(@RequestBody @Valid UpdateState.ReqBody reqBody) {
         try {
             // 加状态操作锁，防止同时操作同一个陪护证
-            Threads.newLockExecutor().link(escortLock.getStateLock().getLock(reqBody.escortNo)).execute(() -> {
+            LockExecutor.execute(escortLock.getStateLock().grant(reqBody.escortNo), () -> {
                 escortService.updateState(reqBody.escortNo, reqBody.state, reqBody.emplCode, "收到客户端请求");
             });
             return RspWrapper.wrapSuccessResponse(null);
@@ -359,7 +359,7 @@ public class EscortController {
         final ActionEnum actionEnum = actionEnumPtr;
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        Threads.newLockExecutor().link(escortLock.getActionLock().getLock(escortNo)).execute(() -> {
+        LockExecutor.execute(escortLock.getActionLock().grant(escortNo), () -> {
             escortService.recordAction(escortNo, actionEnum, "收到客户端请求");
         });
     }
@@ -375,7 +375,7 @@ public class EscortController {
     RspWrapper<Object> recordAction(@RequestBody @Valid RecordAction.ReqBody reqBody) {
         try {
             // 加状态操作锁，防止同时操作同一个陪护证
-            Threads.newLockExecutor().link(escortLock.getActionLock().getLock(reqBody.escortNo)).execute(() -> {
+            LockExecutor.execute(escortLock.getActionLock().grant(reqBody.escortNo), () -> {
                 escortService.recordAction(reqBody.escortNo, reqBody.action, "收到客户端请求");
             });
 

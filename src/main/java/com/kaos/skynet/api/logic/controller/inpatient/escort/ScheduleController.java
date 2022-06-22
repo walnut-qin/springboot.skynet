@@ -12,7 +12,7 @@ import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 import com.kaos.skynet.core.config.spring.net.RspWrapper;
-import com.kaos.skynet.core.util.thread.Threads;
+import com.kaos.skynet.core.util.thread.lock.LockExecutor;
 import com.kaos.skynet.core.util.thread.pool.ThreadPool;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +68,8 @@ public class ScheduleController {
             escortPool.getTaskPool().monitor(escortInfos.size());
             for (EscortMainInfo escortMainInfo : escortInfos) {
                 escortPool.getTaskPool().execute(() -> {
-                    var lock = escortLock.getStateLock().getLock(escortMainInfo.getEscortNo());
-                    Threads.newLockExecutor().link(lock).execute(() -> {
+                    var lock = escortLock.getStateLock().grant(escortMainInfo.getEscortNo());
+                    LockExecutor.execute(lock, () -> {
                         escortService.updateState(escortMainInfo.getEscortNo(), null, "schedule", null);
                     });
                 });

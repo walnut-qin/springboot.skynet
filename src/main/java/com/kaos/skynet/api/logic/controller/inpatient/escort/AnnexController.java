@@ -30,7 +30,7 @@ import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.core.util.converter.StringToBooleanConverter;
-import com.kaos.skynet.core.util.thread.Threads;
+import com.kaos.skynet.core.util.thread.lock.LockExecutor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -146,9 +146,9 @@ public class AnnexController {
         if (!escorts.isEmpty()) {
             for (var escort : escorts) {
                 escortPool.getTaskPool().execute(() -> {
-                    var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                    var stateLock = escortLock.getStateLock().grant(escort.getEscortNo());
                     // 更新关联陪护状态
-                    Threads.newLockExecutor().link(stateLock).execute(() -> {
+                    LockExecutor.execute(stateLock, () -> {
                         escortService.updateState(escort.getEscortNo(), null, "WebApi", null);
                     });
                 });
@@ -184,9 +184,9 @@ public class AnnexController {
             if (!escorts.isEmpty()) {
                 for (var escort : escorts) {
                     escortPool.getTaskPool().execute(() -> {
-                        var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                        var stateLock = escortLock.getStateLock().grant(escort.getEscortNo());
                         // 更新关联陪护状态
-                        Threads.newLockExecutor().link(stateLock).execute(() -> {
+                        LockExecutor.execute(stateLock, () -> {
                             escortService.updateState(escort.getEscortNo(), null, "WebApi", null);
                         });
                     });
@@ -237,7 +237,7 @@ public class AnnexController {
                 checker, negativeFlag.toString(), inspectDate.toString()));
 
         // 加状态操作锁，防止同时操作同一个陪护证
-        Threads.newLockExecutor().link(escortLock.getAnnexLock().getLock(annexNo)).execute(() -> {
+        LockExecutor.execute(escortLock.getAnnexLock().grant(annexNo), () -> {
             annexService.checkAnnex(annexNo, checker, negativeFlagBoolean, inspectDate);
         });
 
@@ -254,9 +254,9 @@ public class AnnexController {
         if (!escorts.isEmpty()) {
             for (var escort : escorts) {
                 escortPool.getTaskPool().execute(() -> {
-                    var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                    var stateLock = escortLock.getStateLock().grant(escort.getEscortNo());
                     // 更新关联陪护状态
-                    Threads.newLockExecutor().link(stateLock).execute(() -> {
+                    LockExecutor.execute(stateLock, () -> {
                         escortService.updateState(escort.getEscortNo(), null, "WebApi", "患者上传外院报告");
                     });
                 });
@@ -269,7 +269,7 @@ public class AnnexController {
     RspWrapper<String> checkAnnex(@RequestBody @Valid CheckAnnex.ReqBody reqBody) {
         try {
             // 加状态操作锁，防止同时操作同一个陪护证
-            Threads.newLockExecutor().link(escortLock.getAnnexLock().getLock(reqBody.annexNo)).execute(() -> {
+            LockExecutor.execute(escortLock.getAnnexLock().grant(reqBody.annexNo), () -> {
                 annexService.checkAnnex(reqBody.annexNo, reqBody.checker, reqBody.negative, reqBody.inspectDate);
             });
 
@@ -286,9 +286,9 @@ public class AnnexController {
             if (!escorts.isEmpty()) {
                 for (var escort : escorts) {
                     escortPool.getTaskPool().execute(() -> {
-                        var stateLock = escortLock.getStateLock().getLock(escort.getEscortNo());
+                        var stateLock = escortLock.getStateLock().grant(escort.getEscortNo());
                         // 更新关联陪护状态
-                        Threads.newLockExecutor().link(stateLock).execute(() -> {
+                        LockExecutor.execute(stateLock, () -> {
                             escortService.updateState(escort.getEscortNo(), null, "WebApi", "患者上传外院报告");
                         });
                     });

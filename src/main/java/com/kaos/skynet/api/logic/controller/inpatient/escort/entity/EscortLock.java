@@ -1,7 +1,6 @@
 package com.kaos.skynet.api.logic.controller.inpatient.escort.entity;
 
-import com.kaos.skynet.core.util.thread.Threads;
-import com.kaos.skynet.core.util.thread.lock.LockFactory;
+import com.kaos.skynet.core.util.thread.lock.LockGuardian;
 
 import org.springframework.stereotype.Component;
 
@@ -13,25 +12,25 @@ public class EscortLock {
     /**
      * 患者卡号锁
      */
-    final LockFactory patientLock = Threads.newLockFactory("escortPatientLock", 20);
+    final LockGuardian patientLock = new LockGuardian("escortPatientLock", 20);
 
     /**
      * 患者卡号锁
      */
-    final LockFactory helperLock = Threads.newLockFactory("escortHelperLock", 20);
+    final LockGuardian helperLock = new LockGuardian("escortHelperLock", 20);
 
     /**
      * 患者卡号锁
      */
-    final LockFactory stateLock = Threads.newLockFactory("escortStateLock", 80);
+    final LockGuardian stateLock = new LockGuardian("escortStateLock", 80);
 
     /**
      * 患者卡号锁
      */
-    final LockFactory actionLock = Threads.newLockFactory("escortActionLock", 20);
+    final LockGuardian actionLock = new LockGuardian("escortActionLock", 20);
 
     /**
      * 附件号锁
      */
-    final LockFactory annexLock = Threads.newLockFactory("escortAnnexLock", 20);
+    final LockGuardian annexLock = new LockGuardian("escortAnnexLock", 20);
 }
