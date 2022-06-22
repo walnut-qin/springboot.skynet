@@ -2,7 +2,7 @@ package com.kaos.skynet.api.data.his.entity.inpatient.surgery;
 
 import com.google.common.base.Objects;
 import com.kaos.skynet.api.data.his.enums.ValidEnum;
-import com.kaos.skynet.core.type.utils.StringUtils;
+import com.kaos.skynet.core.util.StringUtils;
 
 import lombok.Builder;
 import lombok.Getter;

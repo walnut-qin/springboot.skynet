@@ -9,8 +9,8 @@ import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.FinIpbInPrepayMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.api.data.his.mapper.outpatient.fee.FinOprPayModelMapper;
-import com.kaos.skynet.core.json.GsonWrapper;
-import com.kaos.skynet.core.type.utils.IntegerUtils;
+import com.kaos.skynet.core.util.IntegerUtils;
+import com.kaos.skynet.core.util.json.GsonWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

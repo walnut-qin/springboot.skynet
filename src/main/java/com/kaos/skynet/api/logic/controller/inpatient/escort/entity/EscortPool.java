@@ -3,8 +3,8 @@ package com.kaos.skynet.api.logic.controller.inpatient.escort.entity;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.kaos.skynet.core.thread.Threads;
-import com.kaos.skynet.core.thread.pool.ThreadPool;
+import com.kaos.skynet.core.util.thread.Threads;
+import com.kaos.skynet.core.util.thread.pool.ThreadPool;
 
 import org.springframework.stereotype.Component;
 

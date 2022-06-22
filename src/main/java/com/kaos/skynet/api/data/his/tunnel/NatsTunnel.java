@@ -10,7 +10,7 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexChe
 import com.kaos.skynet.api.data.his.mapper.pipe.lis.LisResultNewMapper;
 
 import com.kaos.skynet.core.type.Tunnel;
-import com.kaos.skynet.core.type.converter.LocalDateTimeToStringConverter;
+import com.kaos.skynet.core.util.converter.LocalDateTimeToStringConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

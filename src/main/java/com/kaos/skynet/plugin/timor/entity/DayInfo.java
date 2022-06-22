@@ -3,7 +3,7 @@ package com.kaos.skynet.plugin.timor.entity;
 import java.util.Date;
 
 import com.google.gson.annotations.JsonAdapter;
-import com.kaos.skynet.core.json.adapter.EnumTypeAdapter_Value;
+import com.kaos.skynet.core.util.json.adapter.EnumTypeAdapter_Value;
 import com.kaos.skynet.plugin.timor.enums.DayTypeEnum;
 import com.kaos.skynet.plugin.timor.enums.ResultCodeEnum;
 import com.kaos.skynet.plugin.timor.enums.WeekEnum;

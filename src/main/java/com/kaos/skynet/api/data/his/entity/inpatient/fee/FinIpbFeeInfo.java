@@ -8,8 +8,8 @@ import com.kaos.skynet.api.data.his.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.his.enums.MinFeeEnum;
 import com.kaos.skynet.api.data.his.enums.PayKindEnum;
 import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
-import com.kaos.skynet.core.type.utils.IntegerUtils;
-import com.kaos.skynet.core.type.utils.StringUtils;
+import com.kaos.skynet.core.util.IntegerUtils;
+import com.kaos.skynet.core.util.StringUtils;
 
 import lombok.Builder;
 import lombok.Getter;

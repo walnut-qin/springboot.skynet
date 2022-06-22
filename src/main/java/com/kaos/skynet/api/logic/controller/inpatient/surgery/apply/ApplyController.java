@@ -12,9 +12,9 @@ import com.kaos.skynet.api.data.his.enums.DeptOwnEnum;
 import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.skynet.api.data.his.tunnel.SurgeryNameTunnel;
-import com.kaos.skynet.core.spring.net.RspWrapper;
-import com.kaos.skynet.core.spring.interceptor.annotation.ApiName;
-import com.kaos.skynet.core.spring.net.MediaType;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.net.MediaType;
+import com.kaos.skynet.core.config.spring.net.RspWrapper;
 
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

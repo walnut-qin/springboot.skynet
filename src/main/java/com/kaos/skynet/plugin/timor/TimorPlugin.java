@@ -3,9 +3,9 @@ package com.kaos.skynet.plugin.timor;
 import java.time.Duration;
 import java.time.LocalDate;
 
-import com.kaos.skynet.core.spring.net.RestTemplateWrapper;
+import com.kaos.skynet.core.config.spring.net.RestTemplateWrapper;
 import com.kaos.skynet.core.type.Cache;
-import com.kaos.skynet.core.type.converter.LocalDateToStringConverter;
+import com.kaos.skynet.core.util.converter.LocalDateToStringConverter;
 import com.kaos.skynet.plugin.timor.entity.DayInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;

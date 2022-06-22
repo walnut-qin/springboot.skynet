@@ -18,7 +18,7 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortStateRecMapper
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortVipMapper;
 import com.kaos.skynet.api.logic.service.inpatient.escort.core.StateService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.core.ValidateService;
-import com.kaos.skynet.core.type.utils.StringUtils;
+import com.kaos.skynet.core.util.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -20,10 +20,10 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.his.tunnel.BedNoTunnel;
 import com.kaos.skynet.api.data.his.tunnel.NatsTunnel;
-import com.kaos.skynet.core.json.adapter.BooleanTypeAdapter_是否;
-import com.kaos.skynet.core.spring.net.RspWrapper;
-import com.kaos.skynet.core.spring.interceptor.annotation.ApiName;
-import com.kaos.skynet.core.spring.net.MediaType;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.net.MediaType;
+import com.kaos.skynet.core.config.spring.net.RspWrapper;
+import com.kaos.skynet.core.util.json.adapter.BooleanTypeAdapter_是否;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

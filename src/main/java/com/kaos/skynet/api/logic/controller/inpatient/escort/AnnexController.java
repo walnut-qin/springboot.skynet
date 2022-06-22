@@ -26,11 +26,11 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexInf
 import com.kaos.skynet.api.data.his.tunnel.PatientNameTunnel;
 import com.kaos.skynet.api.logic.service.inpatient.escort.AnnexService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
-import com.kaos.skynet.core.spring.net.RspWrapper;
-import com.kaos.skynet.core.spring.interceptor.annotation.ApiName;
-import com.kaos.skynet.core.spring.net.MediaType;
-import com.kaos.skynet.core.thread.Threads;
-import com.kaos.skynet.core.type.converter.StringToBooleanConverter;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.net.MediaType;
+import com.kaos.skynet.core.config.spring.net.RspWrapper;
+import com.kaos.skynet.core.util.converter.StringToBooleanConverter;
+import com.kaos.skynet.core.util.thread.Threads;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

@@ -5,7 +5,7 @@ import java.util.Date;
 import com.google.common.base.Objects;
 import com.kaos.skynet.core.type.Entity;
 import com.kaos.skynet.core.type.Enum;
-import com.kaos.skynet.core.type.utils.StringUtils;
+import com.kaos.skynet.core.util.StringUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

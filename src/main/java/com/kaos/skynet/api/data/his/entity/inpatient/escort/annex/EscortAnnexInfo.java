@@ -3,8 +3,7 @@ package com.kaos.skynet.api.data.his.entity.inpatient.escort.annex;
 import java.time.LocalDateTime;
 
 import com.google.common.base.Objects;
-
-import com.kaos.skynet.core.type.utils.StringUtils;
+import com.kaos.skynet.core.util.StringUtils;
 
 import lombok.Builder;
 import lombok.Getter;

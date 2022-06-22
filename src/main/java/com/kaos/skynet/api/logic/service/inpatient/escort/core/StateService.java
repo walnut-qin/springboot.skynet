@@ -21,7 +21,7 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortStateRecMapper
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.annex.EscortAnnexInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.outpatient.fee.FinOpbFeeDetailMapper;
 import com.kaos.skynet.api.data.his.tunnel.NatsTunnel;
-import com.kaos.skynet.core.type.utils.IntegerUtils;
+import com.kaos.skynet.core.util.IntegerUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

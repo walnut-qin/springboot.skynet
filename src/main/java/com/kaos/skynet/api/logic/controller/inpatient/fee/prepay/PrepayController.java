@@ -4,10 +4,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.kaos.skynet.api.logic.service.inpatient.fee.prepay.PrepayService;
-import com.kaos.skynet.core.spring.net.RspWrapper;
-import com.kaos.skynet.core.spring.interceptor.annotation.ApiName;
-import com.kaos.skynet.core.spring.net.MediaType;
-import com.kaos.skynet.core.type.utils.StringUtils;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.net.MediaType;
+import com.kaos.skynet.core.config.spring.net.RspWrapper;
+import com.kaos.skynet.core.util.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

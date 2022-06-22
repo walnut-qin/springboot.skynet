@@ -3,8 +3,8 @@ package com.kaos.skynet.api.logic.controller.cache;
 import java.util.Map;
 
 import com.kaos.skynet.api.data.his.cache.DataCache;
-import com.kaos.skynet.core.spring.net.RspWrapper;
-import com.kaos.skynet.core.spring.net.MediaType;
+import com.kaos.skynet.core.config.spring.net.MediaType;
+import com.kaos.skynet.core.config.spring.net.RspWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
