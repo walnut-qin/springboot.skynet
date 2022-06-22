@@ -1,6 +1,6 @@
 package com.kaos.skynet.plugin.timor.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.core.util.json.adapter.EnumTypeAdapter_Value;
@@ -84,7 +84,7 @@ public class DayInfo {
         /**
          * 日期
          */
-        private Date date;
+        private LocalDate date;
 
         /**
          * 剩余日期
