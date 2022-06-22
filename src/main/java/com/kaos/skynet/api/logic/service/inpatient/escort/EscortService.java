@@ -18,6 +18,7 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortStateRecMapper
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortVipMapper;
 import com.kaos.skynet.api.logic.service.inpatient.escort.core.StateService;
 import com.kaos.skynet.api.logic.service.inpatient.escort.core.ValidateService;
+import com.kaos.skynet.core.util.IntegerUtils;
 import com.kaos.skynet.core.util.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -202,6 +203,10 @@ public class EscortService {
                     .recDate(LocalDateTime.now())
                     .remark(remark).build());
         } else {
+            // 逆序
+            actionRecs.sort((x, y) -> {
+                return IntegerUtils.compare(y.getRecNo(), x.getRecNo());
+            });
             actionRecMapper.insertAction(EscortActionRec.builder()
                     .escortNo(escortNo)
                     .recNo(actionRecs.get(0).getRecNo() + 1)
