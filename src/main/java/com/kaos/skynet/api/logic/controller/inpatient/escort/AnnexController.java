@@ -145,7 +145,7 @@ public class AnnexController {
         var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
         if (!escorts.isEmpty()) {
             for (var escort : escorts) {
-                escortPool.getTaskPool().execute(() -> {
+                escortPool.getStateMgr().execute(() -> {
                     var stateLock = escortLock.getStateLock().grant(escort.getEscortNo());
                     // 更新关联陪护状态
                     LockExecutor.execute(stateLock, () -> {
@@ -183,7 +183,7 @@ public class AnnexController {
             var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
             if (!escorts.isEmpty()) {
                 for (var escort : escorts) {
-                    escortPool.getTaskPool().execute(() -> {
+                    escortPool.getStateMgr().execute(() -> {
                         var stateLock = escortLock.getStateLock().grant(escort.getEscortNo());
                         // 更新关联陪护状态
                         LockExecutor.execute(stateLock, () -> {
@@ -253,7 +253,7 @@ public class AnnexController {
         var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
         if (!escorts.isEmpty()) {
             for (var escort : escorts) {
-                escortPool.getTaskPool().execute(() -> {
+                escortPool.getStateMgr().execute(() -> {
                     var stateLock = escortLock.getStateLock().grant(escort.getEscortNo());
                     // 更新关联陪护状态
                     LockExecutor.execute(stateLock, () -> {
@@ -285,7 +285,7 @@ public class AnnexController {
             var escorts = escortMainInfoMapper.queryEscortMainInfos(escortBuilder.build());
             if (!escorts.isEmpty()) {
                 for (var escort : escorts) {
-                    escortPool.getTaskPool().execute(() -> {
+                    escortPool.getStateMgr().execute(() -> {
                         var stateLock = escortLock.getStateLock().grant(escort.getEscortNo());
                         // 更新关联陪护状态
                         LockExecutor.execute(stateLock, () -> {

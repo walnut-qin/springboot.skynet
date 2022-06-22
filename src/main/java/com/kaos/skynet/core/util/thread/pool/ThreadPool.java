@@ -1,78 +1,95 @@
 package com.kaos.skynet.core.util.thread.pool;
 
-import lombok.Setter;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public interface ThreadPool {
+import com.google.common.collect.Queues;
+
+import lombok.Builder;
+import lombok.Getter;
+
+/**
+ * 无状态线程池
+ */
+public class ThreadPool {
     /**
-     * 设置监控器
+     * 线程池名称
+     */
+    @Getter
+    final String name;
+
+    /**
+     * 线程池实体
+     */
+    final ThreadPoolExecutor executor;
+
+    /**
+     * 构造线程池
      * 
-     * @param cnt 需等待完成的任务数量
+     * @param name
+     * @param threadSize
      */
-    void monitor(Integer cnt);
+    public ThreadPool(String name, Integer threadCount) {
+        this.name = name;
+        this.executor = new ThreadPoolExecutor(threadCount, threadCount,
+                0, TimeUnit.SECONDS,
+                Queues.newLinkedBlockingDeque());
+    }
 
     /**
-     * 提交任务
-     * 
-     * @param runnable 可执行任务实体
+     * 执行任务
      */
-    void execute(Runnable runnable);
+    public void execute(Runnable runnable) {
+        this.executor.execute(runnable);
+    }
 
     /**
-     * 等待任务完成
+     * 展示线程池状态
      */
-    void await();
-
-    /**
-     * 展示线程池当前状态
-     * 
-     * @return
-     */
-    PoolState show();
+    public PoolState show() {
+        var builder = PoolState.builder();
+        builder.name(name);
+        builder.size(this.executor.getCorePoolSize());
+        builder.activeSize(this.executor.getActiveCount());
+        builder.queueSize(this.executor.getQueue().size());
+        builder.taskCount(this.executor.getTaskCount());
+        builder.completeTaskCount(this.executor.getCompletedTaskCount());
+        return builder.build();
+    }
 
     /**
      * 线程池视图
      */
+    @Builder
     static class PoolState {
         /**
          * 线程池名称
          */
-        @Setter
-        private String name = null;
+        String name;
 
         /**
          * 核心线程池数量
          */
-        @Setter
-        private Integer coreSize = null;
-
-        /**
-         * 最大线程池数量
-         */
-        @Setter
-        private Integer maxSize = null;
+        Integer size;
 
         /**
          * 活跃线程池数量
          */
-        @Setter
-        private Integer activeSize = null;
+        Integer activeSize;
 
         /**
          * 等待队列容量
          */
-        @Setter
-        private Integer queueSize = null;
+        Integer queueSize;
 
         /**
          * 任务数量
          */
-        @Setter
-        private Long taskCount = null;
+        Long taskCount;
 
         /**
          * 已完成的任务数量
          */
-        @Setter
-        private Long completeTaskCount = null;
+        Long completeTaskCount;
     }
 }
