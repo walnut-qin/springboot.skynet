@@ -500,6 +500,7 @@ public class EscortController {
             /**
              * 患者卡号
              */
+            @SerializedName("escortCardNo")
             String patientCardNo;
 
             /**
