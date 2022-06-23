@@ -5,7 +5,9 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kaos.skynet.core.config.spring.exception.TokenCheckException;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.util.Timer;
 import com.kaos.skynet.core.util.json.GsonWrapper;
 
@@ -49,6 +51,24 @@ class InterceptorConfigurer implements WebMvcConfigurer {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
                 throws Exception {
+            // 获取方法
+            if (!(handler instanceof HandlerMethod)) {
+                return true;
+            }
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            Method method = handlerMethod.getMethod();
+
+            // 若方法含有Pass注解，跳过校验
+            if (method.isAnnotationPresent(PassToken.class)) {
+                return true;
+            }
+
+            // 读取token头
+            String token = request.getHeader("token");
+            if (token == null) {
+                throw new TokenCheckException("token为空, 请登录");
+            }
+
             return true;
         }
 
