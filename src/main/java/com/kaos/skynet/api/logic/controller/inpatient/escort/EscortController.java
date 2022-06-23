@@ -500,12 +500,12 @@ public class EscortController {
             /**
              * 患者卡号
              */
-            @SerializedName("escortCardNo")
             String patientCardNo;
 
             /**
              * 陪护人卡号
              */
+            @SerializedName("escortCardNo")
             String helperCardNo;
 
             /**
