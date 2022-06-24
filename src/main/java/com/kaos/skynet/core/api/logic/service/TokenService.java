@@ -77,7 +77,7 @@ public class TokenService {
         // 过期校验
         LocalDateTime expire = LocalDateTime.ofInstant(decodedJWT.getExpiresAtAsInstant(), ZoneId.systemDefault());
         if (LocalDateTime.now().isAfter(expire)) {
-            throw new TokenCheckException("token已过期");
+            throw new TokenCheckException(1, "token已过期");
         }
 
         // 获取系统用户

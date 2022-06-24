@@ -13,17 +13,36 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import lombok.Getter;
+
 /**
  * 自定义异常：Token校验异常
  */
 public class TokenCheckException extends Exception {
+    /**
+     * 响应码
+     */
+    @Getter
+    private Integer code;
+
+    /**
+     * 构造函数
+     * 
+     * @param code
+     * @param message
+     */
+    public TokenCheckException(Integer code, String message) {
+        super(message);
+        this.code = code;
+    }
+
     /**
      * 构造函数
      * 
      * @param message
      */
     public TokenCheckException(String message) {
-        super(message);
+        this(-1, message);
     }
 
     @Order(0)
