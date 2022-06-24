@@ -1,5 +1,6 @@
 package com.kaos.skynet.core.api.logic.service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -25,14 +26,20 @@ public class TokenService {
     KaosUserMapper kaosUserMapper;
 
     /**
+     * 秘钥前缀 - 修改此前缀可以使所有永久秘钥失效
+     */
+    final String keyPrefix = "kaos";
+
+    /**
      * 校验用户并生成token
      * 
-     * @param uid 用户ID
-     * @param pwd 用户密码
+     * @param uid      用户ID
+     * @param pwd      用户密码
+     * @param duration token有效期
      * @return
      */
     @Transactional
-    public String genToken(String uuid, String pwd) {
+    public String genToken(String uuid, String pwd, Duration duration) {
         // 检索账户实体
         KaosUser kaosUser = kaosUserMapper.queryKaosUser(uuid);
         if (kaosUser == null) {
@@ -46,10 +53,12 @@ public class TokenService {
         }
 
         // 生成token
-        return JWT.create()
-                .withAudience(uuid)
-                .withExpiresAt(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant())
-                .sign(Algorithm.HMAC256(kaosUser.getPwd()));
+        var builder = JWT.create();
+        builder.withAudience(uuid);
+        if (duration != null) {
+            builder.withExpiresAt(LocalDateTime.now().plus(duration).atZone(ZoneId.systemDefault()).toInstant());
+        }
+        return builder.sign(Algorithm.HMAC256(keyPrefix + kaosUser.getPwd()));
     }
 
     /**
@@ -75,9 +84,12 @@ public class TokenService {
         }
 
         // 过期校验
-        LocalDateTime expire = LocalDateTime.ofInstant(decodedJWT.getExpiresAtAsInstant(), ZoneId.systemDefault());
-        if (LocalDateTime.now().isAfter(expire)) {
-            throw new TokenCheckException(1, "token已过期");
+        var expireInstant = decodedJWT.getExpiresAtAsInstant();
+        if (expireInstant != null) {
+            LocalDateTime expire = LocalDateTime.ofInstant(expireInstant, ZoneId.systemDefault());
+            if (LocalDateTime.now().isAfter(expire)) {
+                throw new TokenCheckException(1, "token已过期");
+            }
         }
 
         // 获取系统用户
@@ -88,7 +100,7 @@ public class TokenService {
         }
 
         // 校验token
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(kaosUser.getPwd())).build();
+        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(keyPrefix + kaosUser.getPwd())).build();
         try {
             jwtVerifier.verify(token);
         } catch (Exception e) {

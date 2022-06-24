@@ -1,6 +1,9 @@
 package com.kaos.skynet.core.api.logic.controller;
 
+import java.time.Duration;
+
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import com.kaos.skynet.core.api.logic.service.TokenService;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
@@ -38,7 +41,12 @@ public class UserController {
     RspWrapper<Login.RspBody> login(@RequestBody @Valid Login.ReqBody reqBody) {
         try {
             // 校验并生成token
-            String token = tokenService.genToken(reqBody.uuid, reqBody.pwd);
+            String token = null;
+            if (reqBody.eternal != null && reqBody.eternal) {
+                token = tokenService.genToken(reqBody.uuid, reqBody.pwd, null);
+            } else {
+                token = tokenService.genToken(reqBody.uuid, reqBody.pwd, Duration.ofHours(1));
+            }
 
             // 生成响应
             var builder = Login.RspBody.builder();
@@ -55,12 +63,19 @@ public class UserController {
             /**
              * 用户ID
              */
+            @NotBlank(message = "账号不能为空")
             String uuid;
 
             /**
              * 用户密码
              */
+            @NotBlank(message = "密码不能为空")
             String pwd;
+
+            /**
+             * 是否永久登入
+             */
+            Boolean eternal;
         }
 
         @Builder
