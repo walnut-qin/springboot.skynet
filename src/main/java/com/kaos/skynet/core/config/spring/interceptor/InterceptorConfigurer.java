@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kaos.skynet.core.api.logic.service.TokenService;
-import com.kaos.skynet.core.config.spring.exception.TokenCheckException;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.util.Timer;
@@ -66,24 +65,21 @@ class InterceptorConfigurer implements WebMvcConfigurer {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
 
-            // 若方法含有Pass注解，跳过校验
+            // 判断Pass注解 - 临近原则
             if (method.isAnnotationPresent(PassToken.class)) {
-                return true;
-            }
-
-            // 若类上有Pass注解，也跳过校验
-            if (method.getDeclaringClass().isAnnotationPresent(PassToken.class)) {
-                return true;
-            }
-
-            // 读取token头
-            String token = request.getHeader("token");
-            if (token == null) {
-                throw new TokenCheckException("无token, 请登录");
+                PassToken passToken = method.getAnnotation(PassToken.class);
+                if (passToken.value()) {
+                    return true;
+                }
+            } else if (method.getDeclaringClass().isAnnotationPresent(PassToken.class)) {
+                PassToken passToken = method.getDeclaringClass().getAnnotation(PassToken.class);
+                if (passToken.value()) {
+                    return true;
+                }
             }
 
             // 校验token
-            tokenService.checkToken(token);
+            tokenService.checkToken(request.getHeader("token"));
 
             return true;
         }

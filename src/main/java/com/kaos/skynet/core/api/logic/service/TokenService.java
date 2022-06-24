@@ -61,6 +61,11 @@ public class TokenService {
      */
     @Transactional
     public KaosUser checkToken(String token) throws TokenCheckException {
+        // 无token
+        if (token == null) {
+            throw new TokenCheckException("无token, 请登录");
+        }
+
         // token解码
         DecodedJWT decodedJWT = null;
         try {
