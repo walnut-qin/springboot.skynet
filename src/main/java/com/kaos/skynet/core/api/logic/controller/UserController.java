@@ -37,7 +37,7 @@ public class UserController {
      */
     @PassToken
     @ApiName("登陆系统")
-    @RequestMapping(value = "login", method = RequestMethod.GET, produces = MediaType.JSON)
+    @RequestMapping(value = "login", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<Login.RspBody> login(@RequestBody @Valid Login.ReqBody reqBody) {
         try {
             // 校验并生成token
