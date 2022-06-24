@@ -12,6 +12,7 @@ import com.kaos.skynet.api.data.his.enums.ValidEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.MetOpsApplyMapper;
 import com.kaos.skynet.api.data.his.tunnel.SurgeryNameTunnel;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.Builder;
 import lombok.Getter;
 
+@PassToken
 @Validated
 @RestController
 @RequestMapping({ "/api/inpatient/surgery", "/ms/inpatient/surgery" })

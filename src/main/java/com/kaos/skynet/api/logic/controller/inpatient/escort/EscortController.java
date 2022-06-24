@@ -32,6 +32,7 @@ import com.kaos.skynet.api.data.his.tunnel.DeptNameTunnel;
 import com.kaos.skynet.api.logic.controller.inpatient.escort.entity.EscortLock;
 import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.core.util.IntegerUtils;
@@ -53,6 +54,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
+@PassToken
 @Log4j
 @Validated
 @RestController

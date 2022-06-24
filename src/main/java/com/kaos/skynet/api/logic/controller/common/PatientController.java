@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import com.kaos.skynet.api.data.his.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.his.enums.SexEnum;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 import com.kaos.skynet.core.config.spring.net.RspWrapper;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
 
+@PassToken
 @Validated
 @RestController
 @RequestMapping("api/common/patient")

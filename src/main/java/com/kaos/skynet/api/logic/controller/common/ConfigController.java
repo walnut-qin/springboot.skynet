@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.kaos.skynet.api.data.his.cache.common.config.ConfigSwitchCache;
 import com.kaos.skynet.api.data.his.enums.ValidEnum;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 import com.kaos.skynet.core.config.spring.net.RspWrapper;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.log4j.Log4j;
 
+@PassToken
 @Log4j
 @Validated
 @RestController

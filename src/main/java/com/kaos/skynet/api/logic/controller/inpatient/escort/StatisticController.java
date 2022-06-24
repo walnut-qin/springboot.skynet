@@ -21,6 +21,7 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper
 import com.kaos.skynet.api.data.his.tunnel.BedNoTunnel;
 import com.kaos.skynet.api.data.his.tunnel.NatsTunnel;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.core.util.json.adapter.BooleanTypeAdapter_是否;
@@ -36,6 +37,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
+@PassToken
 @Log4j
 @Validated
 @RestController

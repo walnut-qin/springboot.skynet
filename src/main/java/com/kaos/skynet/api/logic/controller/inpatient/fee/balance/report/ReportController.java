@@ -10,6 +10,7 @@ import com.google.common.base.Optional;
 import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.FinIpbBalanceHeadMapper;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.core.type.Enum;
@@ -26,6 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
+@PassToken
 @Log4j
 @Validated
 @RestController
