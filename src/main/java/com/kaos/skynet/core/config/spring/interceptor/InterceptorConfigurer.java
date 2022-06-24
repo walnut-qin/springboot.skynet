@@ -5,14 +5,17 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kaos.skynet.core.api.data.entity.KaosUser;
 import com.kaos.skynet.core.api.logic.service.TokenService;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.util.Timer;
+import com.kaos.skynet.core.util.UserUtils;
 import com.kaos.skynet.core.util.json.GsonWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -54,6 +57,7 @@ class InterceptorConfigurer implements WebMvcConfigurer {
     /**
      * token校验
      */
+    @Order(0)
     class TokenInterceptor implements HandlerInterceptor {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -79,7 +83,10 @@ class InterceptorConfigurer implements WebMvcConfigurer {
             }
 
             // 校验token
-            tokenService.checkToken(request.getHeader("token"));
+            KaosUser kaosUser = tokenService.checkToken(request.getHeader("token"));
+
+            // 记录用户
+            UserUtils.create(kaosUser);
 
             return true;
         }
@@ -87,6 +94,8 @@ class InterceptorConfigurer implements WebMvcConfigurer {
         @Override
         public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                 ModelAndView modelAndView) throws Exception {
+            // 销毁用户
+            UserUtils.destroy();
         }
 
         @Override
@@ -100,6 +109,7 @@ class InterceptorConfigurer implements WebMvcConfigurer {
      * 日志记录
      */
     @Log4j
+    @Order(1)
     class LogInterceptor implements HandlerInterceptor {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -117,7 +127,7 @@ class InterceptorConfigurer implements WebMvcConfigurer {
             // 对注解了ApiName的方法改名
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
-            String apiName = "匿名";
+            String apiName = method.getName();
             if (method.isAnnotationPresent(ApiName.class)) {
                 // 提取注解内容
                 ApiName apiNameAnnotation = method.getAnnotation(ApiName.class);
@@ -129,8 +139,14 @@ class InterceptorConfigurer implements WebMvcConfigurer {
             var InputStream = request.getInputStream();
             String orgBodyStr = new String(StreamUtils.copyToByteArray(InputStream), request.getCharacterEncoding());
 
+            // 提取登入的用户
+            String uuid = "-";
+            if (UserUtils.currentUser() != null) {
+                uuid = UserUtils.currentUser().getUuid();
+            }
+
             // 记录日志
-            log.info(apiName.concat(", reqBody = ").concat(gsonWrapper.format(orgBodyStr)));
+            log.info(String.format("[%s] <%s> %s", uuid, apiName, gsonWrapper.format(orgBodyStr)));
 
             return true;
         }
@@ -139,6 +155,7 @@ class InterceptorConfigurer implements WebMvcConfigurer {
     /**
      * 计时器生命期管理
      */
+    @Order(2)
     class TimerInterceptor implements HandlerInterceptor {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
