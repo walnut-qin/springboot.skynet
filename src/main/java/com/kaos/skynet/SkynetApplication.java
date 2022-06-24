@@ -5,7 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@MapperScan({ "com.kaos.skynet.api.data.his.mapper", "com.kaos.skynet.api.data.docare.mapper" })
+@MapperScan({ "com.kaos.skynet.core.data.mapper",
+		"com.kaos.skynet.api.data.his.mapper",
+		"com.kaos.skynet.api.data.docare.mapper" })
 @SpringBootApplication
 @EnableScheduling
 public class SkynetApplication {
