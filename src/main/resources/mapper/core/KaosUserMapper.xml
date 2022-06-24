@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kaos.skynet.core.data.mapper.KaosUserMapper">
-    <resultMap id="map" type="com.kaos.skynet.core.data.entity.KaosUser">
-        <id column="UID" jdbcType="VARCHAR" property="uid" />
-        <result column="PASSWD" jdbcType="VARCHAR" property="passwd" />
+<mapper namespace="com.kaos.skynet.core.api.data.mapper.KaosUserMapper">
+    <resultMap id="map" type="com.kaos.skynet.core.api.data.entity.KaosUser">
+        <id column="UUID" jdbcType="VARCHAR" property="uuid" />
+        <result column="PWD" jdbcType="VARCHAR" property="pwd" />
         <result column="VALID" jdbcType="VARCHAR" property="valid" />
     </resultMap>
 
     <sql id="item">
-        UID,
-        PASSWD,
+        UUID,
+        PWD,
         VALID
     </sql>
 
@@ -19,8 +19,8 @@
         FROM
             KAOS.KAOS_USER
         <where>
-            <if test="true">
-                AND UID = #{uid}
+            <if test = "true">
+                AND UUID = #{uuid}
             </if>
         </where>
     </select>

@@ -1,4 +1,4 @@
-package com.kaos.skynet.core.data.entity;
+package com.kaos.skynet.core.api.data.entity;
 
 import lombok.Getter;
 
@@ -10,12 +10,12 @@ public class KaosUser {
     /**
      * 用户号
      */
-    private String uid;
+    private String uuid;
 
     /**
      * 用户密码
      */
-    private String passwd;
+    private String pwd;
 
     /**
      * 有效标识

@@ -5,12 +5,14 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kaos.skynet.core.api.logic.service.TokenService;
 import com.kaos.skynet.core.config.spring.exception.TokenCheckException;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.util.Timer;
 import com.kaos.skynet.core.util.json.GsonWrapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -31,6 +33,12 @@ class InterceptorConfigurer implements WebMvcConfigurer {
      * 序列化工具
      */
     GsonWrapper gsonWrapper = new GsonWrapper();
+
+    /**
+     * 核心数据库 - 账户信息接口
+     */
+    @Autowired
+    TokenService tokenService;
 
     /**
      * 配置拦截器
@@ -63,11 +71,19 @@ class InterceptorConfigurer implements WebMvcConfigurer {
                 return true;
             }
 
+            // 若类上有Pass注解，也跳过校验
+            if (method.getDeclaringClass().isAnnotationPresent(PassToken.class)) {
+                return true;
+            }
+
             // 读取token头
             String token = request.getHeader("token");
             if (token == null) {
-                throw new TokenCheckException("token为空, 请登录");
+                throw new TokenCheckException("无token, 请登录");
             }
+
+            // 校验token
+            tokenService.checkToken(token);
 
             return true;
         }

@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 是否逃逸token校验
  */
-@Target(ElementType.METHOD)
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PassToken {
 }

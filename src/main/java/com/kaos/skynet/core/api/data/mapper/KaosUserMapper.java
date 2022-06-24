@@ -1,7 +1,7 @@
-package com.kaos.skynet.core.data.mapper;
+package com.kaos.skynet.core.api.data.mapper;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
-import com.kaos.skynet.core.data.entity.KaosUser;
+import com.kaos.skynet.core.api.data.entity.KaosUser;
 
 @DS("his")
 public interface KaosUserMapper {
@@ -11,5 +11,5 @@ public interface KaosUserMapper {
      * @param uid 账户ID
      * @return
      */
-    KaosUser queryKaosUser(String uid);
+    KaosUser queryKaosUser(String uuid);
 }

@@ -1,6 +1,6 @@
 package com.kaos.skynet.api.data.core;
 
-import com.kaos.skynet.core.data.mapper.KaosUserMapper;
+import com.kaos.skynet.core.api.data.mapper.KaosUserMapper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
