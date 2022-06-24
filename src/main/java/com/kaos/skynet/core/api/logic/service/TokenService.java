@@ -54,7 +54,9 @@ public class TokenService {
 
         // 生成token
         var builder = JWT.create();
-        builder.withAudience(uuid);
+        builder.withKeyId(LocalDateTime.now().toString()); // 混淆Header段
+        builder.withAudience(uuid); // 插入用户数据
+        builder.withAudience(LocalDateTime.now().toString()); // 混淆payload段
         if (duration != null) {
             builder.withExpiresAt(LocalDateTime.now().plus(duration).atZone(ZoneId.systemDefault()).toInstant());
         }
