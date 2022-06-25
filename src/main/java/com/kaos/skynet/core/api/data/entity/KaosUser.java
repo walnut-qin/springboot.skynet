@@ -21,4 +21,9 @@ public class KaosUser {
      * 有效标识
      */
     private Boolean valid;
+
+    /**
+     * token掩码，增加token复杂度，修改后，历史token立刻失效
+     */
+    private String tokenMask;
 }

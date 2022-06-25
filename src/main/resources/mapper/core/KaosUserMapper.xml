@@ -5,12 +5,14 @@
         <id column="UUID" jdbcType="VARCHAR" property="uuid" />
         <result column="PWD" jdbcType="VARCHAR" property="pwd" />
         <result column="VALID" jdbcType="VARCHAR" property="valid" />
+        <result column="TOKEN_MASK" jdbcType="VARCHAR" property="tokenMask" />
     </resultMap>
 
     <sql id="item">
         UUID,
         PWD,
-        VALID
+        VALID,
+        TOKEN_MASK
     </sql>
 
     <select id="queryKaosUser" resultMap="map">

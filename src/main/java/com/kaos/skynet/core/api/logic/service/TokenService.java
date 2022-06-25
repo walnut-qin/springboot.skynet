@@ -26,7 +26,7 @@ public class TokenService {
     KaosUserMapper kaosUserMapper;
 
     /**
-     * 秘钥前缀 - 修改此前缀可以使所有永久秘钥失效
+     * 秘钥前缀 - 修改后，系统所有历史token失效
      */
     final String keyPrefix = "kaos";
 
@@ -60,7 +60,8 @@ public class TokenService {
         if (duration != null) {
             builder.withExpiresAt(LocalDateTime.now().plus(duration).atZone(ZoneId.systemDefault()).toInstant());
         }
-        return builder.sign(Algorithm.HMAC256(keyPrefix + kaosUser.getPwd()));
+        String tokenPrivateKey = keyPrefix + kaosUser.getTokenMask() + kaosUser.getPwd();
+        return builder.sign(Algorithm.HMAC256(tokenPrivateKey));
     }
 
     /**
@@ -102,7 +103,8 @@ public class TokenService {
         }
 
         // 校验token
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(keyPrefix + kaosUser.getPwd())).build();
+        String tokenPrivateKey = keyPrefix + kaosUser.getTokenMask() + kaosUser.getPwd();
+        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(tokenPrivateKey)).build();
         try {
             jwtVerifier.verify(token);
         } catch (Exception e) {
