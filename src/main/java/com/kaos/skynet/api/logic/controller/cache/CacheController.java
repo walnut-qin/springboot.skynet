@@ -3,6 +3,7 @@ package com.kaos.skynet.api.logic.controller.cache;
 import java.util.Map;
 
 import com.kaos.skynet.api.data.his.cache.DataCache;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 import com.kaos.skynet.core.config.spring.net.RspWrapper;
@@ -26,6 +27,7 @@ class CacheController {
      * 
      * @return
      */
+    @ApiName("显示缓存状态")
     @RequestMapping(value = "show", method = RequestMethod.POST, produces = MediaType.JSON)
     RspWrapper<Map<String, Object>> show() {
         try {
