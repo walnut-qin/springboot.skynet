@@ -1,6 +1,7 @@
 package com.kaos.skynet.core.util.converter;
 
-import org.springframework.beans.ConversionNotSupportedException;
+import com.kaos.skynet.core.config.spring.exception.ConversionException;
+
 import org.springframework.core.convert.converter.Converter;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class StringToBooleanConverter implements Converter<String, Boolean> {
                 throw new RuntimeException("映射不存在");
             }
         } catch (Exception e) {
-            throw new ConversionNotSupportedException(source, String.class, e);
+            throw new ConversionException(String.class, Boolean.class, e.getMessage());
         }
     }
 }

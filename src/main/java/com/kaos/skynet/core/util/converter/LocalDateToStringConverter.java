@@ -3,7 +3,8 @@ package com.kaos.skynet.core.util.converter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.beans.ConversionNotSupportedException;
+import com.kaos.skynet.core.config.spring.exception.ConversionException;
+
 import org.springframework.core.convert.converter.Converter;
 
 public class LocalDateToStringConverter implements Converter<LocalDate, String> {
@@ -32,7 +33,7 @@ public class LocalDateToStringConverter implements Converter<LocalDate, String> 
             // 格式化
             return source.format(formatter);
         } catch (Exception e) {
-            throw new ConversionNotSupportedException(source, String.class, e);
+            throw new ConversionException(LocalDate.class, String.class, e.getMessage());
         }
     }
 }

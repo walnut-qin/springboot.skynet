@@ -1,8 +1,8 @@
 package com.kaos.skynet.core.util.converter;
 
+import com.kaos.skynet.core.config.spring.exception.ConversionException;
 import com.kaos.skynet.core.type.Enum;
 
-import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.core.convert.converter.Converter;
 
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class EnumToStringConverter<E extends Enum> implements Converter<E, Strin
             }
             return useValue ? source.getValue() : source.getDescription();
         } catch (Exception e) {
-            throw new ConversionNotSupportedException(source, String.class, e);
+            throw new ConversionException(source.getClass(), String.class, e.getMessage());
         }
     }
 }

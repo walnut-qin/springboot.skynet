@@ -1,9 +1,12 @@
-package com.kaos.skynet.core.config.spring.exception;
+package com.kaos.skynet.core.config.spring.exception.handler;
 
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
+import java.util.Map;
+
+import com.google.common.collect.Maps;
+import com.kaos.skynet.core.config.spring.exception.ConversionException;
 import com.kaos.skynet.core.util.json.GsonWrapper;
 
-import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -11,8 +14,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+@Order(0)
 @ControllerAdvice
-class ConversionNotSupportedExceptionHandler {
+class ConversionExceptionHandler {
     /**
      * 序列化工具
      */
@@ -24,20 +28,18 @@ class ConversionNotSupportedExceptionHandler {
      * @param ex
      * @return
      */
-    @ExceptionHandler(value = ConversionNotSupportedException.class)
-    public ResponseEntity<RspWrapper<Object>> exceptionHandler(ConversionNotSupportedException ex) {
+    @ExceptionHandler(value = ConversionException.class)
+    public ResponseEntity<Map<String, Object>> exceptionHandler(ConversionException ex) {
         // 构造Header
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Content-Type", "application/json;charset=UTF-8");
 
-        // 构造错误信息
-        String errInfo = String.format("类型转换%s->%s失败, 值: %s, 原因: %s",
-                ex.getValue().getClass().getName(),
-                ex.getRequiredType().getName(),
-                gsonWrapper.toJson(ex.getValue()),
-                ex.getMessage());
+        // 构造body
+        Map<String, Object> body = Maps.newHashMap();
+        body.put("code", -1);
+        body.put("message", String.format("%s -> %s: %s", ex.getOrgType(), ex.getDstType(), ex.getMessage()));
 
         // 构造响应体
-        return new ResponseEntity<>(RspWrapper.wrapFailResponse(errInfo), headers, HttpStatus.OK);
+        return new ResponseEntity<>(body, headers, HttpStatus.OK);
     }
 }

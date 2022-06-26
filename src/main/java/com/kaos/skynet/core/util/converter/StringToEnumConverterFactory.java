@@ -1,8 +1,8 @@
 package com.kaos.skynet.core.util.converter;
 
+import com.kaos.skynet.core.config.spring.exception.ConversionException;
 import com.kaos.skynet.core.type.Enum;
 
-import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
@@ -41,7 +41,7 @@ public class StringToEnumConverterFactory implements ConverterFactory<String, En
 
                     return null;
                 } catch (Exception e) {
-                    throw new ConversionNotSupportedException(source, String.class, e);
+                    throw new ConversionException(targetType, String.class, e.getMessage());
                 }
             }
         };

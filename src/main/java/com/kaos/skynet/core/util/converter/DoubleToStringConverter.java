@@ -2,9 +2,9 @@ package com.kaos.skynet.core.util.converter;
 
 import java.text.DecimalFormat;
 
+import com.kaos.skynet.core.config.spring.exception.ConversionException;
 import com.kaos.skynet.core.util.StringUtils;
 
-import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.core.convert.converter.Converter;
 
 public class DoubleToStringConverter implements Converter<Double, String> {
@@ -33,7 +33,7 @@ public class DoubleToStringConverter implements Converter<Double, String> {
             // 执行转换
             return decimalFormat.format(source);
         } catch (Exception e) {
-            throw new ConversionNotSupportedException(source, String.class, e);
+            throw new ConversionException(Double.class, String.class, e.getMessage());
         }
     }
 }

@@ -2,7 +2,8 @@ package com.kaos.skynet.core.util.converter;
 
 import java.time.Duration;
 
-import org.springframework.beans.ConversionNotSupportedException;
+import com.kaos.skynet.core.config.spring.exception.ConversionException;
+
 import org.springframework.core.convert.converter.Converter;
 
 import lombok.AllArgsConstructor;
@@ -43,7 +44,7 @@ public class DurationToStringConverter implements Converter<Duration, String> {
                 return this.completeConvert(source);
             }
         } catch (Exception e) {
-            throw new ConversionNotSupportedException(source, String.class, e);
+            throw new ConversionException(Duration.class, String.class, e.getMessage());
         }
     }
 

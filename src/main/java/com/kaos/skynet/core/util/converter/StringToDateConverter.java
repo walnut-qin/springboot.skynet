@@ -3,7 +3,8 @@ package com.kaos.skynet.core.util.converter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.springframework.beans.ConversionNotSupportedException;
+import com.kaos.skynet.core.config.spring.exception.ConversionException;
+
 import org.springframework.core.convert.converter.Converter;
 
 public class StringToDateConverter implements Converter<String, Date> {
@@ -26,7 +27,7 @@ public class StringToDateConverter implements Converter<String, Date> {
         try {
             return formatter.parse(source);
         } catch (Exception e) {
-            throw new ConversionNotSupportedException(source, String.class, e);
+            throw new ConversionException(String.class, Date.class, e.getMessage());
         }
     }
 }
