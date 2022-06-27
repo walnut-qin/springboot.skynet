@@ -208,11 +208,13 @@ public class EscortController {
      */
     @ApiName("更新陪护证状态")
     @RequestMapping(value = "updateState", method = RequestMethod.POST, produces = MediaType.JSON)
-    void updateState(@RequestBody @Valid UpdateState.ReqBody reqBody) {
+    String updateState(@RequestBody @Valid UpdateState.ReqBody reqBody) {
         // 加状态操作锁，防止同时操作同一个陪护证
         LockExecutor.execute(escortLock.getStateLock().grant(reqBody.escortNo), () -> {
             escortService.updateState(reqBody.escortNo, reqBody.state, reqBody.emplCode, "收到客户端请求");
         });
+
+        return reqBody.escortNo;
     }
 
     static class UpdateState {
@@ -245,11 +247,13 @@ public class EscortController {
      */
     @ApiName("记录陪护证行为")
     @RequestMapping(value = "recordAction", method = RequestMethod.POST, produces = MediaType.JSON)
-    void recordAction(@RequestBody @Valid RecordAction.ReqBody reqBody) {
+    String recordAction(@RequestBody @Valid RecordAction.ReqBody reqBody) {
         // 加状态操作锁，防止同时操作同一个陪护证
         LockExecutor.execute(escortLock.getActionLock().grant(reqBody.escortNo), () -> {
             escortService.recordAction(reqBody.escortNo, reqBody.action, "收到客户端请求");
         });
+
+        return reqBody.escortNo;
     }
 
     static class RecordAction {
