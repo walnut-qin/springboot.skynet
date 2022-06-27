@@ -32,7 +32,6 @@ import com.kaos.skynet.api.logic.service.inpatient.escort.EscortService;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.core.util.IntegerUtils;
 import com.kaos.skynet.core.util.StringUtils;
 import com.kaos.skynet.core.util.converter.StringToEnumConverterFactory;
@@ -156,24 +155,19 @@ public class EscortController {
 
     @ApiName("绑定陪护人")
     @RequestMapping(value = "bind", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<String> bind(@RequestBody @Valid Bind.ReqBody reqBody) {
-        try {
-            // 获取就诊卡号
-            String patientCardNo = patientIdxToCardNoConverter.convert(reqBody.patientIdx);
+    String bind(@RequestBody @Valid Bind.ReqBody reqBody) throws Exception {
+        // 获取就诊卡号
+        String patientCardNo = patientIdxToCardNoConverter.convert(reqBody.patientIdx);
 
-            // 带锁运行业务
-            var patientLock = escortLock.getHelperLock().grant(patientCardNo);
-            var helperLock = escortLock.getHelperLock().grant(reqBody.helperCardNo);
-            return RspWrapper.wrapSuccessResponse(
-                    LockExecutor.execute(Lists.newArrayList(patientLock, helperLock), () -> {
-                        return escortService.register(patientCardNo,
-                                reqBody.helperCardNo,
-                                reqBody.emplCode,
-                                reqBody.regByWindow);
-                    }));
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
-        }
+        // 带锁运行业务
+        var patientLock = escortLock.getHelperLock().grant(patientCardNo);
+        var helperLock = escortLock.getHelperLock().grant(reqBody.helperCardNo);
+        return LockExecutor.execute(Lists.newArrayList(patientLock, helperLock), () -> {
+            return escortService.register(patientCardNo,
+                    reqBody.helperCardNo,
+                    reqBody.emplCode,
+                    reqBody.regByWindow);
+        });
     }
 
     static class Bind {
@@ -214,16 +208,11 @@ public class EscortController {
      */
     @ApiName("更新陪护证状态")
     @RequestMapping(value = "updateState", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<Object> updateState(@RequestBody @Valid UpdateState.ReqBody reqBody) {
-        try {
-            // 加状态操作锁，防止同时操作同一个陪护证
-            LockExecutor.execute(escortLock.getStateLock().grant(reqBody.escortNo), () -> {
-                escortService.updateState(reqBody.escortNo, reqBody.state, reqBody.emplCode, "收到客户端请求");
-            });
-            return RspWrapper.wrapSuccessResponse(null);
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
-        }
+    void updateState(@RequestBody @Valid UpdateState.ReqBody reqBody) {
+        // 加状态操作锁，防止同时操作同一个陪护证
+        LockExecutor.execute(escortLock.getStateLock().grant(reqBody.escortNo), () -> {
+            escortService.updateState(reqBody.escortNo, reqBody.state, reqBody.emplCode, "收到客户端请求");
+        });
     }
 
     static class UpdateState {
@@ -256,17 +245,11 @@ public class EscortController {
      */
     @ApiName("记录陪护证行为")
     @RequestMapping(value = "recordAction", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<Object> recordAction(@RequestBody @Valid RecordAction.ReqBody reqBody) {
-        try {
-            // 加状态操作锁，防止同时操作同一个陪护证
-            LockExecutor.execute(escortLock.getActionLock().grant(reqBody.escortNo), () -> {
-                escortService.recordAction(reqBody.escortNo, reqBody.action, "收到客户端请求");
-            });
-
-            return RspWrapper.wrapSuccessResponse(null);
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
-        }
+    void recordAction(@RequestBody @Valid RecordAction.ReqBody reqBody) {
+        // 加状态操作锁，防止同时操作同一个陪护证
+        LockExecutor.execute(escortLock.getActionLock().grant(reqBody.escortNo), () -> {
+            escortService.recordAction(reqBody.escortNo, reqBody.action, "收到客户端请求");
+        });
     }
 
     static class RecordAction {
@@ -293,26 +276,22 @@ public class EscortController {
      */
     @ApiName("查询陪护证状态")
     @RequestMapping(value = "queryStateInfo", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<QueryStateInfo.RspBody> queryStateInfo(@RequestBody @Valid QueryStateInfo.ReqBody reqBody) {
-        try {
-            // 调用业务
-            var escortInfo = escortMainInfoCache.get(reqBody.escortNo);
-            if (escortInfo == null) {
-                log.error(String.format("不存在的陪护号", reqBody.escortNo));
-                throw new RuntimeException("不存在的陪护号".concat(reqBody.escortNo));
-            }
-
-            // 构造响应体
-            var rspBuilder = QueryStateInfo.RspBody.builder();
-            rspBuilder.patientCardNo(escortInfo.getPatientCardNo());
-            rspBuilder.helperCardNo(escortInfo.getHelperCardNo());
-            rspBuilder.regDate(escortStateRecMapper.queryFirstEscortStateRec(reqBody.escortNo).getRecDate());
-            rspBuilder.state(escortStateRecMapper.queryLastEscortStateRec(reqBody.escortNo).getState());
-
-            return RspWrapper.wrapSuccessResponse(rspBuilder.build());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
+    QueryStateInfo.RspBody queryStateInfo(@RequestBody @Valid QueryStateInfo.ReqBody reqBody) {
+        // 调用业务
+        var escortInfo = escortMainInfoCache.get(reqBody.escortNo);
+        if (escortInfo == null) {
+            log.error(String.format("不存在的陪护号", reqBody.escortNo));
+            throw new RuntimeException("不存在的陪护号".concat(reqBody.escortNo));
         }
+
+        // 构造响应体
+        var rspBuilder = QueryStateInfo.RspBody.builder();
+        rspBuilder.patientCardNo(escortInfo.getPatientCardNo());
+        rspBuilder.helperCardNo(escortInfo.getHelperCardNo());
+        rspBuilder.regDate(escortStateRecMapper.queryFirstEscortStateRec(reqBody.escortNo).getRecDate());
+        rspBuilder.state(escortStateRecMapper.queryLastEscortStateRec(reqBody.escortNo).getState());
+
+        return rspBuilder.build();
     }
 
     static class QueryStateInfo {
@@ -358,70 +337,66 @@ public class EscortController {
      */
     @ApiName("查询陪护患者信息")
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<List<QueryPatientInfo.RspBody>> queryPatientInfo(@RequestBody @Valid QueryPatientInfo.ReqBody reqBody) {
-        try {
-            // 调用业务
-            var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
-                    EscortMainInfoMapper.Key.builder()
-                            .helperCardNo(reqBody.helperCardNo)
-                            .states(Lists.newArrayList(
-                                    StateEnum.无核酸检测结果,
-                                    StateEnum.等待院内核酸检测结果,
-                                    StateEnum.等待院外核酸检测结果审核,
-                                    StateEnum.生效中,
-                                    StateEnum.其他))
-                            .build());
-            if (escortInfos == null) {
-                return null;
-            }
-
-            // 构造响应body
-            return RspWrapper.wrapSuccessResponse(escortInfos.stream().map(x -> {
-                var rsp = QueryPatientInfo.RspBody.builder();
-                rsp.cardNo = x.getPatientCardNo();
-                var patient = patientInfoCache.get(rsp.cardNo);
-                if (patient != null) {
-                    rsp.name = patient.getName();
-                    rsp.sex = patient.getSex();
-                    rsp.age = Period.between(patient.getBirthday().toLocalDate(), LocalDate.now());
-                }
-                var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
-                        .cardNo(x.getPatientCardNo())
-                        .happenNo(x.getHappenNo())
+    List<QueryPatientInfo.RspBody> queryPatientInfo(@RequestBody @Valid QueryPatientInfo.ReqBody reqBody) {
+        // 调用业务
+        var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
+                EscortMainInfoMapper.Key.builder()
+                        .helperCardNo(reqBody.helperCardNo)
+                        .states(Lists.newArrayList(
+                                StateEnum.无核酸检测结果,
+                                StateEnum.等待院内核酸检测结果,
+                                StateEnum.等待院外核酸检测结果审核,
+                                StateEnum.生效中,
+                                StateEnum.其他))
                         .build());
-                if (inMainInfos != null && inMainInfos.size() == 1) {
-                    var inMainInfo = inMainInfos.get(0);
-                    rsp.deptName = deptNameTunnel.tunneling(inMainInfo.getDeptCode());
-                    rsp.bedNo = bedNoTunnel.tunneling(inMainInfo.getBedNo());
-                    rsp.patientNo = inMainInfo.getPatientNo();
-                } else {
-                    var builder = FinIprPrepayInCache.Key.builder();
-                    builder.cardNo(x.getPatientCardNo());
-                    builder.happenNo(x.getHappenNo());
-                    var prepayIn = prepayInCache.get(builder.build());
-                    if (prepayIn != null) {
-                        rsp.deptName = deptNameTunnel.tunneling(prepayIn.getPreDeptCode());
-                        rsp.bedNo = bedNoTunnel.tunneling(prepayIn.getBedNo());
-                    }
-                }
-                var vip = escortVipCache.get(
-                        EscortVipCache.Key.builder()
-                                .cardNo(x.getPatientCardNo())
-                                .happenNo(x.getHappenNo()).build());
-                if (vip != null) {
-                    rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
-                }
-                rsp.escortNo = x.getEscortNo();
-                rsp.states = escortStateRecCache.get(x.getEscortNo());
-                rsp.states.sort((a, b) -> {
-                    return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
-                });
-                rsp.actions = Lists.newArrayList();
-                return rsp.build();
-            }).toList());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
+        if (escortInfos == null) {
+            return null;
         }
+
+        // 构造响应body
+        return escortInfos.stream().map(x -> {
+            var rsp = QueryPatientInfo.RspBody.builder();
+            rsp.cardNo = x.getPatientCardNo();
+            var patient = patientInfoCache.get(rsp.cardNo);
+            if (patient != null) {
+                rsp.name = patient.getName();
+                rsp.sex = patient.getSex();
+                rsp.age = Period.between(patient.getBirthday().toLocalDate(), LocalDate.now());
+            }
+            var inMainInfos = inMainInfoMapper.queryInMainInfos(FinIprInMainInfoMapper.Key.builder()
+                    .cardNo(x.getPatientCardNo())
+                    .happenNo(x.getHappenNo())
+                    .build());
+            if (inMainInfos != null && inMainInfos.size() == 1) {
+                var inMainInfo = inMainInfos.get(0);
+                rsp.deptName = deptNameTunnel.tunneling(inMainInfo.getDeptCode());
+                rsp.bedNo = bedNoTunnel.tunneling(inMainInfo.getBedNo());
+                rsp.patientNo = inMainInfo.getPatientNo();
+            } else {
+                var builder = FinIprPrepayInCache.Key.builder();
+                builder.cardNo(x.getPatientCardNo());
+                builder.happenNo(x.getHappenNo());
+                var prepayIn = prepayInCache.get(builder.build());
+                if (prepayIn != null) {
+                    rsp.deptName = deptNameTunnel.tunneling(prepayIn.getPreDeptCode());
+                    rsp.bedNo = bedNoTunnel.tunneling(prepayIn.getBedNo());
+                }
+            }
+            var vip = escortVipCache.get(
+                    EscortVipCache.Key.builder()
+                            .cardNo(x.getPatientCardNo())
+                            .happenNo(x.getHappenNo()).build());
+            if (vip != null) {
+                rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
+            }
+            rsp.escortNo = x.getEscortNo();
+            rsp.states = escortStateRecCache.get(x.getEscortNo());
+            rsp.states.sort((a, b) -> {
+                return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
+            });
+            rsp.actions = Lists.newArrayList();
+            return rsp.build();
+        }).toList();
     }
 
     static class QueryPatientInfo {
@@ -495,51 +470,47 @@ public class EscortController {
 
     @ApiName("查询患者陪护人信息")
     @RequestMapping(value = "queryHelperInfo", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<List<QueryHelperInfo.RspBody>> queryHelperInfo(@RequestBody @Valid QueryHelperInfo.ReqBody reqBody) {
-        try {
-            // 调用业务
-            var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
-                    EscortMainInfoMapper.Key.builder()
-                            .patientCardNo(reqBody.patientCardNo)
-                            .states(Lists.newArrayList(
-                                    StateEnum.无核酸检测结果,
-                                    StateEnum.等待院内核酸检测结果,
-                                    StateEnum.等待院外核酸检测结果审核,
-                                    StateEnum.生效中,
-                                    StateEnum.其他))
-                            .build());
-            if (escortInfos == null) {
-                return null;
-            }
-
-            // 构造响应body
-            return RspWrapper.wrapSuccessResponse(escortInfos.stream().map(x -> {
-                var rsp = QueryHelperInfo.RspBody.builder();
-                rsp.cardNo = x.getHelperCardNo();
-                var helper = patientInfoCache.get(x.getHelperCardNo());
-                if (helper != null) {
-                    rsp.name = helper.getName();
-                    rsp.sex = helper.getSex();
-                    rsp.age = Period.between(helper.getBirthday().toLocalDate(), LocalDate.now());
-                }
-                var vip = escortVipCache.get(
-                        EscortVipCache.Key.builder()
-                                .cardNo(x.getPatientCardNo())
-                                .happenNo(x.getHappenNo()).build());
-                if (vip != null) {
-                    rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
-                }
-                rsp.escortNo = x.getEscortNo();
-                rsp.states = escortStateRecCache.get(x.getEscortNo());
-                rsp.states.sort((a, b) -> {
-                    return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
-                });
-                rsp.actions = Lists.newArrayList();
-                return rsp.build();
-            }).toList());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
+    List<QueryHelperInfo.RspBody> queryHelperInfo(@RequestBody @Valid QueryHelperInfo.ReqBody reqBody) {
+        // 调用业务
+        var escortInfos = escortMainInfoMapper.queryEscortMainInfos(
+                EscortMainInfoMapper.Key.builder()
+                        .patientCardNo(reqBody.patientCardNo)
+                        .states(Lists.newArrayList(
+                                StateEnum.无核酸检测结果,
+                                StateEnum.等待院内核酸检测结果,
+                                StateEnum.等待院外核酸检测结果审核,
+                                StateEnum.生效中,
+                                StateEnum.其他))
+                        .build());
+        if (escortInfos == null) {
+            return null;
         }
+
+        // 构造响应body
+        return escortInfos.stream().map(x -> {
+            var rsp = QueryHelperInfo.RspBody.builder();
+            rsp.cardNo = x.getHelperCardNo();
+            var helper = patientInfoCache.get(x.getHelperCardNo());
+            if (helper != null) {
+                rsp.name = helper.getName();
+                rsp.sex = helper.getSex();
+                rsp.age = Period.between(helper.getBirthday().toLocalDate(), LocalDate.now());
+            }
+            var vip = escortVipCache.get(
+                    EscortVipCache.Key.builder()
+                            .cardNo(x.getPatientCardNo())
+                            .happenNo(x.getHappenNo()).build());
+            if (vip != null) {
+                rsp.freeFlag = Boolean.valueOf(StringUtils.equals(vip.getHelperCardNo(), x.getHelperCardNo()));
+            }
+            rsp.escortNo = x.getEscortNo();
+            rsp.states = escortStateRecCache.get(x.getEscortNo());
+            rsp.states.sort((a, b) -> {
+                return IntegerUtils.compare(a.getRecNo(), b.getRecNo());
+            });
+            rsp.actions = Lists.newArrayList();
+            return rsp.build();
+        }).toList();
     }
 
     static class QueryHelperInfo {

@@ -9,7 +9,6 @@ import com.kaos.skynet.core.api.logic.service.TokenService;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,24 +37,20 @@ public class UserController {
     @PassToken
     @ApiName("登陆系统")
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<Login.RspBody> login(@RequestBody @Valid Login.ReqBody reqBody) {
-        try {
-            // 校验并生成token
-            String token = null;
-            if (reqBody.eternal != null && reqBody.eternal) {
-                token = tokenService.genToken(reqBody.uuid, reqBody.pwd, null);
-            } else {
-                token = tokenService.genToken(reqBody.uuid, reqBody.pwd, Duration.ofHours(1));
-            }
-
-            // 生成响应
-            var builder = Login.RspBody.builder();
-            builder.uid(reqBody.uuid);
-            builder.token(token);
-            return RspWrapper.wrapSuccessResponse(builder.build());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
+    Login.RspBody login(@RequestBody @Valid Login.ReqBody reqBody) {
+        // 校验并生成token
+        String token = null;
+        if (reqBody.eternal != null && reqBody.eternal) {
+            token = tokenService.genToken(reqBody.uuid, reqBody.pwd, null);
+        } else {
+            token = tokenService.genToken(reqBody.uuid, reqBody.pwd, Duration.ofHours(1));
         }
+
+        // 生成响应
+        var builder = Login.RspBody.builder();
+        builder.uid(reqBody.uuid);
+        builder.token(token);
+        return builder.build();
     }
 
     static class Login {

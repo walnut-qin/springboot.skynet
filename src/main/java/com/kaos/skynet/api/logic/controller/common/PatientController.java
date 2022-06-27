@@ -10,7 +10,6 @@ import com.kaos.skynet.api.data.his.enums.SexEnum;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -40,27 +39,23 @@ public class PatientController {
      */
     @ApiName("获取患者基本信息")
     @RequestMapping(value = "queryPatientInfo", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<QueryPatientInfo.RspBody> queryPatientInfo(@RequestBody @Valid QueryPatientInfo.ReqBody reqBody) {
-        try {
-            // 调用服务
-            var patient = this.patientInfoCache.get(reqBody.cardNo);
-            if (patient == null) {
-                throw new RuntimeException("就诊卡不存在!");
-            }
-
-            // 构造响应体
-            var rspBuilder = QueryPatientInfo.RspBody.builder();
-            rspBuilder.cardNo(patient.getCardNo());
-            rspBuilder.name(patient.getName());
-            rspBuilder.sex(patient.getSex());
-            rspBuilder.age(Period.between(patient.getBirthday().toLocalDate(), LocalDate.now()));
-            rspBuilder.idenNo(patient.getIdentityCardNo());
-            rspBuilder.tel(patient.getHomeTel());
-
-            return RspWrapper.wrapSuccessResponse(rspBuilder.build());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
+    QueryPatientInfo.RspBody queryPatientInfo(@RequestBody @Valid QueryPatientInfo.ReqBody reqBody) {
+        // 调用服务
+        var patient = this.patientInfoCache.get(reqBody.cardNo);
+        if (patient == null) {
+            throw new RuntimeException("就诊卡不存在!");
         }
+
+        // 构造响应体
+        var rspBuilder = QueryPatientInfo.RspBody.builder();
+        rspBuilder.cardNo(patient.getCardNo());
+        rspBuilder.name(patient.getName());
+        rspBuilder.sex(patient.getSex());
+        rspBuilder.age(Period.between(patient.getBirthday().toLocalDate(), LocalDate.now()));
+        rspBuilder.idenNo(patient.getIdentityCardNo());
+        rspBuilder.tel(patient.getHomeTel());
+
+        return rspBuilder.build();
     }
 
     static class QueryPatientInfo {

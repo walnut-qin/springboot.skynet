@@ -15,9 +15,7 @@ import com.kaos.skynet.api.data.his.tunnel.SurgeryNameTunnel;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
 
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,22 +56,18 @@ class ApplyController {
      */
     @ApiName("查询手术申请记录")
     @RequestMapping(value = "querySurgeryInfo", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<QuerySurgeryInfo.RspBody> querySurgeryInfo(@RequestBody @Valid QuerySurgeryInfo.ReqBody reqBody) {
-        try {
-            // 检索手术信息
-            var surgeryInfo = metOpsApplyMapper.queryApply(reqBody.applyNo);
-            if (surgeryInfo == null) {
-                throw new NotFoundException("未查询到手术");
-            }
-
-            // 构造响应
-            var rspBuilder = QuerySurgeryInfo.RspBody.builder();
-            rspBuilder.icuFlag(surgeryInfo.getIcuFlag());
-
-            return RspWrapper.wrapSuccessResponse(rspBuilder.build());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
+    QuerySurgeryInfo.RspBody querySurgeryInfo(@RequestBody @Valid QuerySurgeryInfo.ReqBody reqBody) {
+        // 检索手术信息
+        var surgeryInfo = metOpsApplyMapper.queryApply(reqBody.applyNo);
+        if (surgeryInfo == null) {
+            throw new RuntimeException("未查询到手术");
         }
+
+        // 构造响应
+        var rspBuilder = QuerySurgeryInfo.RspBody.builder();
+        rspBuilder.icuFlag(surgeryInfo.getIcuFlag());
+
+        return rspBuilder.build();
     }
 
     static class QuerySurgeryInfo {
@@ -102,32 +96,27 @@ class ApplyController {
      */
     @ApiName("querySurgeryInfos")
     @RequestMapping(value = "querySurgeryInfos", method = RequestMethod.POST, produces = MediaType.JSON)
-    public RspWrapper<List<QuerySurgeryInfos.RspBody>> querySurgeryInfos(
-            @RequestBody @Valid QuerySurgeryInfos.ReqBody reqBody) {
-        try {
-            // 检索手术信息
-            var keyBuilder = MetOpsApplyMapper.Key.builder();
-            keyBuilder.beginPreDate(reqBody.beginPreDate);
-            keyBuilder.endPreDate(reqBody.endPreDate);
-            keyBuilder.deptOwn(reqBody.deptOwn);
-            keyBuilder.valid(ValidEnum.VALID);
-            var surgeryInfos = metOpsApplyMapper.queryApplies(keyBuilder.build());
+    public List<QuerySurgeryInfos.RspBody> querySurgeryInfos(@RequestBody @Valid QuerySurgeryInfos.ReqBody reqBody) {
+        // 检索手术信息
+        var keyBuilder = MetOpsApplyMapper.Key.builder();
+        keyBuilder.beginPreDate(reqBody.beginPreDate);
+        keyBuilder.endPreDate(reqBody.endPreDate);
+        keyBuilder.deptOwn(reqBody.deptOwn);
+        keyBuilder.valid(ValidEnum.VALID);
+        var surgeryInfos = metOpsApplyMapper.queryApplies(keyBuilder.build());
 
-            // 构造响应
-            var builder = QuerySurgeryInfos.RspBody.builder();
-            return RspWrapper.wrapSuccessResponse(surgeryInfos.stream().map(x -> {
-                builder.patientNo(x.getPatientNo());
-                var inMainInfo = inMainInfoCache.get("ZY01".concat(x.getPatientNo()));
-                if (inMainInfo != null) {
-                    builder.name(inMainInfo.getName());
-                }
-                builder.surgeryName(surgeryNameTunnel.tunneling(x.getOperationNo()));
-                builder.icuFlag(x.getIcuFlag());
-                return builder.build();
-            }).toList());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
-        }
+        // 构造响应
+        var builder = QuerySurgeryInfos.RspBody.builder();
+        return surgeryInfos.stream().map(x -> {
+            builder.patientNo(x.getPatientNo());
+            var inMainInfo = inMainInfoCache.get("ZY01".concat(x.getPatientNo()));
+            if (inMainInfo != null) {
+                builder.name(inMainInfo.getName());
+            }
+            builder.surgeryName(surgeryNameTunnel.tunneling(x.getOperationNo()));
+            builder.icuFlag(x.getIcuFlag());
+            return builder.build();
+        }).toList();
     }
 
     static class QuerySurgeryInfos {

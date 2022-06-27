@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.plugin.timor.TimorPlugin;
 import com.kaos.skynet.plugin.timor.enums.DayTypeEnum;
 import com.kaos.skynet.plugin.timor.enums.WeekEnum;
@@ -40,25 +39,21 @@ class HolidayController {
      * @return
      */
     @ApiName("获取节假日信息")
-    @RequestMapping(value = "getDayInfo", method = RequestMethod.GET, produces = MediaType.JSON)
-    RspWrapper<GetDayInfo.RspBody> getDayInfo(@NotNull(message = "日期不能为空") LocalDate date) {
-        try {
-            // 获取节假日信息
-            var holidayInfo = timorPlugin.getDayInfo(date);
-            if (holidayInfo == null) {
-                log.error("未从服务器获取到节假日信息");
-                throw new RuntimeException("未从服务器获取到节假日信息");
-            }
-
-            // 构造响应
-            var rspBuilder = GetDayInfo.RspBody.builder();
-            rspBuilder.type(holidayInfo.getType().getType());
-            rspBuilder.name(holidayInfo.getType().getName());
-            rspBuilder.week(holidayInfo.getType().getWeek());
-            return RspWrapper.wrapSuccessResponse(rspBuilder.build());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
+    @RequestMapping(value = "getDayInfo", method = RequestMethod.POST, produces = MediaType.JSON)
+    GetDayInfo.RspBody getDayInfo(@NotNull(message = "日期不能为空") LocalDate date) {
+        // 获取节假s日信息
+        var holidayInfo = timorPlugin.getDayInfo(date);
+        if (holidayInfo == null) {
+            log.error("未从服务器获取到节假日信息");
+            throw new RuntimeException("未从服务器获取到节假日信息");
         }
+
+        // 构造响应
+        var rspBuilder = GetDayInfo.RspBody.builder();
+        rspBuilder.type(holidayInfo.getType().getType());
+        rspBuilder.name(holidayInfo.getType().getName());
+        rspBuilder.week(holidayInfo.getType().getWeek());
+        return rspBuilder.build();
     }
 
     static class GetDayInfo {

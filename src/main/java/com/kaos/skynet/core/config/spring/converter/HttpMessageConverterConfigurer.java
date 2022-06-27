@@ -6,7 +6,9 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
 import com.kaos.skynet.core.util.json.GsonWrapper;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -57,7 +59,13 @@ class HttpMessageConverterConfigurer implements WebMvcConfigurer {
 
         @Override
         protected void writeInternal(Object object, Type type, Writer writer) throws Exception {
-            gsonWrapper.toJson(object, writer);
+            // 包装body
+            Map<String, Object> body = Maps.newHashMap();
+            body.put("code", 0);
+            body.put("data", object);
+
+            // 序列化
+            gsonWrapper.toJson(body, writer);
         }
     }
 

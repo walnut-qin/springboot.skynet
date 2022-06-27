@@ -7,7 +7,6 @@ import com.kaos.skynet.api.logic.service.inpatient.fee.prepay.PrepayService;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.core.util.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,23 +37,19 @@ class PrepayController {
      */
     @ApiName("隔日召回修改预交金")
     @RequestMapping(value = "fixRecallPrepay", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<Object> fixRecallPrepay(@RequestBody @Valid FixRecallPrepay.ReqBody reqBody) {
-        try {
-            // 启动事务处理
-            var prepayModifyResults = prepayService.fixRecallPrepay(StringUtils.leftPad(reqBody.patientNo, 10, '0'));
+    Object fixRecallPrepay(@RequestBody @Valid FixRecallPrepay.ReqBody reqBody) {
+        // 启动事务处理
+        var prepayModifyResults = prepayService.fixRecallPrepay(StringUtils.leftPad(reqBody.patientNo, 10, '0'));
 
-            // 构造响应
-            var builder = FixRecallPrepay.RspBody.builder();
-            return RspWrapper.wrapSuccessResponse(prepayModifyResults.stream().map(x -> {
-                builder.inPatientNo(x.getInPatientNo());
-                builder.happenNo(x.getHappenNo());
-                builder.oldCost(x.getOldCost());
-                builder.newCost(x.getNewCost());
-                return builder.build();
-            }).toList());
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
-        }
+        // 构造响应
+        var builder = FixRecallPrepay.RspBody.builder();
+        return prepayModifyResults.stream().map(x -> {
+            builder.inPatientNo(x.getInPatientNo());
+            builder.happenNo(x.getHappenNo());
+            builder.oldCost(x.getOldCost());
+            builder.newCost(x.getNewCost());
+            return builder.build();
+        }).toList();
     }
 
     /**

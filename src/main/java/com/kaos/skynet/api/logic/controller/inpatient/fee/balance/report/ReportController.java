@@ -12,7 +12,6 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.FinIpbBalanceHe
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.util.json.adapter.EnumTypeAdapter_Value;
 
@@ -45,28 +44,24 @@ class ReportController {
      */
     @ApiName("查询新医保日结")
     @RequestMapping(value = "queryNewYbDayBalanceCost", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<Double> queryNewYbDayBalanceCost(@RequestBody @Valid QueryNewYbDayBalanceCost.ReqBody reqBody) {
-        try {
-            // 检索所有结算记录
-            var keyBuilder = FinIpbBalanceHeadMapper.Key.builder();
-            keyBuilder.balanceOperCode(reqBody.balancer);
-            keyBuilder.beginBalanceDate(reqBody.beginDate);
-            keyBuilder.endBalanceDate(reqBody.endDate);
-            keyBuilder.pactCode("18");
-            var balances = balanceHeadMapper.queryBalanceHeads(keyBuilder.build());
+    Double queryNewYbDayBalanceCost(@RequestBody @Valid QueryNewYbDayBalanceCost.ReqBody reqBody) {
+        // 检索所有结算记录
+        var keyBuilder = FinIpbBalanceHeadMapper.Key.builder();
+        keyBuilder.balanceOperCode(reqBody.balancer);
+        keyBuilder.beginBalanceDate(reqBody.beginDate);
+        keyBuilder.endBalanceDate(reqBody.endDate);
+        keyBuilder.pactCode("18");
+        var balances = balanceHeadMapper.queryBalanceHeads(keyBuilder.build());
 
-            // 算和
-            Double cost = balances.stream().mapToDouble(x -> {
-                return Optional.fromNullable(switch (reqBody.type) {
-                    case PUB -> x.getPubCost();
-                    case PAY -> x.getPayCost();
-                }).or(0.0);
-            }).sum();
+        // 算和
+        Double cost = balances.stream().mapToDouble(x -> {
+            return Optional.fromNullable(switch (reqBody.type) {
+                case PUB -> x.getPubCost();
+                case PAY -> x.getPayCost();
+            }).or(0.0);
+        }).sum();
 
-            return RspWrapper.wrapSuccessResponse(cost);
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
-        }
+        return cost;
     }
 
     static class QueryNewYbDayBalanceCost {

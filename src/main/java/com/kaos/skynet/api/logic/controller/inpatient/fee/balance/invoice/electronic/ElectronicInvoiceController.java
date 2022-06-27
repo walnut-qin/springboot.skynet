@@ -6,7 +6,6 @@ import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.invoice.electro
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
-import com.kaos.skynet.core.config.spring.net.RspWrapper;
 import com.kaos.skynet.core.util.json.adapter.EnumTypeAdapter_Value;
 import com.kaos.skynet.plugin.bosoft.BoSoftPlugin;
 
@@ -36,22 +35,17 @@ class ElectronicInvoiceController {
 
     @ApiName("获取发票信息")
     @RequestMapping(value = "queryElectronicInvoiceInfo", method = RequestMethod.POST, produces = MediaType.JSON)
-    RspWrapper<Object> queryElectronicInvoiceInfo(@RequestBody QueryElectronicInvoiceInfo.ReqBody reqBody) {
-        try {
-            // 查询电子发票记录
-            var invoice = electronicInvoiceMapper.queryInvoice(reqBody.invoiceNo, reqBody.transType);
-            if (invoice == null) {
-                throw new RuntimeException("不存在的电子发票");
-            }
-
-            // 发送请求
-            return RspWrapper.wrapSuccessResponse(
-                    boSoftPlugin.postForObject("getEBillByBusNo",
-                            new QueryElectronicInvoiceInfo.BoSoftReqBody(invoice.getBusNo()),
-                            QueryElectronicInvoiceInfo.BoSoftRspBody.class));
-        } catch (Exception e) {
-            return RspWrapper.wrapFailResponse(e.getMessage());
+    Object queryElectronicInvoiceInfo(@RequestBody QueryElectronicInvoiceInfo.ReqBody reqBody) {
+        // 查询电子发票记录
+        var invoice = electronicInvoiceMapper.queryInvoice(reqBody.invoiceNo, reqBody.transType);
+        if (invoice == null) {
+            throw new RuntimeException("不存在的电子发票");
         }
+
+        // 发送请求
+        return boSoftPlugin.postForObject("getEBillByBusNo",
+                new QueryElectronicInvoiceInfo.BoSoftReqBody(invoice.getBusNo()),
+                QueryElectronicInvoiceInfo.BoSoftRspBody.class);
     }
 
     /**
