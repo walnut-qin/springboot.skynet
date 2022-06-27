@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 		"com.kaos.skynet.api.data.his.mapper",
 		"com.kaos.skynet.api.data.docare.mapper" })
 @SpringBootApplication
-@EnableScheduling
+// @EnableScheduling
 public class SkynetApplication {
 
 	public static void main(String[] args) {

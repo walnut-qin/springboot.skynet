@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+import com.kaos.skynet.core.config.spring.exception.util.ExceptionResponse;
 import com.kaos.skynet.core.util.json.GsonWrapper;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -61,8 +62,15 @@ class HttpMessageConverterConfigurer implements WebMvcConfigurer {
         protected void writeInternal(Object object, Type type, Writer writer) throws Exception {
             // 包装body
             Map<String, Object> body = Maps.newHashMap();
-            body.put("code", 0);
-            body.put("data", object);
+
+            if (object instanceof ExceptionResponse) {
+                ExceptionResponse rsp = (ExceptionResponse) object;
+                body.put("code", rsp.getCode());
+                body.put("message", rsp.getMessage());
+            } else {
+                body.put("code", 0);
+                body.put("data", object);
+            }
 
             // 序列化
             gsonWrapper.toJson(body, writer);
