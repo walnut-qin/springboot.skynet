@@ -111,19 +111,17 @@ class InterceptorConfigurer implements WebMvcConfigurer {
     @Log4j
     @Order(1)
     class LogInterceptor implements HandlerInterceptor {
-        @Override
-        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+        /**
+         * 处理POST请求
+         * 
+         * @param request
+         * @param response
+         * @param handler
+         * @return
+         * @throws Exception
+         */
+        private boolean preHandlePost(HttpServletRequest request, HttpServletResponse response, Object handler)
                 throws Exception {
-            // 仅预处理HandlerMethod
-            if (!(handler instanceof HandlerMethod)) {
-                return true;
-            }
-
-            // 仅对POST方法自动写日志
-            if (!request.getMethod().equals("POST")) {
-                return true;
-            }
-
             // 对注解了ApiName的方法改名
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
@@ -146,7 +144,61 @@ class InterceptorConfigurer implements WebMvcConfigurer {
             }
 
             // 记录日志
-            log.info(String.format("[%s] <%s> %s", uuid, apiName, gsonWrapper.format(orgBodyStr)));
+            log.info(String.format("[%s] [%s] <%s> %s", "POST", uuid, apiName, gsonWrapper.format(orgBodyStr)));
+
+            return true;
+        }
+
+        /**
+         * 处理GET请求
+         * 
+         * @param request
+         * @param response
+         * @param handler
+         * @return
+         * @throws Exception
+         */
+        private boolean preHandleGet(HttpServletRequest request, HttpServletResponse response, Object handler)
+                throws Exception {
+            // 对注解了ApiName的方法改名
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            Method method = handlerMethod.getMethod();
+            String apiName = method.getName();
+            if (method.isAnnotationPresent(ApiName.class)) {
+                // 提取注解内容
+                ApiName apiNameAnnotation = method.getAnnotation(ApiName.class);
+                apiName = apiNameAnnotation.value();
+            }
+
+            // 提取body内容并简化
+            var params = request.getParameterMap();
+
+            // 提取登入的用户
+            String uuid = "-";
+            if (UserUtils.currentUser() != null) {
+                uuid = UserUtils.currentUser().getUuid();
+            }
+
+            // 记录日志
+            log.info(String.format("[%s] [%s] <%s> %s", "GET", uuid, apiName, gsonWrapper.toJson(params)));
+
+            return true;
+        }
+
+        @Override
+        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+                throws Exception {
+            // 仅预处理HandlerMethod
+            if (!(handler instanceof HandlerMethod)) {
+                return true;
+            }
+
+            // 仅对POST方法自动写日志
+            if (request.getMethod().equals("POST")) {
+                return preHandlePost(request, response, handler);
+            } else if (request.getMethod().equals("GET")) {
+                return preHandleGet(request, response, handler);
+            }
 
             return true;
         }
