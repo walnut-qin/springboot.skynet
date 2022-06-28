@@ -4,6 +4,7 @@
     <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict">
         <id column="ICD_CODE" jdbcType="VARCHAR" property="icdCode" />
         <result column="SURGERY_NAME" jdbcType="VARCHAR" property="surgeryName" />
+        <result column="SURGERY_LEVEL" jdbcType="VARCHAR" property="surgeryLevel" />
         <result column="VALID" jdbcType="VARCHAR" property="valid" />
         <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate" />
     </resultMap>
@@ -11,6 +12,7 @@
     <sql id="item">
         ICD_CODE,
         SURGERY_NAME,
+        SURGERY_LEVEL,
         VALID,
         OPER_DATE
     </sql>
