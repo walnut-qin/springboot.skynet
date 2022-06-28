@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDictMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict">
+        <id column="ICD_CODE" jdbcType="VARCHAR" property="icdCode" />
+        <result column="SURGERY_NAME" jdbcType="VARCHAR" property="surgeryName" />
+        <result column="VALID" jdbcType="VARCHAR" property="valid" />
+        <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate" />
+    </resultMap>
+
+    <sql id="item">
+        ICD_CODE,
+        SURGERY_NAME,
+        VALID,
+        OPER_DATE
+    </sql>
+
+    <select id="querySurgeryDict" resultMap="map">
+        SELECT
+        <include refid="item" />
+        FROM
+            KAOS.SURGERY_DICT
+        <where>
+            <if test="true">
+                AND ICD_CODE = #{icdCode}
+            </if>
+        </where>
+    </select>
+</mapper>
