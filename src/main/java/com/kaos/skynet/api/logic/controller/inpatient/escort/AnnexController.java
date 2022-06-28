@@ -329,7 +329,7 @@ public class AnnexController {
         }
     }
 
-    @RequestMapping(value = "getPic", method = RequestMethod.GET, produces = MediaType.JPEG)
+    @RequestMapping(value = "getPic", method = RequestMethod.GET, produces = MediaType.PNG)
     BufferedImage getPic(@NotNull(message = "键值不能为空") String refer) throws IOException {
         // 根据refer号获取annexUrl
         var rec = annexInfoCache.get(refer);
