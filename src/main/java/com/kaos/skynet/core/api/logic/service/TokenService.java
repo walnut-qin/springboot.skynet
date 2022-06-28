@@ -100,6 +100,8 @@ public class TokenService {
         KaosUser kaosUser = kaosUserMapper.queryKaosUser(uuid);
         if (kaosUser == null) {
             throw new TokenCheckException("用户不存在, 请重新登录");
+        } else if (!kaosUser.getValid()) {
+            throw new TokenCheckException("用户被禁用, 请更换用户");
         }
 
         // 校验token
