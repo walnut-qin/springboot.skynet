@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 
-import com.kaos.skynet.api.data.his.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDeptPrivMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDictMapper;
@@ -46,12 +45,6 @@ public class SurgeryController {
     SurgeryDictMapper surgeryDictMapper;
 
     /**
-     * 科室信息缓存
-     */
-    @Autowired
-    DawnOrgDeptCache dawnOrgDeptCache;
-
-    /**
      * 查询已经授权的手术清单
      * 
      * @return
@@ -89,6 +82,8 @@ public class SurgeryController {
             rspBuilder.OPR_DOC = String.join(",", emplInfos.stream().map(y -> {
                 return y.getEmplCode();
             }).toList());
+            // 科室信息
+            rspBuilder.OPR_DOC = reqBody.deptCode;
             return rspBuilder.build();
         }).toList();
     }
