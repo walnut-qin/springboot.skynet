@@ -31,6 +31,11 @@ public interface SurgeryDeptPrivMapper {
         /**
          * 科室编码
          */
+        private String icdCode;
+
+        /**
+         * 科室编码
+         */
         private String deptCode;
 
         /**

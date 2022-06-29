@@ -36,6 +36,9 @@
         FROM
             KAOS.SURGERY_EMPL_PRIV
         <where>
+            <if test="icdCode != null">
+                AND ICD_CODE = #{icdCode}
+            </if>
             <if test="emplCode != null">
                 AND EMPL_CODE = #{emplCode}
             </if>

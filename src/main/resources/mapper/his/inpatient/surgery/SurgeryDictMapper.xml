@@ -28,4 +28,16 @@
             </if>
         </where>
     </select>
+
+    <select id="querySurgeryDicts" resultMap="map">
+        SELECT
+        <include refid="item" />
+        FROM
+            KAOS.SURGERY_DICT
+        <where>
+            <if test="valid != null">
+                AND VALID = #{valid}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -1,6 +1,11 @@
 package com.kaos.skynet.api.data.his.mapper.inpatient.surgery;
 
+import java.util.List;
+
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict;
+
+import lombok.Builder;
+import lombok.Getter;
 
 public interface SurgeryDictMapper {
     /**
@@ -10,4 +15,21 @@ public interface SurgeryDictMapper {
      * @return
      */
     SurgeryDict querySurgeryDict(String icdCode);
+
+    /**
+     * 多值查询
+     * 
+     * @param key
+     * @return
+     */
+    List<SurgeryDict> querySurgeryDicts(Key key);
+
+    @Getter
+    @Builder
+    public static class Key {
+        /**
+         * 有效性标识
+         */
+        private Boolean valid;
+    }
 }

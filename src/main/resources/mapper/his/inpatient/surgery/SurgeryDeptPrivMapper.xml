@@ -36,6 +36,9 @@
         FROM
             KAOS.SURGERY_DEPT_PRIV
         <where>
+            <if test="icdCode != null">
+                AND ICD_CODE = #{icdCode}
+            </if>
             <if test="deptCode != null">
                 AND DEPT_CODE = #{deptCode}
             </if>
