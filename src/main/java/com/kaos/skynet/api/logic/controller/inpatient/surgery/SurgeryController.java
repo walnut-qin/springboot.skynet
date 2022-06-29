@@ -1,6 +1,9 @@
 package com.kaos.skynet.api.logic.controller.inpatient.surgery;
 
 import java.util.List;
+import java.util.Objects;
+
+import javax.validation.Valid;
 
 import com.kaos.skynet.api.data.his.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
@@ -12,6 +15,7 @@ import com.kaos.skynet.core.config.spring.net.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,30 +57,33 @@ public class SurgeryController {
      * @return
      */
     @RequestMapping(value = "queryGrantedSurgerys", method = RequestMethod.POST, produces = MediaType.JSON)
-    List<QueryGrantedSurgerys.RspBody> queryGrantedSurgerys() {
+    List<QueryGrantedSurgerys.RspBody> queryGrantedSurgerys(@RequestBody @Valid QueryGrantedSurgerys.ReqBody reqBody) {
+        // 检索出该科室的所有手术
+        var deptBuilder = SurgeryDeptPrivMapper.Key.builder();
+        deptBuilder.deptCode(reqBody.deptCode);
+        deptBuilder.valid(true);
+        var surgeryDeptPrivs = surgeryDeptPrivMapper.querySurgeryDeptPrivs(deptBuilder.build());
+
+        // 过滤出ICD编码
+        var icdCodes = surgeryDeptPrivs.stream().map(x -> {
+            return x.getIcdCode();
+        }).distinct();
+
         // 检索有效手术字典
-        var surgerys = surgeryDictMapper.querySurgeryDicts(SurgeryDictMapper.Key.builder().valid(true).build());
+        var surgerys = icdCodes.map(x -> {
+            var v = surgeryDictMapper.querySurgeryDict(x);
+            if (!v.getValid()) {
+                return null;
+            }
+            return v;
+        }).filter(Objects::nonNull);
 
         var rspBuilder = QueryGrantedSurgerys.RspBody.builder();
-        var deptBuilder = SurgeryDeptPrivMapper.Key.builder().valid(true);
         var emplBuilder = SurgeryEmplPrivMapper.Key.builder().valid(true);
-        return surgerys.stream().map(x -> {
+        return surgerys.map(x -> {
             rspBuilder.OPR_ID(x.getIcdCode());
             rspBuilder.OPR_NAME(x.getSurgeryName());
             rspBuilder.OPR_LEVEL(x.getSurgeryLevel());
-            // 科室信息
-            var deptInfos = surgeryDeptPrivMapper.querySurgeryDeptPrivs(deptBuilder.icdCode(x.getIcdCode()).build());
-            rspBuilder.DEPT_CODE = String.join(",", deptInfos.stream().map(y -> {
-                return y.getDeptCode();
-            }).toList());
-            rspBuilder.DEPT_NAME = String.join(",", deptInfos.stream().map(y -> {
-                var dept = dawnOrgDeptCache.get(y.getDeptCode());
-                if (dept != null) {
-                    return dept.getDeptName();
-                } else {
-                    return y.getDeptCode();
-                }
-            }).toList());
             // 术者信息
             var emplInfos = surgeryEmplPrivMapper.querySurgeryEmplPrivs(emplBuilder.icdCode(x.getIcdCode()).build());
             rspBuilder.OPR_DOC = String.join(",", emplInfos.stream().map(y -> {
@@ -87,6 +94,13 @@ public class SurgeryController {
     }
 
     static class QueryGrantedSurgerys {
+        static class ReqBody {
+            /**
+             * 拟申请手术科室
+             */
+            String deptCode;
+        }
+
         @Builder
         static class RspBody {
             /**
@@ -105,27 +119,12 @@ public class SurgeryController {
             SurgeryLevelEnum OPR_LEVEL;
 
             /**
-             * 科室编码
-             */
-            String DEPT_CODE;
-
-            /**
-             * 科室名称
-             */
-            String DEPT_NAME;
-
-            /**
              * 拼音码
              */
             String PYM;
 
             /**
-             * 五笔码
-             */
-            String WBM;
-
-            /**
-             * 手术医生
+             * 术者
              */
             String OPR_DOC;
         }

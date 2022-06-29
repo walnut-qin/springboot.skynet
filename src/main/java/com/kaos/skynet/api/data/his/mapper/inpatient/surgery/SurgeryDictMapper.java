@@ -28,6 +28,11 @@ public interface SurgeryDictMapper {
     @Builder
     public static class Key {
         /**
+         * icd编码
+         */
+        private List<String> icdCodes;
+
+        /**
          * 有效性标识
          */
         private Boolean valid;
