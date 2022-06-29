@@ -83,7 +83,7 @@ public class SurgeryController {
                 return y.getEmplCode();
             }).toList());
             // 科室信息
-            rspBuilder.OPR_DOC = reqBody.deptCode;
+            rspBuilder.DEPT_CODE = reqBody.deptCode;
             return rspBuilder.build();
         }).toList();
     }
@@ -122,6 +122,11 @@ public class SurgeryController {
              * 术者
              */
             String OPR_DOC;
+
+            /**
+             * 科室编码
+             */
+            String DEPT_CODE;
         }
     }
 }
