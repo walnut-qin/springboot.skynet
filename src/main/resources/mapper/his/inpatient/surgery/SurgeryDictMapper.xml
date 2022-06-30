@@ -7,6 +7,7 @@
         <result column="SURGERY_LEVEL" jdbcType="VARCHAR" property="surgeryLevel" />
         <result column="VALID" jdbcType="VARCHAR" property="valid" />
         <result column="OPER_DATE" jdbcType="VARCHAR" property="operDate" />
+        <result column="TELEPROMPTER" jdbcType="VARCHAR" property="teleprompter" />
     </resultMap>
 
     <sql id="item">

@@ -77,6 +77,7 @@ public class SurgeryController {
             rspBuilder.OPR_ID(x.getIcdCode());
             rspBuilder.OPR_NAME(x.getSurgeryName());
             rspBuilder.OPR_LEVEL(x.getSurgeryLevel());
+            rspBuilder.PYM(x.getTeleprompter());
             // 术者信息
             var emplInfos = surgeryEmplPrivMapper.querySurgeryEmplPrivs(emplBuilder.icdCode(x.getIcdCode()).build());
             rspBuilder.OPR_DOC = String.join(",", emplInfos.stream().map(y -> {

@@ -34,6 +34,11 @@ public class SurgeryDict {
     private Boolean valid;
 
     /**
+     * 提词器
+     */
+    private String teleprompter;
+
+    /**
      * 操作时间
      */
     private LocalDateTime operDate;
