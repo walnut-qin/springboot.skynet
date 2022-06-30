@@ -264,7 +264,7 @@ public class StateService {
                     // 检索14天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(2))
+                            .duration(Duration.ofDays(5))
                             .build());
                 }
             }
