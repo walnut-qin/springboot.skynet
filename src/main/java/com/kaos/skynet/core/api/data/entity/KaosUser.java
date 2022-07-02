@@ -51,6 +51,11 @@ public class KaosUser {
      */
     private String telephone;
 
+    /**
+     * 头像
+     */
+    private byte[] avatar;
+
     @Override
     public boolean equals(Object arg0) {
         if (arg0 instanceof KaosUser) {

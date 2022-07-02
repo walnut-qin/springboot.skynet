@@ -9,6 +9,7 @@
         <result column="SEX" jdbcType="VARCHAR" property="sex" />
         <result column="EMAIL" jdbcType="VARCHAR" property="email" />
         <result column="TELEPHONE" jdbcType="VARCHAR" property="telephone" />
+        <result column="AVATAR" jdbcType="BLOB" property="avatar" />
     </resultMap>
 
     <sql id="item">
@@ -18,7 +19,8 @@
         BIRTHDAY,
         SEX,
         EMAIL,
-        TELEPHONE
+        TELEPHONE,
+        AVATAR
     </sql>
 
     <select id="queryKaosUser" resultMap="map">
