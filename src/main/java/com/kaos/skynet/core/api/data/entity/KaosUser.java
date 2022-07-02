@@ -1,29 +1,85 @@
 package com.kaos.skynet.core.api.data.entity;
 
+import java.time.LocalDate;
+
+import com.google.common.base.Objects;
+import com.kaos.skynet.core.type.Enum;
+import com.kaos.skynet.core.util.StringUtils;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 /**
  * 账户信息
  */
 @Getter
+@Builder
 public class KaosUser {
     /**
-     * 用户号
+     * 编码
      */
-    private String uuid;
+    private String userCode;
 
     /**
-     * 用户密码
+     * 姓名
      */
-    private String pwd;
+    private String userName;
 
     /**
-     * 有效标识
+     * 身份证号
      */
-    private Boolean valid;
+    private String identityNo;
 
     /**
-     * token掩码，增加token复杂度，修改后，历史token立刻失效
+     * 生日
      */
-    private String tokenMask;
+    private LocalDate birthday;
+
+    /**
+     * 性别
+     */
+    private SexEnum sex;
+
+    /**
+     * 邮件
+     */
+    private String email;
+
+    /**
+     * 电话
+     */
+    private String telephone;
+
+    @Override
+    public boolean equals(Object arg0) {
+        if (arg0 instanceof KaosUser) {
+            var that = (KaosUser) arg0;
+            return StringUtils.equals(this.userCode, that.userCode);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(userCode);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum SexEnum implements Enum {
+        Male("M", "男"),
+        Female("F", "女"),
+        Unknown("U", "不详");
+
+        /**
+         * 数据库存值
+         */
+        private String value;
+
+        /**
+         * 描述存值
+         */
+        private String description;
+    }
 }

@@ -2,17 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaos.skynet.core.api.data.mapper.KaosUserMapper">
     <resultMap id="map" type="com.kaos.skynet.core.api.data.entity.KaosUser">
-        <id column="UUID" jdbcType="VARCHAR" property="uuid" />
-        <result column="PWD" jdbcType="VARCHAR" property="pwd" />
-        <result column="VALID" jdbcType="VARCHAR" property="valid" />
-        <result column="TOKEN_MASK" jdbcType="VARCHAR" property="tokenMask" />
+        <id column="USER_CODE" jdbcType="VARCHAR" property="userCode" />
+        <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+        <result column="IDENTITY_NO" jdbcType="VARCHAR" property="identityNo" />
+        <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday" />
+        <result column="SEX" jdbcType="VARCHAR" property="sex" />
+        <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+        <result column="TELEPHONE" jdbcType="VARCHAR" property="telephone" />
     </resultMap>
 
     <sql id="item">
-        UUID,
-        PWD,
-        VALID,
-        TOKEN_MASK
+        USER_CODE,
+        USER_NAME,
+        IDENTITY_NO,
+        BIRTHDAY,
+        SEX,
+        EMAIL,
+        TELEPHONE
     </sql>
 
     <select id="queryKaosUser" resultMap="map">
@@ -22,7 +28,7 @@
             KAOS.KAOS_USER
         <where>
             <if test = "true">
-                AND UUID = #{uuid}
+                AND USER_CODE = #{userCode}
             </if>
         </where>
     </select>

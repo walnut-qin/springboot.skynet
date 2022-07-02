@@ -140,7 +140,7 @@ class InterceptorConfigurer implements WebMvcConfigurer {
             // 提取登入的用户
             String uuid = "-";
             if (UserUtils.currentUser() != null) {
-                uuid = UserUtils.currentUser().getUuid();
+                uuid = UserUtils.currentUser().getUserCode();
             }
 
             // 记录日志
@@ -176,7 +176,7 @@ class InterceptorConfigurer implements WebMvcConfigurer {
             // 提取登入的用户
             String uuid = "-";
             if (UserUtils.currentUser() != null) {
-                uuid = UserUtils.currentUser().getUuid();
+                uuid = UserUtils.currentUser().getUserCode();
             }
 
             // 记录日志

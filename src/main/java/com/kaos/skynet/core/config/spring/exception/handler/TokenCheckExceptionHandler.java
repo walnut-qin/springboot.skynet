@@ -7,6 +7,7 @@ import com.kaos.skynet.core.util.json.GsonWrapper;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Order(1)
 @ControllerAdvice
@@ -22,6 +23,7 @@ class TokenCheckExceptionHandler {
      * @param ex
      * @return
      */
+    @ResponseBody
     @ExceptionHandler(value = TokenCheckException.class)
     public ExceptionResponse exceptionHandler(TokenCheckException ex) {
         return new ExceptionResponse() {

@@ -9,6 +9,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.kaos.skynet.core.api.data.entity.KaosUser;
+import com.kaos.skynet.core.api.data.entity.KaosUserAccess;
+import com.kaos.skynet.core.api.data.mapper.KaosUserAccessMapper;
 import com.kaos.skynet.core.api.data.mapper.KaosUserMapper;
 import com.kaos.skynet.core.config.spring.exception.TokenCheckException;
 
@@ -26,9 +28,15 @@ public class TokenService {
     KaosUserMapper kaosUserMapper;
 
     /**
+     * 密码信息接口
+     */
+    @Autowired
+    KaosUserAccessMapper kaosUserAccessMapper;
+
+    /**
      * 秘钥前缀 - 修改后，系统所有历史token失效
      */
-    final String keyPrefix = "kaos";
+    final String tokenPrefix = "kaos";
 
     /**
      * 校验用户并生成token
@@ -39,28 +47,33 @@ public class TokenService {
      * @return
      */
     @Transactional
-    public String genToken(String uuid, String pwd, Duration duration) {
+    public String genToken(String userCode, String password, Duration duration) {
         // 检索账户实体
-        KaosUser kaosUser = kaosUserMapper.queryKaosUser(uuid);
+        KaosUser kaosUser = kaosUserMapper.queryKaosUser(userCode);
         if (kaosUser == null) {
             throw new RuntimeException("用户不存在");
         }
 
+        // 检索接入信息
+        KaosUserAccess kaosUserAccess = kaosUserAccessMapper.queryKaosUserAccess(userCode);
+        if (kaosUserAccess == null) {
+            throw new RuntimeException("用户信息异常, 接入信息不存在");
+        }
+
         // 校验密码
-        String md5Pwd = DigestUtils.md5DigestAsHex(pwd.getBytes()).toUpperCase();
-        if (!md5Pwd.equals(kaosUser.getPwd())) {
+        String md5Pwd = DigestUtils.md5DigestAsHex(password.getBytes()).toUpperCase();
+        if (!md5Pwd.equals(kaosUserAccess.getPassword())) {
             throw new RuntimeException("密码错误");
         }
 
         // 生成token
         var builder = JWT.create();
         builder.withKeyId(LocalDateTime.now().toString()); // 混淆Header段
-        builder.withAudience(uuid); // 插入用户数据
-        builder.withAudience(LocalDateTime.now().toString()); // 混淆payload段
+        builder.withAudience(userCode, LocalDateTime.now().toString()); // 插入用户数据和时间段混淆
         if (duration != null) {
             builder.withExpiresAt(LocalDateTime.now().plus(duration).atZone(ZoneId.systemDefault()).toInstant());
         }
-        String tokenPrivateKey = keyPrefix + kaosUser.getTokenMask() + kaosUser.getPwd();
+        String tokenPrivateKey = tokenPrefix + kaosUserAccess.getTokenMask() + kaosUserAccess.getPassword();
         return builder.sign(Algorithm.HMAC256(tokenPrivateKey));
     }
 
@@ -96,16 +109,22 @@ public class TokenService {
         }
 
         // 获取系统用户
-        String uuid = decodedJWT.getAudience().get(0);
-        KaosUser kaosUser = kaosUserMapper.queryKaosUser(uuid);
+        String userCode = decodedJWT.getAudience().get(0);
+
+        // 检索账户实体
+        KaosUser kaosUser = kaosUserMapper.queryKaosUser(userCode);
         if (kaosUser == null) {
-            throw new TokenCheckException("用户不存在, 请重新登录");
-        } else if (!kaosUser.getValid()) {
-            throw new TokenCheckException("用户被禁用, 请更换用户");
+            throw new RuntimeException("用户不存在");
+        }
+
+        // 获取接入信息
+        KaosUserAccess kaosUserAccess = kaosUserAccessMapper.queryKaosUserAccess(userCode);
+        if (kaosUserAccess == null) {
+            throw new RuntimeException("用户信息异常, 接入信息不存在");
         }
 
         // 校验token
-        String tokenPrivateKey = keyPrefix + kaosUser.getTokenMask() + kaosUser.getPwd();
+        String tokenPrivateKey = tokenPrefix + kaosUserAccess.getTokenMask() + kaosUserAccess.getPassword();
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(tokenPrivateKey)).build();
         try {
             jwtVerifier.verify(token);

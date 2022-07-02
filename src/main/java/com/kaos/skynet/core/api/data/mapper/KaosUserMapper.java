@@ -6,10 +6,10 @@ import com.kaos.skynet.core.api.data.entity.KaosUser;
 @DS("his")
 public interface KaosUserMapper {
     /**
-     * 检索账户
+     * 主键检索
      * 
-     * @param uid 账户ID
+     * @param userCode
      * @return
      */
-    KaosUser queryKaosUser(String uuid);
+    KaosUser queryKaosUser(String userCode);
 }

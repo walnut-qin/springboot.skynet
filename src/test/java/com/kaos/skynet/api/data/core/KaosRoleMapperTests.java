@@ -1,18 +1,18 @@
 package com.kaos.skynet.api.data.core;
 
-import com.kaos.skynet.core.api.data.mapper.KaosUserMapper;
+import com.kaos.skynet.core.api.data.mapper.KaosRoleMapper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class KaosUserMapperTests {
+public class KaosRoleMapperTests {
     @Autowired
-    KaosUserMapper kaosUserMapper;
+    KaosRoleMapper kaosRoleMapper;
 
     @Test
-    void queryKaosUser() {
-        kaosUserMapper.queryKaosUser("admin");
+    void queryKaosRole() {
+        kaosRoleMapper.queryKaosRole("admin");
     }
 }

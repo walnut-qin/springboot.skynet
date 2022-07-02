@@ -1,18 +1,18 @@
 package com.kaos.skynet.api.data.core;
 
-import com.kaos.skynet.core.api.data.mapper.KaosUserMapper;
+import com.kaos.skynet.core.api.data.mapper.KaosUserAccessMapper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class KaosUserMapperTests {
+public class KaosUserAccessMapperTests {
     @Autowired
-    KaosUserMapper kaosUserMapper;
+    KaosUserAccessMapper kaosUserAccessMapper;
 
     @Test
-    void queryKaosUser() {
-        kaosUserMapper.queryKaosUser("admin");
+    void queryKaosUserAccess() {
+        kaosUserAccessMapper.queryKaosUserAccess("admin");
     }
 }
