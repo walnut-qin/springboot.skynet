@@ -15,6 +15,7 @@ import com.kaos.skynet.core.api.logic.service.TokenService;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
+import com.kaos.skynet.core.util.ObjectUtils;
 import com.kaos.skynet.core.util.UserUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,9 +159,9 @@ public class UserController {
      * @return
      */
     @ApiName("注销")
-    @RequestMapping(value = "logout", method = RequestMethod.POST)
-    void logout() {
-        // do nothing
+    @RequestMapping(value = "logout", method = RequestMethod.POST, produces = MediaType.JSON)
+    Object logout() {
+        return ObjectUtils.emptyObject;
     }
 
     /**
