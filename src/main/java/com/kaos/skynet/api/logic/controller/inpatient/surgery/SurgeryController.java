@@ -15,6 +15,7 @@ import com.kaos.skynet.core.config.spring.net.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
 
-@PassToken
+@CrossOrigin
 @Validated
 @RestController
 @RequestMapping("/api/inpatient/surgery")
@@ -50,7 +51,8 @@ public class SurgeryController {
      * 
      * @return
      */
-    @ApiName("查询手术字典")
+    @PassToken
+    @ApiName("查询指定科室的授权手术")
     @RequestMapping(value = "queryGrantedSurgerys", method = RequestMethod.POST, produces = MediaType.JSON)
     List<QueryGrantedSurgerys.RspBody> queryGrantedSurgerys(@RequestBody @Valid QueryGrantedSurgerys.ReqBody reqBody) {
         // 检索出该科室的所有手术
@@ -130,6 +132,57 @@ public class SurgeryController {
              * 科室编码
              */
             String DEPT_CODE;
+        }
+    }
+
+    /**
+     * 查询手术字典
+     * 
+     * @param reqBody
+     * @return
+     */
+    @ApiName("获取手术字典")
+    @RequestMapping(value = "getDictionary", method = RequestMethod.POST, produces = MediaType.JSON)
+    public List<GetDictionary.RspBody> getDictionary(@RequestBody @Valid GetDictionary.ReqBody reqBody) {
+        // 检索数据库
+        var keyBuilder = SurgeryDictMapper.Key.builder();
+        keyBuilder.level(reqBody.level);
+        keyBuilder.valid(true);
+        var surgeries = surgeryDictMapper.querySurgeryDicts(keyBuilder.build());
+
+        return surgeries.stream().map(x -> {
+            var rspBuilder = GetDictionary.RspBody.builder();
+            rspBuilder.icdCode(x.getIcdCode());
+            rspBuilder.name(x.getSurgeryName());
+            rspBuilder.level(x.getSurgeryLevel());
+            return rspBuilder.build();
+        }).toList();
+    }
+
+    static class GetDictionary {
+        static class ReqBody {
+            /**
+             * 手术等级
+             */
+            SurgeryLevelEnum level;
+        }
+
+        @Builder
+        static class RspBody {
+            /**
+             * ICD-9编码
+             */
+            String icdCode;
+
+            /**
+             * 手术名
+             */
+            String name;
+
+            /**
+             * 手术等级
+             */
+            SurgeryLevelEnum level;
         }
     }
 }

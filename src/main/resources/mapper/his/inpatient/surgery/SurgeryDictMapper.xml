@@ -36,6 +36,15 @@
         FROM
             KAOS.SURGERY_DICT
         <where>
+            <if test="icdCodes != null">
+                AND ICD_CODE IN
+                <foreach collection="icdCodes" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="level != null">
+                AND ICD_CODE = #{level}
+            </if>
             <if test="valid != null">
                 AND VALID = #{valid}
             </if>

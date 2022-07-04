@@ -3,6 +3,7 @@ package com.kaos.skynet.api.data.his.mapper.inpatient.surgery;
 import java.util.List;
 
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict;
+import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +32,11 @@ public interface SurgeryDictMapper {
          * icd编码
          */
         private List<String> icdCodes;
+
+        /**
+         * 手术等级
+         */
+        private SurgeryLevelEnum level;
 
         /**
          * 有效性标识
