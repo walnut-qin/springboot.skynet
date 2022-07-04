@@ -51,12 +51,12 @@ public class TokenService {
     /**
      * token安全时段 - token生成后这个时段内时，认为是安全的
      */
-    final Duration safeDuration = Duration.ofHours(2);
+    final Duration safeDuration = Duration.ofHours(1);
 
     /**
      * token预警时段 - 预留该时段用于刷新token
      */
-    final Duration alertDuration = Duration.ofHours(2);
+    final Duration alertDuration = Duration.ofHours(1);
 
     /**
      * 生成token
@@ -150,6 +150,7 @@ public class TokenService {
         if (now.isAfter(expire)) {
             throw new TokenCheckException(1, "token已过期");
         } else if (now.isAfter(alert)) {
+            response.setHeader("Access-Control-Expose-Headers", "Token");
             response.setHeader("Token", genToken(kaosUserAccess));
         }
 

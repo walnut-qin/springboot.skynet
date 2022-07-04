@@ -62,9 +62,6 @@ class InterceptorConfigurer implements WebMvcConfigurer {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
                 throws Exception {
-            // 设置自定义响应header
-            response.setHeader("Test", "test");
-
             // 获取方法
             if (!(handler instanceof HandlerMethod)) {
                 return true;
