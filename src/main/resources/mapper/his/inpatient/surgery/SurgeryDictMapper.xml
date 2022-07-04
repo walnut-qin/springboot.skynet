@@ -15,7 +15,8 @@
         SURGERY_NAME,
         SURGERY_LEVEL,
         VALID,
-        OPER_DATE
+        OPER_DATE,
+        TELEPROMPTER
     </sql>
 
     <select id="querySurgeryDict" resultMap="map">
@@ -43,7 +44,7 @@
                 </foreach>
             </if>
             <if test="level != null">
-                AND ICD_CODE = #{level}
+                AND SURGERY_LEVEL = #{level}
             </if>
             <if test="valid != null">
                 AND VALID = #{valid}

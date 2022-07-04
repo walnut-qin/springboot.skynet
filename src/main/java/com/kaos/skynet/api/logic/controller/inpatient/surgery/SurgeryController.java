@@ -155,6 +155,7 @@ public class SurgeryController {
             rspBuilder.icdCode(x.getIcdCode());
             rspBuilder.name(x.getSurgeryName());
             rspBuilder.level(x.getSurgeryLevel());
+            rspBuilder.teleprompter(x.getTeleprompter());
             return rspBuilder.build();
         }).toList();
     }
@@ -183,6 +184,11 @@ public class SurgeryController {
              * 手术等级
              */
             SurgeryLevelEnum level;
+
+            /**
+             * 提词器
+             */
+            String teleprompter;
         }
     }
 }
