@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -20,8 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 public class TokenService {
     /**
      * 账户信息表
@@ -39,6 +42,37 @@ public class TokenService {
      * 秘钥前缀 - 修改后，系统所有历史token失效
      */
     final String tokenPrefix = "kaos";
+
+    /**
+     * 默认时区
+     */
+    final ZoneId defaultZoneId = ZoneId.systemDefault();
+
+    /**
+     * token安全时段 - token生成后这个时段内时，认为是安全的
+     */
+    final Duration safeDuration = Duration.ofHours(2);
+
+    /**
+     * token预警时段 - 预留该时段用于刷新token
+     */
+    final Duration alertDuration = Duration.ofHours(2);
+
+    /**
+     * 生成token
+     * 
+     * @param kaosUserAccess
+     * @return
+     */
+    private String genToken(@NotNull(message = "账户接入信息不能为空") KaosUserAccess kaosUserAccess) {
+        var builder = JWT.create();
+        LocalDateTime now = LocalDateTime.now();
+        builder.withKeyId(now.toString()); // 混淆Header段
+        builder.withAudience(kaosUserAccess.getUserCode(), now.toString()); // 插入用户数据和时间段混淆
+        builder.withExpiresAt(now.plus(safeDuration).plus(alertDuration).atZone(defaultZoneId).toInstant());
+        String tokenPrivateKey = tokenPrefix + kaosUserAccess.getTokenMask() + kaosUserAccess.getPassword();
+        return builder.sign(Algorithm.HMAC256(tokenPrivateKey));
+    }
 
     /**
      * 校验用户并生成token
@@ -69,12 +103,7 @@ public class TokenService {
         }
 
         // 生成token
-        var builder = JWT.create();
-        builder.withKeyId(LocalDateTime.now().toString()); // 混淆Header段
-        builder.withAudience(userCode, LocalDateTime.now().toString()); // 插入用户数据和时间段混淆
-        builder.withExpiresAt(LocalDateTime.now().plus(Duration.ofHours(4)).atZone(ZoneId.systemDefault()).toInstant());
-        String tokenPrivateKey = tokenPrefix + kaosUserAccess.getTokenMask() + kaosUserAccess.getPassword();
-        return builder.sign(Algorithm.HMAC256(tokenPrivateKey));
+        return genToken(kaosUserAccess);
     }
 
     /**
@@ -114,6 +143,16 @@ public class TokenService {
             throw new RuntimeException("用户信息异常, 接入信息不存在");
         }
 
+        // 过期校验
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expire = LocalDateTime.ofInstant(decodedJWT.getExpiresAtAsInstant(), ZoneId.systemDefault());
+        LocalDateTime alert = expire.minus(alertDuration);
+        if (now.isAfter(expire)) {
+            throw new TokenCheckException(1, "token已过期");
+        } else if (now.isAfter(alert)) {
+            response.setHeader("Token", genToken(kaosUserAccess));
+        }
+
         // 校验token
         String tokenPrivateKey = tokenPrefix + kaosUserAccess.getTokenMask() + kaosUserAccess.getPassword();
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(tokenPrivateKey)).build();
@@ -121,22 +160,6 @@ public class TokenService {
             jwtVerifier.verify(token);
         } catch (Exception e) {
             throw new TokenCheckException("token校验失败");
-        }
-
-        // 过期校验
-        var expireInstant = decodedJWT.getExpiresAtAsInstant();
-        if (expireInstant != null) {
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime expire = LocalDateTime.ofInstant(expireInstant, ZoneId.systemDefault());
-            if (now.isAfter(expire)) {
-                throw new TokenCheckException(1, "token已过期");
-            } else {
-                // token有效期小于2小时
-                Duration duration = Duration.between(now, expire);
-                if (duration.compareTo(Duration.ofHours(2)) < 0) {
-                    response.setHeader("Token", genToken(kaosUser.getUserCode(), kaosUserAccess.getPassword()));
-                }
-            }
         }
 
         return kaosUser;
