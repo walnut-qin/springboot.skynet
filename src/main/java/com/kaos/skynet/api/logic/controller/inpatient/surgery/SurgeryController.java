@@ -9,6 +9,7 @@ import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.Surgery
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDeptPrivMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDictMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryEmplPrivMapper;
+import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 
@@ -49,6 +50,7 @@ public class SurgeryController {
      * 
      * @return
      */
+    @ApiName("查询手术字典")
     @RequestMapping(value = "queryGrantedSurgerys", method = RequestMethod.POST, produces = MediaType.JSON)
     List<QueryGrantedSurgerys.RspBody> queryGrantedSurgerys(@RequestBody @Valid QueryGrantedSurgerys.ReqBody reqBody) {
         // 检索出该科室的所有手术
