@@ -51,4 +51,11 @@
             </if>
         </where>
     </select>
+
+    <insert id="insertSurgeryDict">
+        INSERT INTO
+            KAOS.SURGERY_DICT(ICD_CODE, SURGERY_NAME, SURGERY_LEVEL, VALID, OPER_DATE, TELEPROMPTER)
+        VALUES
+            (#{icdCode}, #{surgeryName}, #{surgeryLevel}, #{valid}, #{operDate}, #{teleprompter})
+    </insert>
 </mapper>

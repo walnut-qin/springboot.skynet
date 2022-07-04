@@ -43,4 +43,12 @@ public interface SurgeryDictMapper {
          */
         private Boolean valid;
     }
+
+    /**
+     * 插入操作
+     * 
+     * @param surgeryDict
+     * @return
+     */
+    Integer insertSurgeryDict(SurgeryDict surgeryDict);
 }
