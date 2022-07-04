@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -47,7 +49,7 @@ public class TokenService {
      * @return
      */
     @Transactional
-    public String genToken(String userCode, String password, Duration duration) {
+    public String genToken(String userCode, String password) {
         // 检索账户实体
         KaosUser kaosUser = kaosUserMapper.queryKaosUser(userCode);
         if (kaosUser == null) {
@@ -70,9 +72,7 @@ public class TokenService {
         var builder = JWT.create();
         builder.withKeyId(LocalDateTime.now().toString()); // 混淆Header段
         builder.withAudience(userCode, LocalDateTime.now().toString()); // 插入用户数据和时间段混淆
-        if (duration != null) {
-            builder.withExpiresAt(LocalDateTime.now().plus(duration).atZone(ZoneId.systemDefault()).toInstant());
-        }
+        builder.withExpiresAt(LocalDateTime.now().plus(Duration.ofHours(4)).atZone(ZoneId.systemDefault()).toInstant());
         String tokenPrivateKey = tokenPrefix + kaosUserAccess.getTokenMask() + kaosUserAccess.getPassword();
         return builder.sign(Algorithm.HMAC256(tokenPrivateKey));
     }
@@ -85,7 +85,7 @@ public class TokenService {
      * @throws TokenCheckException
      */
     @Transactional
-    public KaosUser checkToken(String token) throws TokenCheckException {
+    public KaosUser checkToken(String token, HttpServletResponse response) throws TokenCheckException {
         // 无token
         if (token == null) {
             throw new TokenCheckException("无token, 请登录");
@@ -97,15 +97,6 @@ public class TokenService {
             decodedJWT = JWT.decode(token);
         } catch (Exception e) {
             throw new TokenCheckException(e.getMessage());
-        }
-
-        // 过期校验
-        var expireInstant = decodedJWT.getExpiresAtAsInstant();
-        if (expireInstant != null) {
-            LocalDateTime expire = LocalDateTime.ofInstant(expireInstant, ZoneId.systemDefault());
-            if (LocalDateTime.now().isAfter(expire)) {
-                throw new TokenCheckException(1, "token已过期");
-            }
         }
 
         // 获取系统用户
@@ -130,6 +121,22 @@ public class TokenService {
             jwtVerifier.verify(token);
         } catch (Exception e) {
             throw new TokenCheckException("token校验失败");
+        }
+
+        // 过期校验
+        var expireInstant = decodedJWT.getExpiresAtAsInstant();
+        if (expireInstant != null) {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime expire = LocalDateTime.ofInstant(expireInstant, ZoneId.systemDefault());
+            if (now.isAfter(expire)) {
+                throw new TokenCheckException(1, "token已过期");
+            } else {
+                // token有效期小于2小时
+                Duration duration = Duration.between(now, expire);
+                if (duration.compareTo(Duration.ofHours(2)) < 0) {
+                    response.setHeader("Token", genToken(kaosUser.getUserCode(), kaosUserAccess.getPassword()));
+                }
+            }
         }
 
         return kaosUser;

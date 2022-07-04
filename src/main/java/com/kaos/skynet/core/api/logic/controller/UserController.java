@@ -3,7 +3,6 @@ package com.kaos.skynet.core.api.logic.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.Inet4Address;
-import java.time.Duration;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -72,7 +71,7 @@ public class UserController {
     @RequestMapping(value = "login", method = RequestMethod.POST, produces = MediaType.JSON)
     Login.RspBody login(@RequestBody @Valid Login.ReqBody reqBody) {
         // 校验并生成token
-        String token = tokenService.genToken(reqBody.userCode, reqBody.password, Duration.ofHours(1));
+        String token = tokenService.genToken(reqBody.userCode, reqBody.password);
 
         // 生成响应
         var builder = Login.RspBody.builder();

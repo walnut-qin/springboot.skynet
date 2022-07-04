@@ -63,7 +63,7 @@ class InterceptorConfigurer implements WebMvcConfigurer {
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
                 throws Exception {
             // 设置自定义响应header
-            response.setHeader("Token", "test");
+            response.setHeader("Test", "test");
 
             // 获取方法
             if (!(handler instanceof HandlerMethod)) {
@@ -86,7 +86,7 @@ class InterceptorConfigurer implements WebMvcConfigurer {
             }
 
             // 校验token
-            KaosUser kaosUser = tokenService.checkToken(request.getHeader("Token"));
+            KaosUser kaosUser = tokenService.checkToken(request.getHeader("Token"), response);
 
             // 记录用户
             UserUtils.create(kaosUser);
