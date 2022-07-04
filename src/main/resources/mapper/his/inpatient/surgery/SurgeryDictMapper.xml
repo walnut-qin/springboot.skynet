@@ -58,4 +58,31 @@
         VALUES
             (#{icdCode}, #{surgeryName}, #{surgeryLevel}, #{valid}, #{operDate}, #{teleprompter})
     </insert>
+
+    <update id="updateSurgeryDict">
+        UPDATE
+            KAOS.SURGERY_DICT
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="true">
+                SURGERY_NAME = #{surgeryName},
+            </if>
+            <if test="true">
+                SURGERY_LEVEL = #{surgeryLevel},
+            </if>
+            <if test="true">
+                VALID = #{valid},
+            </if>
+            <if test="true">
+                OPER_DATE = #{operDate},
+            </if>
+            <if test="true">
+                TELEPROMPTER = #{teleprompter},
+            </if>
+        </trim>
+        <where>
+            <if test="true">
+                AND ICD_CODE = #{icdCode}
+            </if>
+        </where>
+    </update>
 </mapper>

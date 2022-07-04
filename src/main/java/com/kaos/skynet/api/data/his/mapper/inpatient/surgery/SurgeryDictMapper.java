@@ -51,4 +51,12 @@ public interface SurgeryDictMapper {
      * @return
      */
     Integer insertSurgeryDict(SurgeryDict surgeryDict);
+
+    /**
+     * 变更操作
+     * 
+     * @param surgeryDict
+     * @return
+     */
+    Integer updateSurgeryDict(SurgeryDict surgeryDict);
 }
