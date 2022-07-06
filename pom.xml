@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.kaos</groupId>
 	<artifactId>skynet</artifactId>
-	<version>1.3.2</version>
+	<version>1.3.3</version>
 	<name>skynet</name>
 	<description>Server Based On Spring Boot</description>
 	<properties>
