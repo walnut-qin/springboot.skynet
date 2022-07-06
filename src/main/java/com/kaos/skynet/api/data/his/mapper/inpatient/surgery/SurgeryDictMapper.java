@@ -2,6 +2,8 @@ package com.kaos.skynet.api.data.his.mapper.inpatient.surgery;
 
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict;
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
 
@@ -59,4 +61,12 @@ public interface SurgeryDictMapper {
      * @return
      */
     Integer updateSurgeryDict(SurgeryDict surgeryDict);
+
+    /**
+     * 变更操作
+     * 
+     * @param surgeryDict
+     * @return
+     */
+    Integer deleteSurgeryDict(@NotBlank(message = "ICD-9编码不能为空") String icdCode);
 }

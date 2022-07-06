@@ -85,4 +85,14 @@
             </if>
         </where>
     </update>
+
+    <delete id="deleteSurgeryDict">
+        DELETE FROM
+            KAOS.SURGERY_DICT
+        <where>
+            <if test="true">
+                AND ICD_CODE = #{icdCode}
+            </if>
+        </where>
+    </delete>
 </mapper>
