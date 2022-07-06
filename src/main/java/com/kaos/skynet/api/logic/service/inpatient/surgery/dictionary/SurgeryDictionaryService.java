@@ -60,7 +60,7 @@ public class SurgeryDictionaryService {
      * @param teleprompter
      */
     @Transactional
-    public void modifySurgeryDict(String icdCode, String name, SurgeryLevelEnum level, String teleprompter) {
+    public void updateSurgeryDict(String icdCode, String name, SurgeryLevelEnum level, String teleprompter) {
         // 检索手术字典
         var surgeryDict = surgeryDictMapper.querySurgeryDict(icdCode);
         if (surgeryDict == null) {

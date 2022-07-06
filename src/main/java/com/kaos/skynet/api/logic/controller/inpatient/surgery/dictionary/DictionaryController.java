@@ -146,4 +146,67 @@ public class DictionaryController {
             String teleprompter;
         }
     }
+
+    @ApiName("修改手术字典")
+    @RequestMapping(value = "modifyDictionary", method = RequestMethod.POST, produces = MediaType.JSON)
+    public Object modifyDictionary(@RequestBody @Valid ModifyDictionary.ReqBody reqBody) {
+        // 执行业务
+        LockExecutor.execute(Lists.newArrayList(surgeryLockGuardian.grant(reqBody.icdCode)), () -> {
+            surgeryDictionaryService.updateSurgeryDict(reqBody.icdCode,
+                    reqBody.name,
+                    reqBody.level,
+                    reqBody.teleprompter);
+        });
+
+        return ObjectUtils.emptyObject;
+    }
+
+    static class ModifyDictionary {
+        static class ReqBody {
+            /**
+             * ICD-9编码
+             */
+            @NotBlank(message = "ICD-9编码不能为空")
+            String icdCode;
+
+            /**
+             * 手术名
+             */
+            @NotBlank(message = "手术名称不能为空")
+            String name;
+
+            /**
+             * 手术等级
+             */
+            @NotNull(message = "手术分级不能为空")
+            SurgeryLevelEnum level;
+
+            /**
+             * 提词器
+             */
+            @NotBlank(message = "提词器不能为空")
+            String teleprompter;
+        }
+    }
+
+    @ApiName("删除手术字典")
+    @RequestMapping(value = "removeDictionary", method = RequestMethod.POST, produces = MediaType.JSON)
+    public Object removeDictionary(@RequestBody @Valid RemoveDictionary.ReqBody reqBody) {
+        // 执行业务
+        LockExecutor.execute(Lists.newArrayList(surgeryLockGuardian.grant(reqBody.icdCode)), () -> {
+            surgeryDictionaryService.deleteSurgeryDict(reqBody.icdCode);
+        });
+
+        return ObjectUtils.emptyObject;
+    }
+
+    static class RemoveDictionary {
+        static class ReqBody {
+            /**
+             * ICD-9编码
+             */
+            @NotBlank(message = "ICD-9编码不能为空")
+            String icdCode;
+        }
+    }
 }
