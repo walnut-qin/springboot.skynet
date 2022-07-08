@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import com.kaos.skynet.api.data.his.cache.common.ComPatientInfoCache;
 import com.kaos.skynet.api.data.his.enums.SexEnum;
@@ -13,6 +14,7 @@ import com.kaos.skynet.core.config.spring.net.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
 
+@CrossOrigin
 @PassToken
 @Validated
 @RestController
@@ -63,6 +66,7 @@ public class PatientController {
             /**
              * 患者卡号
              */
+            @NotBlank(message = "就诊卡号不能为空")
             String cardNo;
         }
 
