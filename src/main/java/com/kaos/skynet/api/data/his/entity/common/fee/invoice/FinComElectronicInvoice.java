@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.data.his.entity.inpatient.fee.balance.invoice.electronic;
+package com.kaos.skynet.api.data.his.entity.common.fee.invoice;
 
 import java.time.LocalDateTime;
 

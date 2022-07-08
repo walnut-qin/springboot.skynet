@@ -2,7 +2,7 @@ package com.kaos.skynet.api.logic.controller.inpatient.fee.balance.invoice.elect
 
 import com.google.gson.annotations.JsonAdapter;
 import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
-import com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.invoice.electronic.FinComElectronicInvoiceMapper;
+import com.kaos.skynet.api.data.his.mapper.common.fee.invoice.FinComElectronicInvoiceMapper;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;

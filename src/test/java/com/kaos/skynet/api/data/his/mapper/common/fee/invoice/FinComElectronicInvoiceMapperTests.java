@@ -1,4 +1,4 @@
-package com.kaos.skynet.api.data.his.mapper.inpatient.fee.balance.invoice.electronic;
+package com.kaos.skynet.api.data.his.mapper.common.fee.invoice;
 
 import com.kaos.skynet.api.data.his.enums.TransTypeEnum;
 
