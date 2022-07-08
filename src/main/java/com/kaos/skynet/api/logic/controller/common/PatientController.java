@@ -26,7 +26,7 @@ import lombok.Builder;
 @PassToken
 @Validated
 @RestController
-@RequestMapping("api/common/patient")
+@RequestMapping("/api/common/patient")
 public class PatientController {
     /**
      * 实体信息服务

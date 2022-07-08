@@ -20,7 +20,7 @@ import lombok.Builder;
 @CrossOrigin
 @Validated
 @RestController
-@RequestMapping("/api/inpatient/surgery")
+@RequestMapping("/api/inpatient")
 public class InpatientController {
     /**
      * 实体信息服务
