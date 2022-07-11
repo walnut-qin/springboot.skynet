@@ -128,12 +128,14 @@ public class FinComElectronicInvoice extends Entity {
     @AllArgsConstructor
     public enum BusinessTypeEnum implements Enum {
         住院("01", "住院"),
+        住院fix("1", "住院"),
         门诊("02", "门诊"),
         急诊("03", "急诊"),
         门特("04", "门特"),
         体检("05", "体检"),
         挂号("06", "挂号"),
         住院预交金("07", "住院预交金"),
+        住院预交金fix("7", "住院预交金"),
         体检预交金("08", "体检预交金"),
         往来票("09", "体检预交金"),
         捐赠票("10", "体检预交金"),
