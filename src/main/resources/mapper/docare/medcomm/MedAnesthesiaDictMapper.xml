@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.docare.mapper.medcomm.MedAnesthesiaDictMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.docare.entity.medcomm.MedAnesthesiaDict">
+        <id column="ANAESTHESIA_NAME" jdbcType="VARCHAR" property="anesName"/>
+        <result column="ANAESTHESIA_TYPE" jdbcType="VARCHAR" property="anesType"/>
+    </resultMap>
+
+    <sql id="item">
+        ANAESTHESIA_NAME,
+        ANAESTHESIA_TYPE
+    </sql>
+
+    <select id="queryAnesthesiaDict" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            MEDCOMM.MED_ANAESTHESIA_DICT
+        <where>
+            <if test="true">
+                AND ANAESTHESIA_NAME = #{anesName}
+            </if>
+        </where>
+    </select>
+</mapper>

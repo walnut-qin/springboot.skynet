@@ -191,7 +191,7 @@ public class SurgeryController {
                 rspBuilder.asaGrade(anesPlan.getAsaGrade());
             }
             rspBuilder.inciType(x.getInciType());
-            rspBuilder.anesName(null);
+            rspBuilder.anesName(x.getAnesName());
             rspBuilder.patientNo(x.getPatientId());
             var patient = inMainInfoCache.get("ZY01".concat(x.getPatientId()));
             if (patient != null) {
