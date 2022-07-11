@@ -7,6 +7,7 @@ import com.kaos.skynet.core.util.json.GsonWrapper;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Order(0)
 @ControllerAdvice
@@ -22,6 +23,7 @@ class ConversionExceptionHandler {
      * @param ex
      * @return
      */
+    @ResponseBody
     @ExceptionHandler(value = ConversionException.class)
     public ExceptionResponse exceptionHandler(ConversionException ex) {
         return new ExceptionResponse() {
