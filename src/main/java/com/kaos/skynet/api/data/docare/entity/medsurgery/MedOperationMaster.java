@@ -116,6 +116,26 @@ public class MedOperationMaster {
     private String anesAssistant;
 
     /**
+     * 洗手护士1
+     */
+    private String washNurse1;
+
+    /**
+     * 洗手护士2
+     */
+    private String washNurse2;
+
+    /**
+     * 巡回护士1
+     */
+    private String itinerantNurse1;
+
+    /**
+     * 巡回护士2
+     */
+    private String itinerantNurse2;
+
+    /**
      * 手术开始时间
      */
     private LocalDateTime startDateTime;
@@ -154,6 +174,16 @@ public class MedOperationMaster {
      * 手术名称
      */
     private String operationName;
+
+    /**
+     * 麻醉开始时间
+     */
+    private LocalDateTime anesStartTime;
+
+    /**
+     * 麻醉结束时间
+     */
+    private LocalDateTime anesEndTime;
 
     @Override
     public boolean equals(Object arg0) {

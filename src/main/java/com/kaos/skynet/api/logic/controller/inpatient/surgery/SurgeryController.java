@@ -9,8 +9,10 @@ import java.util.Objects;
 import javax.validation.Valid;
 
 import com.google.common.collect.Lists;
+import com.kaos.skynet.api.data.docare.entity.medcomm.MedAnesthesiaDict.AnesTypeEnum;
 import com.kaos.skynet.api.data.docare.entity.medsurgery.MedAnesthesiaPlan.AsaGradeEnum;
 import com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster.OperStatusEnum;
+import com.kaos.skynet.api.data.docare.mapper.medcomm.MedAnesthesiaDictMapper;
 import com.kaos.skynet.api.data.docare.mapper.medsurgery.MedAnesthesiaPlanMapper;
 import com.kaos.skynet.api.data.docare.mapper.medsurgery.MedOperationMasterMapper;
 import com.kaos.skynet.api.data.his.cache.inpatient.FinIprInMainInfoCache;
@@ -19,6 +21,7 @@ import com.kaos.skynet.api.data.his.enums.SexEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDeptPrivMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDictMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryEmplPrivMapper;
+import com.kaos.skynet.api.data.his.tunnel.EmplNameTunnel;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.PassToken;
 import com.kaos.skynet.core.config.spring.net.MediaType;
@@ -69,10 +72,22 @@ public class SurgeryController {
     MedAnesthesiaPlanMapper medAnesthesiaPlanMapper;
 
     /**
+     * 手麻系统麻醉计划接口
+     */
+    @Autowired
+    MedAnesthesiaDictMapper medAnesthesiaDictMapper;
+
+    /**
      * 住院主表缓存
      */
     @Autowired
     FinIprInMainInfoCache inMainInfoCache;
+
+    /**
+     * 医师姓名快速通道
+     */
+    @Autowired
+    EmplNameTunnel emplNameTunnel;
 
     /**
      * 查询已经授权的手术清单
@@ -181,7 +196,7 @@ public class SurgeryController {
         var result = medOperationMasterMapper.queryOperationMasters(keyBuilder.build());
 
         var rspBuilder = QuerySurgeryInfos.RspBody.builder();
-        return result.stream().map(x -> {
+        var responseStream = result.stream().map(x -> {
             rspBuilder.date(x.getInDateTime().toLocalDate());
             rspBuilder.roomNo(x.getOperatingRoomNo());
             rspBuilder.surgeryName(x.getOperationName());
@@ -192,6 +207,10 @@ public class SurgeryController {
             }
             rspBuilder.inciType(x.getInciType());
             rspBuilder.anesName(x.getAnesName());
+            var anes = medAnesthesiaDictMapper.queryAnesthesiaDict(x.getAnesName());
+            if (anes != null) {
+                rspBuilder.anesType(anes.getAnesType());
+            }
             rspBuilder.patientNo(x.getPatientId());
             var patient = inMainInfoCache.get("ZY01".concat(x.getPatientId()));
             if (patient != null) {
@@ -200,8 +219,38 @@ public class SurgeryController {
                 rspBuilder.age(Period.between(patient.getBirthday().toLocalDate(), LocalDate.now()));
                 rspBuilder.deptStayed(patient.getDeptName());
             }
+            rspBuilder.surgeon(emplNameTunnel.tunneling(x.getSurgeon()));
+            rspBuilder.helper1(emplNameTunnel.tunneling(x.getHelper1()));
+            rspBuilder.helper2(emplNameTunnel.tunneling(x.getHelper2()));
+            rspBuilder.helper3(emplNameTunnel.tunneling(x.getHelper3()));
+            rspBuilder.helper4(emplNameTunnel.tunneling(x.getHelper4()));
+            rspBuilder.anesDoctor(emplNameTunnel.tunneling(x.getAnesDoctor()));
+            rspBuilder.anesAssistant(emplNameTunnel.tunneling(x.getAnesAssistant()));
+            rspBuilder.washNurse1(emplNameTunnel.tunneling(x.getWashNurse1()));
+            rspBuilder.washNurse2(emplNameTunnel.tunneling(x.getWashNurse2()));
+            rspBuilder.itinerantNurse1(emplNameTunnel.tunneling(x.getItinerantNurse1()));
+            rspBuilder.itinerantNurse2(emplNameTunnel.tunneling(x.getItinerantNurse2()));
+            rspBuilder.inDateTime(x.getInDateTime());
+            rspBuilder.anesStartDateTime(x.getAnesStartTime());
+            rspBuilder.startDateTime(x.getStartDateTime());
+            rspBuilder.endDateTime(x.getEndDateTime());
+            rspBuilder.anesEndDateTime(x.getAnesEndTime());
+            rspBuilder.outDateTime(x.getOutDateTime());
             return rspBuilder.build();
-        }).toList();
+        });
+
+        // ASA特殊过滤
+        if (reqBody.asaGrades != null) {
+            responseStream = responseStream.filter(x -> {
+                if (reqBody.asaGrades.contains(x.asaGrade)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
+
+        return responseStream.toList();
     }
 
     static class QuerySurgeryInfos {
@@ -277,7 +326,7 @@ public class SurgeryController {
             /**
              * 麻醉类型
              */
-            String anesType;
+            AnesTypeEnum anesType;
 
             /**
              * 住院号
@@ -307,7 +356,7 @@ public class SurgeryController {
             /**
              * 主刀医师
              */
-            String doctor;
+            String surgeon;
 
             /**
              * 一助
@@ -332,12 +381,12 @@ public class SurgeryController {
             /**
              * 主麻
              */
-            String masterAnesDoctor;
+            String anesDoctor;
 
             /**
              * 副麻
              */
-            String slaveAnesDoctor;
+            String anesAssistant;
 
             /**
              * 洗1
