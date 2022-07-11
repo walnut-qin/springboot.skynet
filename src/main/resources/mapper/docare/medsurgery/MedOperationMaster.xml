@@ -79,6 +79,12 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="negOperStatus != null">
+                AND OPER_STATUS NOT IN
+                <foreach collection="negOperStatus" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
 </mapper>

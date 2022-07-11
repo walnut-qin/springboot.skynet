@@ -50,5 +50,10 @@ public interface MedOperationMasterMapper {
          * 手术状态清单
          */
         private List<OperStatusEnum> operStatus;
+
+        /**
+         * 手术状态清单
+         */
+        private List<OperStatusEnum> negOperStatus;
     }
 }

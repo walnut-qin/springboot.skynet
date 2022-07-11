@@ -1,10 +1,15 @@
 package com.kaos.skynet.api.logic.controller.common;
 
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.his.cache.common.DawnOrgDeptCache;
 import com.kaos.skynet.api.data.his.enums.DeptOwnEnum;
+import com.kaos.skynet.api.data.his.enums.ValidEnum;
+import com.kaos.skynet.api.data.his.mapper.common.DawnOrgDeptMapper;
 import com.kaos.skynet.core.config.spring.interceptor.annotation.ApiName;
 import com.kaos.skynet.core.config.spring.net.MediaType;
 
@@ -28,6 +33,12 @@ public class DepartmentController {
      */
     @Autowired
     DawnOrgDeptCache deptCache;
+
+    /**
+     * 科室接口
+     */
+    @Autowired
+    DawnOrgDeptMapper deptMapper;
 
     /**
      * 查询患者信息
@@ -60,6 +71,58 @@ public class DepartmentController {
              */
             @NotBlank(message = "科室编码不能为空")
             String deptCode;
+        }
+
+        @Builder
+        static class RspBody {
+            /**
+             * 科室编码
+             */
+            String deptCode;
+
+            /**
+             * 科室名称
+             */
+            String deptName;
+
+            /**
+             * 院区
+             */
+            DeptOwnEnum deptOwn;
+        }
+    }
+
+    /**
+     * 查询患者信息
+     * 
+     * @param cardNo
+     * @return
+     */
+    @ApiName("获取科室列表信息")
+    @RequestMapping(value = "getDeptsInfo", method = RequestMethod.POST, produces = MediaType.JSON)
+    List<GetDeptsInfo.RspBody> getDeptsInfo(@RequestBody @Valid GetDeptsInfo.ReqBody reqBody) {
+        // 调用服务
+        var keyBuilder = DawnOrgDeptMapper.Key.builder();
+        keyBuilder.deptOwn(reqBody.deptOwn);
+        keyBuilder.valids(Lists.newArrayList(ValidEnum.VALID));
+        var depts = deptMapper.queryDepts(keyBuilder.build());
+
+        // 构造响应体
+        var rspBuilder = GetDeptsInfo.RspBody.builder();
+        return depts.stream().map(x -> {
+            rspBuilder.deptCode(x.getDeptCode());
+            rspBuilder.deptName(x.getDeptName());
+            rspBuilder.deptOwn(x.getDeptOwn());
+            return rspBuilder.build();
+        }).toList();
+    }
+
+    static class GetDeptsInfo {
+        static class ReqBody {
+            /**
+             * 患者卡号
+             */
+            DeptOwnEnum deptOwn;
         }
 
         @Builder
