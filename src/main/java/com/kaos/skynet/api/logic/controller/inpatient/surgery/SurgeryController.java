@@ -177,7 +177,7 @@ public class SurgeryController {
             rspBuilder.inDate(x.getInDateTime().toLocalDate());
             rspBuilder.roomNo(x.getOperatingRoomNo());
             rspBuilder.surgeryName(x.getOperationName());
-            rspBuilder.leve(x.getOperationScale());
+            rspBuilder.level(x.getOperationScale());
             rspBuilder.patientNo(x.getPatientId());
             var patient = inMainInfoCache.get("ZY01".concat(x.getPatientId()));
             if (patient != null) {
@@ -238,7 +238,7 @@ public class SurgeryController {
             /**
              * 手术等级
              */
-            SurgeryLevelEnum leve;
+            SurgeryLevelEnum level;
 
             /**
              * 住院号
