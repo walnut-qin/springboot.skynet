@@ -195,8 +195,8 @@ public class SurgeryController {
         keyBuilder.stayedDeptCodes(reqBody.stayedDeptCodes);
         var result = medOperationMasterMapper.queryOperationMasters(keyBuilder.build());
 
-        var rspBuilder = QuerySurgeryInfos.RspBody.builder();
         var responseStream = result.stream().map(x -> {
+            var rspBuilder = QuerySurgeryInfos.RspBody.builder();
             rspBuilder.date(x.getInDateTime().toLocalDate());
             rspBuilder.roomNo(x.getOperatingRoomNo());
             rspBuilder.surgeryName(x.getOperationName());
