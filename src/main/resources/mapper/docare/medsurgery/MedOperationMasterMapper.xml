@@ -14,12 +14,21 @@
         <result column="DIAG_AFTER_OPERATION" jdbcType="VARCHAR" property="diagAfterOperation"/>
         <result column="EMERGENCY_INDICATOR" jdbcType="VARCHAR" property="emergencyIndicator"/>
         <result column="OPERATING_DEPT" jdbcType="VARCHAR" property="operatingDept"/>
+        <result column="SURGEON" jdbcType="VARCHAR" property="surgeon"/>
+        <result column="FIRST_ASSISTANT" jdbcType="VARCHAR" property="helper1"/>
+        <result column="SECOND_ASSISTANT" jdbcType="VARCHAR" property="helper2"/>
+        <result column="THIRD_ASSISTANT" jdbcType="VARCHAR" property="helper3"/>
+        <result column="FOURTH_ASSISTANT" jdbcType="VARCHAR" property="helper4"/>
+        <result column="ANESTHESIA_METHOD" jdbcType="VARCHAR" property="anesName"/>
+        <result column="ANESTHESIA_DOCTOR" jdbcType="VARCHAR" property="anesDoctor"/>
+        <result column="ANESTHESIA_ASSISTANT" jdbcType="VARCHAR" property="anesAssistant"/>
         <result column="START_DATE_TIME" jdbcType="VARCHAR" property="startDateTime"/>
         <result column="END_DATE_TIME" jdbcType="VARCHAR" property="endDateTime"/>
         <result column="OPER_STATUS" jdbcType="VARCHAR" property="operStatus"/>
         <result column="IN_DATE_TIME" jdbcType="VARCHAR" property="inDateTime"/>
         <result column="OUT_DATE_TIME" jdbcType="VARCHAR" property="outDateTime"/>
         <result column="SCHEDULED_DATE_TIME" jdbcType="VARCHAR" property="scheduledDateTime"/>
+        <result column="QIEKOU_CLASS" jdbcType="VARCHAR" property="inciType"/>
         <result column="OPERATION_NAME" jdbcType="VARCHAR" property="operationName"/>
     </resultMap>
 
@@ -36,12 +45,21 @@
         DIAG_AFTER_OPERATION,
         EMERGENCY_INDICATOR,
         OPERATING_DEPT,
+        SURGEON,
+        FIRST_ASSISTANT,
+        SECOND_ASSISTANT,
+        THIRD_ASSISTANT,
+        FOURTH_ASSISTANT,
+        ANESTHESIA_METHOD,
+        ANESTHESIA_DOCTOR,
+        ANESTHESIA_ASSISTANT,
         START_DATE_TIME,
         END_DATE_TIME,
         OPER_STATUS,
         IN_DATE_TIME,
         OUT_DATE_TIME,
         SCHEDULED_DATE_TIME,
+        QIEKOU_CLASS,
         OPERATION_NAME
     </sql>
 

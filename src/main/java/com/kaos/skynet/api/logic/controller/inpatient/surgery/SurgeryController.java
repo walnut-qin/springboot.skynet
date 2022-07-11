@@ -9,7 +9,9 @@ import java.util.Objects;
 import javax.validation.Valid;
 
 import com.google.common.collect.Lists;
+import com.kaos.skynet.api.data.docare.entity.medsurgery.MedAnesthesiaPlan.AsaGradeEnum;
 import com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster.OperStatusEnum;
+import com.kaos.skynet.api.data.docare.mapper.medsurgery.MedAnesthesiaPlanMapper;
 import com.kaos.skynet.api.data.docare.mapper.medsurgery.MedOperationMasterMapper;
 import com.kaos.skynet.api.data.his.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
@@ -59,6 +61,12 @@ public class SurgeryController {
      */
     @Autowired
     MedOperationMasterMapper medOperationMasterMapper;
+
+    /**
+     * 手麻系统麻醉计划接口
+     */
+    @Autowired
+    MedAnesthesiaPlanMapper medAnesthesiaPlanMapper;
 
     /**
      * 住院主表缓存
@@ -174,10 +182,16 @@ public class SurgeryController {
 
         var rspBuilder = QuerySurgeryInfos.RspBody.builder();
         return result.stream().map(x -> {
-            rspBuilder.inDate(x.getInDateTime().toLocalDate());
+            rspBuilder.date(x.getInDateTime().toLocalDate());
             rspBuilder.roomNo(x.getOperatingRoomNo());
             rspBuilder.surgeryName(x.getOperationName());
             rspBuilder.level(x.getOperationScale());
+            var anesPlan = medAnesthesiaPlanMapper.queryAnesthesiaPlan(x.getPatientId(), x.getVisitId(), x.getOperId());
+            if (anesPlan != null) {
+                rspBuilder.asaGrade(anesPlan.getAsaGrade());
+            }
+            rspBuilder.inciType(x.getInciType());
+            rspBuilder.anesName(null);
             rspBuilder.patientNo(x.getPatientId());
             var patient = inMainInfoCache.get("ZY01".concat(x.getPatientId()));
             if (patient != null) {
@@ -216,6 +230,11 @@ public class SurgeryController {
              * 住院科室
              */
             List<String> stayedDeptCodes;
+
+            /**
+             * ASA分级
+             */
+            List<AsaGradeEnum> asaGrades;
         }
 
         @Builder
@@ -223,7 +242,7 @@ public class SurgeryController {
             /**
              * 入手术室时间
              */
-            LocalDate inDate;
+            LocalDate date;
 
             /**
              * 手术间号
@@ -236,9 +255,29 @@ public class SurgeryController {
             String surgeryName;
 
             /**
+             * ASA分级
+             */
+            AsaGradeEnum asaGrade;
+
+            /**
              * 手术等级
              */
             SurgeryLevelEnum level;
+
+            /**
+             * 切口类型
+             */
+            String inciType;
+
+            /**
+             * 麻醉名称
+             */
+            String anesName;
+
+            /**
+             * 麻醉类型
+             */
+            String anesType;
 
             /**
              * 住院号
@@ -264,6 +303,91 @@ public class SurgeryController {
              * 住院科室
              */
             String deptStayed;
+
+            /**
+             * 主刀医师
+             */
+            String doctor;
+
+            /**
+             * 一助
+             */
+            String helper1;
+
+            /**
+             * 二助
+             */
+            String helper2;
+
+            /**
+             * 三助
+             */
+            String helper3;
+
+            /**
+             * 四助
+             */
+            String helper4;
+
+            /**
+             * 主麻
+             */
+            String masterAnesDoctor;
+
+            /**
+             * 副麻
+             */
+            String slaveAnesDoctor;
+
+            /**
+             * 洗1
+             */
+            String washNurse1;
+
+            /**
+             * 洗2
+             */
+            String washNurse2;
+
+            /**
+             * 巡1
+             */
+            String itinerantNurse1;
+
+            /**
+             * 巡2
+             */
+            String itinerantNurse2;
+
+            /**
+             * 入手术室时间
+             */
+            LocalDateTime inDateTime;
+
+            /**
+             * 麻醉开始时间
+             */
+            LocalDateTime anesStartDateTime;
+
+            /**
+             * 手术开始时间
+             */
+            LocalDateTime startDateTime;
+
+            /**
+             * 手术结束时间
+             */
+            LocalDateTime endDateTime;
+
+            /**
+             * 麻醉结束时间
+             */
+            LocalDateTime anesEndDateTime;
+
+            /**
+             * 出手术室时间
+             */
+            LocalDateTime outDateTime;
         }
     }
 }

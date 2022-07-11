@@ -76,6 +76,46 @@ public class MedOperationMaster {
     private String operatingDept;
 
     /**
+     * 主刀医师
+     */
+    private String surgeon;
+
+    /**
+     * 一助
+     */
+    private String helper1;
+
+    /**
+     * 二助
+     */
+    private String helper2;
+
+    /**
+     * 三助
+     */
+    private String helper3;
+
+    /**
+     * 四助
+     */
+    private String helper4;
+
+    /**
+     * 麻醉方式名称
+     */
+    private String anesName;
+
+    /**
+     * 主麻
+     */
+    private String anesDoctor;
+
+    /**
+     * 麻醉助手
+     */
+    private String anesAssistant;
+
+    /**
      * 手术开始时间
      */
     private LocalDateTime startDateTime;
@@ -104,6 +144,11 @@ public class MedOperationMaster {
      * 手术排程时间
      */
     private LocalDateTime scheduledDateTime;
+
+    /**
+     * 切口类型
+     */
+    private String inciType;
 
     /**
      * 手术名称
