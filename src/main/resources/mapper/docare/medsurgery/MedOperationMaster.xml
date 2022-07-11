@@ -85,6 +85,21 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="patientId != null">
+                AND PATIENT_ID = #{patientId}
+            </if>
+            <if test="levels != null">
+                AND OPERATION_SCALE IN
+                <foreach collection="levels" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="stayedDeptCodes != null">
+                AND DEPT_STAYED IN
+                <foreach collection="stayedDeptCodes" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
     </select>
 </mapper>

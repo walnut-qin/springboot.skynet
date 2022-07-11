@@ -6,6 +6,7 @@ import java.util.List;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster;
 import com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster.OperStatusEnum;
+import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
 
 import lombok.Getter;
 import lombok.Builder;
@@ -55,5 +56,20 @@ public interface MedOperationMasterMapper {
          * 手术状态清单
          */
         private List<OperStatusEnum> negOperStatus;
+
+        /**
+         * 住院号
+         */
+        private String patientId;
+
+        /**
+         * 手术等级
+         */
+        private List<SurgeryLevelEnum> levels;
+
+        /**
+         * 住院科室
+         */
+        private List<String> stayedDeptCodes;
     }
 }

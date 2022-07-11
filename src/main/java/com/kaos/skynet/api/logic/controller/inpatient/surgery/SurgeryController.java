@@ -1,10 +1,14 @@
 package com.kaos.skynet.api.logic.controller.inpatient.surgery;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
 
+import com.google.common.collect.Lists;
+import com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster.OperStatusEnum;
+import com.kaos.skynet.api.data.docare.mapper.medsurgery.MedOperationMasterMapper;
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDeptPrivMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDictMapper;
@@ -43,6 +47,12 @@ public class SurgeryController {
      */
     @Autowired
     SurgeryDictMapper surgeryDictMapper;
+
+    /**
+     * 手麻系统手术主表接口
+     */
+    @Autowired
+    MedOperationMasterMapper medOperationMasterMapper;
 
     /**
      * 查询已经授权的手术清单
@@ -130,6 +140,68 @@ public class SurgeryController {
              * 科室编码
              */
             String DEPT_CODE;
+        }
+    }
+
+    /**
+     * 查询已经授权的手术清单
+     * 
+     * @return
+     */
+    @PassToken
+    @ApiName("查询手术信息")
+    @RequestMapping(value = "querySurgeryInfos", method = RequestMethod.POST, produces = MediaType.JSON)
+    List<QuerySurgeryInfos.RspBody> querySurgeryInfos(@RequestBody @Valid QuerySurgeryInfos.ReqBody reqBody) {
+        var keyBuilder = MedOperationMasterMapper.Key.builder();
+        keyBuilder.negOperStatus(Lists.newArrayList(OperStatusEnum.手术取消));
+        keyBuilder.beginInDateTime(reqBody.beginInDateTime);
+        keyBuilder.endInDateTime(reqBody.endInDateTime);
+        keyBuilder.patientId(reqBody.patientNo);
+        keyBuilder.levels(reqBody.levels);
+        keyBuilder.stayedDeptCodes(reqBody.stayedDeptCodes);
+        var result = medOperationMasterMapper.queryOperationMasters(keyBuilder.build());
+
+        var rspBuilder = QuerySurgeryInfos.RspBody.builder();
+        return result.stream().map(x -> {
+            rspBuilder.patientNo(x.getPatientId());
+            return rspBuilder.build();
+        }).toList();
+    }
+
+    static class QuerySurgeryInfos {
+        static class ReqBody {
+            /**
+             * 开始时间
+             */
+            LocalDateTime beginInDateTime;
+
+            /**
+             * 开始时间
+             */
+            LocalDateTime endInDateTime;
+
+            /**
+             * 住院号
+             */
+            String patientNo;
+
+            /**
+             * 手术等级
+             */
+            List<SurgeryLevelEnum> levels;
+
+            /**
+             * 住院科室
+             */
+            List<String> stayedDeptCodes;
+        }
+
+        @Builder
+        static class RspBody {
+            /**
+             * 住院号
+             */
+            String patientNo;
         }
     }
 }
