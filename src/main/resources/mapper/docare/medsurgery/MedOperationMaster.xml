@@ -20,6 +20,7 @@
         <result column="IN_DATE_TIME" jdbcType="VARCHAR" property="inDateTime"/>
         <result column="OUT_DATE_TIME" jdbcType="VARCHAR" property="outDateTime"/>
         <result column="SCHEDULED_DATE_TIME" jdbcType="VARCHAR" property="scheduledDateTime"/>
+        <result column="OPERATION_NAME" jdbcType="VARCHAR" property="operationName"/>
     </resultMap>
 
     <sql id="item">
@@ -40,7 +41,8 @@
         OPER_STATUS,
         IN_DATE_TIME,
         OUT_DATE_TIME,
-        SCHEDULED_DATE_TIME
+        SCHEDULED_DATE_TIME,
+        OPERATION_NAME
     </sql>
 
     <select id="queryOperationMaster" resultMap="map">

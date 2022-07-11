@@ -3,7 +3,7 @@ package com.kaos.skynet.api.data.docare.entity.medsurgery;
 import java.time.LocalDateTime;
 
 import com.google.common.base.Objects;
-import com.kaos.skynet.api.data.docare.enums.SurgeryLevelEnum;
+import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
 import com.kaos.skynet.core.type.Enum;
 import com.kaos.skynet.core.util.IntegerUtils;
 import com.kaos.skynet.core.util.StringUtils;
@@ -104,6 +104,11 @@ public class MedOperationMaster {
      * 手术排程时间
      */
     private LocalDateTime scheduledDateTime;
+
+    /**
+     * 手术名称
+     */
+    private String operationName;
 
     @Override
     public boolean equals(Object arg0) {

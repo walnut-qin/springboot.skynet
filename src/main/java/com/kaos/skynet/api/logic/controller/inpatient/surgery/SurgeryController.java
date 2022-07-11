@@ -1,6 +1,8 @@
 package com.kaos.skynet.api.logic.controller.inpatient.surgery;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,7 +11,9 @@ import javax.validation.Valid;
 import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster.OperStatusEnum;
 import com.kaos.skynet.api.data.docare.mapper.medsurgery.MedOperationMasterMapper;
+import com.kaos.skynet.api.data.his.cache.inpatient.FinIprInMainInfoCache;
 import com.kaos.skynet.api.data.his.entity.inpatient.surgery.SurgeryDict.SurgeryLevelEnum;
+import com.kaos.skynet.api.data.his.enums.SexEnum;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDeptPrivMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryDictMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.surgery.SurgeryEmplPrivMapper;
@@ -53,6 +57,12 @@ public class SurgeryController {
      */
     @Autowired
     MedOperationMasterMapper medOperationMasterMapper;
+
+    /**
+     * 住院主表缓存
+     */
+    @Autowired
+    FinIprInMainInfoCache inMainInfoCache;
 
     /**
      * 查询已经授权的手术清单
@@ -148,7 +158,6 @@ public class SurgeryController {
      * 
      * @return
      */
-    @PassToken
     @ApiName("查询手术信息")
     @RequestMapping(value = "querySurgeryInfos", method = RequestMethod.POST, produces = MediaType.JSON)
     List<QuerySurgeryInfos.RspBody> querySurgeryInfos(@RequestBody @Valid QuerySurgeryInfos.ReqBody reqBody) {
@@ -163,7 +172,18 @@ public class SurgeryController {
 
         var rspBuilder = QuerySurgeryInfos.RspBody.builder();
         return result.stream().map(x -> {
+            rspBuilder.inDate(x.getInDateTime().toLocalDate());
+            rspBuilder.roomNo(x.getOperatingRoomNo());
+            rspBuilder.surgeryName(x.getOperationName());
+            rspBuilder.leve(x.getOperationScale());
             rspBuilder.patientNo(x.getPatientId());
+            var patient = inMainInfoCache.get("ZY01".concat(x.getPatientId()));
+            if (patient != null) {
+                rspBuilder.name(patient.getName());
+                rspBuilder.sex(patient.getSex());
+                rspBuilder.age(Period.between(patient.getBirthday().toLocalDate(), LocalDate.now()));
+                rspBuilder.deptStayed(patient.getDeptName());
+            }
             return rspBuilder.build();
         }).toList();
     }
@@ -199,9 +219,49 @@ public class SurgeryController {
         @Builder
         static class RspBody {
             /**
+             * 入手术室时间
+             */
+            LocalDate inDate;
+
+            /**
+             * 手术间号
+             */
+            String roomNo;
+
+            /**
+             * 手术名称
+             */
+            String surgeryName;
+
+            /**
+             * 手术等级
+             */
+            SurgeryLevelEnum leve;
+
+            /**
              * 住院号
              */
             String patientNo;
+
+            /**
+             * 患者姓名
+             */
+            String name;
+
+            /**
+             * 性别
+             */
+            SexEnum sex;
+
+            /**
+             * 年龄
+             */
+            Period age;
+
+            /**
+             * 住院科室
+             */
+            String deptStayed;
         }
     }
 }
