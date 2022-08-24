@@ -239,7 +239,7 @@ public class StateService {
             // 检索14天内核酸结果
             natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                     .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                    .duration(Duration.ofDays(14))
+                    .duration(Duration.ofDays(1))
                     .build());
         } else {
             // 逆序
@@ -256,7 +256,7 @@ public class StateService {
                     // 检索2天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(14))
+                            .duration(Duration.ofDays(1))
                             .build());
                 }
 
@@ -264,7 +264,7 @@ public class StateService {
                     // 检索14天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(5))
+                            .duration(Duration.ofDays(1))
                             .build());
                 }
             }
