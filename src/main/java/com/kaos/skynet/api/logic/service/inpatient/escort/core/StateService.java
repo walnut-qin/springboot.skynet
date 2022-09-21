@@ -256,7 +256,7 @@ public class StateService {
                     // 检索2天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(1))
+                            .duration(Duration.ofDays(14))
                             .build());
                 }
 
@@ -264,7 +264,7 @@ public class StateService {
                     // 检索14天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(1))
+                            .duration(Duration.ofDays(2))
                             .build());
                 }
             }
@@ -283,7 +283,7 @@ public class StateService {
         var feeDetails = feeDetailMapper.queryFeeDetails(FinOpbFeeDetailMapper.Key.builder()
                 .cardNo(escortInfo.getHelperCardNo())
                 .itemCode("F00000068231")
-                .beginOperDate(LocalDateTime.now().minus(Duration.ofDays(7)))
+                .beginOperDate(LocalDateTime.now().minus(Duration.ofDays(2)))
                 .build());
         if (!feeDetails.isEmpty()) {
             return new Result(StateEnum.等待院内核酸检测结果, "存在7天内的核酸划价记录");
