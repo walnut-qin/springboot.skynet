@@ -11,6 +11,6 @@ public class MedAnesthesiaPlanMapperTests {
 
     @Test
     void queryAnesthesiaPlan() {
-        anesthesiaPlanMapper.queryAnesthesiaPlan("0000782112", 1, 1);
+        // anesthesiaPlanMapper.queryAnesthesiaPlan("0000782112", 1, 1);
     }
 }

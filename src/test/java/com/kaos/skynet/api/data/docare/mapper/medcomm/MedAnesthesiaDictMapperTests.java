@@ -11,6 +11,6 @@ public class MedAnesthesiaDictMapperTests {
 
     @Test
     void queryAnesthesiaDict() {
-        medAnesthesiaDictMapper.queryAnesthesiaDict("插管全麻-气管插管全麻");
+        // medAnesthesiaDictMapper.queryAnesthesiaDict("插管全麻-气管插管全麻");
     }
 }

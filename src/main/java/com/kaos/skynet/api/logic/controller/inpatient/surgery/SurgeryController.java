@@ -8,10 +8,10 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 
-import com.google.common.collect.Lists;
+// import com.google.common.collect.Lists;
 import com.kaos.skynet.api.data.docare.entity.medcomm.MedAnesthesiaDict.AnesTypeEnum;
 import com.kaos.skynet.api.data.docare.entity.medsurgery.MedAnesthesiaPlan.AsaGradeEnum;
-import com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster.OperStatusEnum;
+// import com.kaos.skynet.api.data.docare.entity.medsurgery.MedOperationMaster.OperStatusEnum;
 import com.kaos.skynet.api.data.docare.mapper.medcomm.MedAnesthesiaDictMapper;
 import com.kaos.skynet.api.data.docare.mapper.medsurgery.MedAnesthesiaPlanMapper;
 import com.kaos.skynet.api.data.docare.mapper.medsurgery.MedOperationMasterMapper;
@@ -183,75 +183,75 @@ public class SurgeryController {
      * 
      * @return
      */
-    @ApiName("查询手术信息")
-    @RequestMapping(value = "querySurgeryInfos", method = RequestMethod.POST, produces = MediaType.JSON)
-    List<QuerySurgeryInfos.RspBody> querySurgeryInfos(@RequestBody @Valid QuerySurgeryInfos.ReqBody reqBody) {
-        var keyBuilder = MedOperationMasterMapper.Key.builder();
-        keyBuilder.negOperStatus(Lists.newArrayList(OperStatusEnum.手术取消));
-        keyBuilder.beginInDateTime(reqBody.beginInDateTime);
-        keyBuilder.endInDateTime(reqBody.endInDateTime);
-        keyBuilder.patientId(reqBody.patientNo);
-        keyBuilder.levels(reqBody.levels);
-        keyBuilder.stayedDeptCodes(reqBody.stayedDeptCodes);
-        var result = medOperationMasterMapper.queryOperationMasters(keyBuilder.build());
+    // @ApiName("查询手术信息")
+    // @RequestMapping(value = "querySurgeryInfos", method = RequestMethod.POST, produces = MediaType.JSON)
+    // List<QuerySurgeryInfos.RspBody> querySurgeryInfos(@RequestBody @Valid QuerySurgeryInfos.ReqBody reqBody) {
+    //     var keyBuilder = MedOperationMasterMapper.Key.builder();
+    //     keyBuilder.negOperStatus(Lists.newArrayList(OperStatusEnum.手术取消));
+    //     keyBuilder.beginInDateTime(reqBody.beginInDateTime);
+    //     keyBuilder.endInDateTime(reqBody.endInDateTime);
+    //     keyBuilder.patientId(reqBody.patientNo);
+    //     keyBuilder.levels(reqBody.levels);
+    //     keyBuilder.stayedDeptCodes(reqBody.stayedDeptCodes);
+    //     var result = medOperationMasterMapper.queryOperationMasters(keyBuilder.build());
 
-        var responseStream = result.stream().map(x -> {
-            var rspBuilder = QuerySurgeryInfos.RspBody.builder();
-            rspBuilder.date(x.getInDateTime().toLocalDate());
-            rspBuilder.roomNo(x.getOperatingRoomNo());
-            rspBuilder.surgeryName(x.getOperationName());
-            rspBuilder.level(x.getOperationScale());
-            var anesPlan = medAnesthesiaPlanMapper.queryAnesthesiaPlan(x.getPatientId(), x.getVisitId(), x.getOperId());
-            if (anesPlan != null) {
-                rspBuilder.asaGrade(anesPlan.getAsaGrade());
-            }
-            rspBuilder.inciType(x.getInciType());
-            rspBuilder.anesName(x.getAnesName());
-            var anes = medAnesthesiaDictMapper.queryAnesthesiaDict(x.getAnesName());
-            if (anes != null) {
-                rspBuilder.anesType(anes.getAnesType());
-            }
-            rspBuilder.patientNo(x.getPatientId());
-            var patient = inMainInfoCache.get("ZY01".concat(x.getPatientId()));
-            if (patient != null) {
-                rspBuilder.name(patient.getName());
-                rspBuilder.sex(patient.getSex());
-                rspBuilder.age(Period.between(patient.getBirthday().toLocalDate(), LocalDate.now()));
-                rspBuilder.deptStayed(patient.getDeptName());
-            }
-            rspBuilder.surgeon(emplNameTunnel.tunneling(x.getSurgeon()));
-            rspBuilder.helper1(emplNameTunnel.tunneling(x.getHelper1()));
-            rspBuilder.helper2(emplNameTunnel.tunneling(x.getHelper2()));
-            rspBuilder.helper3(emplNameTunnel.tunneling(x.getHelper3()));
-            rspBuilder.helper4(emplNameTunnel.tunneling(x.getHelper4()));
-            rspBuilder.anesDoctor(emplNameTunnel.tunneling(x.getAnesDoctor()));
-            rspBuilder.anesAssistant(emplNameTunnel.tunneling(x.getAnesAssistant()));
-            rspBuilder.washNurse1(emplNameTunnel.tunneling(x.getWashNurse1()));
-            rspBuilder.washNurse2(emplNameTunnel.tunneling(x.getWashNurse2()));
-            rspBuilder.itinerantNurse1(emplNameTunnel.tunneling(x.getItinerantNurse1()));
-            rspBuilder.itinerantNurse2(emplNameTunnel.tunneling(x.getItinerantNurse2()));
-            rspBuilder.inDateTime(x.getInDateTime());
-            rspBuilder.anesStartDateTime(x.getAnesStartTime());
-            rspBuilder.startDateTime(x.getStartDateTime());
-            rspBuilder.endDateTime(x.getEndDateTime());
-            rspBuilder.anesEndDateTime(x.getAnesEndTime());
-            rspBuilder.outDateTime(x.getOutDateTime());
-            return rspBuilder.build();
-        });
+    //     var responseStream = result.stream().map(x -> {
+    //         var rspBuilder = QuerySurgeryInfos.RspBody.builder();
+    //         rspBuilder.date(x.getInDateTime().toLocalDate());
+    //         rspBuilder.roomNo(x.getOperatingRoomNo());
+    //         rspBuilder.surgeryName(x.getOperationName());
+    //         rspBuilder.level(x.getOperationScale());
+    //         // var anesPlan = medAnesthesiaPlanMapper.queryAnesthesiaPlan(x.getPatientId(), x.getVisitId(), x.getOperId());
+    //         // if (anesPlan != null) {
+    //         //     rspBuilder.asaGrade(anesPlan.getAsaGrade());
+    //         // }
+    //         rspBuilder.inciType(x.getInciType());
+    //         rspBuilder.anesName(x.getAnesName());
+    //         // var anes = medAnesthesiaDictMapper.queryAnesthesiaDict(x.getAnesName());
+    //         // if (anes != null) {
+    //         //     rspBuilder.anesType(anes.getAnesType());
+    //         // }
+    //         rspBuilder.patientNo(x.getPatientId());
+    //         var patient = inMainInfoCache.get("ZY01".concat(x.getPatientId()));
+    //         if (patient != null) {
+    //             rspBuilder.name(patient.getName());
+    //             rspBuilder.sex(patient.getSex());
+    //             rspBuilder.age(Period.between(patient.getBirthday().toLocalDate(), LocalDate.now()));
+    //             rspBuilder.deptStayed(patient.getDeptName());
+    //         }
+    //         rspBuilder.surgeon(emplNameTunnel.tunneling(x.getSurgeon()));
+    //         rspBuilder.helper1(emplNameTunnel.tunneling(x.getHelper1()));
+    //         rspBuilder.helper2(emplNameTunnel.tunneling(x.getHelper2()));
+    //         rspBuilder.helper3(emplNameTunnel.tunneling(x.getHelper3()));
+    //         rspBuilder.helper4(emplNameTunnel.tunneling(x.getHelper4()));
+    //         rspBuilder.anesDoctor(emplNameTunnel.tunneling(x.getAnesDoctor()));
+    //         rspBuilder.anesAssistant(emplNameTunnel.tunneling(x.getAnesAssistant()));
+    //         rspBuilder.washNurse1(emplNameTunnel.tunneling(x.getWashNurse1()));
+    //         rspBuilder.washNurse2(emplNameTunnel.tunneling(x.getWashNurse2()));
+    //         rspBuilder.itinerantNurse1(emplNameTunnel.tunneling(x.getItinerantNurse1()));
+    //         rspBuilder.itinerantNurse2(emplNameTunnel.tunneling(x.getItinerantNurse2()));
+    //         rspBuilder.inDateTime(x.getInDateTime());
+    //         rspBuilder.anesStartDateTime(x.getAnesStartTime());
+    //         rspBuilder.startDateTime(x.getStartDateTime());
+    //         rspBuilder.endDateTime(x.getEndDateTime());
+    //         rspBuilder.anesEndDateTime(x.getAnesEndTime());
+    //         rspBuilder.outDateTime(x.getOutDateTime());
+    //         return rspBuilder.build();
+    //     });
 
-        // ASA特殊过滤
-        if (reqBody.asaGrades != null) {
-            responseStream = responseStream.filter(x -> {
-                if (reqBody.asaGrades.contains(x.asaGrade)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-        }
+    //     // ASA特殊过滤
+    //     if (reqBody.asaGrades != null) {
+    //         responseStream = responseStream.filter(x -> {
+    //             if (reqBody.asaGrades.contains(x.asaGrade)) {
+    //                 return true;
+    //             } else {
+    //                 return false;
+    //             }
+    //         });
+    //     }
 
-        return responseStream.toList();
-    }
+    //     return responseStream.toList();
+    // }
 
     static class QuerySurgeryInfos {
         static class ReqBody {
