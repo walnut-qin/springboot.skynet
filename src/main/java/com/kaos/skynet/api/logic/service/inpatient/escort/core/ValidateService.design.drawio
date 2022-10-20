@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="AWQjp3ub72_j4yUvvy9W" name="Page-1">
-        <mxGraphModel dx="3195" dy="3017" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+        <mxGraphModel dx="4523" dy="3900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -41,76 +41,6 @@
                 </mxCell>
                 <mxCell id="13" value="拒绝&amp;lt;陪护人的陪护证数量达到上限&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
                     <mxGeometry x="120" y="285" width="210" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="19" value="拒绝&amp;lt;患者的陪护证数量达到上限&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-                    <mxGeometry x="970" y="3930" width="210" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="29" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="25" target="27" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="25" value="检索患者在院记录" style="whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="475" y="3100" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="31" value="&amp;gt;1" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="27" target="30" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="33" value="0" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="27" target="32" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="35" value="1" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="27" target="75" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="535" y="3430" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="27" value="记录数量" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="447.5" y="3260" width="175" height="80" as="geometry"/>
-                </mxCell>
-                <mxCell id="30" value="拒绝&amp;lt;存在多条在院记录, 无法创建有效关联&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-                    <mxGeometry x="140" y="3285" width="260" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="37" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="32" target="36" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="32" value="检索患者住院证" style="whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="1010" y="3270" width="125" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="39" value="0" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="36" target="38" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="41" value="&amp;gt;0" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="36" target="40" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="36" value="记录数量" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="1245" y="3260" width="175" height="80" as="geometry"/>
-                </mxCell>
-                <mxCell id="38" value="拒绝&amp;lt;不存在可以关联的住院证或住院实体&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-                    <mxGeometry x="1535" y="3285" width="290" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="43" value="" style="edgeStyle=none;html=1;" parent="1" source="40" target="42" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="40" value="住院证逆序" style="whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="1272.5" y="3430" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="45" value="" style="edgeStyle=none;html=1;" parent="1" source="42" target="44" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="42" value="取最后一条住院证" style="whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="1272.5" y="3580" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="46" value="其他" style="edgeStyle=none;html=1;" parent="1" source="44" target="78" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="1150" y="3710" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="49" value="作废" style="edgeStyle=none;html=1;" parent="1" source="44" target="48" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="44" value="住院证状态" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="1245" y="3730" width="175" height="80" as="geometry"/>
-                </mxCell>
-                <mxCell id="48" value="拒绝&amp;lt;患者未入院且最新的一张住院证已作废&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-                    <mxGeometry x="1535" y="3755" width="290" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="58" value="检索患者信息" style="whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="445" y="-1040" width="120" height="60" as="geometry"/>
@@ -156,63 +86,6 @@
                 <mxCell id="68" value="拒绝&amp;lt;无效陪护人&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
                     <mxGeometry x="150" y="-555" width="150" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="73" value="" style="edgeStyle=none;html=1;" parent="1" source="70" target="71" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="70" value="获取第二陪护医嘱" style="whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="1012.5" y="3580" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="82" value="N" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="71" target="19" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="85" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="71" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="790" y="4050" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="71" value="存在第二陪护医嘱？" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="987.5" y="3730" width="175" height="80" as="geometry"/>
-                </mxCell>
-                <mxCell id="77" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="75" target="76" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="75" value="获取患者的陪护证" style="whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="475" y="3430" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="81" value="1" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="76" target="70" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="86" value="0" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="76" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="680" y="4110" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="88" value="&amp;gt;1" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="76" target="87" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="76" value="数量" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="447.5" y="3570" width="175" height="80" as="geometry"/>
-                </mxCell>
-                <mxCell id="80" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="78" target="79" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="78" value="获取患者的陪护证" style="whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="1272.5" y="4080" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="83" value="&amp;gt;0" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="79" target="19" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="84" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="79" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="900" y="4120" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="79" value="数量" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
-                    <mxGeometry x="987.5" y="4070" width="175" height="80" as="geometry"/>
-                </mxCell>
-                <mxCell id="87" value="拒绝&amp;lt;患者的陪护证数量达到上限&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-                    <mxGeometry x="160" y="3595" width="210" height="30" as="geometry"/>
-                </mxCell>
                 <mxCell id="92" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" parent="1" source="90" target="91" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
@@ -245,7 +118,7 @@
                 <mxCell id="171" value="1" style="edgeStyle=none;html=1;" parent="1" source="97" target="169" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="176" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="97" target="174">
+                <mxCell id="176" value="" style="edgeStyle=none;html=1;" parent="1" source="97" target="174" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="97" value="记录数量" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
@@ -378,16 +251,16 @@
                 <mxCell id="169" value="患者陪护证数量" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="416.25" y="1120" width="175" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="177" value="0" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="174" target="117">
+                <mxCell id="177" value="0" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="174" target="117" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="180" value="1" style="edgeStyle=none;html=1;" edge="1" parent="1" source="174" target="179">
+                <mxCell id="180" value="1" style="edgeStyle=none;html=1;" parent="1" source="174" target="179" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="174" value="患者陪护证数量" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" vertex="1" parent="1">
+                <mxCell id="174" value="患者陪护证数量" style="rhombus;whiteSpace=wrap;html=1;dashed=0;strokeColor=#d79b00;fillColor=#ffe6cc;" parent="1" vertex="1">
                     <mxGeometry x="147.5" y="960" width="175" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="179" value="拒绝&amp;lt;患者未开第二陪护医嘱&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                <mxCell id="179" value="拒绝&amp;lt;患者未开第二陪护医嘱&amp;gt;" style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
                     <mxGeometry x="107.5" y="1145" width="255" height="30" as="geometry"/>
                 </mxCell>
             </root>
