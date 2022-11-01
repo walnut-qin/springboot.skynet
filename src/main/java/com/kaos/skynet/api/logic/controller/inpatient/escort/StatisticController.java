@@ -15,6 +15,7 @@ import com.kaos.skynet.api.data.his.entity.inpatient.FinIprInMainInfo.InStateEnu
 import com.kaos.skynet.api.data.his.entity.inpatient.escort.EscortStateRec.StateEnum;
 import com.kaos.skynet.api.data.his.enums.HealthCodeEnum;
 import com.kaos.skynet.api.data.his.enums.TravelCodeEnum;
+import com.kaos.skynet.api.data.his.mapper.common.PatientEscortRelationshipMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.FinIprInMainInfoMapper;
 import com.kaos.skynet.api.data.his.mapper.inpatient.escort.EscortMainInfoMapper;
 import com.kaos.skynet.api.data.his.tunnel.BedNoTunnel;
@@ -49,6 +50,12 @@ public class StatisticController {
      */
     @Autowired
     EscortMainInfoMapper escortMainInfoMapper;
+
+    /**
+     * 关系接口
+     */
+    @Autowired
+    PatientEscortRelationshipMapper relationshipMapper;
 
     /**
      * 特殊信息缓存
@@ -160,6 +167,10 @@ public class StatisticController {
                     builder.escort1HighRiskFlag(helper.getHighRiskFlag());
                     builder.escort1HighRiskArea(helper.getHighRiskArea());
                 }
+                var rela = relationshipMapper.queryRelationship(escort.getPatientCardNo(), escort.getHelperCardNo());
+                if (rela != null) {
+                    builder.escort1Relation(rela.getRelation());
+                }
             }
             if (escortInfos.size() >= 2) {
                 var escort = escortInfos.get(1);
@@ -180,6 +191,10 @@ public class StatisticController {
                     builder.escort2TravelCode(helper.getTravelCode());
                     builder.escort2HighRiskFlag(helper.getHighRiskFlag());
                     builder.escort2HighRiskArea(helper.getHighRiskArea());
+                }
+                var rela = relationshipMapper.queryRelationship(escort.getPatientCardNo(), escort.getHelperCardNo());
+                if (rela != null) {
+                    builder.escort1Relation(rela.getRelation());
                 }
             }
             return builder.build();
@@ -289,6 +304,11 @@ public class StatisticController {
             String escort1HighRiskArea;
 
             /**
+             * 陪护关系
+             */
+            String escort1Relation;
+
+            /**
              * 陪护1姓名
              */
             String escort2Name;
@@ -333,6 +353,11 @@ public class StatisticController {
              * 陪护2高风险地区
              */
             String escort2HighRiskArea;
+
+            /**
+             * 陪护关系
+             */
+            String escort2Relation;
         }
     }
 }

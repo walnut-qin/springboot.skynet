@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaos.skynet.api.data.his.mapper.common.PatientEscortRelationshipMapper">
+    <resultMap id="map" type="com.kaos.skynet.api.data.his.entity.common.PatientEscortRelationship">
+        <id column="PATIENT_CARDNO" jdbcType="VARCHAR" property="patientCardNo"/>
+        <id column="ESCORT_CARDNO" jdbcType="VARCHAR" property="escortCardNo"/>
+        <result column="RELATION" jdbcType="VARCHAR" property="relation"/>
+    </resultMap>
+
+    <sql id="item">
+        PATIENT_CARDNO,
+        ESCORT_CARDNO,
+        RELATION
+    </sql>
+
+    <select id="queryRelationship" resultMap="map">
+        SELECT
+        <include refid="item"/>
+        FROM
+            PATIENT_ESCORT_RELATIONSHIP
+        <where>
+            <if test="true">
+                AND PATIENT_CARDNO = #{patientCardNo}
+            </if>
+            <if test="true">
+                AND ESCORT_CARDNO = #{escortCardNo}
+            </if>
+        </where>
+    </select>
+</mapper>
