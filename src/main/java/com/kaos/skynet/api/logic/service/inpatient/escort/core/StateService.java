@@ -256,7 +256,7 @@ public class StateService {
                     // 生效中的陪护证检索14天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(5))
+                            .duration(Duration.ofDays(2))
                             .build());
                 }
 
@@ -293,7 +293,7 @@ public class StateService {
         var annexInfos = escortAnnexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
                 .cardNo(escortInfo.getHelperCardNo())
                 .checked(false)
-                .beginUploadDate(LocalDateTime.now().minusDays(5))
+                .beginUploadDate(LocalDateTime.now().minusDays(2))
                 .build());
         if (!annexInfos.isEmpty()) {
             return new Result(StateEnum.等待院外核酸检测结果审核, "存在未审核的院外报告");
