@@ -194,7 +194,7 @@ public class StatisticController {
                 }
                 var rela = relationshipMapper.queryRelationship(escort.getPatientCardNo(), escort.getHelperCardNo());
                 if (rela != null) {
-                    builder.escort1Relation(rela.getRelation());
+                    builder.escort2Relation(rela.getRelation());
                 }
             }
             return builder.build();
