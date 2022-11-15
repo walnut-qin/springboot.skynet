@@ -176,7 +176,7 @@ public class ValidateService {
 
             default -> {
                 log.error(String.format("患者存在%d条在院记录, 无法创建有效关联", inMainInfos.size()));
-                throw new RuntimeException("患者存在多条在院记录, 无法创建有效关联");
+                throw new RuntimeException("提醒:患者有多次入院记录，请到护士站确认无效的住院号，再到住院收费室办理无费退院！");
             }
         }
     }
