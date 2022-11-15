@@ -239,7 +239,7 @@ public class StateService {
             // 新陪护证，检索2天内核酸结果
             natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                     .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                    .duration(Duration.ofDays(2))
+                    .duration(Duration.ofDays(4))
                     .build());
         } else {
             // 逆序
@@ -256,7 +256,7 @@ public class StateService {
                     // 生效中的陪护证检索14天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(2))
+                            .duration(Duration.ofDays(4))
                             .build());
                 }
 
@@ -264,7 +264,7 @@ public class StateService {
                     // 其他状态的陪护证检索2天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(2))
+                            .duration(Duration.ofDays(4))
                             .build());
                 }
             }
@@ -283,7 +283,7 @@ public class StateService {
         var feeDetails = feeDetailMapper.queryFeeDetails(FinOpbFeeDetailMapper.Key.builder()
                 .cardNo(escortInfo.getHelperCardNo())
                 .itemCode("F00000068231")
-                .beginOperDate(LocalDateTime.now().minus(Duration.ofDays(2)))
+                .beginOperDate(LocalDateTime.now().minus(Duration.ofDays(4)))
                 .build());
         if (!feeDetails.isEmpty()) {
             return new Result(StateEnum.等待院内核酸检测结果, "存在7天内的核酸划价记录");
@@ -293,7 +293,7 @@ public class StateService {
         var annexInfos = escortAnnexInfoMapper.queryAnnexInfos(EscortAnnexInfoMapper.Key.builder()
                 .cardNo(escortInfo.getHelperCardNo())
                 .checked(false)
-                .beginUploadDate(LocalDateTime.now().minusDays(2))
+                .beginUploadDate(LocalDateTime.now().minusDays(4))
                 .build());
         if (!annexInfos.isEmpty()) {
             return new Result(StateEnum.等待院外核酸检测结果审核, "存在未审核的院外报告");
