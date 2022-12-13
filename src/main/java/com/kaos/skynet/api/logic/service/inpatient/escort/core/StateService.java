@@ -256,7 +256,7 @@ public class StateService {
                     // 生效中的陪护证检索14天内核酸结果
                     natsResult = natsTunnel.tunneling(NatsTunnel.Key.builder()
                             .cardNos(Lists.newArrayList(escortInfo.getHelperCardNo()))
-                            .duration(Duration.ofDays(4))
+                            // .duration(Duration.ofDays(4))
                             .build());
                 }
 

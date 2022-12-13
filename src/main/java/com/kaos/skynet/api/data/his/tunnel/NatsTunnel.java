@@ -42,7 +42,7 @@ public class NatsTunnel implements Tunnel<NatsTunnel.Key, NatsTunnel.Value> {
                     .beginDate(LocalDateTime.now().minus(key.duration))
                     .build()).stream().map(x -> {
                         return Value.builder()
-                                .negative(x.getResult().equals("阴性(-)"))
+                                .negative(x.getResult().contains("阴"))
                                 .inspectDate(x.getInspectDate())
                                 .build();
                     });
