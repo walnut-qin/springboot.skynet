@@ -108,7 +108,7 @@ public class NatsTunnel implements Tunnel<NatsTunnel.Key, NatsTunnel.Value> {
             if (negative) {
                 return "阴性(-)".concat(cvt.convert(inspectDate));
             } else {
-                return "阳性(-)".concat(cvt.convert(inspectDate));
+                return "阳性(+)".concat(cvt.convert(inspectDate));
             }
         }
     }
